@@ -8,4 +8,12 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="ClosedXML" Version="0.95.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="# TestModel\FileUtil\★ Combination\0 initial\" />
+  </ItemGroup>
+
 </Project>
