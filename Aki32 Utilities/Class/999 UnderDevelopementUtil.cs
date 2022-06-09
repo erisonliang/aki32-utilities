@@ -7,12 +7,10 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Aki32_Utilities.Class;
-internal static class UnlabeledUtil
+internal static class UnderDevelopementUtil
 {
-    // still coding...
 
-
-
+    // ★★★★★★★★★★★★★★★ 000 OrganizeDropBoxJuncFiles - wait for test
 
     /// <summary>
     /// MacOS が生成するゴミを削除
@@ -34,6 +32,8 @@ internal static class UnlabeledUtil
             }
         }
     }
+
+    // ★★★★★★★★★★★★★★★ 000 OrganizeDropBoxJuncFiles - wait for test
 
     /// <summary>
     /// 選んだフォルダ内のデータのPhotoとVideoの接頭辞を削除
@@ -76,9 +76,7 @@ internal static class UnlabeledUtil
         }
     }
 
-
-
-    // ↓完成。テストする！
+    // ★★★★★★★★★★★★★★★ 000 PDFPageCount - wait for test
 
     /// <summary>
     /// PDF page count
@@ -158,5 +156,8 @@ internal static class UnlabeledUtil
             return int.Parse(rtLine);
         }
     }
+
+
+    // ★★★★★★★★★★★★★★★
 
 }

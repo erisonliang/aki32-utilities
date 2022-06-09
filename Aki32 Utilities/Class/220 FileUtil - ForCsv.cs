@@ -2,115 +2,31 @@
 using System.Text;
 
 namespace Aki32_Utilities.Class;
-internal static class FileUtil
+internal static partial class FileUtil
 {
 
-    // ★★★★★★★★★★★★★★★ File handling
-
-
-    /// <summary>
-    /// move all matching files to one dir
-    /// </summary>
-    /// <param name="inputDir"></param>
-    /// <param name="outputDir"></param>
-    /// <param name="serchPattern"></param>
-    /// <returns></returns>
-    internal static DirectoryInfo CollectFiles(this DirectoryInfo inputDir, DirectoryInfo outputDir, string serchPattern)
-    {
-        // preprocess
-        if (UtilConfig.ConsoleOutput)
-            Console.WriteLine("\r\n** CollectFiles() Called");
-        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance); // Shift-JISを扱うためには必要。
-        if (!outputDir.Exists) outputDir.Create();
-
-        // main
-        var files = inputDir.GetFiles(serchPattern, SearchOption.AllDirectories).Select(f => f.FullName);
-        foreach (var file in files)
-        {
-            var newFileName = file.Replace(inputDir.FullName, "");
-            foreach (var item in serchPattern.Split("*", StringSplitOptions.RemoveEmptyEntries))
-                newFileName = newFileName.Replace(item, "");
-            newFileName = newFileName.Replace(Path.DirectorySeparatorChar, '_').Trim('_');
-            var newOutputFilePath = Path.Combine(outputDir.FullName, newFileName + Path.GetExtension(file));
-
-            try
-            {
-                File.Copy(file, newOutputFilePath, true);
-                if (UtilConfig.ConsoleOutput)
-                    Console.WriteLine($"O: {newOutputFilePath}");
-            }
-            catch (Exception ex)
-            {
-                if (UtilConfig.ConsoleOutput)
-                    Console.WriteLine($"X: {newOutputFilePath}, {ex.Message}");
-            }
-        }
-
-        return outputDir;
-    }
-
-
-    /// <summary>
-    /// create many template files named by csv list
-    /// </summary>
-    /// <param name="inputDir"></param>
-    /// <param name="outputFile"></param>
-    /// <param name="skipRowCount"></param>
-    /// <returns></returns>
-    internal static DirectoryInfo MakeFilesFromCsv(this FileInfo inputFile, FileInfo templateFile, DirectoryInfo outputDir)
-    {
-        // preprocess
-        if (UtilConfig.ConsoleOutput)
-            Console.WriteLine("\r\n** Csvs2ExcelSheets() Called");
-        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance); // Shift-JISを扱うためには必要。
-        if (!outputDir.Exists) outputDir.Create();
-
-        // main
-        var tempDataEx = Path.GetExtension(templateFile.Name);
-        using var sr = new StreamReader(inputFile.FullName, Encoding.GetEncoding("SHIFT_JIS"));
-
-        while (!sr.EndOfStream)
-        {
-            var line = sr.ReadLine();
-            if (string.IsNullOrEmpty(line)) continue;
-
-            try
-            {
-                var targetPath = Path.Combine(outputDir.FullName, $"{line}{tempDataEx}");
-                templateFile.CopyTo(targetPath, true);
-                Console.WriteLine($"O: {targetPath}");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"X: {ex}");
-            }
-        }
-
-        return outputDir;
-    }
-
-
-    // ★★★★★★★★★★★★★★★ For csv
-
+    // ★★★★★★★★★★★★★★★ 221 ExtractCsvColumns
 
     /// <summary>
     /// extranct designated columns from csv to new csv
     /// </summary>
     /// <param name="inputFile"></param>
-    /// <param name="outputFile"></param>
+    /// <param name="outputFile">when null, automatically set to {inputFile.DirectoryName}/output_ExtractCsvColumns/{inputFile.Name}</param>
     /// <param name="extractingColumns"></param>
     /// <param name="skipRowCount"></param>
     /// <param name="header"></param>
     /// <returns></returns>
-    internal static FileInfo ExtractCsvColumns(this FileInfo inputFile, FileInfo outputFile, int[] extractingColumns, int skipRowCount = 0, string header = null)
+    internal static FileInfo ExtractCsvColumns(this FileInfo inputFile, FileInfo? outputFile, int[] extractingColumns, int skipRowCount = 0, string header = null)
     {
         // preprocess
         Encoding.RegisterProvider(CodePagesEncodingProvider.Instance); // Shift-JISを扱うためには必要。
+        if (outputFile is null)
+            outputFile = new FileInfo(Path.Combine(inputFile.DirectoryName, "output_ExtractCsvColumns", inputFile.Name));
         if (!outputFile.Directory.Exists) outputFile.Directory.Create();
         if (outputFile.Exists) outputFile.Delete();
 
         // main
-        var inputCsv = inputFile.ReadCsv();
+        var inputCsv = inputFile.ReadCsv_Lines();
 
         var resultList = new List<string>();
 
@@ -143,18 +59,22 @@ internal static class FileUtil
     /// <summary>
     /// extranct designated columns from csv to new csv
     /// </summary>
-    /// <param name="inputFile"></param>
-    /// <param name="outputFile"></param>
+    /// <param name="inputDir"></param>
+    /// <param name="outputDir">when null, automatically set to {inputDir.FullName}/output_ExtractCsvColumns</param>
     /// <param name="extractingColumns"></param>
     /// <param name="skipRowCount"></param>
     /// <param name="header"></param>
     /// <returns></returns>
-    internal static DirectoryInfo ForEach_ExtractCsvColumns(this DirectoryInfo inputDir, DirectoryInfo outputDir, int[] extractingColumns, int skipRowCount = 0, string header = null)
+    internal static DirectoryInfo ExtractCsvColumns_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir, int[] extractingColumns, int skipRowCount = 0, string header = null)
     {
         // preprocess
         if (UtilConfig.ConsoleOutput)
             Console.WriteLine("\r\n** ExtractCsvColumns() Called (This takes time...)");
+        if (outputDir is null)
+            outputDir = new DirectoryInfo(Path.Combine(inputDir.FullName, "output_ExtractCsvColumns"));
+        if (!outputDir.Exists) outputDir.Create();
 
+        // main
         foreach (var file in inputDir.GetFiles())
         {
             var newFilePath = Path.Combine(outputDir.FullName, file.Name);
@@ -174,21 +94,24 @@ internal static class FileUtil
         return outputDir;
     }
 
+    // ★★★★★★★★★★★★★★★ 222 CollectCsvColumns
 
     /// <summary>
-    /// move all csvs' target column to one csv
+    /// move all csvs' target column to one csv (.xlsx is also acceptable)
     /// </summary>
     /// <param name="inputDir"></param>
-    /// <param name="outputFile"></param>
+    /// <param name="outputFile">when null, automatically set to {inputDir.FullName}/output_CollectCsvColumns/output.csv</param>
     /// <param name="targetColumn"></param>
     /// <param name="initialColumn"></param>
     /// <returns></returns>
-    internal static FileInfo CollectCsvColumns(this DirectoryInfo inputDir, FileInfo outputFile, int targetColumn, int initialColumn = 0)
+    internal static FileInfo CollectCsvColumns(this DirectoryInfo inputDir, FileInfo? outputFile, int targetColumn, int initialColumn = 0)
     {
         // preprocess
         if (UtilConfig.ConsoleOutput)
             Console.WriteLine("\r\n** CollectCsvColumns() Called");
         Encoding.RegisterProvider(CodePagesEncodingProvider.Instance); // Shift-JISを扱うためには必要。
+        if (outputFile is null)
+            outputFile = new FileInfo(Path.Combine(inputDir.FullName, "output_CollectCsvColumns", "output.csv"));
         if (!outputFile.Directory.Exists) outputFile.Directory.Create();
         if (outputFile.Exists) outputFile.Delete();
 
@@ -215,7 +138,7 @@ internal static class FileUtil
             // CsvからExcelにコピーさせる関数
             void AddColumnToResultColumnList(FileInfo csv, int targetInputCsvColumn, int targetOutputCsvColumn, string header = "")
             {
-                var csvData = csv.ReadCsv();
+                var csvData = csv.ReadCsv_Lines();
                 var tempCsvColumn = new List<string>();
                 tempCsvColumn.Add(header);
                 for (int i = 0; i < csvData.Length; i++)
@@ -275,7 +198,7 @@ internal static class FileUtil
                 resultCsv[i] = line;
             }
 
-            resultCsv.SaveCsv(outputFile);
+            resultCsv.SaveCsv_Lines(outputFile);
         }
         else if (outputExtension == ".xlsx")
         {
@@ -317,11 +240,10 @@ internal static class FileUtil
             }
 
             workbook.SaveAs(outputFile.FullName, true);
-            workbook.Dispose();
         }
         else
         {
-            throw new NotImplementedException();
+            throw new NotImplementedException("outputFile need to be .csv or .xlsx file null.");
         }
 
         return outputFile;
@@ -330,15 +252,18 @@ internal static class FileUtil
     /// move all csvs' target column to one csv
     /// </summary>
     /// <param name="inputDir"></param>
-    /// <param name="outputDir"></param>
+    /// <param name="outputDir">when null, automatically set to {inputDir.FullName}/output_CollectCsvColumns</param>
     /// <param name="targets"></param>
     /// <returns></returns>
     /// <exception cref="InvalidOperationException"></exception>
-    internal static DirectoryInfo ForEach_CollectCsvColumns(this DirectoryInfo inputDir, DirectoryInfo outputDir, params (string name, int targetColumn, int initialColumn)[] targets)
+    internal static DirectoryInfo CollectCsvColumns_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir, params (string name, int targetColumn, int initialColumn)[] targets)
     {
         // preprocess
         if (inputDir.FullName == outputDir.FullName)
             throw new InvalidOperationException("※ inputDir and outputDir must be different");
+        if (outputDir is null)
+            outputDir = new DirectoryInfo(Path.Combine(inputDir.FullName, "output_CollectCsvColumns"));
+        if (!outputDir.Exists) outputDir.Create();
 
         // main
         foreach (var item in targets)
@@ -353,34 +278,35 @@ internal static class FileUtil
     /// move all csvs' target column to one csv
     /// </summary>
     /// <param name="inputDir"></param>
-    /// <param name="outputDir"></param>
+    /// <param name="outputDir">when null, automatically set to {inputDir.FullName}/output_CollectCsvColumns</param>
     /// <param name="targets"></param>
     /// <returns></returns>
-    internal static DirectoryInfo ForEach_CollectCsvColumns(this DirectoryInfo inputDir, DirectoryInfo outputDir, params (string name, int targetColumn)[] targets)
+    internal static DirectoryInfo CollectCsvColumns_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir, params (string name, int targetColumn)[] targets)
     {
-        return inputDir.ForEach_CollectCsvColumns(outputDir, targets.Select(x => (x.name, x.targetColumn, 0)).ToArray());
+        return inputDir.CollectCsvColumns_Loop(outputDir, targets.Select(x => (x.name, x.targetColumn, 0)).ToArray());
     }
 
+    // ★★★★★★★★★★★★★★★ 223 Csvs2ExcelSheets
 
     /// <summary>
     /// create an excel file that have sheets from csvs
     /// </summary>
     /// <param name="inputDir"></param>
-    /// <param name="outputFile"></param>
+    /// <param name="outputFile">when null, automatically set to {inputDir.FullName}/output_Csvs2ExcelSheets/output.xlsx</param>
     /// <returns></returns>
     /// <exception cref="NotImplementedException"></exception>
-    internal static FileInfo Csvs2ExcelSheets(this DirectoryInfo inputDir, FileInfo outputFile)
+    internal static FileInfo Csvs2ExcelSheets(this DirectoryInfo inputDir, FileInfo? outputFile)
     {
         // preprocess
         if (UtilConfig.ConsoleOutput)
             Console.WriteLine("\r\n** Csvs2ExcelSheets() Called");
         Encoding.RegisterProvider(CodePagesEncodingProvider.Instance); // Shift-JISを扱うためには必要。
+        if (outputFile is null)
+            outputFile = new FileInfo(Path.Combine(inputDir.FullName, "output_Csvs2ExcelSheets", "output.xlsx"));
         if (!outputFile.Directory.Exists) outputFile.Directory.Create();
         if (outputFile.Exists) outputFile.Delete();
 
         // main
-
-        // Excel (※A1セルの座標が(1,1))
         using var workbook = new XLWorkbook();
 
         var csvs = inputDir
@@ -401,7 +327,7 @@ internal static class FileUtil
                 var sheetName = Path.GetFileNameWithoutExtension(csv.Name);
                 var worksheet = workbook.AddWorksheet(sheetName);
 
-                var inputCsv = csv.ReadCsv();
+                var inputCsv = csv.ReadCsv_Lines();
                 for (int i = 0; i < inputCsv.Length; i++)
                 {
                     var line = inputCsv[i];
@@ -421,25 +347,27 @@ internal static class FileUtil
         }
 
         workbook.SaveAs(outputFile.FullName, true);
-        workbook.Dispose();
 
         return outputFile;
     }
 
+    // ★★★★★★★★★★★★★★★ 224 MergeAllLines
 
     /// <summary>
     /// merge all file's lines in one file
     /// </summary>
     /// <param name="inputDir"></param>
-    /// <param name="outputFile"></param>
+    /// <param name="outputFile">when null, automatically set to {inputDir.FullName}/output_MergeAllLines/output.txt</param>
     /// <param name="skipRowCount"></param>
     /// <returns></returns>
     internal static FileInfo MergeAllLines(this DirectoryInfo inputDir, FileInfo outputFile, int skipRowCount = 0)
     {
         // preprocess
         if (UtilConfig.ConsoleOutput)
-            Console.WriteLine("\r\n** MergeAllTexts_D2F() Called");
+            Console.WriteLine("\r\n** MergeAllLines() Called");
         Encoding.RegisterProvider(CodePagesEncodingProvider.Instance); // Shift-JISを扱うためには必要。
+        if (outputFile is null)
+            outputFile = new FileInfo(Path.Combine(inputDir.FullName, "output_MergeAllLines", $"output.txt"));
         if (!outputFile.Directory.Exists) outputFile.Directory.Create();
         if (outputFile.Exists) outputFile.Delete();
 
@@ -467,7 +395,6 @@ internal static class FileUtil
 
         return outputFile;
     }
-
 
     // ★★★★★★★★★★★★★★★ 
 

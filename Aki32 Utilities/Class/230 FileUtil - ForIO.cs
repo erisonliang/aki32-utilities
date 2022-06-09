@@ -2,14 +2,13 @@
 
 namespace Aki32_Utilities.Class;
 
-internal static class FileIO
+internal static partial class FileUtil
 {
 
-    // ★★★★★★★★★★★★★★★ For csv IO
-
+    // ★★★★★★★★★★★★★★★ 231 ReadCsv_Lines
 
     /// <summary>
-    /// read csv
+    /// read csv as list of lines
     /// </summary>
     /// <param name="inputFile"></param>
     /// <param name="skipColumnCount"></param>
@@ -17,7 +16,7 @@ internal static class FileIO
     /// <param name="ignoreEmptyLine"></param>
     /// <param name="escapeChar"></param>
     /// <returns></returns>
-    internal static string[][] ReadCsv(this FileInfo inputFile, int skipColumnCount = 0, int skipRowCount = 0, bool ignoreEmptyLine = false, char escapeChar = '\"')
+    internal static string[][] ReadCsv_Lines(this FileInfo inputFile, int skipColumnCount = 0, int skipRowCount = 0, bool ignoreEmptyLine = false, char escapeChar = '\"')
     {
         // preprocess
         Encoding.RegisterProvider(CodePagesEncodingProvider.Instance); // Shift-JISを扱うためには必要。
@@ -58,22 +57,23 @@ internal static class FileIO
         return lines.ToArray();
     }
 
+    // ★★★★★★★★★★★★★★★ 233 SaveCsv_Lines
 
     /// <summary>
-    /// save csv
+    /// save csv from list of lines
     /// </summary>
-    /// <param name="inputFile"></param>
+    /// <param name="inputFile_Lines"></param>
     /// <param name="outputFile"></param>
     /// <param name="escapeChar"></param>
     /// <returns></returns>
-    internal static FileInfo SaveCsv(this string[][] inputFile, FileInfo outputFile, char escapeChar = '\"')
+    internal static FileInfo SaveCsv_Lines(this string[][] inputFile_Lines, FileInfo outputFile, char escapeChar = '\"')
     {
         // 初期処理
         Encoding.RegisterProvider(CodePagesEncodingProvider.Instance); // Shift-JISを扱うためには必要。
 
         using var sw = new StreamWriter(outputFile.FullName, false, Encoding.GetEncoding("SHIFT_JIS"));
 
-        foreach (var line in inputFile)
+        foreach (var line in inputFile_Lines)
         {
             var correctedLine = line.Select(x => x.Contains(',') ? $"{escapeChar}{x}{escapeChar}" : x);
             sw.WriteLine(string.Join(',', correctedLine));
@@ -82,8 +82,6 @@ internal static class FileIO
         return outputFile;
     }
 
-
     // ★★★★★★★★★★★★★★★ 
 
 }
-

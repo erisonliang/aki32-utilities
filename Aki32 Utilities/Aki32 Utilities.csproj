@@ -9,11 +9,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="ClosedXML" Version="0.95.4" />
+    <Compile Remove="# TestModel\FileUtil\**" />
+    <EmbeddedResource Remove="# TestModel\FileUtil\**" />
+    <None Remove="# TestModel\FileUtil\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="# TestModel\FileUtil\★ Combination\0 initial\" />
+    <PackageReference Include="ClosedXML" Version="0.95.4" />
   </ItemGroup>
 
 </Project>
