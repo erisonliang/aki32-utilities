@@ -93,6 +93,65 @@ internal static partial class FileUtil
         return outputDir;
     }
 
+    // ★★★★★★★★★★★★★★★ 213 MoveDir
+
+    /// <summary>
+    /// move entire directory
+    /// </summary>
+    /// <param name="inputDir"></param>
+    /// <param name="outputDir">must not to be null</param>
+    /// <returns></returns>
+    internal static DirectoryInfo MoveDir(this DirectoryInfo inputDir, DirectoryInfo outputDir)
+    {
+        // preprocess
+        if (UtilConfig.ConsoleOutput)
+            Console.WriteLine("\r\n** MoveDir() Called");
+        if (outputDir is null)
+            throw new ArgumentNullException(nameof(outputDir));
+
+        // main
+        inputDir.MoveTo(outputDir.FullName);
+
+        // postprocess
+        return outputDir;
+    }
+
+    // ★★★★★★★★★★★★★★★ 214 CopyDir
+
+    /// <summary>
+    /// copy entire directory
+    /// </summary>
+    /// <param name="inputDir"></param>
+    /// <param name="outputDir">must not to be null</param>
+    /// <returns></returns>
+    internal static DirectoryInfo CopyDir(this DirectoryInfo inputDir, DirectoryInfo outputDir, bool consoleOutput = true)
+    {
+        // preprocess
+        if (UtilConfig.ConsoleOutput && consoleOutput)
+            Console.WriteLine("\r\n** CopyDir() Called");
+        if (outputDir is null)
+            throw new ArgumentNullException(nameof(outputDir));
+
+        // main
+        // create new directory with the same attribtues
+        if (!outputDir.Exists)
+        {
+            outputDir.Create();
+            outputDir.Attributes = inputDir.Attributes;
+        }
+
+        // copy files (with overriding existing files)
+        foreach (FileInfo fileInfo in inputDir.GetFiles())
+            fileInfo.CopyTo(outputDir.FullName + @"\" + fileInfo.Name, true);
+
+        // copy directories
+        foreach (var inner_inputDir in inputDir.GetDirectories())
+            inner_inputDir.CopyDir(new DirectoryInfo(Path.Combine(outputDir.FullName, inner_inputDir.Name)), false);
+
+        // postprocess
+        return outputDir;
+    }
+
     // ★★★★★★★★★★★★★★★ 
 
 }

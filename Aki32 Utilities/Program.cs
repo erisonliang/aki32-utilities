@@ -12,7 +12,6 @@ internal class Program
 
         // tests
         {
-
             // 200 FileUtil
             {
                 var baseDir = @"..\..\..\# TestModel\200 FileUtil";
@@ -33,6 +32,20 @@ internal class Program
                     //var inputList = new FileInfo($@"{baseDir}\212 MakeFilesFromCsv\input\list.csv");
                     //var inputTemp = new FileInfo($@"{baseDir}\212 MakeFilesFromCsv\input\template.docx");
                     //inputList.MakeFilesFromCsv(null, inputTemp);
+                }
+
+                // 213 MoveDir
+                {
+                    //var input = new DirectoryInfo($@"{baseDir}\213 MoveDir\input");
+                    //var output = new DirectoryInfo($@"{baseDir}\213 MoveDir\output");
+                    //input.MoveDir(output);
+                }
+
+                // 214 CopyDir
+                {
+                    var input = new DirectoryInfo($@"{baseDir}\214 CopyDir\input");
+                    var output = new DirectoryInfo($@"{baseDir}\214 CopyDir\output");
+                    input.CopyDir(output);
                 }
 
                 // 221 ExtractCsvColumns
@@ -115,12 +128,13 @@ internal class Program
         // for aki32 private use
         // SNAPのパラメトリックスタディ！
         {
-            var baseDir = @"C:\Users\aki32\Dropbox\Documents\02 東大関連\0 授業\3 建築学専攻\建築構造・材料演習\# 演習\e-defenseモデル\calc";
+            var baseDirF = @"F:\e-defenseモデル\model";
+            var baseDirC = @"C:\Users\aki32\Dropbox\Documents\02 東大関連\0 授業\3 建築学専攻\建築構造・材料演習\# 演習\e-defenseモデル\calc";
             // 最大値と最小値
             {
-                //var _0D = new DirectoryInfo(@"F:\e-defenseモデル\model");
-                //var _1D = new DirectoryInfo($@"{baseDir}\集計処理, max, 0 collected");
-                //var _2D = new DirectoryInfo($@"{baseDir}\集計処理, max, 1 collected");
+                //var _0D = new DirectoryInfo($@"{baseDirF}");
+                //var _1D = new DirectoryInfo($@"{baseDirC}\集計処理, max, 0 collected");
+                //var _2D = new DirectoryInfo($@"{baseDirC}\集計処理, max, 1 collected");
 
                 //// 集約して，Excelに変換
                 //_0D.CollectFiles(_1D, @"*.NAP-AVDQRFMList.csv");
@@ -129,7 +143,7 @@ internal class Program
 
             // 履歴ファイル rainflow前
             {
-                //var _0D = new DirectoryInfo(@"F:\e-defenseモデル\model");
+                //var _0D = new DirectoryInfo($@"{baseDirF}");
                 //var _1D = new DirectoryInfo($@"{baseDir}\集計処理, history, 0 collected");
                 //var _2D = new DirectoryInfo($@"{baseDir}\集計処理, history, 1 extracted");
 
