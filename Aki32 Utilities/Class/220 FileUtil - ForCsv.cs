@@ -259,10 +259,10 @@ internal static partial class FileUtil
     internal static DirectoryInfo CollectCsvColumns_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir, params (string name, int targetColumn, int initialColumn)[] targets)
     {
         // preprocess
-        if (inputDir.FullName == outputDir.FullName)
-            throw new InvalidOperationException("※ inputDir and outputDir must be different");
         if (outputDir is null)
             outputDir = new DirectoryInfo(Path.Combine(inputDir.FullName, "output_CollectCsvColumns"));
+        if (inputDir.FullName == outputDir.FullName)
+            throw new InvalidOperationException("※ inputDir and outputDir must be different");
         if (!outputDir.Exists) outputDir.Create();
 
         // main

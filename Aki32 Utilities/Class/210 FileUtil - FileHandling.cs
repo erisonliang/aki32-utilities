@@ -93,7 +93,7 @@ internal static partial class FileUtil
         return outputDir;
     }
 
-    // ★★★★★★★★★★★★★★★ 213 MoveDir
+    // ★★★★★★★★★★★★★★★ 213 MoveTo
 
     /// <summary>
     /// move entire directory
@@ -101,7 +101,7 @@ internal static partial class FileUtil
     /// <param name="inputDir"></param>
     /// <param name="outputDir">must not to be null</param>
     /// <returns></returns>
-    internal static DirectoryInfo MoveDir(this DirectoryInfo inputDir, DirectoryInfo outputDir)
+    internal static DirectoryInfo MoveTo(this DirectoryInfo inputDir, DirectoryInfo outputDir)
     {
         // preprocess
         if (UtilConfig.ConsoleOutput)
@@ -110,13 +110,23 @@ internal static partial class FileUtil
             throw new ArgumentNullException(nameof(outputDir));
 
         // main
-        inputDir.MoveTo(outputDir.FullName);
+        if (inputDir.FullName[0..3] == outputDir.FullName[0..3])
+        {
+            // use default MoveTo().
+            inputDir.MoveTo(outputDir.FullName);
+        }
+        else
+        {
+            // We can't use MoveTo() for different drive.
+            inputDir.CopyTo(outputDir, false);
+            inputDir.Delete(true);
+        }
 
         // postprocess
         return outputDir;
     }
 
-    // ★★★★★★★★★★★★★★★ 214 CopyDir
+    // ★★★★★★★★★★★★★★★ 214 CopyTo
 
     /// <summary>
     /// copy entire directory
@@ -124,7 +134,7 @@ internal static partial class FileUtil
     /// <param name="inputDir"></param>
     /// <param name="outputDir">must not to be null</param>
     /// <returns></returns>
-    internal static DirectoryInfo CopyDir(this DirectoryInfo inputDir, DirectoryInfo outputDir, bool consoleOutput = true)
+    internal static DirectoryInfo CopyTo(this DirectoryInfo inputDir, DirectoryInfo outputDir, bool consoleOutput = true)
     {
         // preprocess
         if (UtilConfig.ConsoleOutput && consoleOutput)
@@ -146,7 +156,7 @@ internal static partial class FileUtil
 
         // copy directories
         foreach (var inner_inputDir in inputDir.GetDirectories())
-            inner_inputDir.CopyDir(new DirectoryInfo(Path.Combine(outputDir.FullName, inner_inputDir.Name)), false);
+            inner_inputDir.CopyTo(new DirectoryInfo(Path.Combine(outputDir.FullName, inner_inputDir.Name)), false);
 
         // postprocess
         return outputDir;
