@@ -66,36 +66,48 @@ internal class Program
 
                 // 311 CropImage
                 {
-                    var input = new FileInfo($@"{baseDir}\311 CropImage\input.bmp");
-                    input.CropImage(null, new ImageUtil.CropSize(0.13, 0.13, 0.13, 0.13));
-                    input.CropImage(null, new ImageUtil.CropSize(0, 0, 0.3, 0.3));
-                    input.CropImage(null, new ImageUtil.CropSize(0.3, 0, 0, 0.3));
-                    input.CropImage(null, new ImageUtil.CropSize(0.3, 0.3, 0, 0));
-                    input.CropImage(null, new ImageUtil.CropSize(0, 0.3, 0.3, 0));
+                    //var input = new FileInfo($@"{baseDir}\311 CropImage\input.bmp");
+                    //input.CropImage(null, new ImageUtil.CropSize(0.13, 0.13, 0.13, 0.13));
+                    //input.CropImage(null, new ImageUtil.CropSize(0, 0, 0.3, 0.3));
+                    //input.CropImage(null, new ImageUtil.CropSize(0.3, 0, 0, 0.3));
+                    //input.CropImage(null, new ImageUtil.CropSize(0.3, 0.3, 0, 0));
+                    //input.CropImage(null, new ImageUtil.CropSize(0, 0.3, 0.3, 0));
                 }
 
                 // 312 ConvertImageColor
                 {
-                    var input = new FileInfo($@"{baseDir}\312 ConvertImageColorAndSave\input.png");
+                    //var input = new FileInfo($@"{baseDir}\312 ConvertImageColorAndSave\input.png");
 
-                    var targetInfos = new (string, Color)[]
-                    {
-                        ("BBB", Color.Blue),
-                        ("GGG", Color.Green),
-                        ("CCC", Color.Cyan),
-                    };
-                    var targetColors = new Color[]
-                    {
-                        Color.Pink,
-                        Color.Red,
-                        Color.Orange,
-                        Color.Yellow,
-                    };
+                    //var targetInfos = new (string, Color)[]
+                    //{
+                    //    ("BBB", Color.Blue),
+                    //    ("GGG", Color.Green),
+                    //    ("CCC", Color.Cyan),
+                    //};
+                    //var targetColors = new Color[]
+                    //{
+                    //    Color.Pink,
+                    //    Color.Red,
+                    //    Color.Orange,
+                    //    Color.Yellow,
+                    //};
 
-                    input.ConvertImageColor(null, Color.White);
-                    input.ConvertImageColor_Loop(null, targetInfos);
-                    input.ConvertImageColor_Loop(null, targetColors);
+                    //input.ConvertImageColor(null, Color.White);
+                    //input.ConvertImageColor_Loop(null, targetInfos);
+                    //input.ConvertImageColor_Loop(null, targetColors);
                 }
+            }
+
+            // 400 PDFUtil
+            {
+                var baseDir = @"..\..\..\# TestModel\400 PDFUtil";
+
+                // 411 PDFPageCount
+                {
+                    var input = new DirectoryInfo($@"{baseDir}\411 PDFPageCount\input");
+                    input.PDFPageCount();
+                }
+
             }
         }
 

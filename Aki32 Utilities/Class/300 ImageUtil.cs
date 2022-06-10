@@ -67,7 +67,7 @@ internal static class ImageUtil
         foreach (var inputFile in inputDir.GetFiles())
         {
             var outputFile = new FileInfo(Path.Combine(outputDir.FullName, inputFile.Name));
-            inputFile.CropImageAndSave(outputFile, crop);
+            inputFile.CropImage(outputFile, crop);
         }
 
         return outputDir;
