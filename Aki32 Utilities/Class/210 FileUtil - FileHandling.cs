@@ -19,7 +19,7 @@ internal static partial class FileUtil
         // preprocess
         if (UtilConfig.ConsoleOutput)
             Console.WriteLine("\r\n** CollectFiles() Called");
-        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance); // Shift-JISを扱うためには必要。
+        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance); // to handle Shift-JIS
         if (outputDir is null)
             outputDir = new DirectoryInfo(Path.Combine(inputDir.Parent.FullName, "output_CollectFiles"));
         if (!outputDir.Exists) outputDir.Create();
@@ -64,7 +64,7 @@ internal static partial class FileUtil
         // preprocess
         if (UtilConfig.ConsoleOutput)
             Console.WriteLine("\r\n** Csvs2ExcelSheets() Called");
-        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance); // Shift-JISを扱うためには必要。
+        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance); // to handle Shift-JIS
         if (outputDir is null)
             outputDir = new DirectoryInfo(Path.Combine(inputFile.DirectoryName, "output_MakeFilesFromCsv"));
         if (!outputDir.Exists) outputDir.Create();

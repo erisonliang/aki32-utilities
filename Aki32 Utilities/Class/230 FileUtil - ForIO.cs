@@ -5,7 +5,7 @@ namespace Aki32_Utilities.Class;
 internal static partial class FileUtil
 {
 
-    // ★★★★★★★★★★★★★★★ 231 ReadCsv_Lines
+    // ★★★★★★★★★★★★★★★ 231 ReadCsv
 
     /// <summary>
     /// read csv as list of lines
@@ -16,14 +16,16 @@ internal static partial class FileUtil
     /// <param name="ignoreEmptyLine"></param>
     /// <param name="escapeChar"></param>
     /// <returns></returns>
-    internal static string[][] ReadCsv_Lines(this FileInfo inputFile, int skipColumnCount = 0, int skipRowCount = 0, bool ignoreEmptyLine = false, char escapeChar = '\"')
+    internal static string[][] ReadCsv_Rows(this FileInfo inputFile, int skipColumnCount = 0, int skipRowCount = 0, bool ignoreEmptyLine = false, char escapeChar = '\"', bool initialConsoleOutput = true)
     {
         // preprocess
-        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance); // Shift-JISを扱うためには必要。
+        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance); // to handle Shift-JIS
+        if (UtilConfig.ConsoleOutput && initialConsoleOutput)
+            Console.WriteLine("\r\n** ReadCsv_Rows() Called");
 
 
         // main            
-        var lines = new List<string[]>();
+        var rows = new List<string[]>();
 
         using var sr = new StreamReader(inputFile.FullName, Encoding.GetEncoding("SHIFT_JIS"));
 
@@ -36,28 +38,39 @@ internal static partial class FileUtil
             if (string.IsNullOrEmpty(line.Replace(",", "")))
             {
                 if (!ignoreEmptyLine)
-                    lines.Add(new string[0]);
+                    rows.Add(new string[0]);
             }
             else
             {
-                // TODO process escapeChar
+                // TODO: need to implement escapeChar
                 var lineItems = line.Split(",", StringSplitOptions.None);
                 if (lineItems.Length < skipColumnCount)
                 {
                     if (!ignoreEmptyLine)
-                        lines.Add(new string[0]);
+                        rows.Add(new string[0]);
                 }
                 else
                 {
-                    lines.Add(lineItems[skipColumnCount..]);
+                    rows.Add(lineItems[skipColumnCount..]);
                 }
             }
         }
 
-        return lines.ToArray();
+        return rows.ToArray();
+    }
+    internal static string[][] ReadCsv_Columns(this FileInfo inputFile, int skipColumnCount = 0, int skipRowCount = 0, bool ignoreEmptyLine = false, char escapeChar = '\"')
+    {
+        // preprocess
+        if (UtilConfig.ConsoleOutput)
+            Console.WriteLine("\r\n** ReadCsv_Columns() Called");
+
+        // main
+        var rows = ReadCsv_Rows(inputFile, skipColumnCount, skipRowCount, ignoreEmptyLine, escapeChar, false);
+        var columns = rows.Transpose2DArray();
+        return columns;
     }
 
-    // ★★★★★★★★★★★★★★★ 233 SaveCsv_Lines
+    // ★★★★★★★★★★★★★★★ 232 SaveCsv
 
     /// <summary>
     /// save csv from list of lines
@@ -66,22 +79,36 @@ internal static partial class FileUtil
     /// <param name="outputFile"></param>
     /// <param name="escapeChar"></param>
     /// <returns></returns>
-    internal static FileInfo SaveCsv_Lines(this string[][] inputFile_Lines, FileInfo outputFile, char escapeChar = '\"')
+    internal static FileInfo SaveCsv_Rows(this string[][] inputFile_Rows, FileInfo outputFile, char escapeChar = '\"', bool initialConsoleOutput = true)
     {
-        // 初期処理
-        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance); // Shift-JISを扱うためには必要。
+        // preprocess
+        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance); // to handle Shift-JIS
+        if (UtilConfig.ConsoleOutput && initialConsoleOutput)
+            Console.WriteLine("\r\n** SaveCsv_Rows() Called");
 
+
+        // main
         using var sw = new StreamWriter(outputFile.FullName, false, Encoding.GetEncoding("SHIFT_JIS"));
 
-        foreach (var line in inputFile_Lines)
+        foreach (var row in inputFile_Rows)
         {
-            var correctedLine = line.Select(x => x.Contains(',') ? $"{escapeChar}{x}{escapeChar}" : x);
+            var correctedLine = row.Select(x => x ?? "").Select(x => x.Contains(',') ? $"{escapeChar}{x}{escapeChar}" : x);
             sw.WriteLine(string.Join(',', correctedLine));
         }
 
         return outputFile;
     }
+    internal static FileInfo SaveCsv_Colums(this string[][] inputFile_Columns, FileInfo outputFile, char escapeChar = '\"')
+    {
+        // preprocess
+        if (UtilConfig.ConsoleOutput)
+            Console.WriteLine("\r\n** SaveCsv_Colums() Called");
+
+
+        // main
+        var inputFile_Rows = inputFile_Columns.Transpose2DArray();
+        return inputFile_Rows.SaveCsv_Rows(outputFile, escapeChar, false);
+    }
 
     // ★★★★★★★★★★★★★★★ 
-
 }

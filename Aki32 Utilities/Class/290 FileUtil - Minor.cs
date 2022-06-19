@@ -4,7 +4,7 @@ namespace Aki32_Utilities.Class;
 
 internal static partial class FileUtil
 {
-    // TODO: was lazy to test 291 and 292. do it later.
+    // TODO: test 291 and 292 later.
 
 
     // ★★★★★★★★★★★★★★★ 291 OrganizeDropBoxJuncFiles - wait for test

@@ -31,7 +31,7 @@ internal static class PDFUtil
         }
 
         Console.WriteLine($"--------------------------");
-        Console.WriteLine($"{totalCount,5} pages in total");
+        Console.WriteLine($"{totalCount,5} pages in total (only for success counts)");
         Console.WriteLine($"--------------------------");
         return totalCount;
     }
@@ -43,7 +43,7 @@ internal static class PDFUtil
     internal static int PDFPageCount(this FileInfo inputFile, bool initialConsoleOutput = true)
     {
         // preprocess
-        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance); // Shift-JISを扱うためには必要。
+        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance); // to handle Shift-JIS
         if (UtilConfig.ConsoleOutput && initialConsoleOutput)
             Console.WriteLine("\r\n** PDFPageCount() Called");
 
@@ -67,7 +67,7 @@ internal static class PDFUtil
         catch (Exception e)
         {
         }
-        Console.WriteLine($"X fail : {inputFile.FullName}");
+        Console.WriteLine($"---ERROR--- in {inputFile.FullName}");
         return -1;
 
         static int GetPageCount(string line)

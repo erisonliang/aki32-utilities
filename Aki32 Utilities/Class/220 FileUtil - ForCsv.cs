@@ -19,14 +19,14 @@ internal static partial class FileUtil
     internal static FileInfo ExtractCsvColumns(this FileInfo inputFile, FileInfo? outputFile, int[] extractingColumns, int skipRowCount = 0, string header = null)
     {
         // preprocess
-        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance); // Shift-JISを扱うためには必要。
+        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance); // to handle Shift-JIS
         if (outputFile is null)
             outputFile = new FileInfo(Path.Combine(inputFile.DirectoryName, "output_ExtractCsvColumns", inputFile.Name));
         if (!outputFile.Directory.Exists) outputFile.Directory.Create();
         if (outputFile.Exists) outputFile.Delete();
 
         // main
-        var inputCsv = inputFile.ReadCsv_Lines();
+        var inputCsv = inputFile.ReadCsv_Rows();
 
         var resultList = new List<string>();
 
@@ -109,7 +109,7 @@ internal static partial class FileUtil
         // preprocess
         if (UtilConfig.ConsoleOutput)
             Console.WriteLine("\r\n** CollectCsvColumns() Called");
-        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance); // Shift-JISを扱うためには必要。
+        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance); // to handle Shift-JIS
         if (outputFile is null)
             outputFile = new FileInfo(Path.Combine(inputDir.FullName, "output_CollectCsvColumns", "output.csv"));
         if (!outputFile.Directory.Exists) outputFile.Directory.Create();
@@ -132,13 +132,13 @@ internal static partial class FileUtil
 
         if (outputExtension == ".csv")
         {
-            // 全てのをテーブルにまとめて，最後に整形して保存する流れ。
+            // collect all data to this column list and save eventually
             var resultColumnList = new string[csvs.Length + 1][];
 
-            // CsvからExcelにコピーさせる関数
+            // copy one column from inputCsv to outputCsv method
             void AddColumnToResultColumnList(FileInfo csv, int targetInputCsvColumn, int targetOutputCsvColumn, string header = "")
             {
-                var csvData = csv.ReadCsv_Lines();
+                var csvData = csv.ReadCsv_Rows();
                 var tempCsvColumn = new List<string>();
                 tempCsvColumn.Add(header);
                 for (int i = 0; i < csvData.Length; i++)
@@ -155,10 +155,10 @@ internal static partial class FileUtil
                 resultColumnList[targetOutputCsvColumn] = tempCsvColumn.ToArray();
             }
 
-            // 最初の1列を持ってくる。
+            // copy initialColumn 
             AddColumnToResultColumnList(csvs[0], 0, initialColumn);
 
-            // 他の全てを持ってくる
+            // copy all of the rest
             for (int i = 0; i < csvs.Length; i++)
             {
                 var csvPath = csvs[i].FullName;
@@ -177,36 +177,16 @@ internal static partial class FileUtil
                 }
             }
 
-            // 行列を入れ替えて，保存。
-            var columnCount = resultColumnList.Length;
-            var rowCount = resultColumnList.Max(x => x.Length);
-            var resultCsv = new string[rowCount][];
-            for (int i = 0; i < rowCount; i++)
-            {
-                var line = new string[columnCount];
-                for (int j = 0; j < columnCount; j++)
-                {
-                    try
-                    {
-                        line[j] = resultColumnList[j][i];
-                    }
-                    catch (Exception)
-                    {
-                        line[j] = "";
-                    }
-                }
-                resultCsv[i] = line;
-            }
-
-            resultCsv.SaveCsv_Lines(outputFile);
+            // save
+            resultColumnList.SaveCsv_Colums(outputFile);
         }
         else if (outputExtension == ".xlsx")
         {
-            // Excel (※A1セルの座標が(1,1))
+            // Excel (※[1,1] refers A1 cell)
             using var workbook = new XLWorkbook();
             var worksheet = workbook.AddWorksheet("All");
 
-            // CsvからExcelにコピーさせる関数
+            // copy one column from csv to excel method
             void CopyCsvToExcelColumn(FileInfo csv, int targetCsvColumn, int targetExcelColumn)
             {
                 var sr = new StreamReader(csv.FullName, Encoding.GetEncoding("SHIFT_JIS"));
@@ -216,10 +196,10 @@ internal static partial class FileUtil
                     worksheet.Cell(i + 2, targetExcelColumn + 1).Value = all[i];
             }
 
-            // 最初の1列を持ってくる。
+            // copy initialColumn 
             CopyCsvToExcelColumn(csvs[0], initialColumn, 0);
 
-            // 他の全てを持ってくる
+            // copy all of the rest
             foreach (var csv in csvs)
             {
                 var csvPath = csv.FullName;
@@ -239,6 +219,7 @@ internal static partial class FileUtil
                 }
             }
 
+            // save
             workbook.SaveAs(outputFile.FullName, true);
         }
         else
@@ -300,7 +281,7 @@ internal static partial class FileUtil
         // preprocess
         if (UtilConfig.ConsoleOutput)
             Console.WriteLine("\r\n** Csvs2ExcelSheets() Called");
-        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance); // Shift-JISを扱うためには必要。
+        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance); // to handle Shift-JIS
         if (outputFile is null)
             outputFile = new FileInfo(Path.Combine(inputDir.FullName, "output_Csvs2ExcelSheets", "output.xlsx"));
         if (!outputFile.Directory.Exists) outputFile.Directory.Create();
@@ -327,7 +308,7 @@ internal static partial class FileUtil
                 var sheetName = Path.GetFileNameWithoutExtension(csv.Name);
                 var worksheet = workbook.AddWorksheet(sheetName);
 
-                var inputCsv = csv.ReadCsv_Lines();
+                var inputCsv = csv.ReadCsv_Rows();
                 for (int i = 0; i < inputCsv.Length; i++)
                 {
                     var line = inputCsv[i];
@@ -365,7 +346,7 @@ internal static partial class FileUtil
         // preprocess
         if (UtilConfig.ConsoleOutput)
             Console.WriteLine("\r\n** MergeAllLines() Called");
-        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance); // Shift-JISを扱うためには必要。
+        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance); // to handle Shift-JIS
         if (outputFile is null)
             outputFile = new FileInfo(Path.Combine(inputDir.FullName, "output_MergeAllLines", $"output.txt"));
         if (!outputFile.Directory.Exists) outputFile.Directory.Create();

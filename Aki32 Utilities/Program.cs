@@ -38,14 +38,14 @@ internal class Program
                 {
                     //var input = new DirectoryInfo($@"{baseDir}\213 MoveTo\input");
                     //var output = new DirectoryInfo($@"{baseDir}\213 MoveTo\output");
-                    //input.MoveDir(output);
+                    //input.MoveTo(output);
                 }
 
                 // 214 CopyTo
                 {
-                    var input = new DirectoryInfo($@"{baseDir}\214 CopyTo\input");
-                    var output = new DirectoryInfo($@"{baseDir}\214 CopyTo\output");
-                    input.CopyTo(output);
+                    //var input = new DirectoryInfo($@"{baseDir}\214 CopyTo\input");
+                    //var output = new DirectoryInfo($@"{baseDir}\214 CopyTo\output");
+                    //input.CopyTo(output);
                 }
 
                 // 221 ExtractCsvColumns
@@ -70,6 +70,21 @@ internal class Program
                 {
                     //var input = new DirectoryInfo($@"{baseDir}\224 MergeAllLines\input");
                     //input.MergeAllLines(null);
+                }
+
+                // 231 ReadCsv, 232 SaveCsv, 511 Transpose2DArray
+                {
+                    //var innerBaseDir = $@"{baseDir}\231 ReadCsv, 232 SaveCsv";
+                    //var input = new FileInfo($@"{innerBaseDir}\input.csv");
+                    //var output1 = new FileInfo($@"{innerBaseDir}\output1.csv");
+                    //var output2 = new FileInfo($@"{innerBaseDir}\output2.csv");
+                    //var output3 = new FileInfo($@"{innerBaseDir}\output3.csv");
+                    //var output4 = new FileInfo($@"{innerBaseDir}\output4.csv");
+
+                    //input.ReadCsv_Rows().SaveCsv_Rows(output1);
+                    //input.ReadCsv_Rows().SaveCsv_Colums(output2);
+                    //input.ReadCsv_Columns().SaveCsv_Rows(output3);
+                    //input.ReadCsv_Columns().SaveCsv_Colums(output4);
                 }
             }
 
@@ -120,50 +135,57 @@ internal class Program
                     //var input = new DirectoryInfo($@"{baseDir}\411 PDFPageCount\input");
                     //input.PDFPageCount();
                 }
-
             }
         }
 
 
         // for aki32 private use
-        // SNAPのパラメトリックスタディ！
+
         {
-            var baseDirF = @"F:\e-defenseモデル\model";
-            var baseDirC = @"C:\Users\aki32\Dropbox\Documents\02 東大関連\0 授業\3 建築学専攻\建築構造・材料演習\# 演習\e-defenseモデル\calc";
-
-            // 最大値
+            // 適当
             {
-                //var input = new DirectoryInfo($@"{baseDirF}");
-                //var output = new DirectoryInfo($@"{baseDirC}\集計処理, max");
 
-                //// 必要csvだけ持ってきて，対象列を1つのcsvに集約
-                //input
-                //    .CollectFiles(null, @"*.NAP-AVDQRFMList.csv")
-                //    .MoveTo(output)
-                //    .CollectCsvColumns_Loop(null, ("PSV220", 1));
             }
 
-            // 履歴ファイル rainflow前
+            // SNAPのパラメトリックスタディ！
             {
-                //var input = new DirectoryInfo($@"{baseDirF}");
-                //var output = new DirectoryInfo($@"{baseDirC}\集計処理, history");
+                var baseDirF = @"F:\e-defenseモデル\model";
+                var baseDirC = @"C:\Users\aki32\Dropbox\Documents\02 東大関連\0 授業\3 建築学専攻\建築構造・材料演習\# 演習\e-defenseモデル\calc";
 
-                //// 必要csvだけ持ってきて，全部11行目だけ取り出す！
-                //input
-                //    .CollectFiles(null, @"*.NAP-AVDQRFMList.csv")
-                //    .MoveTo(output)
-                //    .ExtractCsvColumns_Loop(null, new int[] { 0, 11 }, 6, "t, mu");
-            }
+                // 最大値
+                {
+                    //var input = new DirectoryInfo($@"{baseDirF}");
+                    //var output = new DirectoryInfo($@"{baseDirC}\集計処理, max");
 
-            // 履歴ファイル rainflow後
-            {
-                //var input = new DirectoryInfo($@"C:\Users\aki32\Dropbox\Documents\02 東大関連\0 授業\3 建築学専攻\建築構造・材料演習\# 演習\e-defenseモデル\calc\集計処理, history\output_ExtractCsvColumns\rainflow");
+                    //// 必要csvだけ持ってきて，対象列を1つのcsvに集約
+                    //input
+                    //    .CollectFiles(null, @"*.NAP-AVDQRFMList.csv")
+                    //    .MoveTo(output)
+                    //    .Csvs2ExcelSheets(null);
+                    //    //.CollectCsvColumns_Loop(null, ("PSV220", 1));
+                }
 
-                //// 最後に集計。
-                //input.CollectCsvColumns_Loop(null, ("totalDamage", 3));
+                // 履歴ファイル rainflow前
+                {
+                    //var input = new DirectoryInfo($@"{baseDirF}");
+                    //var output = new DirectoryInfo($@"{baseDirC}\集計処理, history");
+
+                    //// 必要csvだけ持ってきて，全部11行目だけ取り出す！
+                    //input
+                    //    .CollectFiles(null, @"*.NAP-AVDQRFMList.csv")
+                    //    .MoveTo(output)
+                    //    .ExtractCsvColumns_Loop(null, new int[] { 0, 11 }, 6, "t, mu");
+                }
+
+                // 履歴ファイル rainflow後
+                {
+                    //var input = new DirectoryInfo($@"C:\Users\aki32\Dropbox\Documents\02 東大関連\0 授業\3 建築学専攻\建築構造・材料演習\# 演習\e-defenseモデル\calc\集計処理, history\output_ExtractCsvColumns\rainflow");
+
+                    //// 最後に集計。
+                    //input.CollectCsvColumns_Loop(null, ("totalDamage", 3));
+                }
             }
         }
-
 
         Console.WriteLine();
         Console.WriteLine($"★ Process Finished!");
