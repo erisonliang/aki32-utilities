@@ -74,17 +74,17 @@ internal class Program
 
                 // 231 ReadCsv, 232 SaveCsv, 511 Transpose2DArray
                 {
-                    //var innerBaseDir = $@"{baseDir}\231 ReadCsv, 232 SaveCsv";
-                    //var input = new FileInfo($@"{innerBaseDir}\input.csv");
-                    //var output1 = new FileInfo($@"{innerBaseDir}\output1.csv");
-                    //var output2 = new FileInfo($@"{innerBaseDir}\output2.csv");
-                    //var output3 = new FileInfo($@"{innerBaseDir}\output3.csv");
-                    //var output4 = new FileInfo($@"{innerBaseDir}\output4.csv");
+                    var innerBaseDir = $@"{baseDir}\231 ReadCsv, 232 SaveCsv";
+                    var input = new FileInfo($@"{innerBaseDir}\input.csv");
+                    var output1 = new FileInfo($@"{innerBaseDir}\output1.csv");
+                    var output2 = new FileInfo($@"{innerBaseDir}\output2.csv");
+                    var output3 = new FileInfo($@"{innerBaseDir}\output3.csv");
+                    var output4 = new FileInfo($@"{innerBaseDir}\output4.csv");
 
-                    //input.ReadCsv_Rows().SaveCsv_Rows(output1);
-                    //input.ReadCsv_Rows().SaveCsv_Colums(output2);
-                    //input.ReadCsv_Columns().SaveCsv_Rows(output3);
-                    //input.ReadCsv_Columns().SaveCsv_Colums(output4);
+                    input.ReadCsv_Rows().SaveCsv_Rows(output1);
+                    input.ReadCsv_Rows().SaveCsv_Colums(output2);
+                    input.ReadCsv_Columns().SaveCsv_Rows(output3);
+                    input.ReadCsv_Columns().SaveCsv_Colums(output4);
                 }
             }
 

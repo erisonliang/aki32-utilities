@@ -19,10 +19,6 @@ internal static class DataUtil
     /// <returns></returns>
     internal static T[][] Transpose2DArray<T>(this T[][] inputData)
     {
-        // preprocess
-        if (UtilConfig.ConsoleOutput)
-            Console.WriteLine("\r\n** Transpose2DArray() Called");
-
         // main
         var columnCount = inputData.Length;
         var rowCount = inputData.Max(x => x.Length);

@@ -16,12 +16,10 @@ internal static partial class FileUtil
     /// <param name="ignoreEmptyLine"></param>
     /// <param name="escapeChar"></param>
     /// <returns></returns>
-    internal static string[][] ReadCsv_Rows(this FileInfo inputFile, int skipColumnCount = 0, int skipRowCount = 0, bool ignoreEmptyLine = false, char escapeChar = '\"', bool initialConsoleOutput = true)
+    internal static string[][] ReadCsv_Rows(this FileInfo inputFile, int skipColumnCount = 0, int skipRowCount = 0, bool ignoreEmptyLine = false, bool initialConsoleOutput = true)
     {
         // preprocess
         Encoding.RegisterProvider(CodePagesEncodingProvider.Instance); // to handle Shift-JIS
-        if (UtilConfig.ConsoleOutput && initialConsoleOutput)
-            Console.WriteLine("\r\n** ReadCsv_Rows() Called");
 
 
         // main            
@@ -42,8 +40,24 @@ internal static partial class FileUtil
             }
             else
             {
-                // TODO: need to implement escapeChar
+                var escapedFlag = false;
+                if (line.Contains("\""))
+                {
+                    escapedFlag = true;
+                    line = line.Replace($"\"\"", "{ignoringDQ}");
+                    var splitedLine = line.Split("\"", StringSplitOptions.None);
+                    for (int i = 0; i < splitedLine.Length; i++)
+                        if (i % 2 == 1)
+                            splitedLine[i] = splitedLine[i].Replace(",", "{ignoringComma}");
+                    line = string.Join("", splitedLine);
+                    line = line.Replace("{ignoringDQ}", $"\"");
+                }
+
                 var lineItems = line.Split(",", StringSplitOptions.None);
+
+                if (escapedFlag)
+                    lineItems = lineItems.Select(x => x.Replace("{ignoringComma}", ",")).ToArray();
+
                 if (lineItems.Length < skipColumnCount)
                 {
                     if (!ignoreEmptyLine)
@@ -58,14 +72,10 @@ internal static partial class FileUtil
 
         return rows.ToArray();
     }
-    internal static string[][] ReadCsv_Columns(this FileInfo inputFile, int skipColumnCount = 0, int skipRowCount = 0, bool ignoreEmptyLine = false, char escapeChar = '\"')
+    internal static string[][] ReadCsv_Columns(this FileInfo inputFile, int skipColumnCount = 0, int skipRowCount = 0, bool ignoreEmptyLine = false)
     {
-        // preprocess
-        if (UtilConfig.ConsoleOutput)
-            Console.WriteLine("\r\n** ReadCsv_Columns() Called");
-
         // main
-        var rows = ReadCsv_Rows(inputFile, skipColumnCount, skipRowCount, ignoreEmptyLine, escapeChar, false);
+        var rows = ReadCsv_Rows(inputFile, skipColumnCount, skipRowCount, ignoreEmptyLine, false);
         var columns = rows.Transpose2DArray();
         return columns;
     }
@@ -79,12 +89,10 @@ internal static partial class FileUtil
     /// <param name="outputFile"></param>
     /// <param name="escapeChar"></param>
     /// <returns></returns>
-    internal static FileInfo SaveCsv_Rows(this string[][] inputFile_Rows, FileInfo outputFile, char escapeChar = '\"', bool initialConsoleOutput = true)
+    internal static FileInfo SaveCsv_Rows(this string[][] inputFile_Rows, FileInfo outputFile, bool initialConsoleOutput = true)
     {
         // preprocess
         Encoding.RegisterProvider(CodePagesEncodingProvider.Instance); // to handle Shift-JIS
-        if (UtilConfig.ConsoleOutput && initialConsoleOutput)
-            Console.WriteLine("\r\n** SaveCsv_Rows() Called");
 
 
         // main
@@ -92,22 +100,20 @@ internal static partial class FileUtil
 
         foreach (var row in inputFile_Rows)
         {
-            var correctedLine = row.Select(x => x ?? "").Select(x => x.Contains(',') ? $"{escapeChar}{x}{escapeChar}" : x);
+            var correctedLine = row
+                .Select(x => x ?? "")
+                .Select(x => x.Replace("\"", "\"\""))
+                .Select(x => (x.Contains(',') || x.Contains('\"')) ? $"\"{x}\"" : x);
             sw.WriteLine(string.Join(',', correctedLine));
         }
 
         return outputFile;
     }
-    internal static FileInfo SaveCsv_Colums(this string[][] inputFile_Columns, FileInfo outputFile, char escapeChar = '\"')
+    internal static FileInfo SaveCsv_Colums(this string[][] inputFile_Columns, FileInfo outputFile)
     {
-        // preprocess
-        if (UtilConfig.ConsoleOutput)
-            Console.WriteLine("\r\n** SaveCsv_Colums() Called");
-
-
         // main
         var inputFile_Rows = inputFile_Columns.Transpose2DArray();
-        return inputFile_Rows.SaveCsv_Rows(outputFile, escapeChar, false);
+        return inputFile_Rows.SaveCsv_Rows(outputFile, false);
     }
 
     // ★★★★★★★★★★★★★★★ 
