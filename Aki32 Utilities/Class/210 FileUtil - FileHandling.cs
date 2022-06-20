@@ -71,16 +71,17 @@ internal static partial class FileUtil
 
         // main
         var tempDataEx = Path.GetExtension(templateFile.Name);
-        using var sr = new StreamReader(inputFile.FullName, Encoding.GetEncoding("SHIFT_JIS"));
+        var csv = inputFile.ReadCsv_Rows(ignoreEmptyLine: true);
 
-        while (!sr.EndOfStream)
+        foreach (var line in csv)
         {
-            var line = sr.ReadLine();
-            if (string.IsNullOrEmpty(line)) continue;
+            var targetName = line[0];
+
+            if (string.IsNullOrEmpty(targetName)) continue;
 
             try
             {
-                var targetPath = Path.Combine(outputDir.FullName, $"{line}{tempDataEx}");
+                var targetPath = Path.Combine(outputDir.FullName, $"{targetName}{tempDataEx}");
                 templateFile.CopyTo(targetPath, true);
                 Console.WriteLine($"O: {targetPath}");
             }

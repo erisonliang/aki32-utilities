@@ -5,7 +5,118 @@ namespace Aki32_Utilities.Class;
 internal static partial class FileUtil
 {
 
-    // ★★★★★★★★★★★★★★★ 221 ExtractCsvColumns
+    // ★★★★★★★★★★★★★★★ 221 ReadCsv
+
+    /// <summary>
+    /// read csv as list of lines
+    /// </summary>
+    /// <param name="inputFile"></param>
+    /// <param name="skipColumnCount"></param>
+    /// <param name="skipRowCount"></param>
+    /// <param name="ignoreEmptyLine"></param>
+    /// <param name="escapeChar"></param>
+    /// <returns></returns>
+    internal static string[][] ReadCsv_Rows(this FileInfo inputFile, int skipColumnCount = 0, int skipRowCount = 0, bool ignoreEmptyLine = false)
+    {
+        // preprocess
+        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance); // to handle Shift-JIS
+
+
+        // main            
+        var rows = new List<string[]>();
+
+        using var sr = new StreamReader(inputFile.FullName, Encoding.GetEncoding("SHIFT_JIS"));
+
+        for (int i = 0; i < skipRowCount; i++)
+            sr.ReadLine();
+
+        while (!sr.EndOfStream)
+        {
+            var line = sr.ReadLine();
+            if (string.IsNullOrEmpty(line.Replace(",", "")))
+            {
+                if (!ignoreEmptyLine)
+                    rows.Add(new string[0]);
+            }
+            else
+            {
+                var escapedFlag = false;
+                if (line.Contains("\""))
+                {
+                    escapedFlag = true;
+                    line = line.Replace($"\"\"", "{ignoringDQ}");
+                    var splitedLine = line.Split("\"", StringSplitOptions.None);
+                    for (int i = 0; i < splitedLine.Length; i++)
+                        if (i % 2 == 1)
+                            splitedLine[i] = splitedLine[i].Replace(",", "{ignoringComma}");
+                    line = string.Join("", splitedLine);
+                    line = line.Replace("{ignoringDQ}", $"\"");
+                }
+
+                var lineItems = line.Split(",", StringSplitOptions.None);
+
+                if (escapedFlag)
+                    lineItems = lineItems.Select(x => x.Replace("{ignoringComma}", ",")).ToArray();
+
+                if (lineItems.Length < skipColumnCount)
+                {
+                    if (!ignoreEmptyLine)
+                        rows.Add(new string[0]);
+                }
+                else
+                {
+                    rows.Add(lineItems[skipColumnCount..]);
+                }
+            }
+        }
+
+        return rows.ToArray();
+    }
+    internal static string[][] ReadCsv_Columns(this FileInfo inputFile, int skipColumnCount = 0, int skipRowCount = 0, bool ignoreEmptyLine = false)
+    {
+        // main
+        var rows = ReadCsv_Rows(inputFile, skipColumnCount, skipRowCount, ignoreEmptyLine);
+        var columns = rows.Transpose();
+        return columns;
+    }
+
+    // ★★★★★★★★★★★★★★★ 222 SaveCsv
+
+    /// <summary>
+    /// save csv from list of lines
+    /// </summary>
+    /// <param name="inputFile_Lines"></param>
+    /// <param name="outputFile"></param>
+    /// <param name="escapeChar"></param>
+    /// <returns></returns>
+    internal static FileInfo SaveCsv_Rows(this string[][] inputFile_Rows, FileInfo outputFile)
+    {
+        // preprocess
+        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance); // to handle Shift-JIS
+
+
+        // main
+        using var sw = new StreamWriter(outputFile.FullName, false, Encoding.GetEncoding("SHIFT_JIS"));
+
+        foreach (var row in inputFile_Rows)
+        {
+            var correctedLine = row
+                .Select(x => x ?? "")
+                .Select(x => x.Replace("\"", "\"\""))
+                .Select(x => (x.Contains(',') || x.Contains('\"')) ? $"\"{x}\"" : x);
+            sw.WriteLine(string.Join(',', correctedLine));
+        }
+
+        return outputFile;
+    }
+    internal static FileInfo SaveCsv_Columns(this string[][] inputFile_Columns, FileInfo outputFile)
+    {
+        // main
+        var inputFile_Rows = inputFile_Columns.Transpose();
+        return inputFile_Rows.SaveCsv_Rows(outputFile);
+    }
+
+    // ★★★★★★★★★★★★★★★ 223 ExtractCsvColumns
 
     /// <summary>
     /// extranct designated columns from csv to new csv
@@ -26,33 +137,31 @@ internal static partial class FileUtil
         if (outputFile.Exists) outputFile.Delete();
 
         // main
-        var inputCsv = inputFile.ReadCsv_Rows();
+        var inputCsv = inputFile.ReadCsv_Rows(0, skipRowCount);
 
-        var resultList = new List<string>();
+        var resultList = new List<string[]>();
 
         if (header is not null)
-            resultList.Add(string.Join(",", header));
+            resultList.Add(header.Split(","));
 
-        for (int i = skipRowCount; i < inputCsv.Length; i++) //TODO make this faster
+        for (int i = 0; i < inputCsv.Length; i++)
         {
-            var addingLine = "";
+            var addingLine = new List<string>();
             foreach (var ec in extractingColumns)
             {
                 try
                 {
-                    addingLine += inputCsv[i][ec];
+                    addingLine.Add(inputCsv[i][ec]);
                 }
                 catch (Exception)
                 {
+                    addingLine.Add("");
                 }
-                addingLine += ",";
             }
-            resultList.Add(addingLine);
+            resultList.Add(addingLine.ToArray());
         }
 
-        using var sw = new StreamWriter(outputFile.FullName, false, Encoding.GetEncoding("SHIFT_JIS"));
-        foreach (var item in resultList)
-            sw.WriteLine(item);
+        resultList.ToArray().SaveCsv_Rows(outputFile);
 
         return outputFile;
     }
@@ -94,7 +203,7 @@ internal static partial class FileUtil
         return outputDir;
     }
 
-    // ★★★★★★★★★★★★★★★ 222 CollectCsvColumns
+    // ★★★★★★★★★★★★★★★ 224 CollectCsvColumns
 
     /// <summary>
     /// move all csvs' target column to one csv (.xlsx is also acceptable)
@@ -104,7 +213,7 @@ internal static partial class FileUtil
     /// <param name="targetColumn"></param>
     /// <param name="initialColumn"></param>
     /// <returns></returns>
-    internal static FileInfo CollectCsvColumns(this DirectoryInfo inputDir, FileInfo? outputFile, int targetColumn, int initialColumn = 0)
+    internal static FileInfo CollectCsvColumns(this DirectoryInfo inputDir, FileInfo? outputFile, int targetColumn, int initialColumn = 0, int skipRowCount = 0)
     {
         // preprocess
         if (UtilConfig.ConsoleOutput)
@@ -138,9 +247,8 @@ internal static partial class FileUtil
             // copy one column from inputCsv to outputCsv method
             void AddColumnToResultColumnList(FileInfo csv, int targetInputCsvColumn, int targetOutputCsvColumn, string header = "")
             {
-                var csvData = csv.ReadCsv_Rows();
-                var tempCsvColumn = new List<string>();
-                tempCsvColumn.Add(header);
+                var csvData = csv.ReadCsv_Rows(skipRowCount);
+                var tempCsvColumn = new List<string> { header };
                 for (int i = 0; i < csvData.Length; i++)
                 {
                     try
@@ -178,7 +286,7 @@ internal static partial class FileUtil
             }
 
             // save
-            resultColumnList.SaveCsv_Colums(outputFile);
+            resultColumnList.SaveCsv_Columns(outputFile);
         }
         else if (outputExtension == ".xlsx")
         {
@@ -237,7 +345,7 @@ internal static partial class FileUtil
     /// <param name="targets"></param>
     /// <returns></returns>
     /// <exception cref="InvalidOperationException"></exception>
-    internal static DirectoryInfo CollectCsvColumns_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir, params (string name, int targetColumn, int initialColumn)[] targets)
+    internal static DirectoryInfo CollectCsvColumns_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir, (string name, int targetColumn, int initialColumn)[] targets, int skipRowCount = 0)
     {
         // preprocess
         if (outputDir is null)
@@ -250,7 +358,7 @@ internal static partial class FileUtil
         foreach (var item in targets)
         {
             var outputFile = new FileInfo(Path.Combine(outputDir.FullName, item.name + ".csv"));
-            inputDir.CollectCsvColumns(outputFile, item.targetColumn, item.initialColumn);
+            inputDir.CollectCsvColumns(outputFile, item.targetColumn, item.initialColumn, skipRowCount);
         }
 
         return outputDir;
@@ -260,14 +368,37 @@ internal static partial class FileUtil
     /// </summary>
     /// <param name="inputDir"></param>
     /// <param name="outputDir">when null, automatically set to {inputDir.FullName}/output_CollectCsvColumns</param>
+    /// <param name="target"></param>
+    /// <returns></returns>
+    /// <exception cref="InvalidOperationException"></exception>
+    internal static DirectoryInfo CollectCsvColumns_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir, (string name, int targetColumn, int initialColumn) target, int skipRowCount = 0)
+    {
+        return CollectCsvColumns_Loop(inputDir, outputDir, new (string name, int targetColumn, int initialColumn)[] { target }, skipRowCount);
+    }
+    /// <summary>
+    /// move all csvs' target column to one csv
+    /// </summary>
+    /// <param name="inputDir"></param>
+    /// <param name="outputDir">when null, automatically set to {inputDir.FullName}/output_CollectCsvColumns</param>
     /// <param name="targets"></param>
     /// <returns></returns>
-    internal static DirectoryInfo CollectCsvColumns_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir, params (string name, int targetColumn)[] targets)
+    internal static DirectoryInfo CollectCsvColumns_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir, (string name, int targetColumn)[] targets, int skipRowCount = 0)
     {
-        return inputDir.CollectCsvColumns_Loop(outputDir, targets.Select(x => (x.name, x.targetColumn, 0)).ToArray());
+        return inputDir.CollectCsvColumns_Loop(outputDir, targets.Select(x => (x.name, x.targetColumn, 0)).ToArray(),skipRowCount);
+    }
+    /// <summary>
+    /// move all csvs' target column to one csv
+    /// </summary>
+    /// <param name="inputDir"></param>
+    /// <param name="outputDir">when null, automatically set to {inputDir.FullName}/output_CollectCsvColumns</param>
+    /// <param name="target"></param>
+    /// <returns></returns>
+    internal static DirectoryInfo CollectCsvColumns_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir, (string name, int targetColumn) target, int skipRowCount = 0)
+    {
+        return inputDir.CollectCsvColumns_Loop(outputDir, new (string name, int targetColumn)[] { target }, skipRowCount);
     }
 
-    // ★★★★★★★★★★★★★★★ 223 Csvs2ExcelSheets
+    // ★★★★★★★★★★★★★★★ 225 Csvs2ExcelSheets
 
     /// <summary>
     /// create an excel file that have sheets from csvs
@@ -328,51 +459,6 @@ internal static partial class FileUtil
         }
 
         workbook.SaveAs(outputFile.FullName, true);
-
-        return outputFile;
-    }
-
-    // ★★★★★★★★★★★★★★★ 224 MergeAllLines
-
-    /// <summary>
-    /// merge all file's lines in one file
-    /// </summary>
-    /// <param name="inputDir"></param>
-    /// <param name="outputFile">when null, automatically set to {inputDir.FullName}/output_MergeAllLines/output.txt</param>
-    /// <param name="skipRowCount"></param>
-    /// <returns></returns>
-    internal static FileInfo MergeAllLines(this DirectoryInfo inputDir, FileInfo outputFile, int skipRowCount = 0)
-    {
-        // preprocess
-        if (UtilConfig.ConsoleOutput)
-            Console.WriteLine("\r\n** MergeAllLines() Called");
-        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance); // to handle Shift-JIS
-        if (outputFile is null)
-            outputFile = new FileInfo(Path.Combine(inputDir.FullName, "output_MergeAllLines", $"output.txt"));
-        if (!outputFile.Directory.Exists) outputFile.Directory.Create();
-        if (outputFile.Exists) outputFile.Delete();
-
-        // main
-        var files = inputDir.GetFiles("*", SearchOption.TopDirectoryOnly);
-        files = files.Where(x => !x.Name.Contains(outputFile.DirectoryName)).ToArray();
-
-        using var sw = new StreamWriter(outputFile.FullName, false, Encoding.GetEncoding("SHIFT_JIS"));
-        foreach (var f in files)
-        {
-            try
-            {
-                var input = File.ReadLines(f.FullName, Encoding.GetEncoding("SHIFT_JIS")).ToArray();
-                for (int i = skipRowCount; i < input.Length; i++)
-                    sw.WriteLine(input[i]);
-                if (UtilConfig.ConsoleOutput)
-                    Console.WriteLine($"O: {f.FullName}");
-            }
-            catch (Exception ex)
-            {
-                if (UtilConfig.ConsoleOutput)
-                    Console.WriteLine($"X: {f.FullName}, {ex.Message}");
-            }
-        }
 
         return outputFile;
     }
