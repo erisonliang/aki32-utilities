@@ -23,15 +23,16 @@ internal static class PDFUtil
 
         // main
         var totalCount = 0;
-
+        var errorCount = 0;
         foreach (FileInfo f in inputDir.GetFiles("*.pdf", topDirectoryOnly ? SearchOption.TopDirectoryOnly : SearchOption.AllDirectories))
         {
             var page = f.PDFPageCount(false);
             if (page > 0) totalCount += page;
+            else errorCount++;
         }
 
         Console.WriteLine($"--------------------------");
-        Console.WriteLine($"{totalCount,5} pages in total (only for success counts)");
+        Console.WriteLine($"{totalCount,5} pages in total {(errorCount > 0 ? $"(※ exept for {errorCount} errors)" : "")}");
         Console.WriteLine($"--------------------------");
         return totalCount;
     }

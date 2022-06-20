@@ -172,7 +172,6 @@ internal class Program
 
 
         // for aki32 private use
-
         {
             // 適当
             {
