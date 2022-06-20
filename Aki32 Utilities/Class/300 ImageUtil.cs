@@ -53,11 +53,11 @@ internal static class ImageUtil
     /// <param name="outputDir">when null, automatically set to {inputDir.Fullname}/output_CropImage/{inputFile.Name}.png</param>
     /// <param name="crop"></param>
     /// <returns></returns>
-    internal static DirectoryInfo CropImage(this DirectoryInfo inputDir, DirectoryInfo? outputDir, CropSize crop)
+    internal static DirectoryInfo CropImage_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir, CropSize crop)
     {
         // preprocess
         if (UtilConfig.ConsoleOutput)
-            Console.WriteLine("\r\n** CropImageAndSave() Called");
+            Console.WriteLine("\r\n** CropImage_Loop() Called");
         if (outputDir == null)
             outputDir = new DirectoryInfo(Path.Combine(inputDir.FullName, "output_CropImage"));
         if (!outputDir.Exists)
@@ -178,7 +178,7 @@ internal static class ImageUtil
     {
         // preprocess
         if (UtilConfig.ConsoleOutput)
-            Console.WriteLine("\r\n** ConvertImageColorAndSave() Called");
+            Console.WriteLine("\r\n** ConvertImageColor_Loop() Called");
         if (outputDir == null)
             outputDir = new DirectoryInfo(Path.Combine(inputFile.DirectoryName, "output_ConvertImageColor"));
         if (!outputDir.Exists)

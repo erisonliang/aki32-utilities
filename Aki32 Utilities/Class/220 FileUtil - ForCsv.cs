@@ -5,7 +5,7 @@ namespace Aki32_Utilities.Class;
 internal static partial class FileUtil
 {
 
-    // ★★★★★★★★★★★★★★★ 221 ReadCsv
+    // ★★★★★★★★★★★★★★★ 221 ReadCsv, SaveCsv
 
     /// <summary>
     /// read csv as list of lines
@@ -80,8 +80,6 @@ internal static partial class FileUtil
         return columns;
     }
 
-    // ★★★★★★★★★★★★★★★ 222 SaveCsv
-
     /// <summary>
     /// save csv from list of lines
     /// </summary>
@@ -89,7 +87,7 @@ internal static partial class FileUtil
     /// <param name="outputFile"></param>
     /// <param name="escapeChar"></param>
     /// <returns></returns>
-    internal static FileInfo SaveCsv_Rows(this string[][] inputFile_Rows, FileInfo outputFile)
+    internal static FileInfo SaveCsv_Rows(this string[][] inputFile_Rows, FileInfo outputFile, string header = null)
     {
         // preprocess
         Encoding.RegisterProvider(CodePagesEncodingProvider.Instance); // to handle Shift-JIS
@@ -97,6 +95,9 @@ internal static partial class FileUtil
 
         // main
         using var sw = new StreamWriter(outputFile.FullName, false, Encoding.GetEncoding("SHIFT_JIS"));
+
+        if (header is not null)
+            sw.WriteLine(header);
 
         foreach (var row in inputFile_Rows)
         {
@@ -109,11 +110,73 @@ internal static partial class FileUtil
 
         return outputFile;
     }
-    internal static FileInfo SaveCsv_Columns(this string[][] inputFile_Columns, FileInfo outputFile)
+    internal static FileInfo SaveCsv_Columns(this string[][] inputFile_Columns, FileInfo outputFile, string header = null)
     {
         // main
         var inputFile_Rows = inputFile_Columns.Transpose();
-        return inputFile_Rows.SaveCsv_Rows(outputFile);
+        return inputFile_Rows.SaveCsv_Rows(outputFile, header);
+    }
+
+    // ★★★★★★★★★★★★★★★ 222 TransposeCsv
+
+    /// <summary>
+    /// Transpose csv and save
+    /// </summary>
+    /// <param name="inputFile"></param>
+    /// <param name="outputFile">when null, automatically set to {inputFile.DirectoryName}/output_TransposeCsv/{inputFile.Name}</param>
+    /// <param name="skipColumnCount"></param>
+    /// <param name="skipRowCount"></param>
+    /// <param name="header"></param>
+    /// <returns></returns>
+    internal static FileInfo TransposeCsv(this FileInfo inputFile, FileInfo? outputFile, int skipColumnCount = 0, int skipRowCount = 0, string header = null)
+    {
+        // preprocess
+        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance); // to handle Shift-JIS
+        if (outputFile is null)
+            outputFile = new FileInfo(Path.Combine(inputFile.DirectoryName, "output_TransposeCsv", inputFile.Name));
+        if (!outputFile.Directory.Exists) outputFile.Directory.Create();
+        if (outputFile.Exists) outputFile.Delete();
+
+
+        // main
+        return inputFile.ReadCsv_Rows(skipColumnCount, skipRowCount).SaveCsv_Columns(outputFile, header);
+    }
+    /// <summary>
+    /// Transpose csv and save
+    /// </summary>
+    /// <param name="inputDir"></param>
+    /// <param name="outputDir">when null, automatically set to {inputDir.FullName}/output_TransposeCsv</param>
+    /// <param name="skipColumnCount"></param>s
+    /// <param name="skipRowCount"></param>
+    /// <param name="header"></param>
+    /// <returns></returns>
+    internal static DirectoryInfo TransposeCsv_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir, int skipColumnCount = 0, int skipRowCount = 0, string header = null)
+    {
+        // preprocess
+        if (UtilConfig.ConsoleOutput)
+            Console.WriteLine("\r\n** TransposeCsv_Loop() Called");
+        if (outputDir is null)
+            outputDir = new DirectoryInfo(Path.Combine(inputDir.FullName, "output_TransposeCsv"));
+        if (!outputDir.Exists) outputDir.Create();
+
+        // main
+        foreach (var file in inputDir.GetFiles())
+        {
+            var newFilePath = Path.Combine(outputDir.FullName, file.Name);
+            try
+            {
+                file.TransposeCsv(new FileInfo(newFilePath), skipColumnCount, skipRowCount, header);
+                if (UtilConfig.ConsoleOutput)
+                    Console.WriteLine($"O: {newFilePath}");
+            }
+            catch (Exception ex)
+            {
+                if (UtilConfig.ConsoleOutput)
+                    Console.WriteLine($"X: {newFilePath}, {ex.Message}");
+            }
+        }
+
+        return outputDir;
     }
 
     // ★★★★★★★★★★★★★★★ 223 ExtractCsvColumns
@@ -141,9 +204,6 @@ internal static partial class FileUtil
 
         var resultList = new List<string[]>();
 
-        if (header is not null)
-            resultList.Add(header.Split(","));
-
         for (int i = 0; i < inputCsv.Length; i++)
         {
             var addingLine = new List<string>();
@@ -161,7 +221,7 @@ internal static partial class FileUtil
             resultList.Add(addingLine.ToArray());
         }
 
-        resultList.ToArray().SaveCsv_Rows(outputFile);
+        resultList.ToArray().SaveCsv_Rows(outputFile, header);
 
         return outputFile;
     }
@@ -178,7 +238,7 @@ internal static partial class FileUtil
     {
         // preprocess
         if (UtilConfig.ConsoleOutput)
-            Console.WriteLine("\r\n** ExtractCsvColumns() Called (This takes time...)");
+            Console.WriteLine("\r\n** ExtractCsvColumns_Loop() Called (This takes time...)");
         if (outputDir is null)
             outputDir = new DirectoryInfo(Path.Combine(inputDir.FullName, "output_ExtractCsvColumns"));
         if (!outputDir.Exists) outputDir.Create();
@@ -247,7 +307,7 @@ internal static partial class FileUtil
             // copy one column from inputCsv to outputCsv method
             void AddColumnToResultColumnList(FileInfo csv, int targetInputCsvColumn, int targetOutputCsvColumn, string header = "")
             {
-                var csvData = csv.ReadCsv_Rows(skipRowCount);
+                var csvData = csv.ReadCsv_Rows(0, skipRowCount);
                 var tempCsvColumn = new List<string> { header };
                 for (int i = 0; i < csvData.Length; i++)
                 {
@@ -345,7 +405,7 @@ internal static partial class FileUtil
     /// <param name="targets"></param>
     /// <returns></returns>
     /// <exception cref="InvalidOperationException"></exception>
-    internal static DirectoryInfo CollectCsvColumns_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir, (string name, int targetColumn, int initialColumn)[] targets, int skipRowCount = 0)
+    internal static DirectoryInfo CollectCsvColumns_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir, int initialColumn, int skipRowCount, params (string name, int targetColumn, int initialColumn)[] targets)
     {
         // preprocess
         if (outputDir is null)
@@ -368,12 +428,12 @@ internal static partial class FileUtil
     /// </summary>
     /// <param name="inputDir"></param>
     /// <param name="outputDir">when null, automatically set to {inputDir.FullName}/output_CollectCsvColumns</param>
-    /// <param name="target"></param>
+    /// <param name="targets"></param>
     /// <returns></returns>
     /// <exception cref="InvalidOperationException"></exception>
-    internal static DirectoryInfo CollectCsvColumns_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir, (string name, int targetColumn, int initialColumn) target, int skipRowCount = 0)
+    internal static DirectoryInfo CollectCsvColumns_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir, params (string name, int targetColumn, int initialColumn)[] targets)
     {
-        return CollectCsvColumns_Loop(inputDir, outputDir, new (string name, int targetColumn, int initialColumn)[] { target }, skipRowCount);
+        return inputDir.CollectCsvColumns_Loop(outputDir, 0, 0, targets);
     }
     /// <summary>
     /// move all csvs' target column to one csv
@@ -382,20 +442,20 @@ internal static partial class FileUtil
     /// <param name="outputDir">when null, automatically set to {inputDir.FullName}/output_CollectCsvColumns</param>
     /// <param name="targets"></param>
     /// <returns></returns>
-    internal static DirectoryInfo CollectCsvColumns_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir, (string name, int targetColumn)[] targets, int skipRowCount = 0)
+    internal static DirectoryInfo CollectCsvColumns_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir, int initialColumn, int skipRowCount, params (string name, int targetColumn)[] targets)
     {
-        return inputDir.CollectCsvColumns_Loop(outputDir, targets.Select(x => (x.name, x.targetColumn, 0)).ToArray(),skipRowCount);
+        return inputDir.CollectCsvColumns_Loop(outputDir, initialColumn, skipRowCount, targets.Select(x => (x.name, x.targetColumn, 0)).ToArray());
     }
     /// <summary>
     /// move all csvs' target column to one csv
     /// </summary>
     /// <param name="inputDir"></param>
     /// <param name="outputDir">when null, automatically set to {inputDir.FullName}/output_CollectCsvColumns</param>
-    /// <param name="target"></param>
+    /// <param name="targets"></param>
     /// <returns></returns>
-    internal static DirectoryInfo CollectCsvColumns_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir, (string name, int targetColumn) target, int skipRowCount = 0)
+    internal static DirectoryInfo CollectCsvColumns_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir, params (string name, int targetColumn)[] targets)
     {
-        return inputDir.CollectCsvColumns_Loop(outputDir, new (string name, int targetColumn)[] { target }, skipRowCount);
+        return inputDir.CollectCsvColumns_Loop(outputDir, 0, 0, targets);
     }
 
     // ★★★★★★★★★★★★★★★ 225 Csvs2ExcelSheets

@@ -49,7 +49,7 @@ internal class Program
 
                 // 221 ReadCsv, 222 SaveCsv, 511 Transpose
                 {
-                    //var innerBaseDir = $@"{baseDir}\221 ReadCsv, 222 SaveCsv";
+                    //var innerBaseDir = $@"{baseDir}\221 ReadCsv, SaveCsv";
                     //var input = new FileInfo($@"{innerBaseDir}\input.csv");
                     //var output1 = new FileInfo($@"{innerBaseDir}\output1.csv");
                     //var output2 = new FileInfo($@"{innerBaseDir}\output2.csv");
@@ -185,17 +185,18 @@ internal class Program
                     var baseDirF = @"F:\30層モデル\model";
                     var baseDirC = @"C:\Users\aki32\Dropbox\Documents\02 東大関連\0 授業\3 建築学専攻\建築構造・材料演習\# 演習\30層モデル\calc";
 
-                    // sum mu
+                    // total mu
                     {
                         //var input = new DirectoryInfo($@"{baseDirF}");
-                        //var output = new DirectoryInfo($@"{baseDirC}\集計, sum mu");
+                        //var output = new DirectoryInfo($@"{baseDirC}\集計, total mu");
 
-                        //// 必要csvだけ持ってきて，対象列を1つのcsvに集約
+                        //// 出力データから，各梁における累積塑性変形倍率を抽出。
                         //input
                         //    .CollectFiles(null, @"D30B*.csv")
+                        //    .CollectCsvColumns_Loop(null, 0, 37506, ("total mu i", 6), ("total mu j", 12))
                         //    .MoveTo(output)
-                        //    .ExtractCsvColumns_Loop(null, new int[] { 0, 6, 12 }, 37506, "t,sig mu i, sig mu j")
-                        //    .CollectCsvColumns_Loop(null, ("sig mu i", 1), ("sig mu j", 2));
+                        //    .TransposeCsv_Loop(null, 1, 0)
+                        //    .CollectCsvColumns(null, 1);
                     }
                 }
 
@@ -214,18 +215,11 @@ internal class Program
                         //    .CollectFiles(null, @"*.NAP-AVDQRFMList.csv")
                         //    .MoveTo(output)
                         //    .Csvs2ExcelSheets(null);
-                        //    //.CollectCsvColumns_Loop(null, ("PSV220", 1));
+                        ////.CollectCsvColumns_Loop(null, ("PSV220", 1));
                     }
 
                     // 層間変形履歴ファイル
                     {
-
-                        // test!!
-
-
-
-
-
                         //var input = new DirectoryInfo($@"{baseDirF}");
                         //var output = new DirectoryInfo($@"{baseDirC}\集計, F2 history");
 
@@ -233,8 +227,7 @@ internal class Program
                         //input
                         //    .CollectFiles(null, @"D7F2.csv") // 対象の層
                         //    .MoveTo(output)
-                        //    .ExtractCsvColumns_Loop(null, new int[] { 0, 11 }, 6, "t, 層間変形")
-                        //    .CollectCsvColumns_Loop(null, ("層間変形", 1));
+                        //    .CollectCsvColumns_Loop(null, 0, 6, ("層間変形", 11));
                     }
 
                     // 梁端履歴ファイル rainflow前

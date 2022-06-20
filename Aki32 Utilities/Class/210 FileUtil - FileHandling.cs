@@ -63,7 +63,7 @@ internal static partial class FileUtil
     {
         // preprocess
         if (UtilConfig.ConsoleOutput)
-            Console.WriteLine("\r\n** Csvs2ExcelSheets() Called");
+            Console.WriteLine("\r\n** MakeFilesFromCsv() Called");
         Encoding.RegisterProvider(CodePagesEncodingProvider.Instance); // to handle Shift-JIS
         if (outputDir is null)
             outputDir = new DirectoryInfo(Path.Combine(inputFile.DirectoryName, "output_MakeFilesFromCsv"));
@@ -106,7 +106,7 @@ internal static partial class FileUtil
     {
         // preprocess
         if (UtilConfig.ConsoleOutput)
-            Console.WriteLine("\r\n** MoveDir() Called");
+            Console.WriteLine("\r\n** MoveTo() Called");
         if (outputDir is null)
             throw new ArgumentNullException(nameof(outputDir));
 
@@ -139,7 +139,7 @@ internal static partial class FileUtil
     {
         // preprocess
         if (UtilConfig.ConsoleOutput && consoleOutput)
-            Console.WriteLine("\r\n** CopyDir() Called");
+            Console.WriteLine("\r\n** CopyTo() Called");
         if (outputDir is null)
             throw new ArgumentNullException(nameof(outputDir));
 
