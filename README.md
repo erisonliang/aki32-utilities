@@ -2,7 +2,7 @@
 
 My windows utility written in C#
 
-More descriptions are to be added
+❗ = FileSystemInfo chain available
 
 ![小さいアプリメモ-7](https://user-images.githubusercontent.com/49830756/174707686-66fea4af-4c03-4f56-8b6f-9a3e92dad9c4.jpg)
 
