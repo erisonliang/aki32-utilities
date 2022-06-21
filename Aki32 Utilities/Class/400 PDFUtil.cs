@@ -6,7 +6,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Aki32_Utilities.Class;
-internal static class PDFUtil
+public static class PDFUtil
 {
 
     // ★★★★★★★★★★★★★★★ 411 PDFPageCount
@@ -15,7 +15,7 @@ internal static class PDFUtil
     /// PDF page count
     /// </summary>
     /// <param name="inputDir"></param>
-    internal static int PDFPageCount(this DirectoryInfo inputDir, bool topDirectoryOnly = false)
+    public static int PDFPageCount(this DirectoryInfo inputDir, bool topDirectoryOnly = false)
     {
         // preprocess
         if (UtilConfig.ConsoleOutput)
@@ -41,7 +41,7 @@ internal static class PDFUtil
     /// </summary>
     /// <param name="filePath"></param>
     /// <param name="rootDirPath"></param>
-    internal static int PDFPageCount(this FileInfo inputFile, bool initialConsoleOutput = true)
+    public static int PDFPageCount(this FileInfo inputFile, bool initialConsoleOutput = true)
     {
         // preprocess
         Encoding.RegisterProvider(CodePagesEncodingProvider.Instance); // to handle Shift-JIS

@@ -2,7 +2,7 @@
 
 namespace Aki32_Utilities.Class;
 
-internal static partial class FileUtil
+public static partial class FileUtil
 {
 
     // ★★★★★★★★★★★★★★★ 231 MergeAllLines
@@ -14,7 +14,7 @@ internal static partial class FileUtil
     /// <param name="outputFile">when null, automatically set to {inputDir.FullName}/output_MergeAllLines/output.txt</param>
     /// <param name="skipRowCount"></param>
     /// <returns></returns>
-    internal static FileInfo MergeAllLines(this DirectoryInfo inputDir, FileInfo outputFile, int skipRowCount = 0)
+    public static FileInfo MergeAllLines(this DirectoryInfo inputDir, FileInfo outputFile, int skipRowCount = 0)
     {
         // preprocess
         if (UtilConfig.ConsoleOutput)

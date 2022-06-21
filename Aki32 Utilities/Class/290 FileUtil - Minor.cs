@@ -2,7 +2,7 @@
 
 namespace Aki32_Utilities.Class;
 
-internal static partial class FileUtil
+public static partial class FileUtil
 {
     // TODO: test 291 and 292 later.
 
@@ -13,7 +13,7 @@ internal static partial class FileUtil
     /// MacOS が生成するゴミを削除
     /// </summary>
     /// <param name="inputDir"></param>
-    internal static void OrganizeMacOsJuncFiles(this DirectoryInfo inputDir)
+    public static void OrganizeMacOsJuncFiles(this DirectoryInfo inputDir)
     {
         // preprocess
         if (UtilConfig.ConsoleOutput)
@@ -36,7 +36,7 @@ internal static partial class FileUtil
     /// 選んだフォルダ内のデータのPhotoとVideoの接頭辞を削除
     /// </summary>
     /// <param name="inputDir"></param>
-    internal static void OrganizeDropBoxJuncFiles(this DirectoryInfo inputDir)
+    public static void OrganizeDropBoxJuncFiles(this DirectoryInfo inputDir)
     {
         // preprocess
         if (UtilConfig.ConsoleOutput)

@@ -6,7 +6,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Aki32_Utilities.Class;
-internal static class DataUtil
+public static class DataUtil
 {
 
     // ★★★★★★★★★★★★★★★ 511 Transpose
@@ -17,7 +17,7 @@ internal static class DataUtil
     /// <typeparam name="T"></typeparam>
     /// <param name="inputData"></param>
     /// <returns></returns>
-    internal static T[][] Transpose<T>(this T[][] inputData, T emptyItem = default)
+    public static T[][] Transpose<T>(this T[][] inputData, T emptyItem = default)
     {
         // main
         var columnCount = inputData.Length;
@@ -48,7 +48,7 @@ internal static class DataUtil
     /// <typeparam name="T"></typeparam>
     /// <param name="inputData"></param>
     /// <returns></returns>
-    internal static T[,] Transpose<T>(this T[,] inputData)
+    public static T[,] Transpose<T>(this T[,] inputData)
     {
         // main
         var outputData = new T[inputData.GetLength(1), inputData.GetLength(0)];
@@ -78,7 +78,7 @@ internal static class DataUtil
     /// <param name="inputData"></param>
     /// <param name="emptyItem"></param>
     /// <returns></returns>
-    internal static T[,] To2DArray<T>(this T[][] inputData, T emptyItem = default)
+    public static T[,] To2DArray<T>(this T[][] inputData, T emptyItem = default)
     {
         // main
         var columnCount = inputData.Length;
@@ -108,7 +108,7 @@ internal static class DataUtil
     /// <param name="inputData"></param>
     /// <param name="emptyItem"></param>
     /// <returns></returns>
-    internal static T[][] ToJaggedArray<T>(this T[,] inputData)
+    public static T[][] ToJaggedArray<T>(this T[,] inputData)
     {
         // main
         var outputData = new T[inputData.GetLength(0)][];

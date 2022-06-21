@@ -7,7 +7,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Aki32_Utilities.Class;
-internal static class UnderDevelopementUtil
+public static class UnderDevelopementUtil
 {
 
     // ★★★★★★★★★★★★★★★
@@ -33,7 +33,7 @@ internal static class UnderDevelopementUtil
     /// <param name="skipRowCount"></param>
     /// <param name="header"></param>
     /// <returns></returns>
-    internal static FileInfo TEMPLATE(this FileInfo inputFile, FileInfo? outputFile, int skipColumnCount = 0, int skipRowCount = 0, string header = null)
+    public static FileInfo TEMPLATE(this FileInfo inputFile, FileInfo? outputFile, int skipColumnCount = 0, int skipRowCount = 0, string header = null)
     {
         // preprocess
         Encoding.RegisterProvider(CodePagesEncodingProvider.Instance); // to handle Shift-JIS
@@ -56,7 +56,7 @@ internal static class UnderDevelopementUtil
     /// <param name="skipRowCount"></param>
     /// <param name="header"></param>
     /// <returns></returns>
-    internal static DirectoryInfo TEMPLATE_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir, int skipColumnCount = 0, int skipRowCount = 0, string header = null)
+    public static DirectoryInfo TEMPLATE_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir, int skipColumnCount = 0, int skipRowCount = 0, string header = null)
     {
         // preprocess
         if (UtilConfig.ConsoleOutput)

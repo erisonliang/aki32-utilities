@@ -1,7 +1,7 @@
 ﻿using System.Text;
 
 namespace Aki32_Utilities.Class;
-internal static class UtilConfig
+public static class UtilConfig
 {
 
     // ★★★★★★★★★★★★★★★ 100

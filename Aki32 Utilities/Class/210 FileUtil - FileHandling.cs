@@ -2,7 +2,7 @@
 using System.Text;
 
 namespace Aki32_Utilities.Class;
-internal static partial class FileUtil
+public static partial class FileUtil
 {
 
     // ★★★★★★★★★★★★★★★ 211 CollectFiles
@@ -14,7 +14,7 @@ internal static partial class FileUtil
     /// <param name="outputDir">when null, automatically set to {inputDir.Parent.FullName}/output_CollectFiles</param>
     /// <param name="serchPattern"></param>
     /// <returns></returns>
-    internal static DirectoryInfo CollectFiles(this DirectoryInfo inputDir, DirectoryInfo? outputDir, string serchPattern)
+    public static DirectoryInfo CollectFiles(this DirectoryInfo inputDir, DirectoryInfo? outputDir, string serchPattern)
     {
         // preprocess
         if (UtilConfig.ConsoleOutput)
@@ -59,7 +59,7 @@ internal static partial class FileUtil
     /// <param name="outputDir">when null, automatically set to {inputFile.DirectoryName}/output_MakeFilesFromCsv</param>
     /// <param name="templateFile"></param>
     /// <returns></returns>
-    internal static DirectoryInfo MakeFilesFromCsv(this FileInfo inputFile, DirectoryInfo? outputDir, FileInfo templateFile)
+    public static DirectoryInfo MakeFilesFromCsv(this FileInfo inputFile, DirectoryInfo? outputDir, FileInfo templateFile)
     {
         // preprocess
         if (UtilConfig.ConsoleOutput)
@@ -102,7 +102,7 @@ internal static partial class FileUtil
     /// <param name="inputDir"></param>
     /// <param name="outputDir">must not to be null</param>
     /// <returns></returns>
-    internal static DirectoryInfo MoveTo(this DirectoryInfo inputDir, DirectoryInfo outputDir)
+    public static DirectoryInfo MoveTo(this DirectoryInfo inputDir, DirectoryInfo outputDir)
     {
         // preprocess
         if (UtilConfig.ConsoleOutput)
@@ -135,7 +135,7 @@ internal static partial class FileUtil
     /// <param name="inputDir"></param>
     /// <param name="outputDir">must not to be null</param>
     /// <returns></returns>
-    internal static DirectoryInfo CopyTo(this DirectoryInfo inputDir, DirectoryInfo outputDir, bool consoleOutput = true)
+    public static DirectoryInfo CopyTo(this DirectoryInfo inputDir, DirectoryInfo outputDir, bool consoleOutput = true)
     {
         // preprocess
         if (UtilConfig.ConsoleOutput && consoleOutput)

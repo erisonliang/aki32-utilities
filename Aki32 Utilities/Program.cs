@@ -2,7 +2,7 @@
 using System.Drawing;
 
 namespace Aki32_Utilities;
-internal class Program
+public class Program
 {
     static void Main(string[] args)
     {
@@ -64,7 +64,7 @@ internal class Program
 
                 // 223 ExtractCsvColumns
                 {
-                    //var input = new FileInfo($@"{baseDir}\223 ExtractCsvColumns\input.csv");
+                    var input = new FileInfo($@"{baseDir}\223 ExtractCsvColumns\input.csv");
                     //input.ExtractCsvColumns(null, new int[] { 0, 3 }, 0, "t,x");
                 }
 
@@ -168,89 +168,6 @@ internal class Program
                 }
             }
 
-        }
-
-
-        // for aki32 private use
-        {
-            // 適当
-            {
-
-            }
-
-            // SNAPのパラメトリックスタディ！
-            {
-                // 30層
-                {
-                    var baseDirF = @"F:\30層モデル\model";
-                    var baseDirC = @"C:\Users\aki32\Dropbox\Documents\02 東大関連\0 授業\3 建築学専攻\建築構造・材料演習\# 演習\30層モデル\calc";
-
-                    // total mu
-                    {
-                        //var input = new DirectoryInfo($@"{baseDirF}");
-                        //var output = new DirectoryInfo($@"{baseDirC}\集計, total mu");
-
-                        //// 出力データから，各梁における累積塑性変形倍率を抽出。
-                        //input
-                        //    .CollectFiles(null, @"D30B*.csv")
-                        //    .CollectCsvColumns_Loop(null, 0, 37506, ("total mu i", 6), ("total mu j", 12))
-                        //    .MoveTo(output)
-                        //    .TransposeCsv_Loop(null, 1, 0)
-                        //    .CollectCsvColumns(null, 1);
-                    }
-                }
-
-                // e-defence
-                {
-                    var baseDirF = @"F:\e-defenseモデル\model";
-                    var baseDirC = @"C:\Users\aki32\Dropbox\Documents\02 東大関連\0 授業\3 建築学専攻\建築構造・材料演習\# 演習\e-defenseモデル\calc";
-
-                    // 最大値
-                    {
-                        //var input = new DirectoryInfo($@"{baseDirF}");
-                        //var output = new DirectoryInfo($@"{baseDirC}\集計, max");
-
-                        //// 必要csvだけ持ってきて，対象列を1つのcsvに集約
-                        //input
-                        //    .CollectFiles(null, @"*.NAP-AVDQRFMList.csv")
-                        //    .MoveTo(output)
-                        //    .Csvs2ExcelSheets(null);
-                        ////.CollectCsvColumns_Loop(null, ("PSV220", 1));
-                    }
-
-                    // 層間変形履歴ファイル
-                    {
-                        //var input = new DirectoryInfo($@"{baseDirF}");
-                        //var output = new DirectoryInfo($@"{baseDirC}\集計, F2 history");
-
-                        //// 必要csvだけ持ってきて，全部11行目だけ取り出す！
-                        //input
-                        //    .CollectFiles(null, @"D7F2.csv") // 対象の層
-                        //    .MoveTo(output)
-                        //    .CollectCsvColumns_Loop(null, 0, 6, ("層間変形", 11));
-                    }
-
-                    // 梁端履歴ファイル rainflow前
-                    {
-                        //var input = new DirectoryInfo($@"{baseDirF}");
-                        //var output = new DirectoryInfo($@"{baseDirC}\集計, B17 history");
-
-                        //// 必要csvだけ持ってきて，全部11行目だけ取り出す！
-                        //input
-                        //    .CollectFiles(null, @"D7B17.csv") // 対象の梁端
-                        //    .MoveTo(output)
-                        //    .ExtractCsvColumns_Loop(null, new int[] { 0, 11 }, 6, "t, mu");
-                    }
-
-                    // 梁端履歴ファイル rainflow後
-                    {
-                        //var input = new DirectoryInfo($@"C:\Users\aki32\Dropbox\Documents\02 東大関連\0 授業\3 建築学専攻\建築構造・材料演習\# 演習\e-defenseモデル\calc\集計, B17 history\output_ExtractCsvColumns\rainflow");
-
-                        //// 最後に集計。
-                        //input.CollectCsvColumns_Loop(null, ("totalDamage", 3));
-                    }
-                }
-            }
         }
 
         Console.WriteLine();

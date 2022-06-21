@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Aki32_Utilities.Class;
-internal static class ImageUtil
+public static class ImageUtil
 {
 
     // ★★★★★★★★★★★★★★★ 311 CropImage
@@ -19,7 +19,7 @@ internal static class ImageUtil
     /// <param name="outputFile">when null, automatically set to {inputFile.DirectoryName}/output_CropImage/{inputFile.Name} - {crop.ToString()}.png</param>
     /// <param name="crop"></param>a
     /// <returns></returns>
-    internal static FileInfo CropImage(this FileInfo inputFile, FileInfo? outputFile, CropSize crop)
+    public static FileInfo CropImage(this FileInfo inputFile, FileInfo? outputFile, CropSize crop)
     {
         // preprocess
         if (outputFile == null)
@@ -53,7 +53,7 @@ internal static class ImageUtil
     /// <param name="outputDir">when null, automatically set to {inputDir.Fullname}/output_CropImage/{inputFile.Name}.png</param>
     /// <param name="crop"></param>
     /// <returns></returns>
-    internal static DirectoryInfo CropImage_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir, CropSize crop)
+    public static DirectoryInfo CropImage_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir, CropSize crop)
     {
         // preprocess
         if (UtilConfig.ConsoleOutput)
@@ -78,7 +78,7 @@ internal static class ImageUtil
     /// <param name="inputFile"></param>
     /// <param name="crop"></param>
     /// <returns></returns>
-    internal static Image CropImage(this FileInfo inputFile, CropSize crop)
+    public static Image CropImage(this FileInfo inputFile, CropSize crop)
     {
         using var inputImg = Image.FromFile(inputFile.FullName);
         return CropImage(inputImg, crop);
@@ -89,7 +89,7 @@ internal static class ImageUtil
     /// <param name="inputImg"></param>
     /// <param name="crop"></param>
     /// <returns></returns>
-    internal static Image CropImage(this Image inputImg, CropSize crop)
+    public static Image CropImage(this Image inputImg, CropSize crop)
     {
         var outputBmp = ((Bitmap)inputImg).Clone(crop.GetImageCropRect(inputImg), inputImg.PixelFormat);
         return outputBmp;
@@ -97,7 +97,7 @@ internal static class ImageUtil
     /// <summary>
     /// 
     /// </summary>
-    internal class CropSize
+    public class CropSize
     {
         public double l { get; set; }
         public double t { get; set; }
@@ -127,7 +127,7 @@ internal static class ImageUtil
             return new Rectangle(cx, cy, cw, ch);
         }
 
-        internal string ToString() => $"{l:F2},{t:F2},{r:F2},{b:F2}";
+        public string ToString() => $"{l:F2},{t:F2},{r:F2},{b:F2}";
 
     }
 
@@ -140,7 +140,7 @@ internal static class ImageUtil
     /// <param name="outputFile">when null, automatically set to {inputFile.DirectoryName}/output_ConvertImageColor/{targetColor.Name}.png</param>
     /// <param name="targetColor"></param>
     /// <returns></returns>
-    internal static FileInfo ConvertImageColor(this FileInfo inputFile, FileInfo? outputFile, Color targetColor)
+    public static FileInfo ConvertImageColor(this FileInfo inputFile, FileInfo? outputFile, Color targetColor)
     {
         // preprocess
         if (outputFile == null)
@@ -174,7 +174,7 @@ internal static class ImageUtil
     /// <param name="outputDir">when null, automatically set to {inputFile.DirectoryName}/output_ConvertImageColor/{fileName}.png</param>
     /// <param name="targetInfos"></param>
     /// <returns></returns>
-    internal static DirectoryInfo ConvertImageColor_Loop(this FileInfo inputFile, DirectoryInfo? outputDir, params (string fileName, Color targetColor)[] targetInfos)
+    public static DirectoryInfo ConvertImageColor_Loop(this FileInfo inputFile, DirectoryInfo? outputDir, params (string fileName, Color targetColor)[] targetInfos)
     {
         // preprocess
         if (UtilConfig.ConsoleOutput)
@@ -201,7 +201,7 @@ internal static class ImageUtil
     /// <param name="outputDir">when null, automatically set to {inputFile.DirectoryName}/ConvertImageColorOutput/{targetColor.Name}.png</param>
     /// <param name="targetColors"></param>
     /// <returns></returns>
-    internal static DirectoryInfo ConvertImageColor_Loop(this FileInfo inputFile, DirectoryInfo? outputDir, params Color[] targetColors)
+    public static DirectoryInfo ConvertImageColor_Loop(this FileInfo inputFile, DirectoryInfo? outputDir, params Color[] targetColors)
     {
         var targetInfos = targetColors.Select(c => (c.IsNamedColor ? c.Name : c.ToArgb().ToString(), c)).ToArray();
         inputFile.ConvertImageColor_Loop(outputDir, targetInfos);
@@ -213,7 +213,7 @@ internal static class ImageUtil
     /// <param name="inputImg"></param>
     /// <param name="targetColor"></param>
     /// <returns></returns>
-    internal static Image ConvertImageColor(Image inputImg, Color targetColor)
+    public static Image ConvertImageColor(Image inputImg, Color targetColor)
     {
         var resultBmp = new Bitmap(inputImg); //var resultBmp = new Bitmap(inputImg.Width,inputImg.Height,PixelFormat.Format32bppArgb);
 
@@ -240,7 +240,7 @@ internal static class ImageUtil
     /// <summary>
     /// faster Bitmap with direct memory access
     /// </summary>
-    internal class FastBitmap
+    public class FastBitmap
     {
         private Bitmap original = null;
         private BitmapData fastImage = null;
