@@ -15,12 +15,19 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="B - OwesomeModels\TimeHistoryModel\TimeHistory.cs.bak" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="B - OwesomeModels\TimeHistoryModel\TimeHistory.cs.bak" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="ClosedXML" Version="0.95.4" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="A - OverridingUtils\999 RelatedClasses\" />
-    <Folder Include="B - OwesomeModels\" />
   </ItemGroup>
 
 </Project>

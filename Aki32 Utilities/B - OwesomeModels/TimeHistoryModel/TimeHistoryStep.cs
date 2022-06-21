@@ -1,27 +1,32 @@
 ﻿
 
 namespace Aki32_Utilities.OwesomeModels;
-public class TimeHistoryStep : ICloneable
+/// <summary>
+/// 時系列データのうちの一行。
+/// </summary>
+/// <remarks>
+/// TimeHistoryを流用し，[0]の存在が保証されるモデルとする。
+/// </remarks>
+public class TimeHistoryStep : TimeHistory
 {
-    public Dictionary<string, double> data;
-    public double this[string key]
+    public new double this[string key]
     {
         get
         {
             if (data.Keys.Contains(key))
-                return data[key];
+                return data[key][0];
 
-            data.Add(key, 0);
+            data.Add(key, new double[] { 0 });
             //Console.WriteLine($"ERROR : {key} は定義されていません。空集合を作成しました。");
             //throw new KeyNotFoundException($"{key} は定義されていません。");
-            return data[key];
+            return data[key][0];
         }
         set
         {
             if (data.Keys.Contains(key))
-                data[key] = value;
+                data[key][0] = value;
             else
-                data.Add(key, value);
+                data.Add(key, new double[] { value });
         }
     }
 
@@ -109,9 +114,6 @@ public class TimeHistoryStep : ICloneable
 
     #endregion
 
-
-
-
     #endregion
 
     #region initializers
@@ -121,52 +123,19 @@ public class TimeHistoryStep : ICloneable
     /// </summary>
     public TimeHistoryStep()
     {
-        data = new Dictionary<string, double>();
+        data = new Dictionary<string, double[]>();
     }
 
     /// <summary>
     /// clone
     /// </summary>
     /// <returns></returns>
-    public object Clone()
+    public new object Clone()
     {
         var newHistoryStep = new TimeHistoryStep();
         foreach (var key in data.Keys)
             newHistoryStep.data[key] = data[key];
         return newHistoryStep;
-    }
-
-    #endregion
-
-
-
-
-
-
-    #region output
-
-    /// <summary>
-    /// Output TimeHistory to csv
-    /// </summary>
-    /// <param name="outputFilePath"></param>
-    public void OutputTimeHistoryToCsv(FileInfo outputFile)
-    {
-        if (outputFile is null)
-            throw new ArgumentNullException(nameof(outputFile));
-
-        var th = new TimeHistory();
-        th.SetStep(0, this);
-        th.OutputTimeHistoryToCsv(outputFile);
-    }
-
-    /// <summary>
-    /// Output TimeHistory to console
-    /// </summary>
-    public void OutputTimeHistoryToConsole()
-    {
-        var th = new TimeHistory();
-        th.SetStep(0, this);
-        th.OutputTimeHistoryToConsole();
     }
 
     #endregion

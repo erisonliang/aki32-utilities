@@ -1,9 +1,12 @@
 ﻿using System.Text;
 
 namespace Aki32_Utilities.OwesomeModels;
+/// <summary>
+/// 列と行を自由に増やせる時系列データ。
+/// </summary>
 public class TimeHistory : ICloneable
 {
-    private Dictionary<string, double[]> data;
+    internal Dictionary<string, double[]> data;
     public double[] this[string key]
     {
         get
@@ -31,7 +34,6 @@ public class TimeHistory : ICloneable
             }
         }
     }
-
 
     #region initializers
 
@@ -101,6 +103,66 @@ public class TimeHistory : ICloneable
         newHistory.__inputDir = __inputDir;
 
         return newHistory;
+    }
+
+    #endregion
+
+    #region output
+
+    /// <summary>
+    /// Output TimeHistory to csv
+    /// </summary>
+    /// <param name="outputFilePath"></param>
+    public void OutputTimeHistoryToCsv(FileInfo outputFile = null)
+    {
+        if (outputFile == null)
+            outputFile = new FileInfo(Path.Combine(__inputDir.FullName, "output", $"result - {__resultFileName}.csv"));
+        if (!outputFile.Directory.Exists)
+            outputFile.Directory.Create();
+
+        using var sw = new StreamWriter(outputFile.FullName);
+        OutputTimeHistoryToStream(sw);
+    }
+
+    /// <summary>
+    /// Output TimeHistory to console
+    /// </summary>
+    public void OutputTimeHistoryToConsole()
+    {
+        using var sw = new StreamWriter(Console.OpenStandardOutput());
+        sw.WriteLine("============================================");
+        OutputTimeHistoryToStream(sw);
+        sw.WriteLine("============================================");
+    }
+
+    /// <summary>
+    /// Output TimeHistory to stream
+    /// </summary>
+    private void OutputTimeHistoryToStream(StreamWriter sw)
+    {
+        foreach (var key in data.Keys)
+        {
+            sw.Write(key.ToString());
+            sw.Write(",");
+        }
+        sw.WriteLine();
+
+        for (int i = 0; i < DataRowCount; i++)
+        {
+            foreach (var key in data.Keys)
+            {
+                try
+                {
+                    sw.Write(data[key][i]);
+                }
+                catch (Exception)
+                {
+                }
+                sw.Write(",");
+            }
+            sw.WriteLine();
+        }
+
     }
 
     #endregion
@@ -205,76 +267,43 @@ public class TimeHistory : ICloneable
 
     #endregion
 
+
+
+    #region Methods
+
     public TimeHistoryStep GetStep(int i)
     {
-        var step = new TimeHistoryStep();
+        var step = new TimeHistoryStep()
+        {
+            __inputDir = __inputDir,
+            __resultFileName = __resultFileName,
+        };
         foreach (var key in data.Keys)
-            step.data[key] = this[key][i];
+            step[key] = this[key][i];
         return step;
     }
     public void SetStep(int i, TimeHistoryStep step)
     {
         foreach (var key in step.data.Keys)
-            this[key][i] = step.data[key];
+            this[key][i] = step[key];
     }
 
-    #region output
-
-    /// <summary>
-    /// Output TimeHistory to csv
-    /// </summary>
-    /// <param name="outputFilePath"></param>
-    public void OutputTimeHistoryToCsv(FileInfo outputFile = null)
+    public void DropColumn(params string[] droppingColumns)
     {
-        if (outputFile == null)
-            outputFile = new FileInfo(Path.Combine(__inputDir.FullName, "output", $"result - {__resultFileName}.csv"));
-        if (!outputFile.Directory.Exists)
-            outputFile.Directory.Create();
-
-        using var sw = new StreamWriter(outputFile.FullName);
-        OutputTimeHistoryToStream(sw);
+        foreach (var droppingColumn in droppingColumns)
+            data.Remove(droppingColumn);
     }
-
-    /// <summary>
-    /// Output TimeHistory to console
-    /// </summary>
-    public void OutputTimeHistoryToConsole()
-    {
-        using var sw = new StreamWriter(Console.OpenStandardOutput());
-        sw.WriteLine("============================================");
-        OutputTimeHistoryToStream(sw);
-        sw.WriteLine("============================================");
-    }
-
-    /// <summary>
-    /// Output TimeHistory to stream
-    /// </summary>
-    private void OutputTimeHistoryToStream(StreamWriter sw)
+    public void DropStep(params int[] droppingSteps)
     {
         foreach (var key in data.Keys)
         {
-            sw.Write(key.ToString());
-            sw.Write(",");
+            var dataColumnList = data[key].ToList();
+            foreach (var droppingStep in droppingSteps)
+                dataColumnList.RemoveAt(droppingStep);
+            data[key] = dataColumnList.ToArray();
         }
-        sw.WriteLine();
-
-        for (int i = 0; i < DataRowCount; i++)
-        {
-            foreach (var key in data.Keys)
-            {
-                try
-                {
-                    sw.Write(data[key][i]);
-                }
-                catch (Exception)
-                {
-                }
-                sw.Write(",");
-            }
-            sw.WriteLine();
-        }
-
     }
+
 
     #endregion
 
