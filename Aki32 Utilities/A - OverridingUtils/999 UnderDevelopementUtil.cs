@@ -19,9 +19,6 @@ public static class UnderDevelopementUtil
     // ★★★★★★★★★★★★★★★
 
 
-    // ★★★★★★★★★★★★★★★
-
-
     // ★★★★★★★★★★★★★★★ 999 TEMPLATE
 
     /// <summary>

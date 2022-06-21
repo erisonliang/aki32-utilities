@@ -305,7 +305,9 @@ public static partial class FileUtil
         var csvs = inputDir
             .GetFiles("*.csv", SearchOption.TopDirectoryOnly)
             .Where(x => x.FullName != outputFile.FullName)
+            .Sort()
             .ToArray();
+
         if (csvs.Length == 0)
         {
             Console.WriteLine($"※ No csv file found in {inputDir.FullName}");
@@ -497,6 +499,7 @@ public static partial class FileUtil
         var csvs = inputDir
                     .GetFiles("*.csv", SearchOption.TopDirectoryOnly)
                     .Where(x => x.FullName != outputFile.FullName)
+                    .Sort()
                     .ToArray();
         if (csvs.Length == 0)
         {

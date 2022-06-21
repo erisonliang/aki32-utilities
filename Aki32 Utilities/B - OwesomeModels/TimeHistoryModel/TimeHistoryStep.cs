@@ -1,5 +1,6 @@
 ﻿
-namespace Aki32_Utilities.OwesomeModels.TimeHistoryModel;
+
+namespace Aki32_Utilities.OwesomeModels;
 public class TimeHistoryStep : ICloneable
 {
     public Dictionary<string, double> data;

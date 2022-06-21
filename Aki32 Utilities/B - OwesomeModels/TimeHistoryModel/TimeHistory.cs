@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace Aki32_Utilities.OwesomeModels.TimeHistoryModel;
+namespace Aki32_Utilities.OwesomeModels;
 public class TimeHistory : ICloneable
 {
     private Dictionary<string, double[]> data;

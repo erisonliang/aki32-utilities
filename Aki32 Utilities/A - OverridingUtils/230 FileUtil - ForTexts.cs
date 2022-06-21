@@ -25,9 +25,12 @@ public static partial class FileUtil
         if (outputFile.Exists) outputFile.Delete();
 
         // main
-        var files = inputDir.GetFiles("*", SearchOption.TopDirectoryOnly);
-        files = files.Where(x => !x.Name.Contains(outputFile.DirectoryName)).ToArray();
-
+        var files = inputDir
+            .GetFiles("*", SearchOption.TopDirectoryOnly)
+            .Where(x => !x.Name.Contains(outputFile.DirectoryName))
+            .Sort()
+            .ToArray();
+  
         using var sw = new StreamWriter(outputFile.FullName, false, Encoding.GetEncoding("SHIFT_JIS"));
         foreach (var f in files)
         {

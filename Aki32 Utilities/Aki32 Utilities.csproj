@@ -19,6 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="A - OverridingUtils\999 RelatedClasses\" />
     <Folder Include="B - OwesomeModels\" />
   </ItemGroup>
 

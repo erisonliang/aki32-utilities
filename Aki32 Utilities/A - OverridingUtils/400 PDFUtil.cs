@@ -14,31 +14,6 @@ public static class PDFUtil
     /// <summary>
     /// PDF page count
     /// </summary>
-    /// <param name="inputDir"></param>
-    public static int PDFPageCount(this DirectoryInfo inputDir, bool topDirectoryOnly = false)
-    {
-        // preprocess
-        if (UtilConfig.ConsoleOutput)
-            Console.WriteLine("\r\n** PDFPageCount() Called");
-
-        // main
-        var totalCount = 0;
-        var errorCount = 0;
-        foreach (FileInfo f in inputDir.GetFiles("*.pdf", topDirectoryOnly ? SearchOption.TopDirectoryOnly : SearchOption.AllDirectories))
-        {
-            var page = f.PDFPageCount(false);
-            if (page > 0) totalCount += page;
-            else errorCount++;
-        }
-
-        Console.WriteLine($"--------------------------");
-        Console.WriteLine($"{totalCount,5} pages in total {(errorCount > 0 ? $"(※ exept for {errorCount} errors)" : "")}");
-        Console.WriteLine($"--------------------------");
-        return totalCount;
-    }
-    /// <summary>
-    /// PDF page count
-    /// </summary>
     /// <param name="filePath"></param>
     /// <param name="rootDirPath"></param>
     public static int PDFPageCount(this FileInfo inputFile, bool initialConsoleOutput = true)
@@ -94,6 +69,31 @@ public static class PDFUtil
             }
             return int.Parse(rtLine);
         }
+    }
+    /// <summary>
+    /// PDF page count
+    /// </summary>
+    /// <param name="inputDir"></param>
+    public static int PDFPageCount(this DirectoryInfo inputDir, bool topDirectoryOnly = false)
+    {
+        // preprocess
+        if (UtilConfig.ConsoleOutput)
+            Console.WriteLine("\r\n** PDFPageCount() Called");
+
+        // main
+        var totalCount = 0;
+        var errorCount = 0;
+        foreach (FileInfo f in inputDir.GetFiles("*.pdf", topDirectoryOnly ? SearchOption.TopDirectoryOnly : SearchOption.AllDirectories).Sort())
+        {
+            var page = f.PDFPageCount(false);
+            if (page > 0) totalCount += page;
+            else errorCount++;
+        }
+
+        Console.WriteLine($"--------------------------");
+        Console.WriteLine($"{totalCount,5} pages in total {(errorCount > 0 ? $"(※ exept for {errorCount} errors)" : "")}");
+        Console.WriteLine($"--------------------------");
+        return totalCount;
     }
 
     // ★★★★★★★★★★★★★★★ 

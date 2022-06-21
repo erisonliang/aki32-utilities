@@ -66,14 +66,14 @@ public class Program
 
                     // 223 ExtractCsvColumns
                     {
-                        var input = new FileInfo($@"{baseDir}\223 ExtractCsvColumns\input.csv");
+                        //var input = new FileInfo($@"{baseDir}\223 ExtractCsvColumns\input.csv");
                         //input.ExtractCsvColumns(null, new int[] { 0, 3 }, 0, "t,x");
                     }
 
                     // 224 CollectCsvColumns
                     {
-                        //var input = new DirectoryInfo($@"{baseDir}\224 CollectCsvColumns\input");
-                        //input.CollectCsvColumns(null, 3);
+                        var input = new DirectoryInfo($@"{baseDir}\224 CollectCsvColumns\input");
+                        input.CollectCsvColumns(null, 3);
                     }
 
                     // 225 Csvs2ExcelSheets
