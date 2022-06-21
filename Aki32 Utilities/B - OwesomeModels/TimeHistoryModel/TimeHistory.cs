@@ -32,6 +32,7 @@ public class TimeHistory : ICloneable
         }
     }
 
+
     #region initializers
 
     /// <summary>
@@ -217,8 +218,6 @@ public class TimeHistory : ICloneable
             this[key][i] = step.data[key];
     }
 
-
-
     #region output
 
     /// <summary>
@@ -278,8 +277,6 @@ public class TimeHistory : ICloneable
     }
 
     #endregion
-
-
 
     #region specific use
 
