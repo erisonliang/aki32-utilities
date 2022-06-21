@@ -14,7 +14,7 @@ public static partial class FileUtil
     /// <param name="outputDir">when null, automatically set to {inputDir.Parent.FullName}/output_CollectFiles</param>
     /// <param name="serchPattern"></param>
     /// <returns></returns>
-    public static DirectoryInfo CollectFiles(this DirectoryInfo inputDir, DirectoryInfo? outputDir, string serchPattern)
+    public static DirectoryInfo CollectFiles(this DirectoryInfo inputDir, DirectoryInfo? outputDir, params string[] serchPatterns)
     {
         // preprocess
         if (UtilConfig.ConsoleOutput)
@@ -25,12 +25,16 @@ public static partial class FileUtil
         if (!outputDir.Exists) outputDir.Create();
 
         // main
-        var files = inputDir.GetFiles(serchPattern, SearchOption.AllDirectories).Select(f => f.FullName);
+        var files = new List<string>();
+        foreach (var serchPattern in serchPatterns)
+            files.AddRange(inputDir.GetFiles(serchPattern, SearchOption.AllDirectories).Select(f => f.FullName));
+        files = files.Distinct().ToList();
+
         foreach (var file in files)
         {
             var newFileName = file.Replace(inputDir.FullName, "");
-            foreach (var item in serchPattern.Split("*", StringSplitOptions.RemoveEmptyEntries))
-                newFileName = newFileName.Replace(item, "");
+            //foreach (var item in serchPattern.Split("*", StringSplitOptions.RemoveEmptyEntries))
+            //  newFileName = newFileName.Replace(item, "");
             newFileName = newFileName.Replace(Path.DirectorySeparatorChar, '_').Trim('_');
             var newOutputFilePath = Path.Combine(outputDir.FullName, newFileName + Path.GetExtension(file));
 
