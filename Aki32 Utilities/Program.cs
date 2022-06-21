@@ -49,6 +49,14 @@ public class Program
                         //input.CopyTo(output);
                     }
 
+                    // 215 RenameFiles
+                    {
+                        //var target = new DirectoryInfo($@"{baseDir}\215 RenameFiles\input");
+                        //target.RenameFiles();
+                        ////target.RenameFiles_Append("xxx*xxx");
+                        ////target.RenameFiles_Replace(("ABC", "abc"), ("XYZ", "xyz"));
+                    }
+
                     // 221 ReadCsv, 222 SaveCsv, 511 Transpose
                     {
                         //var innerBaseDir = $@"{baseDir}\221 ReadCsv, SaveCsv";
@@ -72,8 +80,8 @@ public class Program
 
                     // 224 CollectCsvColumns
                     {
-                        var input = new DirectoryInfo($@"{baseDir}\224 CollectCsvColumns\input");
-                        input.CollectCsvColumns(null, 3);
+                        //var input = new DirectoryInfo($@"{baseDir}\224 CollectCsvColumns\input");
+                        //input.CollectCsvColumns(null, 3);
                     }
 
                     // 225 Csvs2ExcelSheets

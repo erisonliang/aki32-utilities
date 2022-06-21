@@ -27,6 +27,18 @@ public static class RelatedClasses
         return targetFilesList;
     }
 
+    // ★★★★★★★★★★★★★★★ 902 IEnumerable<char>.ToString();
+
+    /// <summary>
+    /// return appended chars string.
+    /// </summary>
+    /// <param name="chars"></param>
+    /// <returns></returns>
+    public static string ToString_Extension(this IEnumerable<char> chars)
+    {
+        return new string(chars.ToArray());
+    }
+
     // ★★★★★★★★★★★★★★★ 
 
 }
