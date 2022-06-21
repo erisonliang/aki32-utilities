@@ -25,11 +25,12 @@ public class TimeHistoryStep : ICloneable
         }
     }
 
+    #region useful values
+
     #region default keys
 
     public double t
     {
-
         get
         {
             return this["t"];
@@ -108,6 +109,11 @@ public class TimeHistoryStep : ICloneable
 
     #endregion
 
+
+
+
+    #endregion
+
     #region initializers
 
     /// <summary>
@@ -128,6 +134,39 @@ public class TimeHistoryStep : ICloneable
         foreach (var key in data.Keys)
             newHistoryStep.data[key] = data[key];
         return newHistoryStep;
+    }
+
+    #endregion
+
+
+
+
+
+
+    #region output
+
+    /// <summary>
+    /// Output TimeHistory to csv
+    /// </summary>
+    /// <param name="outputFilePath"></param>
+    public void OutputTimeHistoryToCsv(FileInfo outputFile)
+    {
+        if (outputFile is null)
+            throw new ArgumentNullException(nameof(outputFile));
+
+        var th = new TimeHistory();
+        th.SetStep(0, this);
+        th.OutputTimeHistoryToCsv(outputFile);
+    }
+
+    /// <summary>
+    /// Output TimeHistory to console
+    /// </summary>
+    public void OutputTimeHistoryToConsole()
+    {
+        var th = new TimeHistory();
+        th.SetStep(0, this);
+        th.OutputTimeHistoryToConsole();
     }
 
     #endregion
