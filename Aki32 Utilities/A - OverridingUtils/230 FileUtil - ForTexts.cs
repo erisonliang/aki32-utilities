@@ -24,6 +24,7 @@ public static partial class FileUtil
         if (!outputFile.Directory.Exists) outputFile.Directory.Create();
         if (outputFile.Exists) outputFile.Delete();
 
+
         // main
         var files = inputDir
             .GetFiles("*", SearchOption.TopDirectoryOnly)
@@ -49,6 +50,8 @@ public static partial class FileUtil
             }
         }
 
+
+        // post process
         return outputFile;
     }
 

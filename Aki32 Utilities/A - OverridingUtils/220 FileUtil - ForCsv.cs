@@ -69,6 +69,8 @@ public static partial class FileUtil
             }
         }
 
+
+        // post process
         return rows.ToArray();
     }
     /// <summary>
@@ -114,6 +116,8 @@ public static partial class FileUtil
             sw.WriteLine(string.Join(',', correctedLine));
         }
 
+
+        // post process
         return outputFile;
     }
     /// <summary>
@@ -172,6 +176,7 @@ public static partial class FileUtil
             outputDir = new DirectoryInfo(Path.Combine(inputDir.FullName, "output_TransposeCsv"));
         if (!outputDir.Exists) outputDir.Create();
 
+
         // main
         foreach (var file in inputDir.GetFiles())
         {
@@ -189,6 +194,8 @@ public static partial class FileUtil
             }
         }
 
+
+        // post process
         return outputDir;
     }
 
@@ -211,6 +218,7 @@ public static partial class FileUtil
             outputFile = new FileInfo(Path.Combine(inputFile.DirectoryName, "output_ExtractCsvColumns", inputFile.Name));
         if (!outputFile.Directory.Exists) outputFile.Directory.Create();
         if (outputFile.Exists) outputFile.Delete();
+
 
         // main
         var inputCsv = inputFile.ReadCsv_Rows(0, skipRowCount);
@@ -236,6 +244,8 @@ public static partial class FileUtil
 
         resultList.ToArray().SaveCsv_Rows(outputFile, header);
 
+
+        // post process
         return outputFile;
     }
     /// <summary>
@@ -256,6 +266,7 @@ public static partial class FileUtil
             outputDir = new DirectoryInfo(Path.Combine(inputDir.FullName, "output_ExtractCsvColumns"));
         if (!outputDir.Exists) outputDir.Create();
 
+
         // main
         foreach (var file in inputDir.GetFiles())
         {
@@ -273,6 +284,8 @@ public static partial class FileUtil
             }
         }
 
+
+        // post process
         return outputDir;
     }
 
@@ -296,6 +309,7 @@ public static partial class FileUtil
             outputFile = new FileInfo(Path.Combine(inputDir.FullName, "output_CollectCsvColumns", "output.csv"));
         if (!outputFile.Directory.Exists) outputFile.Directory.Create();
         if (outputFile.Exists) outputFile.Delete();
+
 
         // main
         var outputDirPath = outputFile.DirectoryName;
@@ -410,6 +424,8 @@ public static partial class FileUtil
             throw new NotImplementedException("outputFile need to be .csv or .xlsx file null.");
         }
 
+        
+        // post process
         return outputFile;
     }
     /// <summary>
@@ -436,6 +452,8 @@ public static partial class FileUtil
             inputDir.CollectCsvColumns(outputFile, item.targetColumn, item.initialColumn, skipRowCount);
         }
 
+
+        // post process
         return outputDir;
     }
     /// <summary>
@@ -493,6 +511,7 @@ public static partial class FileUtil
         if (!outputFile.Directory.Exists) outputFile.Directory.Create();
         if (outputFile.Exists) outputFile.Delete();
 
+
         // main
         using var workbook = new XLWorkbook();
 
@@ -536,6 +555,8 @@ public static partial class FileUtil
 
         workbook.SaveAs(outputFile.FullName, true);
 
+
+        // post process
         return outputFile;
     }
 

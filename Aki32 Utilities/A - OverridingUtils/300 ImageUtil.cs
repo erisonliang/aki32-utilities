@@ -27,6 +27,7 @@ public static class ImageUtil
         if (!outputFile.Directory.Exists)
             outputFile.Directory.Create();
 
+
         // main
         try
         {
@@ -44,6 +45,8 @@ public static class ImageUtil
                 Console.WriteLine($"X 失敗 : {inputFile.FullName}, {e.Message}");
         }
 
+
+        // post process
         return outputFile;
     }
     /// <summary>
@@ -63,6 +66,7 @@ public static class ImageUtil
         if (!outputDir.Exists)
             outputDir.Create();
 
+
         // main
         foreach (var inputFile in inputDir.GetFiles())
         {
@@ -70,6 +74,8 @@ public static class ImageUtil
             inputFile.CropImage(outputFile, crop);
         }
 
+
+        // post process
         return outputDir;
     }
     /// <summary>
@@ -148,6 +154,7 @@ public static class ImageUtil
         if (!outputFile.Directory.Exists)
             outputFile.Directory.Create();
 
+
         // main
         try
         {
@@ -165,6 +172,8 @@ public static class ImageUtil
                 Console.WriteLine($"X 失敗 : {inputFile.FullName}, {e.Message}");
         }
 
+
+        // post process
         return outputFile;
     }
     /// <summary>
@@ -184,6 +193,7 @@ public static class ImageUtil
         if (!outputDir.Exists)
             outputDir.Create();
 
+
         // main
         Parallel.ForEach(targetInfos, targetInfos =>
         {
@@ -192,6 +202,8 @@ public static class ImageUtil
             inputFile.ConvertImageColor(outputFile, targetColor);
         });
 
+
+        // post process
         return outputDir;
     }
     /// <summary>
@@ -234,6 +246,7 @@ public static class ImageUtil
 
             bmpP.EndAccess();
         }
+
 
         return resultBmp;
     }

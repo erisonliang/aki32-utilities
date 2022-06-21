@@ -23,6 +23,7 @@ public static class PDFUtil
         if (UtilConfig.ConsoleOutput && initialConsoleOutput)
             Console.WriteLine("\r\n** PDFPageCount() Called");
 
+
         // main
         try
         {
@@ -80,6 +81,7 @@ public static class PDFUtil
         if (UtilConfig.ConsoleOutput)
             Console.WriteLine("\r\n** PDFPageCount() Called");
 
+
         // main
         var totalCount = 0;
         var errorCount = 0;
@@ -90,6 +92,8 @@ public static class PDFUtil
             else errorCount++;
         }
 
+
+        // post process
         Console.WriteLine($"--------------------------");
         Console.WriteLine($"{totalCount,5} pages in total {(errorCount > 0 ? $"(※ exept for {errorCount} errors)" : "")}");
         Console.WriteLine($"--------------------------");

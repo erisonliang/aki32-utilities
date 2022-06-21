@@ -24,6 +24,7 @@ public static partial class FileUtil
             outputDir = new DirectoryInfo(Path.Combine(inputDir.Parent.FullName, "output_CollectFiles"));
         if (!outputDir.Exists) outputDir.Create();
 
+
         // main
         var files = new List<string>();
         foreach (var serchPattern in serchPatterns)
@@ -51,6 +52,8 @@ public static partial class FileUtil
             }
         }
 
+
+        // postprocess
         return outputDir;
     }
 
@@ -72,6 +75,7 @@ public static partial class FileUtil
         if (outputDir is null)
             outputDir = new DirectoryInfo(Path.Combine(inputFile.DirectoryName, "output_MakeFilesFromCsv"));
         if (!outputDir.Exists) outputDir.Create();
+
 
         // main
         var tempDataEx = Path.GetExtension(templateFile.Name);
@@ -95,6 +99,7 @@ public static partial class FileUtil
             }
         }
 
+        // postprocess
         return outputDir;
     }
 
@@ -114,6 +119,7 @@ public static partial class FileUtil
         if (outputDir is null)
             throw new ArgumentNullException(nameof(outputDir));
 
+
         // main
         if (inputDir.FullName[0..3] == outputDir.FullName[0..3])
         {
@@ -126,6 +132,7 @@ public static partial class FileUtil
             inputDir.CopyTo(outputDir, false);
             inputDir.Delete(true);
         }
+
 
         // postprocess
         return outputDir;
@@ -147,6 +154,7 @@ public static partial class FileUtil
         if (outputDir is null)
             throw new ArgumentNullException(nameof(outputDir));
 
+
         // main
         // create new directory with the same attribtues
         if (!outputDir.Exists)
@@ -162,6 +170,7 @@ public static partial class FileUtil
         // copy directories
         foreach (var inner_inputDir in inputDir.GetDirectories())
             inner_inputDir.CopyTo(new DirectoryInfo(Path.Combine(outputDir.FullName, inner_inputDir.Name)), false);
+
 
         // postprocess
         return outputDir;
@@ -255,6 +264,8 @@ public static partial class FileUtil
             }
         }
 
+
+        // postprocess
         return targetDir;
     }
     /// <summary>
