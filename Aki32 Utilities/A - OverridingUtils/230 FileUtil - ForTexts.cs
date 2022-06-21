@@ -20,7 +20,7 @@ public static partial class FileUtil
             Console.WriteLine("\r\n** MergeAllLines() Called");
         Encoding.RegisterProvider(CodePagesEncodingProvider.Instance); // to handle Shift-JIS
         if (outputFile is null)
-            outputFile = new FileInfo(Path.Combine(inputDir.FullName, "output_MergeAllLines", $"output.txt"));
+            outputFile = new FileInfo(Path.Combine(inputDir.FullName, UtilConfig.GetNewFileName("MergeAllLines")  , $"output.txt"));
         if (!outputFile.Directory.Exists) outputFile.Directory.Create();
         if (outputFile.Exists) outputFile.Delete();
 

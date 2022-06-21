@@ -150,7 +150,7 @@ public static partial class FileUtil
         // preprocess
         Encoding.RegisterProvider(CodePagesEncodingProvider.Instance); // to handle Shift-JIS
         if (outputFile is null)
-            outputFile = new FileInfo(Path.Combine(inputFile.DirectoryName, "output_TransposeCsv", inputFile.Name));
+            outputFile = new FileInfo(Path.Combine(inputFile.DirectoryName, UtilConfig.GetNewFileName("TransposeCsv"), inputFile.Name));
         if (!outputFile.Directory.Exists) outputFile.Directory.Create();
         if (outputFile.Exists) outputFile.Delete();
 
@@ -173,7 +173,7 @@ public static partial class FileUtil
         if (UtilConfig.ConsoleOutput)
             Console.WriteLine("\r\n** TransposeCsv_Loop() Called");
         if (outputDir is null)
-            outputDir = new DirectoryInfo(Path.Combine(inputDir.FullName, "output_TransposeCsv"));
+            outputDir = new DirectoryInfo(Path.Combine(inputDir.FullName, UtilConfig.GetNewFileName("TransposeCsv")));
         if (!outputDir.Exists) outputDir.Create();
 
 
@@ -215,7 +215,7 @@ public static partial class FileUtil
         // preprocess
         Encoding.RegisterProvider(CodePagesEncodingProvider.Instance); // to handle Shift-JIS
         if (outputFile is null)
-            outputFile = new FileInfo(Path.Combine(inputFile.DirectoryName, "output_ExtractCsvColumns", inputFile.Name));
+            outputFile = new FileInfo(Path.Combine(inputFile.DirectoryName, UtilConfig.GetNewFileName("ExtractCsvColumns"), inputFile.Name));
         if (!outputFile.Directory.Exists) outputFile.Directory.Create();
         if (outputFile.Exists) outputFile.Delete();
 
@@ -263,7 +263,7 @@ public static partial class FileUtil
         if (UtilConfig.ConsoleOutput)
             Console.WriteLine("\r\n** ExtractCsvColumns_Loop() Called (This takes time...)");
         if (outputDir is null)
-            outputDir = new DirectoryInfo(Path.Combine(inputDir.FullName, "output_ExtractCsvColumns"));
+            outputDir = new DirectoryInfo(Path.Combine(inputDir.FullName, UtilConfig.GetNewFileName("ExtractCsvColumns")));
         if (!outputDir.Exists) outputDir.Create();
 
 
@@ -306,7 +306,7 @@ public static partial class FileUtil
             Console.WriteLine("\r\n** CollectCsvColumns() Called");
         Encoding.RegisterProvider(CodePagesEncodingProvider.Instance); // to handle Shift-JIS
         if (outputFile is null)
-            outputFile = new FileInfo(Path.Combine(inputDir.FullName, "output_CollectCsvColumns", "output.csv"));
+            outputFile = new FileInfo(Path.Combine(inputDir.FullName, UtilConfig.GetNewFileName("CollectCsvColumns"), "output.csv"));
         if (!outputFile.Directory.Exists) outputFile.Directory.Create();
         if (outputFile.Exists) outputFile.Delete();
 
@@ -424,7 +424,7 @@ public static partial class FileUtil
             throw new NotImplementedException("outputFile need to be .csv or .xlsx file null.");
         }
 
-        
+
         // post process
         return outputFile;
     }
@@ -440,7 +440,7 @@ public static partial class FileUtil
     {
         // preprocess
         if (outputDir is null)
-            outputDir = new DirectoryInfo(Path.Combine(inputDir.FullName, "output_CollectCsvColumns"));
+            outputDir = new DirectoryInfo(Path.Combine(inputDir.FullName, UtilConfig.GetNewFileName("CollectCsvColumns")));
         if (inputDir.FullName == outputDir.FullName)
             throw new InvalidOperationException("※ inputDir and outputDir must be different");
         if (!outputDir.Exists) outputDir.Create();
@@ -507,7 +507,7 @@ public static partial class FileUtil
             Console.WriteLine("\r\n** Csvs2ExcelSheets() Called");
         Encoding.RegisterProvider(CodePagesEncodingProvider.Instance); // to handle Shift-JIS
         if (outputFile is null)
-            outputFile = new FileInfo(Path.Combine(inputDir.FullName, "output_Csvs2ExcelSheets", "output.xlsx"));
+            outputFile = new FileInfo(Path.Combine(inputDir.FullName, UtilConfig.GetNewFileName("Csvs2ExcelSheets"), "output.xlsx"));
         if (!outputFile.Directory.Exists) outputFile.Directory.Create();
         if (outputFile.Exists) outputFile.Delete();
 

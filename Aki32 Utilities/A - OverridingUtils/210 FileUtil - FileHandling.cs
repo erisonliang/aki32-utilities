@@ -21,8 +21,9 @@ public static partial class FileUtil
             Console.WriteLine("\r\n** CollectFiles() Called");
         Encoding.RegisterProvider(CodePagesEncodingProvider.Instance); // to handle Shift-JIS
         if (outputDir is null)
-            outputDir = new DirectoryInfo(Path.Combine(inputDir.Parent.FullName, "output_CollectFiles"));
-        if (!outputDir.Exists) outputDir.Create();
+            outputDir = new DirectoryInfo(Path.Combine(inputDir.Parent.FullName, UtilConfig.GetNewFileName("CollectFiles")));
+        if (!outputDir.Exists)
+            outputDir.Create();
 
 
         // main
@@ -34,10 +35,8 @@ public static partial class FileUtil
         foreach (var file in files)
         {
             var newFileName = file.Replace(inputDir.FullName, "");
-            //foreach (var item in serchPattern.Split("*", StringSplitOptions.RemoveEmptyEntries))
-            //  newFileName = newFileName.Replace(item, "");
             newFileName = newFileName.Replace(Path.DirectorySeparatorChar, '_').Trim('_');
-            var newOutputFilePath = Path.Combine(outputDir.FullName, newFileName + Path.GetExtension(file));
+            var newOutputFilePath = Path.Combine(outputDir.FullName, newFileName);
 
             try
             {
@@ -73,8 +72,9 @@ public static partial class FileUtil
             Console.WriteLine("\r\n** MakeFilesFromCsv() Called");
         Encoding.RegisterProvider(CodePagesEncodingProvider.Instance); // to handle Shift-JIS
         if (outputDir is null)
-            outputDir = new DirectoryInfo(Path.Combine(inputFile.DirectoryName, "output_MakeFilesFromCsv"));
-        if (!outputDir.Exists) outputDir.Create();
+            outputDir = new DirectoryInfo(Path.Combine(inputFile.DirectoryName, UtilConfig.GetNewFileName("MakeFilesFromCsv")));
+        if (!outputDir.Exists)
+            outputDir.Create();
 
 
         // main
@@ -118,6 +118,7 @@ public static partial class FileUtil
             Console.WriteLine("\r\n** MoveTo() Called");
         if (outputDir is null)
             throw new ArgumentNullException(nameof(outputDir));
+        if (!outputDir.Parent.Exists) outputDir.Parent.Create();
 
 
         // main
@@ -129,13 +130,69 @@ public static partial class FileUtil
         else
         {
             // We can't use MoveTo() for different drive.
-            inputDir.CopyTo(outputDir, false);
+            inputDir.CopyTo(outputDir, true);
             inputDir.Delete(true);
         }
 
 
         // postprocess
         return outputDir;
+    }
+    /// <summary>
+    /// move a file
+    /// </summary>
+    /// <param name="inputFile"></param>
+    /// <param name="outputFile"></param>
+    /// <returns></returns>
+    public static FileInfo MoveTo(this FileInfo inputFile, FileInfo outputFile)
+    {
+        // preprocess
+        if (outputFile is null)
+            throw new ArgumentNullException(nameof(outputFile));
+        if (!outputFile.Directory.Exists) outputFile.Directory.Create();
+        if (outputFile.Exists) outputFile.Delete();
+
+
+        // main
+        if (inputFile.FullName[0..3] == inputFile.FullName[0..3])
+        {
+            // use default Move().
+            File.Move(inputFile.FullName, outputFile.FullName, true);
+        }
+        else
+        {
+            // We can't use Move() for different drive.
+            File.Copy(inputFile.FullName, outputFile.FullName, true);
+            File.Delete(inputFile.FullName);
+        }
+
+
+        // post process
+        return outputFile;
+    }
+    /// <summary>
+    /// move a file
+    /// </summary>
+    /// <param name="inputFile"></param>
+    /// <param name="outputDir">must not to be null</param>
+    /// <returns></returns>
+    public static FileInfo MoveTo(this FileInfo inputFile, DirectoryInfo outputDir)
+    {
+        // preprocess
+        if (outputDir is null)
+            throw new ArgumentNullException(nameof(outputDir));
+        if (!outputDir.Parent.Exists) outputDir.Parent.Create();
+
+
+        // main
+        var name = inputFile.Name;
+        var outputFilePath = Path.Combine(outputDir.FullName, name);
+        var outputFile = new FileInfo(outputFilePath);
+        File.Move(inputFile.FullName, outputFile.FullName, true);
+
+
+        // post process
+        return outputFile;
     }
 
     // ★★★★★★★★★★★★★★★ 214 CopyTo
@@ -174,6 +231,28 @@ public static partial class FileUtil
 
         // postprocess
         return outputDir;
+    }
+    /// <summary>
+    /// copy a file
+    /// </summary>
+    /// <param name="inputFile"></param>
+    /// <param name="outputFile"></param>
+    /// <returns></returns>
+    public static FileInfo CopyTo(this FileInfo inputFile, FileInfo outputFile)
+    {
+        // preprocess
+        if (outputFile is null)
+            throw new ArgumentNullException(nameof(outputFile));
+        if (!outputFile.Directory.Exists) outputFile.Directory.Create();
+        if (outputFile.Exists) outputFile.Delete();
+
+
+        // main
+        inputFile.CopyTo(outputFile.FullName, true);
+
+
+        // post process
+        return outputFile;
     }
 
     // ★★★★★★★★★★★★★★★ 215 RenameFiles
@@ -308,6 +387,25 @@ public static partial class FileUtil
     public static DirectoryInfo RenameFiles_Append(this DirectoryInfo targetDir, string pattern)
     {
         return targetDir.RenameFiles_AppendAndReplace(pattern, new (string from, string to)[] { (" ", " ") });
+    }
+    /// <summary>
+    /// rename a file
+    /// </summary>
+    /// <param name="inputFile"></param>
+    /// <param name="outputFile"></param>
+    /// <returns></returns>
+    public static FileInfo RenameFile(this FileInfo inputFile, string newNameWithoutExtension)
+    {
+        // main
+        var ext = Path.GetExtension(inputFile.Name);
+        var outputFileName = $"{newNameWithoutExtension}{ext}";
+        var outputFilePath = Path.Combine(inputFile.DirectoryName, outputFileName);
+        var outputFile = new FileInfo(outputFilePath);
+        inputFile.MoveTo(outputFile);
+
+
+        // post process
+        return outputFile;
     }
 
     // ★★★★★★★★★★★★★★★ 

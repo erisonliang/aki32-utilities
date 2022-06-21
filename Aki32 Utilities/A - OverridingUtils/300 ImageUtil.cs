@@ -23,7 +23,7 @@ public static class ImageUtil
     {
         // preprocess
         if (outputFile == null)
-            outputFile = new FileInfo(Path.Combine(inputFile.DirectoryName, "output_CropImage", $"{Path.GetFileNameWithoutExtension(inputFile.Name)} - {crop.ToString()}.png"));
+            outputFile = new FileInfo(Path.Combine(inputFile.DirectoryName, UtilConfig.GetNewFileName("CropImage"), $"{Path.GetFileNameWithoutExtension(inputFile.Name)} - {crop.ToString()}.png"));
         if (!outputFile.Directory.Exists)
             outputFile.Directory.Create();
 
@@ -62,7 +62,7 @@ public static class ImageUtil
         if (UtilConfig.ConsoleOutput)
             Console.WriteLine("\r\n** CropImage_Loop() Called");
         if (outputDir == null)
-            outputDir = new DirectoryInfo(Path.Combine(inputDir.FullName, "output_CropImage"));
+            outputDir = new DirectoryInfo(Path.Combine(inputDir.FullName, UtilConfig.GetNewFileName("CropImage")));
         if (!outputDir.Exists)
             outputDir.Create();
 
@@ -150,7 +150,7 @@ public static class ImageUtil
     {
         // preprocess
         if (outputFile == null)
-            outputFile = new FileInfo(Path.Combine(inputFile.DirectoryName, "output_ConvertImageColor", inputFile.Name));
+            outputFile = new FileInfo(Path.Combine(inputFile.DirectoryName, UtilConfig.GetNewFileName("ConvertImageColor"), inputFile.Name));
         if (!outputFile.Directory.Exists)
             outputFile.Directory.Create();
 
@@ -189,7 +189,7 @@ public static class ImageUtil
         if (UtilConfig.ConsoleOutput)
             Console.WriteLine("\r\n** ConvertImageColor_Loop() Called");
         if (outputDir == null)
-            outputDir = new DirectoryInfo(Path.Combine(inputFile.DirectoryName, "output_ConvertImageColor"));
+            outputDir = new DirectoryInfo(Path.Combine(inputFile.DirectoryName, UtilConfig.GetNewFileName("ConvertImageColor")));
         if (!outputDir.Exists)
             outputDir.Create();
 

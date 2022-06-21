@@ -35,7 +35,7 @@ public static class UnderDevelopementUtil
         // preprocess
         Encoding.RegisterProvider(CodePagesEncodingProvider.Instance); // to handle Shift-JIS
         if (outputFile is null)
-            outputFile = new FileInfo(Path.Combine(inputFile.DirectoryName, "output_TEMPLATE", inputFile.Name));
+            outputFile = new FileInfo(Path.Combine(inputFile.DirectoryName, UtilConfig.GetNewFileName("TEMPLATE"), inputFile.Name));
         if (!outputFile.Directory.Exists) outputFile.Directory.Create();
         if (outputFile.Exists) outputFile.Delete();
 
@@ -62,7 +62,7 @@ public static class UnderDevelopementUtil
         if (UtilConfig.ConsoleOutput)
             Console.WriteLine("\r\n** TEMPLATE_Loop() Called");
         if (outputDir is null)
-            outputDir = new DirectoryInfo(Path.Combine(inputDir.FullName, "output_TEMPLATE"));
+            outputDir = new DirectoryInfo(Path.Combine(inputDir.FullName, UtilConfig.GetNewFileName("TEMPLATE")));
         if (!outputDir.Exists) outputDir.Create();
 
 
