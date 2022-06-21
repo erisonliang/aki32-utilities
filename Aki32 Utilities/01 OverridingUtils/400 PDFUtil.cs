@@ -5,7 +5,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace Aki32_Utilities.Class;
+namespace Aki32_Utilities.OverridingUtils;
 public static class PDFUtil
 {
 

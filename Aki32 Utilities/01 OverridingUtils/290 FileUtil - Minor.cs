@@ -1,7 +1,6 @@
 ﻿using System.Text;
 
-namespace Aki32_Utilities.Class;
-
+namespace Aki32_Utilities.OverridingUtils;
 public static partial class FileUtil
 {
     // TODO: test 291 and 292 later.

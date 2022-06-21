@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace Aki32_Utilities.Class;
+namespace Aki32_Utilities.OverridingUtils;
 public static class UtilConfig
 {
 
