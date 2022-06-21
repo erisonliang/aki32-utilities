@@ -167,6 +167,53 @@ public static partial class FileUtil
         return outputDir;
     }
 
+
+    // ★★★★★★★★★★★★★★★ 215 RenameFiles
+
+    ///// <summary>
+    ///// rename all matching file names
+    ///// </summary>
+    ///// <param name="inputDir"></param>
+    ///// <param name="outputDir">when null, automatically set to {inputDir.Parent.FullName}/output_CollectFiles</param>
+    ///// <param name="serchPattern"></param>
+    ///// <returns></returns>
+    //public static DirectoryInfo RenameFiles(this DirectoryInfo targetDir, params string[] serchPatterns)
+    //{
+    //    // preprocess
+    //    if (UtilConfig.ConsoleOutput)
+    //        Console.WriteLine("\r\n** RenameFiles() Called");
+    //    Encoding.RegisterProvider(CodePagesEncodingProvider.Instance); // to handle Shift-JIS
+
+    //    // main
+    //    var files = new List<string>();
+    //    foreach (var serchPattern in serchPatterns)
+    //        files.AddRange(inputDir.GetFiles(serchPattern, SearchOption.AllDirectories).Select(f => f.FullName));
+    //    files = files.Distinct().ToList();
+
+    //    foreach (var file in files)
+    //    {
+    //        var newFileName = file.Replace(inputDir.FullName, "");
+    //        //foreach (var item in serchPattern.Split("*", StringSplitOptions.RemoveEmptyEntries))
+    //        //  newFileName = newFileName.Replace(item, "");
+    //        newFileName = newFileName.Replace(Path.DirectorySeparatorChar, '_').Trim('_');
+    //        var newOutputFilePath = Path.Combine(outputDir.FullName, newFileName + Path.GetExtension(file));
+
+    //        try
+    //        {
+    //            File.Copy(file, newOutputFilePath, true);
+    //            if (UtilConfig.ConsoleOutput)
+    //                Console.WriteLine($"O: {newOutputFilePath}");
+    //        }
+    //        catch (Exception ex)
+    //        {
+    //            if (UtilConfig.ConsoleOutput)
+    //                Console.WriteLine($"X: {newOutputFilePath}, {ex.Message}");
+    //        }
+    //    }
+
+    //    return targetDir;
+    //}
+
     // ★★★★★★★★★★★★★★★ 
 
 }
