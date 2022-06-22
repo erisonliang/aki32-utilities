@@ -19,10 +19,6 @@ public class Program
                 {
                     var baseDir = @"..\..\..\# TestModel\200 FileUtil";
 
-                    // Combination!!!!
-                    {
-                    }
-
                     // 211 CollectFiles
                     {
                         //var input = new DirectoryInfo($@"{baseDir}\211 CollectFiles\input");
