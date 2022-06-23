@@ -100,15 +100,49 @@ public class TimeHistoryStep : TimeHistory
             this["f"] = value;
         }
     }
-    public double memo1
+    public double memo
     {
         get
         {
-            return this["memo1"];
+            return this["memo"];
         }
         set
         {
-            this["memo1"] = value;
+            this["memo"] = value;
+        }
+    }
+
+    public double a
+    {
+        get
+        {
+            return this["a"];
+        }
+        set
+        {
+            this["a"] = value;
+        }
+    }
+    public double v
+    {
+        get
+        {
+            return this["v"];
+        }
+        set
+        {
+            this["v"] = value;
+        }
+    }
+    public double mu
+    {
+        get
+        {
+            return this["mu"];
+        }
+        set
+        {
+            this["mu"] = value;
         }
     }
 
