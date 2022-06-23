@@ -6,7 +6,18 @@ namespace Aki32_Utilities.OwesomeModels;
 /// </summary>
 public class TimeHistory : ICloneable
 {
+    /// <summary>
+    /// Name of this time history instance
+    /// </summary>
+    public string Name { get; set; }
+    /// <summary>
+    /// </summary>
     internal Dictionary<string, double[]> data;
+    /// <summary>
+    /// indexer
+    /// </summary>
+    /// <param name="key"></param>
+    /// <returns></returns>
     public double[] this[string key]
     {
         get
@@ -40,8 +51,9 @@ public class TimeHistory : ICloneable
     /// <summary>
     /// constructor
     /// </summary>
-    public TimeHistory()
+    public TimeHistory(string Name = "")
     {
+        this.Name = Name;
         data = new Dictionary<string, double[]>();
     }
 
@@ -54,7 +66,11 @@ public class TimeHistory : ICloneable
     /// <exception cref="Exception"></exception>
     public static TimeHistory FromCsv(FileInfo inputCsv, string[] overwriteHeaders = null)
     {
-        var history = new TimeHistory() { __inputDir = inputCsv.Directory };
+        var history = new TimeHistory()
+        {
+            Name = Path.GetFileNameWithoutExtension(inputCsv.Name),
+            __inputDir = inputCsv.Directory,
+        };
 
         try
         {
@@ -95,7 +111,11 @@ public class TimeHistory : ICloneable
     /// <returns></returns>
     public object Clone()
     {
-        var newHistory = new TimeHistory();
+        var newHistory = new TimeHistory()
+        {
+            Name = Name,
+            __inputDir = __inputDir,
+        };
 
         foreach (var key in data.Keys)
             newHistory.data[key] = (double[])data[key].Clone();
@@ -120,13 +140,22 @@ public class TimeHistory : ICloneable
             if (__inputDir == null)
                 throw new InvalidOperationException("outputFile must be declared when input was not by FromCsv()");
             else
-                outputFile = new FileInfo(Path.Combine(__inputDir.FullName, "output", $"result - {__resultFileName}.csv"));
+                outputFile = new FileInfo(Path.Combine(__inputDir.FullName, "output", $"result - {resultFileName}.csv"));
         }
         if (!outputFile.Directory.Exists)
             outputFile.Directory.Create();
 
         using var sw = new StreamWriter(outputFile.FullName);
         OutputTimeHistoryToStream(sw);
+    }
+    /// <summary>
+    /// Output TimeHistory to csv
+    /// </summary>
+    /// <param name="outputFilePath"></param>
+    public void OutputTimeHistoryToCsv(DirectoryInfo outputDir)
+    {
+        var outputFile = new FileInfo(Path.Combine(outputDir.FullName, $"result - {resultFileName}.csv"));
+        OutputTimeHistoryToCsv(outputFile);
     }
 
     /// <summary>
@@ -302,7 +331,7 @@ public class TimeHistory : ICloneable
     #endregion
 
     private DirectoryInfo __inputDir = null;
-    public string __resultFileName = "result";
+    public string resultFileName = "result";
 
     public int DataRowCount
     {
@@ -319,14 +348,14 @@ public class TimeHistory : ICloneable
 
 
 
-    #region Methods
+    #region methods
 
     public TimeHistoryStep GetStep(int i)
     {
         var step = new TimeHistoryStep()
         {
             __inputDir = __inputDir,
-            __resultFileName = __resultFileName,
+            resultFileName = resultFileName,
         };
         foreach (var key in data.Keys)
             step[key] = this[key][i];
