@@ -116,7 +116,12 @@ public class TimeHistory : ICloneable
     public void OutputTimeHistoryToCsv(FileInfo outputFile = null)
     {
         if (outputFile == null)
-            outputFile = new FileInfo(Path.Combine(__inputDir.FullName, "output", $"result - {__resultFileName}.csv"));
+        {
+            if (__inputDir == null)
+                throw new InvalidOperationException("outputFile must be declared when input was not by FromCsv()");
+            else
+                outputFile = new FileInfo(Path.Combine(__inputDir.FullName, "output", $"result - {__resultFileName}.csv"));
+        }
         if (!outputFile.Directory.Exists)
             outputFile.Directory.Create();
 
