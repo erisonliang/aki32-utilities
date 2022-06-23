@@ -2,7 +2,7 @@
 
 ## 🌟 Abstract
 
-My windows utility written in C#
+My windows and C# utilities written in C#
 
 
 
