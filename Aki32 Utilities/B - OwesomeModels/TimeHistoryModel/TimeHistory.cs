@@ -12,7 +12,7 @@ public class TimeHistory : ICloneable
     public string Name { get; set; }
     /// <summary>
     /// </summary>
-    internal Dictionary<string, double[]> data;
+    internal Dictionary<string, double[]> data=new Dictionary<string, double[]>();
     /// <summary>
     /// indexer
     /// </summary>
@@ -133,7 +133,7 @@ public class TimeHistory : ICloneable
     /// Output TimeHistory to csv
     /// </summary>
     /// <param name="outputFilePath"></param>
-    public void OutputTimeHistoryToCsv(FileInfo outputFile = null)
+    public FileInfo OutputToCsv(FileInfo outputFile = null)
     {
         if (outputFile == null)
         {
@@ -146,33 +146,35 @@ public class TimeHistory : ICloneable
             outputFile.Directory.Create();
 
         using var sw = new StreamWriter(outputFile.FullName);
-        OutputTimeHistoryToStream(sw);
+        OutputToStream(sw);
+
+        return outputFile;
     }
     /// <summary>
     /// Output TimeHistory to csv
     /// </summary>
     /// <param name="outputFilePath"></param>
-    public void OutputTimeHistoryToCsv(DirectoryInfo outputDir)
+    public FileInfo OutputToCsv(DirectoryInfo outputDir)
     {
         var outputFile = new FileInfo(Path.Combine(outputDir.FullName, $"result - {resultFileName}.csv"));
-        OutputTimeHistoryToCsv(outputFile);
+        return OutputToCsv(outputFile);
     }
 
     /// <summary>
     /// Output TimeHistory to console
     /// </summary>
-    public void OutputTimeHistoryToConsole()
+    public void OutputToConsole()
     {
         using var sw = new StreamWriter(Console.OpenStandardOutput());
         sw.WriteLine("============================================");
-        OutputTimeHistoryToStream(sw);
+        OutputToStream(sw);
         sw.WriteLine("============================================");
     }
 
     /// <summary>
     /// Output TimeHistory to stream
     /// </summary>
-    private void OutputTimeHistoryToStream(StreamWriter sw)
+    private void OutputToStream(StreamWriter sw)
     {
         foreach (var key in data.Keys)
         {
@@ -249,17 +251,6 @@ public class TimeHistory : ICloneable
             this["xtt"] = value;
         }
     }
-    public double[] xtt_ytt
-    {
-        get
-        {
-            return this["xtt_ytt"];
-        }
-        set
-        {
-            this["xtt_ytt"] = value;
-        }
-    }
     public double[] ytt
     {
         get
@@ -269,6 +260,17 @@ public class TimeHistory : ICloneable
         set
         {
             this["ytt"] = value;
+        }
+    }
+    public double[] xtt_ytt
+    {
+        get
+        {
+            return this["xtt_ytt"];
+        }
+        set
+        {
+            this["xtt_ytt"] = value;
         }
     }
     public double[] f
@@ -328,6 +330,40 @@ public class TimeHistory : ICloneable
         }
     }
 
+    public double[] Sd
+    {
+        get
+        {
+            return this["Sd"];
+        }
+        set
+        {
+            this["Sd"] = value;
+        }
+    }
+    public double[] Sv
+    {
+        get
+        {
+            return this["Sv"];
+        }
+        set
+        {
+            this["Sv"] = value;
+        }
+    }
+    public double[] Sa
+    {
+        get
+        {
+            return this["Sa"];
+        }
+        set
+        {
+            this["Sa"] = value;
+        }
+    }
+
     #endregion
 
     private DirectoryInfo __inputDir = null;
@@ -366,6 +402,33 @@ public class TimeHistory : ICloneable
         foreach (var key in step.data.Keys)
             this[key][i] = step[key];
     }
+    public void AppendStep(TimeHistoryStep step)
+    {
+        // TODO: make this faster
+
+        var addingIndex = DataRowCount;
+
+        var keys = step.data.Keys.ToArray();
+        for (int i = 0; i < keys.Length; i++)
+        {
+            var key = keys[i];
+
+            if (addingIndex >= this[key].Length)
+            {
+                var targetList = this[key];
+                while (targetList.Length < addingIndex)
+                    targetList = targetList.Append(0).ToArray();
+                targetList= targetList.Append(step[key]).ToArray();
+                this[key] = targetList;
+            }
+            else
+            {
+                this[key][addingIndex] = step[key];
+            }
+        }
+    }
+
+
 
     public void DropColumn(params string[] droppingColumns)
     {
@@ -413,13 +476,12 @@ public class TimeHistory : ICloneable
     /// Get response spectrum set from
     /// </summary>
     /// <returns></returns>
-    public TimeHistoryStep GetSpectrumSet(double T)
+    public TimeHistoryStep GetSpectrumSet()
     {
         var step = new TimeHistoryStep();
-        step["T"] = T;
-        step["Sd"] = x.Max(Math.Abs);
-        step["Sv"] = xt.Max(Math.Abs);
-        step["Sa"] = xtt_ytt.Max(Math.Abs);
+        step.Sd = x.Max(Math.Abs);
+        step.Sv = xt.Max(Math.Abs);
+        step.Sa = xtt_ytt.Max(Math.Abs);
         return step;
     }
 

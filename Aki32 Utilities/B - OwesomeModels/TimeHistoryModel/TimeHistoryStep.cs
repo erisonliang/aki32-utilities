@@ -89,6 +89,17 @@ public class TimeHistoryStep : TimeHistory
             this["ytt"] = value;
         }
     }
+    public double xtt_ytt
+    {
+        get
+        {
+            return this["xtt_ytt"];
+        }
+        set
+        {
+            this["xtt_ytt"] = value;
+        }
+    }
     public double f
     {
         get
@@ -143,6 +154,40 @@ public class TimeHistoryStep : TimeHistory
         set
         {
             this["mu"] = value;
+        }
+    }
+
+    public double Sd
+    {
+        get
+        {
+            return this["Sd"];
+        }
+        set
+        {
+            this["Sd"] = value;
+        }
+    }
+    public double Sv
+    {
+        get
+        {
+            return this["Sv"];
+        }
+        set
+        {
+            this["Sv"] = value;
+        }
+    }
+    public double Sa
+    {
+        get
+        {
+            return this["Sa"];
+        }
+        set
+        {
+            this["Sa"] = value;
         }
     }
 
