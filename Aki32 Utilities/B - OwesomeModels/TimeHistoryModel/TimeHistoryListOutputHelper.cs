@@ -1,7 +1,6 @@
 ﻿using Aki32_Utilities.OverridingUtils;
 
 namespace Aki32_Utilities.OwesomeModels;
-
 public static class TimeHistoryListOutputHelper
 {
 
