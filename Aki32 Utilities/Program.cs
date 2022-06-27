@@ -1,6 +1,7 @@
 ﻿using Aki32_Utilities.OverridingUtils;
 using Aki32_Utilities.OwesomeModels;
 using System.Drawing;
+using Aki32_Utilities.OwesomeModels.TimeHistoryModel;
 
 namespace Aki32_Utilities;
 public class Program
@@ -180,23 +181,37 @@ public class Program
             {
                 // TimeHistoryModel
                 {
-                    //var th = new TimeHistory();
-                    //th["A"] = new double[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
-                    //th["B"] = new double[] { 10, 11, 12, 13, 14, 15, 16, 17, 18, 19 };
-                    //th["C"] = new double[] { 20, 21, 22, 23, 24, 25, 26, 27, 28, 29 };
-                    //th["D"] = new double[] { 30, 31, 32, 33, 34, 35, 36, 37, 38, 39 };
+                    // TimeHistory
+                    {
+                        //var th = new TimeHistory();
+                        //th["A"] = new double[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+                        //th["B"] = new double[] { 10, 11, 12, 13, 14, 15, 16, 17, 18, 19 };
+                        //th["C"] = new double[] { 20, 21, 22, 23, 24, 25, 26, 27, 28, 29 };
+                        //th["D"] = new double[] { 30, 31, 32, 33, 34, 35, 36, 37, 38, 39 };
 
-                    //th.OutputTimeHistoryToConsole();
-                    //th.DropColumn("C");
-                    //th.OutputTimeHistoryToConsole();
-                    //th.DropStep(4);
-                    //th.OutputTimeHistoryToConsole();
-                    //var ths = th.GetStep(5);
-                    //ths.OutputTimeHistoryToConsole();
+                        //th.OutputTimeHistoryToConsole();
+                        //th.DropColumn("C");
+                        //th.OutputTimeHistoryToConsole();
+                        //th.DropStep(4);
+                        //th.OutputTimeHistoryToConsole();
+                        //var ths = th.GetStep(5);
+                        //ths.OutputTimeHistoryToConsole();
 
-                    //var ts = new TimeHistoryStep();
-                    //ts["E"] = 3;
-                    //ts.OutputTimeHistoryToConsole();
+                        //var ts = new TimeHistoryStep();
+                        //ts["E"] = 3;
+                        //ts.OutputTimeHistoryToConsole();
+                    }
+
+                    // FFT
+                    {
+                        //var baseDir = @"..\..\..\# TestModel\999 Others";
+
+                        //var input = new FileInfo($@"{baseDir}\FFT\input.csv");
+                        //TimeHistory
+                        //    .FromCsv(input, new string[] { "t", "x" })
+                        //    .FFT("x").Result
+                        //    .OutputToCsv();
+                    }
                 }
             }
         }

@@ -12,7 +12,7 @@ public class TimeHistory : ICloneable
     public string Name { get; set; }
     /// <summary>
     /// </summary>
-    internal Dictionary<string, double[]> data=new Dictionary<string, double[]>();
+    internal Dictionary<string, double[]> data = new Dictionary<string, double[]>();
     /// <summary>
     /// indexer
     /// </summary>
@@ -418,7 +418,7 @@ public class TimeHistory : ICloneable
                 var targetList = this[key];
                 while (targetList.Length < addingIndex)
                     targetList = targetList.Append(0).ToArray();
-                targetList= targetList.Append(step[key]).ToArray();
+                targetList = targetList.Append(step[key]).ToArray();
                 this[key] = targetList;
             }
             else

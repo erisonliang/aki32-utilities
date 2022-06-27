@@ -18,15 +18,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="B - OwesomeModels\TimeHistoryModel\TimeHistory.cs.bak" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Include="B - OwesomeModels\TimeHistoryModel\TimeHistory.cs.bak" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="ClosedXML" Version="0.95.4" />
+    <PackageReference Include="MathNet.Numerics" Version="5.0.0" />
   </ItemGroup>
 
 </Project>
