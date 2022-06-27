@@ -229,7 +229,7 @@ public static partial class FileUtil
         // preprocess
         if (outputDir is null)
             throw new ArgumentNullException(nameof(outputDir));
-        if (!outputDir.Parent.Exists) outputDir.Parent.Create();
+        if (!outputDir.Exists) outputDir.Create();
 
 
         // main

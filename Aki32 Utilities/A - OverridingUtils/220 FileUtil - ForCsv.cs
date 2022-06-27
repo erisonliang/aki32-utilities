@@ -509,6 +509,8 @@ public static partial class FileUtil
         if (outputFile is null)
             outputFile = new FileInfo(Path.Combine(inputDir.FullName, UtilConfig.GetNewFileName("Csvs2ExcelSheets"), "output.xlsx"));
         if (!outputFile.Directory.Exists) outputFile.Directory.Create();
+        if (!outputFile.Name.EndsWith(".xlsx"))
+            outputFile = new FileInfo(Path.GetFileNameWithoutExtension(outputFile.FullName) + ".xlsx");
         if (outputFile.Exists) outputFile.Delete();
 
 

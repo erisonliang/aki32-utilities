@@ -89,6 +89,17 @@ public class TimeHistoryStep : TimeHistory
             this["ytt"] = value;
         }
     }
+    public double xtt_ytt
+    {
+        get
+        {
+            return this["xtt_ytt"];
+        }
+        set
+        {
+            this["xtt_ytt"] = value;
+        }
+    }
     public double f
     {
         get
@@ -100,15 +111,83 @@ public class TimeHistoryStep : TimeHistory
             this["f"] = value;
         }
     }
-    public double memo1
+    public double memo
     {
         get
         {
-            return this["memo1"];
+            return this["memo"];
         }
         set
         {
-            this["memo1"] = value;
+            this["memo"] = value;
+        }
+    }
+
+    public double a
+    {
+        get
+        {
+            return this["a"];
+        }
+        set
+        {
+            this["a"] = value;
+        }
+    }
+    public double v
+    {
+        get
+        {
+            return this["v"];
+        }
+        set
+        {
+            this["v"] = value;
+        }
+    }
+    public double mu
+    {
+        get
+        {
+            return this["mu"];
+        }
+        set
+        {
+            this["mu"] = value;
+        }
+    }
+
+    public double Sd
+    {
+        get
+        {
+            return this["Sd"];
+        }
+        set
+        {
+            this["Sd"] = value;
+        }
+    }
+    public double Sv
+    {
+        get
+        {
+            return this["Sv"];
+        }
+        set
+        {
+            this["Sv"] = value;
+        }
+    }
+    public double Sa
+    {
+        get
+        {
+            return this["Sa"];
+        }
+        set
+        {
+            this["Sa"] = value;
         }
     }
 

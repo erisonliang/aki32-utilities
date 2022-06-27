@@ -6,7 +6,18 @@ namespace Aki32_Utilities.OwesomeModels;
 /// </summary>
 public class TimeHistory : ICloneable
 {
-    internal Dictionary<string, double[]> data;
+    /// <summary>
+    /// Name of this time history instance
+    /// </summary>
+    public string Name { get; set; }
+    /// <summary>
+    /// </summary>
+    internal Dictionary<string, double[]> data=new Dictionary<string, double[]>();
+    /// <summary>
+    /// indexer
+    /// </summary>
+    /// <param name="key"></param>
+    /// <returns></returns>
     public double[] this[string key]
     {
         get
@@ -40,8 +51,9 @@ public class TimeHistory : ICloneable
     /// <summary>
     /// constructor
     /// </summary>
-    public TimeHistory()
+    public TimeHistory(string Name = "")
     {
+        this.Name = Name;
         data = new Dictionary<string, double[]>();
     }
 
@@ -54,7 +66,11 @@ public class TimeHistory : ICloneable
     /// <exception cref="Exception"></exception>
     public static TimeHistory FromCsv(FileInfo inputCsv, string[] overwriteHeaders = null)
     {
-        var history = new TimeHistory() { __inputDir = inputCsv.Directory };
+        var history = new TimeHistory()
+        {
+            Name = Path.GetFileNameWithoutExtension(inputCsv.Name),
+            __inputDir = inputCsv.Directory,
+        };
 
         try
         {
@@ -95,7 +111,11 @@ public class TimeHistory : ICloneable
     /// <returns></returns>
     public object Clone()
     {
-        var newHistory = new TimeHistory();
+        var newHistory = new TimeHistory()
+        {
+            Name = Name,
+            __inputDir = __inputDir,
+        };
 
         foreach (var key in data.Keys)
             newHistory.data[key] = (double[])data[key].Clone();
@@ -113,32 +133,48 @@ public class TimeHistory : ICloneable
     /// Output TimeHistory to csv
     /// </summary>
     /// <param name="outputFilePath"></param>
-    public void OutputTimeHistoryToCsv(FileInfo outputFile = null)
+    public FileInfo OutputToCsv(FileInfo outputFile = null)
     {
         if (outputFile == null)
-            outputFile = new FileInfo(Path.Combine(__inputDir.FullName, "output", $"result - {__resultFileName}.csv"));
+        {
+            if (__inputDir == null)
+                throw new InvalidOperationException("outputFile must be declared when input was not by FromCsv()");
+            else
+                outputFile = new FileInfo(Path.Combine(__inputDir.FullName, "output", $"result - {resultFileName}.csv"));
+        }
         if (!outputFile.Directory.Exists)
             outputFile.Directory.Create();
 
         using var sw = new StreamWriter(outputFile.FullName);
-        OutputTimeHistoryToStream(sw);
+        OutputToStream(sw);
+
+        return outputFile;
+    }
+    /// <summary>
+    /// Output TimeHistory to csv
+    /// </summary>
+    /// <param name="outputFilePath"></param>
+    public FileInfo OutputToCsv(DirectoryInfo outputDir)
+    {
+        var outputFile = new FileInfo(Path.Combine(outputDir.FullName, $"result - {resultFileName}.csv"));
+        return OutputToCsv(outputFile);
     }
 
     /// <summary>
     /// Output TimeHistory to console
     /// </summary>
-    public void OutputTimeHistoryToConsole()
+    public void OutputToConsole()
     {
         using var sw = new StreamWriter(Console.OpenStandardOutput());
         sw.WriteLine("============================================");
-        OutputTimeHistoryToStream(sw);
+        OutputToStream(sw);
         sw.WriteLine("============================================");
     }
 
     /// <summary>
     /// Output TimeHistory to stream
     /// </summary>
-    private void OutputTimeHistoryToStream(StreamWriter sw)
+    private void OutputToStream(StreamWriter sw)
     {
         foreach (var key in data.Keys)
         {
@@ -215,17 +251,6 @@ public class TimeHistory : ICloneable
             this["xtt"] = value;
         }
     }
-    public double[] xtt_ytt
-    {
-        get
-        {
-            return this["xtt_ytt"];
-        }
-        set
-        {
-            this["xtt_ytt"] = value;
-        }
-    }
     public double[] ytt
     {
         get
@@ -237,22 +262,112 @@ public class TimeHistory : ICloneable
             this["ytt"] = value;
         }
     }
-    public double[] memo1
+    public double[] xtt_ytt
     {
         get
         {
-            return this["memo1"];
+            return this["xtt_ytt"];
         }
         set
         {
-            this["memo1"] = value;
+            this["xtt_ytt"] = value;
+        }
+    }
+    public double[] f
+    {
+        get
+        {
+            return this["f"];
+        }
+        set
+        {
+            this["f"] = value;
+        }
+    }
+    public double[] memo
+    {
+        get
+        {
+            return this["memo"];
+        }
+        set
+        {
+            this["memo"] = value;
+        }
+    }
+
+    public double[] a
+    {
+        get
+        {
+            return this["a"];
+        }
+        set
+        {
+            this["a"] = value;
+        }
+    }
+    public double[] v
+    {
+        get
+        {
+            return this["v"];
+        }
+        set
+        {
+            this["v"] = value;
+        }
+    }
+    public double[] mu
+    {
+        get
+        {
+            return this["mu"];
+        }
+        set
+        {
+            this["mu"] = value;
+        }
+    }
+
+    public double[] Sd
+    {
+        get
+        {
+            return this["Sd"];
+        }
+        set
+        {
+            this["Sd"] = value;
+        }
+    }
+    public double[] Sv
+    {
+        get
+        {
+            return this["Sv"];
+        }
+        set
+        {
+            this["Sv"] = value;
+        }
+    }
+    public double[] Sa
+    {
+        get
+        {
+            return this["Sa"];
+        }
+        set
+        {
+            this["Sa"] = value;
         }
     }
 
     #endregion
 
     private DirectoryInfo __inputDir = null;
-    public string __resultFileName = "result";
+    public string resultFileName = "result";
 
     public int DataRowCount
     {
@@ -269,14 +384,14 @@ public class TimeHistory : ICloneable
 
 
 
-    #region Methods
+    #region methods
 
     public TimeHistoryStep GetStep(int i)
     {
         var step = new TimeHistoryStep()
         {
             __inputDir = __inputDir,
-            __resultFileName = __resultFileName,
+            resultFileName = resultFileName,
         };
         foreach (var key in data.Keys)
             step[key] = this[key][i];
@@ -287,6 +402,33 @@ public class TimeHistory : ICloneable
         foreach (var key in step.data.Keys)
             this[key][i] = step[key];
     }
+    public void AppendStep(TimeHistoryStep step)
+    {
+        // TODO: make this faster
+
+        var addingIndex = DataRowCount;
+
+        var keys = step.data.Keys.ToArray();
+        for (int i = 0; i < keys.Length; i++)
+        {
+            var key = keys[i];
+
+            if (addingIndex >= this[key].Length)
+            {
+                var targetList = this[key];
+                while (targetList.Length < addingIndex)
+                    targetList = targetList.Append(0).ToArray();
+                targetList= targetList.Append(step[key]).ToArray();
+                this[key] = targetList;
+            }
+            else
+            {
+                this[key][addingIndex] = step[key];
+            }
+        }
+    }
+
+
 
     public void DropColumn(params string[] droppingColumns)
     {
@@ -334,13 +476,12 @@ public class TimeHistory : ICloneable
     /// Get response spectrum set from
     /// </summary>
     /// <returns></returns>
-    public TimeHistoryStep GetSpectrumSet(double T)
+    public TimeHistoryStep GetSpectrumSet()
     {
         var step = new TimeHistoryStep();
-        step["T"] = T;
-        step["Sd"] = x.Max(Math.Abs);
-        step["Sv"] = xt.Max(Math.Abs);
-        step["Sa"] = xtt_ytt.Max(Math.Abs);
+        step.Sd = x.Max(Math.Abs);
+        step.Sv = xt.Max(Math.Abs);
+        step.Sa = xtt_ytt.Max(Math.Abs);
         return step;
     }
 
