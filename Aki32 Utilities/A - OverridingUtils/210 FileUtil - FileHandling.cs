@@ -202,7 +202,7 @@ public static partial class FileUtil
 
 
         // main
-        if (inputFile.FullName[0..3] == inputFile.FullName[0..3])
+        if (inputFile.FullName[0..3] == outputFile.FullName[0..3])
         {
             // use default Move().
             File.Move(inputFile.FullName, outputFile.FullName, true);
