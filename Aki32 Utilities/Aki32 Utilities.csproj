@@ -10,11 +10,8 @@
 
   <ItemGroup>
     <Compile Remove="# TestModel\FileUtil\**" />
-    <Compile Remove="A - OverridingUtils\999 RelatedClasses\**" />
     <EmbeddedResource Remove="# TestModel\FileUtil\**" />
-    <EmbeddedResource Remove="A - OverridingUtils\999 RelatedClasses\**" />
     <None Remove="# TestModel\FileUtil\**" />
-    <None Remove="A - OverridingUtils\999 RelatedClasses\**" />
   </ItemGroup>
 
   <ItemGroup>

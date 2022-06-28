@@ -1,7 +1,6 @@
-﻿using Aki32_Utilities.OverridingUtils;
+﻿using Aki32_Utilities.Extensions;
 using Aki32_Utilities.OwesomeModels;
 using System.Drawing;
-using Aki32_Utilities.OwesomeModels.TimeHistoryModel;
 
 namespace Aki32_Utilities;
 public class Program
@@ -14,173 +13,169 @@ public class Program
 
         // tests
         {
-            // 01 OverridingUtils
+            // A Extensions
             {
-                // 200 FileUtil
+                var baseDir = @"..\..\..\# TestModel\A Extensions";
+
+                // B001 CollectFiles
                 {
-                    var baseDir = @"..\..\..\# TestModel\200 FileUtil";
-
-                    // 211 CollectFiles
-                    {
-                        //var input = new DirectoryInfo($@"{baseDir}\211 CollectFiles\input");
-                        //input.CollectFiles(null, "a.txt");
-                    }
-
-                    // 212 MakeFilesFromCsv
-                    {
-                        //var inputList = new FileInfo($@"{baseDir}\212 MakeFilesFromCsv\list.csv");
-                        //var inputTemp = new FileInfo($@"{baseDir}\212 MakeFilesFromCsv\template.docx");
-                        //inputList.MakeFilesFromCsv(null, inputTemp);
-                    }
-
-                    // 213 MoveTo
-                    {
-                        //var input = new DirectoryInfo($@"{baseDir}\213 MoveTo\input");
-                        //var output = new DirectoryInfo($@"{baseDir}\213 MoveTo\output");
-                        //input.MoveTo(output);
-                    }
-
-                    // 214 CopyTo
-                    {
-                        //var input = new DirectoryInfo($@"{baseDir}\214 CopyTo\input");
-                        //var output = new DirectoryInfo($@"{baseDir}\214 CopyTo\output");
-                        //input.CopyTo(output);
-                    }
-
-                    // 215 RenameFiles
-                    {
-                        //var target = new DirectoryInfo($@"{baseDir}\215 RenameFiles\input");
-                        //target.RenameFiles();
-                        ////target.RenameFiles_Append("xxx*xxx");
-                        ////target.RenameFiles_Replace(("ABC", "abc"), ("XYZ", "xyz"));
-                    }
-
-                    // 221 ReadCsv, 222 SaveCsv, 511 Transpose
-                    {
-                        //var innerBaseDir = $@"{baseDir}\221 ReadCsv, SaveCsv";
-                        //var input = new FileInfo($@"{innerBaseDir}\input.csv");
-                        //var output1 = new FileInfo($@"{innerBaseDir}\output1.csv");
-                        //var output2 = new FileInfo($@"{innerBaseDir}\output2.csv");
-                        //var output3 = new FileInfo($@"{innerBaseDir}\output3.csv");
-                        //var output4 = new FileInfo($@"{innerBaseDir}\output4.csv");
-
-                        //input.ReadCsv_Rows().SaveCsv_Rows(output1);
-                        //input.ReadCsv_Rows().SaveCsv_Columns(output2);
-                        //input.ReadCsv_Columns().SaveCsv_Rows(output3);
-                        //input.ReadCsv_Columns().SaveCsv_Columns(output4);
-                    }
-
-                    // 223 ExtractCsvColumns
-                    {
-                        //var input = new FileInfo($@"{baseDir}\223 ExtractCsvColumns\input.csv");
-                        //input.ExtractCsvColumns(null, new int[] { 0, 3 }, 0, "t,x");
-                    }
-
-                    // 224 CollectCsvColumns
-                    {
-                        //var input = new DirectoryInfo($@"{baseDir}\224 CollectCsvColumns\input");
-                        //input.CollectCsvColumns(null, 3);
-                    }
-
-                    // 225 Csvs2ExcelSheets
-                    {
-                        //var input = new DirectoryInfo($@"{baseDir}\225 Csvs2ExcelSheets\input");
-                        //input.Csvs2ExcelSheets(null);
-                    }
-
-                    // 231 MergeAllLines
-                    {
-                        //var input = new DirectoryInfo($@"{baseDir}\231 MergeAllLines\input");
-                        //input.MergeAllLines(null);
-                    }
-
+                    //var input = new DirectoryInfo($@"{baseDir}\B001 CollectFiles\input");
+                    //input.CollectFiles(null, "a.txt");
                 }
 
-                // 300 ImageUtil
+                // B002 MakeFilesFromCsv
                 {
-                    var baseDir = @"..\..\..\# TestModel\300 ImageUtil";
-
-                    // 311 CropImage
-                    {
-                        //var input = new FileInfo($@"{baseDir}\311 CropImage\input.bmp");
-                        //input.CropImage(null, new ImageUtil.CropSize(0.13, 0.13, 0.13, 0.13));
-                        //input.CropImage(null, new ImageUtil.CropSize(0, 0, 0.3, 0.3));
-                        //input.CropImage(null, new ImageUtil.CropSize(0.3, 0, 0, 0.3));
-                        //input.CropImage(null, new ImageUtil.CropSize(0.3, 0.3, 0, 0));
-                        //input.CropImage(null, new ImageUtil.CropSize(0, 0.3, 0.3, 0));
-                    }
-
-                    // 312 ConvertImageColor
-                    {
-                        //var input = new FileInfo($@"{baseDir}\312 ConvertImageColorAndSave\input.png");
-
-                        //var targetInfos = new (string, Color)[]
-                        //{
-                        //    ("BBB", Color.Blue),
-                        //    ("GGG", Color.Green),
-                        //    ("CCC", Color.Cyan),
-                        //};
-                        //var targetColors = new Color[]
-                        //{
-                        //    Color.Pink,
-                        //    Color.Red,
-                        //    Color.Orange,
-                        //    Color.Yellow,
-                        //};
-
-                        //input.ConvertImageColor(null, Color.White);
-                        //input.ConvertImageColor_Loop(null, targetInfos);
-                        //input.ConvertImageColor_Loop(null, targetColors);
-                    }
+                    //var inputList = new FileInfo($@"{baseDir}\B002 MakeFilesFromCsv\list.csv");
+                    //var inputTemp = new FileInfo($@"{baseDir}\B002 MakeFilesFromCsv\template.docx");
+                    //inputList.MakeFilesFromCsv(null, inputTemp);
                 }
 
-                // 400 PDFUtil
+                // B003 MoveTo
                 {
-                    var baseDir = @"..\..\..\# TestModel\400 PDFUtil";
-
-                    // 411 PDFPageCount
-                    {
-                        //var input = new DirectoryInfo($@"{baseDir}\411 PDFPageCount\input");
-                        //input.PDFPageCount();
-                    }
+                    //var input = new DirectoryInfo($@"{baseDir}\B003 MoveTo\input");
+                    //var keep = new DirectoryInfo($@"{baseDir}\B003 MoveTo\keep");
+                    //var output = new DirectoryInfo($@"{baseDir}\B003 MoveTo\output");
+                    //input.MoveTo(output);
                 }
 
-                // 500 DataUtil
+                // B004 CopyTo
                 {
-                    // 511 To2DArray, ToJaggedArray
-                    {
-                        //var inputData = new int[][]
-                        //{
-                        //    new int[]{1,2,3,4,5,6,7},
-                        //    new int[]{1,2},
-                        //    new int[]{1,2,3},
-                        //    new int[]{1,2,3,4,5},
-                        //};
-                        //Console.WriteLine("inputData:");
-                        //foreach (var line in inputData)
-                        //    Console.WriteLine(String.Join(", ", line.Select(x => $"{x,3}")));
-
-                        //var outputData1 = inputData.To2DArray(999);
-                        //Console.WriteLine("outputData1:");
-                        //for (int i = 0; i < outputData1.GetLength(0); i++)
-                        //{
-                        //    for (int j = 0; j < outputData1.GetLength(1); j++)
-                        //        Console.Write($"{outputData1[i, j],3}, ");
-                        //    Console.WriteLine();
-                        //}
-
-                        //var outputData2 = outputData1.ToJaggedArray();
-                        //Console.WriteLine("outputData2:");
-                        //foreach (var line in outputData2)
-                        //    Console.WriteLine(String.Join(", ", line.Select(x => $"{x,3}")));
-                    }
+                    //var input = new DirectoryInfo($@"{baseDir}\B004 CopyTo\input");
+                    //var output = new DirectoryInfo($@"{baseDir}\B004 CopyTo\output");
+                    //input.CopyTo(output);
                 }
+
+                // B005 RenameFiles
+                {
+                    //var input = new DirectoryInfo($@"{baseDir}\B005 RenameFiles\input");
+                    //var output = new DirectoryInfo($@"{baseDir}\B005 RenameFiles\output");
+                    //input.CopyTo(output);
+                    //output.RenameFiles();
+                    ////output.RenameFiles_Append("xxx*xxx");
+                    ////output.RenameFiles_Replace(("ABC", "abc"), ("XYZ", "xyz"));
+                }
+
+                // C001 ReadCsv, C002 SaveCsv, F001 Transpose
+                {
+                    //var innerBaseDir = $@"{baseDir}\C001 ReadCsv, SaveCsv";
+                    //var input = new FileInfo($@"{innerBaseDir}\input.csv");
+                    //var output1 = new FileInfo($@"{innerBaseDir}\output1.csv");
+                    //var output2 = new FileInfo($@"{innerBaseDir}\output2.csv");
+                    //var output3 = new FileInfo($@"{innerBaseDir}\output3.csv");
+                    //var output4 = new FileInfo($@"{innerBaseDir}\output4.csv");
+
+                    //input.ReadCsv_Rows().SaveCsv_Rows(output1);
+                    //input.ReadCsv_Rows().SaveCsv_Columns(output2);
+                    //input.ReadCsv_Columns().SaveCsv_Rows(output3);
+                    //input.ReadCsv_Columns().SaveCsv_Columns(output4);
+                }
+
+                // C004 ExtractCsvColumns
+                {
+                    //var input = new FileInfo($@"{baseDir}\C004 ExtractCsvColumns\input.csv");
+                    //input.ExtractCsvColumns(null, new int[] { 0, 3 }, 0, "t,x");
+                }
+
+                // C005 CollectCsvColumns
+                {
+                    //var input = new DirectoryInfo($@"{baseDir}\C005 CollectCsvColumns\input");
+                    //input.CollectCsvColumns(null, 3);
+                }
+
+                // C006 Csvs2ExcelSheets
+                {
+                    //var input = new DirectoryInfo($@"{baseDir}\C006 Csvs2ExcelSheets\input");
+                    //input.Csvs2ExcelSheets(null);
+                }
+
+                // D001 MergeAllLines
+                {
+                    //var input = new DirectoryInfo($@"{baseDir}\D001 MergeAllLines\input");
+                    //input.MergeAllLines(null);
+                }
+
+                // E001 CropImage
+                {
+                    //var input = new FileInfo($@"{baseDir}\E001 CropImage\input.bmp");
+                    //var crops = new OwesomeExtensions.CropSize[]
+                    //{
+                    //    new OwesomeExtensions.CropSize(0.13, 0.13, 0.13, 0.13),
+                    //    new OwesomeExtensions.CropSize(0, 0, 0.3, 0.3),
+                    //    new OwesomeExtensions.CropSize(0.3, 0, 0, 0.3),
+                    //    new OwesomeExtensions.CropSize(0.3, 0.3, 0, 0),
+                    //    new OwesomeExtensions.CropSize(0, 0.3, 0.3, 0),
+                    //};
+
+                    //input.CropImage(null,crops);
+                    ////input.CropImage(null, new OwesomeExtensions.CropSize(0.13, 0.13, 0.13, 0.13));
+                }
+
+                // E002 ConvertImageColor
+                {
+                    //var input = new FileInfo($@"{baseDir}\E002 ConvertImageColorAndSave\input.png");
+
+                    //var targetInfos = new (string, Color)[]
+                    //{
+                    //    ("BBB", Color.Blue),
+                    //    ("GGG", Color.Green),
+                    //    ("CCC", Color.Cyan),
+                    //};
+                    //var targetColors = new Color[]
+                    //{
+                    //    Color.Pink,
+                    //    Color.Red,
+                    //    Color.Orange,
+                    //    Color.Yellow,
+                    //};
+
+                    //input.ConvertImageColor(null, Color.White);
+                    //input.ConvertImageColor_Loop(null, targetInfos);
+                    //input.ConvertImageColor_Loop(null, targetColors);
+                }
+
+
+                // F002 To2DArray, ToJaggedArray
+                {
+                    //var inputData = new int[][]
+                    //{
+                    //    new int[]{1,2,3,4,5,6,7},
+                    //    new int[]{1,2},
+                    //    new int[]{1,2,3},
+                    //    new int[]{1,2,3,4,5},
+                    //};
+                    //Console.WriteLine("inputData:");
+                    //foreach (var line in inputData)
+                    //    Console.WriteLine(string.Join(", ", line.Select(x => $"{x,3}")));
+
+                    //var outputData1 = inputData.ConvertTo2DArray(999);
+                    //Console.WriteLine("outputData1:");
+                    //for (int i = 0; i < outputData1.GetLength(0); i++)
+                    //{
+                    //    for (int j = 0; j < outputData1.GetLength(1); j++)
+                    //        Console.Write($"{outputData1[i, j],3}, ");
+                    //    Console.WriteLine();
+                    //}
+
+                    //var outputData2 = outputData1.ConvertToJaggedArray();
+                    //Console.WriteLine("outputData2:");
+                    //foreach (var line in outputData2)
+                    //    Console.WriteLine(string.Join(", ", line.Select(x => $"{x,3}")));
+                }
+
+                // G001 PDFPageCount
+                {
+                    //var input = new DirectoryInfo($@"{baseDir}\G001 PDFPageCount\input");
+                    //input.PDFPageCount();
+                }
+
             }
 
-            // 02 OwesomeModels
+            // C OwesomeModels
             {
-                // TimeHistoryModel
+                // A TimeHistoryModel
                 {
+                    var baseDir = @"..\..\..\# TestModel\C OwesomeModels\A TimeHistoryModel";
+
                     // TimeHistory
                     {
                         //var th = new TimeHistory();
@@ -189,28 +184,26 @@ public class Program
                         //th["C"] = new double[] { 20, 21, 22, 23, 24, 25, 26, 27, 28, 29 };
                         //th["D"] = new double[] { 30, 31, 32, 33, 34, 35, 36, 37, 38, 39 };
 
-                        //th.OutputTimeHistoryToConsole();
+                        //th.WriteToConsole();
                         //th.DropColumn("C");
-                        //th.OutputTimeHistoryToConsole();
+                        //th.WriteToConsole();
                         //th.DropStep(4);
-                        //th.OutputTimeHistoryToConsole();
+                        //th.WriteToConsole();
                         //var ths = th.GetStep(5);
-                        //ths.OutputTimeHistoryToConsole();
+                        //ths.WriteToConsole();
 
                         //var ts = new TimeHistoryStep();
                         //ts["E"] = 3;
-                        //ts.OutputTimeHistoryToConsole();
+                        //ts.WriteToConsole();
                     }
 
                     // FFT
                     {
-                        //var baseDir = @"..\..\..\# TestModel\999 Others";
-
                         //var input = new FileInfo($@"{baseDir}\FFT\input.csv");
                         //TimeHistory
                         //    .FromCsv(input, new string[] { "t", "x" })
                         //    .FFT("x").Result
-                        //    .OutputToCsv();
+                        //    .SaveToCsv();
                     }
                 }
             }
