@@ -158,7 +158,7 @@ public class TimeHistory
             if (__inputDir == null)
                 throw new InvalidOperationException("outputFile must be declared when input was not by FromCsv()");
             else
-                outputFile = new FileInfo(Path.Combine(__inputDir.FullName, "output", $"result - {resultFileName}.csv"));
+                outputFile = new FileInfo(Path.Combine(__inputDir.FullName, "output", $"{Name}.csv"));
         }
         if (!outputFile.Directory.Exists)
             outputFile.Directory.Create();
@@ -174,7 +174,7 @@ public class TimeHistory
     /// <param name="outputFilePath"></param>
     public FileInfo SaveToCsv(DirectoryInfo outputDir)
     {
-        var outputFile = new FileInfo(Path.Combine(outputDir.FullName, $"result - {resultFileName}.csv"));
+        var outputFile = new FileInfo(Path.Combine(outputDir.FullName, $"{Name}.csv"));
         return SaveToCsv(outputFile);
     }
 
@@ -384,7 +384,6 @@ public class TimeHistory
     #endregion
 
     private DirectoryInfo __inputDir = null;
-    public string resultFileName = "result";
     public int DataRowCount
     {
         get
@@ -404,7 +403,7 @@ public class TimeHistory
         var step = new TimeHistoryStep()
         {
             __inputDir = __inputDir,
-            resultFileName = resultFileName,
+            Name = $"{Name}_step{i}",
         };
         foreach (var key in data.Keys)
         {

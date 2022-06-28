@@ -60,7 +60,7 @@ public static class TimeHistoryExension
     {
         var inputHistoryClone = inputHistory.Clone();
         var resultHistory = inputHistory.Clone();
-        resultHistory.resultFileName = "FFT";
+        resultHistory.Name = $"FFT_{resultHistory.Name}";
         resultHistory.data = new Dictionary<string, double[]>();
 
         if (inputHistoryClone.TimeStep == 0)
