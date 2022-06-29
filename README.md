@@ -8,7 +8,11 @@ My windows and C# utilities written in C#
 
 <br>
 
-## 🌟 A - OverridingUtils
+## 🌟 A, B - Extensions
+
+You can now handle files with beautiful method chain!!!
+
+![image](https://user-images.githubusercontent.com/49830756/176175319-fe5bd66d-e0dc-4141-9808-8fe3f6c0bb72.png)
 
 ❗ = FileSystemInfo chain available
 
@@ -25,7 +29,8 @@ My windows and C# utilities written in C#
 
 <br>
 
-## 🌟 B - OwesomeModels
+
+## 🌟 C - OwesomeModels
 
 ### 🎇 TimeHistoryModel
 
