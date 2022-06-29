@@ -455,6 +455,10 @@ public class TimeHistory
         }
     }
 
+    public void DropAllColumns()
+    {
+        data.Clear();
+    }
     public void DropColumn(params string[] droppingColumns)
     {
         foreach (var droppingColumn in droppingColumns)
