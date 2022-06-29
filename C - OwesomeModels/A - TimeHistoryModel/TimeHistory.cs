@@ -394,7 +394,13 @@ public class TimeHistory
                 return data[data.Keys.First()].Length;
         }
     }
-
+    public string[] Columns
+    {
+        get
+        {
+            return data.Keys.ToArray();
+        }
+    }
 
     // ★★★★★★★★★★★★★★★ methods
 
