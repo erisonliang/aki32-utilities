@@ -10,8 +10,19 @@
 
   <ItemGroup>
     <Compile Remove="# TestModel\FileUtil\**" />
+    <Compile Remove="Aki32 Utilities\**" />
     <EmbeddedResource Remove="# TestModel\FileUtil\**" />
+    <EmbeddedResource Remove="Aki32 Utilities\**" />
     <None Remove="# TestModel\FileUtil\**" />
+    <None Remove="Aki32 Utilities\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove=".gitattributes" />
+    <None Remove=".gitignore" />
+    <None Remove="LICENSE.md" />
+    <None Remove="README.md" />
+    <None Remove="This Repo on GitHub.url" />
   </ItemGroup>
 
   <ItemGroup>
