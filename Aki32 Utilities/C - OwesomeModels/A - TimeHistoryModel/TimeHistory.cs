@@ -76,7 +76,7 @@ public class TimeHistory
         var history = new TimeHistory()
         {
             Name = Path.GetFileNameWithoutExtension(inputCsv.Name),
-            __inputDir = inputCsv.Directory,
+            inputDir = inputCsv.Directory,
         };
 
         try
@@ -133,13 +133,13 @@ public class TimeHistory
         var newHistory = new TimeHistory()
         {
             Name = Name,
-            __inputDir = __inputDir,
+            inputDir = inputDir,
         };
 
         foreach (var key in data.Keys)
             newHistory.data[key] = (double[])data[key].Clone();
 
-        newHistory.__inputDir = __inputDir;
+        newHistory.inputDir = inputDir;
 
         return newHistory;
     }
@@ -155,10 +155,10 @@ public class TimeHistory
     {
         if (outputFile == null)
         {
-            if (__inputDir == null)
+            if (inputDir == null)
                 throw new InvalidOperationException("outputFile must be declared when input was not by FromCsv()");
             else
-                outputFile = new FileInfo(Path.Combine(__inputDir.FullName, "output", $"{Name}.csv"));
+                outputFile = new FileInfo(Path.Combine(inputDir.FullName, "output", $"{Name}.csv"));
         }
         if (!outputFile.Directory.Exists)
             outputFile.Directory.Create();
@@ -383,7 +383,7 @@ public class TimeHistory
 
     #endregion
 
-    private DirectoryInfo __inputDir = null;
+    public DirectoryInfo inputDir = null;
     public int DataRowCount
     {
         get
@@ -402,7 +402,7 @@ public class TimeHistory
     {
         var step = new TimeHistoryStep()
         {
-            __inputDir = __inputDir,
+            inputDir = inputDir,
             Name = $"{Name}_step{i}",
         };
         foreach (var key in data.Keys)
