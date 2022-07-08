@@ -279,15 +279,15 @@ public class TimeHistory
             this["ytt"] = value;
         }
     }
-    public double[] xtt_ytt
+    public double[] xtt_plus_ytt
     {
         get
         {
-            return this["xtt_ytt"];
+            return this["xtt+ytt"];
         }
         set
         {
-            this["xtt_ytt"] = value;
+            this["xtt+ytt"] = value;
         }
     }
     public double[] f
@@ -506,7 +506,7 @@ public class TimeHistory
         var step = new TimeHistoryStep();
         step.Sd = x.Max(Math.Abs);
         step.Sv = xt.Max(Math.Abs);
-        step.Sa = xtt_ytt.Max(Math.Abs);
+        step.Sa = xtt_plus_ytt.Max(Math.Abs);
         return step;
     }
 

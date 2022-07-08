@@ -94,15 +94,15 @@ public class TimeHistoryStep : TimeHistory
             this["ytt"] = value;
         }
     }
-    public double xtt_ytt
+    public double xtt_plus_ytt
     {
         get
         {
-            return this["xtt_ytt"];
+            return this["xtt+ytt"];
         }
         set
         {
-            this["xtt_ytt"] = value;
+            this["xtt+ytt"] = value;
         }
     }
     public double f
