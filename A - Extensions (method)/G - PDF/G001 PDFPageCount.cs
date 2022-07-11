@@ -66,7 +66,7 @@ public static partial class OwesomeExtensions
                 line = line.Replace("/Count ", "");
                 rtLine = line;
             }
-            return int.Parse(rtLine);
+            return Math.Abs(int.Parse(rtLine));
         }
     }
 
@@ -88,16 +88,17 @@ public static partial class OwesomeExtensions
         var pageList = new List<int>();
         var totalCount = 0;
         var errorCount = 0;
-        foreach (FileInfo f in inputDir.GetFiles("*.pdf", topDirectoryOnly ? SearchOption.TopDirectoryOnly : SearchOption.AllDirectories).Sort())
+
+        var targets = inputDir.GetFiles("*.pdf", topDirectoryOnly ? SearchOption.TopDirectoryOnly : SearchOption.AllDirectories).ToArray();
+        Parallel.ForEach(targets, t =>
         {
-            var page = f.PDFPageCount(false);
+            var page = t.PDFPageCount(false);
             pageList.Add(page);
             if (page > 0)
                 totalCount += page;
             else
                 errorCount++;
-        }
-
+        });
 
         // post process
         if (ConsoleOutput)
