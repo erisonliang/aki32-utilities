@@ -12,8 +12,8 @@ public static partial class OwesomeExtensions
     public static void OrganizeMacOsJuncFiles(this DirectoryInfo inputDir)
     {
         // preprocess
-        if (UtilConfig.ConsoleOutput)
-            Console.WriteLine("\r\n** OrganizeMacOsJuncFiles() Called");
+        UtilPreprocessors.PreprocessBasic("OrganizeMacOsJuncFiles", true);
+
 
         // main
         foreach (var fi in inputDir.GetFiles("*", SearchOption.AllDirectories))

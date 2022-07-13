@@ -12,8 +12,8 @@ public static partial class OwesomeExtensions
     public static void OrganizeDropBoxJuncFiles(this DirectoryInfo inputDir)
     {
         // preprocess
-        if (UtilConfig.ConsoleOutput)
-            Console.WriteLine("\r\n** OrganizeDropBoxJuncFiles() Called");
+        UtilPreprocessors.PreprocessBasic("OrganizeDropBoxJuncFiles", true);
+
 
         // main
         foreach (var fi in inputDir.GetFiles("*", SearchOption.AllDirectories))

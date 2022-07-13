@@ -15,7 +15,7 @@ public static partial class OwesomeExtensions
     public static string[][] ReadCsv_Rows(this FileInfo inputFile, int skipColumnCount = 0, int skipRowCount = 0, bool ignoreEmptyLine = false)
     {
         // preprocess
-        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance); // to handle Shift-JIS
+        UtilPreprocessors.PreprocessBasic("ReadCsv", false) ;
 
 
         // main            

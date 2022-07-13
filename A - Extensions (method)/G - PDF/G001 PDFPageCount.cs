@@ -15,9 +15,7 @@ public static partial class OwesomeExtensions
     public static int PDFPageCount(this FileInfo inputFile, bool initialConsoleOutput = true, bool resultConsoleOutput = true)
     {
         // preprocess
-        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance); // to handle Shift-JIS
-        if (UtilConfig.ConsoleOutput && initialConsoleOutput)
-            Console.WriteLine("\r\n** PDFPageCount() Called");
+        UtilPreprocessors.PreprocessBasic("PDFPageCount", true);
 
 
         // main

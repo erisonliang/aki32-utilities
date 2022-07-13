@@ -14,11 +14,7 @@ public static partial class OwesomeExtensions
     public static FileInfo CropImage(this FileInfo inputFile, FileInfo? outputFile, CropSize crop)
     {
         // preprocess
-        if (outputFile == null)
-            outputFile = new FileInfo(Path.Combine(inputFile.DirectoryName!, UtilConfig.GetNewOutputDirName("CropImage"), $"{Path.GetFileNameWithoutExtension(inputFile.Name)} - {crop.ToString()}.png"));
-        if (!outputFile.Directory!.Exists)
-            outputFile.Directory.Create();
-
+        UtilPreprocessors.PreprocessOutFile(outputFile, "CropImage", false, inputFile.Directory!, $"{Path.GetFileNameWithoutExtension(inputFile.Name)} - {crop.ToString()}.png");
 
         // main
         try
@@ -52,12 +48,7 @@ public static partial class OwesomeExtensions
     public static DirectoryInfo CropImage(this FileInfo inputFile, DirectoryInfo? outputDir, CropSize[] crops)
     {
         // preprocess
-        if (UtilConfig.ConsoleOutput)
-            Console.WriteLine("\r\n** CropImage_Loop() Called");
-        if (outputDir == null)
-            outputDir = new DirectoryInfo(Path.Combine(inputFile.DirectoryName!, UtilConfig.GetNewOutputDirName("CropImage")));
-        if (!outputDir.Exists)
-            outputDir.Create();
+        UtilPreprocessors.PreprocessOutDir(outputDir, "CropImage", false, inputFile.Directory!);
 
 
         // main
@@ -68,7 +59,6 @@ public static partial class OwesomeExtensions
         }
 
 
-        // post process
         return outputDir;
     }
 
@@ -82,24 +72,19 @@ public static partial class OwesomeExtensions
     public static DirectoryInfo CropImage_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir, CropSize crop)
     {
         // preprocess
-        if (UtilConfig.ConsoleOutput)
-            Console.WriteLine("\r\n** CropImage_Loop() Called");
-        if (outputDir == null)
-            outputDir = new DirectoryInfo(Path.Combine(inputDir.FullName, UtilConfig.GetNewOutputDirName("CropImage")));
-        if (!outputDir.Exists)
-            outputDir.Create();
+        UtilPreprocessors.PreprocessOutDir(outputDir, "CropImage", true, inputDir!);
 
 
         // main
         foreach (var inputFile in inputDir.GetFiles())
         {
-            var outputFile = new FileInfo(Path.Combine(outputDir.FullName, inputFile.Name));
+            var outputFile = new FileInfo(Path.Combine(outputDir!.FullName, inputFile.Name));
             inputFile.CropImage(outputFile, crop);
         }
 
 
         // post process
-        return outputDir;
+        return outputDir!;
     }
 
     /// <summary>

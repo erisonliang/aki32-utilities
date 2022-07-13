@@ -15,15 +15,9 @@ public static partial class OwesomeExtensions
     public static FileInfo Csvs2ExcelSheets(this DirectoryInfo inputDir, FileInfo? outputFile)
     {
         // preprocess
-        if (UtilConfig.ConsoleOutput)
-            Console.WriteLine("\r\n** Csvs2ExcelSheets() Called");
-        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance); // to handle Shift-JIS
-        if (outputFile is null)
-            outputFile = new FileInfo(Path.Combine(inputDir.FullName, UtilConfig.GetNewOutputDirName("Csvs2ExcelSheets"), "output.xlsx"));
-        if (!outputFile.Directory.Exists) outputFile.Directory.Create();
+        UtilPreprocessors.PreprocessOutFile(outputFile, "Csvs2ExcelSheets", true, inputDir!, "output.xlsx");
         if (!outputFile.Name.EndsWith(".xlsx"))
-            outputFile = new FileInfo(Path.GetFileNameWithoutExtension(outputFile.FullName) + ".xlsx");
-        if (outputFile.Exists) outputFile.Delete();
+            throw new Exception("outputFile name must end with .xlsx");
 
 
         // main

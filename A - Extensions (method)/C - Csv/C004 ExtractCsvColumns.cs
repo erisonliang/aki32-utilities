@@ -16,11 +16,7 @@ public static partial class OwesomeExtensions
     public static FileInfo ExtractCsvColumns(this FileInfo inputFile, FileInfo? outputFile, int[] extractingColumns, int skipRowCount = 0, string header = null)
     {
         // preprocess
-        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance); // to handle Shift-JIS
-        if (outputFile is null)
-            outputFile = new FileInfo(Path.Combine(inputFile.DirectoryName, UtilConfig.GetNewOutputDirName("ExtractCsvColumns"), inputFile.Name));
-        if (!outputFile.Directory.Exists) outputFile.Directory.Create();
-        if (outputFile.Exists) outputFile.Delete();
+        UtilPreprocessors.PreprocessOutFile(outputFile, "ExtractCsvColumns", false, inputFile.Directory!, inputFile.Name);
 
 
         // main
@@ -51,7 +47,7 @@ public static partial class OwesomeExtensions
         // post process
         return outputFile;
     }
-  
+
     /// <summary>
     /// extranct designated columns from csv to new csv
     /// </summary>
@@ -64,11 +60,8 @@ public static partial class OwesomeExtensions
     public static DirectoryInfo ExtractCsvColumns_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir, int[] extractingColumns, int skipRowCount = 0, string header = null)
     {
         // preprocess
-        if (UtilConfig.ConsoleOutput)
-            Console.WriteLine("\r\n** ExtractCsvColumns_Loop() Called (This takes time...)");
-        if (outputDir is null)
-            outputDir = new DirectoryInfo(Path.Combine(inputDir.FullName, UtilConfig.GetNewOutputDirName("ExtractCsvColumns")));
-        if (!outputDir.Exists) outputDir.Create();
+        if (UtilConfig.ConsoleOutput) Console.WriteLine("(This takes time...)");
+        UtilPreprocessors.PreprocessOutDir(outputDir, "ExtractCsvColumns", true, inputDir);
 
 
         // main

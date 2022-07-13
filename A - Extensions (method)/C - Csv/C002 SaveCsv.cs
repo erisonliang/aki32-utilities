@@ -14,7 +14,7 @@ public static partial class OwesomeExtensions
     public static FileInfo SaveCsv_Rows(this string[][] inputFile_Rows, FileInfo outputFile, string header = null)
     {
         // preprocess
-        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance); // to handle Shift-JIS
+        UtilPreprocessors.PreprocessBasic("SaveCsv", false);
 
 
         // main

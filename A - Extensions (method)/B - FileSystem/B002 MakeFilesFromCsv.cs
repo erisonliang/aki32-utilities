@@ -14,13 +14,7 @@ public static partial class OwesomeExtensions
     public static DirectoryInfo MakeFilesFromCsv(this FileInfo inputFile, DirectoryInfo? outputDir, FileInfo templateFile)
     {
         // preprocess
-        if (UtilConfig.ConsoleOutput)
-            Console.WriteLine("\r\n** MakeFilesFromCsv() Called");
-        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance); // to handle Shift-JIS
-        if (outputDir is null)
-            outputDir = new DirectoryInfo(Path.Combine(inputFile.DirectoryName, UtilConfig.GetNewOutputDirName("MakeFilesFromCsv")));
-        if (!outputDir.Exists)
-            outputDir.Create();
+        UtilPreprocessors.PreprocessOutDir(outputDir, "MakeFilesFromCsv", true, inputFile.Directory!);
 
 
         // main
@@ -45,7 +39,7 @@ public static partial class OwesomeExtensions
             }
         }
 
-        // postprocess
+
         return outputDir;
     }
   
@@ -59,13 +53,7 @@ public static partial class OwesomeExtensions
     public static DirectoryInfo MakeDirsFromCsv(this FileInfo inputFile, DirectoryInfo? outputDir, DirectoryInfo templateDir = null)
     {
         // preprocess
-        if (UtilConfig.ConsoleOutput)
-            Console.WriteLine("\r\n** MakeFilesFromCsv() Called");
-        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance); // to handle Shift-JIS
-        if (outputDir is null)
-            outputDir = new DirectoryInfo(Path.Combine(inputFile.DirectoryName, UtilConfig.GetNewOutputDirName("MakeFilesFromCsv")));
-        if (!outputDir.Exists)
-            outputDir.Create();
+        UtilPreprocessors.PreprocessOutDir(outputDir, "MakeFilesFromCsv", true, inputFile.Directory!);
 
 
         // main
@@ -94,7 +82,7 @@ public static partial class OwesomeExtensions
             }
         }
 
-        // postprocess
+
         return outputDir;
     }
 

@@ -13,11 +13,9 @@ public static partial class OwesomeExtensions
     public static DirectoryInfo MoveTo(this DirectoryInfo inputDir, DirectoryInfo outputDir)
     {
         // preprocess
-        if (UtilConfig.ConsoleOutput)
-            Console.WriteLine("\r\n** MoveTo() Called");
         if (outputDir is null)
             throw new ArgumentNullException(nameof(outputDir));
-        if (!outputDir.Parent.Exists) outputDir.Parent.Create();
+        UtilPreprocessors.PreprocessOutDir(outputDir, "MoveTo", true, null); // outputDir.Parent ??
 
 
         // main
@@ -37,7 +35,7 @@ public static partial class OwesomeExtensions
         // postprocess
         return outputDir;
     }
-  
+
     /// <summary>
     /// move a file
     /// </summary>
@@ -49,8 +47,7 @@ public static partial class OwesomeExtensions
         // preprocess
         if (outputFile is null)
             throw new ArgumentNullException(nameof(outputFile));
-        if (!outputFile.Directory.Exists) outputFile.Directory.Create();
-        if (outputFile.Exists) outputFile.Delete();
+        UtilPreprocessors.PreprocessOutFile(outputFile, "MoveTo", false, null, null);
 
 
         // main
@@ -67,10 +64,9 @@ public static partial class OwesomeExtensions
         }
 
 
-        // post process
         return outputFile;
     }
-    
+
     /// <summary>
     /// move a file
     /// </summary>
@@ -83,6 +79,7 @@ public static partial class OwesomeExtensions
         if (outputDir is null)
             throw new ArgumentNullException(nameof(outputDir));
         if (!outputDir.Exists) outputDir.Create();
+        UtilPreprocessors.PreprocessOutDir(outputDir, "MoveTo", false, null);
 
 
         // main
@@ -92,7 +89,6 @@ public static partial class OwesomeExtensions
         File.Move(inputFile.FullName, outputFile.FullName, true);
 
 
-        // post process
         return outputFile;
     }
 
