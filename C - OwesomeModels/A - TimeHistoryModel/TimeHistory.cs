@@ -431,8 +431,6 @@ public class TimeHistory
     }
     public void AppendStep(TimeHistoryStep step)
     {
-        // TODO: make this faster
-
         var addingIndex = DataRowCount;
 
         var keys = step.data.Keys.ToArray();
