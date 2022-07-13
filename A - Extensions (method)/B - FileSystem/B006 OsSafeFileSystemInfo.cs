@@ -5,7 +5,7 @@ public static partial class OwesomeExtensions
 {
 
     /// <summary>
-    /// Get FileInfo with OS default path for mac and windows 
+    /// Get FileInfo with OS default path for mac, windows and linux 
     /// </summary>
     public static FileInfo OsSafe(this FileInfo targetFileInfo)
     {
@@ -19,13 +19,13 @@ public static partial class OwesomeExtensions
     }
 
     /// <summary>
-    /// Get DirectryInfo with OS default path for mac and windows 
+    /// Get DirectryInfo with OS default path for mac, windows and linux 
     /// </summary>
     public static DirectoryInfo OsSafe(this DirectoryInfo targetDirectoryInfo)
     {
         var safePath = targetDirectoryInfo.FullName
            .Replace('\\', Path.DirectorySeparatorChar)
-           .Replace('\\', Path.DirectorySeparatorChar)
+           .Replace('/', Path.DirectorySeparatorChar)
            ;
 
         targetDirectoryInfo = new DirectoryInfo(safePath);

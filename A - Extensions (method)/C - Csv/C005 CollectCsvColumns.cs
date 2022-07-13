@@ -16,13 +16,7 @@ public static partial class OwesomeExtensions
     public static FileInfo CollectCsvColumns(this DirectoryInfo inputDir, FileInfo? outputFile, int targetColumn, int initialColumn = 0, int skipRowCount = 0)
     {
         // preprocess
-        if (UtilConfig.ConsoleOutput)
-            Console.WriteLine("\r\n** CollectCsvColumns() Called");
-        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance); // to handle Shift-JIS
-        if (outputFile is null)
-            outputFile = new FileInfo(Path.Combine(inputDir.FullName, UtilConfig.GetNewOutputDirName("CollectCsvColumns"), "output.csv"));
-        if (!outputFile.Directory.Exists) outputFile.Directory.Create();
-        if (outputFile.Exists) outputFile.Delete();
+        UtilPreprocessors.PreprocessOutFile(ref outputFile, "CollectCsvColumns", true, inputDir!, "output.csv");
 
 
         // main
@@ -154,11 +148,11 @@ public static partial class OwesomeExtensions
     public static DirectoryInfo CollectCsvColumns_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir, int initialColumn, int skipRowCount, params (string name, int targetColumn, int initialColumn)[] targets)
     {
         // preprocess
-        if (outputDir is null)
-            outputDir = new DirectoryInfo(Path.Combine(inputDir.FullName, UtilConfig.GetNewOutputDirName("CollectCsvColumns")));
-        if (inputDir.FullName == outputDir.FullName)
+        if (UtilConfig.ConsoleOutput) Console.WriteLine("(This takes time...)");
+        UtilPreprocessors.PreprocessOutDir(ref outputDir, "CollectCsvColumns", false, inputDir);
+        if (inputDir.FullName == outputDir!.FullName)
             throw new InvalidOperationException("※ inputDir and outputDir must be different");
-        if (!outputDir.Exists) outputDir.Create();
+
 
         // main
         foreach (var item in targets)

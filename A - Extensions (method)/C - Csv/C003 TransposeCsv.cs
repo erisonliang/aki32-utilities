@@ -16,11 +16,9 @@ public static partial class OwesomeExtensions
     public static FileInfo TransposeCsv(this FileInfo inputFile, FileInfo? outputFile, int skipColumnCount = 0, int skipRowCount = 0, string header = null)
     {
         // preprocess
-        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance); // to handle Shift-JIS
         if (outputFile is null)
-            outputFile = new FileInfo(Path.Combine(inputFile.DirectoryName, UtilConfig.GetNewOutputDirName("TransposeCsv"), inputFile.Name));
-        if (!outputFile.Directory.Exists) outputFile.Directory.Create();
-        if (outputFile.Exists) outputFile.Delete();
+            throw new ArgumentNullException(nameof(outputFile));
+        UtilPreprocessors.PreprocessOutFile(ref outputFile, "TransposeCsv", false, inputFile.Directory!, inputFile.Name);
 
 
         // main
@@ -39,11 +37,10 @@ public static partial class OwesomeExtensions
     public static DirectoryInfo TransposeCsv_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir, int skipColumnCount = 0, int skipRowCount = 0, string header = null)
     {
         // preprocess
-        if (UtilConfig.ConsoleOutput)
-            Console.WriteLine("\r\n** TransposeCsv_Loop() Called");
         if (outputDir is null)
-            outputDir = new DirectoryInfo(Path.Combine(inputDir.FullName, UtilConfig.GetNewOutputDirName("TransposeCsv")));
+            throw new ArgumentNullException(nameof(outputDir));
         if (!outputDir.Exists) outputDir.Create();
+        UtilPreprocessors.PreprocessOutDir(ref outputDir, "TransposeCsv", true, inputDir);
 
 
         // main

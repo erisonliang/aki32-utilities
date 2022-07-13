@@ -24,11 +24,7 @@ public static partial class OwesomeExtensions
     public static FileInfo TEMPLATE(this FileInfo inputFile, FileInfo? outputFile, int skipColumnCount = 0, int skipRowCount = 0, string header = null)
     {
         // preprocess
-        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance); // to handle Shift-JIS
-        if (outputFile is null)
-            outputFile = new FileInfo(Path.Combine(inputFile.DirectoryName, UtilConfig.GetNewOutputDirName("TEMPLATE"), inputFile.Name));
-        if (!outputFile.Directory.Exists) outputFile.Directory.Create();
-        if (outputFile.Exists) outputFile.Delete();
+        UtilPreprocessors.PreprocessOutFile(ref outputFile, "TEMPLATE", false, inputFile.Directory!, inputFile.Name);
 
 
         // main
@@ -51,11 +47,7 @@ public static partial class OwesomeExtensions
     public static DirectoryInfo TEMPLATE_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir, int skipColumnCount = 0, int skipRowCount = 0, string header = null)
     {
         // preprocess
-        if (UtilConfig.ConsoleOutput)
-            Console.WriteLine("\r\n** TEMPLATE_Loop() Called");
-        if (outputDir is null)
-            outputDir = new DirectoryInfo(Path.Combine(inputDir.FullName, UtilConfig.GetNewOutputDirName("TEMPLATE")));
-        if (!outputDir.Exists) outputDir.Create();
+        UtilPreprocessors.PreprocessOutDir(ref outputDir, "TEMPLATE", true, inputDir);
 
 
         // main

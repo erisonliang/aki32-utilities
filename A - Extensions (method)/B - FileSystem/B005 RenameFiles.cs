@@ -13,7 +13,7 @@ public static partial class OwesomeExtensions
     {
         return targetDir.RenameFiles_AppendAndReplace("*", new (string from, string to)[] { });
     }
-  
+
     /// <summary>
     /// rename all file names in targetDir
     /// </summary>
@@ -27,9 +27,7 @@ public static partial class OwesomeExtensions
     public static DirectoryInfo RenameFiles_AppendAndReplace(this DirectoryInfo targetDir, string pattern, params (string from, string to)[] replaceSet)
     {
         // preprocess
-        if (UtilConfig.ConsoleOutput)
-            Console.WriteLine("\r\n** RenameFiles() Called");
-        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance); // to handle Shift-JIS
+        UtilPreprocessors.PreprocessBasic("RenameFiles", true);
         if (!pattern.Contains("*"))
             throw new InvalidOperationException("\"pattern\" must contain \"*\"");
 
@@ -76,7 +74,7 @@ public static partial class OwesomeExtensions
             foreach (var item in replaceSet)
                 newFileName = newFileName.Replace(item.from, item.to);
             newFileName = pattern.Replace("*", newFileName);
-            var newFilePath = Path.Combine(targetFile.DirectoryName, newFileName + Path.GetExtension(targetFile.Name));
+            var newFilePath = Path.Combine(targetFile.DirectoryName!, newFileName + Path.GetExtension(targetFile.Name));
 
             try
             {
@@ -92,10 +90,9 @@ public static partial class OwesomeExtensions
         }
 
 
-        // postprocess
         return targetDir;
     }
-    
+
     /// <summary>
     /// rename all file names in targetDir
     /// </summary>
@@ -107,7 +104,7 @@ public static partial class OwesomeExtensions
     {
         return targetDir.RenameFiles_AppendAndReplace(pattern, deletingStringSet.Select(x => (x, "")).ToArray());
     }
-    
+
     /// <summary>
     /// rename all file names in targetDir
     /// </summary>
@@ -118,7 +115,7 @@ public static partial class OwesomeExtensions
     {
         return targetDir.RenameFiles_AppendAndReplace("*", replaceSet);
     }
-    
+
     /// <summary>
     /// rename all file names in targetDir
     /// </summary>
@@ -129,7 +126,7 @@ public static partial class OwesomeExtensions
     {
         return targetDir.RenameFiles_AppendAndReplace("*", deletingStringSet.Select(x => (x, "")).ToArray());
     }
-    
+
     /// <summary>
     /// rename all file names in targetDir
     /// </summary>
@@ -140,7 +137,7 @@ public static partial class OwesomeExtensions
     {
         return targetDir.RenameFiles_AppendAndReplace(pattern, new (string from, string to)[] { (" ", " ") });
     }
-    
+
     /// <summary>
     /// rename a file
     /// </summary>
@@ -157,7 +154,6 @@ public static partial class OwesomeExtensions
         inputFile.MoveTo(outputFile);
 
 
-        // post process
         return outputFile;
     }
 

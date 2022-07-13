@@ -15,10 +15,7 @@ public static partial class OwesomeExtensions
     public static FileInfo ConvertImageColor(this FileInfo inputFile, FileInfo? outputFile, Color targetColor)
     {
         // preprocess
-        if (outputFile == null)
-            outputFile = new FileInfo(Path.Combine(inputFile.DirectoryName, UtilConfig.GetNewOutputDirName("ConvertImageColor"), inputFile.Name));
-        if (!outputFile.Directory.Exists)
-            outputFile.Directory.Create();
+        UtilPreprocessors.PreprocessOutFile(ref outputFile, "ConvertImageColor", false, inputFile.Directory!, inputFile.Name);
 
 
         // main

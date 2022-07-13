@@ -50,8 +50,11 @@ public class Program
                     //var input = new DirectoryInfo($@"{baseDir}\B005 RenameFiles\input");
                     //var output = new DirectoryInfo($@"{baseDir}\B005 RenameFiles\output");
                     //input.CopyTo(output);
+                    //// auto
                     //output.RenameFiles();
+                    ////// append
                     ////output.RenameFiles_Append("xxx*xxx");
+                    ////// replace
                     ////output.RenameFiles_Replace(("ABC", "abc"), ("XYZ", "xyz"));
                 }
 
@@ -106,13 +109,13 @@ public class Program
                     //    new OwesomeExtensions.CropSize(0, 0.3, 0.3, 0),
                     //};
 
-                    //input.CropImage(null,crops);
+                    //input.CropImage(null, crops);
                     ////input.CropImage(null, new OwesomeExtensions.CropSize(0.13, 0.13, 0.13, 0.13));
                 }
 
                 // E002 ConvertImageColor
                 {
-                    //var input = new FileInfo($@"{baseDir}\E002 ConvertImageColorAndSave\input.png");
+                    //var input = new FileInfo($@"{baseDir}\E002 ConvertImageColor\input.png");
 
                     //var targetInfos = new (string, Color)[]
                     //{

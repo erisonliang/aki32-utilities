@@ -13,10 +13,9 @@ public static partial class OwesomeExtensions
     public static DirectoryInfo CopyTo(this DirectoryInfo inputDir, DirectoryInfo outputDir, bool consoleOutput = true)
     {
         // preprocess
-        if (UtilConfig.ConsoleOutput && consoleOutput)
-            Console.WriteLine("\r\n** CopyTo() Called");
         if (outputDir is null)
             throw new ArgumentNullException(nameof(outputDir));
+        UtilPreprocessors.PreprocessOutDir(ref outputDir, "CopyTo", consoleOutput, null);
 
 
         // main
@@ -51,8 +50,7 @@ public static partial class OwesomeExtensions
         // preprocess
         if (outputFile is null)
             throw new ArgumentNullException(nameof(outputFile));
-        if (!outputFile.Directory.Exists) outputFile.Directory.Create();
-        if (outputFile.Exists) outputFile.Delete();
+        UtilPreprocessors.PreprocessOutFile(ref outputFile, "CopyTo", false, null, null);
 
 
         // main

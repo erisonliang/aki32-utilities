@@ -14,13 +14,7 @@ public static partial class OwesomeExtensions
     public static FileInfo MergeAllLines(this DirectoryInfo inputDir, FileInfo? outputFile, int skipRowCount = 0)
     {
         // preprocess
-        if (UtilConfig.ConsoleOutput)
-            Console.WriteLine("\r\n** MergeAllLines() Called");
-        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance); // to handle Shift-JIS
-        if (outputFile is null)
-            outputFile = new FileInfo(Path.Combine(inputDir.FullName, UtilConfig.GetNewOutputDirName("MergeAllLines")  , $"output.txt"));
-        if (!outputFile.Directory!.Exists) outputFile.Directory.Create();
-        if (outputFile.Exists) outputFile.Delete();
+        UtilPreprocessors.PreprocessOutFile(ref outputFile, "MergeAllLines", true, inputDir!, $"output.txt");
 
 
         // main
