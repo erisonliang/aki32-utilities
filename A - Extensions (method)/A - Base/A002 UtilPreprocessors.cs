@@ -54,6 +54,14 @@ public static class UtilPreprocessors
         if (UtilConfig.ConsoleOutput && consoleOut)
             Console.WriteLine($"\r\n** {methodName} Method Called");
 
+        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance); // to handle Shift-JIS
+    }
+
+
+    public static void CreateIfNotExists(this DirectoryInfo outputDirReference)
+    {
+        if (!outputDirReference.Exists)
+            outputDirReference.Create();
     }
 
 }

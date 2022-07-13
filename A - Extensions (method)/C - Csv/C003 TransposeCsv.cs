@@ -18,7 +18,7 @@ public static partial class OwesomeExtensions
         // preprocess
         if (outputFile is null)
             throw new ArgumentNullException(nameof(outputFile));
-        UtilPreprocessors.PreprocessOutFile(outputFile, "TransposeCsv", false, inputFile.Directory!, inputFile.Name);
+        UtilPreprocessors.PreprocessOutFile(ref outputFile, "TransposeCsv", false, inputFile.Directory!, inputFile.Name);
 
 
         // main
@@ -40,7 +40,7 @@ public static partial class OwesomeExtensions
         if (outputDir is null)
             throw new ArgumentNullException(nameof(outputDir));
         if (!outputDir.Exists) outputDir.Create();
-        UtilPreprocessors.PreprocessOutDir(outputDir, "TransposeCsv", true, inputDir);
+        UtilPreprocessors.PreprocessOutDir(ref outputDir, "TransposeCsv", true, inputDir);
 
 
         // main

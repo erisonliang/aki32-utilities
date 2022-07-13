@@ -16,7 +16,7 @@ public static partial class OwesomeExtensions
     public static FileInfo ExtractCsvColumns(this FileInfo inputFile, FileInfo? outputFile, int[] extractingColumns, int skipRowCount = 0, string header = null)
     {
         // preprocess
-        UtilPreprocessors.PreprocessOutFile(outputFile, "ExtractCsvColumns", false, inputFile.Directory!, inputFile.Name);
+        UtilPreprocessors.PreprocessOutFile(ref outputFile, "ExtractCsvColumns", false, inputFile.Directory!, inputFile.Name);
 
 
         // main
@@ -61,7 +61,7 @@ public static partial class OwesomeExtensions
     {
         // preprocess
         if (UtilConfig.ConsoleOutput) Console.WriteLine("(This takes time...)");
-        UtilPreprocessors.PreprocessOutDir(outputDir, "ExtractCsvColumns", true, inputDir);
+        UtilPreprocessors.PreprocessOutDir(ref outputDir, "ExtractCsvColumns", true, inputDir);
 
 
         // main

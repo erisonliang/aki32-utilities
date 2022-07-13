@@ -15,7 +15,7 @@ public static partial class OwesomeExtensions
     public static FileInfo Csvs2ExcelSheets(this DirectoryInfo inputDir, FileInfo? outputFile)
     {
         // preprocess
-        UtilPreprocessors.PreprocessOutFile(outputFile, "Csvs2ExcelSheets", true, inputDir!, "output.xlsx");
+        UtilPreprocessors.PreprocessOutFile(ref outputFile, "Csvs2ExcelSheets", true, inputDir!, "output.xlsx");
         if (!outputFile.Name.EndsWith(".xlsx"))
             throw new Exception("outputFile name must end with .xlsx");
 

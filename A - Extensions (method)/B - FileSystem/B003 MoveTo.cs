@@ -15,7 +15,8 @@ public static partial class OwesomeExtensions
         // preprocess
         if (outputDir is null)
             throw new ArgumentNullException(nameof(outputDir));
-        UtilPreprocessors.PreprocessOutDir(outputDir, "MoveTo", true, null); // outputDir.Parent ??
+        var outputParentDir = outputDir!.Parent; // abnormal, only for dir.MoveTo(dir) 
+        UtilPreprocessors.PreprocessOutDir(ref outputParentDir, "MoveTo", true, null);
 
 
         // main
@@ -26,7 +27,7 @@ public static partial class OwesomeExtensions
         }
         else
         {
-            // We can't use MoveTo() for different drive.
+            // For different drive, we can't use default Move().
             inputDir.CopyTo(outputDir, true);
             inputDir.Delete(true);
         }
@@ -47,7 +48,7 @@ public static partial class OwesomeExtensions
         // preprocess
         if (outputFile is null)
             throw new ArgumentNullException(nameof(outputFile));
-        UtilPreprocessors.PreprocessOutFile(outputFile, "MoveTo", false, null, null);
+        UtilPreprocessors.PreprocessOutFile(ref outputFile!, "MoveTo", false, null, null);
 
 
         // main
@@ -58,7 +59,7 @@ public static partial class OwesomeExtensions
         }
         else
         {
-            // We can't use Move() for different drive.
+            // For different drive, we can't use default Move().
             File.Copy(inputFile.FullName, outputFile.FullName, true);
             File.Delete(inputFile.FullName);
         }
@@ -78,15 +79,11 @@ public static partial class OwesomeExtensions
         // preprocess
         if (outputDir is null)
             throw new ArgumentNullException(nameof(outputDir));
-        if (!outputDir.Exists) outputDir.Create();
-        UtilPreprocessors.PreprocessOutDir(outputDir, "MoveTo", false, null);
 
 
         // main
-        var name = inputFile.Name;
-        var outputFilePath = Path.Combine(outputDir.FullName, name);
-        var outputFile = new FileInfo(outputFilePath);
-        File.Move(inputFile.FullName, outputFile.FullName, true);
+        var outputFile = new FileInfo(Path.Combine(outputDir.FullName, inputFile.Name));
+        inputFile.MoveTo(outputFile);
 
 
         return outputFile;

@@ -16,7 +16,7 @@ public static partial class OwesomeExtensions
     public static FileInfo CollectCsvColumns(this DirectoryInfo inputDir, FileInfo? outputFile, int targetColumn, int initialColumn = 0, int skipRowCount = 0)
     {
         // preprocess
-        UtilPreprocessors.PreprocessOutFile(outputFile, "CollectCsvColumns", true, inputDir!, "output.csv");
+        UtilPreprocessors.PreprocessOutFile(ref outputFile, "CollectCsvColumns", true, inputDir!, "output.csv");
 
 
         // main
@@ -149,7 +149,7 @@ public static partial class OwesomeExtensions
     {
         // preprocess
         if (UtilConfig.ConsoleOutput) Console.WriteLine("(This takes time...)");
-        UtilPreprocessors.PreprocessOutDir(outputDir, "CollectCsvColumns", false, inputDir);
+        UtilPreprocessors.PreprocessOutDir(ref outputDir, "CollectCsvColumns", false, inputDir);
         if (inputDir.FullName == outputDir!.FullName)
             throw new InvalidOperationException("※ inputDir and outputDir must be different");
 
