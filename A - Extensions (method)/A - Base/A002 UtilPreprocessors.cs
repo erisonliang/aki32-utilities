@@ -57,11 +57,4 @@ public static class UtilPreprocessors
         Encoding.RegisterProvider(CodePagesEncodingProvider.Instance); // to handle Shift-JIS
     }
 
-
-    public static void CreateIfNotExists(this DirectoryInfo outputDirReference)
-    {
-        if (!outputDirReference.Exists)
-            outputDirReference.Create();
-    }
-
 }
