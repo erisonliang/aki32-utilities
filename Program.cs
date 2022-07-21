@@ -1,5 +1,6 @@
 ﻿using Aki32_Utilities.Extensions;
 using Aki32_Utilities.OwesomeModels;
+
 using System.Drawing;
 
 namespace Aki32_Utilities;
@@ -19,9 +20,9 @@ public class Program
 
                 // B001 CollectFiles
                 {
-                    var input = new DirectoryInfo($@"{baseDir}\B001 CollectFiles\input");
-                    input.CollectFiles(null, @"^[0-9]*\\a\.txt$");
+                    //var input = new DirectoryInfo($@"{baseDir}\B001 CollectFiles\input");
                     //input.CollectFiles(null, @"^.*a\.txt$");
+                    ////input.CollectFiles(null, @"^[0-9]*\\a\.txt$");
                 }
 
                 // B002 MakeFilesFromCsv

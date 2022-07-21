@@ -15,9 +15,9 @@ public static partial class OwesomeExtensions
     }
     public sealed class NaturalFileInfoNameComparer : IComparer<FileInfo>
     {
-        public int Compare(FileInfo a, FileInfo b)
+        public int Compare(FileInfo? a, FileInfo? b)
         {
-            return SafeNativeMethods.StrCmpLogicalW(a.Name, b.Name);
+            return SafeNativeMethods.StrCmpLogicalW(a!.Name, b!.Name);
         }
     }
     public static IEnumerable<FileInfo> Sort(this IEnumerable<FileInfo> targetFiles)

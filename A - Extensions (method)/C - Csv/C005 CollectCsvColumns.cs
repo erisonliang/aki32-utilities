@@ -20,7 +20,7 @@ public static partial class OwesomeExtensions
 
 
         // main
-        var outputDirPath = outputFile.DirectoryName;
+        var outputDirPath = outputFile!.DirectoryName;
         var itemName = Path.GetFileNameWithoutExtension(outputFile.Name);
         var outputExtension = Path.GetExtension(outputFile.Name);
 

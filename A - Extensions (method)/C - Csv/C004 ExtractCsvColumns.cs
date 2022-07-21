@@ -13,7 +13,7 @@ public static partial class OwesomeExtensions
     /// <param name="skipRowCount"></param>
     /// <param name="header"></param>
     /// <returns></returns>
-    public static FileInfo ExtractCsvColumns(this FileInfo inputFile, FileInfo? outputFile, int[] extractingColumns, int skipRowCount = 0, string header = null)
+    public static FileInfo ExtractCsvColumns(this FileInfo inputFile, FileInfo? outputFile, int[] extractingColumns, int skipRowCount = 0, string? header = null)
     {
         // preprocess
         UtilPreprocessors.PreprocessOutFile(ref outputFile, "ExtractCsvColumns", false, inputFile.Directory!, inputFile.Name);
@@ -41,11 +41,11 @@ public static partial class OwesomeExtensions
             resultList.Add(addingLine.ToArray());
         }
 
-        resultList.ToArray().SaveCsv_Rows(outputFile, header);
+        resultList.ToArray().SaveCsv_Rows(outputFile!, header);
 
 
         // post process
-        return outputFile;
+        return outputFile!;
     }
 
     /// <summary>
@@ -57,7 +57,7 @@ public static partial class OwesomeExtensions
     /// <param name="skipRowCount"></param>
     /// <param name="header"></param>
     /// <returns></returns>
-    public static DirectoryInfo ExtractCsvColumns_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir, int[] extractingColumns, int skipRowCount = 0, string header = null)
+    public static DirectoryInfo ExtractCsvColumns_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir, int[] extractingColumns, int skipRowCount = 0, string? header = null)
     {
         // preprocess
         if (UtilConfig.ConsoleOutput) Console.WriteLine("(This takes time...)");
@@ -67,7 +67,7 @@ public static partial class OwesomeExtensions
         // main
         foreach (var file in inputDir.GetFiles())
         {
-            var newFilePath = Path.Combine(outputDir.FullName, file.Name);
+            var newFilePath = Path.Combine(outputDir!.FullName, file.Name);
             try
             {
                 file.ExtractCsvColumns(new FileInfo(newFilePath), extractingColumns, skipRowCount, header);
@@ -83,7 +83,7 @@ public static partial class OwesomeExtensions
 
 
         // post process
-        return outputDir;
+        return outputDir!;
     }
 
 }

@@ -20,11 +20,11 @@ public static partial class OwesomeExtensions
         // main
         var files = inputDir
             .GetFiles("*", SearchOption.TopDirectoryOnly)
-            .Where(x => !x.Name.Contains(outputFile.DirectoryName!))
+            .Where(x => !x.Name.Contains(outputFile!.DirectoryName!))
             .Sort()
             .ToArray();
   
-        using var sw = new StreamWriter(outputFile.FullName, false, Encoding.GetEncoding("SHIFT_JIS"));
+        using var sw = new StreamWriter(outputFile!.FullName, false, Encoding.GetEncoding("SHIFT_JIS"));
         foreach (var f in files)
         {
             try

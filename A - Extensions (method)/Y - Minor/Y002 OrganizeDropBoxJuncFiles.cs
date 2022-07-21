@@ -38,7 +38,7 @@ public static partial class OwesomeExtensions
                     Console.WriteLine($"　前：{oldFullName}");
                     Console.WriteLine($"　後：{newFullName}");
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     Console.WriteLine($"エラー：{newFullName}");
                 }

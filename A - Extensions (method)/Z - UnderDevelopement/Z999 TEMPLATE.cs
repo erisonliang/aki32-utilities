@@ -21,7 +21,7 @@ public static partial class OwesomeExtensions
     /// <param name="skipRowCount"></param>
     /// <param name="header"></param>
     /// <returns></returns>
-    public static FileInfo TEMPLATE(this FileInfo inputFile, FileInfo? outputFile, int skipColumnCount = 0, int skipRowCount = 0, string header = null)
+    public static FileInfo TEMPLATE(this FileInfo inputFile, FileInfo? outputFile, int skipColumnCount = 0, int skipRowCount = 0, string? header = null)
     {
         // preprocess
         UtilPreprocessors.PreprocessOutFile(ref outputFile, "TEMPLATE", false, inputFile.Directory!, inputFile.Name);
@@ -32,7 +32,7 @@ public static partial class OwesomeExtensions
 
 
         // post process
-        return outputFile;
+        return outputFile!;
     }
    
     /// <summary>
@@ -44,7 +44,7 @@ public static partial class OwesomeExtensions
     /// <param name="skipRowCount"></param>
     /// <param name="header"></param>
     /// <returns></returns>
-    public static DirectoryInfo TEMPLATE_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir, int skipColumnCount = 0, int skipRowCount = 0, string header = null)
+    public static DirectoryInfo TEMPLATE_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir, int skipColumnCount = 0, int skipRowCount = 0, string? header = null)
     {
         // preprocess
         UtilPreprocessors.PreprocessOutDir(ref outputDir, "TEMPLATE", true, inputDir);
@@ -53,7 +53,7 @@ public static partial class OwesomeExtensions
         // main
         foreach (var file in inputDir.GetFiles())
         {
-            var newFilePath = Path.Combine(outputDir.FullName, file.Name);
+            var newFilePath = Path.Combine(outputDir!.FullName, file.Name);
             try
             {
                 file.TEMPLATE(new FileInfo(newFilePath), skipColumnCount, skipRowCount, header);
@@ -69,7 +69,7 @@ public static partial class OwesomeExtensions
 
 
         // post process
-        return outputDir;
+        return outputDir!;
     }
 
     // ★★★★★★★★★★★★★★★

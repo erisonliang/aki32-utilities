@@ -71,12 +71,12 @@ public class TimeHistory
     /// <param name="overwriteHeaders"></param>
     /// <returns></returns>
     /// <exception cref="Exception"></exception>
-    public static TimeHistory FromCsv(FileInfo inputCsv, string[] overwriteHeaders = null)
+    public static TimeHistory FromCsv(FileInfo inputCsv, string[]? overwriteHeaders = null)
     {
         var history = new TimeHistory()
         {
             Name = Path.GetFileNameWithoutExtension(inputCsv.Name),
-            inputDir = inputCsv.Directory,
+            inputDir = inputCsv.Directory!,
         };
 
         try
@@ -151,7 +151,7 @@ public class TimeHistory
     /// Output TimeHistory to csv
     /// </summary>
     /// <param name="outputFilePath"></param>
-    public FileInfo SaveToCsv(FileInfo outputFile = null)
+    public FileInfo SaveToCsv(FileInfo? outputFile = null)
     {
         if (outputFile == null)
         {
@@ -160,7 +160,7 @@ public class TimeHistory
             else
                 outputFile = new FileInfo(Path.Combine(inputDir.FullName, "output", $"{Name}.csv"));
         }
-        if (!outputFile.Directory.Exists)
+        if (!outputFile.Directory!.Exists)
             outputFile.Directory.Create();
 
         using var sw = new StreamWriter(outputFile.FullName, false, Encoding.UTF8);
@@ -383,7 +383,7 @@ public class TimeHistory
 
     #endregion
 
-    public DirectoryInfo inputDir = null;
+    public DirectoryInfo? inputDir = null;
     public int DataRowCount
     {
         get

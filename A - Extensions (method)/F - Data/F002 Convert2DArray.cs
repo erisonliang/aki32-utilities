@@ -11,7 +11,7 @@ public static partial class OwesomeExtensions
     /// <param name="inputData"></param>
     /// <param name="emptyItem"></param>
     /// <returns></returns>
-    public static T[,] ConvertTo2DArray<T>(this T[][] inputData, T emptyItem = default)
+    public static T[,] ConvertTo2DArray<T>(this T[][] inputData, T emptyItem = default!)
     {
         // main
         var columnCount = inputData.Length;
@@ -60,7 +60,7 @@ public static partial class OwesomeExtensions
                 }
                 catch (Exception)
                 {
-                    line[j] = default;
+                    line[j] = default!;
                 }
             }
             outputData[i] = line;

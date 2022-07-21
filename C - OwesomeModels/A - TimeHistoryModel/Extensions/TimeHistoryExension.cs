@@ -14,7 +14,7 @@ public static class TimeHistoryExension
     /// <param name="outputFilePath"></param>
     public static FileInfo SaveToExcel(this IEnumerable<TimeHistory> timeHistoryList, FileInfo outputFile)
     {
-        var tempDir = new DirectoryInfo(Path.Combine(outputFile.DirectoryName, ".__temp"));
+        var tempDir = new DirectoryInfo(Path.Combine(outputFile.DirectoryName!, ".__temp"));
         if (!tempDir.Exists)
             tempDir.Create();
 

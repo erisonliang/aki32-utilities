@@ -24,7 +24,7 @@ public static partial class OwesomeExtensions
             using (var inputImg = Image.FromFile(inputFile.FullName))
             {
                 var img = ConvertImageColor(inputImg, targetColor);
-                img.Save(outputFile.FullName, ImageFormat.Png);
+                img.Save(outputFile!.FullName, ImageFormat.Png);
             }
             if (UtilConfig.ConsoleOutput)
                 Console.WriteLine($"O 成功 : {inputFile.FullName}");
@@ -37,9 +37,9 @@ public static partial class OwesomeExtensions
 
 
         // post process
-        return outputFile;
+        return outputFile!;
     }
-  
+
     /// <summary>
     /// Convert image color to targetColor and save
     /// </summary>
@@ -53,7 +53,7 @@ public static partial class OwesomeExtensions
         if (UtilConfig.ConsoleOutput)
             Console.WriteLine("\r\n** ConvertImageColor_Loop() Called");
         if (outputDir == null)
-            outputDir = new DirectoryInfo(Path.Combine(inputFile.DirectoryName, UtilConfig.GetNewOutputDirName("ConvertImageColor")));
+            outputDir = new DirectoryInfo(Path.Combine(inputFile.DirectoryName!, UtilConfig.GetNewOutputDirName("ConvertImageColor")));
         if (!outputDir.Exists)
             outputDir.Create();
 
@@ -70,7 +70,7 @@ public static partial class OwesomeExtensions
         // post process
         return outputDir;
     }
-    
+
     /// <summary>
     /// Convert image color to targetColor and save
     /// </summary>
@@ -82,9 +82,9 @@ public static partial class OwesomeExtensions
     {
         var targetInfos = targetColors.Select(c => (c.IsNamedColor ? c.Name : c.ToArgb().ToString(), c)).ToArray();
         inputFile.ConvertImageColor_Loop(outputDir, targetInfos);
-        return outputDir;
+        return outputDir!;
     }
-    
+
     /// <summary>
     /// Convert image color to targetColor
     /// </summary>
@@ -116,14 +116,14 @@ public static partial class OwesomeExtensions
 
         return resultBmp;
     }
-    
+
     /// <summary>
     /// faster Bitmap with direct memory access
     /// </summary>
     public class FastBitmap
     {
-        private Bitmap original = null;
-        private BitmapData fastImage = null;
+        private Bitmap original;
+        private BitmapData? fastImage = null;
 
         /// <summary>
         /// Constructor

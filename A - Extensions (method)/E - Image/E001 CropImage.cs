@@ -22,7 +22,7 @@ public static partial class OwesomeExtensions
             using (var inputImg = Image.FromFile(inputFile.FullName))
             {
                 var img = CropImage(inputImg, crop);
-                img.Save(outputFile.FullName);
+                img.Save(outputFile!.FullName);
             }
             if (UtilConfig.ConsoleOutput)
                 Console.WriteLine($"O 成功 : {inputFile.FullName}");
@@ -35,7 +35,7 @@ public static partial class OwesomeExtensions
 
 
         // post process
-        return outputFile;
+        return outputFile!;
     }
 
     /// <summary>
@@ -54,12 +54,12 @@ public static partial class OwesomeExtensions
         // main
         foreach (var crop in crops)
         {
-            var outputFile = new FileInfo(Path.Combine(outputDir.FullName, $"{Path.GetFileNameWithoutExtension(inputFile.Name)} - {crop.ToString()}.png"));
+            var outputFile = new FileInfo(Path.Combine(outputDir!.FullName, $"{Path.GetFileNameWithoutExtension(inputFile.Name)} - {crop.ToString()}.png"));
             inputFile.CropImage(outputFile, crop);
         }
 
 
-        return outputDir;
+        return outputDir!;
     }
 
     /// <summary>
@@ -144,7 +144,7 @@ public static partial class OwesomeExtensions
             return new Rectangle(cx, cy, cw, ch);
         }
 
-        public string ToString() => $"{l:F2},{t:F2},{r:F2},{b:F2}";
+        public new string ToString() => $"{l:F2},{t:F2},{r:F2},{b:F2}";
 
     }
 

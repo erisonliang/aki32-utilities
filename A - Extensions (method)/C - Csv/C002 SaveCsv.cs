@@ -11,7 +11,7 @@ public static partial class OwesomeExtensions
     /// <param name="outputFile"></param>
     /// <param name="header"></param>
     /// <returns></returns>
-    public static FileInfo SaveCsv_Rows(this string[][] inputFile_Rows, FileInfo outputFile, string header = null)
+    public static FileInfo SaveCsv_Rows(this string[][] inputFile_Rows, FileInfo outputFile, string? header = null)
     {
         // preprocess
         UtilPreprocessors.PreprocessBasic("SaveCsv", false);
@@ -20,7 +20,7 @@ public static partial class OwesomeExtensions
         // main
         using var sw = new StreamWriter(outputFile.FullName, false, Encoding.GetEncoding("SHIFT_JIS"));
 
-        if (header is not null)
+        if (!string.IsNullOrEmpty(header))
             sw.WriteLine(header);
 
         foreach (var row in inputFile_Rows)
@@ -44,11 +44,11 @@ public static partial class OwesomeExtensions
     /// <param name="outputFile"></param>
     /// <param name="header"></param>
     /// <returns></returns>
-    public static FileInfo SaveCsv_Columns(this string[][] inputFile_Columns, FileInfo outputFile, string header = null)
+    public static FileInfo SaveCsv_Columns(this string[][] inputFile_Columns, FileInfo outputFile, string? header = null)
     {
         // main
         var inputFile_Rows = inputFile_Columns.Transpose();
-        return inputFile_Rows.SaveCsv_Rows(outputFile, header);
+        return inputFile_Rows!.SaveCsv_Rows(outputFile, header);
     }
 
 }

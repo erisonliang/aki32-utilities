@@ -10,7 +10,7 @@ public static partial class OwesomeExtensions
     /// <typeparam name="T"></typeparam>
     /// <param name="inputData"></param>
     /// <returns></returns>
-    public static T[][] Transpose<T>(this T[][] inputData, T emptyItem = default)
+    public static T[][] Transpose<T>(this T[][] inputData, T emptyItem = default!)
     {
         // main
         var columnCount = inputData.Length;
@@ -58,7 +58,7 @@ public static partial class OwesomeExtensions
                 }
                 catch (Exception)
                 {
-                    outputData[i, j] = default;
+                    outputData[i, j] = default!;
                 }
             }
         }

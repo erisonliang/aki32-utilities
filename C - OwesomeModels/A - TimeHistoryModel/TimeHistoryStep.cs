@@ -39,7 +39,7 @@ public class TimeHistoryStep : TimeHistory
 
     #region default keys
 
-    public double t
+    public new double t
     {
         get
         {
@@ -50,7 +50,7 @@ public class TimeHistoryStep : TimeHistory
             this["t"] = value;
         }
     }
-    public double x
+    public new double x
     {
         get
         {
@@ -61,7 +61,7 @@ public class TimeHistoryStep : TimeHistory
             this["x"] = value;
         }
     }
-    public double xt
+    public new double xt
     {
         get
         {
@@ -72,7 +72,7 @@ public class TimeHistoryStep : TimeHistory
             this["xt"] = value;
         }
     }
-    public double xtt
+    public new double xtt
     {
         get
         {
@@ -83,7 +83,7 @@ public class TimeHistoryStep : TimeHistory
             this["xtt"] = value;
         }
     }
-    public double ytt
+    public new double ytt
     {
         get
         {
@@ -94,7 +94,7 @@ public class TimeHistoryStep : TimeHistory
             this["ytt"] = value;
         }
     }
-    public double xtt_plus_ytt
+    public new double xtt_plus_ytt
     {
         get
         {
@@ -105,7 +105,7 @@ public class TimeHistoryStep : TimeHistory
             this["xtt+ytt"] = value;
         }
     }
-    public double f
+    public new double f
     {
         get
         {
@@ -116,7 +116,7 @@ public class TimeHistoryStep : TimeHistory
             this["f"] = value;
         }
     }
-    public double memo
+    public new double memo
     {
         get
         {
@@ -128,7 +128,7 @@ public class TimeHistoryStep : TimeHistory
         }
     }
 
-    public double a
+    public new double a
     {
         get
         {
@@ -139,7 +139,7 @@ public class TimeHistoryStep : TimeHistory
             this["a"] = value;
         }
     }
-    public double v
+    public new double v
     {
         get
         {
@@ -150,7 +150,7 @@ public class TimeHistoryStep : TimeHistory
             this["v"] = value;
         }
     }
-    public double mu
+    public new double mu
     {
         get
         {
@@ -162,7 +162,7 @@ public class TimeHistoryStep : TimeHistory
         }
     }
 
-    public double Sd
+    public new double Sd
     {
         get
         {
@@ -173,7 +173,7 @@ public class TimeHistoryStep : TimeHistory
             this["Sd"] = value;
         }
     }
-    public double Sv
+    public new double Sv
     {
         get
         {
@@ -184,7 +184,7 @@ public class TimeHistoryStep : TimeHistory
             this["Sv"] = value;
         }
     }
-    public double Sa
+    public new double Sa
     {
         get
         {

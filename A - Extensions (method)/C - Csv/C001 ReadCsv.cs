@@ -28,7 +28,7 @@ public static partial class OwesomeExtensions
 
         while (!sr.EndOfStream)
         {
-            var line = sr.ReadLine();
+            var line = sr.ReadLine()!;
             if (string.IsNullOrEmpty(line.Replace(",", "")))
             {
                 if (!ignoreEmptyLine)
@@ -84,7 +84,7 @@ public static partial class OwesomeExtensions
         // main
         var rows = ReadCsv_Rows(inputFile, skipColumnCount, skipRowCount, ignoreEmptyLine);
         var columns = rows.Transpose();
-        return columns;
+        return columns!;
     }
 
 }

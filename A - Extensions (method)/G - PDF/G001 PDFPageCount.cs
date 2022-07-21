@@ -26,7 +26,7 @@ public static partial class OwesomeExtensions
 
             while (!sw.EndOfStream)
             {
-                var line = sw.ReadLine();
+                var line = sw.ReadLine()!;
                 if (rgx.Match(line).Success)
                 {
                     var pages = GetPageCount(line);
@@ -36,7 +36,7 @@ public static partial class OwesomeExtensions
                 }
             }
         }
-        catch (Exception e)
+        catch (Exception)
         {
         }
         if (resultConsoleOutput)
