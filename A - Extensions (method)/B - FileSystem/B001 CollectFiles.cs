@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using System.Text.RegularExpressions;
 
 namespace Aki32_Utilities.Extensions;
 public static partial class OwesomeExtensions
@@ -9,9 +10,9 @@ public static partial class OwesomeExtensions
     /// </summary>
     /// <param name="inputDir"></param>
     /// <param name="outputDir">when null, automatically set to {inputDir.Parent.FullName}/output_CollectFiles</param>
-    /// <param name="serchPattern"></param>
+    /// <param name="searchPatterns"></param>
     /// <returns></returns>
-    public static DirectoryInfo CollectFiles(this DirectoryInfo inputDir, DirectoryInfo? outputDir, params string[] serchPatterns)
+    public static DirectoryInfo CollectFiles(this DirectoryInfo inputDir, DirectoryInfo? outputDir, params string[] searchRegexen)
     {
         // preprocess
         UtilPreprocessors.PreprocessOutDir(ref outputDir, "CollectFiles", true, inputDir.Parent!);
@@ -19,9 +20,21 @@ public static partial class OwesomeExtensions
 
         // main
         var files = new List<string>();
-        foreach (var serchPattern in serchPatterns)
-            files.AddRange(inputDir.GetFiles(serchPattern, SearchOption.AllDirectories).Select(f => f.FullName));
-        files = files.Distinct().ToList();
+
+        var allFiles = inputDir.GetFiles("*", SearchOption.AllDirectories).Select(f => f.FullName);
+
+        foreach (var targetFile in allFiles)
+        {
+            var ComparingString = targetFile.Replace(inputDir.FullName, "").TrimStart('\\');
+            foreach (var searchRegex in searchRegexen)
+            {
+                if (Regex.IsMatch(ComparingString, searchRegex))
+                {
+                    files.Add(targetFile);
+                    break;
+                }
+            }
+        }
 
         foreach (var file in files)
         {
