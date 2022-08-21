@@ -1,4 +1,7 @@
-﻿using System.Text;
+﻿using System.Linq;
+using System.Text;
+
+using XPlot.Plotly;
 
 namespace Aki32_Utilities.OwesomeModels;
 /// <summary>
@@ -146,6 +149,65 @@ public class TimeHistory
 
 
     // ★★★★★★★★★★★★★★★ output
+
+    /// <summary>
+    /// Draw Scatter Graph
+    /// </summary>
+    /// <param name="verticalKey">Vertical Axis</param>
+    /// <param name="horizontalKey">Horizontal Axis</param>
+    public void DrawScatterGraph(string verticalKey, string horizontalKey = "")
+    {
+        try
+        {
+            var vertical = this[verticalKey];
+
+            if (string.IsNullOrEmpty(horizontalKey))
+            {
+                Chart.Scatter(vertical).Show();
+            }
+            else
+            {
+                var horizontal = this[horizontalKey];
+                var points = Enumerable.Zip(horizontal, vertical).Select(x => new Tuple<double, double>(x.First, x.Second));
+                Chart.Scatter(points).Show();
+            }
+
+            Console.WriteLine("Graph has been drawn and opened in the default browser");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Failed to draw graph: {ex.Message}");
+        }
+    }
+    /// <summary>
+    /// Draw Line Graph
+    /// </summary>
+    /// <param name="verticalKey">Vertical Axis</param>
+    /// <param name="horizontalKey">Horizontal Axis</param>
+    public void DrawLineGraph(string verticalKey, string horizontalKey = "")
+    {
+        try
+        {
+            var vertical = this[verticalKey];
+
+            if (string.IsNullOrEmpty(horizontalKey))
+            {
+                Chart.Line(vertical).Show();
+            }
+            else
+            {
+                var horizontal = this[horizontalKey];
+                var points = Enumerable.Zip(horizontal, vertical).Select(x => new Tuple<double, double>(x.First, x.Second));
+                Chart.Line(points).Show();
+            }
+
+            Console.WriteLine("Graph has been drawn and opened in the default browser");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Failed to draw graph: {ex.Message}");
+        }
+    }
 
     /// <summary>
     /// Output TimeHistory to csv
