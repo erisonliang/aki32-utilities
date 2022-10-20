@@ -1,4 +1,5 @@
 ﻿using ClosedXML.Excel;
+
 using System.Text;
 
 namespace Aki32_Utilities.Extensions;
@@ -136,7 +137,7 @@ public static partial class OwesomeExtensions
         // post process
         return outputFile;
     }
-  
+
     /// <summary>
     /// move all csvs' target column to one csv
     /// </summary>
@@ -145,7 +146,7 @@ public static partial class OwesomeExtensions
     /// <param name="targets"></param>
     /// <returns></returns>
     /// <exception cref="InvalidOperationException"></exception>
-    public static DirectoryInfo CollectCsvColumns_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir, int initialColumn, int skipRowCount, params (string name, int targetColumn, int initialColumn)[] targets)
+    public static DirectoryInfo CollectCsvColumns_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir, int skipRowCount, params (string name, int initialColumn, int targetColumn)[] targets)
     {
         // preprocess
         if (UtilConfig.ConsoleOutput) Console.WriteLine("(This takes time...)");
@@ -155,17 +156,17 @@ public static partial class OwesomeExtensions
 
 
         // main
-        foreach (var item in targets)
+        foreach (var target in targets)
         {
-            var outputFile = new FileInfo(Path.Combine(outputDir.FullName, item.name + ".csv"));
-            inputDir.CollectCsvColumns(outputFile, item.targetColumn, item.initialColumn, skipRowCount);
+            var outputFile = new FileInfo(Path.Combine(outputDir.FullName, target.name + ".csv"));
+            inputDir.CollectCsvColumns(outputFile, target.targetColumn, target.initialColumn, skipRowCount);
         }
 
 
         // post process
         return outputDir;
     }
-  
+
     /// <summary>
     /// move all csvs' target column to one csv
     /// </summary>
@@ -174,11 +175,11 @@ public static partial class OwesomeExtensions
     /// <param name="targets"></param>
     /// <returns></returns>
     /// <exception cref="InvalidOperationException"></exception>
-    public static DirectoryInfo CollectCsvColumns_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir, params (string name, int targetColumn, int initialColumn)[] targets)
+    public static DirectoryInfo CollectCsvColumns_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir, params (string name, int initialColumn, int targetColumn)[] targets)
     {
-        return inputDir.CollectCsvColumns_Loop(outputDir, 0, 0, targets);
+        return inputDir.CollectCsvColumns_Loop(outputDir, 0, targets);
     }
-  
+
     /// <summary>
     /// move all csvs' target column to one csv
     /// </summary>
@@ -188,9 +189,9 @@ public static partial class OwesomeExtensions
     /// <returns></returns>
     public static DirectoryInfo CollectCsvColumns_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir, int initialColumn, int skipRowCount, params (string name, int targetColumn)[] targets)
     {
-        return inputDir.CollectCsvColumns_Loop(outputDir, initialColumn, skipRowCount, targets.Select(x => (x.name, x.targetColumn, 0)).ToArray());
+        return inputDir.CollectCsvColumns_Loop(outputDir, skipRowCount, targets.Select(x => (x.name, initialColumn, x.targetColumn)).ToArray());
     }
-  
+
     /// <summary>
     /// move all csvs' target column to one csv
     /// </summary>
