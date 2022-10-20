@@ -38,6 +38,9 @@ public static partial class OwesomeExtensions
         if (replaceSet.Length == 0)
         {
             var targetFileNames = targetFiles.Select(x => Path.GetFileNameWithoutExtension(x.Name)).ToArray();
+            if (targetFileNames.Length == 0)
+                return targetDir;
+
             var matchF = targetFileNames[0];
             var matchB = targetFileNames[0];
 
