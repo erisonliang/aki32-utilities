@@ -60,7 +60,7 @@ public static partial class OwesomeExtensions
     public static DirectoryInfo ExtractCsvColumns_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir, int[] extractingColumns, int skipRowCount = 0, string? header = null)
     {
         // preprocess
-        if (UtilConfig.ConsoleOutput) Console.WriteLine("(This takes time...)");
+        if (UtilConfig.ConsoleOutput) Console.WriteLine("\r\n(This takes time...)");
         UtilPreprocessors.PreprocessOutDir(ref outputDir, "ExtractCsvColumns", true, inputDir);
 
 
@@ -78,6 +78,47 @@ public static partial class OwesomeExtensions
             {
                 if (UtilConfig.ConsoleOutput)
                     Console.WriteLine($"X: {newFilePath}, {ex.Message}");
+            }
+        }
+
+
+        // post process
+        return outputDir!;
+    }
+
+    /// <summary>
+    /// extranct designated columns from csv to new csv
+    /// </summary>
+    /// <param name="inputDir"></param>
+    /// <param name="outputDir">when null, automatically set to {inputDir.FullName}/output_ExtractCsvColumns</param>
+    /// <param name="extractingColumns"></param>
+    /// <param name="skipRowCount"></param>
+    /// <param name="header"></param>
+    /// <returns></returns>
+    public static DirectoryInfo ExtractCsvColumns_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir, int skipRowCount = 0, params (string name, int[] extractingColumns, string? header)[] targets)
+    {
+        // preprocess
+        if (UtilConfig.ConsoleOutput) Console.WriteLine("\r\n(This takes time...)");
+        UtilPreprocessors.PreprocessOutDir(ref outputDir, "ExtractCsvColumns", true, inputDir);
+
+
+        // main
+        foreach (var target in targets)
+        {
+            foreach (var file in inputDir.GetFiles())
+            {
+                var newFilePath = Path.Combine(outputDir!.FullName, $"{file.Name} - {target.name}");
+                try
+                {
+                    file.ExtractCsvColumns(new FileInfo(newFilePath), target.extractingColumns, skipRowCount, target.header);
+                    if (UtilConfig.ConsoleOutput)
+                        Console.WriteLine($"O: {newFilePath}");
+                }
+                catch (Exception ex)
+                {
+                    if (UtilConfig.ConsoleOutput)
+                        Console.WriteLine($"X: {newFilePath}, {ex.Message}");
+                }
             }
         }
 
