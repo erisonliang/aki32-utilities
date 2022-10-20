@@ -10,7 +10,7 @@ public static partial class OwesomeExtensions
     /// <param name="inputDir"></param>
     /// <param name="outputDir">must not to be null</param>
     /// <returns></returns>
-    public static DirectoryInfo MoveTo(this DirectoryInfo inputDir, DirectoryInfo outputDir)
+    public static DirectoryInfo MoveTo(this DirectoryInfo inputDir, DirectoryInfo outputDir, bool overwriteExistingDir = true)
     {
         // preprocess
         if (outputDir is null)
@@ -23,12 +23,14 @@ public static partial class OwesomeExtensions
         if (inputDir.FullName[0..3] == outputDir.FullName[0..3])
         {
             // use default MoveTo().
+            if (overwriteExistingDir && outputDir.Exists)
+                outputDir.Delete(true);
             inputDir.MoveTo(outputDir.FullName);
         }
         else
         {
             // For different drive, we can't use default Move().
-            inputDir.CopyTo(outputDir, true);
+            inputDir.CopyTo(outputDir, overwriteExistingDir);
             inputDir.Delete(true);
         }
 
@@ -43,7 +45,7 @@ public static partial class OwesomeExtensions
     /// <param name="inputFile"></param>
     /// <param name="outputFile"></param>
     /// <returns></returns>
-    public static FileInfo MoveTo(this FileInfo inputFile, FileInfo outputFile)
+    public static FileInfo MoveTo(this FileInfo inputFile, FileInfo outputFile, bool overwriteExistingFile = true)
     {
         // preprocess
         if (outputFile is null)
@@ -54,13 +56,13 @@ public static partial class OwesomeExtensions
         // main
         if (inputFile.FullName[0..3] == outputFile.FullName[0..3])
         {
-            // use default Move().
-            File.Move(inputFile.FullName, outputFile.FullName, true);
+            // use default. overwrite
+            File.Move(inputFile.FullName, outputFile.FullName, overwriteExistingFile);
         }
         else
         {
             // For different drive, we can't use default Move().
-            File.Copy(inputFile.FullName, outputFile.FullName, true);
+            File.Copy(inputFile.FullName, outputFile.FullName, overwriteExistingFile);
             File.Delete(inputFile.FullName);
         }
 
