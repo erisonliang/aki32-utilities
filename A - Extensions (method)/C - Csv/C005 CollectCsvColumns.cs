@@ -14,7 +14,7 @@ public static partial class OwesomeExtensions
     /// <param name="targetColumn"></param>
     /// <param name="initialColumn"></param>
     /// <returns></returns>
-    public static FileInfo CollectCsvColumns(this DirectoryInfo inputDir, FileInfo? outputFile, int targetColumn, int initialColumn = 0, int skipRowCount = 0)
+    public static FileInfo CollectCsvColumns(this DirectoryInfo inputDir, FileInfo? outputFile, int targetColumn, int? initialColumn = 0, int skipRowCount = 0)
     {
         // preprocess
         UtilPreprocessors.PreprocessOutFile(ref outputFile, "CollectCsvColumns", true, inputDir!, "output.csv");
@@ -39,8 +39,10 @@ public static partial class OwesomeExtensions
 
         if (outputExtension == ".csv")
         {
+            var UseInitColumnThen1 = initialColumn.HasValue ? 1 : 0;
+
             // collect all data to this column list and save eventually
-            var resultColumnList = new string[csvs.Length + 1][];
+            var resultColumnList = new string[csvs.Length + UseInitColumnThen1][];
 
             // copy one column from inputCsv to outputCsv method
             void AddColumnToResultColumnList(FileInfo csv, int targetInputCsvColumn, int targetOutputCsvColumn, string header = "")
@@ -62,7 +64,8 @@ public static partial class OwesomeExtensions
             }
 
             // copy initialColumn 
-            AddColumnToResultColumnList(csvs[0], 0, initialColumn);
+            if (initialColumn.HasValue)
+                AddColumnToResultColumnList(csvs[0], 0, initialColumn.Value);
 
             // copy all of the rest
             for (int i = 0; i < csvs.Length; i++)
@@ -71,7 +74,7 @@ public static partial class OwesomeExtensions
                 try
                 {
                     var header = Path.GetFileNameWithoutExtension(csvPath);
-                    AddColumnToResultColumnList(csvs[i], targetColumn, i + 1, header);
+                    AddColumnToResultColumnList(csvs[i], targetColumn, i + UseInitColumnThen1, header);
 
                     if (UtilConfig.ConsoleOutput)
                         Console.WriteLine($"O: {csvPath}");
@@ -103,7 +106,8 @@ public static partial class OwesomeExtensions
             }
 
             // copy initialColumn 
-            CopyCsvToExcelColumn(csvs[0], initialColumn, 0);
+            if (initialColumn.HasValue)
+                CopyCsvToExcelColumn(csvs[0], initialColumn.Value, 0);
 
             // copy all of the rest
             foreach (var csv in csvs)
@@ -146,7 +150,7 @@ public static partial class OwesomeExtensions
     /// <param name="targets"></param>
     /// <returns></returns>
     /// <exception cref="InvalidOperationException"></exception>
-    public static DirectoryInfo CollectCsvColumns_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir, int skipRowCount, params (string name, int initialColumn, int targetColumn)[] targets)
+    public static DirectoryInfo CollectCsvColumns_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir, int skipRowCount, params (string name, int? initialColumn, int targetColumn)[] targets)
     {
         // preprocess
         if (UtilConfig.ConsoleOutput) Console.WriteLine("(This takes time...)");
@@ -175,7 +179,7 @@ public static partial class OwesomeExtensions
     /// <param name="targets"></param>
     /// <returns></returns>
     /// <exception cref="InvalidOperationException"></exception>
-    public static DirectoryInfo CollectCsvColumns_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir, params (string name, int initialColumn, int targetColumn)[] targets)
+    public static DirectoryInfo CollectCsvColumns_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir, params (string name, int? initialColumn, int targetColumn)[] targets)
     {
         return inputDir.CollectCsvColumns_Loop(outputDir, 0, targets);
     }
@@ -187,7 +191,7 @@ public static partial class OwesomeExtensions
     /// <param name="outputDir">when null, automatically set to {inputDir.FullName}/output_CollectCsvColumns</param>
     /// <param name="targets"></param>
     /// <returns></returns>
-    public static DirectoryInfo CollectCsvColumns_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir, int initialColumn, int skipRowCount, params (string name, int targetColumn)[] targets)
+    public static DirectoryInfo CollectCsvColumns_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir, int? initialColumn, int skipRowCount, params (string name, int targetColumn)[] targets)
     {
         return inputDir.CollectCsvColumns_Loop(outputDir, skipRowCount, targets.Select(x => (x.name, initialColumn, x.targetColumn)).ToArray());
     }
