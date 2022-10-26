@@ -108,7 +108,7 @@ public static partial class OwesomeExtensions
             foreach (var file in inputDir.GetFiles())
             {
                 var fileNameWithoutEx= Path.GetFileNameWithoutExtension(file.Name);
-                var newFilePath = Path.Combine(outputDir!.FullName, $"{fileNameWithoutEx} - {target.name}{file.Extension}");
+                var newFilePath = Path.Combine(outputDir!.FullName, $"{fileNameWithoutEx}_{target.name}{file.Extension}");
                 try
                 {
                     file.ExtractCsvColumns(new FileInfo(newFilePath), target.extractingColumns, skipRowCount, target.header);
