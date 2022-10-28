@@ -77,6 +77,7 @@ public static partial class OwesomeExtensions
             foreach (var item in replaceSet)
                 newFileName = newFileName.Replace(item.from, item.to);
             newFileName = pattern.Replace("*", newFileName);
+            if (newFileName == "") newFileName = "output";
             var newFilePath = Path.Combine(targetFile.DirectoryName!, newFileName + Path.GetExtension(targetFile.Name));
 
             try
