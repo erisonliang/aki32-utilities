@@ -9,13 +9,13 @@ public static partial class OwesomeExtensions
     /// </summary>
     /// <param name="inputFile"></param>
     /// <param name="skipColumnCount"></param>
-    /// <param name="skipRowCount"></param>
+    /// <param name="skipRowCount">negative to get from bottom. eg: -1 for only the last row</param>
     /// <param name="ignoreEmptyLine"></param>
     /// <returns></returns>
     public static string[][] ReadCsv_Rows(this FileInfo inputFile, int skipColumnCount = 0, int skipRowCount = 0, bool ignoreEmptyLine = false)
     {
         // preprocess
-        UtilPreprocessors.PreprocessBasic("ReadCsv", false) ;
+        UtilPreprocessors.PreprocessBasic("ReadCsv", false);
 
 
         // main            
@@ -66,6 +66,9 @@ public static partial class OwesomeExtensions
             }
         }
 
+        // if negative
+        if (skipRowCount < 0)
+            rows.RemoveRange(0, rows.Count + skipRowCount);
 
         // post process
         return rows.ToArray();
@@ -76,7 +79,7 @@ public static partial class OwesomeExtensions
     /// </summary>
     /// <param name="inputFile"></param>
     /// <param name="skipColumnCount"></param>
-    /// <param name="skipRowCount"></param>
+    /// <param name="skipRowCount">negative to get from bottom. eg: -1 for only the last row</param>
     /// <param name="ignoreEmptyLine"></param>
     /// <returns></returns>
     public static string[][] ReadCsv_Columns(this FileInfo inputFile, int skipColumnCount = 0, int skipRowCount = 0, bool ignoreEmptyLine = false)
