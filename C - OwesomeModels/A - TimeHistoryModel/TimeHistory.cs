@@ -486,6 +486,10 @@ public class TimeHistory
         }
         return step;
     }
+    public TimeHistoryStep GetTheLastStep()
+    {
+        return GetStep(DataRowCount - 1);
+    }
     public void SetStep(int i, TimeHistoryStep step)
     {
         foreach (var key in step.data.Keys)
