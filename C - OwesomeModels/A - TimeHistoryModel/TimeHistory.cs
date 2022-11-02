@@ -561,19 +561,6 @@ public class TimeHistory
         }
     }
 
-    /// <summary>
-    /// Get response spectrum set from
-    /// </summary>
-    /// <returns></returns>
-    public TimeHistoryStep GetSpectrumSet()
-    {
-        var step = new TimeHistoryStep();
-        step.Sd = x.Max(Math.Abs);
-        step.Sv = xt.Max(Math.Abs);
-        step.Sa = xtt_plus_ytt.Max(Math.Abs);
-        return step;
-    }
-
 
     // ★★★★★★★★★★★★★★★ 
 
