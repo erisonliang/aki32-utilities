@@ -14,7 +14,7 @@ public static partial class OwesomeExtensions
     {
         // main
         var columnCount = inputData.Length;
-        var rowCount = inputData.Max(x => x.Length);
+        var rowCount = inputData.Max(x => x?.Length ?? 0);
         var outputData = new T[rowCount][];
         for (int i = 0; i < rowCount; i++)
         {
@@ -37,7 +37,7 @@ public static partial class OwesomeExtensions
         // post process
         return outputData;
     }
-  
+
     /// <summary>
     /// Transpose 2D Array
     /// </summary>
@@ -63,7 +63,7 @@ public static partial class OwesomeExtensions
             }
         }
 
-        
+
         // post process
         return outputData;
     }

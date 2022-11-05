@@ -11,7 +11,7 @@ using DocumentFormat.OpenXml.Wordprocessing;
 using Newtonsoft.Json;
 
 namespace Aki32_Utilities.SeviceManagers;
-internal class LINEManager
+public class LINEManager
 {
     /// <summary>
     /// Obtain from https://notify-bot.line.me/my/
@@ -25,12 +25,13 @@ internal class LINEManager
     public LINEManager(string lineAccessToken)
     {
         LineAccessToken = lineAccessToken;
+        //ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
     }
 
     /// <summary>
     /// send message to LINE
     /// </summary>
-    internal async Task<bool> SendMessageAsync(string message)
+    public async Task<bool> SendMessageAsync(string message)
     {
         try
         {

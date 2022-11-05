@@ -220,9 +220,9 @@ public class Program
             {
                 // A LINEManager
                 {
-                    //var accessToken = ""; // LINE Notify
-                    //var line = new LINEManager(accessToken);
-                    //line.SendMessageAsync(@"Hello LINE from C#. 日本語");
+                    var accessToken = ""; // LINE Notify
+                    var line = new LINEManager(accessToken);
+                    line.SendMessageAsync(@"Hello LINE from C#. 日本語");
                 }
             }
         }
