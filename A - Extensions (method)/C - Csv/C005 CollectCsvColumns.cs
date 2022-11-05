@@ -65,7 +65,7 @@ public static partial class OwesomeExtensions
 
             // copy initialColumn 
             if (initialColumn.HasValue)
-                AddColumnToResultColumnList(csvs[0], 0, initialColumn.Value);
+                AddColumnToResultColumnList(csvs[0], initialColumn.Value, 0);
 
             // copy all of the rest
             for (int i = 0; i < csvs.Length; i++)
