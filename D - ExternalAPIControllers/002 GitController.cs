@@ -1,13 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using LibGit2Sharp.Handlers;
+﻿using LibGit2Sharp.Handlers;
 using LibGit2Sharp;
-using System.ComponentModel.DataAnnotations;
-using DocumentFormat.OpenXml.Drawing;
 
 namespace Aki32_Utilities.ExternalAPIControllers;
 public class GitController
