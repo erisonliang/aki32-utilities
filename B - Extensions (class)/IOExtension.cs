@@ -1,15 +1,20 @@
 ﻿using System.Runtime.InteropServices;
 
 namespace Aki32_Utilities.Extensions;
-public class Device
+public class IOExtension
 {
-    // ★★★★★★★★★★★★★★★ Cursor Move Events
+
+    // ★★★★★★★★★★★★★★★ Keyboard Input Events
+
+
+
+    // ★★★★★★★★★★★★★★★ Mouse Move Events
 
     [DllImport("USER32.dll", CallingConvention = CallingConvention.StdCall)]
     static extern void SetCursorPos(int X, int Y);
     public static void MoveCursor(int X, int Y) => SetCursorPos(X, Y);
 
-    // ★★★★★★★★★★★★★★★ Cursor Click Events 
+    // ★★★★★★★★★★★★★★★ Mouse Click Events 
 
     #region consts
     private const int INPUT_MOUSE = 0;                  // マウスイベント
