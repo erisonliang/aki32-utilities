@@ -32,7 +32,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="新しいフォルダー\" />
+    <Folder Include="A - Extensions %28method%29\H - Video\" />
   </ItemGroup>
 
 </Project>

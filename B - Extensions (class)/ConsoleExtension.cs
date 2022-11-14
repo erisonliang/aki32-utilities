@@ -1,5 +1,4 @@
 ﻿
-
 namespace Aki32_Utilities.Extensions;
 public class ConsoleExtension
 {
@@ -16,4 +15,3 @@ public class ConsoleExtension
     }
 
 }
-
