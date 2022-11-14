@@ -1,5 +1,8 @@
 ﻿using System.Runtime.InteropServices;
 
+
+using System.IO;
+
 namespace Aki32_Utilities.Extensions;
 
 /// <summary>
@@ -8,56 +11,120 @@ namespace Aki32_Utilities.Extensions;
 public class IODeviceExtension
 {
 
-    // ★★★★★★★★★★★★★★★ Keyboard Input Events
-
-
-    // キー操作、マウス操作をシミュレート(擬似的に操作する)
-    //[DllImport("user32.dll")]
-    //private extern static void SendInput(int nInputs, ref INPUT pInputs, int cbsize);
-
-
-    // ★★★★★★★★★★★★★★★ Mouse Move Events
-
-    [DllImport("USER32.dll", CallingConvention = CallingConvention.StdCall)]
-    static extern void SetCursorPos(int X, int Y);
-    public static void MouseMove(int X, int Y) => SetCursorPos(X, Y);
-
-    // ★★★★★★★★★★★★★★★ Mouse Click Events 
+    // ★★★★★★★★★★★★★★★ IO Device Input Events
 
     #region consts
     private const int INPUT_MOUSE = 0;                  // マウスイベント
     private const int INPUT_KEYBOARD = 1;               // キーボードイベント
     private const int INPUT_HARDWARE = 2;               // ハードウェアイベント
 
-    private const int MOUSEEVENTF_MOVE = 0x1;           // マウスを移動する
-    private const int MOUSEEVENTF_ABSOLUTE = 0x8000;    // 絶対座標指定
-    private const int MOUSEEVENTF_LEFTDOWN = 0x2;       // 左　ボタンを押す
-    private const int MOUSEEVENTF_LEFTUP = 0x4;         // 左　ボタンを離す
-    private const int MOUSEEVENTF_RIGHTDOWN = 0x8;      // 右　ボタンを押す
-    private const int MOUSEEVENTF_RIGHTUP = 0x10;       // 右　ボタンを離す
-    private const int MOUSEEVENTF_MIDDLEDOWN = 0x20;    // 中央ボタンを押す
-    private const int MOUSEEVENTF_MIDDLEUP = 0x40;      // 中央ボタンを離す
-    private const int MOUSEEVENTF_WHEEL = 0x800;        // ホイールを回転する
     private const int WHEEL_DELTA = 120;                // ホイール回転値
 
-    private const int KEYEVENTF_KEYDOWN = 0x0;          // キーを押す
-    private const int KEYEVENTF_KEYUP = 0x2;            // キーを離す
     private const int KEYEVENTF_EXTENDEDKEY = 0x1;      // 拡張コード
     private const int VK_SHIFT = 0x10;                  // SHIFTキー
     #endregion
 
+    private static int GetInputEventCode(IODeviceButton handlingButton, IODeviceButtonEvent handlingEvent)
+    {
+        switch (handlingButton)
+        {
+            case IODeviceButton.MouseLeft:
+                {
+                    switch (handlingEvent)
+                    {
+                        case IODeviceButtonEvent.Down:
+                            return 0x2;
+                        case IODeviceButtonEvent.Up:
+                            return 0x4;
+                    }
+                }
+                break;
+            case IODeviceButton.MouseMiddle:
+                {
+                    switch (handlingEvent)
+                    {
+                        case IODeviceButtonEvent.Down:
+                            return 0x20;
+                        case IODeviceButtonEvent.Up:
+                            return 0x40;
+                        case IODeviceButtonEvent.WHEEL:
+                            return 0x800;
+                    }
+                }
+                break;
+            case IODeviceButton.MouseRight:
+                {
+                    switch (handlingEvent)
+                    {
+                        case IODeviceButtonEvent.Down:
+                            return 0x8;
+                        case IODeviceButtonEvent.Up:
+                            return 0x10;
+                    }
+                }
+                break;
+            case IODeviceButton.Keyboard:
+                {
+                    switch (handlingEvent)
+                    {
+                        case IODeviceButtonEvent.Down:
+                            return 0x0;
+                        case IODeviceButtonEvent.Up:
+                            return 0x2;
+                    }
+                }
+                break;
+        }
+
+        throw new NotImplementedException();
+    }
+
+    public enum IODeviceButton
+    {
+        MouseLeft,
+        MouseMiddle,
+        MouseRight,
+        Keyboard,
+    }
+    public enum IODeviceButtonEvent
+    {
+        Down,
+        Up,
+        WHEEL,
+    }
+
+
+    // ★★★★★★★★★★★★★★★ Keyboard Input Events
+
+    // キー操作、マウス操作をシミュレート(擬似的に操作する)
+    [DllImport("user32.dll")]
+    private extern static void SendInput(int nInputs, ref INPUT pInputs, int cbsize);
+
+
+
+    // ★★★★★★★★★★★★★★★ Mouse Move Events
+
+    [DllImport("USER32.dll", CallingConvention = CallingConvention.StdCall)]
+    static extern void SetCursorPos(int X, int Y);
+    public static void MouseMove(int x, int y) => SetCursorPos(x, y);
+
+
+
+    // ★★★★★★★★★★★★★★★ Mouse Click Events 
+
     [DllImport("USER32.dll", CallingConvention = CallingConvention.StdCall)]
     static extern void mouse_event(int dwFlags, int dx, int dy, int cButtons, int dwExtraInfo);
-    public static void MouseClick()
+    public static void MouseClick(IODeviceButton button = IODeviceButton.MouseLeft)
     {
-        mouse_event(MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0);
-        mouse_event(MOUSEEVENTF_LEFTUP, 0, 0, 0, 0);
+        mouse_event(GetInputEventCode(button, IODeviceButtonEvent.Down), 0, 0, 0, 0);
+        mouse_event(GetInputEventCode(button, IODeviceButtonEvent.Up), 0, 0, 0, 0);
     }
     public static void MouseDoubleClick()
     {
         MouseClick();
         MouseClick();
     }
+
 
     // ★★★★★★★★★★★★★★★ 未整理 採用予定
 
@@ -67,169 +134,60 @@ public class IODeviceExtension
     private extern static int MapVirtualKey(int wCode, int wMapType);
 
 
+
+
     // ★★★★★★★★★★★★★★★ 
 
 
-    //// マウスの右ボタンをクリックする
-    //private void button1_Click(object sender, EventArgs e)
-    //{
-    //    // 自ウインドウを非表示(マウス操作対象のウィンドウへフォーカスを移動するため)
-    //    this.Visible = false;
 
-    //    // マウス操作実行用のデータ
-    //    const int num = 3;
-    //    INPUT[] inp = new INPUT[num];
 
-    //    // (1)マウスカーソルを移動する(スクリーン座標でX座標=800ピクセル,Y=400ピクセルの位置)
-    //    inp[0].type = INPUT_MOUSE;
-    //    inp[0].mi.dwFlags = MOUSEEVENTF_MOVE | MOUSEEVENTF_ABSOLUTE;
-    //    inp[0].mi.dx = 800 * (65535 / Screen.PrimaryScreen.Bounds.Width);
-    //    inp[0].mi.dy = 400 * (65535 / Screen.PrimaryScreen.Bounds.Height);
-    //    inp[0].mi.mouseData = 0;
-    //    inp[0].mi.dwExtraInfo = 0;
-    //    inp[0].mi.time = 0;
 
-    //    // (2)マウスの右ボタンを押す
-    //    inp[1].type = INPUT_MOUSE;
-    //    inp[1].mi.dwFlags = MOUSEEVENTF_RIGHTDOWN;
-    //    inp[1].mi.dx = 0;
-    //    inp[1].mi.dy = 0;
-    //    inp[1].mi.mouseData = 0;
-    //    inp[1].mi.dwExtraInfo = 0;
-    //    inp[1].mi.time = 0;
 
-    //    // (3)マウスの右ボタンを離す
-    //    inp[2].type = INPUT_MOUSE;
-    //    inp[2].mi.dwFlags = MOUSEEVENTF_RIGHTUP;
-    //    inp[2].mi.dx = 0;
-    //    inp[2].mi.dy = 0;
-    //    inp[2].mi.mouseData = 0;
-    //    inp[2].mi.dwExtraInfo = 0;
-    //    inp[2].mi.time = 0;
 
-    //    // マウス操作実行
-    //    SendInput(num, ref inp[0], Marshal.SizeOf(inp[0]));
+    [StructLayout(LayoutKind.Sequential)]
+    private struct MOUSEINPUT
+    {
+        public int dx;
+        public int dy;
+        public int mouseData;
+        public int dwFlags;
+        public int time;
+        public int dwExtraInfo;
+    };
 
-    //    // 1000ミリ秒スリープ
-    //    System.Threading.Thread.Sleep(1000);
+    // キーボードイベント(keybd_eventの引数と同様のデータ)
+    [StructLayout(LayoutKind.Sequential)]
+    private struct KEYBDINPUT
+    {
+        public short wVk;
+        public short wScan;
+        public int dwFlags;
+        public int time;
+        public int dwExtraInfo;
+    };
 
-    //    // 自ウインドウを表示
-    //    this.Visible = true;
-    //}
+    // ハードウェアイベント
+    [StructLayout(LayoutKind.Sequential)]
+    private struct HARDWAREINPUT
+    {
+        public int uMsg;
+        public short wParamL;
+        public short wParamH;
+    };
 
-    //// マウスの左ボタンをダブルクリックする
-    //private void button2_Click(object sender, EventArgs e)
-    //{
-    //    // 自ウインドウを非表示(マウス操作対象のウィンドウへフォーカスを移動するため)
-    //    this.Visible = false;
-
-    //    // マウス操作実行用のデータ
-    //    const int num = 5;
-    //    INPUT[] inp = new INPUT[num];
-
-    //    // (1)マウスカーソルを移動する(スクリーン座標でX座標=800ピクセル,Y=400ピクセルの位置)
-    //    inp[0].type = INPUT_MOUSE;
-    //    inp[0].mi.dwFlags = MOUSEEVENTF_MOVE | MOUSEEVENTF_ABSOLUTE;
-    //    inp[0].mi.dx = 800 * (65535 / Screen.PrimaryScreen.Bounds.Width);
-    //    inp[0].mi.dy = 400 * (65535 / Screen.PrimaryScreen.Bounds.Height);
-    //    inp[0].mi.mouseData = 0;
-    //    inp[0].mi.dwExtraInfo = 0;
-    //    inp[0].mi.time = 0;
-
-    //    // (2)マウスの左ボタンを押す
-    //    inp[1].type = INPUT_MOUSE;
-    //    inp[1].mi.dwFlags = MOUSEEVENTF_LEFTDOWN;
-    //    inp[1].mi.dx = 0;
-    //    inp[1].mi.dy = 0;
-    //    inp[1].mi.mouseData = 0;
-    //    inp[1].mi.dwExtraInfo = 0;
-    //    inp[1].mi.time = 0;
-
-    //    // (3)マウスの左ボタンを離す
-    //    inp[2].type = INPUT_MOUSE;
-    //    inp[2].mi.dwFlags = MOUSEEVENTF_LEFTUP;
-    //    inp[2].mi.dx = 0;
-    //    inp[2].mi.dy = 0;
-    //    inp[2].mi.mouseData = 0;
-    //    inp[2].mi.dwExtraInfo = 0;
-    //    inp[2].mi.time = 0;
-
-    //    // マウス操作実行
-    //    SendInput(num, ref inp[0], Marshal.SizeOf(inp[0]));
-
-    //    // 1000ミリ秒スリープ
-    //    System.Threading.Thread.Sleep(1000);
-
-    //    // 自ウインドウを表示
-    //    this.Visible = true;
-    //}
-
-    //// マウスの中央ボタンをクリックする
-    //private void button3_Click(object sender, EventArgs e)
-    //{
-    //    // 自ウインドウを非表示(マウス操作対象のウィンドウへフォーカスを移動するため)
-    //    this.Visible = false;
-
-    //    // マウス操作実行用のデータ
-    //    const int num = 3;
-    //    INPUT[] inp = new INPUT[num];
-
-    //    // (1)マウスカーソルを移動する(スクリーン座標でX座標=800ピクセル,Y=400ピクセルの位置)
-    //    inp[0].type = INPUT_MOUSE;
-    //    inp[0].mi.dwFlags = MOUSEEVENTF_MOVE | MOUSEEVENTF_ABSOLUTE;
-    //    inp[0].mi.dx = 800 * (65535 / Screen.PrimaryScreen.Bounds.Width);
-    //    inp[0].mi.dy = 400 * (65535 / Screen.PrimaryScreen.Bounds.Height);
-    //    inp[0].mi.mouseData = 0;
-    //    inp[0].mi.dwExtraInfo = 0;
-    //    inp[0].mi.time = 0;
-
-    //    // (2)マウスの中央ボタンを押す
-    //    inp[1].type = INPUT_MOUSE;
-    //    inp[1].mi.dwFlags = MOUSEEVENTF_MIDDLEDOWN;
-    //    inp[1].mi.dx = 0;
-    //    inp[1].mi.dy = 0;
-    //    inp[1].mi.mouseData = 0;
-    //    inp[1].mi.dwExtraInfo = 0;
-    //    inp[1].mi.time = 0;
-
-    //    // (3)マウスの中央ボタンを離す
-    //    inp[2].type = INPUT_MOUSE;
-    //    inp[2].mi.dwFlags = MOUSEEVENTF_MIDDLEUP;
-    //    inp[2].mi.dx = 0;
-    //    inp[2].mi.dy = 0;
-    //    inp[2].mi.mouseData = 0;
-    //    inp[2].mi.dwExtraInfo = 0;
-    //    inp[2].mi.time = 0;
-
-    //    // マウス操作実行
-    //    SendInput(num, ref inp[0], Marshal.SizeOf(inp[0]));
-
-    //    // 1000ミリ秒スリープ
-    //    System.Threading.Thread.Sleep(1000);
-
-    //    // 自ウインドウを表示
-    //    this.Visible = true;
-    //}
+    // 各種イベント(SendInputの引数データ)
+    [StructLayout(LayoutKind.Explicit)]
+    private struct INPUT
+    {
+        [FieldOffset(0)] public int type;
+        [FieldOffset(4)] public MOUSEINPUT mi;
+        [FieldOffset(4)] public KEYBDINPUT ki;
+        [FieldOffset(4)] public HARDWAREINPUT hi;
+    };
 
     //// マウスホイールを回転する
     //private void button4_Click(object sender, EventArgs e)
     //{
-    //    // 自ウインドウを非表示(マウス操作対象のウィンドウへフォーカスを移動するため)
-    //    this.Visible = false;
-
-    //    // マウス操作実行用のデータ
-    //    const int num = 2;
-    //    INPUT[] inp = new INPUT[num];
-
-    //    // (1)マウスカーソルを移動する(スクリーン座標でX座標=800ピクセル,Y=400ピクセルの位置)
-    //    inp[0].type = INPUT_MOUSE;
-    //    inp[0].mi.dwFlags = MOUSEEVENTF_MOVE | MOUSEEVENTF_ABSOLUTE;
-    //    inp[0].mi.dx = 800 * (65535 / Screen.PrimaryScreen.Bounds.Width);
-    //    inp[0].mi.dy = 400 * (65535 / Screen.PrimaryScreen.Bounds.Height);
-    //    inp[0].mi.mouseData = 0;
-    //    inp[0].mi.dwExtraInfo = 0;
-    //    inp[0].mi.time = 0;
-
     //    // (2)マウスホイールを前方(近づく方向)へ回転する
     //    inp[1].type = INPUT_MOUSE;
     //    inp[1].mi.dwFlags = MOUSEEVENTF_WHEEL;
@@ -239,16 +197,6 @@ public class IODeviceExtension
     //    inp[1].mi.dwExtraInfo = 0;
     //    inp[1].mi.time = 0;
 
-    //    // マウス操作実行
-    //    SendInput(num, ref inp[0], Marshal.SizeOf(inp[0]));
-
-    //    // 1000ミリ秒スリープ
-    //    System.Threading.Thread.Sleep(1000);
-
-    //    // マウス操作実行用のデータ
-    //    const int nu2 = 1;
-    //    INPUT[] in2 = new INPUT[num];
-
     //    // (1)マウスホイールを後方(離れる方向)へ回転する
     //    in2[0].type = INPUT_MOUSE;
     //    in2[0].mi.dwFlags = MOUSEEVENTF_WHEEL;
@@ -257,27 +205,11 @@ public class IODeviceExtension
     //    in2[0].mi.mouseData = +1 * WHEEL_DELTA;
     //    in2[0].mi.dwExtraInfo = 0;
     //    in2[0].mi.time = 0;
-
-    //    // マウス操作実行
-    //    SendInput(nu2, ref in2[0], Marshal.SizeOf(in2[0]));
-
-    //    // 1000ミリ秒スリープ
-    //    System.Threading.Thread.Sleep(1000);
-
-    //    // 自ウインドウを表示
-    //    this.Visible = true;
     //}
 
     //// キーボードを押す
     //private void button5_Click(object sender, EventArgs e)
     //{
-    //    // 自ウインドウを非表示(キーボード操作対象のウィンドウへフォーカスを移動するため)
-    //    this.Visible = false;
-
-    //    // キーボード操作実行用のデータ
-    //    const int num = 4;
-    //    INPUT[] inp = new INPUT[num];
-
     //    // (1)キーボード(SHIFT)を押す
     //    inp[0].type = INPUT_KEYBOARD;
     //    inp[0].ki.wVk = VK_SHIFT;
@@ -310,15 +242,14 @@ public class IODeviceExtension
     //    inp[3].ki.dwExtraInfo = 0;
     //    inp[3].ki.time = 0;
 
-    //    // キーボード操作実行
-    //    SendInput(num, ref inp[0], Marshal.SizeOf(inp[0]));
-
-    //    // 1000ミリ秒スリープ
-    //    System.Threading.Thread.Sleep(1000);
-
-    //    // 自ウインドウを表示
-    //    this.Visible = true;
     //}
+
+
+
+
+
+
+
 
 
 }

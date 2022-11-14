@@ -199,8 +199,15 @@ public class Program
 
                 // 002 IODeviceExtension
                 {
+                    // Left Click
                     //IODeviceExtension.MouseMove(0, 0);
                     //IODeviceExtension.MouseClick();
+
+                    // Middle Click
+                    IODeviceExtension.MouseMove(4444, 100);
+                    IODeviceExtension.MouseClick(IODeviceExtension.IODeviceButton.MouseMiddle);
+
+
                 }
 
 
