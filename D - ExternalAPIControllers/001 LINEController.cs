@@ -1,7 +1,7 @@
 ﻿using System.Net.Http.Headers;
 
-namespace Aki32_Utilities.SeviceManagers;
-public class LINEManager
+namespace Aki32_Utilities.ExternalAPIControllers;
+public class LINEController
 {
     /// <summary>
     /// Obtain from https://notify-bot.line.me/my/
@@ -12,7 +12,7 @@ public class LINEManager
     /// constructor
     /// </summary>
     /// <param name="lineAccessToken"></param>
-    public LINEManager(string lineAccessToken)
+    public LINEController(string lineAccessToken)
     {
         LineAccessToken = lineAccessToken;
         //ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;

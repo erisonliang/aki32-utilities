@@ -1,6 +1,6 @@
 ﻿using Aki32_Utilities.Extensions;
 using Aki32_Utilities.OwesomeModels;
-using Aki32_Utilities.SeviceManagers;
+using Aki32_Utilities.ExternalAPIControllers;
 
 using System.Drawing;
 
@@ -253,13 +253,18 @@ public class Program
                 }
             }
 
-            // D ServiceManagers
+            // D ExternalAPIControllers
             {
-                // A LINEManager
+                // 001 LINEController
                 {
                     //var accessToken = ""; // LINE Notify
-                    //var line = new LINEManager(accessToken);
+                    //var line = new LINEController(accessToken);
                     //line.SendMessageAsync(@"Hello LINE from C#. 日本語");
+                }
+
+                // 002 GitController
+                {
+
                 }
             }
         }
