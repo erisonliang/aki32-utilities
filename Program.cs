@@ -15,7 +15,7 @@ public class Program
 
         // tests
         {
-            // A Extensions
+            // A Extensions (methods)
             {
                 var baseDir = @"..\..\..\# TestModel\A Extensions";
 
@@ -176,6 +176,21 @@ public class Program
 
             }
 
+            // B Extensions (class)
+            {
+                // B001 IODeviceExtension
+                {
+
+                }
+
+                // C001 ConsoleExtension
+                {
+
+                }
+            
+            
+            }
+
             // C OwesomeModels
             {
                 // A TimeHistoryModel
@@ -220,9 +235,9 @@ public class Program
             {
                 // A LINEManager
                 {
-                    var accessToken = ""; // LINE Notify
-                    var line = new LINEManager(accessToken);
-                    line.SendMessageAsync(@"Hello LINE from C#. 日本語");
+                    //var accessToken = ""; // LINE Notify
+                    //var line = new LINEManager(accessToken);
+                    //line.SendMessageAsync(@"Hello LINE from C#. 日本語");
                 }
             }
         }
