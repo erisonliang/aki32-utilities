@@ -1,5 +1,4 @@
-﻿using System.Text;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 
 namespace Aki32_Utilities.Extensions;
 public static partial class OwesomeExtensions

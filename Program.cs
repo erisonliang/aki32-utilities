@@ -139,7 +139,6 @@ public class Program
                     //input.ConvertImageColor_Loop(null, targetColors);
                 }
 
-
                 // F002 To2DArray, ToJaggedArray
                 {
                     //var inputData = new int[][]
@@ -166,6 +165,15 @@ public class Program
                     //Console.WriteLine("outputData2:");
                     //foreach (var line in outputData2)
                     //    Console.WriteLine(string.Join(", ", line.Select(x => $"{x,3}")));
+                }
+
+                // F003 Encrypt, Decrypt
+                {
+                    //var input = new FileInfo($@"{baseDir}\F003 Crypt\input.txt");
+                    //input
+                    //    .Encrypt(null, "aiueo")
+                    //    .Decrypt(null, "aiueo")
+                    //    ;
                 }
 
                 // G001 PDFPageCount
@@ -292,7 +300,7 @@ public class Program
                     //gc.Sync();
                 }
             }
-        
+
         }
 
         Console.WriteLine();
