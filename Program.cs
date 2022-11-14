@@ -218,8 +218,8 @@ public class Program
                     //IODeviceExtension.SendKey(ConsoleKey.V, withCtrl: true, withShift:true); // Ctrl+Shift+V
                     //IODeviceExtension.SendKey(ConsoleKey.E, withAlt: true); // Alt+E
                     //IODeviceExtension.SendKey(ConsoleKey.Spacebar, withShift: true, withAlt: true); // Alt Shift Space
-
                 }
+
             }
 
             // C OwesomeModels
@@ -259,6 +259,7 @@ public class Program
                         //    .FFT("x").Result
                         //    .SaveToCsv();
                     }
+
                 }
             }
 
@@ -290,8 +291,8 @@ public class Program
 
                     //gc.Sync();
                 }
-
             }
+        
         }
 
         Console.WriteLine();
