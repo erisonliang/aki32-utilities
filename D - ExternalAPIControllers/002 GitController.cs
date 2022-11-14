@@ -17,6 +17,10 @@ public class GitController
     public string RemotePath { get; set; }
     public string LocalRepoDirPath { get; set; }
     private Signature TempSignature { get; init; }
+
+    /// <summary>
+    /// go get from https://github.com/settings/tokens
+    /// </summary>
     public UsernamePasswordCredentials? Credentials { private get; set; }
     public Repository Repo { get; set; }
 
@@ -26,7 +30,7 @@ public class GitController
     {
         RemotePath = remotePath;
         LocalRepoDirPath = localPath;
-        if (string.IsNullOrEmpty(signatureName)||string.IsNullOrEmpty(signatureEmail))
+        if (string.IsNullOrEmpty(signatureName) || string.IsNullOrEmpty(signatureEmail))
             throw new UnauthorizedAccessException("signatureName and signatureEmail can not be empty");
         TempSignature = new Signature(signatureName, signatureEmail, DateTime.Now);
         Repo = GetUpToDateRepo();
@@ -150,7 +154,10 @@ public class GitController
         if (Credentials == null)
             throw new UnauthorizedAccessException("You need to fill GitController.Credentials to Push to remote repo!");
 
-        CredentialsHandler ch = (_url, _user, _cred) => Credentials;
+        CredentialsHandler ch = (_url, _user, _cred) =>
+        {
+            return Credentials;
+        };
 
         var options = new PushOptions()
         {

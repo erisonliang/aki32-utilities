@@ -273,23 +273,22 @@ public class Program
 
                 // 002 GitController
                 {
-                    var remotePath = $@"https://github.com/aki32/aki32-utilities"; // remote url
-                    var localPath = $@"C:\Users\aki32\Dropbox\PC\Desktop\repo"; // local path
-                    var signatureName = $@"aki32"; // your name
-                    var signatureEmail = $@"aki32.png@gmail.com"; // your email
+                    //var remotePath = $@"https://github.com/aki32/test"; // remote url
+                    //var localPath = $@"C:\Users\aki32\Dropbox\PC\Desktop\test"; // local path
+                    //var signatureName = $@"aki32"; // your name
+                    //var signatureEmail = $@"aki32@aaa"; // your email
 
-                    var gc = new GitController(remotePath, localPath, signatureName, signatureEmail)
-                    {
-                        Credentials = new LibGit2Sharp.UsernamePasswordCredentials
-                        {
-                            // your credidential info
-                            Username = "",
-                            Password = "",
+                    //var gc = new GitController(remotePath, localPath, signatureName, signatureEmail)
+                    //{
+                    //    Credentials = new LibGit2Sharp.UsernamePasswordCredentials
+                    //    {
+                    //        // your credidential info (obtainable from https://github.com/settings/tokens)
+                    //        Username = "",
+                    //        Password = "",
+                    //    },
+                    //};
 
-                        },
-                    };
-
-                    // gc.Sync();
+                    //gc.Sync();
                 }
 
             }
