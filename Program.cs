@@ -178,17 +178,32 @@ public class Program
 
             // B Extensions (class)
             {
-                // B001 IODeviceExtension
+                // 001 ConsoleExtension
                 {
+                    //var timer = new System.Timers.Timer(500);
 
+                    //var counter = 0;
+                    //var countUntil = 10;
+                    //timer.Elapsed += delegate
+                    //{
+                    //    ConsoleExtension.ClearCurrentConsoleLine();
+                    //    Console.Write(++counter);
+                    //    if (counter >= countUntil)
+                    //        timer.Stop();
+                    //};
+
+                    //timer.Start();
+                    //while (timer.Enabled) { }
+                    //Console.WriteLine();
                 }
 
-                // C001 ConsoleExtension
+                // 002 IODeviceExtension
                 {
-
+                    //IODeviceExtension.MouseMove(0, 0);
+                    //IODeviceExtension.MouseClick();
                 }
-            
-            
+
+
             }
 
             // C OwesomeModels

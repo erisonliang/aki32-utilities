@@ -3,7 +3,7 @@
 namespace Aki32_Utilities.Extensions;
 
 /// <summary>
-/// Mainly, syntax sugar for device IO OS commands.
+/// Mainly, syntax sugar of device IO OS commands.
 /// </summary>
 public class IODeviceExtension
 {
@@ -53,7 +53,11 @@ public class IODeviceExtension
         mouse_event(MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0);
         mouse_event(MOUSEEVENTF_LEFTUP, 0, 0, 0, 0);
     }
-
+    public static void MouseDoubleClick()
+    {
+        MouseClick();
+        MouseClick();
+    }
 
     // ★★★★★★★★★★★★★★★ 未整理 採用予定
 

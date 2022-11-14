@@ -33,8 +33,6 @@
 
   <ItemGroup>
     <Folder Include="A - Extensions %28method%29\H - Video\" />
-    <Folder Include="B - Extensions %28class%29\A - Base\" />
-    <Folder Include="B - Extensions %28class%29\D - WindowsFormApplication\" />
   </ItemGroup>
 
 </Project>
