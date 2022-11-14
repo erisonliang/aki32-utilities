@@ -199,18 +199,27 @@ public class Program
 
                 // 002 IODeviceExtension
                 {
-                    // Left Click
-                    //IODeviceExtension.MouseMove(0, 0);
+                    ////Mouse Move
+                    //IODeviceExtension.MouseMove(4600, 700);
+
+                    //// Mouse Left Click
                     //IODeviceExtension.MouseClick();
 
-                    // Middle Click
-                    IODeviceExtension.MouseMove(4444, 100);
-                    IODeviceExtension.MouseClick(IODeviceExtension.IODeviceButton.MouseMiddle);
+                    //// Mouse Wheel Click
+                    //IODeviceExtension.MouseClick(IODeviceExtension.IODeviceButton.MouseMiddle);
 
+                    //// Wheel Scroll
+                    //IODeviceExtension.MouseWheelScroll(true);
+
+                    ////Keyboard Input
+                    //IODeviceExtension.SendKeys("abc ABC"); // "abc ABC"
+                    //IODeviceExtension.SendKey(65); // "a"
+                    //IODeviceExtension.SendKey(ConsoleKey.V, withCtrl: true); // Ctrl+V
+                    //IODeviceExtension.SendKey(ConsoleKey.V, withCtrl: true, withShift:true); // Ctrl+Shift+V
+                    //IODeviceExtension.SendKey(ConsoleKey.E, withAlt: true); // Alt+E
+                    //IODeviceExtension.SendKey(ConsoleKey.Spacebar, withShift: true, withAlt: true); // Alt Shift Space
 
                 }
-
-
             }
 
             // C OwesomeModels
