@@ -157,6 +157,12 @@ public class Test
                     //input.Imgs2Video(null, 3);
                 }
 
+                // E005 ResizeImage
+                {
+                    //var input = new DirectoryInfo($@"{baseDir}\E006 ResizeImage");
+                    //input.ResizeImage_Loop(null, new Size(100, 100));
+                }
+
                 // F002 To2DArray, ToJaggedArray
                 {
                     //var inputData = new int[][]

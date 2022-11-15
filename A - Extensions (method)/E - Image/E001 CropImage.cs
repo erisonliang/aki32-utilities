@@ -19,11 +19,8 @@ public static partial class OwesomeExtensions
         // main
         try
         {
-            using (var inputImg = Image.FromFile(inputFile.FullName))
-            {
-                var img = CropImage(inputImg, crop);
-                img.Save(outputFile!.FullName);
-            }
+            var img = CropImage(inputFile, crop);
+            img.Save(outputFile!.FullName);
             if (UtilConfig.ConsoleOutput)
                 Console.WriteLine($"O: {inputFile.FullName}");
         }
@@ -124,9 +121,7 @@ public static partial class OwesomeExtensions
         public CropSize(double l, double t, double r, double b)
         {
             if (l < 0 && 1 < l)
-            {
                 throw new InvalidDataException("l, t, r, b must be in range [0.0, 1.0]");
-            }
 
             this.l = l;
             this.t = t;
