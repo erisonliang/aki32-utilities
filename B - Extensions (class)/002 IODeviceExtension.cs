@@ -154,7 +154,7 @@ public class IODeviceExtension
     public static Point GetMouseCursorPosition()
     {
         GetCursorPos(out var p);
-        return new PointF(p.X, p.Y);
+        return new Point(p.X, p.Y);
     }
     public struct POINT
     {

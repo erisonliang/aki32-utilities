@@ -16,7 +16,7 @@ public class MiniApps
     /// </summary>
     public static void Books2PDF()
     {
-        var lastPosition = new PointF(0, 0);
+        var lastPosition = new Point(0, 0);
 
         Console.WriteLine("★★★★★★★★★★★★★★★ 定義");
 
@@ -35,7 +35,7 @@ public class MiniApps
             "撮影対象の右上",
             "先送りボタン",
         };
-        var ps = new PointF[reasons.Length];
+        var ps = new Point[reasons.Length];
 
         for (int i = 0; i < reasons.Length; i++)
         {
@@ -62,23 +62,12 @@ public class MiniApps
         var BR = ps[1];
         var ProceedButton = ps[1];
 
-        if (UL.X >= BR.X || UL.Y >= BR.Y)
-        {
-            Console.WriteLine("左上座標と右下座標の選択が正しくありません。");
-            return;
-        }
-        if (ProceedButton.X == 0 && ProceedButton.Y == 0)
-        {
-            Console.WriteLine("ページ送りボタンの入力が正しくありません。");
-            return;
-        }
-
 
         Console.WriteLine("\r\n★★★★★★★★★★★★★★★ 撮影\r\n");
 
         Console.WriteLine("※未実装");
         Console.WriteLine("Altキー長押しで処理を中断します。");
-
+        //OwesomeExtensions.SaveScreenShot(output, new Point(0, 0), new Point(1000, 1000));
 
 
         Console.WriteLine("\r\n★★★★★★★★★★★★★★★ PDF化\r\n");
@@ -145,14 +134,6 @@ public class MiniApps
     //    }
 
     //    Inform("★★★★★ 処理終了（指定ページ数に到達）");
-    //}
-
-    //private void GetAndSaveScreenshot(Point ul, Point br, string saveFilePath)
-    //{
-    //    Bitmap bm = new Bitmap(br.X - ul.X, br.Y - ul.Y);
-    //    using (var g = Graphics.FromImage(bm))
-    //        g.CopyFromScreen(ul, new Point(0, 0), bm.Size);
-    //    bm.Save(saveFilePath, ImageFormat.Bmp);
     //}
 
 

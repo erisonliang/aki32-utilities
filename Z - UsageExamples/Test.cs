@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -140,14 +141,10 @@ public class Test
 
                 // E003 SaveScreenShot
                 {
-                    var output = new DirectoryInfo($@"{baseDir}\E003 SaveScreenShot");
+                    //var output = new DirectoryInfo($@"{baseDir}\E003 SaveScreenShot");
+                    //OwesomeExtensions.SaveScreenShot(output, new Point(0, 0), new Point(1000, 1000));
+                }
 
-
-
-
-
-                }  
-                
                 // E004 Imgs2PDF
                 {
                     //var input = new DirectoryInfo($@"{baseDir}\E004 Imgs2PDF, E005 Imgs2Video");
@@ -156,9 +153,8 @@ public class Test
 
                 // E005 Imgs2Video
                 {
-                    var input = new DirectoryInfo($@"{baseDir}\E004 Imgs2PDF, E005 Imgs2Video");
-                    
-                    input.Imgs2Video(null);
+                    //var input = new DirectoryInfo($@"{baseDir}\E004 Imgs2PDF, E005 Imgs2Video");
+                    //input.Imgs2Video(null);
 
                 }
 
