@@ -15,19 +15,22 @@ public static partial class OwesomeExtensions
 {
 
     /// <summary>
-    /// Imgs2PDF
+    /// Imgs2Video
     ///  - Currently png only
     /// </summary>
     /// <param name="inputDir"></param>
-    /// <param name="outputFile">when null, automatically set to {inputDir.FullName}/output_Imgs2PDF/output.pdf</param>
+    /// <param name="outputFile">when null, automatically set to {inputDir.FullName}/output_Imgs2PDF/output.mp4</param>
     /// <returns></returns>
-    public static FileInfo Imgs2PDF(this DirectoryInfo inputDir, FileInfo? outputFile)
+    public static FileInfo Imgs2Video(this DirectoryInfo inputDir, FileInfo? outputFile)
     {
+        throw new NotImplementedException();
+
+
         // preprocess
         if (UtilConfig.ConsoleOutput) Console.WriteLine("\r\n(This takes time...)");
-        UtilPreprocessors.PreprocessOutFile(ref outputFile, true, inputDir!, "output.pdf");
-        if (!outputFile!.Name.EndsWith(".pdf"))
-            throw new Exception("outputFile name must end with .pdf");
+        UtilPreprocessors.PreprocessOutFile(ref outputFile, true, inputDir!, "output.mp4");
+        if (!outputFile!.Name.EndsWith(".mp4"))
+            throw new Exception("outputFile name must end with .mp4");
 
 
         // main

@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 
 using Aki32_Utilities.Extensions;
 
+using DocumentFormat.OpenXml.Presentation;
+
 namespace Aki32_Utilities;
 public class Test
 {
@@ -148,17 +150,15 @@ public class Test
                 
                 // E004 Imgs2PDF
                 {
-                    var input = new DirectoryInfo($@"{baseDir}\E004 Imgs2PDF, E005 Imgs2Video");
-                    input.Imgs2PDF(null);
+                    //var input = new DirectoryInfo($@"{baseDir}\E004 Imgs2PDF, E005 Imgs2Video");
+                    //input.Imgs2PDF(null);
                 }
 
                 // E005 Imgs2Video
                 {
                     var input = new DirectoryInfo($@"{baseDir}\E004 Imgs2PDF, E005 Imgs2Video");
-
-
-
-
+                    
+                    input.Imgs2Video(null);
 
                 }
 
