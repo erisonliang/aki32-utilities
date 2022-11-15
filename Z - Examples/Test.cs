@@ -5,9 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Aki32_Utilities;
-public partial class Program
+public class Test
 {
-    static void Test()
+    public static void All()
     {
         {
             // A Extensions (methods)
@@ -202,19 +202,19 @@ public partial class Program
 
                 // 002 IODeviceExtension
                 {
-                    //// Move Mouse Cursor 
+                    //// ★ Move Mouse Cursor 
                     //IODeviceExtension.MouseCursorMoveTo(4600, 700);
 
-                    //// Mouse Left Click
+                    //// ★ Mouse Left Click
                     //IODeviceExtension.MouseClick();
 
-                    //// Mouse Wheel Click
+                    //// ★ Mouse Wheel Click
                     //IODeviceExtension.MouseClick(IODeviceExtension.IODeviceButton.MouseMiddle);
 
-                    //// Wheel Scroll
+                    //// ★ Wheel Scroll
                     //IODeviceExtension.MouseWheelScroll(true);
 
-                    ////Keyboard Input
+                    //// ★ Keyboard Input
                     //IODeviceExtension.SendKeys("abc ABC"); // "abc ABC"
                     //IODeviceExtension.SendKey(65); // "a"
                     //IODeviceExtension.SendKey(ConsoleKey.V, withCtrl: true); // Ctrl+V
@@ -222,8 +222,8 @@ public partial class Program
                     //IODeviceExtension.SendKey(ConsoleKey.E, withAlt: true); // Alt+E
                     //IODeviceExtension.SendKey(ConsoleKey.Spacebar, withShift: true, withAlt: true); // Alt Shift Space
 
-
-                    //// Get Mouse Cursor Position 
+                    //// ★ Get Mouse Cursor Position 
+                    //Console.WriteLine($"Move mouse cursor and press enter to decide");
                     //Console.CursorVisible = false;
                     //while (!Console.KeyAvailable)
                     //{
@@ -233,6 +233,7 @@ public partial class Program
                     //    Thread.Sleep(10);
                     //}
                     //Console.CursorVisible = true;
+                    //Console.ReadLine();
 
                 }
 
@@ -244,7 +245,7 @@ public partial class Program
                 {
                     var baseDir = @"..\..\..\# TestModel\C OwesomeModels\A TimeHistoryModel";
 
-                    // TimeHistory
+                    // ★ TimeHistory
                     {
                         //var th = new TimeHistory();
                         //th["A"] = new double[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
@@ -267,7 +268,7 @@ public partial class Program
 
                     }
 
-                    // FFT
+                    // ★ FFT
                     {
                         //var input = new FileInfo($@"{baseDir}\FFT\input.csv");
                         //TimeHistory

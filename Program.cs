@@ -15,8 +15,8 @@ public partial class Program
         Console.WriteLine();
 
 
-        Test();
-        MiniApps.Books2PDF();
+        Test.All();
+        //MiniApps.Books2PDF();
 
 
         Console.WriteLine();
