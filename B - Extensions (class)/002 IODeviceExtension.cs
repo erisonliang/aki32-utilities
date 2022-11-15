@@ -151,7 +151,7 @@ public class IODeviceExtension
 
     [DllImport("user32.dll")]
     static extern bool GetCursorPos(out POINT lpPoint);
-    public static PointF GetMouseCursorPosition()
+    public static Point GetMouseCursorPosition()
     {
         GetCursorPos(out var p);
         return new PointF(p.X, p.Y);
