@@ -15,8 +15,7 @@ public static partial class OwesomeExtensions
 {
 
     /// <summary>
-    /// Imgs2PDF
-    ///  - Currently png only
+    /// Imgs2PDF (currently, png to pdf only)
     /// </summary>
     /// <param name="inputDir"></param>
     /// <param name="outputFile">when null, automatically set to {inputDir.FullName}/output_Imgs2PDF/output.pdf</param>

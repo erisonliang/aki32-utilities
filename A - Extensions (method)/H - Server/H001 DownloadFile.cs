@@ -18,7 +18,7 @@ public static partial class OwesomeExtensions
     /// <param name="outputFile">not nullable</param>
     /// <param name="url">where download a file from</param>
     /// <returns></returns>
-    public static FileInfo DownloadFile(this FileInfo outputFile, Uri url)
+    public static FileInfo DownloadFileSync(this FileInfo outputFile, Uri url)
     {
         // preprocess
         UtilPreprocessors.PreprocessBasic(true, takesTimeFlag: true);
