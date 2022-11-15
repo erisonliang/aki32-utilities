@@ -1,4 +1,5 @@
-﻿using System.Runtime.InteropServices;
+﻿using System.Drawing;
+using System.Runtime.InteropServices;
 
 namespace Aki32_Utilities.Extensions;
 
@@ -146,11 +147,27 @@ public class IODeviceExtension
     }
 
 
-    // ★★★★★★★★★★★★★★★ Mouse Move Events
+    // ★★★★★★★★★★★★★★★ Get Mouse Cursor Position
+
+    [DllImport("user32.dll")]
+    static extern bool GetCursorPos(out POINT lpPoint);
+    public static PointF GetMouseCursorPosition()
+    {
+        GetCursorPos(out var p);
+        return new PointF(p.X, p.Y);
+    }
+    public struct POINT
+    {
+        public int X;
+        public int Y;
+    }
+
+
+    // ★★★★★★★★★★★★★★★ Move Mouse Cursor
 
     [DllImport("USER32.dll", CallingConvention = CallingConvention.StdCall)]
     static extern void SetCursorPos(int X, int Y);
-    public static void MouseMove(int x, int y) => SetCursorPos(x, y);
+    public static void MouseCursorMoveTo(int x, int y) => SetCursorPos(x, y);
 
 
     // ★★★★★★★★★★★★★★★ Mouse Input Events 
