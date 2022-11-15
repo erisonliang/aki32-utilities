@@ -48,11 +48,9 @@ public class Test
                     //var output = new DirectoryInfo($@"{baseDir}\B004 CopyTo\output");
                     //input.CopyTo(output);
 
-
                     // file
                     //var input = new FileInfo($@"{baseDir}\B004 CopyTo\a.txt");
                     //input.CopyTo();
-
                 }
 
                 // B005 RenameFiles
