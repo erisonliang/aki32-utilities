@@ -34,13 +34,23 @@ public static partial class OwesomeExtensions
 
 
         // main
-        using var doc = new Document();
-        PdfWriter.GetInstance(doc, new FileStream(outputFile.FullName, FileMode.Create));
-
         var pngFIs = inputDir
             .GetFiles("*.png", SearchOption.TopDirectoryOnly)
             .Sort()
             .ToArray();
+
+
+
+
+
+
+
+
+
+
+
+        using var doc = new Document();
+        PdfWriter.GetInstance(doc, new FileStream(outputFile.FullName, FileMode.Create));
 
         foreach (var pngFI in pngFIs)
         {
