@@ -12,7 +12,7 @@ public static partial class OwesomeExtensions
     public static void OrganizeDropBoxJuncFiles(this DirectoryInfo inputDir)
     {
         // preprocess
-        UtilPreprocessors.PreprocessBasic("OrganizeDropBoxJuncFiles", true);
+        UtilPreprocessors.PreprocessBasic(true);
 
 
         // main

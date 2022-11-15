@@ -24,8 +24,7 @@ public static partial class OwesomeExtensions
     public static FileInfo Imgs2PDF(this DirectoryInfo inputDir, FileInfo? outputFile)
     {
         // preprocess
-        if (UtilConfig.ConsoleOutput) Console.WriteLine("\r\n(This takes time...)");
-        UtilPreprocessors.PreprocessOutFile(ref outputFile, true, inputDir!, "output.pdf");
+        UtilPreprocessors.PreprocessOutFile(ref outputFile, true, inputDir!, "output.pdf", takesTimeFlag: true);
         if (!outputFile!.Name.EndsWith(".pdf"))
             throw new Exception("outputFile name must end with .pdf");
 

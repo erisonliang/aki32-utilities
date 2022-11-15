@@ -12,7 +12,7 @@ public static partial class OwesomeExtensions
     public static void OrganizeMacOsJuncFiles(this DirectoryInfo inputDir)
     {
         // preprocess
-        UtilPreprocessors.PreprocessBasic("OrganizeMacOsJuncFiles", true);
+        UtilPreprocessors.PreprocessBasic(true);
 
 
         // main

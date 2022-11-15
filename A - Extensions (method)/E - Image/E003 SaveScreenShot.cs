@@ -21,6 +21,9 @@ public static partial class OwesomeExtensions
     /// <returns></returns>
     public static FileInfo SaveScreenShot(this FileInfo outputFile, Point upperLeftCoordinate, Point bottomRightCoordinate)
     {
+        // preprocess
+        UtilPreprocessors.PreprocessBasic(false);
+
         // main
         var ul = upperLeftCoordinate;
         var br = bottomRightCoordinate;

@@ -27,7 +27,7 @@ public static partial class OwesomeExtensions
     public static DirectoryInfo RenameFiles_AppendAndReplace(this DirectoryInfo targetDir, string pattern, params (string from, string to)[] replaceSet)
     {
         // preprocess
-        UtilPreprocessors.PreprocessBasic("RenameFiles", true);
+        UtilPreprocessors.PreprocessBasic(true);
         if (!pattern.Contains("*"))
             throw new InvalidOperationException("\"pattern\" must contain \"*\"");
 

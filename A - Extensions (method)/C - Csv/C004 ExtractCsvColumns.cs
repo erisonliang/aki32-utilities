@@ -60,8 +60,7 @@ public static partial class OwesomeExtensions
     public static DirectoryInfo ExtractCsvColumns_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir, int[] extractingColumns, int skipRowCount = 0, string? header = null)
     {
         // preprocess
-        if (UtilConfig.ConsoleOutput) Console.WriteLine("\r\n(This takes time...)");
-        UtilPreprocessors.PreprocessOutDir(ref outputDir, true, inputDir);
+        UtilPreprocessors.PreprocessOutDir(ref outputDir, true, inputDir, takesTimeFlag: true);
 
 
         // main
@@ -98,8 +97,7 @@ public static partial class OwesomeExtensions
     public static DirectoryInfo ExtractCsvColumns_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir, int skipRowCount = 0, params (string name, int[] extractingColumns, string? header)[] targets)
     {
         // preprocess
-        if (UtilConfig.ConsoleOutput) Console.WriteLine("\r\n(This takes time...)");
-        UtilPreprocessors.PreprocessOutDir(ref outputDir, true, inputDir);
+        UtilPreprocessors.PreprocessOutDir(ref outputDir, true, inputDir, takesTimeFlag: true);
 
 
         // main

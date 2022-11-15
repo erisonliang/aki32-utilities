@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO.Compression;
 using System.Linq;
+using System.Net;
 using System.Net.NetworkInformation;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-
 
 using OpenCvSharp;
 
@@ -34,12 +34,21 @@ public static partial class OwesomeExtensions
         )
     {
         // preprocess
-        if (UtilConfig.ConsoleOutput) Console.WriteLine("\r\n(This takes time...)");
-        UtilPreprocessors.PreprocessOutFile(ref outputFile, true, inputDir!, "output.avi");
+        UtilPreprocessors.PreprocessOutFile(ref outputFile, true, inputDir!, "output.avi", takesTimeFlag: true);
         if (!outputFile!.Name.EndsWith(".avi"))
             throw new Exception("outputFile name must end with .avi");
 
-        Console.WriteLine("To use Imgs2Video method, you need to put openh264-*.dll to executable folder!!!");
+        // force install openh264-*.dll (To use Imgs2Video method, you need to put openh264-*.dll to executable folder!!!)
+        if (!File.Exists("openh264-1.8.0-win64.dll"))
+        {
+            DownloadFile(
+                new FileInfo("openh264-1.8.0-win64.dll"),
+                new Uri("https://github.com/aki32/aki32-utilities/raw/main/Properties/openh264-1.8.0-win64.dll"));
+
+            //using var wc = new WebClient();
+            //wc.DownloadFile("https://github.com/aki32/aki32-utilities/raw/main/Properties/openh264-1.8.0-win64.dll", @"openh264-1.8.0-win64.dll");
+        }
+
 
         // main
         var pngFiles = inputDir

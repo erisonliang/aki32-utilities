@@ -15,7 +15,7 @@ public static partial class OwesomeExtensions
     public static int PDFPageCount(this FileInfo inputFile, bool initialConsoleOutput = true, bool resultConsoleOutput = true)
     {
         // preprocess
-        UtilPreprocessors.PreprocessBasic("PDFPageCount", false);
+        UtilPreprocessors.PreprocessBasic(false);
 
 
         // main
@@ -78,8 +78,8 @@ public static partial class OwesomeExtensions
     public static int[] PDFPageCount(this DirectoryInfo inputDir, bool topDirectoryOnly = false, bool ConsoleOutput = true)
     {
         // preprocess
-        UtilPreprocessors.PreprocessBasic("PDFPageCount", true);
-
+        UtilPreprocessors.PreprocessBasic(true);
+            
 
         // main
         var pageList = new List<int>();

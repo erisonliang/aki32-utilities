@@ -8,10 +8,11 @@ public static class UtilPreprocessors
         ref DirectoryInfo? outputDirReference,
         bool consoleOut,
         DirectoryInfo targetOutputDirWhenNull,
-        [CallerMemberName] string methodName = ""
+        [CallerMemberName] string methodName = "",
+          bool takesTimeFlag = false
         )
     {
-        PreprocessBasic(methodName, consoleOut);
+        PreprocessBasic(consoleOut, methodName: methodName, takesTimeFlag: takesTimeFlag);
 
         // outputDir initialize
         if (outputDirReference is null)
@@ -31,10 +32,11 @@ public static class UtilPreprocessors
           bool consoleOut,
           DirectoryInfo targetOutputDirWhenNull,
           string fileNameCandidate,
-          [CallerMemberName] string methodName = ""
+          [CallerMemberName] string methodName = "",
+          bool takesTimeFlag = false
           )
     {
-        PreprocessBasic(methodName, consoleOut);
+        PreprocessBasic(consoleOut, methodName: methodName, takesTimeFlag: takesTimeFlag);
 
         // outputFile initialize
         if (outputFileReference is null)
@@ -51,11 +53,14 @@ public static class UtilPreprocessors
         if (outputFileReference.Exists) outputFileReference.Delete();
     }
 
-    public static void PreprocessBasic(string methodName, bool consoleOut)
+    public static void PreprocessBasic(bool consoleOut,
+        [CallerMemberName] string methodName = "",
+        bool takesTimeFlag = false
+        )
     {
         // ConsoleOut
         if (UtilConfig.ConsoleOutput && consoleOut)
-            Console.WriteLine($"\r\n** {methodName} Method Called");
+            Console.WriteLine($"\r\n** {methodName} Method Called{(takesTimeFlag ? " (* This is time-consuming method. Please be patient...)" : "")}");
 
         Encoding.RegisterProvider(CodePagesEncodingProvider.Instance); // to handle Shift-JIS
     }

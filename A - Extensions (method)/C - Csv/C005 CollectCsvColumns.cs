@@ -153,8 +153,7 @@ public static partial class OwesomeExtensions
     public static DirectoryInfo CollectCsvColumns_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir, int skipRowCount, params (string name, int? initialColumn, int targetColumn)[] targets)
     {
         // preprocess
-        if (UtilConfig.ConsoleOutput) Console.WriteLine("(This takes time...)");
-        UtilPreprocessors.PreprocessOutDir(ref outputDir, false, inputDir);
+        UtilPreprocessors.PreprocessOutDir(ref outputDir, false, inputDir, takesTimeFlag: true);
         if (inputDir.FullName == outputDir!.FullName)
             throw new InvalidOperationException("※ inputDir and outputDir must be different");
 

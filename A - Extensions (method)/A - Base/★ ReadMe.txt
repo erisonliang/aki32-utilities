@@ -17,11 +17,11 @@ Check follows before move out of 999.
 
  - return FileInfo or DirectoryInfo if possible
  
+ - all preprocess looks good
+
  - accept null in outputFile
 
- - all console.writeline() flow looks good
-
- - all preprocess looks good
+ - not using async ideally
 
 
 ★★★★★
