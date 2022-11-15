@@ -1,5 +1,7 @@
 ﻿
 
+using static Microsoft.FSharp.Core.ByRefKinds;
+
 namespace Aki32_Utilities.Extensions;
 public static partial class OwesomeExtensions
 {
@@ -10,21 +12,14 @@ public static partial class OwesomeExtensions
     /// <param name="inputDir"></param>
     /// <param name="outputDir">must not to be null</param>
     /// <returns></returns>
-    public static DirectoryInfo CopyTo(this DirectoryInfo inputDir, DirectoryInfo outputDir, bool consoleOutput = true)
+    public static DirectoryInfo CopyTo(this DirectoryInfo inputDir, DirectoryInfo? outputDir, bool consoleOutput = true)
     {
         // preprocess
-        if (outputDir is null)
-            throw new ArgumentNullException(nameof(outputDir));
-        UtilPreprocessors.PreprocessOutDir(ref outputDir, consoleOutput, null);
+        UtilPreprocessors.PreprocessOutDir(ref outputDir, consoleOutput, inputDir.Parent!);
 
 
         // main
-        // create new directory with the same attribtues
-        if (!outputDir.Exists)
-        {
-            outputDir.Create();
-            outputDir.Attributes = inputDir.Attributes;
-        }
+        outputDir.Attributes = inputDir.Attributes;
 
         // copy files (with overriding existing files)
         foreach (FileInfo fileInfo in inputDir.GetFiles())
@@ -41,24 +36,33 @@ public static partial class OwesomeExtensions
 
     /// <summary>
     /// copy a file
+    /// ※ CopyTo(null) call default CopyTo... You can use CopyTo() here.
     /// </summary>
     /// <param name="inputFile"></param>
     /// <param name="outputFile"></param>
     /// <returns></returns>
-    public static FileInfo CopyTo(this FileInfo inputFile, FileInfo outputFile)
+    public static FileInfo CopyTo(this FileInfo inputFile, FileInfo? outputFile)
     {
         // preprocess
-        if (outputFile is null)
-            throw new ArgumentNullException(nameof(outputFile));
-        UtilPreprocessors.PreprocessOutFile(ref outputFile, false, null, null);
+        UtilPreprocessors.PreprocessOutFile(ref outputFile, false, inputFile.Directory!, inputFile.Name);
 
 
         // main
-        inputFile.CopyTo(outputFile.FullName, true);
+        inputFile.CopyTo(outputFile!.FullName, true);
 
 
         // post process
         return outputFile;
+    }
+
+    /// <summary>
+    /// copy a file, infer output path
+    /// </summary>
+    /// <param name="inputFile"></param>
+    /// <returns></returns>
+    public static FileInfo CopyTo(this FileInfo inputFile)
+    {
+        return inputFile.CopyTo(outputFile: null);
     }
 
 }
