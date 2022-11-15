@@ -66,7 +66,4 @@ public static partial class OwesomeExtensions
         return outputFile!;
     }
 
-
-    // ★★★★★★★★★★★★★★★
-
 }
