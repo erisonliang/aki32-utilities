@@ -18,9 +18,9 @@ public class Test
 
                 // B001 CollectFiles
                 {
-                    var input = new DirectoryInfo($@"{baseDir}\B001 CollectFiles\input");
-                    input.CollectFiles(null, @"^.*a\.txt$");
-                    //input.CollectFiles(null, @"^[0-9]*\\a\.txt$");
+                    //var input = new DirectoryInfo($@"{baseDir}\B001 CollectFiles\input");
+                    //input.CollectFiles(null, @"^.*a\.txt$");
+                    ////input.CollectFiles(null, @"^[0-9]*\\a\.txt$");
                 }
 
                 // B002 MakeFilesFromCsv
@@ -148,17 +148,13 @@ public class Test
                 
                 // E004 Imgs2PDF
                 {
-                    var input = new DirectoryInfo($@"{baseDir}\E004 Imgs2PDF, E005 Imgs2Video\input");
-
-
-
-
-
+                    var input = new DirectoryInfo($@"{baseDir}\E004 Imgs2PDF, E005 Imgs2Video");
+                    input.Imgs2PDF(null);
                 }
 
                 // E005 Imgs2Video
                 {
-                    var input = new DirectoryInfo($@"{baseDir}\E004 Imgs2PDF, E005 Imgs2Video\input");
+                    var input = new DirectoryInfo($@"{baseDir}\E004 Imgs2PDF, E005 Imgs2Video");
 
 
 
