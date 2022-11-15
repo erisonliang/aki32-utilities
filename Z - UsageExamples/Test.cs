@@ -153,8 +153,8 @@ public class Test
 
                 // E005 Imgs2Video
                 {
-                    var input = new DirectoryInfo($@"{baseDir}\E005 Imgs2Video");
-                    input.Imgs2Video(null, 400, 200, 3);
+                    //var input = new DirectoryInfo($@"{baseDir}\E005 Imgs2Video");
+                    //input.Imgs2Video(null, 3);
                 }
 
                 // F002 To2DArray, ToJaggedArray
