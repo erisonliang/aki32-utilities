@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using Aki32_Utilities.Extensions;
+
 namespace Aki32_Utilities;
 public class Test
 {
@@ -16,9 +18,9 @@ public class Test
 
                 // B001 CollectFiles
                 {
-                    //var input = new DirectoryInfo($@"{baseDir}\B001 CollectFiles\input");
-                    //input.CollectFiles(null, @"^.*a\.txt$");
-                    ////input.CollectFiles(null, @"^[0-9]*\\a\.txt$");
+                    var input = new DirectoryInfo($@"{baseDir}\B001 CollectFiles\input");
+                    input.CollectFiles(null, @"^.*a\.txt$");
+                    //input.CollectFiles(null, @"^[0-9]*\\a\.txt$");
                 }
 
                 // B002 MakeFilesFromCsv
@@ -132,6 +134,36 @@ public class Test
                     //input.ConvertImageColor(null, Color.White);
                     //input.ConvertImageColor_Loop(null, targetInfos);
                     //input.ConvertImageColor_Loop(null, targetColors);
+                }
+
+                // E003 SaveScreenShot
+                {
+                    var output = new DirectoryInfo($@"{baseDir}\E003 SaveScreenShot");
+
+
+
+
+
+                }  
+                
+                // E004 Imgs2PDF
+                {
+                    var input = new DirectoryInfo($@"{baseDir}\E004 Imgs2PDF, E005 Imgs2Video\input");
+
+
+
+
+
+                }
+
+                // E005 Imgs2Video
+                {
+                    var input = new DirectoryInfo($@"{baseDir}\E004 Imgs2PDF, E005 Imgs2Video\input");
+
+
+
+
+
                 }
 
                 // F002 To2DArray, ToJaggedArray

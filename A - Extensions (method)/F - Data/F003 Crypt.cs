@@ -24,7 +24,7 @@ public static partial class OwesomeExtensions
     public static FileInfo Encrypt(this FileInfo inputFile, FileInfo? outputFile, string password)
     {
         // preprocess
-        UtilPreprocessors.PreprocessOutFile(ref outputFile, "Encrypt", false, inputFile.Directory!, inputFile.Name);
+        UtilPreprocessors.PreprocessOutFile(ref outputFile, false, inputFile.Directory!, inputFile.Name);
 
 
         // main
@@ -69,7 +69,7 @@ public static partial class OwesomeExtensions
     public static DirectoryInfo Encrypt_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir, string password)
     {
         // preprocess
-        UtilPreprocessors.PreprocessOutDir(ref outputDir, "Encrypt", true, inputDir);
+        UtilPreprocessors.PreprocessOutDir(ref outputDir, true, inputDir);
 
 
         // main
@@ -107,7 +107,7 @@ public static partial class OwesomeExtensions
     public static FileInfo Decrypt(this FileInfo inputFile, FileInfo? outputFile, string password)
     {
         // preprocess
-        UtilPreprocessors.PreprocessOutFile(ref outputFile, "Decrypt", false, inputFile.Directory!, inputFile.Name);
+        UtilPreprocessors.PreprocessOutFile(ref outputFile, false, inputFile.Directory!, inputFile.Name);
 
 
         // main
@@ -152,7 +152,7 @@ public static partial class OwesomeExtensions
     public static DirectoryInfo Decrypt_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir, string password)
     {
         // preprocess
-        UtilPreprocessors.PreprocessOutDir(ref outputDir, "Decrypt", true, inputDir);
+        UtilPreprocessors.PreprocessOutDir(ref outputDir, true, inputDir);
 
 
         // main

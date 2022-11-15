@@ -16,7 +16,7 @@ public static partial class OwesomeExtensions
     public static FileInfo TransposeCsv(this FileInfo inputFile, FileInfo? outputFile, int skipColumnCount = 0, int skipRowCount = 0, string? header = null)
     {
         // preprocess
-        UtilPreprocessors.PreprocessOutFile(ref outputFile, "TransposeCsv", false, inputFile.Directory!, inputFile.Name);
+        UtilPreprocessors.PreprocessOutFile(ref outputFile, false, inputFile.Directory!, inputFile.Name);
 
 
         // main
@@ -35,7 +35,7 @@ public static partial class OwesomeExtensions
     public static DirectoryInfo TransposeCsv_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir, int skipColumnCount = 0, int skipRowCount = 0, string? header = null)
     {
         // preprocess
-        UtilPreprocessors.PreprocessOutDir(ref outputDir, "TransposeCsv", true, inputDir);
+        UtilPreprocessors.PreprocessOutDir(ref outputDir, true, inputDir);
 
 
         // main

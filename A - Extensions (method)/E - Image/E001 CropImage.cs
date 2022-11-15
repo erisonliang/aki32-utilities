@@ -14,7 +14,7 @@ public static partial class OwesomeExtensions
     public static FileInfo CropImage(this FileInfo inputFile, FileInfo? outputFile, CropSize crop)
     {
         // preprocess
-        UtilPreprocessors.PreprocessOutFile(ref outputFile, "CropImage", false, inputFile.Directory!, $"{Path.GetFileNameWithoutExtension(inputFile.Name)} - {crop.ToString()}.png");
+        UtilPreprocessors.PreprocessOutFile(ref outputFile, false, inputFile.Directory!, $"{Path.GetFileNameWithoutExtension(inputFile.Name)} - {crop.ToString()}.png");
 
         // main
         try
@@ -48,7 +48,7 @@ public static partial class OwesomeExtensions
     public static DirectoryInfo CropImage(this FileInfo inputFile, DirectoryInfo? outputDir, CropSize[] crops)
     {
         // preprocess
-        UtilPreprocessors.PreprocessOutDir(ref outputDir, "CropImage", false, inputFile.Directory!);
+        UtilPreprocessors.PreprocessOutDir(ref outputDir, false, inputFile.Directory!);
 
 
         // main
@@ -72,7 +72,7 @@ public static partial class OwesomeExtensions
     public static DirectoryInfo CropImage_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir, CropSize crop)
     {
         // preprocess
-        UtilPreprocessors.PreprocessOutDir(ref outputDir, "CropImage", true, inputDir!);
+        UtilPreprocessors.PreprocessOutDir(ref outputDir, true, inputDir!);
 
 
         // main

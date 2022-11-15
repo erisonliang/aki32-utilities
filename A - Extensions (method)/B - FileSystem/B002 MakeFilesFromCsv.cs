@@ -14,7 +14,7 @@ public static partial class OwesomeExtensions
     public static DirectoryInfo MakeFilesFromCsv(this FileInfo inputFile, DirectoryInfo? outputDir, FileInfo templateFile)
     {
         // preprocess
-        UtilPreprocessors.PreprocessOutDir(ref outputDir, "MakeFilesFromCsv", true, inputFile.Directory!);
+        UtilPreprocessors.PreprocessOutDir(ref outputDir, true, inputFile.Directory!);
 
 
         // main
@@ -53,7 +53,7 @@ public static partial class OwesomeExtensions
     public static DirectoryInfo MakeDirsFromCsv(this FileInfo inputFile, DirectoryInfo? outputDir, DirectoryInfo templateDir = null)
     {
         // preprocess
-        UtilPreprocessors.PreprocessOutDir(ref outputDir, "MakeFilesFromCsv", true, inputFile.Directory!);
+        UtilPreprocessors.PreprocessOutDir(ref outputDir, true, inputFile.Directory!);
 
 
         // main

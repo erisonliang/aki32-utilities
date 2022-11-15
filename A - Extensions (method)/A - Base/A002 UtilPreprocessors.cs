@@ -1,13 +1,15 @@
-﻿using System.Text;
+﻿using System.Runtime.CompilerServices;
+using System.Text;
 
 namespace Aki32_Utilities.Extensions;
 public static class UtilPreprocessors
 {
     public static void PreprocessOutDir(
         ref DirectoryInfo? outputDirReference,
-        string methodName,
         bool consoleOut,
-        DirectoryInfo targetOutputDirWhenNull)
+        DirectoryInfo targetOutputDirWhenNull,
+        [CallerMemberName] string methodName = ""
+        )
     {
         PreprocessBasic(methodName, consoleOut);
 
@@ -26,10 +28,11 @@ public static class UtilPreprocessors
 
     public static void PreprocessOutFile(
           ref FileInfo? outputFileReference,
-          string methodName,
           bool consoleOut,
           DirectoryInfo targetOutputDirWhenNull,
-          string fileNameCandidate)
+          string fileNameCandidate,
+          [CallerMemberName] string methodName = ""
+          )
     {
         PreprocessBasic(methodName, consoleOut);
 

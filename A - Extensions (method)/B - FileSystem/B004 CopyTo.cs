@@ -15,7 +15,7 @@ public static partial class OwesomeExtensions
         // preprocess
         if (outputDir is null)
             throw new ArgumentNullException(nameof(outputDir));
-        UtilPreprocessors.PreprocessOutDir(ref outputDir, "CopyTo", consoleOutput, null);
+        UtilPreprocessors.PreprocessOutDir(ref outputDir, consoleOutput, null);
 
 
         // main
@@ -50,7 +50,7 @@ public static partial class OwesomeExtensions
         // preprocess
         if (outputFile is null)
             throw new ArgumentNullException(nameof(outputFile));
-        UtilPreprocessors.PreprocessOutFile(ref outputFile, "CopyTo", false, null, null);
+        UtilPreprocessors.PreprocessOutFile(ref outputFile, false, null, null);
 
 
         // main

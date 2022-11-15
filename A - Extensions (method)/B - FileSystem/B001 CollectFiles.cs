@@ -14,7 +14,7 @@ public static partial class OwesomeExtensions
     public static DirectoryInfo CollectFiles(this DirectoryInfo inputDir, DirectoryInfo? outputDir, params string[] searchRegexen)
     {
         // preprocess
-        UtilPreprocessors.PreprocessOutDir(ref outputDir, "CollectFiles", true, inputDir.Parent!);
+        UtilPreprocessors.PreprocessOutDir(ref outputDir, true, inputDir.Parent!);
 
 
         // main

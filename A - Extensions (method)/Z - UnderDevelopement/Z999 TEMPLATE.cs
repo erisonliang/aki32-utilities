@@ -24,7 +24,7 @@ public static partial class OwesomeExtensions
     public static FileInfo TEMPLATE(this FileInfo inputFile, FileInfo? outputFile, int skipColumnCount = 0, int skipRowCount = 0, string? header = null)
     {
         // preprocess
-        UtilPreprocessors.PreprocessOutFile(ref outputFile, "TEMPLATE", false, inputFile.Directory!, inputFile.Name);
+        UtilPreprocessors.PreprocessOutFile(ref outputFile, false, inputFile.Directory!, inputFile.Name);
 
 
         // main
@@ -47,7 +47,7 @@ public static partial class OwesomeExtensions
     public static DirectoryInfo TEMPLATE_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir, int skipColumnCount = 0, int skipRowCount = 0, string? header = null)
     {
         // preprocess
-        UtilPreprocessors.PreprocessOutDir(ref outputDir, "TEMPLATE", true, inputDir);
+        UtilPreprocessors.PreprocessOutDir(ref outputDir, true, inputDir);
 
 
         // main

@@ -16,7 +16,7 @@ public static partial class OwesomeExtensions
         if (outputDir is null)
             throw new ArgumentNullException(nameof(outputDir));
         var outputParentDir = outputDir!.Parent; // abnormal, only for dir.MoveTo(dir) 
-        UtilPreprocessors.PreprocessOutDir(ref outputParentDir, "MoveTo", true, null);
+        UtilPreprocessors.PreprocessOutDir(ref outputParentDir, true, null);
 
 
         // main
@@ -50,7 +50,7 @@ public static partial class OwesomeExtensions
         // preprocess
         if (outputFile is null)
             throw new ArgumentNullException(nameof(outputFile));
-        UtilPreprocessors.PreprocessOutFile(ref outputFile!, "MoveTo", false, null, null);
+        UtilPreprocessors.PreprocessOutFile(ref outputFile!, false, null, null);
 
 
         // main
