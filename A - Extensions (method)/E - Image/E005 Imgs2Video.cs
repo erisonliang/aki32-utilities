@@ -39,10 +39,9 @@ public static partial class OwesomeExtensions
 
 
         // force install openh264-*.dll (To use Imgs2Video method, you need to put openh264-*.dll to executable folder!!!)
-        if (!File.Exists("openh264-1.8.0-win64.dll"))
-            DownloadFileSync(
-                new FileInfo("openh264-1.8.0-win64.dll"),
-                new Uri("https://github.com/aki32/aki32-utilities/raw/main/Properties/openh264-1.8.0-win64.dll"));
+        var dllName = "openh264-1.8.0-win64.dll";
+        if (!File.Exists(dllName))
+            DownloadFileSync(new FileInfo(dllName), new Uri($@"https://github.com/aki32/aki32-utilities/raw/main/Properties/Assets/{dllName}"));
 
 
         // main
