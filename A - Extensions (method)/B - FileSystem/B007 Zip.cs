@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
+﻿using System.IO.Compression;
 
 namespace Aki32_Utilities.Extensions;
 public static partial class OwesomeExtensions
@@ -19,20 +13,35 @@ public static partial class OwesomeExtensions
     public static FileInfo Zip(this DirectoryInfo inputDir, FileInfo? outputFile)
     {
         //// preprocess
-        UtilPreprocessors.PreprocessOutFile(ref outputFile, true, inputDir!, "output.zip");
-        if (!outputFile!.Name.EndsWith(".zip"))
-            throw new Exception("outputFile name must end with .zip");
+        UtilPreprocessors.PreprocessOutFile(ref outputFile, true, inputDir.Parent!, "output.zip");
 
 
-        throw new NotImplementedException();
-
-        //// main
-        //Directory.zip
-        //inputDir.Zip();
+        // main
+        ZipFile.CreateFromDirectory(inputDir.FullName, outputFile.FullName);
 
 
         // post process
         return outputFile!;
     }
 
+
+    /// <summary>
+    /// Unzip
+    /// </summary>
+    /// <param name="inputDir"></param>
+    /// <param name="outputFile">when null, automatically set to {inputFile.DirectoryName}/output_Zip/{inputFile.Name}</param>
+    /// <returns></returns>
+    public static DirectoryInfo Unzip(this FileInfo inputFile, DirectoryInfo? outputDir)
+    {
+        //// preprocess
+        UtilPreprocessors.PreprocessOutDir(ref outputDir, true, inputFile.Directory);
+
+
+        // main
+        ZipFile.ExtractToDirectory(inputFile.FullName, outputDir.FullName, true);
+
+
+        // post process
+        return outputDir!;
+    }
 }

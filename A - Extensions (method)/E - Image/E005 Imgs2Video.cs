@@ -1,16 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.IO.Compression;
-using System.Linq;
-using System.Net;
-using System.Net.NetworkInformation;
-using System.Reflection;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-
-using OpenCvSharp;
+﻿using OpenCvSharp;
 
 using Size = System.Drawing.Size;
 

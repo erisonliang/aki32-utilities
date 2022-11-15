@@ -20,6 +20,7 @@ public partial class Program
 
 
         Console.WriteLine();
+        Console.WriteLine();
         Console.WriteLine($"★ Process Finished!");
         Console.WriteLine();
 

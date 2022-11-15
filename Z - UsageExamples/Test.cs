@@ -61,6 +61,14 @@ public class Test
                     ////output.RenameFiles_Replace(("ABC", "abc"), ("XYZ", "xyz"));
                 }
 
+                // B007 Zip
+                {
+                    var input = new DirectoryInfo($@"{baseDir}\B007 Zip\input");
+                    input
+                        .Zip(null)
+                        .Unzip(null);
+                }
+
                 // C001 ReadCsv, C002 SaveCsv, F001 Transpose
                 {
                     //var innerBaseDir = $@"{baseDir}\C001 ReadCsv, SaveCsv";

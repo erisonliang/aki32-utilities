@@ -1,7 +1,5 @@
 ﻿using System.Drawing;
 
-using DocumentFormat.OpenXml.Spreadsheet;
-
 namespace Aki32_Utilities.Extensions;
 public static partial class OwesomeExtensions
 {
