@@ -147,15 +147,14 @@ public class Test
 
                 // E004 Imgs2PDF
                 {
-                    //var input = new DirectoryInfo($@"{baseDir}\E004 Imgs2PDF, E005 Imgs2Video");
+                    //var input = new DirectoryInfo($@"{baseDir}\E004 Imgs2PDF");
                     //input.Imgs2PDF(null);
                 }
 
                 // E005 Imgs2Video
                 {
-                
-                    var input = new DirectoryInfo($@"{baseDir}\E004 Imgs2PDF, E005 Imgs2Video");
-                    input.Imgs2Video(null, 1, 400, 200);
+                    var input = new DirectoryInfo($@"{baseDir}\E005 Imgs2Video");
+                    input.Imgs2Video(null, 400, 200, 300);
                 }
 
                 // F002 To2DArray, ToJaggedArray
