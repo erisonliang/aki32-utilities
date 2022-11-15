@@ -25,12 +25,12 @@ public static partial class OwesomeExtensions
                 img.Save(outputFile!.FullName);
             }
             if (UtilConfig.ConsoleOutput)
-                Console.WriteLine($"O 成功 : {inputFile.FullName}");
+                Console.WriteLine($"O: {inputFile.FullName}");
         }
         catch (Exception e)
         {
             if (UtilConfig.ConsoleOutput)
-                Console.WriteLine($"X 失敗 : {inputFile.FullName}, {e.Message}");
+                Console.WriteLine($"X: {inputFile.FullName}, {e.Message}");
         }
 
 
