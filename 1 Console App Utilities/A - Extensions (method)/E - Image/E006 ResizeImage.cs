@@ -84,7 +84,6 @@ public static partial class OwesomeExtensions
                 {
                     using var outputBitmap = new Bitmap(inputImage, outputSize);
                     return (Image)outputBitmap.Clone();
-
                 }
             case ResizeImageMode.Uniform_NotImpremented:
                 {

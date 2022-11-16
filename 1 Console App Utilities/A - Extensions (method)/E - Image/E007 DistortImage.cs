@@ -90,18 +90,36 @@ public static partial class OwesomeExtensions
     public static Image DistortImage(this Image inputImage, params (Point originalPoint, Point tagrtPoint)[] ps)
     {
         // preprocess
-        if (ps.Length is < 1 or > 3)
-            throw new InvalidDataException("length of ps must be 1 - 3");
+
 
         // main
+        switch (ps.Length)
+        {
+            case 1:
+                {
+                    var move = Point.Subtract(ps[0].originalPoint, ((Size)ps[0].tagrtPoint));
+                    var outputBitmap = ((Bitmap)inputImage).Clone(new Rectangle(move, inputImage.Size), inputImage.PixelFormat);
+                    return outputBitmap;
+                }
+            case 2:
+                {
 
 
 
 
-        throw new NotImplementedException();
+                    return null;
+                }
+            case 3:
+                {
 
-        // post process
-        //return aaaa;
+
+
+
+                    return null;
+                }
+            default:
+                throw new InvalidDataException("length of ps must be 1 - 3");
+        }
     }
 
     // ★★★★★★★★★★★★★★★

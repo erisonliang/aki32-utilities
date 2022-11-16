@@ -170,10 +170,30 @@ public class Test
                 //input.Images2Video(null, 3);
             }
 
-            // E005 ResizeImage
+            // E006 ResizeImage
             {
                 //var input = new DirectoryInfo($@"{baseDir}\E006 ResizeImage");
                 //input.ResizeImage_Loop(null, new Size(100, 100));
+            }
+
+            // E007 DistortImage
+            {
+                //var input = new DirectoryInfo($@"{baseDir}\E007 DistortImage");
+                //input.DistortImage_Loop(null, new Size(100, 100));
+
+                var input0 = new FileInfo($@"{baseDir}\E007 DistortImage\5.png");
+                var output11 = new FileInfo($@"{baseDir}\E007 DistortImage\5-11.png");
+                var output12 = new FileInfo($@"{baseDir}\E007 DistortImage\5-12.png");
+                var output21 = new FileInfo($@"{baseDir}\E007 DistortImage\5-21.png");
+                var output22 = new FileInfo($@"{baseDir}\E007 DistortImage\5-22.png");
+                var output31 = new FileInfo($@"{baseDir}\E007 DistortImage\5-31.png");
+                var output32 = new FileInfo($@"{baseDir}\E007 DistortImage\5-32.png");
+
+                input0.DistortImage(output11, (new Point(0, 0), new Point(100, 100)));
+                //input0.DistortImage(output12, (new Point(100, 100), new Point(0, 0)));
+
+
+
             }
 
             // F002 To2DArray, ToJaggedArray
