@@ -111,7 +111,6 @@ public class IODeviceExtension
 
     // ★★★★★★★★★★★★★★★ background processes
 
-
     private const int VIRTUAL_KEY_SHIFT = 0x10;
     private const int VIRTUAL_KEY_CTRL = 0x11;
     private const int VIRTUAL_KEY_ALT = 0x12;
