@@ -59,7 +59,7 @@ public static partial class OwesomeExtensions
                 var pngFile = pngFiles[i * imgFrameRate / videoFrameRate];
                 using var image = Mat.FromStream(pngFile.OpenRead(), ImreadModes.Color);
 
-                if (!(videoSize.Equals(new OpenCvSharp.Size(image.Width, image.Height))))
+                if (!videoSize.Equals(new OpenCvSharp.Size(image.Width, image.Height)))
                     throw new InvalidDataException("All images' size must be the same. Please use ResizeImage() first.");
 
                 Writer.Write(image);

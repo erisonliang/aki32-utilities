@@ -119,7 +119,7 @@ public static partial class OwesomeExtensions
         }
 
 
-        return outputBitmap;
+        return (Image)outputBitmap.Clone();
     }
 
     /// <summary>

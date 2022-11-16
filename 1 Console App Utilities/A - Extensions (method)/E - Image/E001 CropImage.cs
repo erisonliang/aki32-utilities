@@ -100,7 +100,7 @@ public static partial class OwesomeExtensions
     public static Image CropImage(this Image inputImage, CropSize crop)
     {
         var outputBitmap = ((Bitmap)inputImage).Clone(crop.GetImageCropRect(inputImage), inputImage.PixelFormat);
-        return outputBitmap;
+        return (Image)outputBitmap.Clone();
     }
 
     /// <summary>

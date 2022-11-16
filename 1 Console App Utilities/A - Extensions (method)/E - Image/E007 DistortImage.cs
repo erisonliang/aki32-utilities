@@ -97,25 +97,72 @@ public static partial class OwesomeExtensions
         {
             case 1:
                 {
-                    var move = Point.Subtract(ps[0].originalPoint, ((Size)ps[0].tagrtPoint));
-                    var outputBitmap = ((Bitmap)inputImage).Clone(new Rectangle(move, inputImage.Size), inputImage.PixelFormat);
-                    return outputBitmap;
+                    using var outputBitmap = new Bitmap(inputImage.Width, inputImage.Height);
+                    using var g = Graphics.FromImage(outputBitmap);
+
+                    var move = Point.Subtract(ps[0].tagrtPoint, ((Size)ps[0].originalPoint));
+                    var ppp = new Point[]
+                    {
+                        Point.Add(new Point(0,0), (Size)move),
+                        Point.Add(new Point(inputImage.Width,0), (Size)move),
+                        Point.Add(new Point(0,inputImage.Height), (Size)move),
+                    };
+
+                    g.DrawImage(inputImage, ppp);
+
+                    return (Image)outputBitmap.Clone();
                 }
             case 2:
                 {
+                    throw new NotImplementedException();
 
+                    using var outputBitmap = new Bitmap(inputImage.Width, inputImage.Height);
+                    using var g = Graphics.FromImage(outputBitmap);
 
+                    //var move = Point.Subtract(ps[0].tagrtPoint, ((Size)ps[0].originalPoint));
+                    //var ppp = new Point[]
+                    //{
+                    //    new Point(0,0),
+                    //    new Point(400,0),
+                    //    new Point(300,300),
+                    //};
 
+                    var ppp = new Point[]
+                    {
+                        new Point(0,0),
+                        new Point(400,0),
+                        new Point(300,300),
+                      };
 
-                    return null;
+                    g.DrawImage(inputImage, ppp);
+
+                    return (Image)outputBitmap.Clone();
                 }
             case 3:
                 {
+                    throw new NotImplementedException();
 
+                    using var outputBitmap = new Bitmap(inputImage.Width, inputImage.Height);
+                    using var g = Graphics.FromImage(outputBitmap);
 
+                    //var move = Point.Subtract(ps[0].tagrtPoint, ((Size)ps[0].originalPoint));
+                    //var ppp = new Point[]
+                    //{
+                    //    new Point(0,0),
+                    //    new Point(400,0),
+                    //    new Point(300,300),
+                    //};
 
+                    var ppp = new Point[]
+                      {
+                                new Point(0,0),
+                                new Point(400,0),
+                                new Point(300,300),
+                      };
 
-                    return null;
+                    g.DrawImage(inputImage, ppp);
+
+                    return (Image)outputBitmap.Clone();
                 }
             default:
                 throw new InvalidDataException("length of ps must be 1 - 3");

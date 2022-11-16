@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 namespace Aki32_Utilities.Extensions;
 public static partial class OwesomeExtensions
 {
-    
+
     // ★★★★★★★★★★★★★★★ FileSystemInfo chain process
 
     /// <summary>
@@ -22,7 +22,7 @@ public static partial class OwesomeExtensions
     public static FileInfo SaveScreenShot(this FileInfo outputFile, Point upperLeftCoordinate, Point bottomRightCoordinate)
     {
         // preprocess
-        UtilPreprocessors.PreprocessBasic(false);
+        UtilPreprocessors.PreprocessOutFile(ref outputFile, false, null, "output.png");
 
         // main
         var outputImage = TakeScreenShot(upperLeftCoordinate, bottomRightCoordinate);
@@ -77,9 +77,8 @@ public static partial class OwesomeExtensions
         using var g = Graphics.FromImage(outputBitmap);
         g.CopyFromScreen(ul, new Point(0, 0), outputBitmap.Size);
 
-
         // post process
-        return outputBitmap;
+        return (Image)outputBitmap.Clone();
     }
 
 
