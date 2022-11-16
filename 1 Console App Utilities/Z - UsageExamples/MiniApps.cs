@@ -59,66 +59,8 @@ public class MiniApps
         targetDirectory.Images2PDF(null);
 
 
+        // post process
         Console.WriteLine("\r\n★★★★★★★★★★★★★★★ 以上\r\n");
 
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    //private async Task ProcessAll(int proceedCount, Point ul, Point br, Point pb, string saveDirPath)
-    //{
-    //    Inform("★★★★★ 処理開始");
-
-    //    if (!Directory.Exists(saveDirPath))
-    //    {
-    //        Directory.CreateDirectory(saveDirPath);
-    //        Inform($"作成成功：{saveDirPath}");
-    //    }
-
-    //    await MoveCursorOnProceedButton(pb, true);
-
-    //    for (int i = 0; i < proceedCount; i++)
-    //    {
-    //        try
-    //        {
-    //            var saveFileName = DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss-ffff") + ".png";
-    //            var saveFilePath = Path.Combine(saveDirPath, saveFileName);
-    //            GetAndSaveScreenshot(ul, br, saveFilePath);
-
-    //            Inform($"保存成功：{i + 1,4}枚目／{saveFileName}");
-    //        }
-    //        catch (Exception ex)
-    //        {
-    //            Inform($"保存失敗：{i + 1,4}枚目／{ex.Message}");
-    //        }
-
-    //        await PressProceedButton(pb);
-
-    //        await Task.Delay(TimePerPage);
-
-    //        if ((ModifierKeys & Keys.Alt) == Keys.Alt)
-    //        {
-    //            Inform("★★★★★ 処理終了（Altキーの長押しを検知）");
-    //            return;
-    //        }
-    //    }
-
-    //    Inform("★★★★★ 処理終了（指定ページ数に到達）");
-    //}
-
-
-
-
 }
