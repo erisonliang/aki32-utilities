@@ -6,20 +6,20 @@ namespace Aki32_Utilities.Extensions;
 public static partial class OwesomeExtensions
 {
     /// <summary>
-    /// Imgs2Video (currently, png to avi only)
+    /// Images2Video (currently, png to avi only)
     /// </summary>
     /// <remarks>
     /// To use this methods, you need to put openh264-*.dll to executable folder!!!
     /// </remarks>
     /// <param name="inputDir"></param>
-    /// <param name="outputFile">when null, automatically set to {inputDir.FullName}/output_Imgs2Video/output.avi</param>
+    /// <param name="outputFile">when null, automatically set to {inputDir.FullName}/output_Images2Video/output.avi</param>
     /// <param name="imgFrameRate"></param>
     /// <param name="videoFrameRate"></param>
     /// <returns></returns>
     /// <exception cref="Exception"></exception>
     /// <exception cref="InvalidDataException"></exception>
     [STAThread]
-    public static FileInfo Imgs2Video(this DirectoryInfo inputDir, FileInfo? outputFile,
+    public static FileInfo Images2Video(this DirectoryInfo inputDir, FileInfo? outputFile,
         int imgFrameRate,
         int videoFrameRate = 60
         )

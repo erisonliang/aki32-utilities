@@ -158,16 +158,16 @@ public class Test
                     //OwesomeExtensions.SaveScreenShot(output, new Point(0, 0), new Point(1000, 1000));
                 }
 
-                // E004 Imgs2PDF
+                // E004 Images2PDF
                 {
-                    //var input = new DirectoryInfo($@"{baseDir}\E004 Imgs2PDF");
-                    //input.Imgs2PDF(null);
+                    //var input = new DirectoryInfo($@"{baseDir}\E004 Images2PDF");
+                    //input.Images2PDF(null);
                 }
 
-                // E005 Imgs2Video
+                // E005 Images2Video
                 {
-                    //var input = new DirectoryInfo($@"{baseDir}\E005 Imgs2Video");
-                    //input.Imgs2Video(null, 3);
+                    //var input = new DirectoryInfo($@"{baseDir}\E005 Images2Video");
+                    //input.Images2Video(null, 3);
                 }
 
                 // E005 ResizeImage

@@ -15,12 +15,12 @@ public static partial class OwesomeExtensions
 {
 
     /// <summary>
-    /// Imgs2PDF (currently, png to pdf only)
+    /// Images2PDF (currently, png to pdf only)
     /// </summary>
     /// <param name="inputDir"></param>
-    /// <param name="outputFile">when null, automatically set to {inputDir.FullName}/output_Imgs2PDF/output.pdf</param>
+    /// <param name="outputFile">when null, automatically set to {inputDir.FullName}/output_Images2PDF/output.pdf</param>
     /// <returns></returns>
-    public static FileInfo Imgs2PDF(this DirectoryInfo inputDir, FileInfo? outputFile)
+    public static FileInfo Images2PDF(this DirectoryInfo inputDir, FileInfo? outputFile)
     {
         // preprocess
         UtilPreprocessors.PreprocessOutFile(ref outputFile, true, inputDir!, "output.pdf", takesTimeFlag: true);

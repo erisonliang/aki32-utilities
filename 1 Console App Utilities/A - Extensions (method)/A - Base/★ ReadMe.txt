@@ -26,3 +26,11 @@ Check follows before move out of 999.
 
 ★★★★★
 
+ Chain class priority
+ 
+ 1 FileInfo, DirectoryInfo
+ 2 Image, Size, Point
+
+
+
+★★★★★
