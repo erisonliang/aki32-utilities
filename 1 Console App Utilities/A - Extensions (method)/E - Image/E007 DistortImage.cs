@@ -6,73 +6,103 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
+using Org.BouncyCastle.Asn1.Crmf;
+
 namespace Aki32_Utilities.Extensions;
 public static partial class OwesomeExtensions
 {
+
+    // ★★★★★★★★★★★★★★★ FileSystemInfo chain process
 
     /// <summary>
     /// DistortImage
     /// </summary>
     /// <param name="inputFile"></param>
     /// <param name="outputFile">when null, automatically set to {inputFile.DirectoryName}/output_DistortImage/{inputFile.Name}</param>
-    /// <param name="skipColumnCount"></param>
-    /// <param name="skipRowCount"></param>
-    /// <param name="header"></param>
+    /// <param name="ps">List of original points and target points. min 1, max 3</param>
     /// <returns></returns>
-    public static FileInfo DistortImage(this FileInfo inputFile, FileInfo? outputFile, params (Point inputPoint, Point outputPoint)[] ps)
+    public static FileInfo DistortImage(this FileInfo inputFile, FileInfo? outputFile, params (Point originalPoint, Point tagrtPoint)[] ps)
     {
         // preprocess
         UtilPreprocessors.PreprocessOutFile(ref outputFile, false, inputFile.Directory!, inputFile.Name);
+        if (!inputFile!.Name.EndsWith(".png"))
+            throw new Exception("inputFile name must end with .png");
+        if (!outputFile!.Name.EndsWith(".png"))
+            throw new Exception("outputFile name must end with .png");
 
 
         // main
+        using var inputImage = Image.FromFile(inputFile.FullName);
+        var outputImage = DistortImage(inputImage, ps);
+        outputImage.Save(outputFile!.FullName);
 
-
-        throw new NotImplementedException();
 
         // post process
         return outputFile!;
     }
 
 
-    // ★★★★★★★★★★★★★★★ universal
-
-    ///// <summary>
-    ///// DistortImage
-    ///// </summary>
-    ///// <param name="inputDir"></param>
-    ///// <param name="outputDir">when null, automatically set to {inputDir.FullName}/output_DistortImage</param>
-    ///// <param name="skipColumnCount"></param>
-    ///// <param name="skipRowCount"></param>
-    ///// <param name="header"></param>
-    ///// <returns></returns>
-    //public static DirectoryInfo DistortImage_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir, int skipColumnCount = 0, int skipRowCount = 0, string? header = null)
-    //{
-    //    // preprocess
-    //    UtilPreprocessors.PreprocessOutDir(ref outputDir, true, inputDir);
+    /// <summary>
+    /// DistortImage
+    /// </summary>
+    /// <param name="inputDir"></param>
+    /// <param name="outputDir">when null, automatically set to {inputDir.FullName}/output_DistortImage</param>
+    /// <param name="ps">List of original points and target points. min 1, max 3</param>
+    /// <returns></returns>
+    public static DirectoryInfo DistortImage_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir, params (Point originalPoint, Point tagrtPoint)[] ps)
+    {
+        // preprocess
+        UtilPreprocessors.PreprocessOutDir(ref outputDir, true, inputDir);
 
 
-    //    // main
-    //    foreach (var file in inputDir.GetFiles())
-    //    {
-    //        var newFilePath = Path.Combine(outputDir!.FullName, file.Name);
-    //        try
-    //        {
-    //            file.DistortImage(new FileInfo(newFilePath), skipColumnCount, skipRowCount, header);
-    //            if (UtilConfig.ConsoleOutput)
-    //                Console.WriteLine($"O: {newFilePath}");
-    //        }
-    //        catch (Exception ex)
-    //        {
-    //            if (UtilConfig.ConsoleOutput)
-    //                Console.WriteLine($"X: {newFilePath}, {ex.Message}");
-    //        }
-    //    }
+        // main
+        foreach (var file in inputDir.GetFiles())
+        {
+            var newFilePath = Path.Combine(outputDir!.FullName, file.Name);
+            try
+            {
+                file.DistortImage(new FileInfo(newFilePath), ps);
+                if (UtilConfig.ConsoleOutput)
+                    Console.WriteLine($"O: {newFilePath}");
+            }
+            catch (Exception ex)
+            {
+                if (UtilConfig.ConsoleOutput)
+                    Console.WriteLine($"X: {newFilePath}, {ex.Message}");
+            }
+        }
 
 
-    //    // post process
-    //    return outputDir!;
-    //}
+        // post process
+        return outputDir!;
+    }
+
+
+    // ★★★★★★★★★★★★★★★ Image process
+
+    /// <summary>
+    /// DistortImage
+    /// </summary>
+    /// <param name="inputFile"></param>
+    /// <param name="outputFile">when null, automatically set to {inputFile.DirectoryName}/output_DistortImage/{inputFile.Name}</param>
+    /// <param name="ps">List of original points and target points. min 1, max 3</param>
+    /// <returns></returns>
+    public static Image DistortImage(this Image inputImage, params (Point originalPoint, Point tagrtPoint)[] ps)
+    {
+        // preprocess
+        if (ps.Length is < 1 or > 3)
+            throw new InvalidDataException("length of ps must be 1 - 3");
+
+        // main
+
+
+
+
+        throw new NotImplementedException();
+
+        // post process
+        //return aaaa;
+    }
 
     // ★★★★★★★★★★★★★★★
 

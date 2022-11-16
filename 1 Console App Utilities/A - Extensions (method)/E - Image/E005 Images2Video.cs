@@ -5,6 +5,9 @@ using Size = System.Drawing.Size;
 namespace Aki32_Utilities.Extensions;
 public static partial class OwesomeExtensions
 {
+
+    // ★★★★★★★★★★★★★★★ FileSystemInfo chain process
+
     /// <summary>
     /// Images2Video (currently, png to avi only)
     /// </summary>
@@ -70,5 +73,8 @@ public static partial class OwesomeExtensions
         // post process
         return outputFile!;
     }
+
+
+    // ★★★★★★★★★★★★★★★ 
 
 }

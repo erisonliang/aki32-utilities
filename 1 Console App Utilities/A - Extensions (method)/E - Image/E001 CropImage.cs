@@ -4,6 +4,8 @@ namespace Aki32_Utilities.Extensions;
 public static partial class OwesomeExtensions
 {
 
+    // ★★★★★★★★★★★★★★★ FileSystemInfo chain process
+
     /// <summary>
     /// 
     /// </summary>
@@ -19,8 +21,10 @@ public static partial class OwesomeExtensions
         // main
         try
         {
-            var img = CropImage(inputFile, crop);
-            img.Save(outputFile!.FullName);
+            using var inputImage = Image.FromFile(inputFile.FullName);
+            var outputImage = CropImage(inputImage, crop);
+            outputImage.Save(outputFile!.FullName);
+
             if (UtilConfig.ConsoleOutput)
                 Console.WriteLine($"O: {inputFile.FullName}");
         }
@@ -84,28 +88,19 @@ public static partial class OwesomeExtensions
         return outputDir!;
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="inputFile"></param>
-    /// <param name="crop"></param>
-    /// <returns></returns>
-    public static Image CropImage(this FileInfo inputFile, CropSize crop)
-    {
-        using var inputImg = Image.FromFile(inputFile.FullName);
-        return CropImage(inputImg, crop);
-    }
+
+    // ★★★★★★★★★★★★★★★ Image process
 
     /// <summary>
     /// 
     /// </summary>
-    /// <param name="inputImg"></param>
+    /// <param name="inputImage"></param>
     /// <param name="crop"></param>
     /// <returns></returns>
-    public static Image CropImage(this Image inputImg, CropSize crop)
+    public static Image CropImage(this Image inputImage, CropSize crop)
     {
-        var outputBmp = ((Bitmap)inputImg).Clone(crop.GetImageCropRect(inputImg), inputImg.PixelFormat);
-        return outputBmp;
+        var outputBitmap = ((Bitmap)inputImage).Clone(crop.GetImageCropRect(inputImage), inputImage.PixelFormat);
+        return outputBitmap;
     }
 
     /// <summary>
@@ -142,5 +137,7 @@ public static partial class OwesomeExtensions
         public new string ToString() => $"{L:F2},{T:F2},{R:F2},{B:F2}";
 
     }
+
+    // ★★★★★★★★★★★★★★★
 
 }

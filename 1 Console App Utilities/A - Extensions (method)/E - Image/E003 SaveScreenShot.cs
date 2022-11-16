@@ -8,12 +8,12 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-using iTextSharp.text;
-using iTextSharp.text.pdf;
-
 namespace Aki32_Utilities.Extensions;
 public static partial class OwesomeExtensions
 {
+    
+    // ★★★★★★★★★★★★★★★ FileSystemInfo chain process
+
     /// <summary>
     /// SaveScreenShot
     /// </summary>
@@ -25,16 +25,8 @@ public static partial class OwesomeExtensions
         UtilPreprocessors.PreprocessBasic(false);
 
         // main
-        var ul = upperLeftCoordinate;
-        var br = bottomRightCoordinate;
-
-        if (br.X - ul.X < 0) (br.X, ul.X) = (ul.X, br.X);
-        if (br.Y - ul.Y < 0) (br.Y, ul.Y) = (ul.Y, br.Y);
-
-        using var bm = new Bitmap(br.X - ul.X, br.Y - ul.Y);
-        using var g = Graphics.FromImage(bm);
-        g.CopyFromScreen(ul, new Point(0, 0), bm.Size);
-        bm.Save(outputFile.FullName, ImageFormat.Png);
+        var outputImage = TakeScreenShot(upperLeftCoordinate, bottomRightCoordinate);
+        outputImage.Save(outputFile.FullName, ImageFormat.Png);
 
 
         // post process
@@ -59,5 +51,38 @@ public static partial class OwesomeExtensions
         // post process
         return outputFile;
     }
+
+
+    // ★★★★★★★★★★★★★★★ Image process
+
+    /// <summary>
+    /// SaveScreenShot
+    /// </summary>
+    /// <param name="outputFile">when null, automatically set to {inputDir.FullName}/output.pdf</param>
+    /// <returns></returns>
+    public static Image TakeScreenShot(Point upperLeftCoordinate, Point bottomRightCoordinate)
+    {
+        // preprocess
+        UtilPreprocessors.PreprocessBasic(false);
+
+
+        // main
+        var ul = upperLeftCoordinate;
+        var br = bottomRightCoordinate;
+
+        if (br.X - ul.X < 0) (br.X, ul.X) = (ul.X, br.X);
+        if (br.Y - ul.Y < 0) (br.Y, ul.Y) = (ul.Y, br.Y);
+
+        using var outputBitmap = new Bitmap(br.X - ul.X, br.Y - ul.Y);
+        using var g = Graphics.FromImage(outputBitmap);
+        g.CopyFromScreen(ul, new Point(0, 0), outputBitmap.Size);
+
+
+        // post process
+        return outputBitmap;
+    }
+
+
+    // ★★★★★★★★★★★★★★★ 
 
 }

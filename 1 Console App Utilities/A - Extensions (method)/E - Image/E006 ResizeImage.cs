@@ -4,6 +4,8 @@ namespace Aki32_Utilities.Extensions;
 public static partial class OwesomeExtensions
 {
 
+    // ★★★★★★★★★★★★★★★ FileSystemInfo chain process
+
     /// <summary>
     /// ResizeImage
     /// </summary>
@@ -20,7 +22,8 @@ public static partial class OwesomeExtensions
         // main
         try
         {
-            var img = ResizeImage(inputFile, outputSize, mode);
+            using var inputImage = Image.FromFile(inputFile.FullName);
+            var img = ResizeImage(inputImage, outputSize, mode);
             img.Save(outputFile!.FullName);
 
             if (UtilConfig.ConsoleOutput)
@@ -63,34 +66,24 @@ public static partial class OwesomeExtensions
         return outputDir!;
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="inputFile"></param>
-    /// <param name="outputSize"></param>
-    /// <returns></returns>
-    public static Image ResizeImage(this FileInfo inputFile, Size outputSize,
-        ResizeImageMode mode = ResizeImageMode.Stretch)
-    {
-        using var inputImg = Image.FromFile(inputFile.FullName);
-        return ResizeImage(inputImg, outputSize);
-    }
+
+    // ★★★★★★★★★★★★★★★ Image process
 
     /// <summary>
     /// 
     /// </summary>
-    /// <param name="inputImg"></param>
+    /// <param name="inputImage"></param>
     /// <param name="outputSize"></param>
     /// <returns></returns>
-    public static Image ResizeImage(this Image inputImg, Size outputSize,
+    public static Image ResizeImage(this Image inputImage, Size outputSize,
         ResizeImageMode mode = ResizeImageMode.Stretch)
     {
         switch (mode)
         {
             case ResizeImageMode.Stretch:
                 {
-                    using var outputBmp = new Bitmap(inputImg, outputSize);
-                    return (Image)outputBmp.Clone();
+                    using var outputBitmap = new Bitmap(inputImage, outputSize);
+                    return (Image)outputBitmap.Clone();
 
                 }
             case ResizeImageMode.Uniform_NotImpremented:
@@ -119,5 +112,8 @@ public static partial class OwesomeExtensions
         Uniform_NotImpremented,
         UniformToFill_NotImpremented,
     }
+
+
+    // ★★★★★★★★★★★★★★★ 
 
 }

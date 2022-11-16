@@ -14,6 +14,8 @@ namespace Aki32_Utilities.Extensions;
 public static partial class OwesomeExtensions
 {
 
+    // ★★★★★★★★★★★★★★★ FileSystemInfo chain process
+
     /// <summary>
     /// Images2PDF (currently, png to pdf only)
     /// </summary>
@@ -60,5 +62,7 @@ public static partial class OwesomeExtensions
         // post process
         return outputFile!;
     }
+
+    // ★★★★★★★★★★★★★★★ 
 
 }

@@ -5,6 +5,8 @@ namespace Aki32_Utilities.Extensions;
 public static partial class OwesomeExtensions
 {
 
+    // ★★★★★★★★★★★★★★★ FileSystemInfo chain process
+
     /// <summary>
     /// Convert image color to targetColor and save
     /// </summary>
@@ -21,9 +23,9 @@ public static partial class OwesomeExtensions
         // main
         try
         {
-            using (var inputImg = Image.FromFile(inputFile.FullName))
+            using (var inputImage = Image.FromFile(inputFile.FullName))
             {
-                var img = ConvertImageColor(inputImg, targetColor);
+                var img = ConvertImageColor(inputImage, targetColor);
                 img.Save(outputFile!.FullName, ImageFormat.Png);
             }
             if (UtilConfig.ConsoleOutput)
@@ -85,25 +87,28 @@ public static partial class OwesomeExtensions
         return outputDir!;
     }
 
+
+    // ★★★★★★★★★★★★★★★ Image process
+
     /// <summary>
     /// Convert image color to targetColor
     /// </summary>
-    /// <param name="inputImg"></param>
+    /// <param name="inputImage"></param>
     /// <param name="targetColor"></param>
     /// <returns></returns>
-    public static Image ConvertImageColor(Image inputImg, Color targetColor)
+    public static Image ConvertImageColor(Image inputImage, Color targetColor)
     {
-        var resultBmp = new Bitmap(inputImg); //var resultBmp = new Bitmap(inputImg.Width,inputImg.Height,PixelFormat.Format32bppArgb);
+        var outputBitmap = new Bitmap(inputImage); //var resultBmp = new Bitmap(inputImage.Width,inputImage.Height,PixelFormat.Format32bppArgb);
 
-        using (Graphics g = Graphics.FromImage(inputImg))
+        using (Graphics g = Graphics.FromImage(inputImage))
         {
-            var bmpP = new FastBitmap(resultBmp);
+            var bmpP = new FastBitmap(outputBitmap);
 
             bmpP.BeginAccess();
 
-            for (int i = 0; i < resultBmp.Width; i++)
+            for (int i = 0; i < outputBitmap.Width; i++)
             {
-                for (int j = 0; j < resultBmp.Height; j++)
+                for (int j = 0; j < outputBitmap.Height; j++)
                 {
                     var bmpCol = bmpP.GetPixel(i, j);
                     bmpP.SetPixel(i, j, Color.FromArgb(bmpCol.A, targetColor));
@@ -114,7 +119,7 @@ public static partial class OwesomeExtensions
         }
 
 
-        return resultBmp;
+        return outputBitmap;
     }
 
     /// <summary>
@@ -220,6 +225,8 @@ public static partial class OwesomeExtensions
             System.Runtime.InteropServices.Marshal.WriteByte(adr, pos + 2, col.R);
             System.Runtime.InteropServices.Marshal.WriteByte(adr, pos + 3, col.A);
         }
+
+        // ★★★★★★★★★★★★★★★
 
     }
 
