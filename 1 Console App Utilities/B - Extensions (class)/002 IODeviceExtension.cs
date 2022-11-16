@@ -92,6 +92,7 @@ public class IODeviceExtension
             Thread.Sleep(10);
         }
         Console.CursorVisible = true;
+        Console.WriteLine();
         var key = Console.ReadKey();
         return (lastPosition, key);
     }
@@ -103,6 +104,7 @@ public class IODeviceExtension
     public static void MouseCursorMoveAndClick(Point p, IODeviceButton button = IODeviceButton.MouseLeft)
     {
         MouseCursorMoveTo(p);
+        Thread.Sleep(10);
         MouseClick(button);
     }
 

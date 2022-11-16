@@ -14,10 +14,15 @@ namespace Aki32_Utilities;
 public class MiniApps
 {
     /// <summary>
-    /// keep taking screenshot of some dataset
+    /// keep taking screenshot of some dataset and save as PDF
     /// </summary>
     public static void Books2PDF(DirectoryInfo targetDirectory, int PageCount, int TimePerPageMilliSeconds = 2000)
     {
+        // preprocess
+        UtilPreprocessors.PreprocessOutDir(ref targetDirectory!, true, null!);
+
+
+        // main
         Console.WriteLine("\r\n★★★★★★★★★★★★★★★ 座標入力\r\n");
 
         var reasons = new string[] {
@@ -28,15 +33,14 @@ public class MiniApps
         var ps = new Point[reasons.Length];
 
         for (int i = 0; i < reasons.Length; i++)
-            (ps[i], _) = IODeviceExtension.GetMouseCursorPositionConversationally();
+            (ps[i], _) = IODeviceExtension.GetMouseCursorPositionConversationally(reasons[i]);
 
         Console.WriteLine();
         for (int i = 0; i < reasons.Length; i++)
             Console.WriteLine($"{reasons[i]}:{ps[i]}");
         var UL = ps[0];
         var BR = ps[1];
-        var ProceedButton = ps[1];
-
+        var ProceedButton = ps[2];
 
 
         Console.WriteLine("\r\n★★★★★★★★★★★★★★★ 撮影\r\n");
@@ -46,12 +50,13 @@ public class MiniApps
             OwesomeExtensions.SaveScreenShot(targetDirectory, UL, BR);
             IODeviceExtension.MouseCursorMoveAndClick(ProceedButton);
             Console.WriteLine($"{i + 1}/{PageCount} 枚完了");
+            Thread.Sleep(TimePerPageMilliSeconds);
         }
 
 
         Console.WriteLine("\r\n★★★★★★★★★★★★★★★ PDF化\r\n");
 
-
+        targetDirectory.Images2PDF(null);
 
 
         Console.WriteLine("\r\n★★★★★★★★★★★★★★★ 以上\r\n");
