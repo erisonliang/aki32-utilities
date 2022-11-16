@@ -123,31 +123,24 @@ public static partial class OwesomeExtensions
                     g.FillRectangle(Brushes.Orange, new Rectangle(new Point(0, 0), outputBitmap.Size));
 
 
-                    var tarP = CreateMatrix.Dense<float>(3, 3);
-                    var oriP = CreateMatrix.Dense<float>(3, 3);
+                    var tarP = CreateMatrix.Dense<float>(3, 2);
+                    var oriP = CreateMatrix.Dense<float>(3, 2);
                     for (int i = 0; i < 3; i++)
                     {
                         oriP[i, 0] = ps[i].originalPoint.X;
                         oriP[i, 1] = ps[i].originalPoint.Y;
-                        oriP[i, 2] = 1;
 
                         tarP[i, 0] = ps[i].tagrtPoint.X;
                         tarP[i, 1] = ps[i].tagrtPoint.Y;
-                        tarP[i, 2] = 1;
                     }
 
-                    var oriE = CreateMatrix.Dense<float>(3, 3);
-                    var tarE = CreateMatrix.Dense<float>(3, 3);
+                    var oriE = CreateMatrix.Dense<float>(3, 2);
+                    var tarE = CreateMatrix.Dense<float>(3, 2);
 
-                    oriE[0, 0] = 0;
                     oriE[1, 0] = inputImage.Width;
-                    oriE[2, 0] = 0;
-
-                    oriE[0, 1] = 0;
-                    oriE[1, 1] = 0;
                     oriE[2, 1] = inputImage.Height;
 
-                    var X = tarP * oriP.Inverse();
+                    var X = tarP * oriP.PseudoInverse();
                     tarE = X * oriE;
 
                     var points = new PointF[]
