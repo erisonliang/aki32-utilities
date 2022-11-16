@@ -1,10 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+
+using DocumentFormat.OpenXml.Math;
+
+using LibGit2Sharp;
+
+using MathNet.Numerics.LinearAlgebra;
 
 using Org.BouncyCastle.Asn1.Crmf;
 
@@ -90,85 +97,144 @@ public static partial class OwesomeExtensions
     public static Image DistortImage(this Image inputImage, params (Point originalPoint, Point tagrtPoint)[] ps)
     {
         // preprocess
-
+        var dim = ps.Length;
+        if (dim is < 1 or > 3)
+            throw new InvalidDataException("ps length must be in range 1 - 3");
 
         // main
-        switch (ps.Length)
+        switch (dim)
         {
             case 1:
                 {
-                    using var outputBitmap = new Bitmap(inputImage.Width, inputImage.Height);
-                    using var g = Graphics.FromImage(outputBitmap);
-
-                    var move = Point.Subtract(ps[0].tagrtPoint, ((Size)ps[0].originalPoint));
-                    var ppp = new Point[]
-                    {
-                        Point.Add(new Point(0,0), (Size)move),
-                        Point.Add(new Point(inputImage.Width,0), (Size)move),
-                        Point.Add(new Point(0,inputImage.Height), (Size)move),
-                    };
-
-                    g.DrawImage(inputImage, ppp);
-
-                    return (Image)outputBitmap.Clone();
+                    // 移動のみ
+                    throw new NotImplementedException();
                 }
             case 2:
                 {
+                    // 回転・移動のみ
                     throw new NotImplementedException();
-
-                    using var outputBitmap = new Bitmap(inputImage.Width, inputImage.Height);
-                    using var g = Graphics.FromImage(outputBitmap);
-
-                    //var move = Point.Subtract(ps[0].tagrtPoint, ((Size)ps[0].originalPoint));
-                    //var ppp = new Point[]
-                    //{
-                    //    new Point(0,0),
-                    //    new Point(400,0),
-                    //    new Point(300,300),
-                    //};
-
-                    var ppp = new Point[]
-                    {
-                        new Point(0,0),
-                        new Point(400,0),
-                        new Point(300,300),
-                      };
-
-                    g.DrawImage(inputImage, ppp);
-
-                    return (Image)outputBitmap.Clone();
                 }
             case 3:
                 {
-                    throw new NotImplementedException();
+                    // 回転・移動・せん断
 
                     using var outputBitmap = new Bitmap(inputImage.Width, inputImage.Height);
                     using var g = Graphics.FromImage(outputBitmap);
+                    g.FillRectangle(Brushes.Orange, new Rectangle(new Point(0, 0), outputBitmap.Size));
 
-                    //var move = Point.Subtract(ps[0].tagrtPoint, ((Size)ps[0].originalPoint));
-                    //var ppp = new Point[]
-                    //{
-                    //    new Point(0,0),
-                    //    new Point(400,0),
-                    //    new Point(300,300),
-                    //};
 
-                    var ppp = new Point[]
-                      {
-                                new Point(0,0),
-                                new Point(400,0),
-                                new Point(300,300),
-                      };
+                    var tarP = CreateMatrix.Dense<float>(3, 3);
+                    var oriP = CreateMatrix.Dense<float>(3, 3);
+                    for (int i = 0; i < 3; i++)
+                    {
+                        oriP[i, 0] = ps[i].originalPoint.X;
+                        oriP[i, 1] = ps[i].originalPoint.Y;
+                        oriP[i, 2] = 1;
 
-                    g.DrawImage(inputImage, ppp);
+                        tarP[i, 0] = ps[i].tagrtPoint.X;
+                        tarP[i, 1] = ps[i].tagrtPoint.Y;
+                        tarP[i, 2] = 1;
+                    }
+
+                    var oriE = CreateMatrix.Dense<float>(3, 3);
+                    var tarE = CreateMatrix.Dense<float>(3, 3);
+
+                    oriE[0, 0] = 0;
+                    oriE[1, 0] = inputImage.Width;
+                    oriE[2, 0] = 0;
+
+                    oriE[0, 1] = 0;
+                    oriE[1, 1] = 0;
+                    oriE[2, 1] = inputImage.Height;
+
+                    var X = tarP * oriP.Inverse();
+                    tarE = X * oriE;
+
+                    var points = new PointF[]
+                    {
+                        new PointF(tarE[0, 0], tarE[0, 1]),
+                        new PointF(tarE[1, 0], tarE[1, 1]),
+                        new PointF(tarE[2, 0], tarE[2, 1]),
+                    };
+
+                    g.DrawImage(inputImage, points);
 
                     return (Image)outputBitmap.Clone();
                 }
+
+
+            //case 1:
+            //    {
+            //        using var outputBitmap = new Bitmap(inputImage.Width, inputImage.Height);
+            //        using var g = Graphics.FromImage(outputBitmap);
+
+            //        var desCenter = ps[0].tagrtPoint;
+            //        var oriCenter = ps[0].originalPoint;
+
+            //        var move1 = Point.Subtract(desCenter, ((Size)oriCenter));
+            //        var points = new Point[]
+            //        {
+            //            Point.Add(new Point(0,0), (Size)move1),
+            //            Point.Add(new Point(inputImage.Width,0), (Size)move1),
+            //            Point.Add(new Point(0,inputImage.Height), (Size)move1),
+            //        };
+
+            //        g.DrawImage(inputImage, points);
+
+            //        return (Image)outputBitmap.Clone();
+            //    }
+            //case 2:
+            //    {
+            //        throw new NotImplementedException();
+
+            //        using var outputBitmap = new Bitmap(inputImage.Width, inputImage.Height);
+            //        using var g = Graphics.FromImage(outputBitmap);
+
+            //        // 移動元の重心を原点に持ってきて，それを移動先の重心に移動。
+
+            //        //var oriCenter = ps.Average(p => p.tagrtPoint);
+            //        //var desCenter = ps[0].originalPoint;
+
+            //        //var move1 = Point.Subtract(oriCenter, ((Size)desCenter));
+
+
+            //        var move1 = Point.Subtract(ps[0].tagrtPoint, ((Size)ps[0].originalPoint));
+            //        var points = new Point[]
+            //        {
+            //            Point.Add(new Point(0,0), (Size)move1),
+            //            Point.Add(new Point(inputImage.Width,0), (Size)move1),
+            //            Point.Add(new Point(0,inputImage.Height), (Size)move1),
+            //        };
+
+            //        g.DrawImage(inputImage, points);
+
+            //        return (Image)outputBitmap.Clone();
+            //    }
+            //case 3:
+            //    {
+            //        throw new NotImplementedException();
+
+            //        using var outputBitmap = new Bitmap(inputImage.Width, inputImage.Height);
+            //        using var g = Graphics.FromImage(outputBitmap);
+
+            //        var points = new Point[]
+            //          {
+            //                    new Point(0,0),
+            //                    new Point(400,0),
+            //                    new Point(300,300),
+            //          };
+
+            //        g.DrawImage(inputImage, points);
+
+            //        return (Image)outputBitmap.Clone();
+            //    }
+
             default:
                 throw new InvalidDataException("length of ps must be 1 - 3");
         }
+
+        // ★★★★★★★★★★★★★★★
+
     }
-
-    // ★★★★★★★★★★★★★★★
-
 }
+
