@@ -8,26 +8,16 @@ using System.Threading.Tasks;
 
 using Aki32_Utilities.Extensions;
 
+using Org.BouncyCastle.Asn1.UA;
+
 namespace Aki32_Utilities;
 public class MiniApps
 {
     /// <summary>
     /// keep taking screenshot of some dataset
     /// </summary>
-    public static void Books2PDF()
+    public static void Books2PDF(DirectoryInfo targetDirectory, int PageCount, int TimePerPageMilliSeconds = 2000)
     {
-        var lastPosition = new Point(0, 0);
-
-        Console.WriteLine("★★★★★★★★★★★★★★★ 定義");
-
-        Console.WriteLine("※未実装");
-
-        var PageCount = 1000;
-        var TimePerPageMilliSeconds = 1000;
-
-
-
-
         Console.WriteLine("\r\n★★★★★★★★★★★★★★★ 座標入力\r\n");
 
         var reasons = new string[] {
@@ -38,41 +28,28 @@ public class MiniApps
         var ps = new Point[reasons.Length];
 
         for (int i = 0; i < reasons.Length; i++)
-        {
-            Console.WriteLine($"\r\n{reasons[i]} の位置にカーソルを合わせて、Enterを押してください。");
-
-            Console.CursorVisible = false;
-            while (!Console.KeyAvailable)
-            {
-                lastPosition = IODeviceExtension.GetMouseCursorPosition();
-                ConsoleExtension.ClearCurrentConsoleLine();
-                Console.Write(lastPosition);
-                Thread.Sleep(10);
-            }
-            Console.CursorVisible = true;
-            Console.ReadLine();
-            ps[i] = lastPosition;
-        }
+            (ps[i], _) = IODeviceExtension.GetMouseCursorPositionConversationally();
 
         Console.WriteLine();
         for (int i = 0; i < reasons.Length; i++)
             Console.WriteLine($"{reasons[i]}:{ps[i]}");
-
         var UL = ps[0];
         var BR = ps[1];
         var ProceedButton = ps[1];
 
 
+
         Console.WriteLine("\r\n★★★★★★★★★★★★★★★ 撮影\r\n");
 
-        Console.WriteLine("※未実装");
-        Console.WriteLine("Altキー長押しで処理を中断します。");
-        //OwesomeExtensions.SaveScreenShot(output, new Point(0, 0), new Point(1000, 1000));
+        for (int i = 0; i < PageCount; i++)
+        {
+            OwesomeExtensions.SaveScreenShot(targetDirectory, UL, BR);
+            IODeviceExtension.MouseCursorMoveAndClick(ProceedButton);
+            Console.WriteLine($"{i + 1}/{PageCount} 枚完了");
+        }
 
 
         Console.WriteLine("\r\n★★★★★★★★★★★★★★★ PDF化\r\n");
-
-        Console.WriteLine("※未実装");
 
 
 

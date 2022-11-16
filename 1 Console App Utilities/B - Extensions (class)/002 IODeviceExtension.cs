@@ -8,9 +8,112 @@ namespace Aki32_Utilities.Extensions;
 /// </summary>
 public class IODeviceExtension
 {
+    // ★★★★★★★★★★★★★★★ for use
 
-    // ★★★★★★★★★★★★★★★ IO Device Input Events Base
+    public static void SendKey(byte sendingKey, bool withCtrl = false, bool withShift = false, bool withAlt = false)
+    {
+        // for safety
+        Thread.Sleep(10);
 
+        var button = IODeviceButton.Keyboard;
+
+        if (withCtrl) _ = keybd_event(VIRTUAL_KEY_CTRL, 0, (uint)GetInputEventCode(button, IODeviceButtonEvent.Down), (UIntPtr)0);
+        if (withShift) _ = keybd_event(VIRTUAL_KEY_SHIFT, 0, (uint)GetInputEventCode(button, IODeviceButtonEvent.Down), (UIntPtr)0);
+        if (withAlt) _ = keybd_event(VIRTUAL_KEY_ALT, 0, (uint)GetInputEventCode(button, IODeviceButtonEvent.Down), (UIntPtr)0);
+
+        // for safety
+        if (withCtrl | withShift | withAlt) Thread.Sleep(10);
+
+        _ = keybd_event(sendingKey, 0, (uint)GetInputEventCode(button, IODeviceButtonEvent.Down), (UIntPtr)0);
+        _ = keybd_event(sendingKey, 0, (uint)GetInputEventCode(button, IODeviceButtonEvent.Up), (UIntPtr)0);
+
+        if (withCtrl) _ = keybd_event(VIRTUAL_KEY_CTRL, 0, (uint)GetInputEventCode(button, IODeviceButtonEvent.Up), (UIntPtr)0);
+        if (withShift) _ = keybd_event(VIRTUAL_KEY_SHIFT, 0, (uint)GetInputEventCode(button, IODeviceButtonEvent.Up), (UIntPtr)0);
+        if (withAlt) _ = keybd_event(VIRTUAL_KEY_ALT, 0, (uint)GetInputEventCode(button, IODeviceButtonEvent.Up), (UIntPtr)0);
+
+    }
+    public static void SendKey(ConsoleKey sendingKey, bool withCtrl = false, bool withShift = false, bool withAlt = false)
+    {
+        SendKey((byte)sendingKey, withCtrl, withShift, withAlt);
+    }
+    public static void SendKey(char sendingKey, bool withCtrl = false, bool withShift = false, bool withAlt = false)
+    {
+        withShift |= char.IsUpper(sendingKey);
+        sendingKey = CorrectKey(sendingKey);
+        SendKey((byte)sendingKey, withCtrl, withShift, withAlt);
+    }
+    public static void SendKeys(string sendingKeys)
+    {
+        foreach (var sendingKey in sendingKeys)
+            SendKey(sendingKey);
+    }
+
+    public static Point GetMouseCursorPosition()
+    {
+        GetCursorPos(out var p);
+        return new Point(p.X, p.Y);
+    }
+
+    public static void MouseCursorMoveTo(int x, int y) => SetCursorPos(x, y);
+    public static void MouseCursorMoveTo(Point p) => SetCursorPos(p.X, p.Y);
+
+    public static void MouseClick(IODeviceButton button = IODeviceButton.MouseLeft)
+    {
+        mouse_event(GetInputEventCode(button, IODeviceButtonEvent.Down), 0, 0, 0, 0);
+        mouse_event(GetInputEventCode(button, IODeviceButtonEvent.Up), 0, 0, 0, 0);
+    }
+    public static void MouseWheelScroll(bool toUp, int times = 1)
+    {
+        var direction = WHEEL_DELTA * times * (toUp ? 1 : -1);
+        mouse_event(GetInputEventCode(IODeviceButton.MouseMiddle, IODeviceButtonEvent.WHEEL), 0, 0, direction, 0);
+    }
+
+
+    // ★★★★★★★★★★★★★★★ for use (applied)
+
+    public static void MouseDoubleClick(IODeviceButton button = IODeviceButton.MouseLeft)
+    {
+        MouseClick(button);
+        MouseClick(button);
+    }
+
+    public static (Point, ConsoleKeyInfo) GetMouseCursorPositionConversationally(string targetPointName = null)
+    {
+        if (targetPointName != null)
+            Console.WriteLine($"\r\nMove cursor to {targetPointName} and press Enter.");
+
+        var lastPosition = new Point(0, 0);
+        Console.CursorVisible = false;
+        while (!Console.KeyAvailable)
+        {
+            lastPosition = GetMouseCursorPosition();
+            ConsoleExtension.ClearCurrentConsoleLine();
+            Console.Write(lastPosition);
+            Thread.Sleep(10);
+        }
+        Console.CursorVisible = true;
+        var key = Console.ReadKey();
+        return (lastPosition, key);
+    }
+
+    public static void MouseCursorMoveAndClick(int x, int y, IODeviceButton button = IODeviceButton.MouseLeft)
+    {
+        MouseCursorMoveAndClick(new Point(x, y), button);
+    }
+    public static void MouseCursorMoveAndClick(Point p, IODeviceButton button = IODeviceButton.MouseLeft)
+    {
+        MouseCursorMoveTo(p);
+        MouseClick(button);
+    }
+
+
+    // ★★★★★★★★★★★★★★★ background processes
+
+
+    private const int VIRTUAL_KEY_SHIFT = 0x10;
+    private const int VIRTUAL_KEY_CTRL = 0x11;
+    private const int VIRTUAL_KEY_ALT = 0x12;
+    private const int WHEEL_DELTA = 120;
     private static int GetInputEventCode(IODeviceButton handlingButton, IODeviceButtonEvent handlingEvent)
     {
         switch (handlingButton)
@@ -80,56 +183,8 @@ public class IODeviceExtension
     }
 
 
-    // ★★★★★★★★★★★★★★★ Keyboard Input Events
-
-    private const int VIRTUAL_KEY_SHIFT = 0x10;
-    private const int VIRTUAL_KEY_CTRL = 0x11;
-    private const int VIRTUAL_KEY_ALT = 0x12;
-
     [DllImport("user32.dll")]
     public static extern uint keybd_event(byte bVk, byte bScan, uint dwFlags, UIntPtr dwExtraInfo);
-
-    /// <summary>
-    /// Virtual Keyboard Input.
-    /// </summary>
-    /// <param name="sendingKey">sending key code</param>
-    public static void SendKey(byte sendingKey, bool withCtrl = false, bool withShift = false, bool withAlt = false)
-    {
-        // for safety
-        Thread.Sleep(10);
-
-        var button = IODeviceButton.Keyboard;
-
-        if (withCtrl) _ = keybd_event(VIRTUAL_KEY_CTRL, 0, (uint)GetInputEventCode(button, IODeviceButtonEvent.Down), (UIntPtr)0);
-        if (withShift) _ = keybd_event(VIRTUAL_KEY_SHIFT, 0, (uint)GetInputEventCode(button, IODeviceButtonEvent.Down), (UIntPtr)0);
-        if (withAlt) _ = keybd_event(VIRTUAL_KEY_ALT, 0, (uint)GetInputEventCode(button, IODeviceButtonEvent.Down), (UIntPtr)0);
-
-        // for safety
-        if (withCtrl | withShift | withAlt) Thread.Sleep(10);
-
-        _ = keybd_event(sendingKey, 0, (uint)GetInputEventCode(button, IODeviceButtonEvent.Down), (UIntPtr)0);
-        _ = keybd_event(sendingKey, 0, (uint)GetInputEventCode(button, IODeviceButtonEvent.Up), (UIntPtr)0);
-
-        if (withCtrl) _ = keybd_event(VIRTUAL_KEY_CTRL, 0, (uint)GetInputEventCode(button, IODeviceButtonEvent.Up), (UIntPtr)0);
-        if (withShift) _ = keybd_event(VIRTUAL_KEY_SHIFT, 0, (uint)GetInputEventCode(button, IODeviceButtonEvent.Up), (UIntPtr)0);
-        if (withAlt) _ = keybd_event(VIRTUAL_KEY_ALT, 0, (uint)GetInputEventCode(button, IODeviceButtonEvent.Up), (UIntPtr)0);
-
-    }
-    public static void SendKey(ConsoleKey sendingKey, bool withCtrl = false, bool withShift = false, bool withAlt = false)
-    {
-        SendKey((byte)sendingKey, withCtrl, withShift, withAlt);
-    }
-    public static void SendKey(char sendingKey, bool withCtrl = false, bool withShift = false, bool withAlt = false)
-    {
-        withShift |= char.IsUpper(sendingKey);
-        sendingKey = CorrectKey(sendingKey);
-        SendKey((byte)sendingKey, withCtrl, withShift, withAlt);
-    }
-    public static void SendKeys(string sendingKeys)
-    {
-        foreach (var sendingKey in sendingKeys)
-            SendKey(sendingKey);
-    }
     private static char CorrectKey(char c)
     {
         if ('0' <= c && c <= '9') return c;
@@ -147,15 +202,8 @@ public class IODeviceExtension
     }
 
 
-    // ★★★★★★★★★★★★★★★ Get Mouse Cursor Position
-
     [DllImport("user32.dll")]
     static extern bool GetCursorPos(out POINT lpPoint);
-    public static Point GetMouseCursorPosition()
-    {
-        GetCursorPos(out var p);
-        return new Point(p.X, p.Y);
-    }
     public struct POINT
     {
         public int X;
@@ -163,34 +211,12 @@ public class IODeviceExtension
     }
 
 
-    // ★★★★★★★★★★★★★★★ Move Mouse Cursor
-
     [DllImport("USER32.dll", CallingConvention = CallingConvention.StdCall)]
     static extern void SetCursorPos(int X, int Y);
-    public static void MouseCursorMoveTo(int x, int y) => SetCursorPos(x, y);
 
-
-    // ★★★★★★★★★★★★★★★ Mouse Input Events 
-
-    private const int WHEEL_DELTA = 120;
 
     [DllImport("USER32.dll", CallingConvention = CallingConvention.StdCall)]
     static extern void mouse_event(int dwFlags, int dx, int dy, int cButtons, int dwExtraInfo);
-    public static void MouseClick(IODeviceButton button = IODeviceButton.MouseLeft)
-    {
-        mouse_event(GetInputEventCode(button, IODeviceButtonEvent.Down), 0, 0, 0, 0);
-        mouse_event(GetInputEventCode(button, IODeviceButtonEvent.Up), 0, 0, 0, 0);
-    }
-    public static void MouseDoubleClick(IODeviceButton button = IODeviceButton.MouseLeft)
-    {
-        MouseClick(button);
-        MouseClick(button);
-    }
-    public static void MouseWheelScroll(bool toUp)
-    {
-        var direction = WHEEL_DELTA * (toUp ? 1 : -1);
-        mouse_event(GetInputEventCode(IODeviceButton.MouseMiddle, IODeviceButtonEvent.WHEEL), 0, 0, direction, 0);
-    }
 
 
     // ★★★★★★★★★★★★★★★ 
