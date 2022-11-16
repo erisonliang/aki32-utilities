@@ -113,33 +113,33 @@ public static partial class OwesomeExtensions
     /// </summary>
     public class CropSize
     {
-        public double l { get; set; }
-        public double t { get; set; }
-        public double r { get; set; }
-        public double b { get; set; }
+        public double L { get; set; }
+        public double T { get; set; }
+        public double R { get; set; }
+        public double B { get; set; }
 
         public CropSize(double l, double t, double r, double b)
         {
             if (l < 0 && 1 < l)
-                throw new InvalidDataException("l, t, r, b must be in range [0.0, 1.0]");
+                throw new InvalidDataException("L, T, R, B must be in range [0.0, 1.0]");
 
-            this.l = l;
-            this.t = t;
-            this.r = r;
-            this.b = b;
+            L = l;
+            T = t;
+            R = r;
+            B = b;
         }
 
         public Rectangle GetImageCropRect(Image img)
         {
-            var cx = (int)(l * img.Width);
-            var cy = (int)(t * img.Height);
-            var cw = (int)((1 - l - r) * img.Width);
-            var ch = (int)((1 - t - b) * img.Height);
+            var cx = (int)(L * img.Width);
+            var cy = (int)(T * img.Height);
+            var cw = (int)((1 - L - R) * img.Width);
+            var ch = (int)((1 - T - B) * img.Height);
 
             return new Rectangle(cx, cy, cw, ch);
         }
 
-        public new string ToString() => $"{l:F2},{t:F2},{r:F2},{b:F2}";
+        public new string ToString() => $"{L:F2},{T:F2},{R:F2},{B:F2}";
 
     }
 
