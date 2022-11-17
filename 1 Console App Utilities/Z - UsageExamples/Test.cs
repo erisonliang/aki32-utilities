@@ -178,42 +178,36 @@ public class Test
 
             // E007 DistortImage
             {
-                ////var input = new DirectoryInfo($@"{baseDir}\E007 DistortImage");
-                ////input.DistortImage_Loop(null, new Size(100, 100));
+                //var input5 = new FileInfo($@"{baseDir}\E007 DistortImage\5.png");
+                //var output510 = new FileInfo($@"{baseDir}\E007 DistortImage\5-1-0.png");
+                //var output520 = new FileInfo($@"{baseDir}\E007 DistortImage\5-2-0.png");
+                //var output521 = new FileInfo($@"{baseDir}\E007 DistortImage\5-2-1.png");
+                //var output530 = new FileInfo($@"{baseDir}\E007 DistortImage\5-3-0.png");
+                //var output531 = new FileInfo($@"{baseDir}\E007 DistortImage\5-3-1.png");
 
-                var input0 = new FileInfo($@"{baseDir}\E007 DistortImage\5.png");
-                var output11 = new FileInfo($@"{baseDir}\E007 DistortImage\5-11.png");
-                var output12 = new FileInfo($@"{baseDir}\E007 DistortImage\5-12.png");
-                var output21 = new FileInfo($@"{baseDir}\E007 DistortImage\5-21.png");
-                var output22 = new FileInfo($@"{baseDir}\E007 DistortImage\5-22.png");
-                var output31 = new FileInfo($@"{baseDir}\E007 DistortImage\5-31.png");
-                var output32 = new FileInfo($@"{baseDir}\E007 DistortImage\5-32.png");
-                var output33 = new FileInfo($@"{baseDir}\E007 DistortImage\5-33.png");
+                //// ★ 1 point → move
+                //input5.DistortImage(output510, Brushes.Orange,
+                //    (new Point(96, 80), new Point(0, 0)));
 
+                //// ★ 2 points → move, resize, rotate
+                //input5.DistortImage(output520, Brushes.Orange,
+                //    (new Point(96, 80), new Point(0, 0)),
+                //    (new Point(373, 120), new Point(400, 0)));
 
-                //input0.DistortImage(output12, (new Point(50, 100), new Point(0, 0)));
-                //input0.DistortImage(output12, (new Point(100, 100), new Point(0, 0)));
-                //input0.DistortImage(output11, (new Point(0, 0), new Point(100, 100)));
+                //input5.DistortImage(output521, Brushes.Orange,
+                //    (new Point(96, 80), new Point(0, 0)),
+                //    (new Point(116, 138), new Point(0, 200)));
 
+                //// ★ 3 points →  move, resize, rotate, shear
+                //input5.DistortImage(output530, Brushes.Orange,
+                //    (new Point(96, 80), new Point(0, 0)),
+                //    (new Point(373, 120), new Point(400, 0)),
+                //    (new Point(116, 138), new Point(0, 200)));
 
-                //input0.DistortImage(output21, (new Point(0, 0), new Point(100, 0)), (new Point(100, 0), new Point(0, 0)));
-                //input0.DistortImage(output22, (new Point(0, 0), new Point(100, 0)), (new Point(100, 0), new Point(0, 0)));
-
-
-                //input0.DistortImage(output31,
-                //    (new Point(0, 0), new Point(50, 50)),
-                //    (new Point(200, 0), new Point(350, 50)),
-                //    (new Point(0, 100), new Point(50, 150)));
-
-                //input0.DistortImage(output32,
-                //    (new Point(0, 0), new Point(50, 50)),
-                //    (new Point(200, 0), new Point(50, 450)),
-                //    (new Point(0, 100), new Point(350, 50)));
-
-                input0.DistortImage(output33,
-                    (new Point(28, 33), new Point(0, 0)),
-                    (new Point(240, 33), new Point(400, 0)),
-                    (new Point(28, 108), new Point(0, 200)));
+                //input5.DistortImage(output531, Brushes.Orange,
+                //    (new Point(96, 80), new Point(50, 50)),
+                //    (new Point(373, 120), new Point(350, 50)),
+                //    (new Point(116, 138), new Point(50, 150)));
 
 
             }

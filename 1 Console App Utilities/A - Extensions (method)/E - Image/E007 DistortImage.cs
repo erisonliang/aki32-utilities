@@ -8,6 +8,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 using DocumentFormat.OpenXml.Math;
+using DocumentFormat.OpenXml.Wordprocessing;
 
 using LibGit2Sharp;
 
@@ -28,7 +29,7 @@ public static partial class OwesomeExtensions
     /// <param name="outputFile">when null, automatically set to {inputFile.DirectoryName}/output_DistortImage/{inputFile.Name}</param>
     /// <param name="ps">List of original points and target points. min 1, max 3</param>
     /// <returns></returns>
-    public static FileInfo DistortImage(this FileInfo inputFile, FileInfo? outputFile, params (Point originalPoint, Point tagrtPoint)[] ps)
+    public static FileInfo DistortImage(this FileInfo inputFile, FileInfo? outputFile, Brush? fill = null, params (Point originalPoint, Point tagrtPoint)[] ps)
     {
         // preprocess
         UtilPreprocessors.PreprocessOutFile(ref outputFile, false, inputFile.Directory!, inputFile.Name);
@@ -40,7 +41,7 @@ public static partial class OwesomeExtensions
 
         // main
         using var inputImage = Image.FromFile(inputFile.FullName);
-        var outputImage = DistortImage(inputImage, ps);
+        var outputImage = DistortImage(inputImage, fill, ps);
         outputImage.Save(outputFile!.FullName);
 
 
@@ -56,7 +57,7 @@ public static partial class OwesomeExtensions
     /// <param name="outputDir">when null, automatically set to {inputDir.FullName}/output_DistortImage</param>
     /// <param name="ps">List of original points and target points. min 1, max 3</param>
     /// <returns></returns>
-    public static DirectoryInfo DistortImage_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir, params (Point originalPoint, Point tagrtPoint)[] ps)
+    public static DirectoryInfo DistortImage_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir, Brush? fill = null, params (Point originalPoint, Point tagrtPoint)[] ps)
     {
         // preprocess
         UtilPreprocessors.PreprocessOutDir(ref outputDir, true, inputDir);
@@ -68,7 +69,7 @@ public static partial class OwesomeExtensions
             var newFilePath = Path.Combine(outputDir!.FullName, file.Name);
             try
             {
-                file.DistortImage(new FileInfo(newFilePath), ps);
+                file.DistortImage(new FileInfo(newFilePath), fill, ps);
                 if (UtilConfig.ConsoleOutput)
                     Console.WriteLine($"O: {newFilePath}");
             }
@@ -87,178 +88,115 @@ public static partial class OwesomeExtensions
 
     // ★★★★★★★★★★★★★★★ Image process
 
+
+
     /// <summary>
     /// DistortImage
     /// </summary>
     /// <param name="inputFile"></param>
     /// <param name="outputFile">when null, automatically set to {inputFile.DirectoryName}/output_DistortImage/{inputFile.Name}</param>
-    /// <param name="ps">List of original points and target points. min 1, max 3</param>
+    /// <param name="ps">List of relative values of original point and target points. min length 1, max length 3</param>
     /// <returns></returns>
-    public static Image DistortImage(this Image inputImage, params (Point originalPoint, Point tagrtPoint)[] ps)
+    public static Image DistortImage(this Image inputImage, Brush? fill = null, params (PointF originalPoint, PointF tagrtPoint)[] pps)
+    {
+        var ps = pps.Select(pp => (
+            new Point((int)(pp.originalPoint.X * inputImage.Width), (int)(pp.originalPoint.Y * inputImage.Height)),
+            new Point((int)(pp.tagrtPoint.X * inputImage.Width), (int)(pp.tagrtPoint.Y * inputImage.Height)))
+        ).ToArray();
+
+        return DistortImage(inputImage, ps: ps);
+    }
+
+    /// <summary>
+    /// DistortImage
+    /// </summary>
+    /// <param name="inputFile"></param>
+    /// <param name="outputFile">when null, automatically set to {inputFile.DirectoryName}/output_DistortImage/{inputFile.Name}</param>
+    /// <param name="ps">List of original points and target points. min length 1, max length 3</param>
+    /// <returns></returns>
+    public static Image DistortImage(this Image inputImage, Brush? fill = null, params (Point originalPoint, Point tagrtPoint)[] ps)
     {
         // preprocess
-        var dim = ps.Length;
-        if (dim is < 1 or > 3)
+        if (ps.Length is < 1 or > 3)
             throw new InvalidDataException("ps length must be in range 1 - 3");
+        fill ??= Brushes.Transparent;
+
 
         // main
-        switch (dim)
+
+        if (ps.Length == 1)
         {
-            case 1:
-                {
-                    // 移動のみ
-                    throw new NotImplementedException();
-                }
-            case 2:
-                {
-                    // 回転・移動のみ
-                    throw new NotImplementedException();
-                }
-            case 3:
-                {
-                    // 回転・移動・せん断
+            // increase dim
+            ps = ps.Append((Point.Add(ps[0].originalPoint, new Size(100, 0)), Point.Add(ps[0].tagrtPoint, new Size(100, 0)))).ToArray();
+            ps = ps.Append((Point.Add(ps[0].originalPoint, new Size(0, 100)), Point.Add(ps[0].tagrtPoint, new Size(0, 100)))).ToArray();
+        }
+        if (ps.Length == 2)
+        {
+            // increase dim
+            var oriP0 = ps[0].originalPoint;
+            var oriP1 = ps[1].originalPoint;
+            var oriV1 = Point.Subtract(oriP1, (Size)oriP0);
+            var oriV2 = Point.Add(new Point(-oriV1.Y, oriV1.X), (Size)oriP0);
 
-                    using var outputBitmap = new Bitmap(inputImage.Width, inputImage.Height);
-                    using var g = Graphics.FromImage(outputBitmap);
-                    g.FillRectangle(Brushes.Orange, new Rectangle(new Point(0, 0), outputBitmap.Size));
+            var tarP0 = ps[0].tagrtPoint;
+            var tarP1 = ps[1].tagrtPoint;
+            var tarV1 = Point.Subtract(tarP1, (Size)tarP0);
+            var tarV2 = Point.Add(new Point(-tarV1.Y, tarV1.X), (Size)tarP0);
 
-
-                    var oriO = CreateMatrix.Dense<float>(3, 2);
-                    var tarO = CreateMatrix.Dense<float>(3, 2);
-
-                    for (int i = 0; i < dim; i++)
-                    {
-                        oriO[i, 0] = ps[i].originalPoint.X;
-                        oriO[i, 1] = ps[i].originalPoint.Y;
-                        tarO[i, 0] = ps[i].tagrtPoint.X;
-                        tarO[i, 1] = ps[i].tagrtPoint.Y;
-                    }
-
-
-                    var oriO0 = CreateMatrix.Dense<float>(3, 2);
-                    var tarO0 = CreateMatrix.Dense<float>(3, 2);
-
-                    for (int i = 0; i < 3; i++)
-                    {
-                        oriO0[i, 0] = oriO[0, 0];
-                        oriO0[i, 1] = oriO[0, 1];
-                        tarO0[i, 0] = tarO[0, 0];
-                        tarO0[i, 1] = tarO[0, 1];
-                    }
-
-
-                    var oriF = CreateMatrix.Dense<float>(3, 2);
-                    var tarF = CreateMatrix.Dense<float>(3, 2);
-
-                    oriF[1, 0] = inputImage.Width;
-                    oriF[2, 1] = inputImage.Height;
-
-
-                    //tarP -= tarP0;
-                    //oriP -= tarP0;
-                    ////oriP -= oriP0;
-                    ////var oriEXSize = oriE[1, 0] - oriE[0, 0];
-                    ////var oriEYSize = oriE[1, 1] - oriE[0, 1];
-
-                    //var X = tarP * oriP.PseudoInverse();
-                    //tarE = X * oriE;
-
-                    //tarE += tarP0;
-                    //tarE -= oriP0;
-
-
-                    var m1 = tarO - tarO0;
-                    var m2 = (oriO - oriO0).PseudoInverse();
-                    var m3 = oriF - oriO0;
-
-                    tarF = m1 * m2 * m3 + tarO0;
-
-
-                    var points = new PointF[]
-                    {
-                        new PointF(tarF[0, 0], tarF[0, 1]),
-                        new PointF(tarF[1, 0], tarF[1, 1]),
-                        new PointF(tarF[2, 0], tarF[2, 1]),
-                    };
-
-                    g.DrawImage(inputImage, points);
-
-                    return (Image)outputBitmap.Clone();
-                }
-
-
-            //case 1:
-            //    {
-            //        using var outputBitmap = new Bitmap(inputImage.Width, inputImage.Height);
-            //        using var g = Graphics.FromImage(outputBitmap);
-
-            //        var desCenter = ps[0].tagrtPoint;
-            //        var oriCenter = ps[0].originalPoint;
-
-            //        var move1 = Point.Subtract(desCenter, ((Size)oriCenter));
-            //        var points = new Point[]
-            //        {
-            //            Point.Add(new Point(0,0), (Size)move1),
-            //            Point.Add(new Point(inputImage.Width,0), (Size)move1),
-            //            Point.Add(new Point(0,inputImage.Height), (Size)move1),
-            //        };
-
-            //        g.DrawImage(inputImage, points);
-
-            //        return (Image)outputBitmap.Clone();
-            //    }
-            //case 2:
-            //    {
-            //        throw new NotImplementedException();
-
-            //        using var outputBitmap = new Bitmap(inputImage.Width, inputImage.Height);
-            //        using var g = Graphics.FromImage(outputBitmap);
-
-            //        // 移動元の重心を原点に持ってきて，それを移動先の重心に移動。
-
-            //        //var oriCenter = ps.Average(p => p.tagrtPoint);
-            //        //var desCenter = ps[0].originalPoint;
-
-            //        //var move1 = Point.Subtract(oriCenter, ((Size)desCenter));
-
-
-            //        var move1 = Point.Subtract(ps[0].tagrtPoint, ((Size)ps[0].originalPoint));
-            //        var points = new Point[]
-            //        {
-            //            Point.Add(new Point(0,0), (Size)move1),
-            //            Point.Add(new Point(inputImage.Width,0), (Size)move1),
-            //            Point.Add(new Point(0,inputImage.Height), (Size)move1),
-            //        };
-
-            //        g.DrawImage(inputImage, points);
-
-            //        return (Image)outputBitmap.Clone();
-            //    }
-            //case 3:
-            //    {
-            //        throw new NotImplementedException();
-
-            //        using var outputBitmap = new Bitmap(inputImage.Width, inputImage.Height);
-            //        using var g = Graphics.FromImage(outputBitmap);
-
-            //        var points = new Point[]
-            //          {
-            //                    new Point(0,0),
-            //                    new Point(400,0),
-            //                    new Point(300,300),
-            //          };
-
-            //        g.DrawImage(inputImage, points);
-
-            //        return (Image)outputBitmap.Clone();
-            //    }
-
-            default:
-                throw new InvalidDataException("length of ps must be 1 - 3");
+            ps = ps.Append((oriV2, tarV2)).ToArray();
         }
 
-        // ★★★★★★★★★★★★★★★
+        using var outputBitmap = new Bitmap(inputImage.Width, inputImage.Height);
+        using var g = Graphics.FromImage(outputBitmap);
+        g.FillRectangle(fill!, new Rectangle(new Point(0, 0), outputBitmap.Size));
+
+        var oriO = CreateMatrix.Dense<float>(4, 3);
+        var tarO = CreateMatrix.Dense<float>(4, 3);
+
+        for (int i = 0; i < 3; i++)
+        {
+            oriO[0, i] = ps[i].originalPoint.X;
+            oriO[1, i] = ps[i].originalPoint.Y;
+            oriO[2, i] = 1;
+            oriO[3, i] = 1;
+
+            tarO[0, i] = ps[i].tagrtPoint.X;
+            tarO[1, i] = ps[i].tagrtPoint.Y;
+            tarO[2, i] = 1;
+            tarO[3, i] = 1;
+        }
+
+        var oriF = CreateMatrix.Dense<float>(4, 3);
+
+        oriF[0, 1] = inputImage.Width;
+        oriF[1, 2] = inputImage.Height;
+        oriF[2, 0] = 1;
+        oriF[2, 1] = 1;
+        oriF[2, 2] = 1;
+        oriF[3, 0] = 1;
+        oriF[3, 1] = 1;
+        oriF[3, 2] = 1;
+
+        var m1 = tarO;
+        var m2 = oriO;
+        var m3 = oriF;
+        var m2I = m2.PseudoInverse();
+        var tarF = m1 * m2I * m3;
+
+        var points = new PointF[]
+        {
+            new PointF(tarF[0,0], tarF[1,0]),
+            new PointF(tarF[0,1], tarF[1,1]),
+            new PointF(tarF[0,2], tarF[1,2]),
+        };
+
+        g.DrawImage(inputImage, points);
+
+        return (Image)outputBitmap.Clone();
 
     }
+
+    // ★★★★★★★★★★★★★★★
+
 }
 
