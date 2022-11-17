@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
@@ -111,6 +112,96 @@ public static partial class OwesomeExtensions
 
         // post process
         return outputDir!;
+    }
+
+    // ★★★★★★★★★★★★★★★ FileSystemInfo chain process (applied)
+
+    /// <summary>
+    /// DistortImage
+    /// </summary>
+    /// <param name="inputDir"></param>
+    /// <param name="outputDir">when null, automatically set to {inputDir.FullName}/output_DistortImage</param>
+    /// <param name="targetPoints">List of target points. Length 3</param>
+    /// <returns></returns>
+    public static Task<DirectoryInfo> DistortImage_Loop_Conversationally(this DirectoryInfo inputDir, DirectoryInfo? outputDir, Brush? fill = null, params PointF[] targetPoints)
+    {
+        // preprocess
+        UtilPreprocessors.PreprocessOutDir(ref outputDir, true, inputDir.Parent!);
+
+
+        // main
+        if (inputDir.GetFiles("*.png").Any())
+        {
+            Process.Start(new ProcessStartInfo()
+            {
+                FileName = inputDir.GetFiles("*.png").First().FullName,
+                UseShellExecute = true,
+            });
+        }
+        else
+        {
+            return Task.Run(() => outputDir!);
+        }
+
+        Console.WriteLine("\r\n★★★★★ Coodinate Input (Press escape key to go back to previous parameter)\r\n");
+
+        // 画像の点を拾う。
+        var reasons = new string[] {
+                "Upper Left of the Image（┏  ）",
+                "Bottom Right of the Image（┛  ）",
+                "Upper Left of the Object（┏  ）",
+                "Upper Right of the Object（┓  ）",
+                "Bottom Left of the Object（┗  ）",
+            };
+        var ps = new Point[reasons.Length];
+
+        for (int i = 0; i < reasons.Length; i++)
+        {
+            try
+            {
+                ps[i] = IODeviceExtension.GetMouseCursorPositionConversationally(ConsoleKey.Escape, reasons[i]);
+            }
+            catch (OperationCanceledException)
+            {
+                i -= 2;
+                i = Math.Max(-1, i);
+                continue;
+            }
+        }
+
+        Console.WriteLine();
+        Console.WriteLine();
+        for (int i = 0; i < reasons.Length; i++)
+            Console.WriteLine($"{reasons[i]}:{ps[i]}");
+
+        var ulF = ps[0];
+        var brF = ps[1];
+        var ulO = ps[2];
+        var urO = ps[3];
+        var blO = ps[4];
+
+        float widthF = brF.X - ulF.X;
+        float heightF = brF.Y - ulF.Y;
+
+        var ratiosO = new PointF[3]
+        {
+                new PointF((ulO.X - ulF.X) / widthF, (ulO.Y - ulF.Y) / heightF),
+                new PointF((urO.X - ulF.X) / widthF, (urO.Y - ulF.Y) / heightF),
+                new PointF((blO.X - ulF.X) / widthF, (blO.Y - ulF.Y) / heightF),
+        };
+
+
+        Console.WriteLine("\r\n★★★★★ Started to process distortion\r\n");
+
+        // post process
+        return Task.Run(() =>
+        {
+            return inputDir!.DistortImage_Loop(outputDir, fill,
+                (ratiosO[0], targetPoints[0]),
+                (ratiosO[1], targetPoints[1]),
+                (ratiosO[2], targetPoints[2]));
+        });
+
     }
 
 
