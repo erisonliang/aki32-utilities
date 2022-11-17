@@ -80,7 +80,7 @@ public class IODeviceExtension
     public static Point GetMouseCursorPositionConversationally(ConsoleKey terminateKey = ConsoleKey.NoName, string targetPointName = null)
     {
         if (targetPointName != null)
-            Console.WriteLine($"\r\nMove cursor to {targetPointName} and press Enter. (Required this window has focus)");
+            Console.WriteLine($"\r\nMove cursor to {targetPointName} and press Enter. (must be with this window focused)");
 
         var lastPosition = new Point(0, 0);
         Console.CursorVisible = false;
