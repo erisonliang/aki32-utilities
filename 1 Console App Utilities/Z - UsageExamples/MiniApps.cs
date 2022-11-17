@@ -33,7 +33,7 @@ public class MiniApps
         var ps = new Point[reasons.Length];
 
         for (int i = 0; i < reasons.Length; i++)
-            (ps[i], _) = IODeviceExtension.GetMouseCursorPositionConversationally(reasons[i]);
+            ps[i] = IODeviceExtension.GetMouseCursorPositionConversationally(ConsoleKey.Escape, reasons[i]);
 
         Console.WriteLine();
         for (int i = 0; i < reasons.Length; i++)

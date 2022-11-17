@@ -77,15 +77,24 @@ public class IODeviceExtension
         MouseClick(button);
     }
 
-    public static (Point, ConsoleKeyInfo) GetMouseCursorPositionConversationally(string targetPointName = null)
+    public static Point GetMouseCursorPositionConversationally(ConsoleKey terminateKey = ConsoleKey.NoName, string targetPointName = null)
     {
         if (targetPointName != null)
             Console.WriteLine($"\r\nMove cursor to {targetPointName} and press Enter.");
 
         var lastPosition = new Point(0, 0);
         Console.CursorVisible = false;
-        while (!Console.KeyAvailable)
+        while (true)
         {
+            if (Console.KeyAvailable)
+            {
+                var key = Console.ReadKey();
+                if (key.Key == ConsoleKey.Enter)
+                    break;
+                if (key.Key == terminateKey)
+                    throw new OperationCanceledException($"Terminate key ({terminateKey.ToString()}) was pressed");
+            }
+
             lastPosition = GetMouseCursorPosition();
             ConsoleExtension.ClearCurrentConsoleLine();
             Console.Write(lastPosition);
@@ -93,8 +102,7 @@ public class IODeviceExtension
         }
         Console.CursorVisible = true;
         Console.WriteLine();
-        var key = Console.ReadKey();
-        return (lastPosition, key);
+        return lastPosition;
     }
 
     public static void MouseCursorMoveAndClick(int x, int y, IODeviceButton button = IODeviceButton.MouseLeft)
