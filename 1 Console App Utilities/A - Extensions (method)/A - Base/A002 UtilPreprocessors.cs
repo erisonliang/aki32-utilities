@@ -60,7 +60,7 @@ public static class UtilPreprocessors
     {
         // ConsoleOut
         if (UtilConfig.ConsoleOutput && consoleOut)
-            Console.WriteLine($"\r\n** {methodName} Method Called{(takesTimeFlag ? " (* This is time-consuming method. Please be patient...)" : "")}");
+            Console.WriteLine($"\r\n** {methodName} Method Called{(takesTimeFlag ? " (* This method is time-consuming. Please be patient...)" : "")}");
 
         Encoding.RegisterProvider(CodePagesEncodingProvider.Instance); // to handle Shift-JIS
     }
