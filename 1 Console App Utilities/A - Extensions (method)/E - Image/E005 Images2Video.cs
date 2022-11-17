@@ -36,7 +36,7 @@ public static partial class OwesomeExtensions
         // force download required dll
         var requiredDllName = "openh264-1.8.0-win64.dll";
         if (!File.Exists(requiredDllName))
-            DownloadFileSync(new FileInfo(requiredDllName), new Uri($@"https://github.com/aki32/aki32-utilities/raw/main/Properties/Assets/{requiredDllName}"));
+            DownloadFileSync(new FileInfo(requiredDllName), new Uri($@"https://github.com/aki32/aki32-utilities/raw/main/1%20Console%20App%20Utilities/Properties/Assets/{requiredDllName}"));
 
 
         // main

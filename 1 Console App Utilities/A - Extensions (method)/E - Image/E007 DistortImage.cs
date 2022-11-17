@@ -27,7 +27,21 @@ public static partial class OwesomeExtensions
     /// </summary>
     /// <param name="inputFile"></param>
     /// <param name="outputFile">when null, automatically set to {inputFile.DirectoryName}/output_DistortImage/{inputFile.Name}</param>
-    /// <param name="ps">List of original points and target points. min 1, max 3</param>
+    /// <param name="pps">List of the ratio of original point and target points. from 0.0-1.0. Min length 1, max length 3</param>
+    /// <returns></returns>
+    public static FileInfo DistortImage(this FileInfo inputFile, FileInfo? outputFile, Brush? fill = null, params (PointF originalPointRatio, PointF tagrtPointRatio)[] pps)
+    {
+        using var inputImage = Image.FromFile(inputFile.FullName);
+        var ps = inputImage.__For_DistortImage_ConvertFromPointFsToPoints(pps);
+        return inputFile.DistortImage(outputFile, fill, ps);
+    }
+
+    /// <summary>
+    /// DistortImage
+    /// </summary>
+    /// <param name="inputFile"></param>
+    /// <param name="outputFile">when null, automatically set to {inputFile.DirectoryName}/output_DistortImage/{inputFile.Name}</param>
+    /// <param name="ps">List of original points and target points. Min length 1, max length 3</param>
     /// <returns></returns>
     public static FileInfo DistortImage(this FileInfo inputFile, FileInfo? outputFile, Brush? fill = null, params (Point originalPoint, Point tagrtPoint)[] ps)
     {
@@ -55,7 +69,21 @@ public static partial class OwesomeExtensions
     /// </summary>
     /// <param name="inputDir"></param>
     /// <param name="outputDir">when null, automatically set to {inputDir.FullName}/output_DistortImage</param>
-    /// <param name="ps">List of original points and target points. min 1, max 3</param>
+    /// <param name="pps">List of the ratio of original point and target points. from 0.0-1.0. Min length 1, max length 3</param>
+    /// <returns></returns>
+    public static DirectoryInfo DistortImage_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir, Brush? fill = null, params (PointF originalPointRatio, PointF tagrtPointRatio)[] pps)
+    {
+        using var inputImage = Image.FromFile(inputDir.GetFiles("*.png")[0].FullName);
+        var ps = inputImage.__For_DistortImage_ConvertFromPointFsToPoints(pps);
+        return inputDir.DistortImage_Loop(outputDir, fill, ps);
+    }
+
+    /// <summary>
+    /// DistortImage
+    /// </summary>
+    /// <param name="inputDir"></param>
+    /// <param name="outputDir">when null, automatically set to {inputDir.FullName}/output_DistortImage</param>
+    /// <param name="ps">List of original points and target points. Min length 1, max length 3</param>
     /// <returns></returns>
     public static DirectoryInfo DistortImage_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir, Brush? fill = null, params (Point originalPoint, Point tagrtPoint)[] ps)
     {
@@ -88,23 +116,15 @@ public static partial class OwesomeExtensions
 
     // ★★★★★★★★★★★★★★★ Image process
 
-
-
     /// <summary>
     /// DistortImage
     /// </summary>
-    /// <param name="inputFile"></param>
-    /// <param name="outputFile">when null, automatically set to {inputFile.DirectoryName}/output_DistortImage/{inputFile.Name}</param>
-    /// <param name="ps">List of relative values of original point and target points. min length 1, max length 3</param>
+    /// <param name="pps">List of the ratio of original point and target points. from 0.0-1.0. Min length 1, max length 3</param>
     /// <returns></returns>
-    public static Image DistortImage(this Image inputImage, Brush? fill = null, params (PointF originalPoint, PointF tagrtPoint)[] pps)
+    public static Image DistortImage(this Image inputImage, Brush? fill = null, params (PointF originalPointRatio, PointF tagrtPointRatio)[] pps)
     {
-        var ps = pps.Select(pp => (
-            new Point((int)(pp.originalPoint.X * inputImage.Width), (int)(pp.originalPoint.Y * inputImage.Height)),
-            new Point((int)(pp.tagrtPoint.X * inputImage.Width), (int)(pp.tagrtPoint.Y * inputImage.Height)))
-        ).ToArray();
-
-        return DistortImage(inputImage, ps: ps);
+        var ps = inputImage.__For_DistortImage_ConvertFromPointFsToPoints(pps);
+        return DistortImage(inputImage, fill, ps);
     }
 
     /// <summary>
@@ -112,7 +132,7 @@ public static partial class OwesomeExtensions
     /// </summary>
     /// <param name="inputFile"></param>
     /// <param name="outputFile">when null, automatically set to {inputFile.DirectoryName}/output_DistortImage/{inputFile.Name}</param>
-    /// <param name="ps">List of original points and target points. min length 1, max length 3</param>
+    /// <param name="ps">List of original points and target points. Min length 1, max length 3</param>
     /// <returns></returns>
     public static Image DistortImage(this Image inputImage, Brush? fill = null, params (Point originalPoint, Point tagrtPoint)[] ps)
     {
@@ -196,7 +216,21 @@ public static partial class OwesomeExtensions
 
     }
 
+    /// <summary>
+    /// For DistortImage. Convert from PointFs to Points
+    /// </summary>
+    /// <param name="inputImage"></param>
+    /// <param name="pps">List of the ratio of original point and target points. from 0.0-1.0. Min length 1, max length 3</param>
+    /// <returns></returns>
+    private static (Point originalPoint, Point tagrtPoint)[] __For_DistortImage_ConvertFromPointFsToPoints(this Image inputImage, params (PointF originalPointRatio, PointF tagrtPointRatio)[] pps)
+    {
+        return pps.Select(pp => (
+             new Point((int)(pp.originalPointRatio.X * inputImage.Width), (int)(pp.originalPointRatio.Y * inputImage.Height)),
+             new Point((int)(pp.tagrtPointRatio.X * inputImage.Width), (int)(pp.tagrtPointRatio.Y * inputImage.Height)))
+             ).ToArray();
+    }
+
+
     // ★★★★★★★★★★★★★★★
 
 }
-

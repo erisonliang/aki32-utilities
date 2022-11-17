@@ -29,7 +29,7 @@ public static partial class OwesomeExtensions
         using var request = new HttpRequestMessage(HttpMethod.Get, url);
         using var response = httpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead).Result;
         if (response.StatusCode != HttpStatusCode.OK)
-            return null;
+            throw new HttpRequestException($"Http request failed: {response.RequestMessage}");
 
         using var content = response.Content;
         using var serverStream = content.ReadAsStreamAsync().Result;
