@@ -188,6 +188,7 @@ public class Test
                 var output22 = new FileInfo($@"{baseDir}\E007 DistortImage\5-22.png");
                 var output31 = new FileInfo($@"{baseDir}\E007 DistortImage\5-31.png");
                 var output32 = new FileInfo($@"{baseDir}\E007 DistortImage\5-32.png");
+                var output33 = new FileInfo($@"{baseDir}\E007 DistortImage\5-33.png");
 
 
                 //input0.DistortImage(output12, (new Point(50, 100), new Point(0, 0)));
@@ -199,11 +200,20 @@ public class Test
                 //input0.DistortImage(output22, (new Point(0, 0), new Point(100, 0)), (new Point(100, 0), new Point(0, 0)));
 
 
-                input0.DistortImage(output31,
-                    (new Point(0, 0), new Point(50, 50)),
-                    (new Point(200, 0), new Point(350, 50)),
-                    (new Point(0, 100), new Point(50, 150)));
-                //input0.DistortImage(output32, (new Point(0, 0), new Point(100, 0)), (new Point(100, 0), new Point(0, 0)));
+                //input0.DistortImage(output31,
+                //    (new Point(0, 0), new Point(50, 50)),
+                //    (new Point(200, 0), new Point(350, 50)),
+                //    (new Point(0, 100), new Point(50, 150)));
+
+                //input0.DistortImage(output32,
+                //    (new Point(0, 0), new Point(50, 50)),
+                //    (new Point(200, 0), new Point(50, 450)),
+                //    (new Point(0, 100), new Point(350, 50)));
+
+                input0.DistortImage(output33,
+                    (new Point(28, 33), new Point(0, 0)),
+                    (new Point(240, 33), new Point(400, 0)),
+                    (new Point(28, 108), new Point(0, 200)));
 
 
             }

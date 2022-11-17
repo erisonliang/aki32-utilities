@@ -123,31 +123,62 @@ public static partial class OwesomeExtensions
                     g.FillRectangle(Brushes.Orange, new Rectangle(new Point(0, 0), outputBitmap.Size));
 
 
-                    var tarP = CreateMatrix.Dense<float>(3, 2);
-                    var oriP = CreateMatrix.Dense<float>(3, 2);
-                    for (int i = 0; i < 3; i++)
-                    {
-                        oriP[i, 0] = ps[i].originalPoint.X;
-                        oriP[i, 1] = ps[i].originalPoint.Y;
+                    var oriO = CreateMatrix.Dense<float>(3, 2);
+                    var tarO = CreateMatrix.Dense<float>(3, 2);
 
-                        tarP[i, 0] = ps[i].tagrtPoint.X;
-                        tarP[i, 1] = ps[i].tagrtPoint.Y;
+                    for (int i = 0; i < dim; i++)
+                    {
+                        oriO[i, 0] = ps[i].originalPoint.X;
+                        oriO[i, 1] = ps[i].originalPoint.Y;
+                        tarO[i, 0] = ps[i].tagrtPoint.X;
+                        tarO[i, 1] = ps[i].tagrtPoint.Y;
                     }
 
-                    var oriE = CreateMatrix.Dense<float>(3, 2);
-                    var tarE = CreateMatrix.Dense<float>(3, 2);
 
-                    oriE[1, 0] = inputImage.Width;
-                    oriE[2, 1] = inputImage.Height;
+                    var oriO0 = CreateMatrix.Dense<float>(3, 2);
+                    var tarO0 = CreateMatrix.Dense<float>(3, 2);
 
-                    var X = tarP * oriP.PseudoInverse();
-                    tarE = X * oriE;
+                    for (int i = 0; i < 3; i++)
+                    {
+                        oriO0[i, 0] = oriO[0, 0];
+                        oriO0[i, 1] = oriO[0, 1];
+                        tarO0[i, 0] = tarO[0, 0];
+                        tarO0[i, 1] = tarO[0, 1];
+                    }
+
+
+                    var oriF = CreateMatrix.Dense<float>(3, 2);
+                    var tarF = CreateMatrix.Dense<float>(3, 2);
+
+                    oriF[1, 0] = inputImage.Width;
+                    oriF[2, 1] = inputImage.Height;
+
+
+                    //tarP -= tarP0;
+                    //oriP -= tarP0;
+                    ////oriP -= oriP0;
+                    ////var oriEXSize = oriE[1, 0] - oriE[0, 0];
+                    ////var oriEYSize = oriE[1, 1] - oriE[0, 1];
+
+                    //var X = tarP * oriP.PseudoInverse();
+                    //tarE = X * oriE;
+
+                    //tarE += tarP0;
+                    //tarE -= oriP0;
+
+
+                    var m1 = tarO - tarO0;
+                    var m2 = (oriO - oriO0).PseudoInverse();
+                    var m3 = oriF - oriO0;
+
+                    tarF = m1 * m2 * m3 + tarO0;
+
 
                     var points = new PointF[]
                     {
-                        new PointF(tarE[0, 0], tarE[0, 1]),
-                        new PointF(tarE[1, 0], tarE[1, 1]),
-                        new PointF(tarE[2, 0], tarE[2, 1]),
+                        new PointF(tarF[0, 0], tarF[0, 1]),
+                        new PointF(tarF[1, 0], tarF[1, 1]),
+                        new PointF(tarF[2, 0], tarF[2, 1]),
                     };
 
                     g.DrawImage(inputImage, points);
