@@ -92,7 +92,7 @@ public class IODeviceExtension
                 if (key.Key == ConsoleKey.Enter)
                     break;
                 if (key.Key == terminateKey)
-                    throw new OperationCanceledException($"Terminate key ({terminateKey.ToString()}) was pressed");
+                    throw new OperationCanceledException($"Terminate key ({terminateKey}) was pressed");
             }
 
             lastPosition = GetMouseCursorPosition();
