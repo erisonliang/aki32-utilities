@@ -23,18 +23,30 @@ public class MiniApps
 
 
         // main
-        Console.WriteLine("\r\n★★★★★★★★★★★★★★★ 座標入力\r\n");
+        Console.WriteLine("\r\n★★★★★ 座標入力（ひとつ前に戻るには Escape キーを押す。）\r\n");
 
         var reasons = new string[] {
-            "撮影対象の左上",
-            "撮影対象の右上",
-            "先送りボタン",
+            "撮影対象の左上（┏  ）",
+            "撮影対象の右下（┛  ）",
+            "先送りボタン（→）",
         };
         var ps = new Point[reasons.Length];
 
         for (int i = 0; i < reasons.Length; i++)
-            ps[i] = IODeviceExtension.GetMouseCursorPositionConversationally(ConsoleKey.Escape, reasons[i]);
+        {
+            try
+            {
+                ps[i] = IODeviceExtension.GetMouseCursorPositionConversationally(ConsoleKey.Escape, reasons[i]);
+            }
+            catch (OperationCanceledException)
+            {
+                i -= 2;
+                i = Math.Max(-1, i);
+                continue;
+            }
+        }
 
+        Console.WriteLine();
         Console.WriteLine();
         for (int i = 0; i < reasons.Length; i++)
             Console.WriteLine($"{reasons[i]}:{ps[i]}");
