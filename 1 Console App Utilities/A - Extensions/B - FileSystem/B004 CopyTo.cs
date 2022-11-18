@@ -1,7 +1,5 @@
 ﻿
 
-using static Microsoft.FSharp.Core.ByRefKinds;
-
 namespace Aki32_Utilities.Extensions;
 public static partial class OwesomeExtensions
 {
@@ -12,7 +10,10 @@ public static partial class OwesomeExtensions
     /// <param name="inputDir"></param>
     /// <param name="outputDir">must not to be null</param>
     /// <returns></returns>
-    public static DirectoryInfo CopyTo(this DirectoryInfo inputDir, DirectoryInfo? outputDir, bool consoleOutput = true)
+    public static DirectoryInfo CopyTo(this DirectoryInfo inputDir, DirectoryInfo? outputDir,
+        bool consoleOutput = true,
+        bool overwriteExistingFile = true
+        )
     {
         // preprocess
         UtilPreprocessors.PreprocessOutDir(ref outputDir, consoleOutput, inputDir.Parent!);
@@ -21,13 +22,16 @@ public static partial class OwesomeExtensions
         // main
         outputDir.Attributes = inputDir.Attributes;
 
-        // copy files (with overriding existing files)
+        // copy files
         foreach (FileInfo fileInfo in inputDir.GetFiles())
-            fileInfo.CopyTo(outputDir.FullName + @"\" + fileInfo.Name, true);
+            fileInfo.CopyTo(Path.Combine(outputDir.FullName, fileInfo.Name), overwrite: overwriteExistingFile);
 
         // copy directories
         foreach (var inner_inputDir in inputDir.GetDirectories())
-            inner_inputDir.CopyTo(new DirectoryInfo(Path.Combine(outputDir.FullName, inner_inputDir.Name)), false);
+            inner_inputDir.CopyTo(new DirectoryInfo(Path.Combine(outputDir.FullName, inner_inputDir.Name)),
+                consoleOutput: false,
+                overwriteExistingFile: overwriteExistingFile
+                );
 
 
         // postprocess
@@ -36,19 +40,21 @@ public static partial class OwesomeExtensions
 
     /// <summary>
     /// copy a file
-    /// ※ CopyTo(null) call default CopyTo... You can use CopyTo() here.
+    /// ※ CopyTo(null) induce default CopyTo(string)... You can use CopyTo() here.
     /// </summary>
     /// <param name="inputFile"></param>
     /// <param name="outputFile"></param>
     /// <returns></returns>
-    public static FileInfo CopyTo(this FileInfo inputFile, FileInfo? outputFile)
+    public static FileInfo CopyTo(this FileInfo inputFile, FileInfo? outputFile,
+        bool overwriteExistingFile = true
+        )
     {
         // preprocess
         UtilPreprocessors.PreprocessOutFile(ref outputFile, false, inputFile.Directory!, inputFile.Name);
 
 
         // main
-        inputFile.CopyTo(outputFile!.FullName, true);
+        inputFile.CopyTo(outputFile!.FullName, overwrite: overwriteExistingFile);
 
 
         // post process
@@ -56,13 +62,17 @@ public static partial class OwesomeExtensions
     }
 
     /// <summary>
-    /// copy a file, infer output path
+    /// Syntax sugar for default CopyTo() with inferring output path
     /// </summary>
     /// <param name="inputFile"></param>
     /// <returns></returns>
-    public static FileInfo CopyTo(this FileInfo inputFile)
+    public static FileInfo CopyTo(this FileInfo inputFile,
+        bool overwriteExistingFile = true
+        )
     {
-        return inputFile.CopyTo(outputFile: null);
+        return inputFile.CopyTo(
+            outputFile: null,
+            overwriteExistingFile: overwriteExistingFile);
     }
 
 }
