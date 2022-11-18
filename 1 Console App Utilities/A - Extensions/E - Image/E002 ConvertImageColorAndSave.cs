@@ -51,12 +51,7 @@ public static partial class OwesomeExtensions
     public static DirectoryInfo ConvertImageColor_Loop(this FileInfo inputFile, DirectoryInfo? outputDir, params (string fileName, Color targetColor)[] targetInfos)
     {
         // preprocess
-        if (UtilConfig.ConsoleOutput)
-            Console.WriteLine("\r\n** ConvertImageColor_Loop() Called");
-        if (outputDir == null)
-            outputDir = new DirectoryInfo(Path.Combine(inputFile.DirectoryName!, UtilConfig.GetNewOutputDirName("ConvertImageColor")));
-        if (!outputDir.Exists)
-            outputDir.Create();
+        UtilPreprocessors.PreprocessOutDir(ref outputDir, true, inputFile.Directory!);
 
 
         // main
@@ -97,7 +92,7 @@ public static partial class OwesomeExtensions
     /// <returns></returns>
     public static Image ConvertImageColor(Image inputImage, Color targetColor)
     {
-        var outputBitmap = new Bitmap(inputImage); //var resultBmp = new Bitmap(inputImage.Width,inputImage.Height,PixelFormat.Format32bppArgb);
+        var outputBitmap = new Bitmap(inputImage);
 
         using (Graphics g = Graphics.FromImage(inputImage))
         {

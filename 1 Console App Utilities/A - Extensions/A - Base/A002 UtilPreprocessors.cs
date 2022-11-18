@@ -9,19 +9,18 @@ public static class UtilPreprocessors
         bool consoleOut,
         DirectoryInfo targetOutputDirWhenNull,
         [CallerMemberName] string methodName = "",
-          bool takesTimeFlag = false
+        bool takesTimeFlag = false
         )
     {
         PreprocessBasic(consoleOut, methodName: methodName, takesTimeFlag: takesTimeFlag);
 
         // outputDir initialize
-        if (outputDirReference is null)
-            outputDirReference = new DirectoryInfo(
-                Path.Combine(
-                    targetOutputDirWhenNull.FullName,
-                    UtilConfig.GetNewOutputDirName(methodName)
-                    )
-                );
+        outputDirReference ??= new DirectoryInfo(
+            Path.Combine(
+                targetOutputDirWhenNull.FullName,
+                GetNewOutputDirName(methodName)
+                )
+            );
         if (!outputDirReference.Exists)
             outputDirReference.Create();
 
@@ -39,14 +38,13 @@ public static class UtilPreprocessors
         PreprocessBasic(consoleOut, methodName: methodName, takesTimeFlag: takesTimeFlag);
 
         // outputFile initialize
-        if (outputFileReference is null)
-            outputFileReference = new FileInfo(
-                Path.Combine(
-                    targetOutputDirWhenNull.FullName!,
-                    UtilConfig.GetNewOutputDirName(methodName),
-                    fileNameCandidate
-                    )
-                );
+        outputFileReference ??= new FileInfo(
+            Path.Combine(
+                targetOutputDirWhenNull.FullName!,
+                GetNewOutputDirName(methodName),
+                fileNameCandidate
+                )
+            );
         if (!outputFileReference.Directory!.Exists)
             outputFileReference.Directory.Create();
 
@@ -63,6 +61,20 @@ public static class UtilPreprocessors
             Console.WriteLine($"\r\n** {methodName} Method Called{(takesTimeFlag ? " (* This method is time-consuming. Please be patient...)" : "")}");
 
         Encoding.RegisterProvider(CodePagesEncodingProvider.Instance); // to handle Shift-JIS
+    }
+
+    /// <summary>
+    /// For creating new output dir name
+    /// </summary>
+    /// <param name="MethodName"></param>
+    /// <returns></returns>
+    public static string GetNewOutputDirName(string MethodName)
+    {
+        var randomGuid = Guid.NewGuid().ToString()[0..6].ToUpper();
+        if (UtilConfig.IncludeGuidToNewOutputDirName)
+            return $"output_{MethodName}_{randomGuid}";
+        else
+            return $"output_{MethodName}";
     }
 
 }
