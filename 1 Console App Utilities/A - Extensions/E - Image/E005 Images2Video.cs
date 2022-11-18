@@ -54,10 +54,24 @@ public static partial class OwesomeExtensions
         using var Writer = new VideoWriter();
         Writer.Open(outputFile.FullName, FourCC.H264, videoFrameRate, videoSize);
 
-        for (int i = 0; i < imageFiles.Length * videoFrameRate / imgFrameRate; i++)
+        var maxCount = imageFiles.Length * videoFrameRate / imgFrameRate;
+
+        if (UtilConfig.ConsoleOutput)
+            Console.WriteLine();
+
+        for (int i = 0; i < maxCount; i++)
         {
             try
             {
+                if (UtilConfig.ConsoleOutput)
+                {
+                    if (i % 100 == 0)
+                    {
+                        ConsoleExtension.ClearCurrentConsoleLine();
+                        Console.Write($"Processing… {100 * i / maxCount} % ( {i} / {maxCount} steps)");
+                    }
+                }
+
                 var pngFile = imageFiles[i * imgFrameRate / videoFrameRate];
                 using var image = Mat.FromStream(pngFile.OpenRead(), ImreadModes.Color);
 
@@ -71,6 +85,11 @@ public static partial class OwesomeExtensions
             }
         }
 
+        if (UtilConfig.ConsoleOutput)
+        {
+            ConsoleExtension.ClearCurrentConsoleLine();
+            Console.Write($"Process Finished! 100 % ( {maxCount} / {maxCount} steps)");
+        }
 
         // post process
         return outputFile!;
