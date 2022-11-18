@@ -255,6 +255,12 @@ public class Test
                 //input.PDFPageCount();
             }
 
+            // G002 PDF2Images
+            {
+                //var input = new FileInfo($@"{baseDir}\G002 PDF2Images\input.pdf");
+                //input.PDF2Images(null);
+            }
+
         }
 
         // B - Extensions (class)

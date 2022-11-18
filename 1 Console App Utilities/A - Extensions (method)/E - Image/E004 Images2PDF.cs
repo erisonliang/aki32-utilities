@@ -32,7 +32,7 @@ public static partial class OwesomeExtensions
 
         // main
         var pngFIs = inputDir
-            .GetFiles("*.png", SearchOption.TopDirectoryOnly)
+            .GetFilesWithRegexen(SearchOption.TopDirectoryOnly, GetImageFilesRegexen(png: true, jpg: true, bmp: true))
             .Sort()
             .ToArray();
 
