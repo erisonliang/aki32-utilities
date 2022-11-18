@@ -1,5 +1,7 @@
 ﻿using Aki32_Utilities.Extensions;
+
 using MathNet.Numerics.IntegralTransforms;
+
 using System.Numerics;
 
 namespace Aki32_Utilities.OwesomeModels;
@@ -54,6 +56,20 @@ public static class TimeHistoryExension
         }
     }
 
+
+    // ★★★★★★★★★★★★★★★ initialize helper
+
+    /// <summary>
+    /// Create TimeHistory instance and return
+    /// </summary>
+    /// <param name="inputFile"></param>
+    /// <returns></returns>
+    public static TimeHistory GetTimeHistoryFromFile(this FileInfo inputFile, string[]? overwriteHeaders = null)
+    {
+        return TimeHistory.FromCsv(inputFile, overwriteHeaders);
+    }
+
+
     // ★★★★★★★★★★★★★★★ data analysis
 
     public static async Task<TimeHistory> FFT(this TimeHistory inputHistory, string targetIndex)
@@ -106,6 +122,7 @@ public static class TimeHistoryExension
 
         return resultHistory;
     }
+
 
     // ★★★★★★★★★★★★★★★
 
