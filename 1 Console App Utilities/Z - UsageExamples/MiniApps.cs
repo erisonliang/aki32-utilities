@@ -75,4 +75,5 @@ public class MiniApps
         Console.WriteLine("\r\n★★★★★★★★★★★★★★★ 以上\r\n");
 
     }
+
 }
