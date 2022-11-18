@@ -1,6 +1,6 @@
 ﻿
 namespace Aki32_Utilities.Extensions;
-public class ConsoleExtension
+public static class ConsoleExtension
 {
 
     /// <summary>

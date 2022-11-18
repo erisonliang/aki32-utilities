@@ -9,7 +9,7 @@ public static partial class OwesomeExtensions
     /// MacOS が生成するゴミを削除
     /// </summary>
     /// <param name="inputDir"></param>
-    public static void OrganizeMacOsJuncFiles(this DirectoryInfo inputDir)
+    public static DirectoryInfo OrganizeMacOsJuncFiles(this DirectoryInfo inputDir)
     {
         // preprocess
         UtilPreprocessors.PreprocessBasic(true);
@@ -24,6 +24,10 @@ public static partial class OwesomeExtensions
                 Console.WriteLine($"削除：{fi}");
             }
         }
+
+
+        // post process
+        return inputDir!;
     }
 
 }

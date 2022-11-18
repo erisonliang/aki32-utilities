@@ -8,14 +8,12 @@ using System.Threading.Tasks;
 using Aki32_Utilities.Extensions;
 using Aki32_Utilities.OwesomeModels;
 
-using DocumentFormat.OpenXml.Presentation;
-
 namespace Aki32_Utilities;
 public class Test
 {
     public static void All()
     {
-        // A - Extensions (methods)
+        // A - Extensions
         {
             var baseDir = @"..\..\..\# TestModel\A - Extensions";
 
@@ -75,21 +73,6 @@ public class Test
                 //    .Unzip(null);
             }
 
-            // C001 ReadCsv, C002 SaveCsv, F001 Transpose
-            {
-                //var innerBaseDir = $@"{baseDir}\C001 ReadCsv, SaveCsv";
-                //var input = new FileInfo($@"{innerBaseDir}\input.csv");
-                //var output1 = new FileInfo($@"{innerBaseDir}\output1.csv");
-                //var output2 = new FileInfo($@"{innerBaseDir}\output2.csv");
-                //var output3 = new FileInfo($@"{innerBaseDir}\output3.csv");
-                //var output4 = new FileInfo($@"{innerBaseDir}\output4.csv");
-
-                //input.ReadCsv_Rows().SaveCsv_Rows(output1);
-                //input.ReadCsv_Rows().SaveCsv_Columns(output2);
-                //input.ReadCsv_Columns().SaveCsv_Rows(output3);
-                //input.ReadCsv_Columns().SaveCsv_Columns(output4);
-            }
-
             // C004 ExtractCsvColumns
             {
                 //var input = new FileInfo($@"{baseDir}\C004 ExtractCsvColumns\input.csv");
@@ -106,6 +89,21 @@ public class Test
             {
                 //var input = new DirectoryInfo($@"{baseDir}\C006 Csvs2ExcelSheets\input");
                 //input.Csvs2ExcelSheets(null);
+            }
+
+            // C101 ReadCsv, C102 SaveCsv, F201 Transpose
+            {
+                //var innerBaseDir = $@"{baseDir}\C101 ReadCsv, SaveCsv";
+                //var input = new FileInfo($@"{innerBaseDir}\input.csv");
+                //var output1 = new FileInfo($@"{innerBaseDir}\output1.csv");
+                //var output2 = new FileInfo($@"{innerBaseDir}\output2.csv");
+                //var output3 = new FileInfo($@"{innerBaseDir}\output3.csv");
+                //var output4 = new FileInfo($@"{innerBaseDir}\output4.csv");
+
+                //input.ReadCsv_Rows().SaveCsv_Rows(output1);
+                //input.ReadCsv_Rows().SaveCsv_Columns(output2);
+                //input.ReadCsv_Columns().SaveCsv_Rows(output3);
+                //input.ReadCsv_Columns().SaveCsv_Columns(output4);
             }
 
             // D001 MergeAllLines
@@ -151,12 +149,6 @@ public class Test
                 //input.ConvertImageColor(null, Color.White);
                 //input.ConvertImageColor_Loop(null, targetInfos);
                 //input.ConvertImageColor_Loop(null, targetColors);
-            }
-
-            // E003 SaveScreenShot
-            {
-                //var output = new DirectoryInfo($@"{baseDir}\E003 SaveScreenShot");
-                //OwesomeExtensions.SaveScreenShot(output, new Point(0, 0), new Point(1000, 1000));
             }
 
             // E004 Images2PDF
@@ -212,7 +204,22 @@ public class Test
 
             }
 
-            // F002 To2DArray, ToJaggedArray
+            // E102 SaveScreenShot
+            {
+                //var output = new DirectoryInfo($@"{baseDir}\E102 SaveScreenShot");
+                //OwesomeExtensions.SaveScreenShot(output, new Point(0, 0), new Point(1000, 1000));
+            }
+
+            // F003 Encrypt, Decrypt
+            {
+                //var input = new FileInfo($@"{baseDir}\F003 Crypt\input.txt");
+                //input
+                //    .Encrypt(null, "aiueo")
+                //    .Decrypt(null, "aiueo")
+                //    ;
+            }
+
+            // F202 To2DArray, ToJaggedArray
             {
                 //var inputData = new int[][]
                 //{
@@ -240,32 +247,19 @@ public class Test
                 //    Console.WriteLine(string.Join(", ", line.Select(x => $"{x,3}")));
             }
 
-            // F003 Encrypt, Decrypt
-            {
-                //var input = new FileInfo($@"{baseDir}\F003 Crypt\input.txt");
-                //input
-                //    .Encrypt(null, "aiueo")
-                //    .Decrypt(null, "aiueo")
-                //    ;
-            }
-
-            // G001 PDFPageCount
-            {
-                //var input = new DirectoryInfo($@"{baseDir}\G001 PDFPageCount\input");
-                //input.PDFPageCount();
-            }
-
             // G002 PDF2Images
             {
                 //var input = new FileInfo($@"{baseDir}\G002 PDF2Images\input.pdf");
                 //input.PDF2Images(null);
             }
 
-        }
+            // G101 PDFPageCount
+            {
+                //var input = new DirectoryInfo($@"{baseDir}\G101 PDFPageCount\input");
+                //input.PDFPageCount();
+            }
 
-        // B - Extensions (class)
-        {
-            // 001 ConsoleExtension
+            // W201 ConsoleExtension
             {
                 //var timer = new System.Timers.Timer(500);
 
@@ -284,7 +278,7 @@ public class Test
                 //Console.WriteLine();
             }
 
-            // 002 IODeviceExtension
+            // W202 IODeviceExtension
             {
                 //// ★ Move Mouse Cursor 
                 //IODeviceExtension.MouseCursorMoveTo(4600, 700);

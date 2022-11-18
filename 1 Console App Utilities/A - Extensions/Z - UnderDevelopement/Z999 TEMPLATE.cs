@@ -17,18 +17,16 @@ public static partial class OwesomeExtensions
     /// </summary>
     /// <param name="inputFile"></param>
     /// <param name="outputFile">when null, automatically set to {inputFile.DirectoryName}/output_TEMPLATE/{inputFile.Name}</param>
-    /// <param name="skipColumnCount"></param>
-    /// <param name="skipRowCount"></param>
-    /// <param name="header"></param>
     /// <returns></returns>
-    public static FileInfo TEMPLATE(this FileInfo inputFile, FileInfo? outputFile, int skipColumnCount = 0, int skipRowCount = 0, string? header = null)
+    public static FileInfo TEMPLATE(this FileInfo inputFile, FileInfo? outputFile)
     {
         // preprocess
         UtilPreprocessors.PreprocessOutFile(ref outputFile, false, inputFile.Directory!, inputFile.Name);
 
 
         // main
-        var inputCsv = inputFile.ReadCsv_Rows(skipColumnCount, skipRowCount);
+
+
 
 
         // post process
@@ -40,11 +38,8 @@ public static partial class OwesomeExtensions
     /// </summary>
     /// <param name="inputDir"></param>
     /// <param name="outputDir">when null, automatically set to {inputDir.FullName}/output_TEMPLATE</param>
-    /// <param name="skipColumnCount"></param>
-    /// <param name="skipRowCount"></param>
-    /// <param name="header"></param>
     /// <returns></returns>
-    public static DirectoryInfo TEMPLATE_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir, int skipColumnCount = 0, int skipRowCount = 0, string? header = null)
+    public static DirectoryInfo TEMPLATE_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir)
     {
         // preprocess
         UtilPreprocessors.PreprocessOutDir(ref outputDir, true, inputDir);
@@ -56,7 +51,7 @@ public static partial class OwesomeExtensions
             var newFilePath = Path.Combine(outputDir!.FullName, file.Name);
             try
             {
-                file.TEMPLATE(new FileInfo(newFilePath), skipColumnCount, skipRowCount, header);
+                file.TEMPLATE(new FileInfo(newFilePath));
                 if (UtilConfig.ConsoleOutput)
                     Console.WriteLine($"O: {newFilePath}");
             }

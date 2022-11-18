@@ -9,7 +9,7 @@ public static partial class OwesomeExtensions
     /// 選んだフォルダ内のデータのPhotoとVideoの接頭辞を削除
     /// </summary>
     /// <param name="inputDir"></param>
-    public static void OrganizeDropBoxJuncFiles(this DirectoryInfo inputDir)
+    public static DirectoryInfo OrganizeDropBoxJuncFiles(this DirectoryInfo inputDir)
     {
         // preprocess
         UtilPreprocessors.PreprocessBasic(true);
@@ -44,6 +44,10 @@ public static partial class OwesomeExtensions
                 }
             }
         }
+
+
+        // post process
+        return inputDir;
     }
 
 }
