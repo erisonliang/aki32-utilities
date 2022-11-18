@@ -9,10 +9,12 @@ public static partial class OwesomeExtensions
     // ★★★★★★★★★★★★★★★ FileSystemInfo chain process
 
     /// <summary>
-    /// Images2Video (currently, png to avi only)
+    /// Merge all images in a folder to a video.
+    /// Ccurrently, (jpg, .png) to (.avi, .mp4) is only supported.
     /// </summary>
     /// <remarks>
     /// To use this methods, you need to put openh264-*.dll to executable folder!!!
+    /// It will be automatically downloaded!
     /// </remarks>
     /// <param name="inputDir"></param>
     /// <param name="outputFile">when null, automatically set to {inputDir.FullName}/output_Images2Video/output.avi</param>
@@ -28,9 +30,9 @@ public static partial class OwesomeExtensions
         )
     {
         // preprocess
-        UtilPreprocessors.PreprocessOutFile(ref outputFile, true, inputDir!, "output.avi", takesTimeFlag: true);
-        if (!outputFile!.Name.EndsWith(".avi"))
-            throw new Exception("outputFile name must end with .avi");
+        UtilPreprocessors.PreprocessOutFile(ref outputFile, true, inputDir!, "output.mp4", takesTimeFlag: true);
+        if (!outputFile!.Name.EndsWith(".mp4") && !outputFile!.Name.EndsWith(".avi"))
+            throw new Exception("outputFile name must end with .mp4 or .avi");
 
 
         // force download required dll
