@@ -32,7 +32,7 @@ public static partial class OwesomeExtensions
     /// <returns></returns>
     public static FileInfo DistortImage(this FileInfo inputFile, FileInfo? outputFile, Brush? fill = null, params (PointF originalPointRatio, PointF tagrtPointRatio)[] pps)
     {
-        using var inputImage = Image.FromFile(inputFile.FullName);
+        using var inputImage = inputFile.GetImageFromFile();
         var ps = inputImage.__For_DistortImage_ConvertFromPointFsToPoints(pps);
         return inputFile.DistortImage(outputFile, fill, ps);
     }
@@ -48,14 +48,14 @@ public static partial class OwesomeExtensions
     {
         // preprocess
         UtilPreprocessors.PreprocessOutFile(ref outputFile, false, inputFile.Directory!, inputFile.Name);
-        if (!inputFile!.Name.EndsWith(".png"))
-            throw new Exception("inputFile name must end with .png");
-        if (!outputFile!.Name.EndsWith(".png"))
-            throw new Exception("outputFile name must end with .png");
+        //if (!inputFile!.Name.IsMatchAny(GetImageFilesRegexen(png: true, jpg: true,bmp:true)))
+        //    throw new Exception("inputFile name must end with .png, .jpg or .bmp");
+        //if (!outputFile!.Name.IsMatchAny(GetImageFilesRegexen(png: true, jpg: true, bmp: true)))
+        //    throw new Exception("outputFile name must end with .png, .jpg or .bmp");
 
 
         // main
-        using var inputImage = Image.FromFile(inputFile.FullName);
+        using var inputImage = inputFile.GetImageFromFile();
         var outputImage = DistortImage(inputImage, fill, ps);
         outputImage.Save(outputFile!.FullName);
 
@@ -74,8 +74,18 @@ public static partial class OwesomeExtensions
     /// <returns></returns>
     public static DirectoryInfo DistortImage_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir, Brush? fill = null, params (PointF originalPointRatio, PointF tagrtPointRatio)[] pps)
     {
-        using var inputImage = Image.FromFile(inputDir.GetFiles("*.png")[0].FullName);
+        // preprocess
+        UtilPreprocessors.PreprocessOutDir(ref outputDir, true, inputDir);
+
+
+        // main
+        var firstImageFile = inputDir.GetFilesWithRegexen(SearchOption.TopDirectoryOnly, GetImageFilesRegexen(png: true, jpg: true, bmp: true)).FirstOrDefault();
+        if (firstImageFile == null)
+            return outputDir;
+
+        using var inputImage = firstImageFile.GetImageFromFile();
         var ps = inputImage.__For_DistortImage_ConvertFromPointFsToPoints(pps);
+
         return inputDir.DistortImage_Loop(outputDir, fill, ps);
     }
 
@@ -130,11 +140,13 @@ public static partial class OwesomeExtensions
 
 
         // main
-        if (inputDir.GetFiles("*.png").Any())
+        var ImageFiles = inputDir.GetFilesWithRegexen(SearchOption.TopDirectoryOnly, GetImageFilesRegexen(png: true, jpg: true, bmp: true));
+
+        if (ImageFiles.Any())
         {
             Process.Start(new ProcessStartInfo()
             {
-                FileName = inputDir.GetFiles("*.png").First().FullName,
+                FileName = ImageFiles.First().FullName,
                 UseShellExecute = true,
             });
         }
@@ -304,7 +316,6 @@ public static partial class OwesomeExtensions
         g.DrawImage(inputImage, points);
 
         return (Image)outputBitmap.Clone();
-
     }
 
     /// <summary>

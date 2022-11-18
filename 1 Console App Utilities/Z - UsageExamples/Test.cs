@@ -22,8 +22,9 @@ public class Test
             // B001 CollectFiles
             {
                 //var input = new DirectoryInfo($@"{baseDir}\B001 CollectFiles\input");
+                //input.CollectFiles(null, @"^.*a\.txt$", @"^.*3.*$");
                 //input.CollectFiles(null, @"^.*a\.txt$");
-                ////input.CollectFiles(null, @"^[0-9]*\\a\.txt$");
+                //input.CollectFiles(null, @"^[0-9]*\\a\.txt$");
             }
 
             // B002 MakeFilesFromCsv
@@ -185,7 +186,7 @@ public class Test
                 //var output530 = new FileInfo($@"{baseDir}\E007 DistortImage\5-3-0.png");
                 //var output531 = new FileInfo($@"{baseDir}\E007 DistortImage\5-3-1.png");
 
-                //// ★ 1 point → move
+                // //★ 1 point → move
                 //input5.DistortImage(output510, Brushes.Orange,
                 //    (new Point(96, 80), new Point(0, 0)));
 
@@ -208,7 +209,6 @@ public class Test
                 //    (new Point(96, 80), new Point(50, 50)),
                 //    (new Point(373, 120), new Point(350, 50)),
                 //    (new Point(116, 138), new Point(50, 150)));
-
 
             }
 

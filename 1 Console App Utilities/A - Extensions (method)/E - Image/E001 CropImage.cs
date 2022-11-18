@@ -21,7 +21,7 @@ public static partial class OwesomeExtensions
         // main
         try
         {
-            using var inputImage = Image.FromFile(inputFile.FullName);
+            using var inputImage = inputFile.GetImageFromFile();
             var outputImage = CropImage(inputImage, crop);
             outputImage.Save(outputFile!.FullName);
 
@@ -42,9 +42,9 @@ public static partial class OwesomeExtensions
     /// <summary>
     /// 
     /// </summary>
-    /// <param name="inputDir"></param>
+    /// <param name="inputFile"></param>
     /// <param name="outputDir">when null, automatically set to {inputDir.Fullname}/output_CropImage/{inputFile.Name}.png</param>
-    /// <param name="crop"></param>
+    /// <param name="crops"></param>
     /// <returns></returns>
     public static DirectoryInfo CropImage(this FileInfo inputFile, DirectoryInfo? outputDir, CropSize[] crops)
     {

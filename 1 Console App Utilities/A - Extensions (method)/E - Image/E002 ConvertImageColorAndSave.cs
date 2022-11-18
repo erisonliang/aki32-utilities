@@ -23,11 +23,10 @@ public static partial class OwesomeExtensions
         // main
         try
         {
-            using (var inputImage = Image.FromFile(inputFile.FullName))
-            {
-                var img = ConvertImageColor(inputImage, targetColor);
-                img.Save(outputFile!.FullName, ImageFormat.Png);
-            }
+            using var inputImage = inputFile.GetImageFromFile();
+            var outputImage = ConvertImageColor(inputImage, targetColor);
+            outputImage.Save(outputFile!.FullName, ImageFormat.Png);
+
             if (UtilConfig.ConsoleOutput)
                 Console.WriteLine($"O: {inputFile.FullName}");
         }

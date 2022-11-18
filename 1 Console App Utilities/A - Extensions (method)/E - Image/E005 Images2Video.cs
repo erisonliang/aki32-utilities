@@ -31,7 +31,7 @@ public static partial class OwesomeExtensions
     {
         // preprocess
         UtilPreprocessors.PreprocessOutFile(ref outputFile, true, inputDir!, "output.mp4", takesTimeFlag: true);
-        if (!outputFile!.Name.EndsWith(".mp4") && !outputFile!.Name.EndsWith(".avi"))
+        if (!outputFile!.Name.IsMatchAny(GetVideoFilesRegexen(mp4: true, avi: true)))
             throw new Exception("outputFile name must end with .mp4 or .avi");
 
 
@@ -42,23 +42,23 @@ public static partial class OwesomeExtensions
 
 
         // main
-        var pngFiles = inputDir
-            .GetFiles("*.png", SearchOption.TopDirectoryOnly)
+        var imageFiles = inputDir
+            .GetFilesWithRegexen(SearchOption.TopDirectoryOnly, GetImageFilesRegexen(jpg: true, png: true, bmp: true))
             .Sort()
             .ToArray();
 
         // find video size
-        using var img0 = Mat.FromStream(pngFiles[0].OpenRead(), ImreadModes.Color);
+        using var img0 = Mat.FromStream(imageFiles[0].OpenRead(), ImreadModes.Color);
         var videoSize = new OpenCvSharp.Size(img0.Width, img0.Height);
 
         using var Writer = new VideoWriter();
         Writer.Open(outputFile.FullName, FourCC.H264, videoFrameRate, videoSize);
 
-        for (int i = 0; i < pngFiles.Length * videoFrameRate / imgFrameRate; i++)
+        for (int i = 0; i < imageFiles.Length * videoFrameRate / imgFrameRate; i++)
         {
             try
             {
-                var pngFile = pngFiles[i * imgFrameRate / videoFrameRate];
+                var pngFile = imageFiles[i * imgFrameRate / videoFrameRate];
                 using var image = Mat.FromStream(pngFile.OpenRead(), ImreadModes.Color);
 
                 if (!videoSize.Equals(new OpenCvSharp.Size(image.Width, image.Height)))

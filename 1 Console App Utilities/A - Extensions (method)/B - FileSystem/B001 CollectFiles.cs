@@ -18,32 +18,23 @@ public static partial class OwesomeExtensions
 
 
         // main
-        var files = new List<string>();
+        //var targetFileNames = inputDir
+        //    .GetFiles("*", SearchOption.AllDirectories)
+        //    .Select(f => f.FullName)
+        //    .Where(f => f.Replace(inputDir.FullName, "").TrimStart('\\').IsMatchAny(searchRegexen));
 
-        var allFiles = inputDir.GetFiles("*", SearchOption.AllDirectories).Select(f => f.FullName);
+        var targetFiles = inputDir.GetFilesWithRegexen(SearchOption.AllDirectories, searchRegexen);
 
-        foreach (var targetFile in allFiles)
+        foreach (var targetFile in targetFiles)
         {
-            var ComparingString = targetFile.Replace(inputDir.FullName, "").TrimStart('\\');
-            foreach (var searchRegex in searchRegexen)
-            {
-                if (Regex.IsMatch(ComparingString, searchRegex))
-                {
-                    files.Add(targetFile);
-                    break;
-                }
-            }
-        }
-
-        foreach (var file in files)
-        {
-            var newFileName = file.Replace(inputDir.FullName, "");
+            var targetFileName = targetFile.FullName;
+            var newFileName = targetFileName.Replace(inputDir.FullName, "");
             newFileName = newFileName.Replace(Path.DirectorySeparatorChar, '_').Trim('_');
             var newOutputFilePath = Path.Combine(outputDir!.FullName, newFileName);
 
             try
             {
-                File.Copy(file, newOutputFilePath, true);
+                File.Copy(targetFileName, newOutputFilePath, true);
                 if (UtilConfig.ConsoleOutput)
                     Console.WriteLine($"O: {newOutputFilePath}");
             }

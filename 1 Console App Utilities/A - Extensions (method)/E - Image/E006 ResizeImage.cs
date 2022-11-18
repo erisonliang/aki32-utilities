@@ -22,7 +22,7 @@ public static partial class OwesomeExtensions
         // main
         try
         {
-            using var inputImage = Image.FromFile(inputFile.FullName);
+            using var inputImage = inputFile.GetImageFromFile();
             var img = ResizeImage(inputImage, outputSize, mode);
             img.Save(outputFile!.FullName);
 
