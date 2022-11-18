@@ -5,6 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using DocumentFormat.OpenXml.ExtendedProperties;
+
 namespace Aki32_Utilities.A___Extensions.E___Image;
 /// <summary>
 /// This uses a simple algorithm to try to undo the distortion of a rectangle in an image
@@ -35,6 +37,7 @@ internal static class SimplePerspectiveCorrection
                 .Range(0, lengthOfLineToTrace)
                 .Select(j =>
                 {
+                    GC.Collect();
                     var fractionOfProgressAlongLineToTrace = (float)j / lengthOfLineToTrace;
                     var point = GetPointAlongLine(lineToTrace, fractionOfProgressAlongLineToTrace);
                     return GetAverageColour(image, point);
@@ -65,9 +68,17 @@ internal static class SimplePerspectiveCorrection
 
             (Color c0, Color c1) GetColours(Point p0, Point p1)
             {
-                var c0 = image.GetPixel(p0.X, p0.Y);
-                var c1 = (p0 == p1) ? c0 : image.GetPixel(p1.X, p1.Y);
-                return (c0, c1);
+                try
+                {
+                    var c0 = image.GetPixel(p0.X, p0.Y);
+                    var c1 = (p0 == p1) ? c0 : image.GetPixel(p1.X, p1.Y);
+                    return (c0, c1);
+                }
+                catch (Exception)
+                {
+                    return (Color.White, Color.White);
+                }
+
             }
 
             static (int Integral, float Fractional) GetIntegralAndFractional(float value)

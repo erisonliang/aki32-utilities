@@ -171,36 +171,52 @@ public class Test
 
             // E007 DistortImage
             {
-                //var input5 = new FileInfo($@"{baseDir}\E007 DistortImage\5.png");
-                //var output510 = new FileInfo($@"{baseDir}\E007 DistortImage\5-1-0.png");
-                //var output520 = new FileInfo($@"{baseDir}\E007 DistortImage\5-2-0.png");
-                //var output521 = new FileInfo($@"{baseDir}\E007 DistortImage\5-2-1.png");
-                //var output530 = new FileInfo($@"{baseDir}\E007 DistortImage\5-3-0.png");
-                //var output531 = new FileInfo($@"{baseDir}\E007 DistortImage\5-3-1.png");
+                var input5 = new FileInfo($@"{baseDir}\E007 DistortImage\5.png");
+                var output510 = new FileInfo($@"{baseDir}\E007 DistortImage\5-1-0.png");
+                var output520 = new FileInfo($@"{baseDir}\E007 DistortImage\5-2-0.png");
+                var output521 = new FileInfo($@"{baseDir}\E007 DistortImage\5-2-1.png");
+                var output530 = new FileInfo($@"{baseDir}\E007 DistortImage\5-3-0.png");
+                var output531 = new FileInfo($@"{baseDir}\E007 DistortImage\5-3-1.png");
+                var output540 = new FileInfo($@"{baseDir}\E007 DistortImage\5-4-0.png");
+                var output541 = new FileInfo($@"{baseDir}\E007 DistortImage\5-4-1.png");
+                var output542 = new FileInfo($@"{baseDir}\E007 DistortImage\5-4-2.png");
 
-                // //★ 1 point → move
-                //input5.DistortImage(output510, Brushes.Orange,
-                //    (new Point(96, 80), new Point(0, 0)));
+                //★ 1 point → move
+                input5.DistortImage(output510, Color.Orange,
+                    (new Point(96, 80), new Point(0, 0)));
 
-                //// ★ 2 points → move, resize, rotate
-                //input5.DistortImage(output520, Brushes.Orange,
-                //    (new Point(96, 80), new Point(0, 0)),
-                //    (new Point(373, 120), new Point(400, 0)));
+                // ★ 2 points → move, resize, rotate
+                input5.DistortImage(output520, Color.Orange,
+                    (new Point(96, 80), new Point(0, 0)),
+                    (new Point(373, 120), new Point(400, 0)));
 
-                //input5.DistortImage(output521, Brushes.Orange,
-                //    (new Point(96, 80), new Point(0, 0)),
-                //    (new Point(116, 138), new Point(0, 200)));
+                input5.DistortImage(output521, Color.Orange,
+                    (new Point(96, 80), new Point(0, 0)),
+                    (new Point(116, 138), new Point(0, 200)));
 
-                //// ★ 3 points →  move, resize, rotate, shear
-                //input5.DistortImage(output530, Brushes.Orange,
-                //    (new Point(96, 80), new Point(0, 0)),
-                //    (new Point(373, 120), new Point(400, 0)),
-                //    (new Point(116, 138), new Point(0, 200)));
+                // ★ 3 points →  move, resize, rotate, shear
+                input5.DistortImage(output530, Color.Orange,
+                    (new Point(96, 80), new Point(0, 0)),
+                    (new Point(373, 120), new Point(400, 0)),
+                    (new Point(116, 138), new Point(0, 200)));
 
-                //input5.DistortImage(output531, Brushes.Orange,
-                //    (new Point(96, 80), new Point(50, 50)),
-                //    (new Point(373, 120), new Point(350, 50)),
-                //    (new Point(116, 138), new Point(50, 150)));
+                input5.DistortImage(output531, Color.Orange,
+                    (new Point(96, 80), new Point(50, 50)),
+                    (new Point(373, 120), new Point(350, 50)),
+                    (new Point(116, 138), new Point(50, 150)));
+
+                // ★ 4 points →  move, resize, rotate, shear, perspective
+                input5.DistortImage(output540, Color.Orange,
+                  (new Point(96, 80), new Point(50, 50)),
+                  (new Point(373, 120), new Point(350, 50)),
+                  (new Point(116, 138), new Point(50, 150)),
+                  (new Point(394, 178), new Point(350, 150)));
+
+                input5.DistortImage(output541, Color.Orange,
+                   (new Point(96, 80), new Point(50, 50)),
+                   (new Point(373, 120), new Point(350, 50)),
+                   (new Point(116, 138), new Point(50, 150)),
+                   (new Point(394, 178), new Point(400, 200)));
 
             }
 
