@@ -23,7 +23,6 @@ public static partial class OwesomeExtensions
     /// <returns></returns>
     /// <exception cref="Exception"></exception>
     /// <exception cref="InvalidDataException"></exception>
-    [STAThread]
     public static FileInfo Images2Video(this DirectoryInfo inputDir, FileInfo? outputFile,
         int imgFrameRate,
         int videoFrameRate = 60
@@ -55,22 +54,14 @@ public static partial class OwesomeExtensions
         Writer.Open(outputFile.FullName, FourCC.H264, videoFrameRate, videoSize);
 
         var maxCount = imageFiles.Length * videoFrameRate / imgFrameRate;
-
-        if (UtilConfig.ConsoleOutput)
-            Console.WriteLine();
+        var progress = new ProgressCounter(maxCount);
 
         for (int i = 0; i < maxCount; i++)
         {
             try
             {
-                if (UtilConfig.ConsoleOutput)
-                {
-                    if (i % 100 == 0)
-                    {
-                        ConsoleExtension.ClearCurrentConsoleLine();
-                        Console.Write($"Processing… {100 * i / maxCount} % ( {i} / {maxCount} steps)");
-                    }
-                }
+                if (i % 10 == 0)
+                    progress.WriteCurrentState(i);
 
                 var pngFile = imageFiles[i * imgFrameRate / videoFrameRate];
                 using var image = Mat.FromStream(pngFile.OpenRead(), ImreadModes.Color);
@@ -85,11 +76,7 @@ public static partial class OwesomeExtensions
             }
         }
 
-        if (UtilConfig.ConsoleOutput)
-        {
-            ConsoleExtension.ClearCurrentConsoleLine();
-            Console.Write($"Process Finished! 100 % ( {maxCount} / {maxCount} steps)");
-        }
+        progress.WriteDone();
 
         // post process
         return outputFile!;

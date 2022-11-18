@@ -86,7 +86,7 @@ public static partial class OwesomeExtensions
         using var inputImage = firstImageFile.GetImageFromFile();
         var ps = inputImage.__For_DistortImage_ConvertFromPointFsToPoints(pps);
 
-        return inputDir.DistortImage_Loop(outputDir, fill, ps);
+        return inputDir.DistortImage_Loop(outputDir, fill, ps: ps);
     }
 
     /// <summary>
@@ -106,6 +106,7 @@ public static partial class OwesomeExtensions
         foreach (var file in inputDir.GetFiles())
         {
             var newFilePath = Path.Combine(outputDir!.FullName, file.Name);
+
             try
             {
                 file.DistortImage(new FileInfo(newFilePath), fill, ps);
@@ -117,6 +118,8 @@ public static partial class OwesomeExtensions
                 if (UtilConfig.ConsoleOutput)
                     Console.WriteLine($"X: {newFilePath}, {ex.Message}");
             }
+
+            GC.Collect();
         }
 
 
@@ -133,7 +136,7 @@ public static partial class OwesomeExtensions
     /// <param name="outputDir">when null, automatically set to {inputDir.FullName}/output_DistortImage</param>
     /// <param name="targetPoints">List of target points. Length 3</param>
     /// <returns></returns>
-    public static Task<DirectoryInfo> DistortImage_Loop_Conversationally(this DirectoryInfo inputDir, DirectoryInfo? outputDir, Brush? fill = null, params PointF[] targetPoints)
+    public static Action DistortImage_Loop_Conversationally(this DirectoryInfo inputDir, DirectoryInfo? outputDir, Brush? fill = null, PointF[] targetPoints = null, Point[] framePoints = null)
     {
         // preprocess
         UtilPreprocessors.PreprocessOutDir(ref outputDir, true, inputDir.Parent!);
@@ -142,22 +145,77 @@ public static partial class OwesomeExtensions
         // main
         var ImageFiles = inputDir.GetFilesWithRegexen(SearchOption.TopDirectoryOnly, GetImageFilesRegexen(png: true, jpg: true, bmp: true));
 
-        if (ImageFiles.Any())
+        if (!ImageFiles.Any())
+            return new Action(() => { });
+
+
+        Console.WriteLine($"\r\n★★★★★ {ImageFiles.First().FullName} started\r\n");
+
+        if (targetPoints == null)
         {
-            Process.Start(new ProcessStartInfo()
+            Console.WriteLine("\r\n★★★★★ Target Point Coordinate Input (Press escape key to go back to previous parameter)\r\n");
+            targetPoints = __For_DistortImage_GetTargetPointRatios(framePoints);
+        }
+
+        var process = Process.Start(new ProcessStartInfo()
+        {
+            FileName = ImageFiles.First().FullName,
+            UseShellExecute = true,
+        });
+
+        Console.WriteLine("\r\n★★★★★ Original Point Coodinates Input (Press escape key to go back to previous parameter)\r\n");
+
+        var ratiosO = __For_DistortImage_GetTargetPointRatios(framePoints);
+        process?.Kill();
+
+
+        Console.WriteLine("\r\n★★★★★ Started to process distortion\r\n");
+
+        //post process
+        return new Action(() =>
+        {
+            inputDir!.DistortImage_Loop(outputDir, fill,
+                (ratiosO[0], targetPoints[0]),
+                (ratiosO[1], targetPoints[1]),
+                (ratiosO[2], targetPoints[2]));
+        });
+    }
+
+
+    // ★★★★★★★★★★★★★★★ Helper
+
+    public static Point[] __For_DistortImage_GetFramePoints()
+    {
+        var reasons = new string[] {
+                "Upper Left of the Image（┏  ）",
+                "Bottom Right of the Image（┛  ）",
+            };
+        var ps = new Point[reasons.Length];
+
+        for (int i = 0; i < reasons.Length; i++)
+        {
+            try
             {
-                FileName = ImageFiles.First().FullName,
-                UseShellExecute = true,
-            });
-        }
-        else
-        {
-            return Task.Run(() => outputDir!);
+                ps[i] = IODeviceExtension.GetMouseCursorPositionConversationally(ConsoleKey.Escape, reasons[i]);
+            }
+            catch (OperationCanceledException)
+            {
+                i -= 2;
+                i = Math.Max(-1, i);
+                continue;
+            }
         }
 
-        Console.WriteLine("\r\n★★★★★ Coodinate Input (Press escape key to go back to previous parameter)\r\n");
+        Console.WriteLine();
+        Console.WriteLine();
+        for (int i = 0; i < reasons.Length; i++)
+            Console.WriteLine($"{reasons[i]}:{ps[i]}");
 
-        // 画像の点を拾う。
+        return ps;
+    }
+
+    public static PointF[] __For_DistortImage_GetTargetPointRatios(Point[] framePoints = null)
+    {
         var reasons = new string[] {
                 "Upper Left of the Image（┏  ）",
                 "Bottom Right of the Image（┛  ）",
@@ -171,6 +229,12 @@ public static partial class OwesomeExtensions
         {
             try
             {
+                if (i < 2 && framePoints != null)
+                {
+                    ps[i] = framePoints[i];
+                    continue;
+                }
+
                 ps[i] = IODeviceExtension.GetMouseCursorPositionConversationally(ConsoleKey.Escape, reasons[i]);
             }
             catch (OperationCanceledException)
@@ -197,23 +261,12 @@ public static partial class OwesomeExtensions
 
         var ratiosO = new PointF[3]
         {
-                new PointF((ulO.X - ulF.X) / widthF, (ulO.Y - ulF.Y) / heightF),
-                new PointF((urO.X - ulF.X) / widthF, (urO.Y - ulF.Y) / heightF),
-                new PointF((blO.X - ulF.X) / widthF, (blO.Y - ulF.Y) / heightF),
+            new PointF((ulO.X - ulF.X) / widthF, (ulO.Y - ulF.Y) / heightF),
+            new PointF((urO.X - ulF.X) / widthF, (urO.Y - ulF.Y) / heightF),
+            new PointF((blO.X - ulF.X) / widthF, (blO.Y - ulF.Y) / heightF),
         };
 
-
-        Console.WriteLine("\r\n★★★★★ Started to process distortion\r\n");
-
-        // post process
-        return Task.Run(() =>
-        {
-            return inputDir!.DistortImage_Loop(outputDir, fill,
-                (ratiosO[0], targetPoints[0]),
-                (ratiosO[1], targetPoints[1]),
-                (ratiosO[2], targetPoints[2]));
-        });
-
+        return ratiosO;
     }
 
 
@@ -269,10 +322,6 @@ public static partial class OwesomeExtensions
             ps = ps.Append((oriV2, tarV2)).ToArray();
         }
 
-        using var outputBitmap = new Bitmap(inputImage.Width, inputImage.Height);
-        using var g = Graphics.FromImage(outputBitmap);
-        g.FillRectangle(fill!, new Rectangle(new Point(0, 0), outputBitmap.Size));
-
         var oriO = CreateMatrix.Dense<float>(4, 3);
         var tarO = CreateMatrix.Dense<float>(4, 3);
 
@@ -313,6 +362,9 @@ public static partial class OwesomeExtensions
             new PointF(tarF[0,2], tarF[1,2]),
         };
 
+        using var outputBitmap = new Bitmap(inputImage.Width, inputImage.Height);
+        using var g = Graphics.FromImage(outputBitmap);
+        g.FillRectangle(fill!, new Rectangle(new Point(0, 0), outputBitmap.Size));
         g.DrawImage(inputImage, points);
 
         return (Image)outputBitmap.Clone();
