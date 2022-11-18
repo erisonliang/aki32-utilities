@@ -334,20 +334,18 @@ public static partial class OwesomeExtensions
             ps = ps.Append((oriP3, tarP3)).ToArray();
         }
 
-        var oriO = CreateMatrix.Dense<float>(4, 4);
-        var tarO = CreateMatrix.Dense<float>(4, 4);
+        var oriO = CreateMatrix.Dense<float>(3, 4);
+        var tarO = CreateMatrix.Dense<float>(3, 4);
 
         for (int i = 0; i < 4; i++)
         {
             oriO[0, i] = ps[i].originalPoint.X;
             oriO[1, i] = ps[i].originalPoint.Y;
             oriO[2, i] = 1;
-            oriO[3, i] = 1;
 
             tarO[0, i] = ps[i].tagrtPoint.X;
             tarO[1, i] = ps[i].tagrtPoint.Y;
             tarO[2, i] = 1;
-            tarO[3, i] = 1;
         }
 
         var m1 = tarO;
@@ -355,92 +353,10 @@ public static partial class OwesomeExtensions
         var m1I = m1.PseudoInverse();
         var invMatrix = m2 * m1I;
 
-        var outputImage = __DistortImage_FromInverseMatrix2(inputImage, invMatrix, fill);
-
-        //// original bitmap mapping
-        //using var outputBitmap = new Bitmap(inputImage.Width, inputImage.Height);
-        //using var g = Graphics.FromImage(outputBitmap);
-        //g.FillRectangle(fill!, new Rectangle(new Point(0, 0), outputBitmap.Size));
-        //g.DrawImage(inputImage, points);
-
-
+        var outputImage = __DistortImage_FromInverseMatrix(inputImage, invMatrix, fill);
 
         return outputImage;
 
-
-
-        // stable keep
-        {
-
-            //if (ps.Length == 1)
-            //{
-            //    // increase dim
-            //    ps = ps.Append((Point.Add(ps[0].originalPoint, new Size(100, 0)), Point.Add(ps[0].tagrtPoint, new Size(100, 0)))).ToArray();
-            //    ps = ps.Append((Point.Add(ps[0].originalPoint, new Size(0, 100)), Point.Add(ps[0].tagrtPoint, new Size(0, 100)))).ToArray();
-            //}
-            //if (ps.Length == 2)
-            //{
-            //    // increase dim
-            //    var oriP0 = ps[0].originalPoint;
-            //    var oriP1 = ps[1].originalPoint;
-            //    var oriV1 = Point.Subtract(oriP1, (Size)oriP0);
-            //    var oriV2 = Point.Add(new Point(-oriV1.Y, oriV1.X), (Size)oriP0);
-
-            //    var tarP0 = ps[0].tagrtPoint;
-            //    var tarP1 = ps[1].tagrtPoint;
-            //    var tarV1 = Point.Subtract(tarP1, (Size)tarP0);
-            //    var tarV2 = Point.Add(new Point(-tarV1.Y, tarV1.X), (Size)tarP0);
-
-            //    ps = ps.Append((oriV2, tarV2)).ToArray();
-            //}
-
-            //var oriO = CreateMatrix.Dense<float>(4, 3);
-            //var tarO = CreateMatrix.Dense<float>(4, 3);
-
-            //for (int i = 0; i < 3; i++)
-            //{
-            //    oriO[0, i] = ps[i].originalPoint.X;
-            //    oriO[1, i] = ps[i].originalPoint.Y;
-            //    oriO[2, i] = 1;
-            //    oriO[3, i] = 1;
-
-            //    tarO[0, i] = ps[i].tagrtPoint.X;
-            //    tarO[1, i] = ps[i].tagrtPoint.Y;
-            //    tarO[2, i] = 1;
-            //    tarO[3, i] = 1;
-            //}
-
-            //var oriF = CreateMatrix.Dense<float>(4, 3);
-
-            //oriF[0, 1] = inputImage.Width;
-            //oriF[1, 2] = inputImage.Height;
-            //oriF[2, 0] = 1;
-            //oriF[2, 1] = 1;
-            //oriF[2, 2] = 1;
-            //oriF[3, 0] = 1;
-            //oriF[3, 1] = 1;
-            //oriF[3, 2] = 1;
-
-            //var m1 = tarO;
-            //var m2 = oriO;
-            //var m3 = oriF;
-            //var m2I = m2.PseudoInverse();
-            //var tarF = m1 * m2I * m3;
-
-            //var points = new PointF[]
-            //{
-            //new PointF(tarF[0,0], tarF[1,0]),
-            //new PointF(tarF[0,1], tarF[1,1]),
-            //new PointF(tarF[0,2], tarF[1,2]),
-            //};
-
-            //using var outputBitmap = new Bitmap(inputImage.Width, inputImage.Height);
-            //using var g = Graphics.FromImage(outputBitmap);
-            //g.FillRectangle(fill!, new Rectangle(new Point(0, 0), outputBitmap.Size));
-            //g.DrawImage(inputImage, points);
-
-            //return (Image)outputBitmap.Clone();
-        }
     }
 
     /// <summary>
@@ -476,110 +392,49 @@ public static partial class OwesomeExtensions
         inFBmp.BeginAccess();
         outFBmp.BeginAccess();
 
-        Color bmpCol;
+        Color pixCol;
         for (int w = 0; w < outputBitmap.Width; w++)
         {
             for (int h = 0; h < outputBitmap.Height; h++)
             {
                 // from target frame to original frame
-                var tarF = CreateMatrix.Dense<float>(4, 1);
+                var tarF = CreateMatrix.Dense<float>(3, 1);
 
                 tarF[0, 0] = w;
                 tarF[1, 0] = h;
                 tarF[2, 0] = 1;
-                tarF[3, 0] = 1;
 
                 var oriF = invMatrix * tarF;
-
                 int oriX = (int)oriF[0, 0];
                 int oriY = (int)oriF[1, 0];
+                float oXW = oriF[0, 0] - oriX;
+                float oYW = oriF[1, 0] - oriY;
 
-                if (0 < oriX && oriX < inputImage.Width && 0 < oriY && oriY < inputImage.Height)
+                if (0 < oriX && oriX < inputImage.Width - 1 && 0 < oriY && oriY < inputImage.Height - 1)
                 {
-                    bmpCol = inFBmp.GetPixel(oriX, oriY);
+                    var c00 = inFBmp.GetPixel(oriX + 0, oriY + 0);
+                    var c10 = inFBmp.GetPixel(oriX + 1, oriY + 0);
+                    var c01 = inFBmp.GetPixel(oriX + 0, oriY + 1);
+                    var c11 = inFBmp.GetPixel(oriX + 1, oriY + 1);
+
+                    var w00 = (1 - oXW) + (1 - oYW);
+                    var w10 = (0 + oXW) + (1 - oYW);
+                    var w01 = (1 - oXW) + (0 + oYW);
+                    var w11 = (0 + oXW) + (0 + oYW);
+
+                    var A = (int)((c00.A * w00 + c10.A * w10 + c01.A * w01 + c11.A * w11) / 4);
+                    var R = (int)((c00.R * w00 + c10.R * w10 + c01.R * w01 + c11.R * w11) / 4);
+                    var G = (int)((c00.G * w00 + c10.G * w10 + c01.G * w01 + c11.G * w11) / 4);
+                    var B = (int)((c00.B * w00 + c10.B * w10 + c01.B * w01 + c11.B * w11) / 4);
+
+                    pixCol = Color.FromArgb(A, R, G, B);
                 }
                 else
                 {
-                    bmpCol = fill.Value;
+                    pixCol = fill.Value;
                 }
 
-                outFBmp.SetPixel(w, h, bmpCol);
-            }
-        }
-
-        outFBmp.EndAccess();
-        inFBmp.EndAccess();
-
-        return (Image)outputBitmap.Clone();
-    }
-
-    /// <summary>
-    /// DistortImage Main
-    /// </summary>
-    /// <param name="inputImage"></param>
-    /// <param name="targetColor"></param>
-    /// <returns></returns>
-    private static Image __DistortImage_FromInverseMatrix2(Image inputImage, Matrix<float> invMatrix, Color? fill = null)
-    {
-        // from target frame to original frame
-        var tarF = CreateMatrix.Dense<float>(4, 4);
-
-        tarF[0, 1] = inputImage.Width;
-        tarF[1, 2] = inputImage.Height;
-        tarF[0, 3] = inputImage.Width;
-        tarF[1, 3] = inputImage.Height;
-        tarF[2, 0] = 1;
-        tarF[2, 1] = 1;
-        tarF[2, 2] = 1;
-        tarF[2, 3] = 1;
-        tarF[3, 0] = 1;
-        tarF[3, 1] = 1;
-        tarF[3, 2] = 1;
-        tarF[3, 3] = 1;
-
-        var oriF = invMatrix * tarF;
-        var oriFs = new PointF[]
-        {
-            new PointF(oriF[0,0], oriF[1,0]),
-            new PointF(oriF[0,1], oriF[1,1]),
-            new PointF(oriF[0,2], oriF[1,2]),
-            new PointF(oriF[0,3], oriF[1,3]),
-        };
-
-        fill ??= Color.Transparent;
-
-        var outputBitmap = new Bitmap(inputImage.Width, inputImage.Height);
-
-        var inFBmp = new FastBitmap((Bitmap)inputImage);
-        var outFBmp = new FastBitmap(outputBitmap);
-
-
-        inFBmp.BeginAccess();
-        outFBmp.BeginAccess();
-
-        Color bmpCol;
-        for (int w = 0; w < outputBitmap.Width; w++)
-        {
-            for (int h = 0; h < outputBitmap.Height; h++)
-            {
-                // 0 → 1 の幅割合分 → 4
-                var P4X = ((outputBitmap.Width - w) * oriFs[0].X + w * oriFs[1].X) / outputBitmap.Width;
-                var P4Y = ((outputBitmap.Width - w) * oriFs[0].Y + w * oriFs[1].Y) / outputBitmap.Width;
-
-                // 2 → 3 の幅割合分 → 5
-                var P5X = ((outputBitmap.Width - w) * oriFs[2].X + w * oriFs[3].X) / outputBitmap.Width;
-                var P5Y = ((outputBitmap.Width - w) * oriFs[2].Y + w * oriFs[3].Y) / outputBitmap.Width;
-
-                // 4 → 5 の高さ割合分 → 6
-                var P6X = (int)((outputBitmap.Height - h) * P4X + h * P5X) / outputBitmap.Height;
-                var P6Y = (int)((outputBitmap.Height - h) * P4Y + h * P5Y) / outputBitmap.Height;
-
-                if (0 < P6X && P6X < inputImage.Width && 0 < P6Y && P6Y < inputImage.Height)
-                    bmpCol = inFBmp.GetPixel(P6X, P6Y);
-                else
-                    bmpCol = fill.Value;
-
-                outFBmp.SetPixel(w, h, bmpCol);
+                outFBmp.SetPixel(w, h, pixCol);
             }
         }
 
