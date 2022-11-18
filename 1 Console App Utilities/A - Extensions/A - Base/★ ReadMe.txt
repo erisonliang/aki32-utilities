@@ -1,36 +1,33 @@
 ﻿
 
-
-★★★★★ 
-
-Add util → always in 999.
-
- - Template exists in 999. Just copy it.
-
-★★★★★
-
-Check follows before move out of 999.
-
- - test
-
- - write summary
-
- - return FileInfo or DirectoryInfo if possible
- 
- - all preprocess looks good
-
- - accept null in outputFile
-
- - not using async ideally
+★★★★★ Numbering Rule
 
 
-★★★★★
+ - All file is classified into a folder that is converted from.
 
- Chain class priority
- 
- 1 FileInfo, DirectoryInfo
- 2 Image, Size, Point
+ - Num = 100 * (FileSystemInfo count) + (incremental num)
 
+
+For example, "Save Csv"
+
+ - input is double[][] → classified to "F - Data" → "F---"
+
+ - output is FileInfo which is FileSystemInfo and input is not. → "F1--"
+
+ - F101 is available → "F101"
+
+
+
+★★★★★ Creating Rule
+
+
+ - Template exists in 999.
+
+ - First, accept and return as FileInfo or DirectoryInfo if possible.
+
+ - Second, accept and return as Image, Size or Point if possible.
+
+ - not using async ideally for chaining
 
 
 ★★★★★
