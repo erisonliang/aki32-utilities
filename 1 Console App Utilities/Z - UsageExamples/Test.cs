@@ -222,9 +222,9 @@ public class Test
 
             // E008 AddTextToImage
             {
-                var input = new DirectoryInfo($@"{baseDir}\E008 AddTextToImage");
-                input.AddTextToImageProportionally_Loop(null, "aiueo あいうえお", new PointF(0.9f, 0.8f),
-                    fontSizeRatio: 0.1, isRightToLeft: true);
+                //var input = new DirectoryInfo($@"{baseDir}\E008 AddTextToImage");
+                //input.AddTextToImageProportionally_Loop(null, "%FN", new PointF(0.9f, 0.8f),
+                //    fontSizeRatio: 0.1, alignRight: true);
             }
 
             // E102 SaveScreenShot
