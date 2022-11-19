@@ -212,18 +212,23 @@ public static partial class OwesomeExtensions
     /// 
     /// </summary>
     /// <param name="framePoints"></param>
-    /// <param name="pointCount">TODO: 汎用的に。</param>
+    /// <param name="pickingPointCount">TODO: 汎用的に。</param>
     /// <returns></returns>
-    public static PointF[] GetTargetPointRatiosConversationally_For_DistortImage(Point[] framePoints = null, int pointCount = 4)
+    public static PointF[] GetTargetPointRatiosConversationally_For_DistortImage(Point[] framePoints = null, int pickingPointCount = 4)
     {
         var reasons = new string[] {
                 "Upper Left of the Image（┏  ）",
                 "Bottom Right of the Image（┛  ）",
                 "Upper Left of the Object（┏  ）",
-                "Upper Right of the Object（┓  ）",
-                "Bottom Left of the Object（┗  ）",
-                "Bottom Right of the Object（┛  ）",
             };
+
+        if (pickingPointCount >= 2)
+            reasons = reasons.Append("Upper Right of the Object（┓  ）").ToArray();
+        if (pickingPointCount >= 3)
+            reasons = reasons.Append("Bottom Left of the Object（┗  ）").ToArray();
+        if (pickingPointCount >= 4)
+            reasons = reasons.Append("Bottom Right of the Object（┛  ）").ToArray();
+
         var ps = new Point[reasons.Length];
 
         for (int i = 0; i < reasons.Length; i++)
@@ -251,31 +256,13 @@ public static partial class OwesomeExtensions
         for (int i = 0; i < reasons.Length; i++)
             Console.WriteLine($"{reasons[i]}:{ps[i]}");
 
-        // TODO: 汎用的に。
-        {
-            var Fs = ps[..2];
-            var Os = ps[2..];
-        }
+        var Fs = ps[..2];
+        var Os = ps[2..];
 
-        var ulF = ps[0];
-        var brF = ps[1];
-        var ulO = ps[2];
-        var urO = ps[3];
-        var blO = ps[4];
-        var brO = ps[5];
+        float Fw = Fs[1].X - Fs[0].X;
+        float Fh = Fs[1].Y - Fs[0].Y;
 
-        float Fw = brF.X - ulF.X;
-        float Fh = brF.Y - ulF.Y;
-
-        var ratiosO = new PointF[4]
-        {
-            new PointF((ulO.X - ulF.X) / Fw, (ulO.Y - ulF.Y) / Fh),
-            new PointF((urO.X - ulF.X) / Fw, (urO.Y - ulF.Y) / Fh),
-            new PointF((blO.X - ulF.X) / Fw, (blO.Y - ulF.Y) / Fh),
-            new PointF((brO.X - ulF.X) / Fw, (brO.Y - ulF.Y) / Fh),
-        };
-
-        return ratiosO;
+        return Os.Select(o => new PointF((o.X - Fs[0].X) / Fw, (o.Y - Fs[0].Y) / Fh)).ToArray();
     }
 
     /// <summary>
