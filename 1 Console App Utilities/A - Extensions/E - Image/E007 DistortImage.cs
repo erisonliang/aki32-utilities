@@ -69,8 +69,6 @@ public static partial class OwesomeExtensions
                 if (UtilConfig.ConsoleOutput)
                     Console.WriteLine($"X: {inputFile.FullName}, {ex.Message}");
             }
-
-            GC.Collect();
         }
 
 
@@ -359,8 +357,9 @@ public static partial class OwesomeExtensions
 
         var outputImage = __DistortImage_FromInverseMatrix(inputImage, invMatrix, fill);
 
+        GC.Collect();
+        
         return outputImage;
-
     }
 
     /// <summary>
