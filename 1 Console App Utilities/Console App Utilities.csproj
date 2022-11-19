@@ -30,6 +30,7 @@
 
   <ItemGroup>
     <PackageReference Include="ClosedXML" Version="0.95.4" />
+    <PackageReference Include="HomographySharp" Version="3.2.1" />
     <PackageReference Include="iTextSharp" Version="5.5.13.3" />
     <PackageReference Include="LibGit2Sharp" Version="0.26.2" />
     <PackageReference Include="MathNet.Numerics" Version="5.0.0" />

@@ -5,6 +5,8 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
 
+using HomographySharp;
+
 using MathNet.Numerics.LinearAlgebra;
 
 namespace Aki32_Utilities.Extensions;
@@ -87,7 +89,7 @@ public static partial class OwesomeExtensions
     {
         // sugar
         using var inputImage = inputFile.GetImageFromFile();
-        var ps = inputImage.__For_DistortImage_ConvertFromPointFsToPoints(pps);
+        var ps = inputImage.GetPointsFromPointRatios_For_DistortImage(pps);
         return inputFile.DistortImage(outputFile, fill, ps);
     }
 
@@ -110,7 +112,7 @@ public static partial class OwesomeExtensions
             return outputDir;
 
         using var inputImage = firstImageFile.GetImageFromFile();
-        var ps = inputImage.__For_DistortImage_ConvertFromPointFsToPoints(pps);
+        var ps = inputImage.GetPointsFromPointRatios_For_DistortImage(pps);
 
 
         // post process
@@ -146,7 +148,7 @@ public static partial class OwesomeExtensions
         if (presetTargetPointRatios == null)
         {
             Console.WriteLine("\r\n★★★★★ Target Point Coordinate Input (Press escape key to go back to previous parameter)\r\n");
-            presetTargetPointRatios = __For_DistortImage_GetTargetPointRatios(presetFramePoints);
+            presetTargetPointRatios = GetTargetPointRatiosConversationally_For_DistortImage(presetFramePoints);
         }
 
         var process = Process.Start(new ProcessStartInfo()
@@ -157,7 +159,7 @@ public static partial class OwesomeExtensions
 
         Console.WriteLine("\r\n★★★★★ Original Point Coodinates Input (Press escape key to go back to previous parameter)\r\n");
 
-        var ratiosO = __For_DistortImage_GetTargetPointRatios(presetFramePoints);
+        var ratiosO = GetTargetPointRatiosConversationally_For_DistortImage(presetFramePoints);
         process?.Kill();
 
 
@@ -176,7 +178,7 @@ public static partial class OwesomeExtensions
 
     // ★★★★★★★★★★★★★★★ Helper
 
-    public static Point[] __For_DistortImage_GetFramePoints()
+    public static Point[] GetFramePointRatiosConversationally_For_DistortImage()
     {
         var reasons = new string[] {
                 "Upper Left of the Image（┏  ）",
@@ -206,7 +208,13 @@ public static partial class OwesomeExtensions
         return ps;
     }
 
-    public static PointF[] __For_DistortImage_GetTargetPointRatios(Point[] framePoints = null)
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="framePoints"></param>
+    /// <param name="pointCount">TODO: 汎用的に。</param>
+    /// <returns></returns>
+    public static PointF[] GetTargetPointRatiosConversationally_For_DistortImage(Point[] framePoints = null, int pointCount = 4)
     {
         var reasons = new string[] {
                 "Upper Left of the Image（┏  ）",
@@ -214,6 +222,7 @@ public static partial class OwesomeExtensions
                 "Upper Left of the Object（┏  ）",
                 "Upper Right of the Object（┓  ）",
                 "Bottom Left of the Object（┗  ）",
+                "Bottom Right of the Object（┛  ）",
             };
         var ps = new Point[reasons.Length];
 
@@ -242,42 +251,48 @@ public static partial class OwesomeExtensions
         for (int i = 0; i < reasons.Length; i++)
             Console.WriteLine($"{reasons[i]}:{ps[i]}");
 
+        // TODO: 汎用的に。
+        {
+            var Fs = ps[..2];
+            var Os = ps[2..];
+        }
+
         var ulF = ps[0];
         var brF = ps[1];
         var ulO = ps[2];
         var urO = ps[3];
         var blO = ps[4];
+        var brO = ps[5];
 
-        float widthF = brF.X - ulF.X;
-        float heightF = brF.Y - ulF.Y;
+        float Fw = brF.X - ulF.X;
+        float Fh = brF.Y - ulF.Y;
 
-        var ratiosO = new PointF[3]
+        var ratiosO = new PointF[4]
         {
-            new PointF((ulO.X - ulF.X) / widthF, (ulO.Y - ulF.Y) / heightF),
-            new PointF((urO.X - ulF.X) / widthF, (urO.Y - ulF.Y) / heightF),
-            new PointF((blO.X - ulF.X) / widthF, (blO.Y - ulF.Y) / heightF),
+            new PointF((ulO.X - ulF.X) / Fw, (ulO.Y - ulF.Y) / Fh),
+            new PointF((urO.X - ulF.X) / Fw, (urO.Y - ulF.Y) / Fh),
+            new PointF((blO.X - ulF.X) / Fw, (blO.Y - ulF.Y) / Fh),
+            new PointF((brO.X - ulF.X) / Fw, (brO.Y - ulF.Y) / Fh),
         };
 
         return ratiosO;
     }
 
-
-    // ★★★★★★★★★★★★★★★ Image process
-
-    // process 4 points!
-    // https://www.productiverage.com/approximately-correcting-perspective-with-c-sharp-fixing-a-blurry-presentation-video-part-two
-
-
     /// <summary>
-    /// DistortImage
+    /// For DistortImage. Convert from PointFs to Points
     /// </summary>
+    /// <param name="inputImage"></param>
     /// <param name="pps">List of the ratio of original point and target points. from 0.0-1.0. Min length 1, max length 3</param>
     /// <returns></returns>
-    public static Image DistortImage(this Image inputImage, Color? fill = null, params (PointF originalPointRatio, PointF tagrtPointRatio)[] pps)
+    private static (Point originalPoint, Point tagrtPoint)[] GetPointsFromPointRatios_For_DistortImage(this Image inputImage, params (PointF originalPointRatio, PointF tagrtPointRatio)[] pps)
     {
-        var ps = inputImage.__For_DistortImage_ConvertFromPointFsToPoints(pps);
-        return DistortImage(inputImage, fill, ps);
+        return pps.Select(pp => (
+           new Point((int)(pp.originalPointRatio.X * inputImage.Width), (int)(pp.originalPointRatio.Y * inputImage.Height)),
+           new Point((int)(pp.tagrtPointRatio.X * inputImage.Width), (int)(pp.tagrtPointRatio.Y * inputImage.Height)))
+           ).ToArray();
     }
+
+    // ★★★★★★★★★★★★★★★ Image process
 
     /// <summary>
     /// DistortImage
@@ -294,7 +309,7 @@ public static partial class OwesomeExtensions
         fill ??= Color.Transparent;
 
 
-        // main
+        // increase dim
         if (ps.Length == 1)
         {
             // increase dim
@@ -336,44 +351,39 @@ public static partial class OwesomeExtensions
             ps = ps.Append((oriP3, tarP3)).ToArray();
         }
 
-        var oriO = CreateMatrix.Dense<float>(3, 4);
-        var tarO = CreateMatrix.Dense<float>(3, 4);
+
+        // main
+        var oriPs = new List<Point2<double>>(4);
+        var tarPs = new List<Point2<double>>(4);
 
         for (int i = 0; i < 4; i++)
         {
-            oriO[0, i] = ps[i].originalPoint.X;
-            oriO[1, i] = ps[i].originalPoint.Y;
-            oriO[2, i] = 1;
-
-            tarO[0, i] = ps[i].tagrtPoint.X;
-            tarO[1, i] = ps[i].tagrtPoint.Y;
-            tarO[2, i] = 1;
+            oriPs.Add(new Point2<double>(ps[i].originalPoint.X, ps[i].originalPoint.Y));
+            tarPs.Add(new Point2<double>(ps[i].tagrtPoint.X, ps[i].tagrtPoint.Y));
         }
 
-        var m1 = tarO;
-        var m2 = oriO;
-        var m1I = m1.PseudoInverse();
-        var invMatrix = m2 * m1I;
+        // Homography (https://blog.neno.dev/entry/2019/01/12/homographysharp/)
+        var H = Homography.Find(oriPs, tarPs).ToMathNetMatrix();
+        var HI = H.PseudoInverse();
 
-        var outputImage = __DistortImage_FromInverseMatrix(inputImage, invMatrix, fill);
+        var outputImage = DistortImageFromInverseMatrix(inputImage, HI, fill);
 
+
+        // output
         GC.Collect();
-        
         return outputImage;
     }
 
     /// <summary>
-    /// For DistortImage. Convert from PointFs to Points
+    /// DistortImage
     /// </summary>
-    /// <param name="inputImage"></param>
     /// <param name="pps">List of the ratio of original point and target points. from 0.0-1.0. Min length 1, max length 3</param>
     /// <returns></returns>
-    private static (Point originalPoint, Point tagrtPoint)[] __For_DistortImage_ConvertFromPointFsToPoints(this Image inputImage, params (PointF originalPointRatio, PointF tagrtPointRatio)[] pps)
+    public static Image DistortImageProportionally(this Image inputImage, Color? fill = null, params (PointF originalPointRatio, PointF tagrtPointRatio)[] pps)
     {
-        return pps.Select(pp => (
-             new Point((int)(pp.originalPointRatio.X * inputImage.Width), (int)(pp.originalPointRatio.Y * inputImage.Height)),
-             new Point((int)(pp.tagrtPointRatio.X * inputImage.Width), (int)(pp.tagrtPointRatio.Y * inputImage.Height)))
-             ).ToArray();
+        // sugar
+        var ps = inputImage.GetPointsFromPointRatios_For_DistortImage(pps);
+        return DistortImage(inputImage, fill, ps);
     }
 
     /// <summary>
@@ -382,7 +392,7 @@ public static partial class OwesomeExtensions
     /// <param name="inputImage"></param>
     /// <param name="targetColor"></param>
     /// <returns></returns>
-    private static Image __DistortImage_FromInverseMatrix(Image inputImage, Matrix<float> invMatrix, Color? fill = null)
+    private static Image DistortImageFromInverseMatrix(Image inputImage, Matrix<double> invMatrix, Color? fill = null, bool useLinear = false)
     {
         fill ??= Color.Transparent;
 
@@ -390,7 +400,6 @@ public static partial class OwesomeExtensions
 
         var inFBmp = new FastBitmap((Bitmap)inputImage);
         var outFBmp = new FastBitmap(outputBitmap);
-
 
         inFBmp.BeginAccess();
         outFBmp.BeginAccess();
@@ -401,41 +410,65 @@ public static partial class OwesomeExtensions
             for (int h = 0; h < outputBitmap.Height; h++)
             {
                 // from target frame to original frame
-                var tarF = CreateMatrix.Dense<float>(3, 1);
+                var tarF = CreateMatrix.Dense<double>(3, 1);
 
                 tarF[0, 0] = w;
                 tarF[1, 0] = h;
                 tarF[2, 0] = 1;
 
                 var oriF = invMatrix * tarF;
-                int oriX = (int)oriF[0, 0];
-                int oriY = (int)oriF[1, 0];
-                float oXW = oriF[0, 0] - oriX;
-                float oYW = oriF[1, 0] - oriY;
 
-                if (0 < oriX && oriX < inputImage.Width - 1 && 0 < oriY && oriY < inputImage.Height - 1)
+                double oriX = oriF[0, 0] / oriF[2, 0];
+                double oriY = oriF[1, 0] / oriF[2, 0];
+
+                if (useLinear)
                 {
-                    var c00 = inFBmp.GetPixel(oriX + 0, oriY + 0);
-                    var c10 = inFBmp.GetPixel(oriX + 1, oriY + 0);
-                    var c01 = inFBmp.GetPixel(oriX + 0, oriY + 1);
-                    var c11 = inFBmp.GetPixel(oriX + 1, oriY + 1);
+                    // 色を直線補完
+                    int oriXint = (int)oriX;
+                    int oriYint = (int)oriY;
+                    double oXW = oriX - oriXint;
+                    double oYW = oriY - oriYint;
 
-                    var w00 = (1 - oXW) + (1 - oYW);
-                    var w10 = (0 + oXW) + (1 - oYW);
-                    var w01 = (1 - oXW) + (0 + oYW);
-                    var w11 = (0 + oXW) + (0 + oYW);
+                    if (0 < oriX && oriX < inputImage.Width - 1 && 0 < oriY && oriY < inputImage.Height - 1)
+                    {
+                        var c00 = inFBmp.GetPixel(oriXint + 0, oriYint + 0);
+                        var c10 = inFBmp.GetPixel(oriXint + 1, oriYint + 0);
+                        var c01 = inFBmp.GetPixel(oriXint + 0, oriYint + 1);
+                        var c11 = inFBmp.GetPixel(oriXint + 1, oriYint + 1);
 
-                    var A = (int)((c00.A * w00 + c10.A * w10 + c01.A * w01 + c11.A * w11) / 4);
-                    var R = (int)((c00.R * w00 + c10.R * w10 + c01.R * w01 + c11.R * w11) / 4);
-                    var G = (int)((c00.G * w00 + c10.G * w10 + c01.G * w01 + c11.G * w11) / 4);
-                    var B = (int)((c00.B * w00 + c10.B * w10 + c01.B * w01 + c11.B * w11) / 4);
+                        var w00 = (1 - oXW) + (1 - oYW);
+                        var w10 = (0 + oXW) + (1 - oYW);
+                        var w01 = (1 - oXW) + (0 + oYW);
+                        var w11 = (0 + oXW) + (0 + oYW);
 
-                    pixCol = Color.FromArgb(A, R, G, B);
+                        var A = (int)((c00.A * w00 + c10.A * w10 + c01.A * w01 + c11.A * w11) / 4);
+                        var R = (int)((c00.R * w00 + c10.R * w10 + c01.R * w01 + c11.R * w11) / 4);
+                        var G = (int)((c00.G * w00 + c10.G * w10 + c01.G * w01 + c11.G * w11) / 4);
+                        var B = (int)((c00.B * w00 + c10.B * w10 + c01.B * w01 + c11.B * w11) / 4);
+
+                        pixCol = Color.FromArgb(A, R, G, B);
+                    }
+                    else
+                    {
+                        pixCol = fill.Value;
+                    }
                 }
                 else
                 {
-                    pixCol = fill.Value;
+                    // その点をそのまま返す
+                    int oriXint = (int)oriX;
+                    int oriYint = (int)oriY;
+
+                    if (0 < oriX && oriX < inputImage.Width && 0 < oriY && oriY < inputImage.Height)
+                    {
+                        pixCol = inFBmp.GetPixel(oriXint, oriYint);
+                    }
+                    else
+                    {
+                        pixCol = fill.Value;
+                    }
                 }
+
 
                 outFBmp.SetPixel(w, h, pixCol);
             }
