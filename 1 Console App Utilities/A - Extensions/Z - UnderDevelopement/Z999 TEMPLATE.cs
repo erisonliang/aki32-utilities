@@ -32,7 +32,7 @@ public static partial class OwesomeExtensions
         // post process
         return outputFile!;
     }
-   
+
     /// <summary>
     /// TEMPLATE
     /// </summary>
@@ -46,19 +46,20 @@ public static partial class OwesomeExtensions
 
 
         // main
-        foreach (var file in inputDir.GetFiles())
+        foreach (var inputFile in inputDir.GetFiles())
         {
-            var newFilePath = Path.Combine(outputDir!.FullName, file.Name);
             try
             {
-                file.TEMPLATE(new FileInfo(newFilePath));
+                var outputFile = new FileInfo(Path.Combine(outputDir!.FullName, inputFile.Name));
+                inputFile.TEMPLATE(outputFile);
+
                 if (UtilConfig.ConsoleOutput)
-                    Console.WriteLine($"O: {newFilePath}");
+                    Console.WriteLine($"O: {inputFile.FullName}");
             }
             catch (Exception ex)
             {
                 if (UtilConfig.ConsoleOutput)
-                    Console.WriteLine($"X: {newFilePath}, {ex.Message}");
+                    Console.WriteLine($"X: {inputFile.FullName}, {ex.Message}");
             }
         }
 

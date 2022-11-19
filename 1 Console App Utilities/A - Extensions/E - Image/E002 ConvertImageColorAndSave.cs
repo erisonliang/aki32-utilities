@@ -21,20 +21,9 @@ public static partial class OwesomeExtensions
 
 
         // main
-        try
-        {
-            using var inputImage = inputFile.GetImageFromFile();
-            var outputImage = ConvertImageColor(inputImage, targetColor);
-            outputImage.Save(outputFile!.FullName, ImageFormat.Png);
-
-            if (UtilConfig.ConsoleOutput)
-                Console.WriteLine($"O: {inputFile.FullName}");
-        }
-        catch (Exception e)
-        {
-            if (UtilConfig.ConsoleOutput)
-                Console.WriteLine($"X: {inputFile.FullName}, {e.Message}");
-        }
+        using var inputImage = inputFile.GetImageFromFile();
+        var outputImage = ConvertImageColor(inputImage, targetColor);
+        outputImage.Save(outputFile!.FullName, ImageFormat.Png);
 
 
         // post process
@@ -57,9 +46,20 @@ public static partial class OwesomeExtensions
         // main
         Parallel.ForEach(targetInfos, targetInfos =>
         {
-            var (targetName, targetColor) = targetInfos;
-            var outputFile = new FileInfo(Path.Combine(outputDir.FullName, $"{targetName.Replace(".png", "")}.png"));
-            inputFile.ConvertImageColor(outputFile, targetColor);
+            try
+            {
+                var (targetName, targetColor) = targetInfos;
+                var outputFile = new FileInfo(Path.Combine(outputDir.FullName, $"{targetName.Replace(".png", "")}.png"));
+                inputFile.ConvertImageColor(outputFile, targetColor);
+
+                if (UtilConfig.ConsoleOutput)
+                    Console.WriteLine($"O: {inputFile.FullName}");
+            }
+            catch (Exception e)
+            {
+                if (UtilConfig.ConsoleOutput)
+                    Console.WriteLine($"X: {inputFile.FullName}, {e.Message}");
+            }
         });
 
 
@@ -76,6 +76,7 @@ public static partial class OwesomeExtensions
     /// <returns></returns>
     public static DirectoryInfo ConvertImageColor_Loop(this FileInfo inputFile, DirectoryInfo? outputDir, params Color[] targetColors)
     {
+        // sugar
         var targetInfos = targetColors.Select(c => (c.IsNamedColor ? c.Name : c.ToArgb().ToString(), c)).ToArray();
         inputFile.ConvertImageColor_Loop(outputDir, targetInfos);
         return outputDir!;

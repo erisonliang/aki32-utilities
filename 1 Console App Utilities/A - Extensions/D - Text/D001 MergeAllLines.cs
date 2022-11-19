@@ -18,27 +18,28 @@ public static partial class OwesomeExtensions
 
 
         // main
-        var files = inputDir
+        var inputFiles = inputDir
             .GetFiles("*", SearchOption.TopDirectoryOnly)
             .Where(x => !x.Name.Contains(outputFile!.DirectoryName!))
             .Sort()
             .ToArray();
   
         using var sw = new StreamWriter(outputFile!.FullName, false, Encoding.GetEncoding("SHIFT_JIS"));
-        foreach (var f in files)
+        foreach (var inputFile in inputFiles)
         {
             try
             {
-                var input = File.ReadLines(f.FullName, Encoding.GetEncoding("SHIFT_JIS")).ToArray();
-                for (int i = skipRowCount; i < input.Length; i++)
-                    sw.WriteLine(input[i]);
+                var inputTexts = File.ReadLines(inputFile.FullName, Encoding.GetEncoding("SHIFT_JIS")).ToArray();
+                for (int i = skipRowCount; i < inputTexts.Length; i++)
+                    sw.WriteLine(inputTexts[i]);
+
                 if (UtilConfig.ConsoleOutput)
-                    Console.WriteLine($"O: {f.FullName}");
+                    Console.WriteLine($"O: {inputFile.FullName}");
             }
             catch (Exception ex)
             {
                 if (UtilConfig.ConsoleOutput)
-                    Console.WriteLine($"X: {f.FullName}, {ex.Message}");
+                    Console.WriteLine($"X: {inputFile.FullName}, {ex.Message}");
             }
         }
 

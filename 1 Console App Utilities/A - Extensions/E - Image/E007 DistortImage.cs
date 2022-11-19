@@ -54,20 +54,20 @@ public static partial class OwesomeExtensions
 
 
         // main
-        foreach (var file in inputDir.GetFiles())
+        foreach (var inputFile in inputDir.GetFiles())
         {
-            var newFilePath = Path.Combine(outputDir!.FullName, file.Name);
-
             try
             {
-                file.DistortImage(new FileInfo(newFilePath), fill, ps);
+                var outputFile = new FileInfo(Path.Combine(outputDir!.FullName, inputFile.Name));
+                inputFile.DistortImage(outputFile, fill, ps);
+
                 if (UtilConfig.ConsoleOutput)
-                    Console.WriteLine($"O: {newFilePath}");
+                    Console.WriteLine($"O: {inputFile.FullName}");
             }
             catch (Exception ex)
             {
                 if (UtilConfig.ConsoleOutput)
-                    Console.WriteLine($"X: {newFilePath}, {ex.Message}");
+                    Console.WriteLine($"X: {inputFile.FullName}, {ex.Message}");
             }
 
             GC.Collect();

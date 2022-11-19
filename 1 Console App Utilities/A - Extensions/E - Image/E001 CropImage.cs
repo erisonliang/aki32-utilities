@@ -20,20 +20,9 @@ public static partial class OwesomeExtensions
 
 
         // main
-        try
-        {
-            using var inputImage = inputFile.GetImageFromFile();
-            var outputImage = CropImage(inputImage, crop);
-            outputImage.Save(outputFile!.FullName);
-
-            if (UtilConfig.ConsoleOutput)
-                Console.WriteLine($"O: {inputFile.FullName}");
-        }
-        catch (Exception e)
-        {
-            if (UtilConfig.ConsoleOutput)
-                Console.WriteLine($"X: {inputFile.FullName}, {e.Message}");
-        }
+        using var inputImage = inputFile.GetImageFromFile();
+        var outputImage = CropImage(inputImage, crop);
+        outputImage.Save(outputFile!.FullName);
 
 
         // post process
@@ -80,8 +69,19 @@ public static partial class OwesomeExtensions
         // main
         foreach (var inputFile in inputDir.GetFiles())
         {
-            var outputFile = new FileInfo(Path.Combine(outputDir!.FullName, inputFile.Name));
-            inputFile.CropImage(outputFile, crop);
+            try
+            {
+                var outputFile = new FileInfo(Path.Combine(outputDir!.FullName, inputFile.Name));
+                inputFile.CropImage(outputFile, crop);
+
+                if (UtilConfig.ConsoleOutput)
+                    Console.WriteLine($"O: {inputFile.FullName}");
+            }
+            catch (Exception e)
+            {
+                if (UtilConfig.ConsoleOutput)
+                    Console.WriteLine($"X: {inputFile.FullName}, {e.Message}");
+            }
         }
 
 

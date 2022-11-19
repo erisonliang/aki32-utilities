@@ -73,19 +73,19 @@ public static partial class OwesomeExtensions
 
 
         // main
-        foreach (var file in inputDir.GetFiles())
+        foreach (var inputFile in inputDir.GetFiles())
         {
-            var newFilePath = Path.Combine(outputDir!.FullName, file.Name);
             try
             {
-                file.Encrypt(new FileInfo(newFilePath), password);
+                var outputFile = new FileInfo(Path.Combine(outputDir!.FullName, inputFile.Name));
+                inputFile.Encrypt(outputFile, password);
                 if (UtilConfig.ConsoleOutput)
-                    Console.WriteLine($"O: {newFilePath}");
+                    Console.WriteLine($"O: {inputFile.FullName}");
             }
             catch (Exception ex)
             {
                 if (UtilConfig.ConsoleOutput)
-                    Console.WriteLine($"X: {newFilePath}, {ex.Message}");
+                    Console.WriteLine($"X: {inputFile.FullName}, {ex.Message}");
             }
         }
 
@@ -156,19 +156,19 @@ public static partial class OwesomeExtensions
 
 
         // main
-        foreach (var file in inputDir.GetFiles())
+        foreach (var inputFile in inputDir.GetFiles())
         {
-            var newFilePath = Path.Combine(outputDir!.FullName, file.Name);
             try
             {
-                file.Decrypt(new FileInfo(newFilePath), password);
+                var outputFile = new FileInfo(Path.Combine(outputDir!.FullName, inputFile.Name));
+                inputFile.Decrypt(outputFile, password);
                 if (UtilConfig.ConsoleOutput)
-                    Console.WriteLine($"O: {newFilePath}");
+                    Console.WriteLine($"O: {inputFile.FullName}");
             }
             catch (Exception ex)
             {
                 if (UtilConfig.ConsoleOutput)
-                    Console.WriteLine($"X: {newFilePath}, {ex.Message}");
+                    Console.WriteLine($"X: {inputFile.FullName}, {ex.Message}");
             }
         }
 

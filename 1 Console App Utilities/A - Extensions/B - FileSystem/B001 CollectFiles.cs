@@ -23,25 +23,26 @@ public static partial class OwesomeExtensions
         //    .Select(f => f.FullName)
         //    .Where(f => f.Replace(inputDir.FullName, "").TrimStart('\\').IsMatchAny(searchRegexen));
 
-        var targetFiles = inputDir.GetFilesWithRegexen(SearchOption.AllDirectories, searchRegexen);
+        var inputFiles = inputDir.GetFilesWithRegexen(SearchOption.AllDirectories, searchRegexen);
 
-        foreach (var targetFile in targetFiles)
+        foreach (var inputFile in inputFiles)
         {
-            var targetFileName = targetFile.FullName;
-            var newFileName = targetFileName.Replace(inputDir.FullName, "");
-            newFileName = newFileName.Replace(Path.DirectorySeparatorChar, '_').Trim('_');
-            var newOutputFilePath = Path.Combine(outputDir!.FullName, newFileName);
-
             try
             {
-                File.Copy(targetFileName, newOutputFilePath, true);
+                var inputFileName = inputFile.FullName;
+                var outputFileName = inputFileName.Replace(inputDir.FullName, "");
+                outputFileName = outputFileName.Replace(Path.DirectorySeparatorChar, '_').Trim('_');
+                var outputFilePath = Path.Combine(outputDir!.FullName, outputFileName);
+
+                File.Copy(inputFileName, outputFilePath, true);
+
                 if (UtilConfig.ConsoleOutput)
-                    Console.WriteLine($"O: {newOutputFilePath}");
+                    Console.WriteLine($"O: {inputFile.FullName}");
             }
             catch (Exception ex)
             {
                 if (UtilConfig.ConsoleOutput)
-                    Console.WriteLine($"X: {newOutputFilePath}, {ex.Message}");
+                    Console.WriteLine($"X: {inputFile.FullName}, {ex.Message}");
             }
         }
 

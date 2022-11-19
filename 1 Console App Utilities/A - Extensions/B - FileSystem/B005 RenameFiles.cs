@@ -17,84 +17,85 @@ public static partial class OwesomeExtensions
     /// <summary>
     /// rename all file names in targetDir
     /// </summary>
-    /// <param name="targetDir"></param>
+    /// <param name="inputDir"></param>
     /// <param name="pattern">with "abc*def", "123" will be "abc123def". must include "*".</param>
-    /// <param name="replaceSet">
+    /// <param name="replaceSets">
     /// replace designated strings in filenames
     /// If 0-length array was given, replaceSet will be automatically decided.
     /// </param>
     /// <returns></returns>
-    public static DirectoryInfo RenameFiles_AppendAndReplace(this DirectoryInfo targetDir, string pattern, params (string from, string to)[] replaceSet)
+    public static DirectoryInfo RenameFiles_AppendAndReplace(this DirectoryInfo inputDir, string pattern, params (string from, string to)[] replaceSets)
     {
         // preprocess
         UtilPreprocessors.PreprocessBasic(true);
         if (!pattern.Contains("*"))
-            throw new InvalidOperationException("\"pattern\" must contain \"*\"");
+            throw new InvalidOperationException(@"""pattern"" must contain "" * """);
 
 
         // main
-        var targetFiles = targetDir.GetFiles();
+        var inputFiles = inputDir.GetFiles();
 
-        if (replaceSet.Length == 0)
+        if (replaceSets.Length == 0)
         {
-            var targetFileNames = targetFiles.Select(x => Path.GetFileNameWithoutExtension(x.Name)).ToArray();
-            if (targetFileNames.Length == 0)
-                return targetDir;
+            var inputFileNames = inputFiles.Select(x => Path.GetFileNameWithoutExtension(x.Name)).ToArray();
+            if (inputFileNames.Length == 0)
+                return inputDir;
 
-            var matchF = targetFileNames[0];
-            var matchB = targetFileNames[0];
+            var matchF = inputFileNames[0];
+            var matchB = inputFileNames[0];
 
-            foreach (var targetFileName in targetFileNames)
+            foreach (var inputFileName in inputFileNames)
             {
                 var F = 0;
-                for (int i = 0; i < Math.Min(targetFileName.Length, matchF.Length); i++)
+                for (int i = 0; i < Math.Min(inputFileName.Length, matchF.Length); i++)
                 {
-                    if (targetFileName[i] != matchF[i])
+                    if (inputFileName[i] != matchF[i])
                         break;
                     F++;
                 }
-                matchF = targetFileName.Take(F).ToString_Extension();
+                matchF = inputFileName.Take(F).ToString_Extension();
 
                 var B = 0;
-                for (int i = 0; i < Math.Min(targetFileName.Length, matchB.Length); i++)
+                for (int i = 0; i < Math.Min(inputFileName.Length, matchB.Length); i++)
                 {
-                    if (targetFileName[^(i + 1)] != matchB[^(i + 1)])
+                    if (inputFileName[^(i + 1)] != matchB[^(i + 1)])
                         break;
                     B++;
                 }
-                matchB = targetFileName.TakeLast(B).ToString_Extension();
+                matchB = inputFileName.TakeLast(B).ToString_Extension();
             }
 
             var replaceSetList = new List<(string from, string to)>();
             if (matchF != "") { replaceSetList.Add((matchF, "")); }
             if (matchB != "") { replaceSetList.Add((matchB, "")); }
-            replaceSet = replaceSetList.ToArray();
+            replaceSets = replaceSetList.ToArray();
         }
 
-        foreach (var targetFile in targetFiles)
+        foreach (var inputFile in inputFiles)
         {
-            var newFileName = Path.GetFileNameWithoutExtension(targetFile.Name);
-            foreach (var item in replaceSet)
-                newFileName = newFileName.Replace(item.from, item.to);
-            newFileName = pattern.Replace("*", newFileName);
-            if (newFileName == "") newFileName = "output";
-            var newFilePath = Path.Combine(targetFile.DirectoryName!, newFileName + Path.GetExtension(targetFile.Name));
-
             try
             {
-                targetFile.MoveTo(newFilePath);
+                var outputFileName = Path.GetFileNameWithoutExtension(inputFile.Name);
+                foreach (var replaceSet in replaceSets)
+                    outputFileName = outputFileName.Replace(replaceSet.from, replaceSet.to);
+                outputFileName = pattern.Replace(" * ", outputFileName);
+                if (outputFileName == "") outputFileName = "output";
+                var outputFilePath = Path.Combine(inputFile.DirectoryName!, outputFileName + Path.GetExtension(inputFile.Name));
+
+                inputFile.MoveTo(outputFilePath);
+
                 if (UtilConfig.ConsoleOutput)
-                    Console.WriteLine($"O: {newFilePath}");
+                    Console.WriteLine($"O: {inputFile.FullName}");
             }
             catch (Exception ex)
             {
                 if (UtilConfig.ConsoleOutput)
-                    Console.WriteLine($"X: {targetFile.FullName}, {ex.Message}");
+                    Console.WriteLine($"X: {inputFile.FullName}, {ex.Message}");
             }
         }
 
 
-        return targetDir;
+        return inputDir;
     }
 
     /// <summary>
@@ -158,6 +159,7 @@ public static partial class OwesomeExtensions
         inputFile.MoveTo(outputFile);
 
 
+        // post process
         return outputFile;
     }
 

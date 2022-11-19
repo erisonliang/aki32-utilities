@@ -19,21 +19,11 @@ public static partial class OwesomeExtensions
         // preprocess
         UtilPreprocessors.PreprocessOutFile(ref outputFile, false, inputFile.Directory!, $"output.png");
 
-        // main
-        try
-        {
-            using var inputImage = inputFile.GetImageFromFile();
-            var img = ResizeImage(inputImage, outputSize, mode);
-            img.Save(outputFile!.FullName);
 
-            if (UtilConfig.ConsoleOutput)
-                Console.WriteLine($"O: {inputFile.FullName}");
-        }
-        catch (Exception e)
-        {
-            if (UtilConfig.ConsoleOutput)
-                Console.WriteLine($"X: {inputFile.FullName}, {e.Message}");
-        }
+        // main
+        using var inputImage = inputFile.GetImageFromFile();
+        var img = ResizeImage(inputImage, outputSize, mode);
+        img.Save(outputFile!.FullName);
 
 
         // post process
@@ -57,8 +47,19 @@ public static partial class OwesomeExtensions
         // main
         foreach (var inputFile in inputDir.GetFiles())
         {
-            var outputFile = new FileInfo(Path.Combine(outputDir!.FullName, inputFile.Name));
-            inputFile.ResizeImage(outputFile, outputSize, mode);
+            try
+            {
+                var outputFile = new FileInfo(Path.Combine(outputDir!.FullName, inputFile.Name));
+                inputFile.ResizeImage(outputFile, outputSize, mode);
+
+                if (UtilConfig.ConsoleOutput)
+                    Console.WriteLine($"O: {inputFile.FullName}");
+            }
+            catch (Exception e)
+            {
+                if (UtilConfig.ConsoleOutput)
+                    Console.WriteLine($"X: {inputFile.FullName}, {e.Message}");
+            }
         }
 
 
@@ -103,8 +104,20 @@ public static partial class OwesomeExtensions
         // main
         foreach (var inputFile in inputDir.GetFiles())
         {
-            var outputFile = new FileInfo(Path.Combine(outputDir!.FullName, inputFile.Name));
-            inputFile.ResizeImagePropotionally(outputFile, outputSizeRatio, mode);
+            try
+            {
+                var outputFile = new FileInfo(Path.Combine(outputDir!.FullName, inputFile.Name));
+                inputFile.ResizeImagePropotionally(outputFile, outputSizeRatio, mode);
+
+                if (UtilConfig.ConsoleOutput)
+                    Console.WriteLine($"O: {inputFile.FullName}");
+            }
+            catch (Exception e)
+            {
+                if (UtilConfig.ConsoleOutput)
+                    Console.WriteLine($"X: {inputFile.FullName}, {e.Message}");
+            }
+
         }
 
 

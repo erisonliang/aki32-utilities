@@ -64,19 +64,20 @@ public static partial class OwesomeExtensions
 
 
         // main
-        foreach (var file in inputDir.GetFiles())
+        foreach (var inputFile in inputDir.GetFiles())
         {
-            var newFilePath = Path.Combine(outputDir!.FullName, file.Name);
             try
             {
-                file.ExtractCsvColumns(new FileInfo(newFilePath), extractingColumns, skipRowCount, header);
+                var outputFile = new FileInfo(Path.Combine(outputDir!.FullName, inputFile.Name));
+                inputFile.ExtractCsvColumns(outputFile, extractingColumns, skipRowCount, header);
+
                 if (UtilConfig.ConsoleOutput)
-                    Console.WriteLine($"O: {newFilePath}");
+                    Console.WriteLine($"O: {inputFile.FullName}");
             }
             catch (Exception ex)
             {
                 if (UtilConfig.ConsoleOutput)
-                    Console.WriteLine($"X: {newFilePath}, {ex.Message}");
+                    Console.WriteLine($"X: {inputFile.FullName}, {ex.Message}");
             }
         }
 
@@ -103,20 +104,21 @@ public static partial class OwesomeExtensions
         // main
         foreach (var target in targets)
         {
-            foreach (var file in inputDir.GetFiles())
+            foreach (var inputFile in inputDir.GetFiles())
             {
-                var fileNameWithoutEx= Path.GetFileNameWithoutExtension(file.Name);
-                var newFilePath = Path.Combine(outputDir!.FullName, $"{fileNameWithoutEx}_{target.name}{file.Extension}");
                 try
                 {
-                    file.ExtractCsvColumns(new FileInfo(newFilePath), target.extractingColumns, skipRowCount, target.header);
+                    var inputFileNameWithoutEx = Path.GetFileNameWithoutExtension(inputFile.Name);
+                    var outputFile = new FileInfo(Path.Combine(outputDir!.FullName, $"{inputFileNameWithoutEx}_{target.name}{inputFile.Extension}"));
+                    inputFile.ExtractCsvColumns(outputFile, target.extractingColumns, skipRowCount, target.header);
+
                     if (UtilConfig.ConsoleOutput)
-                        Console.WriteLine($"O: {newFilePath}");
+                        Console.WriteLine($"O: {inputFile.FullName}");
                 }
                 catch (Exception ex)
                 {
                     if (UtilConfig.ConsoleOutput)
-                        Console.WriteLine($"X: {newFilePath}, {ex.Message}");
+                        Console.WriteLine($"X: {inputFile.FullName}, {ex.Message}");
                 }
             }
         }

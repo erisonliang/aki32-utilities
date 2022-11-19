@@ -22,7 +22,7 @@ public static partial class OwesomeExtensions
         // main
         return inputFile.ReadCsv_Rows(skipColumnCount, skipRowCount).SaveCsv_Columns(outputFile!, header);
     }
-  
+
     /// <summary>
     /// Transpose csv and save
     /// </summary>
@@ -39,19 +39,20 @@ public static partial class OwesomeExtensions
 
 
         // main
-        foreach (var file in inputDir.GetFiles())
+        foreach (var inputFile in inputDir.GetFiles())
         {
-            var newFilePath = Path.Combine(outputDir!.FullName, file.Name);
             try
             {
-                file.TransposeCsv(new FileInfo(newFilePath), skipColumnCount, skipRowCount, header);
+                var outputFile = new FileInfo(Path.Combine(outputDir!.FullName, inputFile.Name));
+                inputFile.TransposeCsv(outputFile, skipColumnCount, skipRowCount, header);
+
                 if (UtilConfig.ConsoleOutput)
-                    Console.WriteLine($"O: {newFilePath}");
+                    Console.WriteLine($"O: {inputFile.FullName}");
             }
             catch (Exception ex)
             {
                 if (UtilConfig.ConsoleOutput)
-                    Console.WriteLine($"X: {newFilePath}, {ex.Message}");
+                    Console.WriteLine($"X: {inputFile.FullName}, {ex.Message}");
             }
         }
 
