@@ -18,20 +18,6 @@ public static partial class OwesomeExtensions
     /// </summary>
     /// <param name="inputFile"></param>
     /// <param name="outputFile">when null, automatically set to {inputFile.DirectoryName}/output_DistortImage/{inputFile.Name}</param>
-    /// <param name="pps">List of the ratio of original point and target points. from 0.0-1.0. Min length 1, max length 3</param>
-    /// <returns></returns>
-    public static FileInfo DistortImage(this FileInfo inputFile, FileInfo? outputFile, Color? fill = null, params (PointF originalPointRatio, PointF tagrtPointRatio)[] pps)
-    {
-        using var inputImage = inputFile.GetImageFromFile();
-        var ps = inputImage.__For_DistortImage_ConvertFromPointFsToPoints(pps);
-        return inputFile.DistortImage(outputFile, fill, ps);
-    }
-
-    /// <summary>
-    /// DistortImage
-    /// </summary>
-    /// <param name="inputFile"></param>
-    /// <param name="outputFile">when null, automatically set to {inputFile.DirectoryName}/output_DistortImage/{inputFile.Name}</param>
     /// <param name="ps">List of original points and target points. Min length 1, max length 3</param>
     /// <returns></returns>
     public static FileInfo DistortImage(this FileInfo inputFile, FileInfo? outputFile, Color? fill = null, params (Point originalPoint, Point tagrtPoint)[] ps)
@@ -52,31 +38,6 @@ public static partial class OwesomeExtensions
 
         // post process
         return outputFile!;
-    }
-
-
-    /// <summary>
-    /// DistortImage
-    /// </summary>
-    /// <param name="inputDir"></param>
-    /// <param name="outputDir">when null, automatically set to {inputDir.FullName}/output_DistortImage</param>
-    /// <param name="pps">List of the ratio of original point and target points. from 0.0-1.0. Min length 1, max length 3</param>
-    /// <returns></returns>
-    public static DirectoryInfo DistortImage_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir, Color? fill = null, params (PointF originalPointRatio, PointF tagrtPointRatio)[] pps)
-    {
-        // preprocess
-        UtilPreprocessors.PreprocessOutDir(ref outputDir, true, inputDir);
-
-
-        // main
-        var firstImageFile = inputDir.GetFilesWithRegexen(SearchOption.TopDirectoryOnly, GetImageFilesRegexen(png: true, jpg: true, bmp: true)).FirstOrDefault();
-        if (firstImageFile == null)
-            return outputDir;
-
-        using var inputImage = firstImageFile.GetImageFromFile();
-        var ps = inputImage.__For_DistortImage_ConvertFromPointFsToPoints(pps);
-
-        return inputDir.DistortImage_Loop(outputDir, fill, ps: ps);
     }
 
     /// <summary>
@@ -117,16 +78,59 @@ public static partial class OwesomeExtensions
         return outputDir!;
     }
 
-    // ★★★★★★★★★★★★★★★ FileSystemInfo chain process (applied)
+    /// <summary>
+    /// DistortImageProportionally
+    /// </summary>
+    /// <param name="inputFile"></param>
+    /// <param name="outputFile">when null, automatically set to {inputFile.DirectoryName}/output_DistortImage/{inputFile.Name}</param>
+    /// <param name="pps">List of the ratio of original point and target points. from 0.0-1.0. Min length 1, max length 3</param>
+    /// <returns></returns>
+    public static FileInfo DistortImageProportionally(this FileInfo inputFile, FileInfo? outputFile, Color? fill = null, params (PointF originalPointRatio, PointF tagrtPointRatio)[] pps)
+    {
+        // sugar
+        using var inputImage = inputFile.GetImageFromFile();
+        var ps = inputImage.__For_DistortImage_ConvertFromPointFsToPoints(pps);
+        return inputFile.DistortImage(outputFile, fill, ps);
+    }
 
     /// <summary>
-    /// DistortImage
+    /// DistortImageProportionally_Loop
     /// </summary>
     /// <param name="inputDir"></param>
     /// <param name="outputDir">when null, automatically set to {inputDir.FullName}/output_DistortImage</param>
-    /// <param name="targetPoints">List of target points. Length 3</param>
+    /// <param name="pps">List of the ratio of original point and target points. from 0.0-1.0. Min length 1, max length 3</param>
     /// <returns></returns>
-    public static Action DistortImage_Loop_Conversationally(this DirectoryInfo inputDir, DirectoryInfo? outputDir, Color? fill = null, PointF[] targetPoints = null, Point[] framePoints = null)
+    public static DirectoryInfo DistortImageProportionally_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir, Color? fill = null, params (PointF originalPointRatio, PointF tagrtPointRatio)[] pps)
+    {
+        // preprocess
+        UtilPreprocessors.PreprocessOutDir(ref outputDir, true, inputDir);
+
+
+        // main
+        var firstImageFile = inputDir.GetFilesWithRegexen(SearchOption.TopDirectoryOnly, GetImageFilesRegexen(png: true, jpg: true, bmp: true)).FirstOrDefault();
+        if (firstImageFile == null)
+            return outputDir;
+
+        using var inputImage = firstImageFile.GetImageFromFile();
+        var ps = inputImage.__For_DistortImage_ConvertFromPointFsToPoints(pps);
+
+
+        // post process
+        return inputDir.DistortImage_Loop(outputDir, fill, ps: ps);
+    }
+
+
+    // ★★★★★★★★★★★★★★★ FileSystemInfo chain process (applied)
+
+    /// <summary>
+    /// DistortImage.
+    /// Return Task of DistortImage List after picking points.
+    /// </summary>
+    /// <param name="inputDir"></param>
+    /// <param name="outputDir">when null, automatically set to {inputDir.FullName}/output_DistortImage</param>
+    /// <param name="presetTargetPointRatios">List of target point ratios. Length 3</param>
+    /// <returns></returns>
+    public static Action DistortImage_Loop_Conversationally(this DirectoryInfo inputDir, DirectoryInfo? outputDir, Color? fill = null, PointF[] presetTargetPointRatios = null, Point[] presetFramePoints = null)
     {
         // preprocess
         UtilPreprocessors.PreprocessOutDir(ref outputDir, true, inputDir.Parent!);
@@ -141,10 +145,10 @@ public static partial class OwesomeExtensions
 
         Console.WriteLine($"\r\n★★★★★ {ImageFiles.First().FullName} started\r\n");
 
-        if (targetPoints == null)
+        if (presetTargetPointRatios == null)
         {
             Console.WriteLine("\r\n★★★★★ Target Point Coordinate Input (Press escape key to go back to previous parameter)\r\n");
-            targetPoints = __For_DistortImage_GetTargetPointRatios(framePoints);
+            presetTargetPointRatios = __For_DistortImage_GetTargetPointRatios(presetFramePoints);
         }
 
         var process = Process.Start(new ProcessStartInfo()
@@ -155,7 +159,7 @@ public static partial class OwesomeExtensions
 
         Console.WriteLine("\r\n★★★★★ Original Point Coodinates Input (Press escape key to go back to previous parameter)\r\n");
 
-        var ratiosO = __For_DistortImage_GetTargetPointRatios(framePoints);
+        var ratiosO = __For_DistortImage_GetTargetPointRatios(presetFramePoints);
         process?.Kill();
 
 
@@ -164,10 +168,10 @@ public static partial class OwesomeExtensions
         //post process
         return new Action(() =>
         {
-            inputDir!.DistortImage_Loop(outputDir, fill,
-                (ratiosO[0], targetPoints[0]),
-                (ratiosO[1], targetPoints[1]),
-                (ratiosO[2], targetPoints[2]));
+            inputDir!.DistortImageProportionally_Loop(outputDir, fill,
+                (ratiosO[0], presetTargetPointRatios[0]),
+                (ratiosO[1], presetTargetPointRatios[1]),
+                (ratiosO[2], presetTargetPointRatios[2]));
         });
     }
 

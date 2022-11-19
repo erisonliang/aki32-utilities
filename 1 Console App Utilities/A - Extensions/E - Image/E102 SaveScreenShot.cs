@@ -24,6 +24,7 @@ public static partial class OwesomeExtensions
         // preprocess
         UtilPreprocessors.PreprocessOutFile(ref outputFile, false, null, "output.png");
 
+
         // main
         var outputImage = TakeScreenShot(upperLeftCoordinate, bottomRightCoordinate);
         outputImage.Save(outputFile.FullName, ImageFormat.Png);
@@ -45,7 +46,7 @@ public static partial class OwesomeExtensions
 
 
         // main
-        SaveScreenShot(outputFile, upperLeftCoordinate, bottomRightCoordinate);
+        outputFile.SaveScreenShot(upperLeftCoordinate, bottomRightCoordinate);
 
 
         // post process
