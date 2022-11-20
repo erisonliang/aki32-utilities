@@ -38,6 +38,7 @@ public static partial class OwesomeExtensions
     /// <param name="outputSize"></param>
     /// <returns></returns>
     public static DirectoryInfo ResizeImage_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir, Size outputSize,
+        bool useParallelThreading = true,
         ResizeImageMode mode = ResizeImageMode.Stretch)
     {
         // preprocess
@@ -45,7 +46,8 @@ public static partial class OwesomeExtensions
 
 
         // main
-        foreach (var inputFile in inputDir.GetFiles())
+        var inputFiles = inputDir.GetFiles().Sort();
+        var ProcessOne = (FileInfo inputFile) =>
         {
             try
             {
@@ -60,7 +62,13 @@ public static partial class OwesomeExtensions
                 if (UtilConfig.ConsoleOutput)
                     Console.WriteLine($"X: {inputFile.FullName}, {e.Message}");
             }
-        }
+        };
+
+        if (useParallelThreading)
+            Parallel.ForEach(inputFiles, ProcessOne);
+        else
+            foreach (var inputFile in inputFiles)
+                ProcessOne(inputFile);
 
 
         // post process
@@ -95,14 +103,17 @@ public static partial class OwesomeExtensions
     /// <param name="outputSizeRatio">1 for the same size. More than 0. </param>
     /// <returns></returns>
     public static DirectoryInfo ResizeImagePropotionally_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir, SizeF outputSizeRatio,
-        ResizeImageMode mode = ResizeImageMode.Stretch)
+        ResizeImageMode mode = ResizeImageMode.Stretch,
+        bool useParallelThreading = true
+        )
     {
         // preprocess
         UtilPreprocessors.PreprocessOutDir(ref outputDir, true, inputDir!);
 
 
         // main
-        foreach (var inputFile in inputDir.GetFiles())
+        var inputFiles = inputDir.GetFiles().Sort();
+        var ProcessOne = (FileInfo inputFile) =>
         {
             try
             {
@@ -117,8 +128,13 @@ public static partial class OwesomeExtensions
                 if (UtilConfig.ConsoleOutput)
                     Console.WriteLine($"X: {inputFile.FullName}, {e.Message}");
             }
+        };
 
-        }
+        if (useParallelThreading)
+            Parallel.ForEach(inputFiles, ProcessOne);
+        else
+            foreach (var inputFile in inputFiles)
+                ProcessOne(inputFile);
 
 
         // post process

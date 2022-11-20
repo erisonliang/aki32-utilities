@@ -205,7 +205,6 @@ public static partial class OwesomeExtensions
 
         using var outputBitmap = new Bitmap(inputImage);
         using var g = Graphics.FromImage(outputBitmap);
-
         g.DrawString(addingText, font, brush, (PointF)textUpperLeftPoint, format);
 
         return (Image)outputBitmap.Clone();
