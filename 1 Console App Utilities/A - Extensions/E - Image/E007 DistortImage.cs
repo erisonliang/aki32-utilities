@@ -178,7 +178,7 @@ public static partial class OwesomeExtensions
 
     // ★★★★★★★★★★★★★★★ Helper
 
-    public static Point[] GetFramePointRatiosConversationally_For_DistortImage()
+    public static Point[] GetFramePointsConversationally_For_DistortImage()
     {
         var reasons = new string[] {
                 "Upper Left of the Image（┏  ）",
