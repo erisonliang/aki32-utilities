@@ -38,7 +38,7 @@ public static partial class OwesomeExtensions
     /// <param name="outputSize"></param>
     /// <returns></returns>
     public static DirectoryInfo ResizeImage_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir, Size outputSize,
-        bool useParallelThreading = true,
+        int maxDegreeOfParallelism = 999,
         ResizeImageMode mode = ResizeImageMode.Stretch)
     {
         // preprocess
@@ -47,7 +47,7 @@ public static partial class OwesomeExtensions
 
         // main
         var inputFiles = inputDir.GetFiles().Sort();
-        var ProcessOne = (FileInfo inputFile) =>
+        Parallel.ForEach(inputFiles, new ParallelOptions { MaxDegreeOfParallelism = maxDegreeOfParallelism }, (FileInfo inputFile) =>
         {
             try
             {
@@ -62,13 +62,7 @@ public static partial class OwesomeExtensions
                 if (UtilConfig.ConsoleOutput)
                     Console.WriteLine($"X: {inputFile.FullName}, {e.Message}");
             }
-        };
-
-        if (useParallelThreading)
-            Parallel.ForEach(inputFiles, ProcessOne);
-        else
-            foreach (var inputFile in inputFiles)
-                ProcessOne(inputFile);
+        });
 
 
         // post process
@@ -104,7 +98,7 @@ public static partial class OwesomeExtensions
     /// <returns></returns>
     public static DirectoryInfo ResizeImagePropotionally_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir, SizeF outputSizeRatio,
         ResizeImageMode mode = ResizeImageMode.Stretch,
-        bool useParallelThreading = true
+        int maxDegreeOfParallelism = 999
         )
     {
         // preprocess
@@ -113,7 +107,7 @@ public static partial class OwesomeExtensions
 
         // main
         var inputFiles = inputDir.GetFiles().Sort();
-        var ProcessOne = (FileInfo inputFile) =>
+        Parallel.ForEach(inputFiles, new ParallelOptions { MaxDegreeOfParallelism = maxDegreeOfParallelism }, (FileInfo inputFile) =>
         {
             try
             {
@@ -128,13 +122,7 @@ public static partial class OwesomeExtensions
                 if (UtilConfig.ConsoleOutput)
                     Console.WriteLine($"X: {inputFile.FullName}, {e.Message}");
             }
-        };
-
-        if (useParallelThreading)
-            Parallel.ForEach(inputFiles, ProcessOne);
-        else
-            foreach (var inputFile in inputFiles)
-                ProcessOne(inputFile);
+        });
 
 
         // post process
