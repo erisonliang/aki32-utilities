@@ -4,6 +4,8 @@ namespace Aki32_Utilities.Extensions;
 public static partial class OwesomeExtensions
 {
 
+    // ★★★★★★★★★★★★★★★ main
+
     /// <summary>
     /// extranct designated columns from csv to new csv
     /// </summary>
@@ -51,40 +53,31 @@ public static partial class OwesomeExtensions
     /// <summary>
     /// extranct designated columns from csv to new csv
     /// </summary>
-    /// <param name="inputDir"></param>
-    /// <param name="outputDir">when null, automatically set to {inputDir.FullName}/output_ExtractCsvColumns</param>
-    /// <param name="extractingColumns"></param>
+    /// <param name="inputFile"></param>
+    /// <param name="outputFile">when null, automatically set to {inputFile.DirectoryName}/output_ExtractCsvColumns/{inputFile.Name}</param>
     /// <param name="skipRowCount"></param>
-    /// <param name="header"></param>
+    /// <param name="targets"></param>
     /// <returns></returns>
-    public static DirectoryInfo ExtractCsvColumns_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir, int[] extractingColumns, int skipRowCount = 0, string? header = null)
+    public static FileInfo ExtractCsvColumnsForMany(this FileInfo inputFile, FileInfo? outputFile, int skipRowCount = 0, params (string name, int[] extractingColumns, string? header)[] targets)
     {
         // preprocess
-        UtilPreprocessors.PreprocessOutDir(ref outputDir, true, inputDir, takesTimeFlag: true);
+        UtilPreprocessors.PreprocessOutFile(ref outputFile, false, inputFile.Directory!, inputFile.Name);
 
 
         // main
-        foreach (var inputFile in inputDir.GetFiles())
+        foreach (var (name, extractingColumns, header) in targets)
         {
-            try
-            {
-                var outputFile = new FileInfo(Path.Combine(outputDir!.FullName, inputFile.Name));
-                inputFile.ExtractCsvColumns(outputFile, extractingColumns, skipRowCount, header);
-
-                if (UtilConfig.ConsoleOutput)
-                    Console.WriteLine($"O: {inputFile.FullName}");
-            }
-            catch (Exception ex)
-            {
-                if (UtilConfig.ConsoleOutput)
-                    Console.WriteLine($"X: {inputFile.FullName}, {ex.Message}");
-            }
+            var newOutputFile = new FileInfo(Path.Combine(outputFile.Directory!.FullName, $"{outputFile.Name}_{name}{inputFile.Extension}"));
+            inputFile.ExtractCsvColumns(newOutputFile, extractingColumns, skipRowCount, header);
         }
 
 
         // post process
-        return outputDir!;
+        return outputFile!;
     }
+
+
+    // ★★★★★★★★★★★★★★★ loop sugar
 
     /// <summary>
     /// extranct designated columns from csv to new csv
@@ -95,37 +88,24 @@ public static partial class OwesomeExtensions
     /// <param name="skipRowCount"></param>
     /// <param name="header"></param>
     /// <returns></returns>
+    public static DirectoryInfo ExtractCsvColumns_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir, int[] extractingColumns, int skipRowCount = 0, string? header = null)
+        => inputDir.Loop(outputDir, (inF, outF) => ExtractCsvColumns(inF, outF, extractingColumns, skipRowCount, header));
+
+    /// <summary>
+    /// extranct designated columns from csv to new csv
+    /// </summary>
+    /// <param name="inputDir"></param>
+    /// <param name="outputDir">when null, automatically set to {inputDir.FullName}/output_ExtractCsvColumns</param>
+    /// <param name="skipRowCount"></param>
+    /// <param name="targets"></param>
+    /// <returns></returns>
     public static DirectoryInfo ExtractCsvColumns_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir, int skipRowCount = 0, params (string name, int[] extractingColumns, string? header)[] targets)
-    {
-        // preprocess
-        UtilPreprocessors.PreprocessOutDir(ref outputDir, true, inputDir, takesTimeFlag: true);
+        => inputDir.Loop(outputDir,
+            (inF, outF) => ExtractCsvColumnsForMany(inF, outF, skipRowCount, targets),
+            overrideOutputFile: new FileInfo(Path.Combine(outputDir.FullName, "auto"))
+            );
 
 
-        // main
-        foreach (var target in targets)
-        {
-            foreach (var inputFile in inputDir.GetFiles())
-            {
-                try
-                {
-                    var inputFileNameWithoutEx = Path.GetFileNameWithoutExtension(inputFile.Name);
-                    var outputFile = new FileInfo(Path.Combine(outputDir!.FullName, $"{inputFileNameWithoutEx}_{target.name}{inputFile.Extension}"));
-                    inputFile.ExtractCsvColumns(outputFile, target.extractingColumns, skipRowCount, target.header);
-
-                    if (UtilConfig.ConsoleOutput)
-                        Console.WriteLine($"O: {inputFile.FullName}");
-                }
-                catch (Exception ex)
-                {
-                    if (UtilConfig.ConsoleOutput)
-                        Console.WriteLine($"X: {inputFile.FullName}, {ex.Message}");
-                }
-            }
-        }
-
-
-        // post process
-        return outputDir!;
-    }
+    // ★★★★★★★★★★★★★★★ 
 
 }

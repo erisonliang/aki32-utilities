@@ -6,6 +6,8 @@ namespace Aki32_Utilities.Extensions;
 public static partial class OwesomeExtensions
 {
 
+    // ★★★★★★★★★★★★★★★ main
+
     /// <summary>
     /// move all csvs' target column to one csv (.xlsx is also acceptable)
     /// </summary>
@@ -150,7 +152,7 @@ public static partial class OwesomeExtensions
     /// <param name="targets"></param>
     /// <returns></returns>
     /// <exception cref="InvalidOperationException"></exception>
-    public static DirectoryInfo CollectCsvColumns_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir, int skipRowCount, params (string name, int? initialColumn, int targetColumn)[] targets)
+    public static DirectoryInfo CollectCsvColumnsForMany(this DirectoryInfo inputDir, DirectoryInfo? outputDir, int skipRowCount, params (string name, int? initialColumn, int targetColumn)[] targets)
     {
         // preprocess
         UtilPreprocessors.PreprocessOutDir(ref outputDir, false, inputDir, takesTimeFlag: true);
@@ -170,6 +172,9 @@ public static partial class OwesomeExtensions
         return outputDir;
     }
 
+
+    // ★★★★★★★★★★★★★★★ sugar
+
     /// <summary>
     /// move all csvs' target column to one csv
     /// </summary>
@@ -178,10 +183,8 @@ public static partial class OwesomeExtensions
     /// <param name="targets"></param>
     /// <returns></returns>
     /// <exception cref="InvalidOperationException"></exception>
-    public static DirectoryInfo CollectCsvColumns_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir, params (string name, int? initialColumn, int targetColumn)[] targets)
-    {
-        return inputDir.CollectCsvColumns_Loop(outputDir, 0, targets);
-    }
+    public static DirectoryInfo CollectCsvColumnsForMany(this DirectoryInfo inputDir, DirectoryInfo? outputDir, params (string name, int? initialColumn, int targetColumn)[] targets)
+        => inputDir.CollectCsvColumnsForMany(outputDir, 0, targets);
 
     /// <summary>
     /// move all csvs' target column to one csv
@@ -190,10 +193,8 @@ public static partial class OwesomeExtensions
     /// <param name="outputDir">when null, automatically set to {inputDir.FullName}/output_CollectCsvColumns</param>
     /// <param name="targets"></param>
     /// <returns></returns>
-    public static DirectoryInfo CollectCsvColumns_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir, int? initialColumn, int skipRowCount, params (string name, int targetColumn)[] targets)
-    {
-        return inputDir.CollectCsvColumns_Loop(outputDir, skipRowCount, targets.Select(x => (x.name, initialColumn, x.targetColumn)).ToArray());
-    }
+    public static DirectoryInfo CollectCsvColumnsForMany(this DirectoryInfo inputDir, DirectoryInfo? outputDir, int? initialColumn, int skipRowCount, params (string name, int targetColumn)[] targets)
+        => inputDir.CollectCsvColumnsForMany(outputDir, skipRowCount, targets.Select(x => (x.name, initialColumn, x.targetColumn)).ToArray());
 
     /// <summary>
     /// move all csvs' target column to one csv
@@ -202,9 +203,10 @@ public static partial class OwesomeExtensions
     /// <param name="outputDir">when null, automatically set to {inputDir.FullName}/output_CollectCsvColumns</param>
     /// <param name="targets"></param>
     /// <returns></returns>
-    public static DirectoryInfo CollectCsvColumns_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir, params (string name, int targetColumn)[] targets)
-    {
-        return inputDir.CollectCsvColumns_Loop(outputDir, 0, 0, targets);
-    }
+    public static DirectoryInfo CollectCsvColumnsForMany(this DirectoryInfo inputDir, DirectoryInfo? outputDir, params (string name, int targetColumn)[] targets)
+        => inputDir.CollectCsvColumnsForMany(outputDir, 0, 0, targets);
+
+
+    // ★★★★★★★★★★★★★★★ sugar
 
 }

@@ -31,43 +31,6 @@ public static partial class OwesomeExtensions
     }
 
     /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="inputDir"></param>
-    /// <param name="outputDir">when null, automatically set to {inputDir.Fullname}/output_CropImage/{inputFile.Name}.png</param>
-    /// <param name="outputSize"></param>
-    /// <returns></returns>
-    public static DirectoryInfo ResizeImage_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir, Size outputSize,
-        ResizeImageMode mode = ResizeImageMode.Stretch)
-    {
-        // preprocess
-        UtilPreprocessors.PreprocessOutDir(ref outputDir, true, inputDir!);
-
-
-        // main
-        foreach (var inputFile in inputDir.GetFiles())
-        {
-            try
-            {
-                var outputFile = new FileInfo(Path.Combine(outputDir!.FullName, inputFile.Name));
-                inputFile.ResizeImage(outputFile, outputSize, mode);
-
-                if (UtilConfig.ConsoleOutput)
-                    Console.WriteLine($"O: {inputFile.FullName}");
-            }
-            catch (Exception e)
-            {
-                if (UtilConfig.ConsoleOutput)
-                    Console.WriteLine($"X: {inputFile.FullName}, {e.Message}");
-            }
-        }
-
-
-        // post process
-        return outputDir!;
-    }
-
-    /// <summary>
     /// ResizeImage Proportionally
     /// </summary>
     /// <param name="inputFile"></param>
@@ -87,6 +50,20 @@ public static partial class OwesomeExtensions
 
     }
 
+
+    // ★★★★★★★★★★★★★★★ loop sugar
+
+    /// <summary>
+    /// ResizeImage
+    /// </summary>
+    /// <param name="inputDir"></param>
+    /// <param name="outputDir">when null, automatically set to {inputDir.Fullname}/output_CropImage/{inputFile.Name}.png</param>
+    /// <param name="outputSize"></param>
+    /// <returns></returns>
+    public static DirectoryInfo ResizeImage_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir, Size outputSize,
+        ResizeImageMode mode = ResizeImageMode.Stretch)
+        => inputDir.Loop(outputDir, (inF, outF) => ResizeImage(inF, outF, outputSize, mode));
+
     /// <summary>
     /// ResizeImage Proportionally
     /// </summary>
@@ -96,37 +73,10 @@ public static partial class OwesomeExtensions
     /// <returns></returns>
     public static DirectoryInfo ResizeImagePropotionally_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir, SizeF outputSizeRatio,
         ResizeImageMode mode = ResizeImageMode.Stretch)
-    {
-        // preprocess
-        UtilPreprocessors.PreprocessOutDir(ref outputDir, true, inputDir!);
+        => inputDir.Loop(outputDir, (inF, outF) => ResizeImagePropotionally(inF, outF, outputSizeRatio, mode));
 
 
-        // main
-        foreach (var inputFile in inputDir.GetFiles())
-        {
-            try
-            {
-                var outputFile = new FileInfo(Path.Combine(outputDir!.FullName, inputFile.Name));
-                inputFile.ResizeImagePropotionally(outputFile, outputSizeRatio, mode);
-
-                if (UtilConfig.ConsoleOutput)
-                    Console.WriteLine($"O: {inputFile.FullName}");
-            }
-            catch (Exception e)
-            {
-                if (UtilConfig.ConsoleOutput)
-                    Console.WriteLine($"X: {inputFile.FullName}, {e.Message}");
-            }
-
-        }
-
-
-        // post process
-        return outputDir!;
-    }
-
-
-    // ★★★★★★★★★★★★★★★ Image process
+    // ★★★★★★★★★★★★★★★ image process
 
     /// <summary>
     /// 

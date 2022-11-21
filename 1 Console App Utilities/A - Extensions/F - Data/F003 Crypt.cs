@@ -12,7 +12,7 @@ public static partial class OwesomeExtensions
 {
     // ref: https://qiita.com/hibara/items/6c7476ceec5a9caf2e81
 
-    // ★★★★★★★★★★★★★★★ Encrypt
+    // ★★★★★★★★★★★★★★★ main
 
     /// <summary>
     /// Encrypt file
@@ -60,44 +60,6 @@ public static partial class OwesomeExtensions
     }
 
     /// <summary>
-    /// Encrypt
-    /// </summary>
-    /// <param name="inputDir"></param>
-    /// <param name="outputDir">when null, automatically set to {inputDir.FullName}/output_Encrypt_Loop</param>
-    /// <param name="password">password for encryption</param>
-    /// <returns></returns>
-    public static DirectoryInfo Encrypt_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir, string password)
-    {
-        // preprocess
-        UtilPreprocessors.PreprocessOutDir(ref outputDir, true, inputDir);
-
-
-        // main
-        foreach (var inputFile in inputDir.GetFiles())
-        {
-            try
-            {
-                var outputFile = new FileInfo(Path.Combine(outputDir!.FullName, inputFile.Name));
-                inputFile.Encrypt(outputFile, password);
-                if (UtilConfig.ConsoleOutput)
-                    Console.WriteLine($"O: {inputFile.FullName}");
-            }
-            catch (Exception ex)
-            {
-                if (UtilConfig.ConsoleOutput)
-                    Console.WriteLine($"X: {inputFile.FullName}, {ex.Message}");
-            }
-        }
-
-
-        // post process
-        return outputDir!;
-    }
-
-
-    // ★★★★★★★★★★★★★★★ Decrypt
-
-    /// <summary>
     /// Decrypt file
     /// </summary>
     /// <param name="inputFile"></param>
@@ -142,6 +104,18 @@ public static partial class OwesomeExtensions
         return outputFile!;
     }
 
+    // ★★★★★★★★★★★★★★★ loop sugar
+
+    /// <summary>
+    /// Encrypt
+    /// </summary>
+    /// <param name="inputDir"></param>
+    /// <param name="outputDir">when null, automatically set to {inputDir.FullName}/output_Encrypt_Loop</param>
+    /// <param name="password">password for encryption</param>
+    /// <returns></returns>
+    public static DirectoryInfo Encrypt_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir, string password)
+        => inputDir.Loop(outputDir, (inF, outF) => Encrypt(inF, outF, password));
+
     /// <summary>
     /// Decrypt
     /// </summary>
@@ -150,32 +124,7 @@ public static partial class OwesomeExtensions
     /// <param name="password">password for decryption</param>
     /// <returns></returns>
     public static DirectoryInfo Decrypt_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir, string password)
-    {
-        // preprocess
-        UtilPreprocessors.PreprocessOutDir(ref outputDir, true, inputDir);
-
-
-        // main
-        foreach (var inputFile in inputDir.GetFiles())
-        {
-            try
-            {
-                var outputFile = new FileInfo(Path.Combine(outputDir!.FullName, inputFile.Name));
-                inputFile.Decrypt(outputFile, password);
-                if (UtilConfig.ConsoleOutput)
-                    Console.WriteLine($"O: {inputFile.FullName}");
-            }
-            catch (Exception ex)
-            {
-                if (UtilConfig.ConsoleOutput)
-                    Console.WriteLine($"X: {inputFile.FullName}, {ex.Message}");
-            }
-        }
-
-
-        // post process
-        return outputDir!;
-    }
+        => inputDir.Loop(outputDir, (inF, outF) => Decrypt(inF, outF, password));
 
 
     // ★★★★★★★★★★★★★★★

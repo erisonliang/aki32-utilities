@@ -37,29 +37,21 @@ public static partial class OwesomeExtensions
     /// <param name="outputDir">when null, automatically set to {inputFile.DirectoryName}/output_ConvertImageColor/{fileName}.png</param>
     /// <param name="targetInfos"></param>
     /// <returns></returns>
-    public static DirectoryInfo ConvertImageColor_Loop(this FileInfo inputFile, DirectoryInfo? outputDir, params (string fileName, Color targetColor)[] targetInfos)
+    public static DirectoryInfo ConvertImageColorForMany(this FileInfo inputFile, DirectoryInfo? outputDir,
+        int maxDegreeOfParallelism = 999,
+        params (string fileName, Color targetColor)[] targetInfos)
     {
         // preprocess
         UtilPreprocessors.PreprocessOutDir(ref outputDir, true, inputFile.Directory!);
 
 
         // main
-        Parallel.ForEach(targetInfos, targetInfos =>
+        var option = new ParallelOptions { MaxDegreeOfParallelism = maxDegreeOfParallelism };
+        Parallel.ForEach(targetInfos, option, targetInfos =>
         {
-            try
-            {
-                var (targetName, targetColor) = targetInfos;
-                var outputFile = new FileInfo(Path.Combine(outputDir.FullName, $"{targetName.Replace(".png", "")}.png"));
-                inputFile.ConvertImageColor(outputFile, targetColor);
-
-                if (UtilConfig.ConsoleOutput)
-                    Console.WriteLine($"O: {inputFile.FullName}");
-            }
-            catch (Exception e)
-            {
-                if (UtilConfig.ConsoleOutput)
-                    Console.WriteLine($"X: {inputFile.FullName}, {e.Message}");
-            }
+            var (targetName, targetColor) = targetInfos;
+            var outputFile = new FileInfo(Path.Combine(outputDir.FullName, $"{targetName.Replace(".png", "")}.png"));
+            inputFile.ConvertImageColor(outputFile, targetColor);
         });
 
 
@@ -74,16 +66,14 @@ public static partial class OwesomeExtensions
     /// <param name="outputDir">when null, automatically set to {inputFile.DirectoryName}/ConvertImageColorOutput/{targetColor.Name}.png</param>
     /// <param name="targetColors"></param>
     /// <returns></returns>
-    public static DirectoryInfo ConvertImageColor_Loop(this FileInfo inputFile, DirectoryInfo? outputDir, params Color[] targetColors)
-    {
-        // sugar
-        var targetInfos = targetColors.Select(c => (c.IsNamedColor ? c.Name : c.ToArgb().ToString(), c)).ToArray();
-        inputFile.ConvertImageColor_Loop(outputDir, targetInfos);
-        return outputDir!;
-    }
+    public static DirectoryInfo ConvertImageColorForMany(this FileInfo inputFile, DirectoryInfo? outputDir, params Color[] targetColors)
+        => inputFile.ConvertImageColorForMany(
+            outputDir,
+            targetInfos: targetColors.Select(c => (c.IsNamedColor ? c.Name : c.ToArgb().ToString(), c)).ToArray()
+            );
 
 
-    // ★★★★★★★★★★★★★★★ Image process
+    // ★★★★★★★★★★★★★★★ image process
 
     /// <summary>
     /// Convert image color to targetColor

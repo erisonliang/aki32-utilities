@@ -43,42 +43,6 @@ public static partial class OwesomeExtensions
     }
 
     /// <summary>
-    /// DistortImage
-    /// </summary>
-    /// <param name="inputDir"></param>
-    /// <param name="outputDir">when null, automatically set to {inputDir.FullName}/output_DistortImage</param>
-    /// <param name="ps">List of original points and target points. Min length 1, max length 3</param>
-    /// <returns></returns>
-    public static DirectoryInfo DistortImage_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir, Color? fill = null, params (Point originalPoint, Point tagrtPoint)[] ps)
-    {
-        // preprocess
-        UtilPreprocessors.PreprocessOutDir(ref outputDir, true, inputDir);
-
-
-        // main
-        foreach (var inputFile in inputDir.GetFiles())
-        {
-            try
-            {
-                var outputFile = new FileInfo(Path.Combine(outputDir!.FullName, inputFile.Name));
-                inputFile.DistortImage(outputFile, fill, ps);
-
-                if (UtilConfig.ConsoleOutput)
-                    Console.WriteLine($"O: {inputFile.FullName}");
-            }
-            catch (Exception ex)
-            {
-                if (UtilConfig.ConsoleOutput)
-                    Console.WriteLine($"X: {inputFile.FullName}, {ex.Message}");
-            }
-        }
-
-
-        // post process
-        return outputDir!;
-    }
-
-    /// <summary>
     /// DistortImageProportionally
     /// </summary>
     /// <param name="inputFile"></param>
@@ -92,6 +56,19 @@ public static partial class OwesomeExtensions
         var ps = inputImage.GetPointsFromPointRatios_For_DistortImage(pps);
         return inputFile.DistortImage(outputFile, fill, ps);
     }
+
+
+    // ★★★★★★★★★★★★★★★ loop sugar
+
+    /// <summary>
+    /// DistortImage
+    /// </summary>
+    /// <param name="inputDir"></param>
+    /// <param name="outputDir">when null, automatically set to {inputDir.FullName}/output_DistortImage</param>
+    /// <param name="ps">List of original points and target points. Min length 1, max length 3</param>
+    /// <returns></returns>
+    public static DirectoryInfo DistortImage_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir, Color? fill = null, params (Point originalPoint, Point tagrtPoint)[] ps)
+        => inputDir.Loop(outputDir, (inF, outF) => DistortImage(inF, outF, fill, ps));
 
     /// <summary>
     /// DistortImageProportionally_Loop
@@ -176,7 +153,7 @@ public static partial class OwesomeExtensions
     }
 
 
-    // ★★★★★★★★★★★★★★★ Helper
+    // ★★★★★★★★★★★★★★★ helper
 
     public static Point[] GetFramePointRatiosConversationally_For_DistortImage()
     {
@@ -279,7 +256,8 @@ public static partial class OwesomeExtensions
            ).ToArray();
     }
 
-    // ★★★★★★★★★★★★★★★ Image process
+
+    // ★★★★★★★★★★★★★★★ image process
 
     /// <summary>
     /// DistortImage

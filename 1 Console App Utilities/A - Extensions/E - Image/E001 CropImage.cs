@@ -36,7 +36,7 @@ public static partial class OwesomeExtensions
     /// <param name="outputDir">when null, automatically set to {inputDir.Fullname}/output_CropImage/{inputFile.Name}.png</param>
     /// <param name="crops"></param>
     /// <returns></returns>
-    public static DirectoryInfo CropImage(this FileInfo inputFile, DirectoryInfo? outputDir, CropSize[] crops)
+    public static DirectoryInfo CropImageForMany(this FileInfo inputFile, DirectoryInfo? outputDir, CropSize[] crops)
     {
         // preprocess
         UtilPreprocessors.PreprocessOutDir(ref outputDir, false, inputFile.Directory!);
@@ -53,6 +53,9 @@ public static partial class OwesomeExtensions
         return outputDir!;
     }
 
+
+    // ★★★★★★★★★★★★★★★ loop sugar
+
     /// <summary>
     /// 
     /// </summary>
@@ -61,36 +64,10 @@ public static partial class OwesomeExtensions
     /// <param name="crop"></param>
     /// <returns></returns>
     public static DirectoryInfo CropImage_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir, CropSize crop)
-    {
-        // preprocess
-        UtilPreprocessors.PreprocessOutDir(ref outputDir, true, inputDir!);
+        => inputDir.Loop(outputDir, (inF, outF) => CropImage(inF, outF, crop));
 
 
-        // main
-        foreach (var inputFile in inputDir.GetFiles())
-        {
-            try
-            {
-                var outputFile = new FileInfo(Path.Combine(outputDir!.FullName, inputFile.Name));
-                inputFile.CropImage(outputFile, crop);
-
-                if (UtilConfig.ConsoleOutput)
-                    Console.WriteLine($"O: {inputFile.FullName}");
-            }
-            catch (Exception e)
-            {
-                if (UtilConfig.ConsoleOutput)
-                    Console.WriteLine($"X: {inputFile.FullName}, {e.Message}");
-            }
-        }
-
-
-        // post process
-        return outputDir!;
-    }
-
-
-    // ★★★★★★★★★★★★★★★ Image process
+    // ★★★★★★★★★★★★★★★ image process
 
     /// <summary>
     /// 

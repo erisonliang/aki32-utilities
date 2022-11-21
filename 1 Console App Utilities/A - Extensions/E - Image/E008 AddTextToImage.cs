@@ -47,54 +47,6 @@ public static partial class OwesomeExtensions
     }
 
     /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="inputDir"></param>
-    /// <param name="outputDir">when null, automatically set to {inputDir.Fullname}/output_CropImage/{inputFile.Name}.png</param>
-    /// <param name="addingText">
-    /// Text to add in image.
-    /// (%FN → FileName)
-    /// (%CT → CreationTime)
-    /// (%WT → LastWriteTime)
-    /// </param>
-    /// <returns></returns>
-    public static DirectoryInfo AddTextToImage_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir, string addingText, Point textUpperLeftPoint,
-        int fontSize = 20,
-        Brush? brush = null,
-        bool alignRight = false)
-    {
-        // preprocess
-        UtilPreprocessors.PreprocessOutDir(ref outputDir, true, inputDir!);
-
-
-        // main
-        foreach (var inputFile in inputDir.GetFiles())
-        {
-            try
-            {
-                var outputFile = new FileInfo(Path.Combine(outputDir!.FullName, inputFile.Name));
-                inputFile.AddTextToImage(outputFile, addingText, textUpperLeftPoint,
-                    fontSize: fontSize,
-                    brush: brush,
-                    alignRight: alignRight
-                    );
-
-                if (UtilConfig.ConsoleOutput)
-                    Console.WriteLine($"O: {inputFile.FullName}");
-            }
-            catch (Exception e)
-            {
-                if (UtilConfig.ConsoleOutput)
-                    Console.WriteLine($"X: {inputFile.FullName}, {e.Message}");
-            }
-        }
-
-
-        // post process
-        return outputDir!;
-    }
-
-    /// <summary>
     /// AddTextToImage
     /// </summary>
     /// <param name="inputFile"></param>
@@ -127,8 +79,33 @@ public static partial class OwesomeExtensions
             );
     }
 
+
+    // ★★★★★★★★★★★★★★★ loop sugar
+
     /// <summary>
-    /// 
+    /// AddTextToImage
+    /// </summary>
+    /// <param name="inputDir"></param>
+    /// <param name="outputDir">when null, automatically set to {inputDir.Fullname}/output_CropImage/{inputFile.Name}.png</param>
+    /// <param name="addingText">
+    /// Text to add in image.
+    /// (%FN → FileName)
+    /// (%CT → CreationTime)
+    /// (%WT → LastWriteTime)
+    /// </param>
+    /// <returns></returns>
+    public static DirectoryInfo AddTextToImage_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir, string addingText, Point textUpperLeftPoint,
+        int fontSize = 20,
+        Brush? brush = null,
+        bool alignRight = false)
+        => inputDir.Loop(outputDir, (inF, outF) => AddTextToImage(inF, outF, addingText, textUpperLeftPoint,
+            fontSize: fontSize,
+            brush: brush,
+            alignRight: alignRight
+            ));
+
+    /// <summary>
+    /// AddTextToImage
     /// </summary>
     /// <param name="inputDir"></param>
     /// <param name="outputDir">when null, automatically set to {inputDir.Fullname}/output_CropImage/{inputFile.Name}.png</param>
@@ -142,38 +119,12 @@ public static partial class OwesomeExtensions
     public static DirectoryInfo AddTextToImageProportionally_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir, string addingText, PointF textUpperLeftPointRatio,
         double fontSizeRatio = 0.1,
         Brush? brush = null,
-         bool alignRight = false)
-    {
-        // preprocess
-        UtilPreprocessors.PreprocessOutDir(ref outputDir, true, inputDir!);
-
-
-        // main
-        foreach (var inputFile in inputDir.GetFiles())
-        {
-            try
-            {
-                var outputFile = new FileInfo(Path.Combine(outputDir!.FullName, inputFile.Name));
-                inputFile.AddTextToImageProportionally(outputFile, addingText, textUpperLeftPointRatio,
-                    fontSizeRatio: fontSizeRatio,
-                    brush: brush,
-                    alignRight: alignRight
-                    );
-
-                if (UtilConfig.ConsoleOutput)
-                    Console.WriteLine($"O: {inputFile.FullName}");
-            }
-            catch (Exception e)
-            {
-                if (UtilConfig.ConsoleOutput)
-                    Console.WriteLine($"X: {inputFile.FullName}, {e.Message}");
-            }
-        }
-
-
-        // post process
-        return outputDir!;
-    }
+        bool alignRight = false)
+        => inputDir.Loop(outputDir, (inF, outF) => AddTextToImageProportionally(inF, outF, addingText, textUpperLeftPointRatio,
+            fontSizeRatio: fontSizeRatio,
+            brush: brush,
+            alignRight: alignRight
+            ));
 
 
     // ★★★★★★★★★★★★★★★ Image process
