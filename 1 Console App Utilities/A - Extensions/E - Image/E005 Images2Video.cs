@@ -30,7 +30,7 @@ public static partial class OwesomeExtensions
     {
         // preprocess
         UtilPreprocessors.PreprocessOutFile(ref outputFile, true, inputDir!, "output.mp4", takesTimeFlag: true);
-        if (!outputFile!.Name.IsMatchAny(GetVideoFilesRegexen(mp4: true, avi: true)))
+        if (!outputFile!.Name.IsMatchAny(GetVideoFilesRegexen()))
             throw new Exception("outputFile name must end with .mp4 or .avi");
 
 
@@ -42,7 +42,7 @@ public static partial class OwesomeExtensions
 
         // main
         var imageFiles = inputDir
-            .GetFilesWithRegexen(SearchOption.TopDirectoryOnly, GetImageFilesRegexen(jpg: true, png: true, bmp: true))
+            .GetFilesWithRegexen(SearchOption.TopDirectoryOnly, GetImageFilesRegexen())
             .Sort()
             .ToArray();
 

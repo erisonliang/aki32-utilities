@@ -47,9 +47,9 @@ public static partial class OwesomeExtensions
     // ★★★★★★★★★★★★★★★ sub
 
     public static string[] GetImageFilesRegexen(
-        bool jpg = false,
-        bool png = false,
-        bool bmp = false)
+        bool jpg = true,
+        bool png = true,
+        bool bmp = true)
     {
         var regexen = new List<string>();
 
@@ -75,8 +75,8 @@ public static partial class OwesomeExtensions
     }
 
     public static string[] GetVideoFilesRegexen(
-        bool mp4 = false,
-        bool avi = false)
+        bool mp4 = true,
+        bool avi = true)
     {
         var regexen = new List<string>();
 

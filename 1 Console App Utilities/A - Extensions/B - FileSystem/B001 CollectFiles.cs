@@ -11,21 +11,17 @@ public static partial class OwesomeExtensions
     /// <param name="outputDir">when null, automatically set to {inputDir.Parent.FullName}/output_CollectFiles</param>
     /// <param name="searchPatterns"></param>
     /// <returns></returns>
-    public static DirectoryInfo CollectFiles(this DirectoryInfo inputDir, DirectoryInfo? outputDir, params string[] searchRegexen)
+    public static DirectoryInfo CollectFiles(this DirectoryInfo inputDir, DirectoryInfo? outputDir,
+        int maxDegreeOfParallelism = 999,
+        params string[] searchRegexen)
     {
         // preprocess
         UtilPreprocessors.PreprocessOutDir(ref outputDir, true, inputDir.Parent!);
 
 
         // main
-        //var targetFileNames = inputDir
-        //    .GetFiles("*", SearchOption.AllDirectories)
-        //    .Select(f => f.FullName)
-        //    .Where(f => f.Replace(inputDir.FullName, "").TrimStart('\\').IsMatchAny(searchRegexen));
-
         var inputFiles = inputDir.GetFilesWithRegexen(SearchOption.AllDirectories, searchRegexen);
-
-        foreach (var inputFile in inputFiles)
+        Parallel.ForEach(inputFiles, new ParallelOptions() { MaxDegreeOfParallelism = maxDegreeOfParallelism }, (FileInfo inputFile) =>
         {
             try
             {
@@ -44,7 +40,7 @@ public static partial class OwesomeExtensions
                 if (UtilConfig.ConsoleOutput)
                     Console.WriteLine($"X: {inputFile.FullName}, {ex.Message}");
             }
-        }
+        });
 
 
         return outputDir!;

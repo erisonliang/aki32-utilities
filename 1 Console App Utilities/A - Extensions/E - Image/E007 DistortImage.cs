@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
@@ -49,7 +50,10 @@ public static partial class OwesomeExtensions
     /// <param name="outputFile">when null, automatically set to {inputFile.DirectoryName}/output_DistortImage/{inputFile.Name}</param>
     /// <param name="pps">List of the ratio of original point and target points. from 0.0-1.0. Min length 1, max length 3</param>
     /// <returns></returns>
-    public static FileInfo DistortImageProportionally(this FileInfo inputFile, FileInfo? outputFile, Color? fill = null, params (PointF originalPointRatio, PointF tagrtPointRatio)[] pps)
+    public static FileInfo DistortImageProportionally(this FileInfo inputFile, FileInfo? outputFile,
+        Color? fill = null,
+        params (PointF originalPointRatio, PointF tagrtPointRatio)[] pps
+        )
     {
         // sugar
         using var inputImage = inputFile.GetImageFromFile();
@@ -77,14 +81,18 @@ public static partial class OwesomeExtensions
     /// <param name="outputDir">when null, automatically set to {inputDir.FullName}/output_DistortImage</param>
     /// <param name="pps">List of the ratio of original point and target points. from 0.0-1.0. Min length 1, max length 3</param>
     /// <returns></returns>
-    public static DirectoryInfo DistortImageProportionally_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir, Color? fill = null, params (PointF originalPointRatio, PointF tagrtPointRatio)[] pps)
+    public static DirectoryInfo DistortImageProportionally_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir,
+        Color? fill = null,
+        int maxDegreeOfParallelism = 10,
+        params (PointF originalPointRatio, PointF tagrtPointRatio)[] pps
+        )
     {
         // preprocess
         UtilPreprocessors.PreprocessOutDir(ref outputDir, true, inputDir);
 
 
         // main
-        var firstImageFile = inputDir.GetFilesWithRegexen(SearchOption.TopDirectoryOnly, GetImageFilesRegexen(png: true, jpg: true, bmp: true)).FirstOrDefault();
+        var firstImageFile = inputDir.GetFilesWithRegexen(SearchOption.TopDirectoryOnly, GetImageFilesRegexen()).FirstOrDefault();
         if (firstImageFile == null)
             return outputDir;
 
@@ -93,7 +101,10 @@ public static partial class OwesomeExtensions
 
 
         // post process
-        return inputDir.DistortImage_Loop(outputDir, fill, ps: ps);
+        return inputDir.DistortImage_Loop(outputDir, fill,
+            maxDegreeOfParallelism: maxDegreeOfParallelism,
+            ps: ps
+            );
     }
 
 
@@ -107,60 +118,79 @@ public static partial class OwesomeExtensions
     /// <param name="outputDir">when null, automatically set to {inputDir.FullName}/output_DistortImage</param>
     /// <param name="presetTargetPointRatios">List of target point ratios. Length 3</param>
     /// <returns></returns>
-    public static Action DistortImage_Loop_Conversationally(this DirectoryInfo inputDir, DirectoryInfo? outputDir, Color? fill = null, PointF[] presetTargetPointRatios = null, Point[] presetFramePoints = null)
+    public static Func<DirectoryInfo> DistortImage_Loop_Conversationally_Func(this DirectoryInfo inputDir, DirectoryInfo? outputDir,
+        Color? fill = null,
+        PointF[] presetTargetPointRatios = null,
+        Point[] presetFramePoints = null,
+        int pickingPointCount = 4
+        )
     {
         // preprocess
         UtilPreprocessors.PreprocessOutDir(ref outputDir, true, inputDir.Parent!);
 
 
         // main
-        var ImageFiles = inputDir.GetFilesWithRegexen(SearchOption.TopDirectoryOnly, GetImageFilesRegexen(png: true, jpg: true, bmp: true));
+        var inputImageFiles = inputDir
+            .GetFilesWithRegexen(SearchOption.TopDirectoryOnly, GetImageFilesRegexen())
+            .Sort();
 
-        if (!ImageFiles.Any())
-            return new Action(() => { });
+        if (!inputImageFiles.Any())
+            return () => outputDir!;
 
 
-        Console.WriteLine($"\r\n★★★★★ {ImageFiles.First().FullName} started\r\n");
+        Console.WriteLine($"\r\n★★★★★ {inputImageFiles.First().FullName} started\r\n");
 
         if (presetTargetPointRatios == null)
         {
             Console.WriteLine("\r\n★★★★★ Target Point Coordinate Input (Press escape key to go back to previous parameter)\r\n");
-            presetTargetPointRatios = GetTargetPointRatiosConversationally_For_DistortImage(presetFramePoints);
+            presetTargetPointRatios = GetTargetPointRatiosConversationally_For_DistortImage(
+                presetFramePoints: presetFramePoints,
+                pickingPointCount: pickingPointCount
+                );
         }
 
         var process = Process.Start(new ProcessStartInfo()
         {
-            FileName = ImageFiles.First().FullName,
+            FileName = inputImageFiles.First().FullName,
             UseShellExecute = true,
         });
 
+
         Console.WriteLine("\r\n★★★★★ Original Point Coodinates Input (Press escape key to go back to previous parameter)\r\n");
 
-        var ratiosO = GetTargetPointRatiosConversationally_For_DistortImage(presetFramePoints);
+        var ratiosO = GetTargetPointRatiosConversationally_For_DistortImage(
+                presetFramePoints: presetFramePoints,
+                pickingPointCount: pickingPointCount
+                );
         process?.Kill();
 
 
         Console.WriteLine("\r\n★★★★★ Started to process distortion\r\n");
 
+        var pps = new List<(PointF, PointF)>();
+        for (int i = 0; i < pickingPointCount; i++)
+            pps.Add((ratiosO[i], presetTargetPointRatios[i]));
+
+
         //post process
-        return new Action(() =>
-        {
-            inputDir!.DistortImageProportionally_Loop(outputDir, fill,
-                (ratiosO[0], presetTargetPointRatios[0]),
-                (ratiosO[1], presetTargetPointRatios[1]),
-                (ratiosO[2], presetTargetPointRatios[2]));
-        });
+        return
+            () => inputDir!.DistortImageProportionally_Loop(outputDir,
+            fill: fill,
+            pps: pps.ToArray()
+            );
     }
 
 
     // ★★★★★★★★★★★★★★★ helper
 
-    public static Point[] GetFramePointRatiosConversationally_For_DistortImage()
+    public static Point[] GetFramePointsConversationally_For_DistortImage()
     {
-        var reasons = new string[] {
-                "Upper Left of the Image（┏  ）",
-                "Bottom Right of the Image（┛  ）",
-            };
+        var reasons = new string[]
+        {
+            "Upper Left of the Image（┏  ）",
+            "Bottom Right of the Image（┛  ）",
+        };
+
         var ps = new Point[reasons.Length];
 
         for (int i = 0; i < reasons.Length; i++)
@@ -188,23 +218,23 @@ public static partial class OwesomeExtensions
     /// <summary>
     /// 
     /// </summary>
-    /// <param name="framePoints"></param>
+    /// <param name="presetFramePoints"></param>
     /// <param name="pickingPointCount">TODO: 汎用的に。</param>
     /// <returns></returns>
-    public static PointF[] GetTargetPointRatiosConversationally_For_DistortImage(Point[] framePoints = null, int pickingPointCount = 4)
+    public static PointF[] GetTargetPointRatiosConversationally_For_DistortImage(Point[] presetFramePoints = null, int pickingPointCount = 4)
     {
-        var reasons = new string[] {
-                "Upper Left of the Image（┏  ）",
-                "Bottom Right of the Image（┛  ）",
-                "Upper Left of the Object（┏  ）",
-            };
+        // preprocess
+        if (pickingPointCount is < 1 or > 4)
+            throw new InvalidDataException("pickingPointCount length must be in range 1 - 4");
 
-        if (pickingPointCount >= 2)
-            reasons = reasons.Append("Upper Right of the Object（┓  ）").ToArray();
-        if (pickingPointCount >= 3)
-            reasons = reasons.Append("Bottom Left of the Object（┗  ）").ToArray();
-        if (pickingPointCount >= 4)
-            reasons = reasons.Append("Bottom Right of the Object（┛  ）").ToArray();
+        var reasons = new string[]
+        {
+            "Upper Left of the Image（┏  ）",
+            "Bottom Right of the Image（┛  ）",
+        };
+
+        for (int i = 0; i < pickingPointCount; i++)
+            reasons = reasons.Append($"Point {i + 1}").ToArray();
 
         var ps = new Point[reasons.Length];
 
@@ -212,9 +242,9 @@ public static partial class OwesomeExtensions
         {
             try
             {
-                if (i < 2 && framePoints != null)
+                if (i < 2 && presetFramePoints != null)
                 {
-                    ps[i] = framePoints[i];
+                    ps[i] = presetFramePoints[i];
                     continue;
                 }
 
@@ -274,7 +304,7 @@ public static partial class OwesomeExtensions
         fill ??= Color.Transparent;
 
 
-        // increase dim
+        // increase dim to 4
         if (ps.Length == 1)
         {
             // increase dim
@@ -318,10 +348,10 @@ public static partial class OwesomeExtensions
 
 
         // main
-        var oriPs = new List<Point2<double>>(4);
-        var tarPs = new List<Point2<double>>(4);
+        var oriPs = new List<Point2<double>>();
+        var tarPs = new List<Point2<double>>();
 
-        for (int i = 0; i < 4; i++)
+        for (int i = 0; i < ps.Length; i++)
         {
             oriPs.Add(new Point2<double>(ps[i].originalPoint.X, ps[i].originalPoint.Y));
             tarPs.Add(new Point2<double>(ps[i].tagrtPoint.X, ps[i].tagrtPoint.Y));
