@@ -13,9 +13,10 @@ public static partial class OwesomeExtensions
     /// <returns></returns>
     public static DirectoryInfo Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir, Action<FileInfo, FileInfo> targetAction,
         string[] searchRegexen = null,
+        int maxDegreeOfParallelism = 999,
         SearchOption targetFilesOption = SearchOption.TopDirectoryOnly,
-        [CallerMemberName] string methodName = "",
-        FileInfo overrideOutputFile = null
+        FileInfo overrideOutputFile = null,
+        [CallerMemberName] string methodName = ""
         )
     {
         // preprocess
@@ -24,8 +25,10 @@ public static partial class OwesomeExtensions
 
 
         // main
-        var inputFiles = inputDir.GetFilesWithRegexen(targetFilesOption, searchRegexen);
-        foreach (var inputFile in inputFiles)
+        var inputFiles = inputDir.GetFilesWithRegexen(targetFilesOption, searchRegexen).Sort();
+        var option = new ParallelOptions { MaxDegreeOfParallelism = maxDegreeOfParallelism };
+
+        Parallel.ForEach(inputFiles, option, inputFile =>
         {
             try
             {
@@ -40,7 +43,7 @@ public static partial class OwesomeExtensions
                 if (UtilConfig.ConsoleOutput)
                     Console.WriteLine($"X: {inputFile.FullName}, {ex.Message}");
             }
-        }
+        });
 
 
         // post process

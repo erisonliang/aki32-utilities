@@ -102,7 +102,7 @@ public static partial class OwesomeExtensions
             fontSize: fontSize,
             brush: brush,
             alignRight: alignRight
-            ));
+            ), maxDegreeOfParallelism: 1);
 
     /// <summary>
     /// AddTextToImage
@@ -124,7 +124,7 @@ public static partial class OwesomeExtensions
             fontSizeRatio: fontSizeRatio,
             brush: brush,
             alignRight: alignRight
-            ));
+            ), maxDegreeOfParallelism: 1);
 
 
     // ★★★★★★★★★★★★★★★ Image process

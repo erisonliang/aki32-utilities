@@ -71,8 +71,14 @@ public static partial class OwesomeExtensions
     /// <param name="outputDir">when null, automatically set to {inputDir.FullName}/output_DistortImage</param>
     /// <param name="ps">List of original points and target points. Min length 1, max length 3</param>
     /// <returns></returns>
-    public static DirectoryInfo DistortImage_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir, Color? fill = null, params (Point originalPoint, Point tagrtPoint)[] ps)
-        => inputDir.Loop(outputDir, (inF, outF) => DistortImage(inF, outF, fill, ps));
+    public static DirectoryInfo DistortImage_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir,
+        Color? fill = null,
+        int maxDegreeOfParallelism = 5,
+        params (Point originalPoint, Point tagrtPoint)[] ps
+        )
+        => inputDir.Loop(outputDir, (inF, outF) => DistortImage(inF, outF, fill, ps),
+            maxDegreeOfParallelism: maxDegreeOfParallelism
+            );
 
     /// <summary>
     /// DistortImageProportionally_Loop
@@ -83,7 +89,7 @@ public static partial class OwesomeExtensions
     /// <returns></returns>
     public static DirectoryInfo DistortImageProportionally_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir,
         Color? fill = null,
-        int maxDegreeOfParallelism = 10,
+        int maxDegreeOfParallelism = 5,
         params (PointF originalPointRatio, PointF tagrtPointRatio)[] pps
         )
     {

@@ -41,7 +41,8 @@ public static partial class OwesomeExtensions
     /// <param name="outputDir">when null, automatically set to {inputDir.FullName}/output_TEMPLATE</param>
     /// <returns></returns>
     public static DirectoryInfo TEMPLATE_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir)
-        => inputDir.Loop(outputDir, (inF, outF) => TEMPLATE(inF, outF));
+        => inputDir.Loop(outputDir, (inF, outF) => TEMPLATE(inF, outF),
+            maxDegreeOfParallelism: 1);
 
     /// <summary>
     /// TEMPLATE
