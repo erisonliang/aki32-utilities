@@ -67,7 +67,7 @@ public static partial class OwesomeExtensions
         // main
         foreach (var (name, extractingColumns, header) in targets)
         {
-            var newOutputFile = new FileInfo(Path.Combine(outputFile.Directory!.FullName, $"{outputFile.Name}_{name}{inputFile.Extension}"));
+            var newOutputFile = new FileInfo(Path.Combine(outputFile!.Directory!.FullName, $"{outputFile.Name}_{name}{inputFile.Extension}"));
             inputFile.ExtractCsvColumns(newOutputFile, extractingColumns, skipRowCount, header);
         }
 
@@ -99,11 +99,8 @@ public static partial class OwesomeExtensions
     /// <param name="skipRowCount"></param>
     /// <param name="targets"></param>
     /// <returns></returns>
-    public static DirectoryInfo ExtractCsvColumns_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir, int skipRowCount = 0, params (string name, int[] extractingColumns, string? header)[] targets)
-        => inputDir.Loop(outputDir,
-            (inF, outF) => ExtractCsvColumnsForMany(inF, outF, skipRowCount, targets),
-            overrideOutputFile: new FileInfo(Path.Combine(outputDir.FullName, "auto"))
-            );
+    public static DirectoryInfo ExtractCsvColumnsForMany_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir, int skipRowCount = 0, params (string name, int[] extractingColumns, string? header)[] targets)
+        => inputDir.Loop(outputDir, (inF, outF) => ExtractCsvColumnsForMany(inF, outF, skipRowCount, targets));
 
 
     // ★★★★★★★★★★★★★★★ 

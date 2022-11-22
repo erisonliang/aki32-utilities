@@ -15,7 +15,6 @@ public static partial class OwesomeExtensions
         string[] searchRegexen = null,
         int maxDegreeOfParallelism = 999,
         SearchOption targetFilesOption = SearchOption.TopDirectoryOnly,
-        FileInfo overrideOutputFile = null,
         [CallerMemberName] string methodName = ""
         )
     {
@@ -32,7 +31,7 @@ public static partial class OwesomeExtensions
         {
             try
             {
-                var outputFile = overrideOutputFile ?? new FileInfo(Path.Combine(outputDir!.FullName, inputFile.Name));
+                var outputFile = new FileInfo(Path.Combine(outputDir!.FullName, inputFile.Name));
                 targetAction(inputFile, outputFile);
 
                 if (UtilConfig.ConsoleOutput)

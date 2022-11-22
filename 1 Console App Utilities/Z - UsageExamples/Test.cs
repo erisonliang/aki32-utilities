@@ -73,8 +73,11 @@ public class Test
 
             // C004 ExtractCsvColumns
             {
-                //var input = new FileInfo($@"{baseDir}\C004 ExtractCsvColumns\input.csv");
-                //input.ExtractCsvColumns(null, new int[] { 0, 3 }, 0, "t,x");
+                //new FileInfo($@"{baseDir}\C004 ExtractCsvColumns\input.csv")
+                //    .ExtractCsvColumns(null, new int[] { 0, 3 }, 0, "t,x");
+
+                //new DirectoryInfo($@"{baseDir}\C004 ExtractCsvColumns")
+                //    .ExtractCsvColumnsForMany_Loop(null, 0, ("a", new int[] { 0, 3 }, "t,x"), ("b", new int[] { 0, 4 }, "t,y"));
             }
 
             // C005 CollectCsvColumns
