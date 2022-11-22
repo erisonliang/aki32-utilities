@@ -73,34 +73,7 @@ public static partial class OwesomeExtensions
     /// <returns></returns>
     public static DirectoryInfo ResizeImagePropotionally_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir, SizeF outputSizeRatio,
         ResizeImageMode mode = ResizeImageMode.Stretch)
-    {
-        // preprocess
-        UtilPreprocessors.PreprocessOutDir(ref outputDir, true, inputDir!);
-
-
-        // main
-        foreach (var inputFile in inputDir.GetFiles())
-        {
-            try
-            {
-                var outputFile = new FileInfo(Path.Combine(outputDir!.FullName, inputFile.Name));
-                inputFile.ResizeImagePropotionally(outputFile, outputSizeRatio, mode);
-
-                if (UtilConfig.ConsoleOutput)
-                    Console.WriteLine($"O: {inputFile.FullName}");
-            }
-            catch (Exception e)
-            {
-                if (UtilConfig.ConsoleOutput)
-                    Console.WriteLine($"X: {inputFile.FullName}, {e.Message}");
-            }
-
-        }
-
-
-        // post process
-        return outputDir!;
-    }
+           => inputDir.Loop(outputDir, (inF, outF) => ResizeImagePropotionally(inF, outF, outputSizeRatio, mode));
 
 
     // ★★★★★★★★★★★★★★★ Image process
