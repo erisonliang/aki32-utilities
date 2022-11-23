@@ -4,6 +4,8 @@ namespace Aki32_Utilities.Extensions;
 public static partial class OwesomeExtensions
 {
 
+    // ★★★★★★★★★★★★★★★ loop sugar
+
     /// <summary>
     /// move all matching files to one dir
     /// </summary>
@@ -14,36 +16,19 @@ public static partial class OwesomeExtensions
     public static DirectoryInfo CollectFiles(this DirectoryInfo inputDir, DirectoryInfo? outputDir,
         int maxDegreeOfParallelism = 999,
         params string[] searchRegexen)
-    {
-        // preprocess
-        UtilPreprocessors.PreprocessOutDir(ref outputDir, true, inputDir.Parent!);
-
-
-        // main
-        var inputFiles = inputDir.GetFilesWithRegexen(SearchOption.AllDirectories, searchRegexen);
-        Parallel.ForEach(inputFiles, new ParallelOptions() { MaxDegreeOfParallelism = maxDegreeOfParallelism }, (FileInfo inputFile) =>
-        {
-            try
+        => inputDir.Loop(outputDir, (inF, outF) =>
             {
-                var inputFileName = inputFile.FullName;
-                var outputFileName = inputFileName.Replace(inputDir.FullName, "");
-                outputFileName = outputFileName.Replace(Path.DirectorySeparatorChar, '_').Trim('_');
-                var outputFilePath = Path.Combine(outputDir!.FullName, outputFileName);
-
-                File.Copy(inputFileName, outputFilePath, true);
-
-                if (UtilConfig.ConsoleOutput)
-                    Console.WriteLine($"O: {inputFile.FullName}");
-            }
-            catch (Exception ex)
-            {
-                if (UtilConfig.ConsoleOutput)
-                    Console.WriteLine($"X: {inputFile.FullName}, {ex.Message}");
-            }
-        });
+                var outputFileName = inF.FullName.Replace(inputDir.FullName, "").Replace(Path.DirectorySeparatorChar, '_').Trim('_');
+                var outputFilePath = Path.Combine(outF.Directory!.FullName, outputFileName);
+                File.Copy(inF.FullName, outputFilePath, true);
+            },
+            targetFilesOption: SearchOption.AllDirectories,
+            searchRegexen: searchRegexen,
+            maxDegreeOfParallelism: maxDegreeOfParallelism,
+            overrideTargetOutputDirCandidate: inputDir.Parent!
+            );
 
 
-        return outputDir!;
-    }
+    // ★★★★★★★★★★★★★★★ 
 
 }

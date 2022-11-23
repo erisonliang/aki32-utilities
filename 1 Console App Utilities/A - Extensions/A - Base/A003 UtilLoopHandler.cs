@@ -16,13 +16,13 @@ public static partial class OwesomeExtensions
         string[] searchRegexen = null,
         int maxDegreeOfParallelism = 999,
         SearchOption targetFilesOption = SearchOption.TopDirectoryOnly,
-        FileInfo overrideOutputFile = null,
+        DirectoryInfo overrideTargetOutputDirCandidate = null,
         int maxRetryCount = 5,
         [CallerMemberName] string methodName = ""
         )
     {
         // preprocess
-        UtilPreprocessors.PreprocessOutDir(ref outputDir, true, inputDir, methodName: methodName);
+        UtilPreprocessors.PreprocessOutDir(ref outputDir, true, overrideTargetOutputDirCandidate ?? inputDir, methodName: methodName);
         searchRegexen ??= new string[] { ".*" };
 
 
@@ -55,7 +55,7 @@ public static partial class OwesomeExtensions
                 {
                     try
                     {
-                        var outputFile = overrideOutputFile ?? new FileInfo(Path.Combine(outputDir!.FullName, inputFile.Name));
+                        var outputFile = new FileInfo(Path.Combine(outputDir!.FullName, inputFile.Name));
                         targetAction(inputFile, outputFile);
                         break;
                     }

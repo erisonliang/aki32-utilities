@@ -207,6 +207,6 @@ public static partial class OwesomeExtensions
         => inputDir.CollectCsvColumnsForMany(outputDir, 0, 0, targets);
 
 
-    // ★★★★★★★★★★★★★★★ sugar
+    // ★★★★★★★★★★★★★★★
 
 }

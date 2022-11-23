@@ -12,7 +12,7 @@ public static partial class OwesomeExtensions
     /// <param name="initialConsoleOutput"></param>
     /// <param name="resultConsoleOutput"></param>
     /// <returns> -1 if error </returns>
-    public static int PDFPageCount(this FileInfo inputFile, bool initialConsoleOutput = true, bool resultConsoleOutput = true)
+    public static int? PDFPageCount(this FileInfo inputFile, bool initialConsoleOutput = true, bool resultConsoleOutput = true)
     {
         // preprocess
         UtilPreprocessors.PreprocessBasic(false);
@@ -21,7 +21,7 @@ public static partial class OwesomeExtensions
         // main
         try
         {
-            Regex rgx = new Regex(@"/Count ", RegexOptions.IgnoreCase);
+            var rgx = new Regex(@"/Count ", RegexOptions.IgnoreCase);
             using var sw = new StreamReader(inputFile.FullName, Encoding.GetEncoding("SHIFT_JIS"));
 
             while (!sw.EndOfStream)
@@ -41,7 +41,7 @@ public static partial class OwesomeExtensions
         }
         if (resultConsoleOutput)
             Console.WriteLine($"---ERROR--- in {inputFile.FullName}");
-        return -1;
+        return null;
 
         static int GetPageCount(string line)
         {
@@ -79,7 +79,7 @@ public static partial class OwesomeExtensions
     {
         // preprocess
         UtilPreprocessors.PreprocessBasic(true);
-            
+
 
         // main
         var pageList = new List<int>();
@@ -90,11 +90,15 @@ public static partial class OwesomeExtensions
         Parallel.ForEach(targets, t =>
         {
             var page = t.PDFPageCount(false);
-            pageList.Add(page);
-            if (page > 0)
-                totalCount += page;
-            else
+            if (page == null)
+            {
                 errorCount++;
+            }
+            else
+            {
+                pageList.Add(page.Value);
+                totalCount += page.Value;
+            }
         });
 
         // post process

@@ -57,7 +57,10 @@ public class ProgressManager
             return;
 
         if (useConsoleOverwrite)
+        {
+            Thread.Sleep(10); // make sure another rewrite process finished
             ConsoleExtension.ClearCurrentConsoleLine();
+        }
 
         Console.Write(GetCurrentStateString("Done!", MaxStep));
         Console.WriteLine();
@@ -81,7 +84,7 @@ public class ProgressManager
     {
         var s = $"{message}, ";
 
-        var percentage = 100d * currentStep / MaxStep;
+        var percentage = MaxStep == 0 ? 100 : 100d * currentStep / MaxStep;
 
         if (WriteSteps)
             s += $"{currentStep}/{MaxStep} steps, ";
@@ -107,11 +110,7 @@ public class ProgressManager
 
         if (WriteEstimateTime)
         {
-            if (percentage == 0)
-            {
-                s += $"0 sec left, ";
-            }
-            else
+            if (percentage > 0)
             {
                 var estimated = ElapsedTime * ((100 - percentage) / percentage);
                 if (estimated.TotalMinutes > 1.0)
