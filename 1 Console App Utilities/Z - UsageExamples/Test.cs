@@ -166,8 +166,8 @@ public class Test
 
             // E006 ResizeImage
             {
-                var input = new DirectoryInfo($@"{baseDir}\E006 ResizeImage");
-                input.ResizeImage_Loop(null, new Size(100, 100));
+                //var input = new DirectoryInfo($@"{baseDir}\E006 ResizeImage");
+                //input.ResizeImage_Loop(null, new Size(100, 100));
             }
 
             // E007 DistortImage
