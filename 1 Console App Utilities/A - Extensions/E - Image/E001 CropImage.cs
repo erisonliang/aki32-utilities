@@ -66,6 +66,16 @@ public static partial class OwesomeExtensions
     public static DirectoryInfo CropImage_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir, CropSize crop)
         => inputDir.Loop(outputDir, (inF, outF) => CropImage(inF, outF, crop));
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="inputDir"></param>
+    /// <param name="outputDir">when null, automatically set to {inputDir.Fullname}/output_CropImage/{inputFile.Name}.png</param>
+    /// <param name="crop"></param>
+    /// <returns></returns>
+    public static DirectoryInfo CropImageForMany_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir, CropSize[] crops)
+        => inputDir.Loop(outputDir, (inF, outF) => CropImageForMany(inF, outputDir, crops));
+
 
     // ★★★★★★★★★★★★★★★ image process
 
