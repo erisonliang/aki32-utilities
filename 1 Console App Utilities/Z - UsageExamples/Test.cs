@@ -109,8 +109,8 @@ public class Test
 
             // D001 MergeAllLines
             {
-                var input = new DirectoryInfo($@"{baseDir}\D001 MergeAllLines\input");
-                input.MergeAllLines(null);
+                //var input = new DirectoryInfo($@"{baseDir}\D001 MergeAllLines\input");
+                //input.MergeAllLines(null);
             }
 
             // E001 CropImage
@@ -223,9 +223,9 @@ public class Test
 
             // E008 AddTextToImage
             {
-                var input = new DirectoryInfo($@"{baseDir}\E008 AddTextToImage");
-                input.AddTextToImageProportionally_Loop(null, "%FN", new PointF(0.9f, 0.8f),
-                    fontSizeRatio: 0.1, alignRight: true);
+                //var input = new DirectoryInfo($@"{baseDir}\E008 AddTextToImage");
+                //input.AddTextToImageProportionally_Loop(null, "%FN", new PointF(0.9f, 0.8f),
+                //    fontSizeRatio: 0.1, alignRight: true);
             }
 
             // E102 SaveScreenShot

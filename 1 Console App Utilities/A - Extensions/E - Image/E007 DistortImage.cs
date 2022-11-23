@@ -191,32 +191,18 @@ public static partial class OwesomeExtensions
 
     public static Point[] GetFramePointsConversationally_For_DistortImage()
     {
-        var reasons = new string[]
+        var pointNames = new string[]
         {
             "Upper Left of the Image（┏  ）",
             "Bottom Right of the Image（┛  ）",
         };
 
-        var ps = new Point[reasons.Length];
-
-        for (int i = 0; i < reasons.Length; i++)
-        {
-            try
-            {
-                ps[i] = IODeviceExtension.GetMouseCursorPositionConversationally(ConsoleKey.Escape, reasons[i]);
-            }
-            catch (OperationCanceledException)
-            {
-                i -= 2;
-                i = Math.Max(-1, i);
-                continue;
-            }
-        }
+        var ps = IODeviceExtension.GetMouseCursorPositionConversationallyForMany(pointNames, ConsoleKey.Escape);
 
         Console.WriteLine();
         Console.WriteLine();
-        for (int i = 0; i < reasons.Length; i++)
-            Console.WriteLine($"{reasons[i]}:{ps[i]}");
+        for (int i = 0; i < pointNames.Length; i++)
+            Console.WriteLine($"{pointNames[i]}:{ps[i]}");
 
         return ps;
     }
@@ -233,41 +219,21 @@ public static partial class OwesomeExtensions
         if (pickingPointCount is < 1 or > 4)
             throw new InvalidDataException("pickingPointCount length must be in range 1 - 4");
 
-        var reasons = new string[]
+        var pointNames = new string[]
         {
             "Upper Left of the Image（┏  ）",
             "Bottom Right of the Image（┛  ）",
         };
 
         for (int i = 0; i < pickingPointCount; i++)
-            reasons = reasons.Append($"Point {i + 1}").ToArray();
+            pointNames = pointNames.Append($"Point {i + 1}").ToArray();
 
-        var ps = new Point[reasons.Length];
-
-        for (int i = 0; i < reasons.Length; i++)
-        {
-            try
-            {
-                if (i < 2 && presetFramePoints != null)
-                {
-                    ps[i] = presetFramePoints[i];
-                    continue;
-                }
-
-                ps[i] = IODeviceExtension.GetMouseCursorPositionConversationally(ConsoleKey.Escape, reasons[i]);
-            }
-            catch (OperationCanceledException)
-            {
-                i -= 2;
-                i = Math.Max(-1, i);
-                continue;
-            }
-        }
+        var ps = IODeviceExtension.GetMouseCursorPositionConversationallyForMany(pointNames, ConsoleKey.Escape);
 
         Console.WriteLine();
         Console.WriteLine();
-        for (int i = 0; i < reasons.Length; i++)
-            Console.WriteLine($"{reasons[i]}:{ps[i]}");
+        for (int i = 0; i < pointNames.Length; i++)
+            Console.WriteLine($"{pointNames[i]}:{ps[i]}");
 
         var Fs = ps[..2];
         var Os = ps[2..];

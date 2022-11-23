@@ -30,21 +30,8 @@ public static partial class OwesomeExtensions
         var inputFiles = inputDir.GetFilesWithRegexen(targetFilesOption, searchRegexen).Sort();
         var option = new ParallelOptions { MaxDegreeOfParallelism = maxDegreeOfParallelism };
 
-        var tokenSource = new CancellationTokenSource();
-        var token = tokenSource.Token;
         var progress = new ProgressManager(inputFiles.Count());
-        var finishedTaskCount = 0;
-        var progressManageTask = Task.Run(() =>
-        {
-            while (true)
-            {
-                if (token.IsCancellationRequested)
-                    return;
-
-                progress.WriteCurrentState(finishedTaskCount);
-                Thread.Sleep(100);
-            }
-        }, token);
+        progress.StartAutoWrite(100);
 
         Parallel.ForEach(inputFiles, option, inputFile =>
         {
@@ -74,11 +61,10 @@ public static partial class OwesomeExtensions
             }
             finally
             {
-                finishedTaskCount++;
+                progress.CurrentStep++;
             }
         });
 
-        tokenSource.Cancel();
         progress.WriteDone();
 
         // post process

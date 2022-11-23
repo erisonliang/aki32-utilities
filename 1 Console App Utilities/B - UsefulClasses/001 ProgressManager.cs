@@ -1,4 +1,6 @@
 ﻿
+using Newtonsoft.Json.Linq;
+
 namespace Aki32_Utilities.Extensions;
 public class ProgressManager
 {
@@ -9,6 +11,7 @@ public class ProgressManager
     public TimeSpan ElapsedTime => DateTime.Now - StartTime;
 
     public int MaxStep { get; set; }
+    public int CurrentStep { get; set; }
 
     public bool ConsoleOutput { get; set; } = true;
     public bool WritePercentage { get; set; } = true;
@@ -21,6 +24,9 @@ public class ProgressManager
     public int ProgressBarBoxCount { get; set; } = 15;
 
     public List<string> ErrorMessages { get; set; } = new List<string>();
+
+    private bool isRewriting = false;
+    private System.Timers.Timer autoWriteTimer;
 
 
     // ★★★★★★★★★★★★★★★ inits
@@ -42,19 +48,29 @@ public class ProgressManager
 
     // ★★★★★★★★★★★★★★★ methods
 
-    public void WriteCurrentState(int currentStep, bool useConsoleOverwrite = true)
+    public void WriteCurrentState(int? currentStep = null, bool useConsoleOverwrite = true)
     {
+        if (currentStep != null)
+            CurrentStep = currentStep.Value;
+
         if (!ConsoleOutput)
             return;
 
+        if (isRewriting) Thread.Sleep(10);
+        isRewriting = true;
+
         if (useConsoleOverwrite)
             ConsoleExtension.ClearCurrentConsoleLine();
+        Console.Write(GetCurrentStateString("Processing…"));
 
-        Console.Write(GetCurrentStateString("Processing…", currentStep));
+        isRewriting = false;
     }
 
     public void WriteDone(bool writeErrorMessages = true, bool useConsoleOverwrite = true)
     {
+        CurrentStep = MaxStep;
+        autoWriteTimer?.Stop();
+
         if (!ConsoleOutput)
             return;
 
@@ -64,7 +80,7 @@ public class ProgressManager
             ConsoleExtension.ClearCurrentConsoleLine();
         }
 
-        Console.Write(GetCurrentStateString("Done!", MaxStep));
+        Console.Write(GetCurrentStateString("Done!"));
         Console.WriteLine();
         Console.WriteLine();
 
@@ -82,14 +98,21 @@ public class ProgressManager
 
     public void AddErrorMessage(string errorMessage) => ErrorMessages.Add(errorMessage);
 
-    private string GetCurrentStateString(string message, double currentStep)
+    public void StartAutoWrite(int interval = 100, bool useConsoleOverwrite = true)
+    {
+        autoWriteTimer = new System.Timers.Timer(interval);
+        autoWriteTimer.Elapsed += delegate { WriteCurrentState(useConsoleOverwrite: useConsoleOverwrite); };
+        autoWriteTimer.Start();
+    }
+
+    private string GetCurrentStateString(string message)
     {
         var s = $"{message}, ";
 
-        var percentage = MaxStep == 0 ? 100 : 100d * currentStep / MaxStep;
+        var percentage = MaxStep == 0 ? 100 : 100d * CurrentStep / MaxStep;
 
         if (WriteSteps)
-            s += $"{currentStep}/{MaxStep} steps, ";
+            s += $"{CurrentStep}/{MaxStep} steps, ";
 
         if (WritePercentage)
             s += $"{percentage:F0} %, ";

@@ -24,9 +24,9 @@ public static partial class OwesomeExtensions
             .Sort()
             .ToArray();
 
-        var finishedTaskCount = 0;
         var maxRetryCount = 5;
         var progress = new ProgressManager(inputFiles.Count());
+        progress.StartAutoWrite(100);
 
         using var sw = new StreamWriter(outputFile!.FullName, false, Encoding.GetEncoding("SHIFT_JIS"));
         foreach (var inputFile in inputFiles)
@@ -58,8 +58,7 @@ public static partial class OwesomeExtensions
             }
             finally
             {
-                finishedTaskCount++;
-                progress.WriteCurrentState(finishedTaskCount);
+                progress.CurrentStep++;
             }
         }
         

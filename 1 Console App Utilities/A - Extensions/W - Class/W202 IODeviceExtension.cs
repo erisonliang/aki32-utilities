@@ -77,9 +77,9 @@ public static class IODeviceExtension
         MouseClick(button);
     }
 
-    public static Point GetMouseCursorPositionConversationally(ConsoleKey terminateKey = ConsoleKey.NoName, string targetPointName = null)
+    public static Point GetMouseCursorPositionConversationally(string targetPointName = null, ConsoleKey terminateKey = ConsoleKey.Escape)
     {
-        Console.WriteLine($"\r\nMove cursor to {targetPointName ?? "target"} and press Enter. (must be with this window focused)");
+        ConsoleExtension.WriteLineWithColor($"\r\nMove cursor to {targetPointName ?? "target"} and press Enter. (must be with this window focused)", ConsoleColor.Blue);
 
         var lastPosition = new Point(0, 0);
         Console.CursorVisible = false;
@@ -102,6 +102,26 @@ public static class IODeviceExtension
         Console.CursorVisible = true;
         Console.WriteLine();
         return lastPosition;
+    }
+    public static Point[] GetMouseCursorPositionConversationallyForMany(string[] targetPointNames, ConsoleKey terminateKey = ConsoleKey.Escape)
+    {
+        var points = new Point[targetPointNames.Length];
+
+        for (int i = 0; i < targetPointNames.Length; i++)
+        {
+            try
+            {
+                points[i] = GetMouseCursorPositionConversationally(targetPointNames[i], terminateKey);
+            }
+            catch (OperationCanceledException)
+            {
+                i -= 2;
+                i = Math.Max(-1, i);
+                continue;
+            }
+        }
+
+        return points;
     }
 
     public static void MouseCursorMoveAndClick(int x, int y, IODeviceButton button = IODeviceButton.MouseLeft)

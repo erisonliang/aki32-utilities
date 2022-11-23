@@ -55,13 +55,12 @@ public static partial class OwesomeExtensions
 
         var maxCount = imageFiles.Length * videoFrameRate / imgFrameRate;
         var progress = new ProgressManager(maxCount);
+        progress.StartAutoWrite(100);
 
         for (int i = 0; i < maxCount; i++)
         {
             try
             {
-                if (i % 10 == 0) progress.WriteCurrentState(i);
-
                 var pngFile = imageFiles[i * imgFrameRate / videoFrameRate];
                 using var image = Mat.FromStream(pngFile.OpenRead(), ImreadModes.Color);
 
@@ -69,6 +68,8 @@ public static partial class OwesomeExtensions
                     throw new InvalidDataException("All images' size must be the same. Please use ResizeImage() first.");
 
                 Writer.Write(image);
+
+                progress.CurrentStep = i;
             }
             catch (IndexOutOfRangeException)
             {

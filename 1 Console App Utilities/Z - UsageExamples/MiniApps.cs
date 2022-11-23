@@ -25,31 +25,17 @@ public class MiniApps
         // main
         Console.WriteLine("\r\n★★★★★ 座標入力（ひとつ前に戻るには Escape キーを押す。）\r\n");
 
-        var reasons = new string[] {
+        var pointNames = new string[] {
             "撮影対象の左上（┏  ）",
             "撮影対象の右下（┛  ）",
             "先送りボタン（→）",
         };
-        var ps = new Point[reasons.Length];
-
-        for (int i = 0; i < reasons.Length; i++)
-        {
-            try
-            {
-                ps[i] = IODeviceExtension.GetMouseCursorPositionConversationally(ConsoleKey.Escape, reasons[i]);
-            }
-            catch (OperationCanceledException)
-            {
-                i -= 2;
-                i = Math.Max(-1, i);
-                continue;
-            }
-        }
+        var ps = IODeviceExtension.GetMouseCursorPositionConversationallyForMany(pointNames, ConsoleKey.Escape);
 
         Console.WriteLine();
         Console.WriteLine();
-        for (int i = 0; i < reasons.Length; i++)
-            Console.WriteLine($"{reasons[i]}:{ps[i]}");
+        for (int i = 0; i < pointNames.Length; i++)
+            Console.WriteLine($"{pointNames[i]}:{ps[i]}");
         var UL = ps[0];
         var BR = ps[1];
         var ProceedButton = ps[2];
@@ -57,13 +43,15 @@ public class MiniApps
 
         Console.WriteLine("\r\n★★★★★★★★★★★★★★★ 撮影\r\n");
 
+        var progress = new ProgressManager(PageCount);
         for (int i = 0; i < PageCount; i++)
         {
             OwesomeExtensions.SaveScreenShot(targetDirectory, UL, BR);
             IODeviceExtension.MouseCursorMoveAndClick(ProceedButton);
-            Console.WriteLine($"{i + 1}/{PageCount} 枚完了");
+            progress.WriteCurrentState(i);
             Thread.Sleep(TimePerPageMilliSeconds);
         }
+        progress.WriteDone();
 
 
         Console.WriteLine("\r\n★★★★★★★★★★★★★★★ PDF化\r\n");

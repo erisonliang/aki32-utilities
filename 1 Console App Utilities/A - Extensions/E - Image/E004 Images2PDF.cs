@@ -7,6 +7,8 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
+using DocumentFormat.OpenXml.Vml;
+
 using iTextSharp.text;
 using iTextSharp.text.pdf;
 
@@ -28,7 +30,7 @@ public static partial class OwesomeExtensions
         UtilPreprocessors.PreprocessOutFile(ref outputFile, true, inputDir!, "output.pdf", takesTimeFlag: true);
         if (!outputFile!.Name.EndsWith(".pdf"))
             throw new Exception("outputFile name must end with .pdf");
-
+   
 
         // main
         var pngFIs = inputDir
@@ -39,8 +41,13 @@ public static partial class OwesomeExtensions
         using var doc = new Document();
         PdfWriter.GetInstance(doc, new FileStream(outputFile.FullName, FileMode.Create));
 
-        foreach (var pngFI in pngFIs)
+        var maxCount = pngFIs.Length;
+        var progress = new ProgressManager(maxCount);
+        progress.StartAutoWrite();
+
+        for (int i = 0; i < maxCount; i++)
         {
+            var pngFI = pngFIs[i];
             var png = iTextSharp.text.Image.GetInstance(pngFI.FullName);
 
             doc.SetPageSize(png);
@@ -53,10 +60,14 @@ public static partial class OwesomeExtensions
             png.ScaleToFit(doc.PageSize);
             png.SetAbsolutePosition(0, 0);
             doc.Add(png);
+
+            progress.CurrentStep = i;
         }
 
         if (doc.IsOpen())
             doc.Close();
+
+        progress.WriteDone();
 
 
         // post process
