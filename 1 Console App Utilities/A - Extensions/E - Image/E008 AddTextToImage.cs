@@ -10,7 +10,7 @@ public static partial class OwesomeExtensions
     /// AddTextToImage
     /// </summary>
     /// <param name="inputFile"></param>
-    /// <param name="outputFile">when null, automatically set to {inputFile.DirectoryName}/output_AddTextToImage/output.png</param>
+    /// <param name="outputFile">when null, automatically set</param>
     /// <param name="addingText">
     /// Text to add in image.
     /// (%FN → FileName)
@@ -50,7 +50,7 @@ public static partial class OwesomeExtensions
     /// AddTextToImage
     /// </summary>
     /// <param name="inputFile"></param>
-    /// <param name="outputFile">when null, automatically set to {inputFile.DirectoryName}/output_AddTextToImage/output.png</param>
+    /// <param name="outputFile">when null, automatically set</param>
     /// <param name="outputFile"></param>  
     /// <param name="addingText">
     /// Text to add in image.
@@ -86,7 +86,7 @@ public static partial class OwesomeExtensions
     /// AddTextToImage
     /// </summary>
     /// <param name="inputDir"></param>
-    /// <param name="outputDir">when null, automatically set to {inputDir.Fullname}/output_CropImage/{inputFile.Name}.png</param>
+    /// <param name="outputDir">when null, automatically set</param>
     /// <param name="addingText">
     /// Text to add in image.
     /// (%FN → FileName)
@@ -108,7 +108,7 @@ public static partial class OwesomeExtensions
     /// AddTextToImage
     /// </summary>
     /// <param name="inputDir"></param>
-    /// <param name="outputDir">when null, automatically set to {inputDir.Fullname}/output_CropImage/{inputFile.Name}.png</param>
+    /// <param name="outputDir">when null, automatically set</param>
     /// <param name="addingText">
     /// Text to add in image.
     /// (%FN → FileName)

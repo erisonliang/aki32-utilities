@@ -9,7 +9,7 @@ public static partial class OwesomeExtensions
     /// Turn file-utility-methods into loop method
     /// </summary>
     /// <param name="inputDir"></param>
-    /// <param name="outputDir">when null, automatically set to {inputDir.FullName}/{methodName}</param>
+    /// <param name="outputDir">when null, automatically set</param>
     /// <returns></returns>
     public static DirectoryInfo Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir, Action<FileInfo, FileInfo> targetAction,
         string[] searchRegexen = null,

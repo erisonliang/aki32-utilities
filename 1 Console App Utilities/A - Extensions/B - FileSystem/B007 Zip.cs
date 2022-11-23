@@ -8,7 +8,7 @@ public static partial class OwesomeExtensions
     /// Zip
     /// </summary>
     /// <param name="inputDir"></param>
-    /// <param name="outputFile">when null, automatically set to {inputFile.DirectoryName}/output_Zip/{inputFile.Name}</param>
+    /// <param name="outputFile">when null, automatically set</param>
     /// <returns></returns>
     public static FileInfo Zip(this DirectoryInfo inputDir, FileInfo? outputFile)
     {
@@ -29,7 +29,7 @@ public static partial class OwesomeExtensions
     /// Unzip
     /// </summary>
     /// <param name="inputDir"></param>
-    /// <param name="outputFile">when null, automatically set to {inputFile.DirectoryName}/output_Zip/{inputFile.Name}</param>
+    /// <param name="outputFile">when null, automatically set</param>
     /// <returns></returns>
     public static DirectoryInfo Unzip(this FileInfo inputFile, DirectoryInfo? outputDir)
     {

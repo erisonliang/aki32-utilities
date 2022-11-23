@@ -8,7 +8,7 @@ public static partial class OwesomeExtensions
     /// move all matching files to one dir
     /// </summary>
     /// <param name="inputDir"></param>
-    /// <param name="outputDir">when null, automatically set to {inputDir.Parent.FullName}/output_CollectFiles</param>
+    /// <param name="outputDir">when null, automatically set</param>
     /// <param name="searchPatterns"></param>
     /// <returns></returns>
     public static DirectoryInfo CollectFiles(this DirectoryInfo inputDir, DirectoryInfo? outputDir,

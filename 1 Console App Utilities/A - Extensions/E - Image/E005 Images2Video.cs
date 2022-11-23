@@ -17,7 +17,7 @@ public static partial class OwesomeExtensions
     /// It will be automatically downloaded!
     /// </remarks>
     /// <param name="inputDir"></param>
-    /// <param name="outputFile">when null, automatically set to {inputDir.FullName}/output_Images2Video/output.avi</param>
+    /// <param name="outputFile">when null, automatically set</param>
     /// <param name="imgFrameRate"></param>
     /// <param name="videoFrameRate"></param>
     /// <returns></returns>

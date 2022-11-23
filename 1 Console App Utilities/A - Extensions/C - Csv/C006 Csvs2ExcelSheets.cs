@@ -8,7 +8,7 @@ public static partial class OwesomeExtensions
     /// create an excel file that have sheets from csvs
     /// </summary>
     /// <param name="inputDir"></param>
-    /// <param name="outputFile">when null, automatically set to {inputDir.FullName}/output_Csvs2ExcelSheets/output.xlsx</param>
+    /// <param name="outputFile">when null, automatically set</param>
     /// <returns></returns>
     /// <exception cref="NotImplementedException"></exception>
     public static FileInfo Csvs2ExcelSheets(this DirectoryInfo inputDir, FileInfo? outputFile)

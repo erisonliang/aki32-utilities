@@ -12,7 +12,7 @@ public static partial class OwesomeExtensions
     /// move all csvs' target column to one csv (.xlsx is also acceptable)
     /// </summary>
     /// <param name="inputDir"></param>
-    /// <param name="outputFile">when null, automatically set to {inputDir.FullName}/output_CollectCsvColumns/output.csv</param>
+    /// <param name="outputFile">when null, automatically set</param>
     /// <param name="targetColumn"></param>
     /// <param name="initialColumn"></param>
     /// <returns></returns>
@@ -148,7 +148,7 @@ public static partial class OwesomeExtensions
     /// move all csvs' target column to one csv
     /// </summary>
     /// <param name="inputDir"></param>
-    /// <param name="outputDir">when null, automatically set to {inputDir.FullName}/output_CollectCsvColumns</param>
+    /// <param name="outputDir">when null, automatically set</param>
     /// <param name="targets"></param>
     /// <returns></returns>
     /// <exception cref="InvalidOperationException"></exception>
@@ -179,7 +179,7 @@ public static partial class OwesomeExtensions
     /// move all csvs' target column to one csv
     /// </summary>
     /// <param name="inputDir"></param>
-    /// <param name="outputDir">when null, automatically set to {inputDir.FullName}/output_CollectCsvColumns</param>
+    /// <param name="outputDir">when null, automatically set</param>
     /// <param name="targets"></param>
     /// <returns></returns>
     /// <exception cref="InvalidOperationException"></exception>
@@ -190,7 +190,7 @@ public static partial class OwesomeExtensions
     /// move all csvs' target column to one csv
     /// </summary>
     /// <param name="inputDir"></param>
-    /// <param name="outputDir">when null, automatically set to {inputDir.FullName}/output_CollectCsvColumns</param>
+    /// <param name="outputDir">when null, automatically set</param>
     /// <param name="targets"></param>
     /// <returns></returns>
     public static DirectoryInfo CollectCsvColumnsForMany(this DirectoryInfo inputDir, DirectoryInfo? outputDir, int? initialColumn, int skipRowCount, params (string name, int targetColumn)[] targets)
@@ -200,7 +200,7 @@ public static partial class OwesomeExtensions
     /// move all csvs' target column to one csv
     /// </summary>
     /// <param name="inputDir"></param>
-    /// <param name="outputDir">when null, automatically set to {inputDir.FullName}/output_CollectCsvColumns</param>
+    /// <param name="outputDir">when null, automatically set</param>
     /// <param name="targets"></param>
     /// <returns></returns>
     public static DirectoryInfo CollectCsvColumnsForMany(this DirectoryInfo inputDir, DirectoryInfo? outputDir, params (string name, int targetColumn)[] targets)

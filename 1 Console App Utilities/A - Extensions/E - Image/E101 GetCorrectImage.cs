@@ -26,7 +26,7 @@ public static partial class OwesomeExtensions
     /// Default Image.FromFile() creates image instance with no rotation applied; Use this method instead to get correct one.
     /// </summary>
     /// <param name="inputFile"></param>
-    /// <param name="outputFile">when null, automatically set to {inputFile.DirectoryName}/output_DistortImage/{inputFile.Name}</param>
+    /// <param name="outputFile">when null, automatically set</param>
     /// <param name="pps">List of the ratio of original point and target points. from 0.0-1.0. Min length 1, max length 3</param>
     /// <returns></returns>
     public static Image GetImageFromFile(this FileInfo inputFile)

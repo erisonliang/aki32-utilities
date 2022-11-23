@@ -8,7 +8,7 @@ public static partial class OwesomeExtensions
     /// create many template files named by csv list
     /// </summary>
     /// <param name="inputFile"></param>
-    /// <param name="outputDir">when null, automatically set to {inputFile.DirectoryName}/output_MakeFilesFromCsv</param>
+    /// <param name="outputDir">when null, automatically set</param>
     /// <param name="templateFile"></param>
     /// <returns></returns>
     public static DirectoryInfo MakeFilesFromCsv(this FileInfo inputFile, DirectoryInfo? outputDir, FileInfo templateFile)
@@ -47,7 +47,7 @@ public static partial class OwesomeExtensions
     /// create many directories named by csv list
     /// </summary>
     /// <param name="inputFile"></param>
-    /// <param name="outputDir">when null, automatically set to {inputFile.DirectoryName}/output_MakeFilesFromCsv</param>
+    /// <param name="outputDir">when null, automatically set</param>
     /// <param name="templateDir">when null, will be empty directories</param>
     /// <returns></returns>
     public static DirectoryInfo MakeDirsFromCsv(this FileInfo inputFile, DirectoryInfo? outputDir, DirectoryInfo templateDir = null)

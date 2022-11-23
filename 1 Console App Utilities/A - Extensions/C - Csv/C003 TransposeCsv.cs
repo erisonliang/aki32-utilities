@@ -8,7 +8,7 @@ public static partial class OwesomeExtensions
     /// Transpose csv and save
     /// </summary>
     /// <param name="inputFile"></param>
-    /// <param name="outputFile">when null, automatically set to {inputFile.DirectoryName}/output_TransposeCsv/{inputFile.Name}</param>
+    /// <param name="outputFile">when null, automatically set</param>
     /// <param name="skipColumnCount"></param>
     /// <param name="skipRowCount"></param>
     /// <param name="header"></param>
@@ -27,7 +27,7 @@ public static partial class OwesomeExtensions
     /// Transpose csv and save
     /// </summary>
     /// <param name="inputDir"></param>
-    /// <param name="outputDir">when null, automatically set to {inputDir.FullName}/output_TransposeCsv</param>
+    /// <param name="outputDir">when null, automatically set</param>
     /// <param name="skipColumnCount"></param>s
     /// <param name="skipRowCount"></param>
     /// <param name="header"></param>

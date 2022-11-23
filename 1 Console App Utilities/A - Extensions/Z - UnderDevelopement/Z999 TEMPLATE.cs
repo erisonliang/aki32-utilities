@@ -17,7 +17,7 @@ public static partial class OwesomeExtensions
     /// TEMPLATE
     /// </summary>
     /// <param name="inputFile"></param>
-    /// <param name="outputFile">when null, automatically set to {inputFile.DirectoryName}/output_TEMPLATE/{inputFile.Name}</param>
+    /// <param name="outputFile">when null, automatically set</param>
     /// <returns></returns>
     public static FileInfo TEMPLATE(this FileInfo inputFile, FileInfo? outputFile)
     {
@@ -38,7 +38,7 @@ public static partial class OwesomeExtensions
     /// TEMPLATE
     /// </summary>
     /// <param name="inputDir"></param>
-    /// <param name="outputDir">when null, automatically set to {inputDir.FullName}/output_TEMPLATE</param>
+    /// <param name="outputDir">when null, automatically set</param>
     /// <returns></returns>
     public static DirectoryInfo TEMPLATE_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir)
         => inputDir.Loop(outputDir, (inF, outF) => TEMPLATE(inF, outF),
@@ -48,7 +48,7 @@ public static partial class OwesomeExtensions
     /// TEMPLATE
     /// </summary>
     /// <param name="inputDir"></param>
-    /// <param name="outputDir">when null, automatically set to {inputDir.FullName}/output_TEMPLATE</param>
+    /// <param name="outputDir">when null, automatically set</param>
     /// <returns></returns>
     public static DirectoryInfo TEMPLATE_Loop_Manually(this DirectoryInfo inputDir, DirectoryInfo? outputDir)
     {

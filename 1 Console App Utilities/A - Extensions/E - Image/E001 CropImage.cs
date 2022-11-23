@@ -10,7 +10,7 @@ public static partial class OwesomeExtensions
     /// 
     /// </summary>
     /// <param name="inputFile"></param>
-    /// <param name="outputFile">when null, automatically set to {inputFile.DirectoryName}/output_CropImage/{inputFile.Name} - {crop.ToString()}.png</param>
+    /// <param name="outputFile">when null, automatically set</param>
     /// <param name="crop"></param>a
     /// <returns></returns>
     public static FileInfo CropImage(this FileInfo inputFile, FileInfo? outputFile, CropSize crop)
@@ -33,7 +33,7 @@ public static partial class OwesomeExtensions
     /// 
     /// </summary>
     /// <param name="inputFile"></param>
-    /// <param name="outputDir">when null, automatically set to {inputDir.Fullname}/output_CropImage/{inputFile.Name}.png</param>
+    /// <param name="outputDir">when null, automatically set</param>
     /// <param name="crops"></param>
     /// <returns></returns>
     public static DirectoryInfo CropImageForMany(this FileInfo inputFile, DirectoryInfo? outputDir, CropSize[] crops)
@@ -60,7 +60,7 @@ public static partial class OwesomeExtensions
     /// 
     /// </summary>
     /// <param name="inputDir"></param>
-    /// <param name="outputDir">when null, automatically set to {inputDir.Fullname}/output_CropImage/{inputFile.Name}.png</param>
+    /// <param name="outputDir">when null, automatically set</param>
     /// <param name="crop"></param>
     /// <returns></returns>
     public static DirectoryInfo CropImage_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir, CropSize crop)
@@ -70,7 +70,7 @@ public static partial class OwesomeExtensions
     /// 
     /// </summary>
     /// <param name="inputDir"></param>
-    /// <param name="outputDir">when null, automatically set to {inputDir.Fullname}/output_CropImage/{inputFile.Name}.png</param>
+    /// <param name="outputDir">when null, automatically set </param>
     /// <param name="crop"></param>
     /// <returns></returns>
     public static DirectoryInfo CropImageForMany_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir, CropSize[] crops)

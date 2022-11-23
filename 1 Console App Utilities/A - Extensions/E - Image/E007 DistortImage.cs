@@ -20,7 +20,7 @@ public static partial class OwesomeExtensions
     /// DistortImage
     /// </summary>
     /// <param name="inputFile"></param>
-    /// <param name="outputFile">when null, automatically set to {inputFile.DirectoryName}/output_DistortImage/{inputFile.Name}</param>
+    /// <param name="outputFile">when null, automatically set</param>
     /// <param name="ps">List of original points and target points. Min length 1, max length 3</param>
     /// <returns></returns>
     public static FileInfo DistortImage(this FileInfo inputFile, FileInfo? outputFile, Color? fill = null, params (Point originalPoint, Point tagrtPoint)[] ps)
@@ -47,7 +47,7 @@ public static partial class OwesomeExtensions
     /// DistortImageProportionally
     /// </summary>
     /// <param name="inputFile"></param>
-    /// <param name="outputFile">when null, automatically set to {inputFile.DirectoryName}/output_DistortImage/{inputFile.Name}</param>
+    /// <param name="outputFile">when null, automatically set</param>
     /// <param name="pps">List of the ratio of original point and target points. from 0.0-1.0. Min length 1, max length 3</param>
     /// <returns></returns>
     public static FileInfo DistortImageProportionally(this FileInfo inputFile, FileInfo? outputFile,
@@ -68,7 +68,7 @@ public static partial class OwesomeExtensions
     /// DistortImage
     /// </summary>
     /// <param name="inputDir"></param>
-    /// <param name="outputDir">when null, automatically set to {inputDir.FullName}/output_DistortImage</param>
+    /// <param name="outputDir">when null, automatically set</param>
     /// <param name="ps">List of original points and target points. Min length 1, max length 3</param>
     /// <returns></returns>
     public static DirectoryInfo DistortImage_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir,
@@ -84,7 +84,7 @@ public static partial class OwesomeExtensions
     /// DistortImageProportionally_Loop
     /// </summary>
     /// <param name="inputDir"></param>
-    /// <param name="outputDir">when null, automatically set to {inputDir.FullName}/output_DistortImage</param>
+    /// <param name="outputDir">when null, automatically set</param>
     /// <param name="pps">List of the ratio of original point and target points. from 0.0-1.0. Min length 1, max length 3</param>
     /// <returns></returns>
     public static DirectoryInfo DistortImageProportionally_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir,
@@ -121,7 +121,7 @@ public static partial class OwesomeExtensions
     /// Return Task of DistortImage List after picking points.
     /// </summary>
     /// <param name="inputDir"></param>
-    /// <param name="outputDir">when null, automatically set to {inputDir.FullName}/output_DistortImage</param>
+    /// <param name="outputDir">when null, automatically set</param>
     /// <param name="presetTargetPointRatios">List of target point ratios. Length 3</param>
     /// <returns></returns>
     public static Func<DirectoryInfo> DistortImage_Loop_Conversationally_Func(this DirectoryInfo inputDir, DirectoryInfo? outputDir,
@@ -299,7 +299,7 @@ public static partial class OwesomeExtensions
     /// DistortImage
     /// </summary>
     /// <param name="inputFile"></param>
-    /// <param name="outputFile">when null, automatically set to {inputFile.DirectoryName}/output_DistortImage/{inputFile.Name}</param>
+    /// <param name="outputFile">when null, automatically set</param>
     /// <param name="ps">List of original points and target points. Min length 1, max length 3</param>
     /// <returns></returns>
     public static Image DistortImage(this Image inputImage, Color? fill = null, params (Point originalPoint, Point tagrtPoint)[] ps)

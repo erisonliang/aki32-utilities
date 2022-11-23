@@ -10,7 +10,7 @@ public static partial class OwesomeExtensions
     /// ResizeImage
     /// </summary>
     /// <param name="inputFile"></param>
-    /// <param name="outputFile">when null, automatically set to {inputFile.DirectoryName}/output_ResizeImage/{inputFile.Name} - {crop.ToString()}.png</param>
+    /// <param name="outputFile">when null, automatically set</param>
     /// <param name="outputSize"></param>
     /// <returns></returns>
     public static FileInfo ResizeImage(this FileInfo inputFile, FileInfo? outputFile, Size outputSize,
@@ -34,7 +34,7 @@ public static partial class OwesomeExtensions
     /// ResizeImage Proportionally
     /// </summary>
     /// <param name="inputFile"></param>
-    /// <param name="outputFile">when null, automatically set to {inputFile.DirectoryName}/output_ResizeImage/{inputFile.Name} - {crop.ToString()}.png</param>
+    /// <param name="outputFile">when null, automatically set</param>
     /// <param name="outputSizeRatio">1 for the same size. More than 0. </param>
     /// <returns></returns>
     public static FileInfo ResizeImagePropotionally(this FileInfo inputFile, FileInfo? outputFile, SizeF outputSizeRatio,
@@ -57,7 +57,7 @@ public static partial class OwesomeExtensions
     /// ResizeImage
     /// </summary>
     /// <param name="inputDir"></param>
-    /// <param name="outputDir">when null, automatically set to {inputDir.Fullname}/output_CropImage/{inputFile.Name}.png</param>
+    /// <param name="outputDir">when null, automatically set</param>
     /// <param name="outputSize"></param>
     /// <returns></returns>
     public static DirectoryInfo ResizeImage_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir, Size outputSize,
@@ -68,7 +68,7 @@ public static partial class OwesomeExtensions
     /// ResizeImage Proportionally
     /// </summary>
     /// <param name="inputDir"></param>
-    /// <param name="outputDir">when null, automatically set to {inputDir.Fullname}/output_CropImage/{inputFile.Name}.png</param>
+    /// <param name="outputDir">when null, automatically set</param>
     /// <param name="outputSizeRatio">1 for the same size. More than 0. </param>
     /// <returns></returns>
     public static DirectoryInfo ResizeImagePropotionally_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir, SizeF outputSizeRatio,

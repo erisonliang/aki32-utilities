@@ -8,7 +8,7 @@ public static partial class OwesomeExtensions
     /// merge all file's lines in one file
     /// </summary>
     /// <param name="inputDir"></param>
-    /// <param name="outputFile">when null, automatically set to {inputDir.FullName}/output_MergeAllLines/output.txt</param>
+    /// <param name="outputFile">when null, automatically set</param>
     /// <param name="skipRowCount"></param>
     /// <returns></returns>
     public static FileInfo MergeAllLines(this DirectoryInfo inputDir, FileInfo? outputFile, int skipRowCount = 0)

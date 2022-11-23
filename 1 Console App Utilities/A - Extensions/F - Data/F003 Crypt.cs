@@ -18,7 +18,7 @@ public static partial class OwesomeExtensions
     /// Encrypt file
     /// </summary>
     /// <param name="inputFile"></param>
-    /// <param name="outputFile">when null, automatically set to {inputFile.DirectoryName}/output_Encrypt/{inputFile.Name}</param>
+    /// <param name="outputFile">when null, automatically set</param>
     /// <param name="password">password for encryption</param>
     /// <returns></returns>
     public static FileInfo Encrypt(this FileInfo inputFile, FileInfo? outputFile, string password)
@@ -63,7 +63,7 @@ public static partial class OwesomeExtensions
     /// Decrypt file
     /// </summary>
     /// <param name="inputFile"></param>
-    /// <param name="outputFile">when null, automatically set to {inputFile.DirectoryName}/output_Decrypt/{inputFile.Name}</param>
+    /// <param name="outputFile">when null, automatically set</param>
     /// <param name="password">password for decryption</param>
     /// <returns></returns>
     public static FileInfo Decrypt(this FileInfo inputFile, FileInfo? outputFile, string password)
@@ -110,7 +110,7 @@ public static partial class OwesomeExtensions
     /// Encrypt
     /// </summary>
     /// <param name="inputDir"></param>
-    /// <param name="outputDir">when null, automatically set to {inputDir.FullName}/output_Encrypt_Loop</param>
+    /// <param name="outputDir">when null, automatically set</param>
     /// <param name="password">password for encryption</param>
     /// <returns></returns>
     public static DirectoryInfo Encrypt_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir, string password)
@@ -120,7 +120,7 @@ public static partial class OwesomeExtensions
     /// Decrypt
     /// </summary>
     /// <param name="inputDir"></param>
-    /// <param name="outputDir">when null, automatically set to {inputDir.FullName}/output_Decrypt_Loop</param>
+    /// <param name="outputDir">when null, automatically set</param>
     /// <param name="password">password for decryption</param>
     /// <returns></returns>
     public static DirectoryInfo Decrypt_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir, string password)

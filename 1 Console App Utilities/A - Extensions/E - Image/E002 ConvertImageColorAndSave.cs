@@ -11,7 +11,7 @@ public static partial class OwesomeExtensions
     /// Convert image color to targetColor and save
     /// </summary>
     /// <param name="inputFile"></param>
-    /// <param name="outputFile">when null, automatically set to {inputFile.DirectoryName}/output_ConvertImageColor/{targetColor.Name}.png</param>
+    /// <param name="outputFile">when null, automatically set</param>
     /// <param name="targetColor"></param>
     /// <returns></returns>
     public static FileInfo ConvertImageColor(this FileInfo inputFile, FileInfo? outputFile, Color targetColor)
@@ -34,7 +34,7 @@ public static partial class OwesomeExtensions
     /// Convert image color to targetColor and save
     /// </summary>
     /// <param name="inputFile"></param>
-    /// <param name="outputDir">when null, automatically set to {inputFile.DirectoryName}/output_ConvertImageColor/{fileName}.png</param>
+    /// <param name="outputDir">when null, automatically set</param>
     /// <param name="targetInfos"></param>
     /// <returns></returns>
     public static DirectoryInfo ConvertImageColorForMany(this FileInfo inputFile, DirectoryInfo? outputDir,
@@ -63,7 +63,7 @@ public static partial class OwesomeExtensions
     /// Convert image color to targetColor and save
     /// </summary>
     /// <param name="inputFile"></param>
-    /// <param name="outputDir">when null, automatically set to {inputFile.DirectoryName}/ConvertImageColorOutput/{targetColor.Name}.png</param>
+    /// <param name="outputDir">when null, automatically set</param>
     /// <param name="targetColors"></param>
     /// <returns></returns>
     public static DirectoryInfo ConvertImageColorForMany(this FileInfo inputFile, DirectoryInfo? outputDir, params Color[] targetColors)

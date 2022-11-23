@@ -22,7 +22,7 @@ public static partial class OwesomeExtensions
     /// Images2PDF (currently, png to pdf only)
     /// </summary>
     /// <param name="inputDir"></param>
-    /// <param name="outputFile">when null, automatically set to {inputDir.FullName}/output_Images2PDF/output.pdf</param>
+    /// <param name="outputFile">when null, automatically set</param>
     /// <returns></returns>
     public static DirectoryInfo PDF2Images(this FileInfo inputFile, DirectoryInfo? outputDir)
     {

@@ -10,7 +10,7 @@ public static partial class OwesomeExtensions
     /// extranct designated columns from csv to new csv
     /// </summary>
     /// <param name="inputFile"></param>
-    /// <param name="outputFile">when null, automatically set to {inputFile.DirectoryName}/output_ExtractCsvColumns/{inputFile.Name}</param>
+    /// <param name="outputFile">when null, automatically set</param>
     /// <param name="extractingColumns"></param>
     /// <param name="skipRowCount"></param>
     /// <param name="header"></param>
@@ -54,7 +54,7 @@ public static partial class OwesomeExtensions
     /// extranct designated columns from csv to new csv
     /// </summary>
     /// <param name="inputFile"></param>
-    /// <param name="outputFile">when null, automatically set to {inputFile.DirectoryName}/output_ExtractCsvColumns/{inputFile.Name}</param>
+    /// <param name="outputFile">when null, automatically set</param>
     /// <param name="skipRowCount"></param>
     /// <param name="targets"></param>
     /// <returns></returns>
@@ -83,7 +83,7 @@ public static partial class OwesomeExtensions
     /// extranct designated columns from csv to new csv
     /// </summary>
     /// <param name="inputDir"></param>
-    /// <param name="outputDir">when null, automatically set to {inputDir.FullName}/output_ExtractCsvColumns</param>
+    /// <param name="outputDir">when null, automatically set</param>
     /// <param name="extractingColumns"></param>
     /// <param name="skipRowCount"></param>
     /// <param name="header"></param>
@@ -95,7 +95,7 @@ public static partial class OwesomeExtensions
     /// extranct designated columns from csv to new csv
     /// </summary>
     /// <param name="inputDir"></param>
-    /// <param name="outputDir">when null, automatically set to {inputDir.FullName}/output_ExtractCsvColumns</param>
+    /// <param name="outputDir">when null, automatically set</param>
     /// <param name="skipRowCount"></param>
     /// <param name="targets"></param>
     /// <returns></returns>

@@ -8,7 +8,7 @@ public static partial class OwesomeExtensions
     /// Return if string match any of search regexen
     /// </summary>
     /// <param name="inputDir"></param>
-    /// <param name="outputFile">when null, automatically set to {inputFile.DirectoryName}/output_Zip/{inputFile.Name}</param>
+    /// <param name="outputFile">when null, automatically set</param>
     /// <returns></returns>
     public static IEnumerable<FileInfo> GetFilesWithRegexen(this DirectoryInfo inputDir, SearchOption searchOption, params string[] searchRegexen)
     {

@@ -17,7 +17,7 @@ public static partial class OwesomeExtensions
     /// <summary>
     /// SaveScreenShot
     /// </summary>
-    /// <param name="outputFile">when null, automatically set to {inputDir.FullName}/output.pdf</param>
+    /// <param name="outputFile">when null, automatically set</param>
     /// <returns></returns>
     public static FileInfo SaveScreenShot(this FileInfo outputFile, Point upperLeftCoordinate, Point bottomRightCoordinate)
     {
@@ -37,7 +37,7 @@ public static partial class OwesomeExtensions
     /// <summary>
     /// SaveScreenShot
     /// </summary>
-    /// <param name="outputFile">when null, automatically set to {inputDir.FullName}/output.pdf</param>
+    /// <param name="outputFile">when null, automatically set</param>
     /// <returns></returns>
     public static FileInfo SaveScreenShot(this DirectoryInfo outputDir, Point upperLeftCoordinate, Point bottomRightCoordinate)
     {
@@ -59,7 +59,7 @@ public static partial class OwesomeExtensions
     /// <summary>
     /// SaveScreenShot
     /// </summary>
-    /// <param name="outputFile">when null, automatically set to {inputDir.FullName}/output.pdf</param>
+    /// <param name="outputFile">when null, automatically set</param>
     /// <returns></returns>
     public static Image TakeScreenShot(Point upperLeftCoordinate, Point bottomRightCoordinate)
     {
