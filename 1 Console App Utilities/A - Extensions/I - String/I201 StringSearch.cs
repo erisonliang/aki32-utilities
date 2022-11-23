@@ -49,7 +49,8 @@ public static partial class OwesomeExtensions
     public static string[] GetImageFilesRegexen(
         bool jpg = true,
         bool png = true,
-        bool bmp = true)
+        bool bmp = true,
+        bool heic = true)
     {
         var regexen = new List<string>();
 
@@ -69,6 +70,11 @@ public static partial class OwesomeExtensions
         {
             regexen.Add(@"^.*\.bmp$");
             regexen.Add(@"^.*\.BMP$");
+        }
+        if (heic)
+        {
+            regexen.Add(@"^.*\.heic");
+            regexen.Add(@"^.*\.HEIC$");
         }
 
         return regexen.ToArray();
