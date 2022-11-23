@@ -1,10 +1,4 @@
 ﻿
-using System;
-
-using DocumentFormat.OpenXml.Office2013.Word;
-
-using iTextSharp.text.pdf.security;
-
 namespace Aki32_Utilities.Extensions;
 public class ProgressManager
 {
