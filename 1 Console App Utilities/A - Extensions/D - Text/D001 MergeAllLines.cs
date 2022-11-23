@@ -23,25 +23,47 @@ public static partial class OwesomeExtensions
             .Where(x => !x.Name.Contains(outputFile!.DirectoryName!))
             .Sort()
             .ToArray();
-  
+
+        var finishedTaskCount = 0;
+        var maxRetryCount = 5;
+        var progress = new ProgressManager(inputFiles.Count());
+
         using var sw = new StreamWriter(outputFile!.FullName, false, Encoding.GetEncoding("SHIFT_JIS"));
         foreach (var inputFile in inputFiles)
         {
             try
             {
-                var inputTexts = File.ReadLines(inputFile.FullName, Encoding.GetEncoding("SHIFT_JIS")).ToArray();
-                for (int i = skipRowCount; i < inputTexts.Length; i++)
-                    sw.WriteLine(inputTexts[i]);
-
-                if (UtilConfig.ConsoleOutput)
-                    Console.WriteLine($"O: {inputFile.FullName}");
+                var retryCount = 0;
+                while (true)
+                {
+                    try
+                    {
+                        var inputTexts = File.ReadLines(inputFile.FullName, Encoding.GetEncoding("SHIFT_JIS")).ToArray();
+                        for (int i = skipRowCount; i < inputTexts.Length; i++)
+                            sw.WriteLine(inputTexts[i]);
+                        break;
+                    }
+                    catch (Exception ex)
+                    {
+                        if (++retryCount < maxRetryCount)
+                        {
+                            Thread.Sleep(100);
+                            GC.Collect();
+                            continue;
+                        }
+                        progress.AddErrorMessage($"{inputFile.FullName}, {ex.Message}");
+                        break;
+                    }
+                }
             }
-            catch (Exception ex)
+            finally
             {
-                if (UtilConfig.ConsoleOutput)
-                    Console.WriteLine($"X: {inputFile.FullName}, {ex.Message}");
+                finishedTaskCount++;
+                progress.WriteCurrentState(finishedTaskCount);
             }
         }
+        
+        progress.WriteDone();
 
 
         // post process

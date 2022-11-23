@@ -13,10 +13,12 @@ public class ProgressManager
     public bool ConsoleOutput { get; set; } = true;
     public bool WritePercentage { get; set; } = true;
     public bool WriteSteps { get; set; } = true;
-    public bool WriteBar { get; set; } = true;
+    public bool WriteProgressBar { get; set; } = true;
     public bool WriteElapsedTime { get; set; } = false;
     public bool WriteEstimateTime { get; set; } = true;
     public bool WriteErrorCount { get; set; } = true;
+
+    public int ProgressBarBoxCount { get; set; } = 15;
 
     public List<string> ErrorMessages { get; set; } = new List<string>();
 
@@ -68,10 +70,10 @@ public class ProgressManager
 
         if (writeErrorMessages && ErrorMessages.Count > 0)
         {
-            Console.WriteLine($"(!) {ErrorMessages.Count} ERRORS OCCURRED IN TOTAL.");
+            ConsoleExtension.WriteLineWithColor($"(!) {ErrorMessages.Count} ERRORS OCCURRED IN TOTAL.", ConsoleColor.Red);
 
             for (int i = 0; i < ErrorMessages.Count; i++)
-                Console.WriteLine($"ERROR{i + 1}: {ErrorMessages[i]}");
+                ConsoleExtension.WriteLineWithColor($"ERROR{i + 1}: {ErrorMessages[i]}", ConsoleColor.Red);
 
             Console.WriteLine();
             Console.WriteLine();
@@ -92,11 +94,10 @@ public class ProgressManager
         if (WritePercentage)
             s += $"{percentage:F0} %, ";
 
-        if (WriteBar)
+        if (WriteProgressBar)
         {
-            var boxCount = 10;
-            var s1 = Enumerable.Repeat('■', (int)(percentage * boxCount / 100.001 + 1)).ToString_Extension();
-            var s2 = Enumerable.Repeat('＿', (int)((100 - percentage) * boxCount / 100)).ToString_Extension();
+            var s1 = Enumerable.Repeat('■', (int)(percentage * ProgressBarBoxCount / 100.001 + 1)).ToString_Extension();
+            var s2 = Enumerable.Repeat('＿', (int)((100 - percentage) * ProgressBarBoxCount / 100)).ToString_Extension();
             s += $"{s1}{s2}, ";
         }
 
@@ -122,7 +123,7 @@ public class ProgressManager
 
         if (WriteErrorCount)
             if (ErrorMessages.Count > 0)
-                s += $"(!){ErrorMessages.Count} errors, ";
+                s += $"(!) {ErrorMessages.Count} error{(ErrorMessages.Count == 1 ? "" : "s")}, ";
 
         return s.TrimEnd(' ', ',');
     }

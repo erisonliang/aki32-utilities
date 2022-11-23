@@ -11,7 +11,7 @@ public partial class Program
     static void Main(string[] args)
     {
         Console.WriteLine();
-        Console.WriteLine($"★ Process Started!");
+        ConsoleExtension.WriteLineWithColor($"★ Process Started!", ConsoleColor.Yellow);
         Console.WriteLine();
 
 
@@ -19,8 +19,7 @@ public partial class Program
 
 
         Console.WriteLine();
-        Console.WriteLine();
-        Console.WriteLine($"★ Process Finished!");
+        ConsoleExtension.WriteLineWithColor($"★ Process Finished!", ConsoleColor.Yellow);
         Console.WriteLine();
 
         Console.ReadLine();
