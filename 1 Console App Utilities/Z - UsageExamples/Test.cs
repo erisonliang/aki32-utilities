@@ -113,17 +113,17 @@ public class Test
             // E001 CropImage
             {
                 //var input = new FileInfo($@"{baseDir}\E001 CropImage\input.bmp");
-                //var crops = new OwesomeExtensions.CropSize[]
+                //var crops = new OwesomeExtensions.Thickness[]
                 //{
-                //    new OwesomeExtensions.CropSize(0.13, 0.13, 0.13, 0.13),
-                //    new OwesomeExtensions.CropSize(0, 0, 0.3, 0.3),
-                //    new OwesomeExtensions.CropSize(0.3, 0, 0, 0.3),
-                //    new OwesomeExtensions.CropSize(0.3, 0.3, 0, 0),
-                //    new OwesomeExtensions.CropSize(0, 0.3, 0.3, 0),
+                //    new OwesomeExtensions.Thickness(0.13, 0.13, 0.13, 0.13),
+                //    new OwesomeExtensions.Thickness(0, 0, 0.3, 0.3),
+                //    new OwesomeExtensions.Thickness(0.3, 0, 0, 0.3),
+                //    new OwesomeExtensions.Thickness(0.3, 0.3, 0, 0),
+                //    new OwesomeExtensions.Thickness(0, 0.3, 0.3, 0),
                 //};
 
-                //input.CropImage(null, crops);
-                ////input.CropImage(null, new OwesomeExtensions.CropSize(0.13, 0.13, 0.13, 0.13));
+                //input.CropImageForMany(null, crops);
+                ////input.CropImage(null, new OwesomeExtensions.Thickness(0.13, 0.13, 0.13, 0.13));
             }
 
             // E002 ConvertImageColor
@@ -163,8 +163,8 @@ public class Test
 
             // E006 ResizeImage
             {
-                //var input = new DirectoryInfo($@"{baseDir}\E006 ResizeImage");
-                //input.ResizeImage_Loop(null, new Size(100, 100));
+                var input = new DirectoryInfo($@"{baseDir}\E006 ResizeImage");
+                input.ResizeImage_Loop(null, new Size(100, 100));
             }
 
             // E007 DistortImage

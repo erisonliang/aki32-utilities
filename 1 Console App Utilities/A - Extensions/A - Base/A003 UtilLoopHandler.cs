@@ -1,4 +1,5 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System.Diagnostics.Metrics;
+using System.Runtime.CompilerServices;
 using System.Text;
 
 namespace Aki32_Utilities.Extensions;
@@ -16,6 +17,7 @@ public static partial class OwesomeExtensions
         int maxDegreeOfParallelism = 999,
         SearchOption targetFilesOption = SearchOption.TopDirectoryOnly,
         FileInfo overrideOutputFile = null,
+        int maxRetryCount = 5,
         [CallerMemberName] string methodName = ""
         )
     {
@@ -28,23 +30,56 @@ public static partial class OwesomeExtensions
         var inputFiles = inputDir.GetFilesWithRegexen(targetFilesOption, searchRegexen).Sort();
         var option = new ParallelOptions { MaxDegreeOfParallelism = maxDegreeOfParallelism };
 
+        var tokenSource = new CancellationTokenSource();
+        var token = tokenSource.Token;
+        var progress = new ProgressManager(inputFiles.Count());
+        var finishedTaskCount = 0;
+        var progressManageTask = Task.Run(() =>
+        {
+            while (true)
+            {
+                if (token.IsCancellationRequested)
+                    return;
+
+                progress.WriteCurrentState(finishedTaskCount);
+                Thread.Sleep(100);
+            }
+        }, token);
+
         Parallel.ForEach(inputFiles, option, inputFile =>
         {
             try
             {
-                var outputFile = overrideOutputFile ?? new FileInfo(Path.Combine(outputDir!.FullName, inputFile.Name));
-                targetAction(inputFile, outputFile);
-
-                if (UtilConfig.ConsoleOutput)
-                    Console.WriteLine($"O: {inputFile.FullName}");
+                var retryCount = 0;
+                while (true)
+                {
+                    try
+                    {
+                        var outputFile = overrideOutputFile ?? new FileInfo(Path.Combine(outputDir!.FullName, inputFile.Name));
+                        targetAction(inputFile, outputFile);
+                        break;
+                    }
+                    catch (Exception ex)
+                    {
+                        if (++retryCount < maxRetryCount)
+                        {
+                            Thread.Sleep(100);
+                            GC.Collect();
+                            continue;
+                        }
+                        progress.AddErrorMessage($"{inputFile.FullName}, {ex.Message}");
+                        break;
+                    }
+                }
             }
-            catch (Exception ex)
+            finally
             {
-                if (UtilConfig.ConsoleOutput)
-                    Console.WriteLine($"X: {inputFile.FullName}, {ex.Message}");
+                finishedTaskCount++;
             }
         });
 
+        tokenSource.Cancel();
+        progress.WriteDone();
 
         // post process
         return outputDir!;

@@ -54,14 +54,13 @@ public static partial class OwesomeExtensions
         Writer.Open(outputFile.FullName, FourCC.H264, videoFrameRate, videoSize);
 
         var maxCount = imageFiles.Length * videoFrameRate / imgFrameRate;
-        var progress = new ProgressCounter(maxCount);
+        var progress = new ProgressManager(maxCount);
 
         for (int i = 0; i < maxCount; i++)
         {
             try
             {
-                if (i % 10 == 0)
-                    progress.WriteCurrentState(i);
+                if (i % 10 == 0) progress.WriteCurrentState(i);
 
                 var pngFile = imageFiles[i * imgFrameRate / videoFrameRate];
                 using var image = Mat.FromStream(pngFile.OpenRead(), ImreadModes.Color);
