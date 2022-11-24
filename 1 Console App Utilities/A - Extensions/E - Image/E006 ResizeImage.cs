@@ -96,9 +96,16 @@ public static partial class OwesomeExtensions
             case ResizeImageMode.Stretch:
                 {
                     using var outputBitmap = new Bitmap(outputSize.Width, outputSize.Height);
-                    using var g = Graphics.FromImage(outputBitmap);
-                    g.InterpolationMode = interpolationMode;
-                    g.DrawImage(inputImage, 0, 0, outputBitmap.Width, outputBitmap.Height);
+
+                    {
+                        var attributes = new ImageAttributes();
+                        attributes.SetWrapMode(WrapMode.TileFlipXY);
+                        var destination = new Rectangle(0, 0, outputBitmap.Width, outputBitmap.Height);
+
+                        using var g = Graphics.FromImage(outputBitmap);
+                        g.InterpolationMode = interpolationMode;
+                        g.DrawImage(inputImage, destination, 0, 0, inputImage.Width, inputImage.Height, GraphicsUnit.Pixel, attributes);
+                    }
 
                     return (Image)outputBitmap.Clone();
                 }
