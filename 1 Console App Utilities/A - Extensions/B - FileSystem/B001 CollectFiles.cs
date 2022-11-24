@@ -3,7 +3,7 @@ namespace Aki32_Utilities.Extensions;
 public static partial class OwesomeExtensions
 {
 
-    // ★★★★★★★★★★★★★★★ loop sugar
+    // ★★★★★★★★★★★★★★★ main
 
     /// <summary>
     /// move all matching files to one dir
@@ -31,6 +31,12 @@ public static partial class OwesomeExtensions
             maxDegreeOfParallelism: maxDegreeOfParallelism,
             overrideTargetOutputDirCandidate: inputDir.Parent!
             );
+
+
+    // ★★★★★★★★★★★★★★★ sugar
+
+    public static DirectoryInfo CollectFiles(this DirectoryInfo inputDir, DirectoryInfo? outputDir, params string[] searchRegexen)
+      => inputDir.CollectFiles(outputDir, 999, false, searchRegexen);
 
 
     // ★★★★★★★★★★★★★★★ 
