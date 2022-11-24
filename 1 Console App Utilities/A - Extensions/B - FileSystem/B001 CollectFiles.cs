@@ -1,5 +1,4 @@
-﻿using System.Text.RegularExpressions;
-
+﻿
 namespace Aki32_Utilities.Extensions;
 public static partial class OwesomeExtensions
 {
@@ -15,12 +14,17 @@ public static partial class OwesomeExtensions
     /// <returns></returns>
     public static DirectoryInfo CollectFiles(this DirectoryInfo inputDir, DirectoryInfo? outputDir,
         int maxDegreeOfParallelism = 999,
-        params string[] searchRegexen)
+        bool useMove = false,
+        params string[] searchRegexen
+        )
         => inputDir.Loop(outputDir, (inF, outF) =>
             {
                 var outputFileName = inF.FullName.Replace(inputDir.FullName, "").Replace(Path.DirectorySeparatorChar, '_').Trim('_');
                 var outputFilePath = Path.Combine(outF.Directory!.FullName, outputFileName);
-                File.Copy(inF.FullName, outputFilePath, true);
+                if (useMove)
+                    inF.MoveTo(outputFilePath, true);
+                else
+                    inF.CopyTo(outputFilePath, true);
             },
             targetFilesOption: SearchOption.AllDirectories,
             searchRegexen: searchRegexen,
