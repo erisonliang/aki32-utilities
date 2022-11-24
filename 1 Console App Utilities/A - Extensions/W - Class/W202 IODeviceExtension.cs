@@ -103,7 +103,7 @@ public static class IODeviceExtension
         Console.WriteLine();
         return lastPosition;
     }
-    public static Point[] GetMouseCursorPositionConversationallyForMany(string[] targetPointNames, ConsoleKey terminateKey = ConsoleKey.Escape)
+    public static Point[] GetMouseCursorPositionConversationallyForMany(string[] targetPointNames, ConsoleKey terminateKey = ConsoleKey.Escape, bool consoleWriteResults = false)
     {
         var points = new Point[targetPointNames.Length];
 
@@ -120,6 +120,18 @@ public static class IODeviceExtension
                 continue;
             }
         }
+
+        if (consoleWriteResults)
+        {
+            Console.WriteLine();
+            Console.WriteLine();
+            for (int i = 0; i < points.Length; i++)
+                Console.WriteLine($"{targetPointNames[i]}:{points[i]}");
+
+        }
+
+        Console.WriteLine();
+        Console.WriteLine();
 
         return points;
     }
