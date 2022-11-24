@@ -1,4 +1,6 @@
 ﻿using System.Drawing;
+using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
 
 namespace Aki32_Utilities.Extensions;
 public static partial class OwesomeExtensions
@@ -85,13 +87,26 @@ public static partial class OwesomeExtensions
     /// <param name="outputSize"></param>
     /// <returns></returns>
     public static Image ResizeImage(this Image inputImage, Size outputSize,
-        ResizeImageMode mode = ResizeImageMode.Stretch)
+        ResizeImageMode resizeMode = ResizeImageMode.Stretch,
+        InterpolationMode interpolationMode = InterpolationMode.NearestNeighbor
+        )
     {
-        switch (mode)
+        switch (resizeMode)
         {
             case ResizeImageMode.Stretch:
                 {
-                    using var outputBitmap = new Bitmap(inputImage, outputSize);
+                    using var outputBitmap = new Bitmap(outputSize.Width, outputSize.Height);
+
+                    {
+                        var attributes = new ImageAttributes();
+                        attributes.SetWrapMode(WrapMode.TileFlipXY);
+                        var destination = new Rectangle(0, 0, outputBitmap.Width, outputBitmap.Height);
+
+                        using var g = Graphics.FromImage(outputBitmap);
+                        g.InterpolationMode = interpolationMode;
+                        g.DrawImage(inputImage, destination, 0, 0, inputImage.Width, inputImage.Height, GraphicsUnit.Pixel, attributes);
+                    }
+
                     return (Image)outputBitmap.Clone();
                 }
             case ResizeImageMode.Uniform_NotImpremented:

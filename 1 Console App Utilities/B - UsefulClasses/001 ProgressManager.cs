@@ -80,6 +80,7 @@ public class ProgressManager
             ConsoleExtension.ClearCurrentConsoleLine();
         }
 
+        WriteElapsedTime = true;
         Console.Write(GetCurrentStateString("Done!"));
         Console.WriteLine();
         Console.WriteLine();
@@ -127,9 +128,9 @@ public class ProgressManager
         if (WriteElapsedTime)
         {
             if (ElapsedTime.TotalMinutes > 1.0)
-                s += $"{ElapsedTime.TotalMinutes:F1} min elapsed, ";
+                s += $"{ElapsedTime.TotalMinutes:F1} mins elapsed, ";
             else
-                s += $"{ElapsedTime.TotalSeconds:F1} sec elapsed, ";
+                s += $"{ElapsedTime.TotalSeconds:F1} secs elapsed, ";
         }
 
         if (WriteEstimateTime)
@@ -138,9 +139,9 @@ public class ProgressManager
             {
                 var estimated = ElapsedTime * ((100 - percentage) / percentage);
                 if (estimated.TotalMinutes > 1.0)
-                    s += $"{estimated.TotalMinutes:F1} min left, ";
+                    s += $"{estimated.TotalMinutes:F1} mins left, ";
                 else
-                    s += $"{estimated.TotalSeconds:F1} sec left, ";
+                    s += $"{estimated.TotalSeconds:F1} secs left, ";
             }
         }
 
