@@ -18,7 +18,7 @@ Since this repo has some git submodules, use following for correct cloning
 git clone --recursive https://github.com/aki32/aki32-utilities
 ```
 
-If you forgotten to use above, use following
+If you've forgotten to use above, use following
 ```
 git submodule update --init --recursive
 ```
