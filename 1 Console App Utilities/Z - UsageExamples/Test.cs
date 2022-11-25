@@ -339,6 +339,26 @@ public class Test
 
             }
 
+            // W203 CommandPromptExtension
+            {
+                var commands = new string[] {
+                   @"",
+                   @"cd ..\..\..\# TestModel\A - Extensions\E007 DistortImage",
+                   @"",
+                   @"lnn",
+                   @"",
+                   @"ls",
+                   @""};
+
+                var output = CommandPromptExtension.Execute(
+                    realTimeConsoleWriteLineOutput: true,
+                    omitCurrentDirectoryDisplay: true,
+                    outputReceivedAction: null,
+                    commands: commands);
+
+                ////Console.WriteLine(output);
+            }
+
         }
 
         // C - OwesomeModels
