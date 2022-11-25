@@ -339,24 +339,28 @@ public class Test
 
             }
 
-            // W203 CommandPromptExtension
+        }
+
+        // B - UsefulClasses
+        {
+
+            // 003 CommandPrompt
             {
-                var commands = new string[] {
-                   @"",
-                   @"cd ..\..\..\# TestModel\A - Extensions\E007 DistortImage",
-                   @"",
-                   @"lnn",
-                   @"",
-                   @"ls",
-                   @""};
+                //var commands = new string[] {
+                //   @"",
+                //   @"cd ..\..\..\# TestModel\A - Extensions\E007 DistortImage",
+                //   @"",
+                //   @"lnn",
+                //   @"",
+                //   @"ls",
+                //   @""};
 
-                var output = CommandPromptExtension.Execute(
-                    realTimeConsoleWriteLineOutput: true,
-                    omitCurrentDirectoryDisplay: true,
-                    outputReceivedAction: null,
-                    commands: commands);
+                //CommandPrompt.Execute(
+                //    realTimeConsoleWriteLineOutput: true,
+                //    omitCurrentDirectoryDisplay: true,
+                //    outputReceivedAction: null,
+                //    commands: commands);
 
-                ////Console.WriteLine(output);
             }
 
         }
@@ -435,7 +439,7 @@ public class Test
             }
         }
 
-        // Z - UsageExample
+        // Z - MiniApps
         {
             var baseDir = @"..\..\..\# TestModel\Z - UsageExample";
 
