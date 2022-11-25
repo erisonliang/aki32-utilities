@@ -346,20 +346,46 @@ public class Test
 
             // 003 CommandPrompt
             {
-                //var commands = new string[] {
-                //   @"",
-                //   @"cd ..\..\..\# TestModel\A - Extensions\E007 DistortImage",
-                //   @"",
-                //   @"lnn",
-                //   @"",
-                //   @"ls",
-                //   @""};
 
-                //CommandPrompt.Execute(
-                //    realTimeConsoleWriteLineOutput: true,
-                //    omitCurrentDirectoryDisplay: true,
-                //    outputReceivedAction: null,
-                //    commands: commands);
+                // objective
+                {
+                    //using var prompt = new CommandPrompt()
+                    //{
+                    //    RealTimeConsoleWriteLineOutput = true,
+                    //    OmitCurrentDirectoryDisplay = false,
+                    //};
+
+                    //prompt.WriteLine(@"");
+                    //prompt.WriteLine(@"cd ..\..\..\# TestModel\A - Extensions\E007 DistortImage");
+                    //prompt.WriteLine(@"");
+                    //prompt.WriteLine(@"lnn");
+                    //prompt.WriteLine(@"");
+                    //prompt.WriteLine(@"ls");
+                    //prompt.WriteLine(@"");
+
+                    //var outupt = prompt.ResponseList.ToArray();
+
+                }
+
+                // static
+                {
+
+                    //var commands = new string[] {
+                    //   @"",
+                    //   @"cd ..\..\..\# TestModel\A - Extensions\E007 DistortImage",
+                    //   @"",
+                    //   @"lnn",
+                    //   @"",
+                    //   @"ls",
+                    //   @""};
+
+                    //var outupt = CommandPrompt.Execute(
+                    //    realTimeConsoleWriteLineOutput: true,
+                    //    omitCurrentDirectoryDisplay: true,
+                    //    outputReceivedAction: null,
+                    //    commands: commands);
+
+                }
 
             }
 

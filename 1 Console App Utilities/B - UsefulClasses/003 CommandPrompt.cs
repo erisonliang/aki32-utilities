@@ -1,9 +1,11 @@
 ﻿using System.Diagnostics;
 
+using DocumentFormat.OpenXml.Drawing.Charts;
+
 namespace Aki32_Utilities.Extensions;
 public class CommandPrompt : IDisposable
 {
-    public bool RealTimeConsoleWriteLineOutput { get; set; } = false;
+    public bool RealTimeConsoleWriteLineOutput { get; set; }
     public bool OmitCurrentDirectoryDisplay { get; set; } = false;
 
     public Action<string>? OutputReceivedAction { get; set; } = null;
@@ -12,6 +14,7 @@ public class CommandPrompt : IDisposable
     public Process CommandPromptProcess { get; set; }
     public StreamWriter InputStream => CommandPromptProcess.StandardInput;
     public List<string> ResponseList { get; set; } = new List<string>();
+
 
     public CommandPrompt()
     {
@@ -25,11 +28,8 @@ public class CommandPrompt : IDisposable
             RedirectStandardError = true,
         };
 
-        CommandPromptProcess = new Process { StartInfo = processStartInfo };
-        CommandPromptProcess.OutputDataReceived += (object _, DataReceivedEventArgs e) =>
+        var OmitCurrentDirectoryString = (string data) =>
         {
-            var data = e?.Data ?? "";
-
             if (OmitCurrentDirectoryDisplay)
             {
                 try
@@ -41,6 +41,14 @@ public class CommandPrompt : IDisposable
                 {
                 }
             }
+
+            return data;
+        };
+        CommandPromptProcess = new Process { StartInfo = processStartInfo };
+        CommandPromptProcess.OutputDataReceived += (object _, DataReceivedEventArgs e) =>
+        {
+            var data = e?.Data ?? "";
+            data = OmitCurrentDirectoryString(data);
 
             if (RealTimeConsoleWriteLineOutput)
                 Console.WriteLine(data);
@@ -52,18 +60,7 @@ public class CommandPrompt : IDisposable
         CommandPromptProcess.ErrorDataReceived += (object _, DataReceivedEventArgs e) =>
         {
             var data = e?.Data ?? "";
-
-            if (OmitCurrentDirectoryDisplay)
-            {
-                try
-                {
-                    if (data[1] == ':')
-                        data = data.Substring(data.IndexOf(">"));
-                }
-                catch (Exception)
-                {
-                }
-            }
+            data = OmitCurrentDirectoryString(data);
 
             if (RealTimeConsoleWriteLineOutput)
                 ConsoleExtension.WriteLineWithColor(data, foreground: ConsoleColor.Red);
@@ -73,12 +70,12 @@ public class CommandPrompt : IDisposable
             ResponseList.Add(data);
         };
 
+        if (UtilConfig.ConsoleOutput)
+            ConsoleExtension.WriteLineWithColor("\r\n★ Command Prompt Started\r\n", foreground: ConsoleColor.Magenta);
+
         CommandPromptProcess.Start();
         CommandPromptProcess.BeginOutputReadLine();
         CommandPromptProcess.BeginErrorReadLine();
-
-        if (RealTimeConsoleWriteLineOutput)
-            ConsoleExtension.WriteLineWithColor("\r\n★ Command Prompt Started\r\n", foreground: ConsoleColor.Magenta);
 
     }
 
@@ -97,7 +94,7 @@ public class CommandPrompt : IDisposable
         CommandPromptProcess.WaitForExit();
         CommandPromptProcess.Close();
 
-        if (RealTimeConsoleWriteLineOutput)
+        if (UtilConfig.ConsoleOutput)
             ConsoleExtension.WriteLineWithColor("\r\n★ Command Prompt Closed\r\n", foreground: ConsoleColor.Magenta);
 
         GC.SuppressFinalize(this);
