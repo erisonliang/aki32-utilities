@@ -495,6 +495,32 @@ public class TimeHistory
         foreach (var key in step.data.Keys)
             this[key][i] = step[key];
     }
+
+    public void AddColumn(params string[] addingColumnNames)
+    {
+        foreach (var addingColumnName in addingColumnNames)
+            _ = data[addingColumnName][0];
+    }
+    public void RenameColumn(string targetColumnName, string newColumnName)
+    {
+        DeplicateColumn(targetColumnName, newColumnName);
+        DropColumn(targetColumnName);
+    }
+    public void DeplicateColumn(string baseColumnName, string newColumnName)
+    {
+        AddColumn(baseColumnName, newColumnName);
+        data[newColumnName] = data[baseColumnName];
+    }
+    public void DropColumn(params string[] droppingColumnNames)
+    {
+        foreach (var droppingColumnName in droppingColumnNames)
+            data.Remove(droppingColumnName);
+    }
+    public void DropAllColumns()
+    {
+        data.Clear();
+    }
+
     public void AppendStep(TimeHistoryStep step)
     {
         var addingIndex = DataRowCount;
@@ -516,17 +542,7 @@ public class TimeHistory
             {
                 this[key][addingIndex] = step[key];
             }
-        }
     }
-
-    public void DropAllColumns()
-    {
-        data.Clear();
-    }
-    public void DropColumn(params string[] droppingColumns)
-    {
-        foreach (var droppingColumn in droppingColumns)
-            data.Remove(droppingColumn);
     }
     public void DropStep(params int[] droppingSteps)
     {
