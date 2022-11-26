@@ -11,7 +11,7 @@ public static partial class TimeHistoryExensions
         var inputHistoryClone = inputHistory.Clone();
         var resultHistory = inputHistory.Clone();
         resultHistory.Name += "_FFT";
-        resultHistory.data = new Dictionary<string, double[]>();
+        resultHistory.DropAllColumns();
 
         if (inputHistoryClone.TimeStep == 0)
             throw new InvalidDataException("\"t\" index is required in inputHistory");

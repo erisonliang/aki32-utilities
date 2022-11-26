@@ -21,7 +21,7 @@ public class TimeHistory
     public string Name { get; set; }
     /// <summary>
     /// </summary>
-    internal Dictionary<string, double[]> data = new Dictionary<string, double[]>();
+    protected Dictionary<string, double[]> ContentsTable = new Dictionary<string, double[]>();
     /// <summary>
     /// indexer
     /// </summary>
@@ -31,26 +31,26 @@ public class TimeHistory
     {
         get
         {
-            if (data.Keys.Contains(key))
-                return data[key];
+            if (ContentsTable.Keys.Contains(key))
+                return ContentsTable[key];
 
-            data.Add(key, new double[DataRowCount]);
+            ContentsTable.Add(key, new double[DataRowCount]);
             //Console.WriteLine($"ERROR : {key} は定義されていません。空集合を作成しました。");
             //throw new KeyNotFoundException($"{key} は定義されていません。");
-            return data[key];
+            return ContentsTable[key];
         }
         set
         {
-            if (data.Keys.Contains(key))
+            if (ContentsTable.Keys.Contains(key))
             {
-                data[key] = value;
+                ContentsTable[key] = value;
             }
             else
             {
                 var newData = new double[Math.Max(DataRowCount, value.Length)];
                 for (int i = 0; i < value.Length; i++)
                     newData[i] = value[i];
-                data.Add(key, newData);
+                ContentsTable.Add(key, newData);
             }
         }
     }
@@ -64,7 +64,7 @@ public class TimeHistory
     public TimeHistory(string Name = "")
     {
         this.Name = Name;
-        data = new Dictionary<string, double[]>();
+        ContentsTable = new Dictionary<string, double[]>();
     }
 
     /// <summary>
@@ -74,7 +74,7 @@ public class TimeHistory
     /// <param name="overwriteHeaders"></param>
     /// <returns></returns>
     /// <exception cref="Exception"></exception>
-    public static TimeHistory FromCsv(FileInfo inputCsv, string[]? overwriteHeaders = null)
+    public static TimeHistory FromCsv(FileInfo inputCsv, params string[]? overwriteHeaders)
     {
         var history = new TimeHistory()
         {
@@ -92,7 +92,7 @@ public class TimeHistory
                      .Select(x => x.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries))
                      .First();
 
-            if (overwriteHeaders != null)
+            if (overwriteHeaders != null && overwriteHeaders.Length > 0)
                 headers = overwriteHeaders;
 
             var data = input
@@ -115,7 +115,7 @@ public class TimeHistory
                         }
                     })
                     .ToArray();
-                history.data[headers[i]] = column;
+                history.ContentsTable[headers[i]] = column;
             }
 
         }
@@ -139,8 +139,8 @@ public class TimeHistory
             inputDir = inputDir,
         };
 
-        foreach (var key in data.Keys)
-            newHistory.data[key] = (double[])data[key].Clone();
+        foreach (var key in ContentsTable.Keys)
+            newHistory.ContentsTable[key] = (double[])ContentsTable[key].Clone();
 
         newHistory.inputDir = inputDir;
 
@@ -243,33 +243,36 @@ public class TimeHistory
     /// <summary>
     /// Output TimeHistory to console
     /// </summary>
-    public void WriteToConsole()
+    public void WriteToConsole(int head = int.MaxValue)
     {
         using var sw = new StreamWriter(Console.OpenStandardOutput());
         sw.WriteLine("============================================");
-        WriteToStream(sw);
+        WriteToStream(sw, head);
         sw.WriteLine("============================================");
     }
 
     /// <summary>
     /// Output TimeHistory to stream
     /// </summary>
-    private void WriteToStream(StreamWriter sw)
+    private void WriteToStream(StreamWriter sw, int head = int.MaxValue)
     {
-        foreach (var key in data.Keys)
+        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance); // to handle Shift-JIS
+
+        foreach (var key in ContentsTable.Keys)
         {
             sw.Write(key.ToString());
             sw.Write(",");
         }
         sw.WriteLine();
 
-        for (int i = 0; i < DataRowCount; i++)
+        var repeatingCount = Math.Min(DataRowCount, head);
+        for (int i = 0; i < repeatingCount; i++)
         {
-            foreach (var key in data.Keys)
+            foreach (var key in ContentsTable.Keys)
             {
                 try
                 {
-                    sw.Write(data[key][i]);
+                    sw.Write(ContentsTable[key][i]);
                 }
                 catch (Exception)
                 {
@@ -450,17 +453,17 @@ public class TimeHistory
     {
         get
         {
-            if (data.Keys.Count == 0)
+            if (ContentsTable.Keys.Count == 0)
                 return 0;
             else
-                return data[data.Keys.First()].Length;
+                return ContentsTable[ContentsTable.Keys.First()].Length;
         }
     }
     public string[] Columns
     {
         get
         {
-            return data.Keys.ToArray();
+            return ContentsTable.Keys.ToArray();
         }
     }
 
@@ -473,7 +476,7 @@ public class TimeHistory
             inputDir = inputDir,
             Name = $"{Name}_step{i}",
         };
-        foreach (var key in data.Keys)
+        foreach (var key in ContentsTable.Keys)
         {
             try
             {
@@ -492,14 +495,40 @@ public class TimeHistory
     }
     public void SetStep(int i, TimeHistoryStep step)
     {
-        foreach (var key in step.data.Keys)
+        foreach (var key in step.ContentsTable.Keys)
             this[key][i] = step[key];
     }
+
+    public void AddColumn(params string[] addingColumnNames)
+    {
+        foreach (var addingColumnName in addingColumnNames)
+            _ = ContentsTable[addingColumnName][0];
+    }
+    public void RenameColumn(string targetColumnName, string newColumnName)
+    {
+        DeplicateColumn(targetColumnName, newColumnName);
+        DropColumn(targetColumnName);
+    }
+    public void DeplicateColumn(string baseColumnName, string newColumnName)
+    {
+        AddColumn(baseColumnName, newColumnName);
+        ContentsTable[newColumnName] = ContentsTable[baseColumnName];
+    }
+    public void DropColumn(params string[] droppingColumnNames)
+    {
+        foreach (var droppingColumnName in droppingColumnNames)
+            ContentsTable.Remove(droppingColumnName);
+    }
+    public void DropAllColumns()
+    {
+        ContentsTable.Clear();
+    }
+
     public void AppendStep(TimeHistoryStep step)
     {
         var addingIndex = DataRowCount;
 
-        var keys = step.data.Keys.ToArray();
+        var keys = step.ContentsTable.Keys.ToArray();
         for (int i = 0; i < keys.Length; i++)
         {
             var key = keys[i];
@@ -518,24 +547,14 @@ public class TimeHistory
             }
         }
     }
-
-    public void DropAllColumns()
-    {
-        data.Clear();
-    }
-    public void DropColumn(params string[] droppingColumns)
-    {
-        foreach (var droppingColumn in droppingColumns)
-            data.Remove(droppingColumn);
-    }
     public void DropStep(params int[] droppingSteps)
     {
-        foreach (var key in data.Keys)
+        foreach (var key in ContentsTable.Keys)
         {
-            var dataColumnList = data[key].ToList();
+            var dataColumnList = ContentsTable[key].ToList();
             foreach (var droppingStep in droppingSteps)
                 dataColumnList.RemoveAt(droppingStep);
-            data[key] = dataColumnList.ToArray();
+            ContentsTable[key] = dataColumnList.ToArray();
         }
     }
 
