@@ -74,7 +74,7 @@ public class TimeHistory
     /// <param name="overwriteHeaders"></param>
     /// <returns></returns>
     /// <exception cref="Exception"></exception>
-    public static TimeHistory FromCsv(FileInfo inputCsv, string[]? overwriteHeaders = null)
+    public static TimeHistory FromCsv(FileInfo inputCsv, params string[]? overwriteHeaders)
     {
         var history = new TimeHistory()
         {
@@ -92,7 +92,7 @@ public class TimeHistory
                      .Select(x => x.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries))
                      .First();
 
-            if (overwriteHeaders != null)
+            if (overwriteHeaders != null && overwriteHeaders.Length > 0)
                 headers = overwriteHeaders;
 
             var data = input
@@ -256,6 +256,8 @@ public class TimeHistory
     /// </summary>
     private void WriteToStream(StreamWriter sw, int head = int.MaxValue)
     {
+        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance); // to handle Shift-JIS
+
         foreach (var key in ContentsTable.Keys)
         {
             sw.Write(key.ToString());
