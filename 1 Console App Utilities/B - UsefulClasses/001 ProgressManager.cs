@@ -1,7 +1,6 @@
-﻿
-using Newtonsoft.Json.Linq;
+﻿using Aki32_Utilities.Extensions;
 
-namespace Aki32_Utilities.Extensions;
+namespace Aki32_Utilities.UsefulClasses;
 public class ProgressManager
 {
 

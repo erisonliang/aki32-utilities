@@ -1,6 +1,8 @@
 ﻿using System.Drawing;
 using System.Drawing.Imaging;
 
+using Aki32_Utilities.UsefulClasses;
+
 namespace Aki32_Utilities.Extensions;
 public static partial class OwesomeExtensions
 {
