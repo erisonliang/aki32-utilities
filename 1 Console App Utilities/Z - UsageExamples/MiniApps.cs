@@ -23,7 +23,7 @@ public class MiniApps
 
 
         // main
-        ConsoleExtension.WriteLineWithColor("\r\n★★★★★ 座標入力\r\n");
+        ConsoleExtension.WriteLineWithColor("\r\n★★★★★★★★★★★★★★★ 座標入力\r\n");
 
         var pointNames = new string[] {
             "撮影対象の左上（┏  ）",
