@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using Aki32_Utilities.Extensions;
 using Aki32_Utilities.OwesomeModels;
 
+using static Microsoft.FSharp.Core.ByRefKinds;
+
 namespace Aki32_Utilities;
 public class Test
 {
@@ -420,6 +422,13 @@ public class Test
                     //var ts = new TimeHistoryStep();
                     //ts["E"] = 3;
                     //ts.WriteToConsole();
+
+                    ////TimeHistory
+                    ////    .FromCsv(input, "t", "v")
+                    ////    .RenameColumn("v", "x")
+                    ////    .WriteToConsole(5)
+                    ////    .DrawLineGraph("x")
+                    ////    ;
 
                 }
 
