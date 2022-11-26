@@ -21,7 +21,7 @@ public class TimeHistory
     public string Name { get; set; }
     /// <summary>
     /// </summary>
-    private Dictionary<string, double[]> ContentsTable = new Dictionary<string, double[]>();
+    protected Dictionary<string, double[]> ContentsTable = new Dictionary<string, double[]>();
     /// <summary>
     /// indexer
     /// </summary>
