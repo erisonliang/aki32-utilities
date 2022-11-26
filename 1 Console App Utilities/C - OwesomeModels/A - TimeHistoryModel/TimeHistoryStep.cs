@@ -17,20 +17,20 @@ public class TimeHistoryStep : TimeHistory
     {
         get
         {
-            if (data.Keys.Contains(key))
-                return data[key][0];
+            if (ContentsTable.Keys.Contains(key))
+                return ContentsTable[key][0];
 
-            data.Add(key, new double[] { 0 });
+            ContentsTable.Add(key, new double[] { 0 });
             //Console.WriteLine($"ERROR : {key} は定義されていません。空集合を作成しました。");
             //throw new KeyNotFoundException($"{key} は定義されていません。");
-            return data[key][0];
+            return ContentsTable[key][0];
         }
         set
         {
-            if (data.Keys.Contains(key))
-                data[key][0] = value;
+            if (ContentsTable.Keys.Contains(key))
+                ContentsTable[key][0] = value;
             else
-                data.Add(key, new double[] { value });
+                ContentsTable.Add(key, new double[] { value });
         }
     }
 
@@ -206,7 +206,7 @@ public class TimeHistoryStep : TimeHistory
     /// </summary>
     public TimeHistoryStep()
     {
-        data = new Dictionary<string, double[]>();
+        ContentsTable = new Dictionary<string, double[]>();
     }
 
 
@@ -219,8 +219,8 @@ public class TimeHistoryStep : TimeHistory
     public new TimeHistoryStep Clone()
     {
         var newHistoryStep = new TimeHistoryStep();
-        foreach (var key in data.Keys)
-            newHistoryStep.data[key] = data[key];
+        foreach (var key in ContentsTable.Keys)
+            newHistoryStep.ContentsTable[key] = ContentsTable[key];
         return newHistoryStep;
     }
 
