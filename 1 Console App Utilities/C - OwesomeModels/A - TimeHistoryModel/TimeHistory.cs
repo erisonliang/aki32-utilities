@@ -243,18 +243,18 @@ public class TimeHistory
     /// <summary>
     /// Output TimeHistory to console
     /// </summary>
-    public void WriteToConsole()
+    public void WriteToConsole(int head = int.MaxValue)
     {
         using var sw = new StreamWriter(Console.OpenStandardOutput());
         sw.WriteLine("============================================");
-        WriteToStream(sw);
+        WriteToStream(sw, head);
         sw.WriteLine("============================================");
     }
 
     /// <summary>
     /// Output TimeHistory to stream
     /// </summary>
-    private void WriteToStream(StreamWriter sw)
+    private void WriteToStream(StreamWriter sw, int head = int.MaxValue)
     {
         foreach (var key in data.Keys)
         {
@@ -263,7 +263,8 @@ public class TimeHistory
         }
         sw.WriteLine();
 
-        for (int i = 0; i < DataRowCount; i++)
+        var repeatingCount = Math.Min(DataRowCount, head);
+        for (int i = 0; i < repeatingCount; i++)
         {
             foreach (var key in data.Keys)
             {
