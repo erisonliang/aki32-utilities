@@ -155,7 +155,7 @@ public class TimeHistory
     /// </summary>
     /// <param name="verticalKey">Vertical Axis</param>
     /// <param name="horizontalKey">Horizontal Axis</param>
-    public void DrawScatterGraph(string verticalKey, string horizontalKey = "")
+    public TimeHistory DrawScatterGraph(string verticalKey, string horizontalKey = "")
     {
         try
         {
@@ -178,13 +178,15 @@ public class TimeHistory
         {
             Console.WriteLine($"Failed to draw graph: {ex.Message}");
         }
+
+        return this;
     }
     /// <summary>
     /// Draw Line Graph
     /// </summary>
     /// <param name="verticalKey">Vertical Axis</param>
     /// <param name="horizontalKey">Horizontal Axis</param>
-    public void DrawLineGraph(string verticalKey, string horizontalKey = "")
+    public TimeHistory DrawLineGraph(string verticalKey, string horizontalKey = "")
     {
         try
         {
@@ -207,6 +209,8 @@ public class TimeHistory
         {
             Console.WriteLine($"Failed to draw graph: {ex.Message}");
         }
+
+        return this;
     }
 
     /// <summary>
@@ -243,18 +247,20 @@ public class TimeHistory
     /// <summary>
     /// Output TimeHistory to console
     /// </summary>
-    public void WriteToConsole(int head = int.MaxValue)
+    public TimeHistory WriteToConsole(int head = int.MaxValue)
     {
         using var sw = new StreamWriter(Console.OpenStandardOutput());
         sw.WriteLine("============================================");
         WriteToStream(sw, head);
         sw.WriteLine("============================================");
+
+        return this;
     }
 
     /// <summary>
     /// Output TimeHistory to stream
     /// </summary>
-    private void WriteToStream(StreamWriter sw, int head = int.MaxValue)
+    private TimeHistory WriteToStream(StreamWriter sw, int head = int.MaxValue)
     {
         Encoding.RegisterProvider(CodePagesEncodingProvider.Instance); // to handle Shift-JIS
 
@@ -282,6 +288,7 @@ public class TimeHistory
             sw.WriteLine();
         }
 
+        return this;
     }
 
 
@@ -493,38 +500,49 @@ public class TimeHistory
     {
         return GetStep(DataRowCount - 1);
     }
-    public void SetStep(int i, TimeHistoryStep step)
+    public TimeHistory SetStep(int i, TimeHistoryStep step)
     {
         foreach (var key in step.ContentsTable.Keys)
             this[key][i] = step[key];
+
+        return this;
     }
 
-    public void AddColumn(params string[] addingColumnNames)
+    public TimeHistory AddColumn(params string[] addingColumnNames)
     {
         foreach (var addingColumnName in addingColumnNames)
-            _ = ContentsTable[addingColumnName][0];
+            _ = this[addingColumnName][0];
+
+        return this;
     }
-    public void RenameColumn(string targetColumnName, string newColumnName)
+    public TimeHistory RenameColumn(string targetColumnName, string newColumnName)
     {
         DeplicateColumn(targetColumnName, newColumnName);
         DropColumn(targetColumnName);
+
+        return this;
     }
-    public void DeplicateColumn(string baseColumnName, string newColumnName)
+    public TimeHistory DeplicateColumn(string baseColumnName, string newColumnName)
     {
-        AddColumn(baseColumnName, newColumnName);
-        ContentsTable[newColumnName] = ContentsTable[baseColumnName];
+        this[newColumnName] = this[baseColumnName];
+        
+        return this;
     }
-    public void DropColumn(params string[] droppingColumnNames)
+    public TimeHistory DropColumn(params string[] droppingColumnNames)
     {
         foreach (var droppingColumnName in droppingColumnNames)
             ContentsTable.Remove(droppingColumnName);
+     
+        return this;
     }
-    public void DropAllColumns()
+    public TimeHistory DropAllColumns()
     {
         ContentsTable.Clear();
+    
+        return this;
     }
 
-    public void AppendStep(TimeHistoryStep step)
+    public TimeHistory AppendStep(TimeHistoryStep step)
     {
         var addingIndex = DataRowCount;
 
@@ -546,8 +564,10 @@ public class TimeHistory
                 this[key][addingIndex] = step[key];
             }
         }
+
+        return this;
     }
-    public void DropStep(params int[] droppingSteps)
+    public TimeHistory DropStep(params int[] droppingSteps)
     {
         foreach (var key in ContentsTable.Keys)
         {
@@ -556,6 +576,8 @@ public class TimeHistory
                 dataColumnList.RemoveAt(droppingStep);
             ContentsTable[key] = dataColumnList.ToArray();
         }
+
+        return this;
     }
 
 
