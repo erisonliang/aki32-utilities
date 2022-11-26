@@ -79,7 +79,7 @@ public static class IODeviceExtension
 
     public static Point GetMouseCursorPositionConversationally(string targetPointName = null, ConsoleKey terminateKey = ConsoleKey.Escape)
     {
-        ConsoleExtension.WriteLineWithColor($"\r\nMove cursor to {targetPointName ?? "target"} and press Enter. (must be with this window focused)", ConsoleColor.Blue);
+        ConsoleExtension.WriteLineWithColor($"\r\nMove cursor to {targetPointName ?? "target"} and press Enter. Press {terminateKey} to redo. Make sure this window is focused!", ConsoleColor.Blue);
 
         var lastPosition = new Point(0, 0);
         Console.CursorVisible = false;
@@ -91,7 +91,11 @@ public static class IODeviceExtension
                 if (key.Key == ConsoleKey.Enter)
                     break;
                 if (key.Key == terminateKey)
+                {
+                    ConsoleExtension.ClearCurrentConsoleLine();
+                    ConsoleExtension.WriteLineWithColor($"x Terminate key ({terminateKey}) was pressed", ConsoleColor.Red);
                     throw new OperationCanceledException($"Terminate key ({terminateKey}) was pressed");
+                }
             }
 
             lastPosition = GetMouseCursorPosition();

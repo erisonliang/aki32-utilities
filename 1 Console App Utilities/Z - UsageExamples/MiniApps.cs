@@ -23,25 +23,24 @@ public class MiniApps
 
 
         // main
-        Console.WriteLine("\r\n★★★★★ 座標入力（ひとつ前に戻るには Escape キーを押す。）\r\n");
+        ConsoleExtension.WriteLineWithColor("\r\n★★★★★ 座標入力\r\n");
 
         var pointNames = new string[] {
             "撮影対象の左上（┏  ）",
             "撮影対象の右下（┛  ）",
             "先送りボタン（→）",
         };
-        var ps = IODeviceExtension.GetMouseCursorPositionConversationallyForMany(pointNames, ConsoleKey.Escape);
-
-        Console.WriteLine();
-        Console.WriteLine();
-        for (int i = 0; i < pointNames.Length; i++)
-            Console.WriteLine($"{pointNames[i]}:{ps[i]}");
+        
+        var ps = IODeviceExtension.GetMouseCursorPositionConversationallyForMany(pointNames, ConsoleKey.Escape, true);
+       
         var UL = ps[0];
         var BR = ps[1];
         var ProceedButton = ps[2];
 
 
-        Console.WriteLine("\r\n★★★★★★★★★★★★★★★ 撮影\r\n");
+        ConsoleExtension.WriteLineWithColor("\r\n★★★★★★★★★★★★★★★ 撮影\r\n");
+
+        Console.WriteLine("マウスカーソルを動かさないでください。");
 
         var progress = new ProgressManager(PageCount);
         for (int i = 0; i < PageCount; i++)
@@ -54,13 +53,13 @@ public class MiniApps
         progress.WriteDone();
 
 
-        Console.WriteLine("\r\n★★★★★★★★★★★★★★★ PDF化\r\n");
+        ConsoleExtension.WriteLineWithColor("\r\n★★★★★★★★★★★★★★★ PDF化\r\n");
 
         targetDirectory.Images2PDF(null);
 
 
         // post process
-        Console.WriteLine("\r\n★★★★★★★★★★★★★★★ 以上\r\n");
+        ConsoleExtension.WriteLineWithColor("\r\n★★★★★★★★★★★★★★★ 以上\r\n");
 
     }
 
