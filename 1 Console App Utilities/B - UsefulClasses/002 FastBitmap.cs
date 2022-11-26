@@ -1,7 +1,7 @@
 ﻿using System.Drawing;
 using System.Drawing.Imaging;
 
-namespace Aki32_Utilities.Extensions;
+namespace Aki32_Utilities.UsefulClasses;
 /// <summary>
 /// faster Bitmap with direct memory access
 /// </summary>

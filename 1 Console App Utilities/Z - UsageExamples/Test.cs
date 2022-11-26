@@ -480,8 +480,8 @@ public class Test
 
             // Books2PDF
             {
-                var outputDir = new DirectoryInfo($@"{baseDir}\Books2PDF");
-                MiniApps.Books2PDF(outputDir, 10);
+                //var outputDir = new DirectoryInfo($@"{baseDir}\Books2PDF");
+                //MiniApps.Books2PDF(outputDir, 10);
 
             }
 

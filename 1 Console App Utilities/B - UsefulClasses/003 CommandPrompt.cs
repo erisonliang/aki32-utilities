@@ -1,8 +1,8 @@
 ﻿using System.Diagnostics;
 
-using DocumentFormat.OpenXml.Drawing.Charts;
+using Aki32_Utilities.Extensions;
 
-namespace Aki32_Utilities.Extensions;
+namespace Aki32_Utilities.UsefulClasses;
 public class CommandPrompt : IDisposable
 {
     public bool RealTimeConsoleWriteLineOutput { get; set; }

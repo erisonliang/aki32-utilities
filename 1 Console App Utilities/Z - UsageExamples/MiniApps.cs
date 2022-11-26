@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Drawing.Imaging;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿using Aki32_Utilities.UsefulClasses;
 using Aki32_Utilities.Extensions;
 
 using Org.BouncyCastle.Asn1.UA;
@@ -30,9 +23,9 @@ public class MiniApps
             "撮影対象の右下（┛  ）",
             "先送りボタン（→）",
         };
-        
+
         var ps = IODeviceExtension.GetMouseCursorPositionConversationallyForMany(pointNames, ConsoleKey.Escape, true);
-       
+
         var UL = ps[0];
         var BR = ps[1];
         var ProceedButton = ps[2];

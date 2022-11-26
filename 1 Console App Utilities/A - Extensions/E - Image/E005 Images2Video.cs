@@ -1,6 +1,5 @@
 ﻿using OpenCvSharp;
-
-using Size = System.Drawing.Size;
+using Aki32_Utilities.UsefulClasses;
 
 namespace Aki32_Utilities.Extensions;
 public static partial class OwesomeExtensions
