@@ -124,7 +124,7 @@ public static partial class OwesomeExtensions
     /// <param name="outputDir">when null, automatically set</param>
     /// <param name="presetTargetPointRatios">List of target point ratios. Length 3</param>
     /// <returns></returns>
-    public static Func<DirectoryInfo> DistortImage_Loop_Conversationally_Func(this DirectoryInfo inputDir, DirectoryInfo? outputDir,
+    public static Func<DirectoryInfo> DistortImageConversationally_Loop_Func(this DirectoryInfo inputDir, DirectoryInfo? outputDir,
         Color? fill = null,
         PointF[] presetTargetPointRatios = null,
         Point[] presetFramePoints = null,
@@ -199,11 +199,6 @@ public static partial class OwesomeExtensions
 
         var ps = IODeviceExtension.GetMouseCursorPositionConversationallyForMany(pointNames, ConsoleKey.Escape);
 
-        Console.WriteLine();
-        Console.WriteLine();
-        for (int i = 0; i < pointNames.Length; i++)
-            Console.WriteLine($"{pointNames[i]}:{ps[i]}");
-
         return ps;
     }
 
@@ -211,7 +206,7 @@ public static partial class OwesomeExtensions
     /// 
     /// </summary>
     /// <param name="presetFramePoints"></param>
-    /// <param name="pickingPointCount">TODO: 汎用的に。</param>
+    /// <param name="pickingPointCount"></param>
     /// <returns></returns>
     public static PointF[] GetTargetPointRatiosConversationally_For_DistortImage(Point[] presetFramePoints = null, int pickingPointCount = 4)
     {
@@ -219,24 +214,13 @@ public static partial class OwesomeExtensions
         if (pickingPointCount is < 1 or > 4)
             throw new InvalidDataException("pickingPointCount length must be in range 1 - 4");
 
-        var pointNames = new string[]
-        {
-            "Upper Left of the Image（┏  ）",
-            "Bottom Right of the Image（┛  ）",
-        };
+        var framePoints = presetFramePoints ?? GetFramePointsConversationally_For_DistortImage();
 
-        for (int i = 0; i < pickingPointCount; i++)
-            pointNames = pointNames.Append($"Point {i + 1}").ToArray();
+        var pointNames = Enumerable.Range(1, pickingPointCount).Select(s => $"Point {s}").ToArray();
+        var tagrtPoints = IODeviceExtension.GetMouseCursorPositionConversationallyForMany(pointNames, ConsoleKey.Escape);
 
-        var ps = IODeviceExtension.GetMouseCursorPositionConversationallyForMany(pointNames, ConsoleKey.Escape);
-
-        Console.WriteLine();
-        Console.WriteLine();
-        for (int i = 0; i < pointNames.Length; i++)
-            Console.WriteLine($"{pointNames[i]}:{ps[i]}");
-
-        var Fs = ps[..2];
-        var Os = ps[2..];
+        var Fs = framePoints;
+        var Os = tagrtPoints;
 
         float Fw = Fs[1].X - Fs[0].X;
         float Fh = Fs[1].Y - Fs[0].Y;
@@ -271,52 +255,8 @@ public static partial class OwesomeExtensions
     public static Image DistortImage(this Image inputImage, Color? fill = null, params (Point originalPoint, Point tagrtPoint)[] ps)
     {
         // preprocess
-        if (ps.Length is < 1 or > 4)
-            throw new InvalidDataException("ps length must be in range 1 - 4");
         fill ??= Color.Transparent;
-
-
-        // increase dim to 4
-        if (ps.Length == 1)
-        {
-            // increase dim
-            ps = ps.Append((Point.Add(ps[0].originalPoint, new Size(100, 0)), Point.Add(ps[0].tagrtPoint, new Size(100, 0)))).ToArray();
-            ps = ps.Append((Point.Add(ps[0].originalPoint, new Size(0, 100)), Point.Add(ps[0].tagrtPoint, new Size(0, 100)))).ToArray();
-        }
-        if (ps.Length == 2)
-        {
-            // increase dim
-            var oriP0 = ps[0].originalPoint;
-            var oriP1 = ps[1].originalPoint;
-            var oriV1 = Point.Subtract(oriP1, (Size)oriP0);
-            var oriV2 = Point.Add(new Point(-oriV1.Y, oriV1.X), (Size)oriP0);
-
-            var tarP0 = ps[0].tagrtPoint;
-            var tarP1 = ps[1].tagrtPoint;
-            var tarV1 = Point.Subtract(tarP1, (Size)tarP0);
-            var tarV2 = Point.Add(new Point(-tarV1.Y, tarV1.X), (Size)tarP0);
-
-            ps = ps.Append((oriV2, tarV2)).ToArray();
-        }
-        if (ps.Length == 3)
-        {
-            // increase dim
-            var oriP0 = ps[0].originalPoint;
-            var oriP1 = ps[1].originalPoint;
-            var oriP2 = ps[2].originalPoint;
-            var oriP3X = oriP1.X + oriP2.X - oriP0.X;
-            var oriP3Y = oriP1.Y + oriP2.Y - oriP0.Y;
-            var oriP3 = new Point(oriP3X, oriP3Y);
-
-            var tarP0 = ps[0].tagrtPoint;
-            var tarP1 = ps[1].tagrtPoint;
-            var tarP2 = ps[2].tagrtPoint;
-            var tarP3X = tarP1.X + tarP2.X - tarP0.X;
-            var tarP3Y = tarP1.Y + tarP2.Y - tarP0.Y;
-            var tarP3 = new Point(tarP3X, tarP3Y);
-
-            ps = ps.Append((oriP3, tarP3)).ToArray();
-        }
+        ps = IncreaseDimTo4_ForDistortImage(ps);
 
 
         // main
@@ -445,6 +385,63 @@ public static partial class OwesomeExtensions
         inFBmp.EndAccess();
 
         return (Image)outputBitmap.Clone();
+    }
+
+
+    // ★★★★★★★★★★★★★★★ helper
+
+    private static (Point originalPoint, Point tagrtPoint)[] IncreaseDimTo4_ForDistortImage((Point originalPoint, Point tagrtPoint)[] ps)
+    {
+        // preprocess
+        if (ps.Length is < 1 or > 4)
+            throw new InvalidDataException("ps length must be in range 1 - 4");
+
+
+        // main
+        if (ps.Length == 1)
+        {
+            // increase dim
+            ps = ps.Append((Point.Add(ps[0].originalPoint, new Size(100, 0)), Point.Add(ps[0].tagrtPoint, new Size(100, 0)))).ToArray();
+            ps = ps.Append((Point.Add(ps[0].originalPoint, new Size(0, 100)), Point.Add(ps[0].tagrtPoint, new Size(0, 100)))).ToArray();
+        }
+        if (ps.Length == 2)
+        {
+            // increase dim
+            var oriP0 = ps[0].originalPoint;
+            var oriP1 = ps[1].originalPoint;
+            var oriV1 = Point.Subtract(oriP1, (Size)oriP0);
+            var oriV2 = Point.Add(new Point(-oriV1.Y, oriV1.X), (Size)oriP0);
+
+            var tarP0 = ps[0].tagrtPoint;
+            var tarP1 = ps[1].tagrtPoint;
+            var tarV1 = Point.Subtract(tarP1, (Size)tarP0);
+            var tarV2 = Point.Add(new Point(-tarV1.Y, tarV1.X), (Size)tarP0);
+
+            ps = ps.Append((oriV2, tarV2)).ToArray();
+        }
+        if (ps.Length == 3)
+        {
+            // increase dim
+            var oriP0 = ps[0].originalPoint;
+            var oriP1 = ps[1].originalPoint;
+            var oriP2 = ps[2].originalPoint;
+            var oriP3X = oriP1.X + oriP2.X - oriP0.X;
+            var oriP3Y = oriP1.Y + oriP2.Y - oriP0.Y;
+            var oriP3 = new Point(oriP3X, oriP3Y);
+
+            var tarP0 = ps[0].tagrtPoint;
+            var tarP1 = ps[1].tagrtPoint;
+            var tarP2 = ps[2].tagrtPoint;
+            var tarP3X = tarP1.X + tarP2.X - tarP0.X;
+            var tarP3Y = tarP1.Y + tarP2.Y - tarP0.Y;
+            var tarP3 = new Point(tarP3X, tarP3Y);
+
+            ps = ps.Append((oriP3, tarP3)).ToArray();
+        }
+
+
+        // post process
+        return ps;
     }
 
 
