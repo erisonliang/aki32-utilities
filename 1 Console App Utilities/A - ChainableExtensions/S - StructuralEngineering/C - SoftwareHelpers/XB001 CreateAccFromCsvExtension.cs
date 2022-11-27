@@ -1,4 +1,4 @@
-﻿using Aki32_Utilities.ChainableExtensions;
+﻿using Aki32_Utilities.ChainableExtensions.General;
 using Aki32_Utilities.StructuralEngineering.SoftwareHelpers;
 
 namespace Aki32_Utilities.ChainableExtensions.StructuralEngineering;

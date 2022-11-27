@@ -1,7 +1,7 @@
 ﻿using System.Runtime.CompilerServices;
 using System.Text;
 
-namespace Aki32_Utilities.ChainableExtensions;
+namespace Aki32_Utilities.ChainableExtensions.General;
 public static class UtilPreprocessors
 {
     public static void PreprocessOutDir(

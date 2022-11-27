@@ -1,7 +1,7 @@
 ﻿using System.Drawing;
 using System.Runtime.InteropServices;
 
-namespace Aki32_Utilities.ChainableExtensions;
+namespace Aki32_Utilities.ChainableExtensions.General;
 
 /// <summary>
 /// Mainly, syntax sugar of device IO OS commands.

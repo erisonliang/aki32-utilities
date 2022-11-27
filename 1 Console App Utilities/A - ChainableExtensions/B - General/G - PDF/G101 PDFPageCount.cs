@@ -1,7 +1,7 @@
 ﻿using System.Text;
 using System.Text.RegularExpressions;
 
-namespace Aki32_Utilities.ChainableExtensions;
+namespace Aki32_Utilities.ChainableExtensions.General;
 public static partial class ChainableExtensions
 {
 

@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-using Aki32_Utilities.ChainableExtensions;
+using Aki32_Utilities.ChainableExtensions.General;
 
 namespace Aki32_Utilities.ChainableExtensions.StructuralEngineering;
 public static partial class ChainableExtensions
