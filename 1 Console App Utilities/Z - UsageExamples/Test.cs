@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using Aki32_Utilities.Extensions;
 using Aki32_Utilities.OwesomeModels;
 
+using static Microsoft.FSharp.Core.ByRefKinds;
+
 namespace Aki32_Utilities;
 public class Test
 {
@@ -18,9 +20,9 @@ public class Test
             // B001 CollectFiles
             {
                 //var input = new DirectoryInfo($@"{baseDir}\B001 CollectFiles\input");
-                //input.CollectFiles(null, 999, @"^.*a\.txt$", @"^.*3.*$");
-                //input.CollectFiles(null, 999, @"^.*a\.txt$");
-                //input.CollectFiles(null, 999, @"^[0-9]*\\a\.txt$");
+                //input.CollectFiles(null, @"^.*a\.txt$", @"^.*3.*$");
+                //input.CollectFiles(null, @"^.*a\.txt$");
+                //input.CollectFiles(null, @"^[0-9]*\\a\.txt$");
             }
 
             // B002 MakeFilesFromCsv
@@ -341,6 +343,56 @@ public class Test
 
         }
 
+        // B - UsefulClasses
+        {
+
+            // 003 CommandPrompt
+            {
+
+                // objective
+                {
+                    //using var prompt = new CommandPrompt()
+                    //{
+                    //    RealTimeConsoleWriteLineOutput = true,
+                    //    OmitCurrentDirectoryDisplay = false,
+                    //};
+
+                    //prompt.WriteLine(@"");
+                    //prompt.WriteLine(@"cd ..\..\..\# TestModel\A - Extensions\E007 DistortImage");
+                    //prompt.WriteLine(@"");
+                    //prompt.WriteLine(@"lnn");
+                    //prompt.WriteLine(@"");
+                    //prompt.WriteLine(@"ls");
+                    //prompt.WriteLine(@"");
+
+                    //var outupt = prompt.ResponseList.ToArray();
+
+                }
+
+                // static
+                {
+
+                    //var commands = new string[] {
+                    //   @"",
+                    //   @"cd ..\..\..\# TestModel\A - Extensions\E007 DistortImage",
+                    //   @"",
+                    //   @"lnn",
+                    //   @"",
+                    //   @"ls",
+                    //   @""};
+
+                    //var outupt = CommandPrompt.Execute(
+                    //    realTimeConsoleWriteLineOutput: true,
+                    //    omitCurrentDirectoryDisplay: true,
+                    //    outputReceivedAction: null,
+                    //    commands: commands);
+
+                }
+
+            }
+
+        }
+
         // C - OwesomeModels
         {
             var baseDir = @"..\..\..\# TestModel\C - OwesomeModels";
@@ -370,6 +422,13 @@ public class Test
                     //var ts = new TimeHistoryStep();
                     //ts["E"] = 3;
                     //ts.WriteToConsole();
+
+                    ////TimeHistory
+                    ////    .FromCsv(input, "t", "v")
+                    ////    .RenameColumn("v", "x")
+                    ////    .WriteToConsole(5)
+                    ////    .DrawLineGraph("x")
+                    ////    ;
 
                 }
 
@@ -415,7 +474,7 @@ public class Test
             }
         }
 
-        // Z - UsageExample
+        // Z - MiniApps
         {
             var baseDir = @"..\..\..\# TestModel\Z - UsageExample";
 

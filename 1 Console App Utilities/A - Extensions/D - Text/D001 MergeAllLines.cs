@@ -1,5 +1,7 @@
 ﻿using System.Text;
 
+using Aki32_Utilities.UsefulClasses;
+
 namespace Aki32_Utilities.Extensions;
 public static partial class OwesomeExtensions
 {
@@ -61,7 +63,7 @@ public static partial class OwesomeExtensions
                 progress.CurrentStep++;
             }
         }
-        
+
         progress.WriteDone();
 
 

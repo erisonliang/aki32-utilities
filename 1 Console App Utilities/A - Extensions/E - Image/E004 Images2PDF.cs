@@ -1,13 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-
-using DocumentFormat.OpenXml.Vml;
+﻿using Aki32_Utilities.UsefulClasses;
 
 using iTextSharp.text;
 using iTextSharp.text.pdf;
@@ -30,7 +21,7 @@ public static partial class OwesomeExtensions
         UtilPreprocessors.PreprocessOutFile(ref outputFile, true, inputDir!, "output.pdf", takesTimeFlag: true);
         if (!outputFile!.Name.EndsWith(".pdf"))
             throw new Exception("outputFile name must end with .pdf");
-   
+
 
         // main
         var pngFIs = inputDir

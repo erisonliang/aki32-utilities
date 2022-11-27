@@ -21,12 +21,23 @@ public static class ConsoleExtension
     /// <param name="value"></param>
     /// <param name="foreground"></param>
     /// <param name="backgroud"></param>
-    public static void WriteLineWithColor(object value, ConsoleColor foreground = ConsoleColor.Green, ConsoleColor backgroud = ConsoleColor.Black)
+    public static void WriteWithColor(object value, ConsoleColor foreground = ConsoleColor.Green, ConsoleColor backgroud = ConsoleColor.Black)
     {
         Console.ForegroundColor = foreground;
         Console.BackgroundColor = backgroud;
-        Console.WriteLine(value);
+        Console.Write(value);
         Console.ResetColor();
+    }
+
+    /// <summary>
+    /// ConsoleWriteLine with Colors
+    /// </summary>
+    /// <param name="value"></param>
+    /// <param name="foreground"></param>
+    /// <param name="backgroud"></param>
+    public static void WriteLineWithColor(object value, ConsoleColor foreground = ConsoleColor.Green, ConsoleColor backgroud = ConsoleColor.Black)
+    {
+        WriteWithColor($"{value}\r\n", foreground, backgroud);
     }
 
 }
