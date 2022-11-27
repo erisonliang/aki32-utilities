@@ -4,8 +4,9 @@ using Aki32_Utilities.Extensions;
 using Org.BouncyCastle.Asn1.UA;
 
 namespace Aki32_Utilities;
-public class MiniApps
+public partial class MiniApps
 {
+
     /// <summary>
     /// keep taking screenshot of some dataset and save as PDF
     /// </summary>

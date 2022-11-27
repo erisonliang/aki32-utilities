@@ -21,11 +21,19 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="E - SpecificPurposeModels\A - StructuralEngineering\X - SoftwareHelpers\A - SNAP\XA001 KeepClosingExcel.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove=".gitattributes" />
     <None Remove=".gitignore" />
     <None Remove="LICENSE.md" />
     <None Remove="README.md" />
     <None Remove="This Repo on GitHub.url" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="E - SpecificPurposeModels\A - StructuralEngineering\X - SoftwareHelpers\A - SNAP\XA001 KeepClosingExcel.cs" />
   </ItemGroup>
 
   <ItemGroup>

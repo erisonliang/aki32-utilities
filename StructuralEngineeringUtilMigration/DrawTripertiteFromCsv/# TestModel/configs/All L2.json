@@ -1,0 +1,33 @@
+{
+  "graph": {
+    "dpi": 600,
+    "graph_width": 6.0,
+    "graph_height": 8.0,
+    "min_period": 0.01,
+    "max_period": 10.0,
+    "min_vel": 0.1,
+    "max_vel": 1000.0,
+    "x_label": "T (S)",
+    "y_label": "Sv (cm/s)",
+    "acc_label": "Sa (cm/s/s)",
+    "disp_label": "Sd (cm)",
+    "eigen_period": []
+  },
+  "spectra": [
+    {
+      "name": "El Centro L2",
+      "color": "red",
+      "line_style": "solid"
+    },
+    {
+      "name": "Hachinohe L2",
+      "color": "red",
+      "line_style": "dashed"
+    },
+    {
+      "name": "Taft L2",
+      "color": "red",
+      "line_style": "dotted"
+    }
+  ]
+}
