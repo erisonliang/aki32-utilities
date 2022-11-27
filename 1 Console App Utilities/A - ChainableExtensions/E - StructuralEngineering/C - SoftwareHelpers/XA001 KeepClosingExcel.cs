@@ -1,4 +1,4 @@
-﻿using Aki32_Utilities.General.ChainableExtensions;
+﻿using Aki32_Utilities.StructuralEngineering;
 
 namespace Aki32_Utilities.StructuralEngineering.ChainableExtensions;
 public static partial class ChainableExtensions
@@ -6,9 +6,10 @@ public static partial class ChainableExtensions
 
     // ★★★★★★★★★★★★★★★ sugar
 
-    public static void KeepClosingExcel(int interval = 5000)
+    public static void KeepClosingExcelSugar(int interval = 5000)
     {
-        Aki32_Utilities.StructuralEngineering.SoftwareHelpers.KeepClosingExcel.CheckAndKillEndless(interval);
+        throw new NotImplementedException();
+        //Aki32_Utilities.StructuralEngineering.KeepClosingExcelAAAAA
     }
 
 

@@ -2,7 +2,7 @@
 
 using System.Numerics;
 
-namespace Aki32_Utilities.OwesomeModels;
+namespace Aki32_Utilities.OwesomeModels.ChainableExtensions;
 public static partial class TimeHistoryExensions
 {
 

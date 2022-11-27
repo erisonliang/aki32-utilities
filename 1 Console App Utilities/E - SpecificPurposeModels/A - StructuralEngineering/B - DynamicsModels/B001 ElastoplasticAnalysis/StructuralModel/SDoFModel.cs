@@ -1,4 +1,4 @@
-﻿using Aki32_Utilities.StructuralEngineering.DynamicsModels;
+﻿using Aki32_Utilities.StructuralEngineering;
 using Aki32_Utilities.OwesomeModels;
 using Aki32_Utilities.General.ChainableExtensions;
 

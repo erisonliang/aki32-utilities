@@ -71,32 +71,6 @@ public class CreateAccFromCsv
     }
 
 
-    // ★★★★★★★★★★★★★★★ sugar
-
-    public static void CreateAccFromCsvConversationally_For_DynamicPro()
-    {
-        Console.WriteLine("2行目からA列に時間・B列に加速度を配置した.csvファイルのパスを入力することで処理を実行できます。");
-
-        while (true)
-        {
-            Console.WriteLine("================================================");
-            Console.WriteLine("処理したいデータのパスを入力：");
-
-            var input = Console.ReadLine();
-            input = input.Trim('\"');
-            try
-            {
-                var inputFile = new FileInfo(input);
-                inputFile.CreateAccFromCsv_For_DynamicPro();
-            }
-            catch (Exception)
-            {
-                Console.WriteLine("失敗：入力が正しいか確認してください。");
-            }
-        }
-    }
-
-
     // ★★★★★★★★★★★★★★★
 
 }
