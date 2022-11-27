@@ -1,8 +1,8 @@
-﻿using Aki32_Utilities.ChainableExtensions;
+﻿using System.Text;
 
-using System.Text;
+using Aki32_Utilities.ChainableExtensions;
 
-namespace StructuralEngineering_Utilities.DynamicsModels;
+namespace Aki32_Utilities.ChainableExtensions.StructuralEngineering;
 public static partial class ChainableExtensions
 {
 

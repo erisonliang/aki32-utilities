@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 
-using Aki32_Utilities.ChainableExtensions;
+using Aki32_Utilities.ChainableExtensions.General;
 
 namespace Aki32_Utilities.UsefulClasses;
 public class CommandPrompt : IDisposable

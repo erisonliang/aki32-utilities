@@ -1,16 +1,14 @@
-﻿
-
-using DocumentFormat.OpenXml.Presentation;
+﻿using Aki32_Utilities.ChainableExtensions;
 
 namespace Aki32_Utilities.ChainableExtensions.StructuralEngineering;
-public static partial class StructuralEngineering_Utilities_Extensions
+public static partial class ChainableExtensions
 {
 
     // ★★★★★★★★★★★★★★★ sugar
 
     public static void KeepClosingExcel(int interval = 5000)
     {
-        SoftwareHelpers.KeepClosingExcel.CheckAndKillEndless(interval);
+        Aki32_Utilities.StructuralEngineering.SoftwareHelpers.KeepClosingExcel.CheckAndKillEndless(interval);
     }
 
 

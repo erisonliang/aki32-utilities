@@ -8,7 +8,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Aki32_Utilities.ChainableExtensions;
-public static partial class OwesomeExtensions
+public static partial class ChainableExtensions
 {
     // ref: https://qiita.com/hibara/items/6c7476ceec5a9caf2e81
 

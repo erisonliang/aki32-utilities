@@ -4,7 +4,7 @@ using System.Drawing.Imaging;
 using Aki32_Utilities.UsefulClasses;
 
 namespace Aki32_Utilities.ChainableExtensions;
-public static partial class OwesomeExtensions
+public static partial class ChainableExtensions
 {
 
     // ★★★★★★★★★★★★★★★ FileSystemInfo chain process

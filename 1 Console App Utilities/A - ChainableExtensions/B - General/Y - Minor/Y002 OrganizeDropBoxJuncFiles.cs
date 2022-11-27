@@ -1,7 +1,7 @@
 ﻿using System.Text;
 
-namespace Aki32_Utilities.ChainableExtensions;
-public static partial class OwesomeExtensions
+namespace Aki32_Utilities.ChainableExtensions.General;
+public static partial class ChainableExtensions
 {
     // TODO: test
 

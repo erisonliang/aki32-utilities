@@ -1,9 +1,8 @@
-﻿using System.Text;
+﻿using Aki32_Utilities.ChainableExtensions;
+using Aki32_Utilities.StructuralEngineering.SoftwareHelpers;
 
-using Aki32_Utilities.ChainableExtensions;
-
-namespace StructuralEngineering_Utilities.SoftwareHelpers;
-public static partial class StructuralEngineering_Utilities_Extensions
+namespace Aki32_Utilities.ChainableExtensions.StructuralEngineering;
+public static partial class ChainableExtensions
 {
 
     // ★★★★★★★★★★★★★★★ main
@@ -15,9 +14,11 @@ public static partial class StructuralEngineering_Utilities_Extensions
 
 
         // main
-        return inputFile.ReadCsv_Rows(skipColumnCount, skipRowCount).SaveCsv_Columns(outputFile!, header);
+        CreateAccFromCsv.CreateAccFromCsv_For_DynamicPro(inputFile, outputFile!);
 
-        CreateAccFromCsv.CreateAccFromCsv_For_DynamicPro(inputFile,);
+
+        // post process
+        return outputFile!;
     }
 
 

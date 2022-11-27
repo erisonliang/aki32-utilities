@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Threading.Tasks;
 
-using Aki32_Utilities.ChainableExtensions;
+using Aki32_Utilities.ChainableExtensions.General;
 using Aki32_Utilities.OwesomeModels;
 
 using static Microsoft.FSharp.Core.ByRefKinds;

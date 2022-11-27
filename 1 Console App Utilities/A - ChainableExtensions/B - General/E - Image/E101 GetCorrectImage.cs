@@ -16,7 +16,7 @@ using LibGit2Sharp;
 using MathNet.Numerics.LinearAlgebra;
 
 namespace Aki32_Utilities.ChainableExtensions;
-public static partial class OwesomeExtensions
+public static partial class ChainableExtensions
 {
 
     // ★★★★★★★★★★★★★★★ main

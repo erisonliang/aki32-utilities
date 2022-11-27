@@ -1,5 +1,5 @@
 ﻿using Aki32_Utilities.UsefulClasses;
-using Aki32_Utilities.ChainableExtensions;
+using Aki32_Utilities.ChainableExtensions.General;
 
 using Org.BouncyCastle.Asn1.UA;
 
@@ -39,7 +39,7 @@ public partial class MiniApps
         var progress = new ProgressManager(PageCount);
         for (int i = 0; i < PageCount; i++)
         {
-            OwesomeExtensions.SaveScreenShot(targetDirectory, UL, BR);
+            ChainableExtensions.ChainableExtensions.SaveScreenShot(targetDirectory, UL, BR);
             IODeviceExtension.MouseCursorMoveAndClick(ProceedButton);
             progress.WriteCurrentState(i);
             Thread.Sleep(TimePerPageMilliSeconds);

@@ -4,7 +4,7 @@ using iTextSharp.text;
 using iTextSharp.text.pdf;
 
 namespace Aki32_Utilities.ChainableExtensions;
-public static partial class OwesomeExtensions
+public static partial class ChainableExtensions
 {
 
     // ★★★★★★★★★★★★★★★ FileSystemInfo chain process
