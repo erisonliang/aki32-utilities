@@ -6,7 +6,7 @@ namespace Aki32_Utilities.ChainableExtensions;
 /// <summary>
 /// Mainly, syntax sugar of device IO OS commands.
 /// </summary>
-public static class IODeviceExtension
+public class IODeviceExtension
 {
     // ★★★★★★★★★★★★★★★ for use
 

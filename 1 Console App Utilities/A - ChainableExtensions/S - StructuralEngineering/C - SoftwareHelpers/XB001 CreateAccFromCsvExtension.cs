@@ -1,5 +1,7 @@
 ﻿using System.Text;
 
+using Aki32_Utilities.ChainableExtensions;
+
 namespace StructuralEngineering_Utilities.SoftwareHelpers;
 public static partial class StructuralEngineering_Utilities_Extensions
 {

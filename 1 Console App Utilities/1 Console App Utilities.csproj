@@ -62,8 +62,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="A - ChainableExtensions\新しいフォルダー\" />
-    <Folder Include="E - SpecificPurposeModels\A - Extensions\" />
+    <Folder Include="A - ChainableExtensions\W - Class\" />
   </ItemGroup>
 
 </Project>

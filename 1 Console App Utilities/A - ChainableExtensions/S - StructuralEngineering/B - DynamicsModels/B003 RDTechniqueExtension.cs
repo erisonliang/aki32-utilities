@@ -1,7 +1,7 @@
 ﻿using Aki32_Utilities.ChainableExtensions;
 
 namespace StructuralEngineering_Utilities.DynamicsModels;
-public static partial class Extensions
+public static partial class ChainableExtensions
 {
 
     /// <summary>

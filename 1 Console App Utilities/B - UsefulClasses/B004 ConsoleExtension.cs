@@ -1,6 +1,6 @@
 ﻿
 namespace Aki32_Utilities.ChainableExtensions;
-public static class ConsoleExtension
+public class ConsoleExtension
 {
 
     /// <summary>

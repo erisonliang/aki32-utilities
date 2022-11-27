@@ -2,7 +2,7 @@
 
 using DocumentFormat.OpenXml.Presentation;
 
-namespace StructuralEngineering_Utilities.SoftwareHelpers;
+namespace Aki32_Utilities.ChainableExtensions.StructuralEngineering;
 public static partial class StructuralEngineering_Utilities_Extensions
 {
 
