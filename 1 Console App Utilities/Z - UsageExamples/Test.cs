@@ -397,9 +397,9 @@ public class Test
         {
             var baseDir = @"..\..\..\# TestModel\C - OwesomeModels";
 
-            // A TimeHistoryModel
+            // A - TimeHistoryModel
             {
-                var baseDir2 = $@"{baseDir}\A TimeHistoryModel";
+                var baseDir2 = $@"{baseDir}\A - TimeHistoryModel";
 
                 // ★ TimeHistory
                 {
