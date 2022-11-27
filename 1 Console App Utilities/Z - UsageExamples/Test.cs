@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Threading.Tasks;
 
-using Aki32_Utilities.Extensions;
+using Aki32_Utilities.ChainableExtensions;
 using Aki32_Utilities.OwesomeModels;
 
 using static Microsoft.FSharp.Core.ByRefKinds;
@@ -652,7 +652,7 @@ public class Test
                         // XA001 KeepClosingExcel
                         {
 
-                            //StructuralEngineering_Utilities_Extensions.KeepClosingExcel();
+                            //Aki32_Utilities.StructuralEngineering.Extensions.KeepClosingExcel();
 
                         }
 
@@ -666,7 +666,7 @@ public class Test
                             //new FileInfo(Path.Combine(basePath, "XB001 CreateAccFromCsvExtension", @"kobe L1.csv"))
                             //    .CreateAccFromCsv_For_DynamicPro();
 
-                            //StructuralEngineering_Utilities_Extensions.CreateAccFromCsvConversationally_For_DynamicPro();
+                            //Aki32_Utilities.StructuralEngineering.Extensions.CreateAccFromCsvConversationally_For_DynamicPro();
                         }
 
                     }

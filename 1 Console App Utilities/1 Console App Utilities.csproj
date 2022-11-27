@@ -61,4 +61,9 @@
     </EmbeddedResource>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="A - ChainableExtensions\新しいフォルダー\" />
+    <Folder Include="E - SpecificPurposeModels\A - Extensions\" />
+  </ItemGroup>
+
 </Project>

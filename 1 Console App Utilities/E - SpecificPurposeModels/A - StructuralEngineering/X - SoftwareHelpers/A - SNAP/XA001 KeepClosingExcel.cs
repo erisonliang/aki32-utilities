@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 
-namespace StructuralEngineering_Utilities.SoftwareHelpers;
+namespace Aki32_Utilities.StructuralEngineering.SoftwareHelpers;
 public class KeepClosingExcel
 {
     private const int WAIT_FOR_EXIT_TIME = 5000;

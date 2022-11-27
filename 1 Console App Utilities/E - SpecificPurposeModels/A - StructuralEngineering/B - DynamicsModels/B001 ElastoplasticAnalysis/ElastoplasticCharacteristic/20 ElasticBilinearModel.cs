@@ -2,7 +2,7 @@
 
 using DocumentFormat.OpenXml.Wordprocessing;
 
-namespace StructuralEngineering_Utilities.DynamicsModels;
+namespace Aki32_Utilities.StructuralEngineering.DynamicsModels;
 
 /// <summary>
 /// Elastic Bilinear Model

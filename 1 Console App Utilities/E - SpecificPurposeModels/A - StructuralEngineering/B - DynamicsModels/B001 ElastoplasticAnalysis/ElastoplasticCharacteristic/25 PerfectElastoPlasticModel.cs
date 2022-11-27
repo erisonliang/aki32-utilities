@@ -1,6 +1,6 @@
 ﻿
 
-namespace StructuralEngineering_Utilities.DynamicsModels;
+namespace Aki32_Utilities.StructuralEngineering.DynamicsModels;
 
 /// <summary>
 /// Bilinear Model where K2=0

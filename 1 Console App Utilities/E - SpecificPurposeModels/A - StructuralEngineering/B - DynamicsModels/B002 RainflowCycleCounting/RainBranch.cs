@@ -1,6 +1,6 @@
 ﻿
 
-namespace StructuralEngineering_Utilities.DynamicsModels;
+namespace Aki32_Utilities.StructuralEngineering.DynamicsModels;
 public class RainBranch
 {
     public double SourceMu { get; set; }

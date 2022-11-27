@@ -1,4 +1,4 @@
-﻿using Aki32_Utilities.Extensions;
+﻿using Aki32_Utilities.ChainableExtensions;
 
 namespace Aki32_Utilities.OwesomeModels;
 public static partial class TimeHistoryExensions

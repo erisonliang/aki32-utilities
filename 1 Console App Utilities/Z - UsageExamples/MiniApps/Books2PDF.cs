@@ -1,5 +1,5 @@
 ﻿using Aki32_Utilities.UsefulClasses;
-using Aki32_Utilities.Extensions;
+using Aki32_Utilities.ChainableExtensions;
 
 using Org.BouncyCastle.Asn1.UA;
 

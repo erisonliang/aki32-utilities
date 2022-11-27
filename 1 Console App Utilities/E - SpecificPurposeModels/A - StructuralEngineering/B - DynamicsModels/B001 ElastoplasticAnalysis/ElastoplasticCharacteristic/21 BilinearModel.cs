@@ -1,6 +1,6 @@
 ﻿
 
-namespace StructuralEngineering_Utilities.DynamicsModels;
+namespace Aki32_Utilities.StructuralEngineering.DynamicsModels;
 
 /// <summary>
 /// Normal Bilinear Model with Kinematic Hardening (移動硬化)
