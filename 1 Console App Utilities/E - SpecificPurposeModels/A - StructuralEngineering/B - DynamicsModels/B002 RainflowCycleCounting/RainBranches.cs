@@ -1,6 +1,6 @@
 ﻿
 
-namespace Aki32_Utilities.StructuralEngineering.DynamicsModels;
+namespace Aki32_Utilities.StructuralEngineering;
 public class RainBranches
 {
     public List<RainBranch> RainBranchList { get; init; }

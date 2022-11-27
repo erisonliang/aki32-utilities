@@ -3,344 +3,297 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Threading.Tasks;
 
-using Aki32_Utilities.ChainableExtensions.General;
+using Aki32_Utilities.General.ChainableExtensions;
 using Aki32_Utilities.OwesomeModels;
 
-using static Microsoft.FSharp.Core.ByRefKinds;
-
-namespace Aki32_Utilities;
-public class Test
+namespace Aki32_Utilities.UsageExamples;
+public class TestHelper
 {
+
     public static void All()
     {
-        // A - Extensions
+        // A - ChainableExtensions
         {
-            var baseDir = @"..\..\..\# TestModel\A - Extensions";
-
-            // B001 CollectFiles
+            // B - General
             {
-                //var input = new DirectoryInfo($@"{baseDir}\B001 CollectFiles\input");
-                //input.CollectFiles(null, @"^.*a\.txt$", @"^.*3.*$");
-                //input.CollectFiles(null, @"^.*a\.txt$");
-                //input.CollectFiles(null, @"^[0-9]*\\a\.txt$");
-            }
 
-            // B002 MakeFilesFromCsv
-            {
-                //var inputList = new FileInfo($@"{baseDir}\B002 MakeFilesFromCsv\list.csv");
-                //var inputTemp = new FileInfo($@"{baseDir}\B002 MakeFilesFromCsv\template.docx");
-                //inputList.MakeFilesFromCsv(null, inputTemp);
-            }
+                var baseDir = @"..\..\..\# TestModel\A - ChainableExtensions\B - General";
 
-            // B003 MoveTo
-            {
-                //var input = new DirectoryInfo($@"{baseDir}\B003 MoveTo\input");
-                //var keep = new DirectoryInfo($@"{baseDir}\B003 MoveTo\keep");
-                //var output = new DirectoryInfo($@"{baseDir}\B003 MoveTo\output");
-                //input.MoveTo(output);
-            }
+                // B001 CollectFiles
+                {
+                    //var input = new DirectoryInfo($@"{baseDir}\B001 CollectFiles\input");
+                    //input.CollectFiles(null, @"^.*a\.txt$", @"^.*3.*$");
+                    //input.CollectFiles(null, @"^.*a\.txt$");
+                    //input.CollectFiles(null, @"^[0-9]*\\a\.txt$");
+                }
 
-            // B004 CopyTo
-            {
-                // directry-wise
-                //var input = new DirectoryInfo($@"{baseDir}\B004 CopyTo\input");
-                //var output = new DirectoryInfo($@"{baseDir}\B004 CopyTo\output");
-                //input.CopyTo(output);
+                // B002 MakeFilesFromCsv
+                {
+                    //var inputList = new FileInfo($@"{baseDir}\B002 MakeFilesFromCsv\list.csv");
+                    //var inputTemp = new FileInfo($@"{baseDir}\B002 MakeFilesFromCsv\template.docx");
+                    //inputList.MakeFilesFromCsv(null, inputTemp);
+                }
 
-                // file
-                //var input = new FileInfo($@"{baseDir}\B004 CopyTo\a.txt");
-                //input.CopyTo();
-            }
+                // B003 MoveTo
+                {
+                    //var input = new DirectoryInfo($@"{baseDir}\B003 MoveTo\input");
+                    //var keep = new DirectoryInfo($@"{baseDir}\B003 MoveTo\keep");
+                    //var output = new DirectoryInfo($@"{baseDir}\B003 MoveTo\output");
+                    //input.MoveTo(output);
+                }
 
-            // B005 RenameFiles
-            {
-                //var input = new DirectoryInfo($@"{baseDir}\B005 RenameFiles\input");
-                //var output = new DirectoryInfo($@"{baseDir}\B005 RenameFiles\output");
-                //input.CopyTo(output);
-                //// auto
-                //output.RenameFiles();
-                ////// append
-                ////output.RenameFiles_Append("xxx*xxx");
-                ////// replace
-                ////output.RenameFiles_Replace(("ABC", "abc"), ("XYZ", "xyz"));
-            }
+                // B004 CopyTo
+                {
+                    // directry-wise
+                    //var input = new DirectoryInfo($@"{baseDir}\B004 CopyTo\input");
+                    //var output = new DirectoryInfo($@"{baseDir}\B004 CopyTo\output");
+                    //input.CopyTo(output);
 
-            // B007 Zip
-            {
-                //var input = new DirectoryInfo($@"{baseDir}\B007 Zip\input");
-                //input
-                //    .Zip(null)
-                //    .Unzip(null);
-            }
+                    // file
+                    //var input = new FileInfo($@"{baseDir}\B004 CopyTo\a.txt");
+                    //input.CopyTo();
+                }
 
-            // C004 ExtractCsvColumns
-            {
-                //new FileInfo($@"{baseDir}\C004 ExtractCsvColumns\input.csv")
-                //    .ExtractCsvColumns(null, new int[] { 0, 3 }, 0, "t,x");
+                // B005 RenameFiles
+                {
+                    //var input = new DirectoryInfo($@"{baseDir}\B005 RenameFiles\input");
+                    //var output = new DirectoryInfo($@"{baseDir}\B005 RenameFiles\output");
+                    //input.CopyTo(output);
+                    //// auto
+                    //output.RenameFiles();
+                    ////// append
+                    ////output.RenameFiles_Append("xxx*xxx");
+                    ////// replace
+                    ////output.RenameFiles_Replace(("ABC", "abc"), ("XYZ", "xyz"));
+                }
 
-                //new DirectoryInfo($@"{baseDir}\C004 ExtractCsvColumns")
-                //    .ExtractCsvColumnsForMany_Loop(null, 0, ("a", new int[] { 0, 3 }, "t,x"), ("b", new int[] { 0, 4 }, "t,y"));
-            }
+                // B007 Zip
+                {
+                    //var input = new DirectoryInfo($@"{baseDir}\B007 Zip\input");
+                    //input
+                    //    .Zip(null)
+                    //    .Unzip(null);
+                }
 
-            // C005 CollectCsvColumns
-            {
-                //var input = new DirectoryInfo($@"{baseDir}\C005 CollectCsvColumns\input");
-                //input.CollectCsvColumns(null, 3);
-            }
+                // C004 ExtractCsvColumns
+                {
+                    //new FileInfo($@"{baseDir}\C004 ExtractCsvColumns\input.csv")
+                    //    .ExtractCsvColumns(null, new int[] { 0, 3 }, 0, "t,x");
 
-            // C006 Csvs2ExcelSheets
-            {
-                //var input = new DirectoryInfo($@"{baseDir}\C006 Csvs2ExcelSheets\input");
-                //input.Csvs2ExcelSheets(null);
-            }
+                    //new DirectoryInfo($@"{baseDir}\C004 ExtractCsvColumns")
+                    //    .ExtractCsvColumnsForMany_Loop(null, 0, ("a", new int[] { 0, 3 }, "t,x"), ("b", new int[] { 0, 4 }, "t,y"));
+                }
 
-            // C101 ReadCsv, F201 Transpose2DArray, C103 SaveCsv
-            {
-                //var innerBaseDir = $@"{baseDir}\C101 ReadCsv, SaveCsv";
-                //var input = new FileInfo($@"{innerBaseDir}\input.csv");
-                //var output1 = new FileInfo($@"{innerBaseDir}\output1.csv");
-                //var output2 = new FileInfo($@"{innerBaseDir}\output2.csv");
-                //var output3 = new FileInfo($@"{innerBaseDir}\output3.csv");
-                //var output4 = new FileInfo($@"{innerBaseDir}\output4.csv");
+                // C005 CollectCsvColumns
+                {
+                    //var input = new DirectoryInfo($@"{baseDir}\C005 CollectCsvColumns\input");
+                    //input.CollectCsvColumns(null, 3);
+                }
 
-                //input.ReadCsv_Rows().SaveCsv_Rows(output1);
-                //input.ReadCsv_Rows().SaveCsv_Columns(output2);
-                //input.ReadCsv_Columns().SaveCsv_Rows(output3);
-                //input.ReadCsv_Columns().SaveCsv_Columns(output4);
-            }
+                // C006 Csvs2ExcelSheets
+                {
+                    //var input = new DirectoryInfo($@"{baseDir}\C006 Csvs2ExcelSheets\input");
+                    //input.Csvs2ExcelSheets(null);
+                }
 
-            // D001 MergeAllLines
-            {
-                //var input = new DirectoryInfo($@"{baseDir}\D001 MergeAllLines\input");
-                //input.MergeAllLines(null);
-            }
+                // C101 ReadCsv, F201 Transpose2DArray, C103 SaveCsv
+                {
+                    //var innerBaseDir = $@"{baseDir}\C101 ReadCsv, SaveCsv";
+                    //var input = new FileInfo($@"{innerBaseDir}\input.csv");
+                    //var output1 = new FileInfo($@"{innerBaseDir}\output1.csv");
+                    //var output2 = new FileInfo($@"{innerBaseDir}\output2.csv");
+                    //var output3 = new FileInfo($@"{innerBaseDir}\output3.csv");
+                    //var output4 = new FileInfo($@"{innerBaseDir}\output4.csv");
 
-            // E001 CropImage
-            {
-                //var input = new FileInfo($@"{baseDir}\E001 CropImage\input.bmp");
-                //var crops = new OwesomeExtensions.Thickness[]
-                //{
-                //    new OwesomeExtensions.Thickness(0.13, 0.13, 0.13, 0.13),
-                //    new OwesomeExtensions.Thickness(0, 0, 0.3, 0.3),
-                //    new OwesomeExtensions.Thickness(0.3, 0, 0, 0.3),
-                //    new OwesomeExtensions.Thickness(0.3, 0.3, 0, 0),
-                //    new OwesomeExtensions.Thickness(0, 0.3, 0.3, 0),
-                //};
+                    //input.ReadCsv_Rows().SaveCsv_Rows(output1);
+                    //input.ReadCsv_Rows().SaveCsv_Columns(output2);
+                    //input.ReadCsv_Columns().SaveCsv_Rows(output3);
+                    //input.ReadCsv_Columns().SaveCsv_Columns(output4);
+                }
 
-                //input.CropImageForMany(null, crops);
-                ////input.CropImage(null, new OwesomeExtensions.Thickness(0.13, 0.13, 0.13, 0.13));
-            }
+                // D001 MergeAllLines
+                {
+                    //var input = new DirectoryInfo($@"{baseDir}\D001 MergeAllLines\input");
+                    //input.MergeAllLines(null);
+                }
 
-            // E002 ConvertImageColor
-            {
-                //var input = new FileInfo($@"{baseDir}\E002 ConvertImageColor\input.png");
+                // E001 CropImage
+                {
+                    //var input = new FileInfo($@"{baseDir}\E001 CropImage\input.bmp");
+                    //var crops = new OwesomeExtensions.Thickness[]
+                    //{
+                    //    new OwesomeExtensions.Thickness(0.13, 0.13, 0.13, 0.13),
+                    //    new OwesomeExtensions.Thickness(0, 0, 0.3, 0.3),
+                    //    new OwesomeExtensions.Thickness(0.3, 0, 0, 0.3),
+                    //    new OwesomeExtensions.Thickness(0.3, 0.3, 0, 0),
+                    //    new OwesomeExtensions.Thickness(0, 0.3, 0.3, 0),
+                    //};
 
-                //var targetInfos = new (string, Color)[]
-                //{
-                //    ("BBB", Color.Blue),
-                //    ("GGG", Color.Green),
-                //    ("CCC", Color.Cyan),
-                //};
-                //var targetColors = new Color[]
-                //{
-                //    Color.Pink,
-                //    Color.Red,
-                //    Color.Orange,
-                //    Color.Yellow,
-                //};
+                    //input.CropImageForMany(null, crops);
+                    ////input.CropImage(null, new OwesomeExtensions.Thickness(0.13, 0.13, 0.13, 0.13));
+                }
 
-                //input.ConvertImageColor(null, Color.White);
-                //input.ConvertImageColor_Loop(null, targetInfos);
-                //input.ConvertImageColor_Loop(null, targetColors);
-            }
+                // E002 ConvertImageColor
+                {
+                    //var input = new FileInfo($@"{baseDir}\E002 ConvertImageColor\input.png");
 
-            // E004 Images2PDF
-            {
-                //var input = new DirectoryInfo($@"{baseDir}\E004 Images2PDF");
-                //input.Images2PDF(null);
-            }
+                    //var targetInfos = new (string, Color)[]
+                    //{
+                    //    ("BBB", Color.Blue),
+                    //    ("GGG", Color.Green),
+                    //    ("CCC", Color.Cyan),
+                    //};
+                    //var targetColors = new Color[]
+                    //{
+                    //    Color.Pink,
+                    //    Color.Red,
+                    //    Color.Orange,
+                    //    Color.Yellow,
+                    //};
 
-            // E005 Images2Video
-            {
-                //var input = new DirectoryInfo($@"{baseDir}\E005 Images2Video");
-                //input.Images2Video(null, 3);
-            }
+                    //input.ConvertImageColor(null, Color.White);
+                    //input.ConvertImageColor_Loop(null, targetInfos);
+                    //input.ConvertImageColor_Loop(null, targetColors);
+                }
 
-            // E006 ResizeImage
-            {
-                //var input = new DirectoryInfo($@"{baseDir}\E006 ResizeImage");
-                //input.ResizeImage_Loop(null, new Size(100, 100));
-            }
+                // E004 Images2PDF
+                {
+                    //var input = new DirectoryInfo($@"{baseDir}\E004 Images2PDF");
+                    //input.Images2PDF(null);
+                }
 
-            // E007 DistortImage
-            {
-                //var input5 = new FileInfo($@"{baseDir}\E007 DistortImage\5.png");
-                //var output510 = new FileInfo($@"{baseDir}\E007 DistortImage\5-1-0.png");
-                //var output520 = new FileInfo($@"{baseDir}\E007 DistortImage\5-2-0.png");
-                //var output521 = new FileInfo($@"{baseDir}\E007 DistortImage\5-2-1.png");
-                //var output530 = new FileInfo($@"{baseDir}\E007 DistortImage\5-3-0.png");
-                //var output531 = new FileInfo($@"{baseDir}\E007 DistortImage\5-3-1.png");
-                //var output540 = new FileInfo($@"{baseDir}\E007 DistortImage\5-4-0.png");
-                //var output541 = new FileInfo($@"{baseDir}\E007 DistortImage\5-4-1.png");
-                //var output542 = new FileInfo($@"{baseDir}\E007 DistortImage\5-4-2.png");
+                // E005 Images2Video
+                {
+                    //var input = new DirectoryInfo($@"{baseDir}\E005 Images2Video");
+                    //input.Images2Video(null, 3);
+                }
 
-                ////★ 1 point → move
-                //input5.DistortImage(output510, Color.Orange,
-                //    (new Point(96, 80), new Point(0, 0)));
+                // E006 ResizeImage
+                {
+                    //var input = new DirectoryInfo($@"{baseDir}\E006 ResizeImage");
+                    //input.ResizeImage_Loop(null, new Size(100, 100));
+                }
 
-                //// ★ 2 points → move, resize, rotate
-                //input5.DistortImage(output520, Color.Orange,
-                //    (new Point(96, 80), new Point(0, 0)),
-                //    (new Point(373, 120), new Point(400, 0)));
+                // E007 DistortImage
+                {
+                    //var input5 = new FileInfo($@"{baseDir}\E007 DistortImage\5.png");
+                    //var output510 = new FileInfo($@"{baseDir}\E007 DistortImage\5-1-0.png");
+                    //var output520 = new FileInfo($@"{baseDir}\E007 DistortImage\5-2-0.png");
+                    //var output521 = new FileInfo($@"{baseDir}\E007 DistortImage\5-2-1.png");
+                    //var output530 = new FileInfo($@"{baseDir}\E007 DistortImage\5-3-0.png");
+                    //var output531 = new FileInfo($@"{baseDir}\E007 DistortImage\5-3-1.png");
+                    //var output540 = new FileInfo($@"{baseDir}\E007 DistortImage\5-4-0.png");
+                    //var output541 = new FileInfo($@"{baseDir}\E007 DistortImage\5-4-1.png");
+                    //var output542 = new FileInfo($@"{baseDir}\E007 DistortImage\5-4-2.png");
 
-                //input5.DistortImage(output521, Color.Orange,
-                //    (new Point(96, 80), new Point(0, 0)),
-                //    (new Point(116, 138), new Point(0, 200)));
+                    ////★ 1 point → move
+                    //input5.DistortImage(output510, Color.Orange,
+                    //    (new Point(96, 80), new Point(0, 0)));
 
-                //// ★ 3 points →  move, resize, rotate, shear
-                //input5.DistortImage(output530, Color.Orange,
-                //    (new Point(96, 80), new Point(0, 0)),
-                //    (new Point(373, 120), new Point(400, 0)),
-                //    (new Point(116, 138), new Point(0, 200)));
+                    //// ★ 2 points → move, resize, rotate
+                    //input5.DistortImage(output520, Color.Orange,
+                    //    (new Point(96, 80), new Point(0, 0)),
+                    //    (new Point(373, 120), new Point(400, 0)));
 
-                //input5.DistortImage(output531, Color.Orange,
-                //    (new Point(96, 80), new Point(50, 50)),
-                //    (new Point(373, 120), new Point(350, 50)),
-                //    (new Point(116, 138), new Point(50, 150)));
+                    //input5.DistortImage(output521, Color.Orange,
+                    //    (new Point(96, 80), new Point(0, 0)),
+                    //    (new Point(116, 138), new Point(0, 200)));
 
-                //// ★ 4 points →  move, resize, rotate, shear, perspective
-                //input5.DistortImage(output540, Color.Orange,
-                //  (new Point(96, 80), new Point(50, 50)),
-                //  (new Point(373, 120), new Point(350, 50)),
-                //  (new Point(116, 138), new Point(50, 150)),
-                //  (new Point(394, 178), new Point(350, 150)));
+                    //// ★ 3 points →  move, resize, rotate, shear
+                    //input5.DistortImage(output530, Color.Orange,
+                    //    (new Point(96, 80), new Point(0, 0)),
+                    //    (new Point(373, 120), new Point(400, 0)),
+                    //    (new Point(116, 138), new Point(0, 200)));
 
-                //input5.DistortImage(output541, Color.Orange,
-                //   (new Point(96, 80), new Point(50, 50)),
-                //   (new Point(373, 120), new Point(350, 50)),
-                //   (new Point(116, 138), new Point(50, 150)),
-                //   (new Point(394, 178), new Point(400, 200)));
+                    //input5.DistortImage(output531, Color.Orange,
+                    //    (new Point(96, 80), new Point(50, 50)),
+                    //    (new Point(373, 120), new Point(350, 50)),
+                    //    (new Point(116, 138), new Point(50, 150)));
 
-            }
+                    //// ★ 4 points →  move, resize, rotate, shear, perspective
+                    //input5.DistortImage(output540, Color.Orange,
+                    //  (new Point(96, 80), new Point(50, 50)),
+                    //  (new Point(373, 120), new Point(350, 50)),
+                    //  (new Point(116, 138), new Point(50, 150)),
+                    //  (new Point(394, 178), new Point(350, 150)));
 
-            // E008 AddTextToImage
-            {
-                //var input = new DirectoryInfo($@"{baseDir}\E008 AddTextToImage");
-                //input.AddTextToImageProportionally_Loop(null, "%FN", new PointF(0.9f, 0.8f),
-                //    fontSizeRatio: 0.1, alignRight: true);
-            }
+                    //input5.DistortImage(output541, Color.Orange,
+                    //   (new Point(96, 80), new Point(50, 50)),
+                    //   (new Point(373, 120), new Point(350, 50)),
+                    //   (new Point(116, 138), new Point(50, 150)),
+                    //   (new Point(394, 178), new Point(400, 200)));
 
-            // E102 SaveScreenShot
-            {
-                //var output = new DirectoryInfo($@"{baseDir}\E102 SaveScreenShot");
-                //OwesomeExtensions.SaveScreenShot(output, new Point(0, 0), new Point(1000, 1000));
-            }
+                }
 
-            // F003 Encrypt, Decrypt
-            {
-                //var input = new FileInfo($@"{baseDir}\F003 Crypt\input.txt");
-                //input
-                //    .Encrypt(null, "aiueo")
-                //    .Decrypt(null, "aiueo")
-                //    ;
-            }
+                // E008 AddTextToImage
+                {
+                    //var input = new DirectoryInfo($@"{baseDir}\E008 AddTextToImage");
+                    //input.AddTextToImageProportionally_Loop(null, "%FN", new PointF(0.9f, 0.8f),
+                    //    fontSizeRatio: 0.1, alignRight: true);
+                }
 
-            // F202 To2DArray, ToJaggedArray
-            {
-                //var inputData = new int[][]
-                //{
-                //    new int[]{1,2,3,4,5,6,7},
-                //    new int[]{1,2},
-                //    new int[]{1,2,3},
-                //    new int[]{1,2,3,4,5},
-                //};
-                //Console.WriteLine("inputData:");
-                //foreach (var line in inputData)
-                //    Console.WriteLine(string.Join(", ", line.Select(x => $"{x,3}")));
+                // E102 SaveScreenShot
+                {
+                    //var output = new DirectoryInfo($@"{baseDir}\E102 SaveScreenShot");
+                    //OwesomeExtensions.SaveScreenShot(output, new Point(0, 0), new Point(1000, 1000));
+                }
 
-                //var outputData1 = inputData.ConvertTo2DArray(999);
-                //Console.WriteLine("outputData1:");
-                //for (int i = 0; i < outputData1.GetLength(0); i++)
-                //{
-                //    for (int j = 0; j < outputData1.GetLength(1); j++)
-                //        Console.Write($"{outputData1[i, j],3}, ");
-                //    Console.WriteLine();
-                //}
+                // F003 Encrypt, Decrypt
+                {
+                    //var input = new FileInfo($@"{baseDir}\F003 Crypt\input.txt");
+                    //input
+                    //    .Encrypt(null, "aiueo")
+                    //    .Decrypt(null, "aiueo")
+                    //    ;
+                }
 
-                //var outputData2 = outputData1.ConvertToJaggedArray();
-                //Console.WriteLine("outputData2:");
-                //foreach (var line in outputData2)
-                //    Console.WriteLine(string.Join(", ", line.Select(x => $"{x,3}")));
-            }
+                // F202 To2DArray, ToJaggedArray
+                {
+                    //var inputData = new int[][]
+                    //{
+                    //    new int[]{1,2,3,4,5,6,7},
+                    //    new int[]{1,2},
+                    //    new int[]{1,2,3},
+                    //    new int[]{1,2,3,4,5},
+                    //};
+                    //Console.WriteLine("inputData:");
+                    //foreach (var line in inputData)
+                    //    Console.WriteLine(string.Join(", ", line.Select(x => $"{x,3}")));
 
-            // G002 PDF2Images
-            {
-                //var input = new FileInfo($@"{baseDir}\G002 PDF2Images\input.pdf");
-                //input.PDF2Images(null);
-            }
+                    //var outputData1 = inputData.ConvertTo2DArray(999);
+                    //Console.WriteLine("outputData1:");
+                    //for (int i = 0; i < outputData1.GetLength(0); i++)
+                    //{
+                    //    for (int j = 0; j < outputData1.GetLength(1); j++)
+                    //        Console.Write($"{outputData1[i, j],3}, ");
+                    //    Console.WriteLine();
+                    //}
 
-            // G101 PDFPageCount
-            {
-                //var input = new DirectoryInfo($@"{baseDir}\G101 PDFPageCount\input");
-                //input.PDFPageCount();
-            }
+                    //var outputData2 = outputData1.ConvertToJaggedArray();
+                    //Console.WriteLine("outputData2:");
+                    //foreach (var line in outputData2)
+                    //    Console.WriteLine(string.Join(", ", line.Select(x => $"{x,3}")));
+                }
 
-            // W201 ConsoleExtension
-            {
-                //var timer = new System.Timers.Timer(500);
+                // G002 PDF2Images
+                {
+                    //var input = new FileInfo($@"{baseDir}\G002 PDF2Images\input.pdf");
+                    //input.PDF2Images(null);
+                }
 
-                //var counter = 0;
-                //var countUntil = 10;
-                //timer.Elapsed += delegate
-                //{
-                //    ConsoleExtension.ClearCurrentConsoleLine();
-                //    Console.Write(++counter);
-                //    if (counter >= countUntil)
-                //        timer.Stop();
-                //};
-
-                //timer.Start();
-                //while (timer.Enabled) { }
-                //Console.WriteLine();
-            }
-
-            // W202 IODeviceExtension
-            {
-                //// ★ Move Mouse Cursor 
-                //IODeviceExtension.MouseCursorMoveTo(4600, 700);
-
-                //// ★ Mouse Left Click
-                //IODeviceExtension.MouseClick();
-
-                //// ★ Mouse Wheel Click
-                //IODeviceExtension.MouseClick(IODeviceExtension.IODeviceButton.MouseMiddle);
-
-                //// ★ Wheel Scroll
-                //IODeviceExtension.MouseWheelScroll(true);
-
-                //// ★ Keyboard Input
-                //IODeviceExtension.SendKeys("abc ABC"); // "abc ABC"
-                //IODeviceExtension.SendKey(65); // "a"
-                //IODeviceExtension.SendKey(ConsoleKey.V, withCtrl: true); // Ctrl+V
-                //IODeviceExtension.SendKey(ConsoleKey.V, withCtrl: true, withShift:true); // Ctrl+Shift+V
-                //IODeviceExtension.SendKey(ConsoleKey.E, withAlt: true); // Alt+E
-                //IODeviceExtension.SendKey(ConsoleKey.Spacebar, withShift: true, withAlt: true); // Alt Shift Space
-
-                //// ★ Get Mouse Cursor Position 
-                //Console.WriteLine($"Move mouse cursor and press enter to decide");
-                //Console.CursorVisible = false;
-                //while (!Console.KeyAvailable)
-                //{
-                //    var p = IODeviceExtension.GetMouseCursorPosition();
-                //    ConsoleExtension.ClearCurrentConsoleLine();
-                //    Console.Write(p);
-                //    Thread.Sleep(10);
-                //}
-                //Console.CursorVisible = true;
-                //Console.ReadLine();
+                // G101 PDFPageCount
+                {
+                    //var input = new DirectoryInfo($@"{baseDir}\G101 PDFPageCount\input");
+                    //input.PDFPageCount();
+                }
 
             }
 
+            // C - StructuralEngineering
+            {
+                var baseDir = @"..\..\..\# TestModel\A - ChainableExtensions\C - StructuralEngineering";
+
+            }
         }
 
         // B - UsefulClasses
@@ -391,6 +344,61 @@ public class Test
 
             }
 
+            // B004 ConsoleExtension
+            {
+                //var timer = new System.Timers.Timer(500);
+
+                //var counter = 0;
+                //var countUntil = 10;
+                //timer.Elapsed += delegate
+                //{
+                //    ConsoleExtension.ClearCurrentConsoleLine();
+                //    Console.Write(++counter);
+                //    if (counter >= countUntil)
+                //        timer.Stop();
+                //};
+
+                //timer.Start();
+                //while (timer.Enabled) { }
+                //Console.WriteLine();
+            }
+
+            // B005 IODeviceExtension
+            {
+                //// ★ Move Mouse Cursor 
+                //IODeviceExtension.MouseCursorMoveTo(4600, 700);
+
+                //// ★ Mouse Left Click
+                //IODeviceExtension.MouseClick();
+
+                //// ★ Mouse Wheel Click
+                //IODeviceExtension.MouseClick(IODeviceExtension.IODeviceButton.MouseMiddle);
+
+                //// ★ Wheel Scroll
+                //IODeviceExtension.MouseWheelScroll(true);
+
+                //// ★ Keyboard Input
+                //IODeviceExtension.SendKeys("abc ABC"); // "abc ABC"
+                //IODeviceExtension.SendKey(65); // "a"
+                //IODeviceExtension.SendKey(ConsoleKey.V, withCtrl: true); // Ctrl+V
+                //IODeviceExtension.SendKey(ConsoleKey.V, withCtrl: true, withShift:true); // Ctrl+Shift+V
+                //IODeviceExtension.SendKey(ConsoleKey.E, withAlt: true); // Alt+E
+                //IODeviceExtension.SendKey(ConsoleKey.Spacebar, withShift: true, withAlt: true); // Alt Shift Space
+
+                //// ★ Get Mouse Cursor Position 
+                //Console.WriteLine($"Move mouse cursor and press enter to decide");
+                //Console.CursorVisible = false;
+                //while (!Console.KeyAvailable)
+                //{
+                //    var p = IODeviceExtension.GetMouseCursorPosition();
+                //    ConsoleExtension.ClearCurrentConsoleLine();
+                //    Console.Write(p);
+                //    Thread.Sleep(10);
+                //}
+                //Console.CursorVisible = true;
+                //Console.ReadLine();
+
+            }
         }
 
         // C - OwesomeModels

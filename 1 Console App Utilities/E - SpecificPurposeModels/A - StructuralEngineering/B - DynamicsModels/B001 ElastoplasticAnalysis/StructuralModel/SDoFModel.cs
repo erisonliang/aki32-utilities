@@ -1,8 +1,8 @@
 ﻿using Aki32_Utilities.StructuralEngineering.DynamicsModels;
 using Aki32_Utilities.OwesomeModels;
-using Aki32_Utilities.ChainableExtensions.General;
+using Aki32_Utilities.General.ChainableExtensions;
 
-namespace Aki32_Utilities.StructuralEngineering.DynamicsModels;
+namespace Aki32_Utilities.StructuralEngineering;
 public class SDoFModel
 {
 

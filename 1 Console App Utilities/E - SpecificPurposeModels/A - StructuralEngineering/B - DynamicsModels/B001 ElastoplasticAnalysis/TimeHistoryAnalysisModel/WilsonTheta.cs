@@ -1,7 +1,7 @@
 ﻿using Aki32_Utilities.StructuralEngineering.DynamicsModels;
 using Aki32_Utilities.OwesomeModels;
 
-namespace Aki32_Utilities.StructuralEngineering.DynamicsModels;
+namespace Aki32_Utilities.StructuralEngineering;
 public class WilsonTheta : ITimeHistoryAnalysisModel
 {
 

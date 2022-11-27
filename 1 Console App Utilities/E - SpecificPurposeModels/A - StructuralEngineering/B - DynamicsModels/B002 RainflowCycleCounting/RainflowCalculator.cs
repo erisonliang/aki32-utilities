@@ -1,6 +1,6 @@
 ﻿using Aki32_Utilities.OwesomeModels;
 
-namespace Aki32_Utilities.StructuralEngineering.DynamicsModels;
+namespace Aki32_Utilities.StructuralEngineering;
 public class RainflowCalculator
 {
 

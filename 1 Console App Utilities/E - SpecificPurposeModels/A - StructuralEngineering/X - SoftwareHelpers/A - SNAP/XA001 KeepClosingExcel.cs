@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Aki32_Utilities.StructuralEngineering.SoftwareHelpers;
+namespace Aki32_Utilities.StructuralEngineering;
 public class KeepClosingExcel
 {
     private const int WAIT_FOR_EXIT_TIME = 5000;

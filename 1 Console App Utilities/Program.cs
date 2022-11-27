@@ -1,4 +1,5 @@
-﻿using Aki32_Utilities.ChainableExtensions.General;
+﻿using Aki32_Utilities.General.ChainableExtensions;
+using Aki32_Utilities.UsageExamples;
 
 namespace Aki32_Utilities;
 public partial class Program
@@ -10,7 +11,7 @@ public partial class Program
         Console.WriteLine();
 
 
-        Test.All();
+        TestHelper.All();
 
 
         Console.WriteLine();

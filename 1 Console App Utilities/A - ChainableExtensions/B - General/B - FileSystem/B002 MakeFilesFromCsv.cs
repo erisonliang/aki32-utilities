@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace Aki32_Utilities.ChainableExtensions.General;
+namespace Aki32_Utilities.General.ChainableExtensions;
 public static partial class ChainableExtensions
 {
 

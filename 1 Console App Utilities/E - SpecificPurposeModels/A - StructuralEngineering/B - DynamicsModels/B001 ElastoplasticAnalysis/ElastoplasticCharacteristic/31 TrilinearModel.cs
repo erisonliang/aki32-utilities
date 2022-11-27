@@ -1,6 +1,6 @@
 ﻿
 
-namespace Aki32_Utilities.StructuralEngineering.DynamicsModels;
+namespace Aki32_Utilities.StructuralEngineering;
 
 /// <summary>
 /// Normal Trilinear Model with Kinematic Hardening (移動硬化)
