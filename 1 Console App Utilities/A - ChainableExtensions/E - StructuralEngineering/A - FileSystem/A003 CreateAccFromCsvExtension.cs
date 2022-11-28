@@ -10,7 +10,7 @@ public static partial class ChainableExtensions
     public static FileInfo CreateAccFromCsv_For_DynamicPro(this FileInfo inputFile, FileInfo? outputFile)
     {
         // preprocess
-        UtilPreprocessors.PreprocessOutFile(ref outputFile, inputFile.Directory!, inputFile.Name);
+        UtilPreprocessors.PreprocessOutFile(ref outputFile, inputFile.Directory!, inputFile.Name.Replace(".csv", ".acc"));
 
 
         // main

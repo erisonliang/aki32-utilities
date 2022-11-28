@@ -9,7 +9,7 @@ public static class DynamicProHelper
 {
     // ★★★★★★★★★★★★★★★ main
 
-    public static void CreateAccFromCsv(FileInfo inputFile, FileInfo outputFile)
+    public static void CreateAccFromCsv(FileInfo inputFile, FileInfo? outputFile)
     {
         // TODO: ちゃんとしたフォーマットにする！
 
@@ -17,10 +17,7 @@ public static class DynamicProHelper
         const int STEP = 8;
         try
         {
-            if (!inputFilePath.EndsWith(".csv"))
-                throw new Exception("受け付けられるのはCSVファイルのみです。");
-            //var outputFilePath = inputFilePath.Replace(".csv", ".acc");
-            var outputFilePath = outputFile.FullName;
+            var outputFilePath = outputFile?.FullName ?? inputFilePath.Replace(".csv", ".acc");
 
             var input = File.ReadLines(inputFilePath, Encoding.UTF8).ToArray();
 

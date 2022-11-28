@@ -357,15 +357,14 @@ public class TestHelper
 
                 // A003 CreateAccFromCsv
                 {
-                    //var input = new FileInfo(Path.Combine(baseDir, "X002 DynamicProHelper", @"kobe L1.csv"));
-                    //var output = new FileInfo(Path.Combine(baseDir, "X002 DynamicProHelper", @"kobe L1.acc"));
-                    //DynamicProHelper.CreateAccFromCsv(input, output);
+                    //new FileInfo(Path.Combine(baseDir, "A003 CreateAccFromCsv", @"kobe L1.csv"))
+                    //    .CreateAccFromCsv_For_DynamicPro(null);
 
                 }
 
                 // V001 KeepClosingExcel
                 {
-                    //SNAPHelper.KeepClosingExcel(5000);
+                    //StructuralEngineering.ChainableExtensions.KeepClosingExcel_For_SNAP(5000);
 
                 }
 
