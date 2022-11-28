@@ -57,7 +57,6 @@ public static partial class TimeHistoryExensions
     }
 
 
-
     // ★★★★★★★★★★★★★★★
 
 }

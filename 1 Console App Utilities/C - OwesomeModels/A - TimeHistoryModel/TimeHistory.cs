@@ -54,6 +54,22 @@ public class TimeHistory
             }
         }
     }
+    /// <summary>
+    /// indexer
+    /// </summary>
+    /// <param name="key"></param>
+    /// <returns></returns>
+    public double[] this[int index]
+    {
+        get
+        {
+            return this[Columns[index]];
+        }
+        set
+        {
+            this[Columns[index]] = value;
+        }
+    }
 
 
     // ★★★★★★★★★★★★★★★ inits
