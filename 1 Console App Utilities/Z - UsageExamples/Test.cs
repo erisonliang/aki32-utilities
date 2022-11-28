@@ -301,18 +301,33 @@ public class TestHelper
 
             // D - OwesomeModels
             {
-                var baseDir = @"..\..\..\# TestModel\A - ChainableExtensions\D - OwesomeModels";
-
                 // A - TimeHistoryModel
                 {
+                    var baseDir = @"..\..\..\# TestModel\A - ChainableExtensions\D - OwesomeModels\A - TimeHistoryModel";
 
                     // B001 FFT
                     {
-                        //var input = new FileInfo($@"{baseDir2}\B001 FFT\input.csv");
-                        //TimeHistory
-                        //    .FromCsv(input, new string[] { "t", "x" })
+                        //new FileInfo($@"{baseDir}\B001 FFT\input.csv")
+                        //    .GetTimeHistoryFromFile(new string[] { "t", "x" })
                         //    .FFT("x").Result
                         //    .SaveToCsv();
+
+                    }
+
+                    // B002 DrawGraph
+                    {
+                        //new FileInfo($@"{baseDir}\B002 DrawGraph\input.csv")
+                        //  .DrawLineGraph("t", "v");
+
+
+
+                        //new FileInfo($@"{baseDir}\B002 DrawGraph\input.csv")
+                        //    .DrawLineGraph(0, 1)
+                        //    .DrawScatterGraph(0, 1);
+
+
+                        new FileInfo($@"{baseDir}\B002 DrawGraph\input_FFT.csv")
+                            .DrawLineGraph_ForAll();
 
                     }
 
