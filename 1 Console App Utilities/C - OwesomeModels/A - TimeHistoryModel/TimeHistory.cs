@@ -1,5 +1,5 @@
-﻿using System.Linq;
-using System.Text;
+﻿using System.Text;
+using System.Xml.Linq;
 
 using XPlot.Plotly;
 
@@ -151,57 +151,36 @@ public class TimeHistory
     // ★★★★★★★★★★★★★★★ output
 
     /// <summary>
-    /// Draw Scatter Graph
-    /// </summary>
-    /// <param name="verticalKey">Vertical Axis</param>
-    /// <param name="horizontalKey">Horizontal Axis</param>
-    public TimeHistory DrawScatterGraph(string verticalKey, string horizontalKey = "")
-    {
-        try
-        {
-            var vertical = this[verticalKey];
-
-            if (string.IsNullOrEmpty(horizontalKey))
-            {
-                Chart.Scatter(vertical).Show();
-            }
-            else
-            {
-                var horizontal = this[horizontalKey];
-                var points = Enumerable.Zip(horizontal, vertical).Select(x => new Tuple<double, double>(x.First, x.Second));
-                Chart.Scatter(points).Show();
-            }
-
-            Console.WriteLine("Graph has been drawn and opened in the default browser");
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Failed to draw graph: {ex.Message}");
-        }
-
-        return this;
-    }
-    /// <summary>
     /// Draw Line Graph
     /// </summary>
-    /// <param name="verticalKey">Vertical Axis</param>
-    /// <param name="horizontalKey">Horizontal Axis</param>
-    public TimeHistory DrawLineGraph(string verticalKey, string horizontalKey = "")
+    /// <param name="yName">Vertical Axis</param>
+    /// <param name="xName">Horizontal Axis</param>
+    public TimeHistory DrawGraph(string yName, string xName = "", ChartType type = ChartType.Line)
     {
         try
         {
-            var vertical = this[verticalKey];
+            var vertical = this[yName];
 
-            if (string.IsNullOrEmpty(horizontalKey))
+            var layout = new Layout.Layout
             {
-                Chart.Line(vertical).Show();
-            }
-            else
+                title = Name,
+                xaxis = new Xaxis { title = xName },
+                yaxis = new Yaxis { title = yName }
+            };
+
+            var horizontal =
+                string.IsNullOrEmpty(xName) ?
+                Enumerable.Range(0, vertical.Length).Select(i => (double)i) :
+                this[xName];
+            var points = Enumerable.Zip(horizontal, vertical).Select(x => new Tuple<double, double>(x.First, x.Second));
+            PlotlyChart chart = type switch
             {
-                var horizontal = this[horizontalKey];
-                var points = Enumerable.Zip(horizontal, vertical).Select(x => new Tuple<double, double>(x.First, x.Second));
-                Chart.Line(points).Show();
-            }
+                ChartType.Scatter => Chart.Scatter(points),
+                ChartType.Line => Chart.Line(points),
+                _ => throw new NotImplementedException(),
+            };
+            chart.WithLayout(layout);
+            chart.Show();
 
             Console.WriteLine("Graph has been drawn and opened in the default browser");
         }
@@ -525,20 +504,20 @@ public class TimeHistory
     public TimeHistory DeplicateColumn(string baseColumnName, string newColumnName)
     {
         this[newColumnName] = this[baseColumnName];
-        
+
         return this;
     }
     public TimeHistory DropColumn(params string[] droppingColumnNames)
     {
         foreach (var droppingColumnName in droppingColumnNames)
             ContentsTable.Remove(droppingColumnName);
-     
+
         return this;
     }
     public TimeHistory DropAllColumns()
     {
         ContentsTable.Clear();
-    
+
         return this;
     }
 
@@ -600,6 +579,15 @@ public class TimeHistory
             }
             return __timeStep;
         }
+    }
+
+
+    // ★★★★★★★★★★★★★★★ enum
+
+    public enum ChartType
+    {
+        Scatter,
+        Line,
     }
 
 

@@ -11,25 +11,11 @@ public static partial class TimeHistoryExensions
     /// </summary>
     /// <param name="inputFile"></param>
     /// <returns></returns>
-    public static FileInfo DrawLineGraph(this FileInfo inputFile, int hAxisIndex, int vAxisIndex)
+    public static FileInfo DrawGraph(this FileInfo inputFile, int hAxisIndex, int vAxisIndex, TimeHistory.ChartType type = TimeHistory.ChartType.Line)
     {
         var th = inputFile.GetTimeHistoryFromFile();
 
-        th.DrawLineGraph(th.Columns[hAxisIndex], th.Columns[vAxisIndex]);
-
-        return inputFile;
-    }
-
-    /// <summary>
-    /// Create TimeHistory instance and return
-    /// </summary>
-    /// <param name="inputFile"></param>
-    /// <returns></returns>
-    public static FileInfo DrawScatterGraph(this FileInfo inputFile, int hAxisIndex, int vAxisIndex)
-    {
-        var th = inputFile.GetTimeHistoryFromFile();
-
-        th.DrawScatterGraph(th.Columns[hAxisIndex], th.Columns[vAxisIndex]);
+        th.DrawGraph(th.Columns[vAxisIndex], th.Columns[hAxisIndex], type);
 
         return inputFile;
     }
@@ -42,25 +28,11 @@ public static partial class TimeHistoryExensions
     /// </summary>
     /// <param name="inputFile"></param>
     /// <returns></returns>
-    public static FileInfo DrawLineGraph(this FileInfo inputFile, string hAxisName, string vAxisName)
+    public static FileInfo DrawGraph(this FileInfo inputFile, string hAxisName, string vAxisName, TimeHistory.ChartType type = TimeHistory.ChartType.Line)
     {
         inputFile
             .GetTimeHistoryFromFile()
-            .DrawLineGraph(vAxisName, hAxisName);
-
-        return inputFile;
-    }
-
-    /// <summary>
-    /// Create TimeHistory instance and return
-    /// </summary>
-    /// <param name="inputFile"></param>
-    /// <returns></returns>
-    public static FileInfo DrawScatterGraph(this FileInfo inputFile, string hAxisName, string vAxisName)
-    {
-        inputFile
-            .GetTimeHistoryFromFile()
-            .DrawScatterGraph(vAxisName, hAxisName);
+            .DrawGraph(vAxisName, hAxisName, type);
 
         return inputFile;
     }
@@ -73,13 +45,13 @@ public static partial class TimeHistoryExensions
     /// </summary>
     /// <param name="inputFile"></param>
     /// <returns></returns>
-    public static FileInfo DrawLineGraph_ForAll(this FileInfo inputFile)
+    public static FileInfo DrawGraph_ForAll(this FileInfo inputFile, TimeHistory.ChartType type = TimeHistory.ChartType.Line)
     {
         var th = inputFile.GetTimeHistoryFromFile();
 
         for (int i = 0; i < th.Columns.Length; i++)
             for (int j = i + 1; j < th.Columns.Length; j++)
-                th.DrawLineGraph(th.Columns[j], th.Columns[i]);
+                th.DrawGraph(th.Columns[j], th.Columns[i], type);
 
         return inputFile;
     }

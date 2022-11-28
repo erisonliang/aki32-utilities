@@ -316,18 +316,24 @@ public class TestHelper
 
                     // B002 DrawGraph
                     {
-                        //new FileInfo($@"{baseDir}\B002 DrawGraph\input.csv")
-                        //  .DrawLineGraph("t", "v");
+                        new FileInfo($@"{baseDir}\B002 DrawGraph\input.csv")
+                          .DrawGraph("t", "v", TimeHistory.ChartType.Scatter);
 
 
-
-                        //new FileInfo($@"{baseDir}\B002 DrawGraph\input.csv")
-                        //    .DrawLineGraph(0, 1)
-                        //    .DrawScatterGraph(0, 1);
+                        new FileInfo($@"{baseDir}\B002 DrawGraph\input.csv")
+                            .DrawGraph(0, 1, TimeHistory.ChartType.Scatter);
 
 
                         new FileInfo($@"{baseDir}\B002 DrawGraph\input_FFT.csv")
-                            .DrawLineGraph_ForAll();
+                            .DrawGraph_ForAll(TimeHistory.ChartType.Scatter);
+
+
+
+                        //new FileInfo($@"{baseDir}\B002 DrawGraph\input_FFT.csv")
+                        //    .DrawLineGraph("T", "Amp")
+                        //    .DrawLineGraph("Freq", "Amp")
+                        //    ;
+
 
                     }
 
