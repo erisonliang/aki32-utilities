@@ -8,10 +8,14 @@
 # output from text models
 output_*
 output/
+archive/
 
 # manually set to provate
 @Private*
 
+# set to C#
+* linguist-documentation
+*.cs linguist-documentation=false
 
 
 # User-specific files
