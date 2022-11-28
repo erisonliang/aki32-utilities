@@ -1,4 +1,5 @@
-﻿using Aki32_Utilities.Extensions;
+﻿using Aki32_Utilities.UsageExamples;
+using Aki32_Utilities.UsefulClasses;
 
 namespace Aki32_Utilities;
 public partial class Program
@@ -10,7 +11,7 @@ public partial class Program
         Console.WriteLine();
 
 
-        Test.All();
+        TestHelper.All();
 
 
         Console.WriteLine();

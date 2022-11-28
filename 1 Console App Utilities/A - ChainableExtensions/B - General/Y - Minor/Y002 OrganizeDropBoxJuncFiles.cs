@@ -1,0 +1,53 @@
+﻿using System.Text;
+
+namespace Aki32_Utilities.General;
+public static partial class ChainableExtensions
+{
+    // TODO: test
+
+    /// <summary>
+    /// 選んだフォルダ内のデータのPhotoとVideoの接頭辞を削除
+    /// </summary>
+    /// <param name="inputDir"></param>
+    public static DirectoryInfo OrganizeDropBoxJuncFiles(this DirectoryInfo inputDir)
+    {
+        // preprocess
+        UtilPreprocessors.PreprocessBasic(true);
+
+
+        // main
+        foreach (var fi in inputDir.GetFiles("*", SearchOption.AllDirectories))
+        {
+            string oldName = fi.Name;
+            string newName = fi.Name;
+
+            newName = newName
+                .Replace("スクリーンショット ", "")
+                .Replace("Photo ", "")
+                .Replace("Video ", "");
+
+            if (oldName != newName)
+            {
+                var oldFullName = fi.FullName;
+                var newFullName = oldFullName.Replace(oldName, newName);
+
+                try
+                {
+                    fi.MoveTo(newFullName);
+                    Console.WriteLine($"変更");
+                    Console.WriteLine($"　前：{oldFullName}");
+                    Console.WriteLine($"　後：{newFullName}");
+                }
+                catch (Exception)
+                {
+                    Console.WriteLine($"エラー：{newFullName}");
+                }
+            }
+        }
+
+
+        // post process
+        return inputDir;
+    }
+
+}
