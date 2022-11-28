@@ -24,8 +24,8 @@ public static partial class ChainableExtensions
         // preprocess
         UtilPreprocessors.PreprocessOutDir(ref outputDir, true, overrideTargetOutputDirCandidate ?? inputDir, methodName: methodName);
         searchRegexen ??= new string[] { ".*" };
-        var initialConsoleOutput = UtilConfig.ConsoleOutput;
-        UtilConfig.ConsoleOutput = false;
+        var init_ConsoleOutput_Preprocess = UtilConfig.ConsoleOutput_Preprocess;
+        UtilConfig.ConsoleOutput_Preprocess = false;
 
 
         // main
@@ -71,7 +71,7 @@ public static partial class ChainableExtensions
 
 
         // post process
-        UtilConfig.ConsoleOutput = initialConsoleOutput;
+        UtilConfig.ConsoleOutput_Preprocess = init_ConsoleOutput_Preprocess;
 
 
         return outputDir!;

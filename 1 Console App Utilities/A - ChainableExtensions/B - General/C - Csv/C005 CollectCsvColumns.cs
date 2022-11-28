@@ -78,12 +78,12 @@ public static partial class ChainableExtensions
                     var header = Path.GetFileNameWithoutExtension(csvPath);
                     AddColumnToResultColumnList(csvs[i], targetColumn, i + UseInitColumnThen1, header);
 
-                    if (UtilConfig.ConsoleOutput)
+                    if (UtilConfig.ConsoleOutput_Contents)
                         Console.WriteLine($"O: {csvPath}");
                 }
                 catch (Exception ex)
                 {
-                    if (UtilConfig.ConsoleOutput)
+                    if (UtilConfig.ConsoleOutput_Contents)
                         Console.WriteLine($"X: {csvPath}, {ex.Message}");
                 }
             }
@@ -121,12 +121,12 @@ public static partial class ChainableExtensions
                     CopyCsvToExcelColumn(csv, targetColumn, lastColumn);
                     worksheet.Cell(1, lastColumn + 1).Value = Path.GetFileNameWithoutExtension(csvPath);
 
-                    if (UtilConfig.ConsoleOutput)
+                    if (UtilConfig.ConsoleOutput_Contents)
                         Console.WriteLine($"O: {csvPath}");
                 }
                 catch (Exception ex)
                 {
-                    if (UtilConfig.ConsoleOutput)
+                    if (UtilConfig.ConsoleOutput_Contents)
                         Console.WriteLine($"X: {csvPath}, {ex.Message}");
                 }
             }

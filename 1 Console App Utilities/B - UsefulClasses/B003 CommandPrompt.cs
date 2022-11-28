@@ -70,7 +70,7 @@ public class CommandPrompt : IDisposable
             ResponseList.Add(data);
         };
 
-        if (UtilConfig.ConsoleOutput)
+        if (UtilConfig.ConsoleOutput_Contents)
             ConsoleExtension.WriteLineWithColor("\r\n★ Command Prompt Started\r\n", foreground: ConsoleColor.Magenta);
 
         CommandPromptProcess.Start();
@@ -94,7 +94,7 @@ public class CommandPrompt : IDisposable
         CommandPromptProcess.WaitForExit();
         CommandPromptProcess.Close();
 
-        if (UtilConfig.ConsoleOutput)
+        if (UtilConfig.ConsoleOutput_Contents)
             ConsoleExtension.WriteLineWithColor("\r\n★ Command Prompt Closed\r\n", foreground: ConsoleColor.Magenta);
 
         GC.SuppressFinalize(this);

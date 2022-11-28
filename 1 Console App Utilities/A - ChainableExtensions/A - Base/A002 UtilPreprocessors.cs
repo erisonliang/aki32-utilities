@@ -57,7 +57,7 @@ public static class UtilPreprocessors
         )
     {
         // ConsoleOut
-        if (UtilConfig.ConsoleOutput && consoleOut)
+        if (UtilConfig.ConsoleOutput_Preprocess && consoleOut)
             ConsoleExtension.WriteLineWithColor($"\r\n\r\n** {methodName} Method Called{(takesTimeFlag ? " (* This method is time-consuming. Please be patient...)" : "")}");
 
         Encoding.RegisterProvider(CodePagesEncodingProvider.Instance); // to handle Shift-JIS

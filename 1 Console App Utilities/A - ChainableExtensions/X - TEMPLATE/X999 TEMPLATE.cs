@@ -65,12 +65,12 @@ public static partial class ChainableExtensions
                 var outputFile = new FileInfo(Path.Combine(outputDir!.FullName, inputFile.Name));
                 inputFile.TEMPLATE(outputFile);
 
-                if (UtilConfig.ConsoleOutput)
+                if (UtilConfig.ConsoleOutput_Contents)
                     Console.WriteLine($"O: {inputFile.FullName}");
             }
             catch (Exception ex)
             {
-                if (UtilConfig.ConsoleOutput)
+                if (UtilConfig.ConsoleOutput_Contents)
                     Console.WriteLine($"X: {inputFile.FullName}, {ex.Message}");
             }
         }

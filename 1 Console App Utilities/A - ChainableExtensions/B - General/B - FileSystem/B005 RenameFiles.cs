@@ -84,12 +84,12 @@ public static partial class ChainableExtensions
 
                 inputFile.MoveTo(outputFilePath);
 
-                if (UtilConfig.ConsoleOutput)
+                if (UtilConfig.ConsoleOutput_Contents)
                     Console.WriteLine($"O: {inputFile.FullName}");
             }
             catch (Exception ex)
             {
-                if (UtilConfig.ConsoleOutput)
+                if (UtilConfig.ConsoleOutput_Contents)
                     Console.WriteLine($"X: {inputFile.FullName}, {ex.Message}");
             }
         }

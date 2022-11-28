@@ -50,12 +50,12 @@ public static partial class ChainableExtensions
                         worksheet.Cell(i + 1, j + 1).Value = line[j];
                 }
 
-                if (UtilConfig.ConsoleOutput)
+                if (UtilConfig.ConsoleOutput_Contents)
                     Console.WriteLine($"O: {csvPath}");
             }
             catch (Exception ex)
             {
-                if (UtilConfig.ConsoleOutput)
+                if (UtilConfig.ConsoleOutput_Contents)
                     Console.WriteLine($"X: {csvPath}, {ex.Message}");
             }
         }

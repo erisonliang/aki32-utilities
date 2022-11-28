@@ -35,7 +35,7 @@ public class ProgressManager
         StartTime = DateTime.Now;
         MaxStep = maxStep;
 
-        ConsoleOutput = consoleOutput == null ? UtilConfig.ConsoleOutput : consoleOutput.Value;
+        ConsoleOutput = consoleOutput == null ? UtilConfig.ConsoleOutput_Contents : consoleOutput.Value;
 
         if (!ConsoleOutput)
             return;
