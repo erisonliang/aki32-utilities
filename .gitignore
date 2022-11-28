@@ -4,6 +4,16 @@
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
 
+
+# output from text models
+output_*
+output/
+
+# manually set to provate
+@Private*
+
+
+
 # User-specific files
 *.rsuser
 *.suo
@@ -363,13 +373,3 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 /1 Console App Utilities/# TestModel/A - Extensions/B004 CopyTo/input/desktop.ini
-
-
-
-
-# output from text models
-output_*
-output/
-
-# manually set to provate
-@Private*
