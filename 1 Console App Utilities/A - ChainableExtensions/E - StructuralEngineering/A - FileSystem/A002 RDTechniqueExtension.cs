@@ -10,30 +10,29 @@ public static partial class ChainableExtensions
     /// <param name="inputFile"></param>
     /// <param name="outputFile">when null, automatically set to {inputFile.DirectoryName}/output_Rainflow/{inputFile.Name}</param>
     /// <returns></returns>
-    public static FileInfo CalcRandomDecrement(this FileInfo inputFile, FileInfo? outputFile)
+    public static FileInfo CalcRD(this FileInfo inputFile, FileInfo? outputFile, int resultStepLength, int maxOverlayCount = int.MaxValue, int skipingInitialPeakCount = 0)
     {
-        // TODO
-        throw new NotImplementedException();
+        // preprocess
+        UtilPreprocessors.PreprocessOutFile(ref outputFile, inputFile.Directory!, inputFile.Name);
 
 
+        // main
+        var rd = RDTechniqueCalculator.FromCsv(inputFile);
 
-        //// Define IO paths
-        //var input = new FileInfo(Path.Combine(basePath, "B003 RDTechnique", @"input.csv"));
+        // calc convolution
+        rd.Calc(resultStepLength, maxOverlayCount, skipingInitialPeakCount);
+        rd.ResultHistory.SaveToCsv(outputFile);
 
-        //// Read input csv
-        //var rd = RDTechniqueCalculator.FromCsv(input);
+        // calc attenuationConstant
+        var att = rd.CalcAttenuationConstant(4, true);
+        rd.ResultHistory["h"][0] = att;
 
-        //// Calc and show
-        //rd.Calc(200);
-        //rd.InputHistory.DrawLineGraph("v");
-        //rd.ResultHistory.DrawLineGraph("v");
-
-        //// Calc AttenuationConstant and show
-        //var att = rd.CalcAttenuationConstant(4, true);
-        //Console.WriteLine();
-        //Console.WriteLine($"result h = {att}");
+        // save
+        rd.ResultHistory.SaveToCsv(outputFile);
 
 
+        // post process
+        return outputFile!;
     }
 
 

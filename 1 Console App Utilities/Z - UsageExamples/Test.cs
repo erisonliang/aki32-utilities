@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 
 using Aki32_Utilities.General;
 using Aki32_Utilities.OwesomeModels;
+using Aki32_Utilities.OwesomeModels.ChainableExtensions;
 using Aki32_Utilities.StructuralEngineering;
 using Aki32_Utilities.StructuralEngineering;
 
@@ -328,35 +329,23 @@ public class TestHelper
                     //new FileInfo(Path.Combine(baseDir, "A001 RainflowCycleCounting", @"input3.csv"))
                     //    .Rainflow(null, 4, 1 / 3d, false);
 
-                    new DirectoryInfo(Path.Combine(baseDir, "A001 RainflowCycleCounting"))
-                        .Rainflow_Loop(null, 4, 1 / 3d, false);
+                    //new DirectoryInfo(Path.Combine(baseDir, "A001 RainflowCycleCounting"))
+                    //    .Rainflow_Loop(null, 4, 1 / 3d, false);
 
                 }
 
                 // A002 RDTechnique
                 {
-                    //// Define IO paths
-                    //var input = new FileInfo(Path.Combine(basePath, "B003 RDTechnique", @"input.csv"));
-
-                    //// Read input csv
-                    //var rd = RDTechniqueCalculator.FromCsv(input);
-
-                    //// Calc and show
-                    //rd.Calc(200);
-                    //rd.InputHistory.DrawLineGraph("v");
-                    //rd.ResultHistory.DrawLineGraph("v");
-
-                    //// Calc AttenuationConstant and show
-                    //var att = rd.CalcAttenuationConstant(4, true);
-                    //Console.WriteLine();
-                    //Console.WriteLine($"result h = {att}");
+                    //new FileInfo(Path.Combine(baseDir, "A002 RDTechnique", @"input.csv"))
+                    //    .CalcRD(null, 200)
+                    //    ;
 
                 }
 
                 // A003 CreateAccFromCsv
                 {
-                    //var input = new FileInfo(Path.Combine(basePath, "X002 DynamicProHelper", @"kobe L1.csv"));
-                    //var output = new FileInfo(Path.Combine(basePath, "X002 DynamicProHelper", @"kobe L1.acc"));
+                    //var input = new FileInfo(Path.Combine(baseDir, "X002 DynamicProHelper", @"kobe L1.csv"));
+                    //var output = new FileInfo(Path.Combine(baseDir, "X002 DynamicProHelper", @"kobe L1.acc"));
                     //DynamicProHelper.CreateAccFromCsv(input, output);
 
                 }
