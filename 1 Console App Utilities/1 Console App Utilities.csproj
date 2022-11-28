@@ -21,7 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Remove="E - SpecificPurposeModels\A - StructuralEngineering\X - SoftwareHelpers\A - SNAP\XA001 KeepClosingExcel.cs" />
+    <Compile Remove="E - SpecificPurposeModels\A - StructuralEngineering\X - SoftwareHelpers\XA001 KeepClosingExcel.cs" />
   </ItemGroup>
 
   <ItemGroup>

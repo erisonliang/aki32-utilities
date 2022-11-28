@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Aki32_Utilities.StructuralEngineering;
-public class CreateAccFromCsv
+public static class CreateAccFromCsv
 {
     // TODO: ちゃんとしたフォーマットにする！
 
