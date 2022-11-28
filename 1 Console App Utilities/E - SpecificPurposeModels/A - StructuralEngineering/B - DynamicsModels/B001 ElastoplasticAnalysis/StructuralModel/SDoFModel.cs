@@ -1,6 +1,6 @@
 ﻿using Aki32_Utilities.StructuralEngineering;
 using Aki32_Utilities.OwesomeModels;
-using Aki32_Utilities.General;
+using Aki32_Utilities.UsefulClasses;
 
 namespace Aki32_Utilities.StructuralEngineering;
 public class SDoFModel

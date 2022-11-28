@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 
 using Aki32_Utilities.General;
+using Aki32_Utilities.UsefulClasses;
 
 namespace Aki32_Utilities.StructuralEngineering;
 public static class SNAPHelper

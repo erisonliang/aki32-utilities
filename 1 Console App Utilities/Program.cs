@@ -1,5 +1,5 @@
-﻿using Aki32_Utilities.General;
-using Aki32_Utilities.UsageExamples;
+﻿using Aki32_Utilities.UsageExamples;
+using Aki32_Utilities.UsefulClasses;
 
 namespace Aki32_Utilities;
 public partial class Program
