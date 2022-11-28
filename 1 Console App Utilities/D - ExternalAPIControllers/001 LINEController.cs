@@ -3,10 +3,16 @@
 namespace Aki32_Utilities.ExternalAPIControllers;
 public class LINEController
 {
+
+    // ★★★★★★★★★★★★★★★ props
+
     /// <summary>
     /// Obtain from https://notify-bot.line.me/my/
     /// </summary>
     public string LineAccessToken { get; set; } = "";
+
+
+    // ★★★★★★★★★★★★★★★ init
 
     /// <summary>
     /// constructor
@@ -17,6 +23,9 @@ public class LINEController
         LineAccessToken = lineAccessToken;
         //ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
     }
+
+
+    // ★★★★★★★★★★★★★★★ methods
 
     /// <summary>
     /// send message to LINE
@@ -52,5 +61,8 @@ public class LINEController
         //    return ret;
         //}
     }
+
+
+    // ★★★★★★★★★★★★★★★ 
 
 }
