@@ -3,8 +3,6 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
-# output from text models
-output_*
 
 # User-specific files
 *.rsuser
@@ -368,4 +366,10 @@ FodyWeavers.xsd
 
 
 
-*非公開*/
+
+# output from text models
+output_*
+output/
+
+# manually set to provate
+@Private*
