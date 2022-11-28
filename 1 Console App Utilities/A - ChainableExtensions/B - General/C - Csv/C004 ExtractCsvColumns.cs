@@ -18,7 +18,7 @@ public static partial class ChainableExtensions
     public static FileInfo ExtractCsvColumns(this FileInfo inputFile, FileInfo? outputFile, int[] extractingColumns, int skipRowCount = 0, string? header = null)
     {
         // preprocess
-        UtilPreprocessors.PreprocessOutFile(ref outputFile, false, inputFile.Directory!, inputFile.Name);
+        UtilPreprocessors.PreprocessOutFile(ref outputFile, inputFile.Directory!, inputFile.Name);
 
 
         // main
@@ -61,7 +61,7 @@ public static partial class ChainableExtensions
     public static FileInfo ExtractCsvColumnsForMany(this FileInfo inputFile, FileInfo? outputFile, int skipRowCount = 0, params (string name, int[] extractingColumns, string? header)[] targets)
     {
         // preprocess
-        UtilPreprocessors.PreprocessOutFile(ref outputFile, false, inputFile.Directory!, inputFile.Name);
+        UtilPreprocessors.PreprocessOutFile(ref outputFile, inputFile.Directory!, inputFile.Name);
 
 
         // main

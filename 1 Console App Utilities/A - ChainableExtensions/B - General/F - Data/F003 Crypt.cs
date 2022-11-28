@@ -24,7 +24,7 @@ public static partial class ChainableExtensions
     public static FileInfo Encrypt(this FileInfo inputFile, FileInfo? outputFile, string password)
     {
         // preprocess
-        UtilPreprocessors.PreprocessOutFile(ref outputFile, false, inputFile.Directory!, inputFile.Name);
+        UtilPreprocessors.PreprocessOutFile(ref outputFile, inputFile.Directory!, inputFile.Name);
 
 
         // main
@@ -69,7 +69,7 @@ public static partial class ChainableExtensions
     public static FileInfo Decrypt(this FileInfo inputFile, FileInfo? outputFile, string password)
     {
         // preprocess
-        UtilPreprocessors.PreprocessOutFile(ref outputFile, false, inputFile.Directory!, inputFile.Name);
+        UtilPreprocessors.PreprocessOutFile(ref outputFile, inputFile.Directory!, inputFile.Name);
 
 
         // main

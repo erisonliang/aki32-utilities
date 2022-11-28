@@ -16,7 +16,7 @@ public static partial class ChainableExtensions
     public static FileInfo MergeAllLines(this DirectoryInfo inputDir, FileInfo? outputFile, int skipRowCount = 0)
     {
         // preprocess
-        UtilPreprocessors.PreprocessOutFile(ref outputFile, true, inputDir!, $"output.txt");
+        UtilPreprocessors.PreprocessOutFile(ref outputFile, inputDir!, $"output.txt");
 
 
         // main

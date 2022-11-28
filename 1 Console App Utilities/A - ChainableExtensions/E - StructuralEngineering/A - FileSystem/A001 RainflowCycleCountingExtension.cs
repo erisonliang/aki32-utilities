@@ -20,9 +20,9 @@ public static partial class ChainableExtensions
     public static FileInfo Rainflow(this FileInfo inputFile, FileInfo? outputFile, double C, double beta, bool consoleOutput = false, bool outputRainFlowResultHistory = true, bool outputRainBranches = false, FileInfo? outputFileForRainBranches = null)
     {
         // preprocess
-        UtilPreprocessors.PreprocessOutFile(ref outputFile, true, inputFile.Directory!, inputFile.Name);
+        UtilPreprocessors.PreprocessOutFile(ref outputFile, inputFile.Directory!, inputFile.Name);
         if (outputRainBranches && outputFileForRainBranches is null)
-            UtilPreprocessors.PreprocessOutFile(ref outputFileForRainBranches, false, outputFile!.Directory!, $"{Path.GetFileNameWithoutExtension(outputFile.Name)}_Branches.csv");
+            UtilPreprocessors.PreprocessOutFile(ref outputFileForRainBranches, outputFile!.Directory!, $"{Path.GetFileNameWithoutExtension(outputFile.Name)}_Branches.csv");
 
 
         // main

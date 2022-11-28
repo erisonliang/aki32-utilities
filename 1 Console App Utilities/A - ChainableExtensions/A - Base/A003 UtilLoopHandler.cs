@@ -22,10 +22,9 @@ public static partial class ChainableExtensions
         )
     {
         // preprocess
-        UtilPreprocessors.PreprocessOutDir(ref outputDir, true, overrideTargetOutputDirCandidate ?? inputDir, methodName: methodName);
+        UtilPreprocessors.PreprocessOutDir(ref outputDir, overrideTargetOutputDirCandidate ?? inputDir, true, methodName: methodName);
         searchRegexen ??= new string[] { ".*" };
-        var init_ConsoleOutput_Preprocess = UtilConfig.ConsoleOutput_Preprocess;
-        UtilConfig.ConsoleOutput_Preprocess = false;
+        (var init_ConsoleOutput_Preprocess, UtilConfig.ConsoleOutput_Preprocess) = (UtilConfig.ConsoleOutput_Preprocess, false);
 
 
         // main

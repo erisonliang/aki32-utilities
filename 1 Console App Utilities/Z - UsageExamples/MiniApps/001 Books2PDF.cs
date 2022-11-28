@@ -13,7 +13,7 @@ public partial class MiniApps
     public static void Books2PDF(DirectoryInfo targetDirectory, int PageCount, int TimePerPageMilliSeconds = 2000)
     {
         // preprocess
-        UtilPreprocessors.PreprocessOutDir(ref targetDirectory!, true, null!);
+        UtilPreprocessors.PreprocessOutDir(ref targetDirectory!, null!);
 
 
         // main

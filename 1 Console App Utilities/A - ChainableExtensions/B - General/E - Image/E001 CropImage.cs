@@ -16,7 +16,7 @@ public static partial class ChainableExtensions
     public static FileInfo CropImage(this FileInfo inputFile, FileInfo? outputFile, Thickness cropSize)
     {
         // preprocess
-        UtilPreprocessors.PreprocessOutFile(ref outputFile, false, inputFile.Directory!, $"{Path.GetFileNameWithoutExtension(inputFile.Name)} - {cropSize.ToString()}.png");
+        UtilPreprocessors.PreprocessOutFile(ref outputFile, inputFile.Directory!, $"{Path.GetFileNameWithoutExtension(inputFile.Name)} - {cropSize.ToString()}.png");
 
 
         // main
@@ -39,7 +39,8 @@ public static partial class ChainableExtensions
     public static DirectoryInfo CropImageForMany(this FileInfo inputFile, DirectoryInfo? outputDir, Thickness[] cropSizes)
     {
         // preprocess
-        UtilPreprocessors.PreprocessOutDir(ref outputDir, false, inputFile.Directory!);
+        UtilPreprocessors.PreprocessOutDir(ref outputDir, inputFile.Directory!);
+        (var init_ConsoleOutput_Preprocess, UtilConfig.ConsoleOutput_Preprocess) = (UtilConfig.ConsoleOutput_Preprocess, false);
 
 
         // main
@@ -50,6 +51,8 @@ public static partial class ChainableExtensions
         }
 
 
+        // post process
+        UtilConfig.ConsoleOutput_Preprocess = init_ConsoleOutput_Preprocess;
         return outputDir!;
     }
 

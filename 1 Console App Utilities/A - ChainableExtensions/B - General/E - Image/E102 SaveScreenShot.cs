@@ -22,7 +22,7 @@ public static partial class ChainableExtensions
     public static FileInfo SaveScreenShot(this FileInfo outputFile, Point upperLeftCoordinate, Point bottomRightCoordinate)
     {
         // preprocess
-        UtilPreprocessors.PreprocessOutFile(ref outputFile, false, null, "output.png");
+        UtilPreprocessors.PreprocessOutFile(ref outputFile, null, "output.png");
 
 
         // main

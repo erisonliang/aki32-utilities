@@ -16,11 +16,11 @@ public static partial class ChainableExtensions
         )
     {
         // preprocess
-        UtilPreprocessors.PreprocessOutDir(ref outputDir, consoleOutput, inputDir.Parent!);
+        UtilPreprocessors.PreprocessOutDir(ref outputDir, inputDir.Parent!, consoleOutput);
 
 
         // main
-        outputDir.Attributes = inputDir.Attributes;
+        outputDir!.Attributes = inputDir.Attributes;
 
         // copy files
         foreach (FileInfo fileInfo in inputDir.GetFiles())
@@ -50,7 +50,7 @@ public static partial class ChainableExtensions
         )
     {
         // preprocess
-        UtilPreprocessors.PreprocessOutFile(ref outputFile, false, inputFile.Directory!, inputFile.Name);
+        UtilPreprocessors.PreprocessOutFile(ref outputFile, inputFile.Directory!, inputFile.Name);
 
 
         // main

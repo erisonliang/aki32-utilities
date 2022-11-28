@@ -23,7 +23,7 @@ public static partial class ChainableExtensions
     public static FileInfo DistortImage(this FileInfo inputFile, FileInfo? outputFile, Color? fill = null, params (Point originalPoint, Point tagrtPoint)[] ps)
     {
         // preprocess
-        UtilPreprocessors.PreprocessOutFile(ref outputFile, false, inputFile.Directory!, inputFile.Name);
+        UtilPreprocessors.PreprocessOutFile(ref outputFile, inputFile.Directory!, inputFile.Name);
         //if (!inputFile!.Name.IsMatchAny(GetImageFilesRegexen(png: true, jpg: true,bmp:true)))
         //    throw new Exception("inputFile name must end with .png, .jpg or .bmp");
         //if (!outputFile!.Name.IsMatchAny(GetImageFilesRegexen(png: true, jpg: true, bmp: true)))
@@ -91,7 +91,7 @@ public static partial class ChainableExtensions
         )
     {
         // preprocess
-        UtilPreprocessors.PreprocessOutDir(ref outputDir, true, inputDir);
+        UtilPreprocessors.PreprocessOutDir(ref outputDir, inputDir);
 
 
         // main
@@ -129,7 +129,7 @@ public static partial class ChainableExtensions
         )
     {
         // preprocess
-        UtilPreprocessors.PreprocessOutDir(ref outputDir, true, inputDir.Parent!);
+        UtilPreprocessors.PreprocessOutDir(ref outputDir, inputDir.Parent!);
 
 
         // main

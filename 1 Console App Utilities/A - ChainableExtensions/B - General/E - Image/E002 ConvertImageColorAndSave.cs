@@ -19,7 +19,7 @@ public static partial class ChainableExtensions
     public static FileInfo ConvertImageColor(this FileInfo inputFile, FileInfo? outputFile, Color targetColor)
     {
         // preprocess
-        UtilPreprocessors.PreprocessOutFile(ref outputFile, false, inputFile.Directory!, inputFile.Name);
+        UtilPreprocessors.PreprocessOutFile(ref outputFile, inputFile.Directory!, inputFile.Name);
 
 
         // main
@@ -40,25 +40,24 @@ public static partial class ChainableExtensions
     /// <param name="targetInfos"></param>
     /// <returns></returns>
     public static DirectoryInfo ConvertImageColorForMany(this FileInfo inputFile, DirectoryInfo? outputDir,
-        int maxDegreeOfParallelism = 999,
         params (string fileName, Color targetColor)[] targetInfos)
     {
         // preprocess
-        UtilPreprocessors.PreprocessOutDir(ref outputDir, true, inputFile.Directory!);
+        UtilPreprocessors.PreprocessOutDir(ref outputDir, inputFile.Directory!);
+        (var init_ConsoleOutput_Preprocess, UtilConfig.ConsoleOutput_Preprocess) = (UtilConfig.ConsoleOutput_Preprocess, false);
 
 
         // main
-        var option = new ParallelOptions { MaxDegreeOfParallelism = maxDegreeOfParallelism };
-        Parallel.ForEach(targetInfos, option, targetInfos =>
+        foreach (var (targetName, targetColor) in targetInfos)
         {
-            var (targetName, targetColor) = targetInfos;
-            var outputFile = new FileInfo(Path.Combine(outputDir.FullName, $"{targetName.Replace(".png", "")}.png"));
+            var outputFile = new FileInfo(Path.Combine(outputDir!.FullName, $"{targetName.Replace(".png", "")}.png"));
             inputFile.ConvertImageColor(outputFile, targetColor);
-        });
+        }
 
 
         // post process
-        return outputDir;
+        UtilConfig.ConsoleOutput_Preprocess = init_ConsoleOutput_Preprocess;
+        return outputDir!;
     }
 
     /// <summary>

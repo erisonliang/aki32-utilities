@@ -6,8 +6,8 @@ public static class UtilPreprocessors
 {
     public static void PreprocessOutDir(
         ref DirectoryInfo? outputDirReference,
-        bool consoleOut,
         DirectoryInfo targetOutputDirWhenNull,
+        bool consoleOut = true,
         [CallerMemberName] string methodName = "",
         bool takesTimeFlag = false
         )
@@ -28,9 +28,9 @@ public static class UtilPreprocessors
 
     public static void PreprocessOutFile(
           ref FileInfo? outputFileReference,
-          bool consoleOut,
           DirectoryInfo targetOutputDirWhenNull,
           string fileNameCandidate,
+          bool consoleOut = true,
           [CallerMemberName] string methodName = "",
           bool takesTimeFlag = false
           )
@@ -51,7 +51,8 @@ public static class UtilPreprocessors
         if (outputFileReference.Exists) outputFileReference.Delete();
     }
 
-    public static void PreprocessBasic(bool consoleOut,
+    public static void PreprocessBasic(
+        bool consoleOut = true,
         [CallerMemberName] string methodName = "",
         bool takesTimeFlag = false
         )

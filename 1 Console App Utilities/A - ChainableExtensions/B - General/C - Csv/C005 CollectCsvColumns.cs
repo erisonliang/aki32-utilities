@@ -19,7 +19,7 @@ public static partial class ChainableExtensions
     public static FileInfo CollectCsvColumns(this DirectoryInfo inputDir, FileInfo? outputFile, int targetColumn, int? initialColumn = 0, int skipRowCount = 0)
     {
         // preprocess
-        UtilPreprocessors.PreprocessOutFile(ref outputFile, true, inputDir!, "output.csv");
+        UtilPreprocessors.PreprocessOutFile(ref outputFile, inputDir!, "output.csv");
 
 
         // main
@@ -155,20 +155,20 @@ public static partial class ChainableExtensions
     public static DirectoryInfo CollectCsvColumnsForMany(this DirectoryInfo inputDir, DirectoryInfo? outputDir, int skipRowCount, params (string name, int? initialColumn, int targetColumn)[] targets)
     {
         // preprocess
-        UtilPreprocessors.PreprocessOutDir(ref outputDir, false, inputDir, takesTimeFlag: true);
+        UtilPreprocessors.PreprocessOutDir(ref outputDir, inputDir, takesTimeFlag: true);
         if (inputDir.FullName == outputDir!.FullName)
             throw new InvalidOperationException("※ inputDir and outputDir must be different");
-
-
+        (var init_ConsoleOutput_Preprocess, UtilConfig.ConsoleOutput_Preprocess) = (UtilConfig.ConsoleOutput_Preprocess, false);
+        
         // main
-        foreach (var target in targets)
+        foreach (var (name, initialColumn, targetColumn) in targets)
         {
-            var outputFile = new FileInfo(Path.Combine(outputDir.FullName, target.name + ".csv"));
-            inputDir.CollectCsvColumns(outputFile, target.targetColumn, target.initialColumn, skipRowCount);
+            var outputFile = new FileInfo(Path.Combine(outputDir.FullName, $"{name}.csv"));
+            inputDir.CollectCsvColumns(outputFile, targetColumn, initialColumn, skipRowCount);
         }
 
-
         // post process
+        UtilConfig.ConsoleOutput_Preprocess = init_ConsoleOutput_Preprocess;
         return outputDir;
     }
 

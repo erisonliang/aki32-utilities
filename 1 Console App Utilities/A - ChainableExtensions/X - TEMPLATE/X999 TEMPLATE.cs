@@ -22,7 +22,7 @@ public static partial class ChainableExtensions
     public static FileInfo TEMPLATE(this FileInfo inputFile, FileInfo? outputFile)
     {
         // preprocess
-        UtilPreprocessors.PreprocessOutFile(ref outputFile, false, inputFile.Directory!, inputFile.Name);
+        UtilPreprocessors.PreprocessOutFile(ref outputFile, inputFile.Directory!, inputFile.Name);
 
 
         // main
@@ -53,7 +53,7 @@ public static partial class ChainableExtensions
     public static DirectoryInfo TEMPLATE_Loop_Manually(this DirectoryInfo inputDir, DirectoryInfo? outputDir)
     {
         // preprocess
-        UtilPreprocessors.PreprocessOutDir(ref outputDir, true, inputDir);
+        UtilPreprocessors.PreprocessOutDir(ref outputDir, inputDir);
 
 
         // main

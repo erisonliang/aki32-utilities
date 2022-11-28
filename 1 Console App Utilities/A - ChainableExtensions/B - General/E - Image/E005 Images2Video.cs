@@ -28,7 +28,7 @@ public static partial class ChainableExtensions
         )
     {
         // preprocess
-        UtilPreprocessors.PreprocessOutFile(ref outputFile, true, inputDir!, "output.mp4", takesTimeFlag: true);
+        UtilPreprocessors.PreprocessOutFile(ref outputFile, inputDir!, "output.mp4", takesTimeFlag: true);
         if (!outputFile!.Name.IsMatchAny(GetRegexen_VideoFiles()))
             throw new Exception("outputFile name must end with .mp4 or .avi");
 

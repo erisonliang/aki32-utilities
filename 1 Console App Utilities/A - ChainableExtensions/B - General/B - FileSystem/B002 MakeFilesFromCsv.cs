@@ -14,7 +14,7 @@ public static partial class ChainableExtensions
     public static DirectoryInfo MakeFilesFromCsv(this FileInfo inputFile, DirectoryInfo? outputDir, FileInfo templateFile)
     {
         // preprocess
-        UtilPreprocessors.PreprocessOutDir(ref outputDir, true, inputFile.Directory!);
+        UtilPreprocessors.PreprocessOutDir(ref outputDir, inputFile.Directory!);
 
 
         // main
@@ -53,7 +53,7 @@ public static partial class ChainableExtensions
     public static DirectoryInfo MakeDirsFromCsv(this FileInfo inputFile, DirectoryInfo? outputDir, DirectoryInfo templateDir = null)
     {
         // preprocess
-        UtilPreprocessors.PreprocessOutDir(ref outputDir, true, inputFile.Directory!);
+        UtilPreprocessors.PreprocessOutDir(ref outputDir, inputFile.Directory!);
 
 
         // main

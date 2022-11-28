@@ -27,7 +27,7 @@ public static partial class ChainableExtensions
     public static DirectoryInfo PDF2Images(this FileInfo inputFile, DirectoryInfo? outputDir)
     {
         // preprocess
-        UtilPreprocessors.PreprocessOutDir(ref outputDir, true, inputFile.Directory!, takesTimeFlag: true);
+        UtilPreprocessors.PreprocessOutDir(ref outputDir, inputFile.Directory!, takesTimeFlag: true);
         if (!inputFile.Name.EndsWith(".pdf"))
             throw new Exception("inputFile name must end with .pdf");
 

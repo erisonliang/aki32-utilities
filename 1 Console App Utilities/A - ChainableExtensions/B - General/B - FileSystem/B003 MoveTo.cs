@@ -16,7 +16,7 @@ public static partial class ChainableExtensions
         if (outputDir is null)
             throw new ArgumentNullException(nameof(outputDir));
         var outputParentDir = outputDir!.Parent; // abnormal, only for dir.MoveTo(dir) 
-        UtilPreprocessors.PreprocessOutDir(ref outputParentDir, true, null);
+        UtilPreprocessors.PreprocessOutDir(ref outputParentDir, null!);
 
 
         // main
@@ -50,7 +50,7 @@ public static partial class ChainableExtensions
         // preprocess
         if (outputFile is null)
             throw new ArgumentNullException(nameof(outputFile));
-        UtilPreprocessors.PreprocessOutFile(ref outputFile!, false, null, null);
+        UtilPreprocessors.PreprocessOutFile(ref outputFile!, null!, null!);
 
 
         // main

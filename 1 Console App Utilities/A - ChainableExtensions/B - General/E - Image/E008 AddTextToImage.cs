@@ -24,7 +24,7 @@ public static partial class ChainableExtensions
         bool alignRight = false)
     {
         // preprocess
-        UtilPreprocessors.PreprocessOutFile(ref outputFile, false, inputFile.Directory!, $"output.png");
+        UtilPreprocessors.PreprocessOutFile(ref outputFile, inputFile.Directory!, $"output.png");
         addingText = addingText
             .Replace("%FN", inputFile.Name)
             .Replace("%CT", inputFile.CreationTime.ToString("s"))

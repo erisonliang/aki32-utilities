@@ -13,7 +13,7 @@ public static partial class ChainableExtensions
     public static FileInfo Zip(this DirectoryInfo inputDir, FileInfo? outputFile)
     {
         //// preprocess
-        UtilPreprocessors.PreprocessOutFile(ref outputFile, true, inputDir.Parent!, "output.zip");
+        UtilPreprocessors.PreprocessOutFile(ref outputFile, inputDir.Parent!, "output.zip");
 
 
         // main
@@ -34,7 +34,7 @@ public static partial class ChainableExtensions
     public static DirectoryInfo Unzip(this FileInfo inputFile, DirectoryInfo? outputDir)
     {
         //// preprocess
-        UtilPreprocessors.PreprocessOutDir(ref outputDir, true, inputFile.Directory);
+        UtilPreprocessors.PreprocessOutDir(ref outputDir, inputFile.Directory);
 
 
         // main

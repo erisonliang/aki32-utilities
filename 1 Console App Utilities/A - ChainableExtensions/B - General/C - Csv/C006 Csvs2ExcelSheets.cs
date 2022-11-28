@@ -14,7 +14,7 @@ public static partial class ChainableExtensions
     public static FileInfo Csvs2ExcelSheets(this DirectoryInfo inputDir, FileInfo? outputFile)
     {
         // preprocess
-        UtilPreprocessors.PreprocessOutFile(ref outputFile, true, inputDir!, "output.xlsx");
+        UtilPreprocessors.PreprocessOutFile(ref outputFile, inputDir!, "output.xlsx");
         if (!outputFile!.Name.EndsWith(".xlsx"))
             throw new Exception("outputFile name must end with .xlsx");
 

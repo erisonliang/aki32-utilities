@@ -19,7 +19,7 @@ public static partial class ChainableExtensions
         ResizeImageMode mode = ResizeImageMode.Stretch)
     {
         // preprocess
-        UtilPreprocessors.PreprocessOutFile(ref outputFile, false, inputFile.Directory!, $"output.png");
+        UtilPreprocessors.PreprocessOutFile(ref outputFile, inputFile.Directory!, $"output.png");
 
 
         // main
