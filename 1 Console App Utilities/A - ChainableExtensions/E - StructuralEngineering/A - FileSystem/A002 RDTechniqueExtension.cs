@@ -14,6 +14,26 @@ public static partial class ChainableExtensions
     {
         // TODO
         throw new NotImplementedException();
+
+
+
+        //// Define IO paths
+        //var input = new FileInfo(Path.Combine(basePath, "B003 RDTechnique", @"input.csv"));
+
+        //// Read input csv
+        //var rd = RDTechniqueCalculator.FromCsv(input);
+
+        //// Calc and show
+        //rd.Calc(200);
+        //rd.InputHistory.DrawLineGraph("v");
+        //rd.ResultHistory.DrawLineGraph("v");
+
+        //// Calc AttenuationConstant and show
+        //var att = rd.CalcAttenuationConstant(4, true);
+        //Console.WriteLine();
+        //Console.WriteLine($"result h = {att}");
+
+
     }
 
 

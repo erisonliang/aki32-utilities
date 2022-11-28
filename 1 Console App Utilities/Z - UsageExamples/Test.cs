@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 
 using Aki32_Utilities.General.ChainableExtensions;
 using Aki32_Utilities.OwesomeModels;
+using Aki32_Utilities.StructuralEngineering;
 
 namespace Aki32_Utilities.UsageExamples;
 public class TestHelper
@@ -289,11 +290,40 @@ public class TestHelper
 
             }
 
-            // C - StructuralEngineering
+            // C - MachineLearning
             {
-                var baseDir = @"..\..\..\# TestModel\A - ChainableExtensions\C - StructuralEngineering";
+                var baseDir = @"..\..\..\# TestModel\A - ChainableExtensions\C - MachineLearning";
+
 
             }
+
+            // D - OwesomeModels
+            {
+                var baseDir = @"..\..\..\# TestModel\A - ChainableExtensions\D - OwesomeModels";
+
+                // A - TimeHistoryModel
+                {
+
+                    // ★ FFT
+                    {
+                        //var input = new FileInfo($@"{baseDir2}\FFT\input.csv");
+                        //TimeHistory
+                        //    .FromCsv(input, new string[] { "t", "x" })
+                        //    .FFT("x").Result
+                        //    .SaveToCsv();
+                    }
+
+                }
+
+            }
+
+            // E - StructuralEngineering
+            {
+                var baseDir = @"..\..\..\# TestModel\A - ChainableExtensions\E - StructuralEngineering";
+
+
+            }
+
         }
 
         // B - UsefulClasses
@@ -399,6 +429,7 @@ public class TestHelper
                 //Console.ReadLine();
 
             }
+
         }
 
         // C - OwesomeModels
@@ -440,15 +471,6 @@ public class TestHelper
 
                 }
 
-                // ★ FFT
-                {
-                    //var input = new FileInfo($@"{baseDir2}\FFT\input.csv");
-                    //TimeHistory
-                    //    .FromCsv(input, new string[] { "t", "x" })
-                    //    .FFT("x").Result
-                    //    .SaveToCsv();
-                }
-
             }
         }
 
@@ -487,197 +509,177 @@ public class TestHelper
 
             // A - StructuralEngineering
             {
+                var basePath = @"..\..\..\# TestModel\E - SpecificPurposeModels\A - StructuralEngineering";
 
-                // B - DynamicsModels
+
+                // B001 ElastoplasticAnalysis
                 {
-                    var basePath = @"..\..\..\# TestModel\E - SpecificPurposeModels\A - StructuralEngineering\B - DynamicsModels";
+                    var basePath_B001 = @$"{basePath}\B001 EPAnalysis";
 
-                    // B001 ElastoplasticAnalysis
+                    // newmark beta
                     {
-                        var basePath_B001 = @$"{basePath}\B001 ElastoplasticAnalysis";
+                        //var model = SDoFModel.FromT(1, 0.03);
 
-                        // newmark beta
+                        //var waveCsv = new FileInfo(@$"{basePath_B001}\Hachinohe-NS.csv");
+                        //var wave = TimeHistory.FromCsv(waveCsv, new string[] { "t", "ytt" });
+
+                        //var waveAnalysisModel = new NewmarkBetaModel(0.25);
+                        //var result = model.Calc(wave, waveAnalysisModel);
+
+                        //result.SaveToCsv();
+                        //result.DrawLineGraph("x", "t");
+                    }
+
+                    // nigam jennings
+                    {
+                        //var model = SDoFModel.FromT(1, 0.03);
+
+                        //var waveCsv = new FileInfo(@$"{basePath_B001}\Hachinohe-NS.csv");
+                        //var wave = TimeHistory.FromCsv(waveCsv, new string[] { "t", "ytt" });
+
+                        //var waveAnalysisModel = new NigamJenningsModel();
+                        //var result = model.Calc(wave, waveAnalysisModel);
+
+                        //result.SaveToCsv();
+                        //result.DrawLineGraph("x", "t");
+                    }
+
+                    // ep test
+                    {
+                        //var epList = new List<ElastoplasticCharacteristicBase>
+                        //{
+                        //    //new ElasticModel(2),
+
+                        //    //new ElasticBilinearModel(2, 0.1, 80),
+                        //    //new BilinearModel(2, 0.1, 80),
+                        //    //new CloughModel(2, 0.1, 80),
+                        //    //new DegradingCloughModel(2, 0.1, 80, 0.4),
+                        //    //new PerfectElastoPlasticModel(2,80),
+
+                        //    //new ElasticTrilinearModel(2, 0.5, 80, 0.1, 100),
+                        //    new TrilinearModel(2, 0.5, 80, 0.1, 100),
+                        //    //new TrilinearModel_Obsolete(2, 0.5, 80, 0.1, 100),
+
+                        //    //new ElasticTetralinearModel(2, 0.5, 80, 0.25, 90, 0.1, 110),
+                        //};
+
+                        //foreach (var ep in epList)
+                        //{
+                        //    var tester = new EPTester(ep);
+                        //    var result = tester.Calc(EPTester.TestWave.TestWave1);
+
+                        //    var saveDir = new DirectoryInfo(@$"{basePath_B001}\output");
+                        //    result.SaveToCsv(saveDir);
+                        //    result.DrawLineGraph("f", "x");
+                        //}
+
+                        // combined
                         {
-                            //var model = SDoFModel.FromT(1, 0.03);
-
-                            //var waveCsv = new FileInfo(@$"{basePath_B001}\Hachinohe-NS.csv");
-                            //var wave = TimeHistory.FromCsv(waveCsv, new string[] { "t", "ytt" });
-
-                            //var waveAnalysisModel = new NewmarkBetaModel(0.25);
-                            //var result = model.Calc(wave, waveAnalysisModel);
-
-                            //result.SaveToCsv();
-                            //result.DrawLineGraph("x", "t");
-                        }
-
-                        // nigam jennings
-                        {
-                            //var model = SDoFModel.FromT(1, 0.03);
-
-                            //var waveCsv = new FileInfo(@$"{basePath_B001}\Hachinohe-NS.csv");
-                            //var wave = TimeHistory.FromCsv(waveCsv, new string[] { "t", "ytt" });
-
-                            //var waveAnalysisModel = new NigamJenningsModel();
-                            //var result = model.Calc(wave, waveAnalysisModel);
-
-                            //result.SaveToCsv();
-                            //result.DrawLineGraph("x", "t");
-                        }
-
-                        // ep test
-                        {
-                            //var epList = new List<ElastoplasticCharacteristicBase>
+                            //var waveAnalysisModelList = new List<ITimeHistoryAnalysisModel>
                             //{
-                            //    //new ElasticModel(2),
-
-                            //    //new ElasticBilinearModel(2, 0.1, 80),
-                            //    //new BilinearModel(2, 0.1, 80),
-                            //    //new CloughModel(2, 0.1, 80),
-                            //    //new DegradingCloughModel(2, 0.1, 80, 0.4),
-                            //    //new PerfectElastoPlasticModel(2,80),
-
-                            //    //new ElasticTrilinearModel(2, 0.5, 80, 0.1, 100),
-                            //    new TrilinearModel(2, 0.5, 80, 0.1, 100),
-                            //    //new TrilinearModel_Obsolete(2, 0.5, 80, 0.1, 100),
-
-                            //    //new ElasticTetralinearModel(2, 0.5, 80, 0.25, 90, 0.1, 110),
+                            //    new NewmarkBetaModel(0.25),
+                            //    //new WilsonTheta(1.4,0.25),
+                            //    //new NigamJenningsModel(),
                             //};
 
-                            //foreach (var ep in epList)
+                            //var waveCsv = new FileInfo(@$"{basePath_B001}\Hachinohe-NS.csv");
+                            //var wave = TimeHistory.FromCsv(waveCsv, new string[] { "t", "ytt" });
+
+                            //foreach (var waveAnalysisModel in waveAnalysisModelList)
                             //{
-                            //    var tester = new EPTester(ep);
-                            //    var result = tester.Calc(EPTester.TestWave.TestWave1);
+                            //    var epList = new List<ElastoplasticCharacteristicBase>
+                            //    {
+                            //        //new ElasticModel(2),
+                            //        //new BilinearModel(2, 0.1, 8),
+                            //        new TrilinearModel(2, 0.5, 5, 0.1, 7),
+                            //        //new CloughModel(2, 0.1, 8),
+                            //        //new DegradingCloughModel(2, 0.1, 8, 0.4),
+                            //    };
 
-                            //    var saveDir = new DirectoryInfo(@$"{basePath_B001}\output");
-                            //    result.SaveToCsv(saveDir);
-                            //    result.DrawLineGraph("f", "x");
+                            //    foreach (var ep in epList)
+                            //    {
+                            //        try
+                            //        {
+                            //            var model = SDoFModel.FromT(1, 0.03, ep);
+                            //            var result = model.Calc(wave, waveAnalysisModel);
+                            //            result.DrawLineGraph("x", "t");
+                            //            result.DrawLineGraph("f", "x");
+                            //            result.SaveToCsv();
+                            //            Console.WriteLine("[O]");
+                            //        }
+                            //        catch (Exception ex)
+                            //        {
+                            //            Console.WriteLine($"[X]: {ex.Message}");
+                            //            throw;
+                            //        }
+                            //    }
                             //}
-
-                            // combined
-                            {
-                                //var waveAnalysisModelList = new List<ITimeHistoryAnalysisModel>
-                                //{
-                                //    new NewmarkBetaModel(0.25),
-                                //    //new WilsonTheta(1.4,0.25),
-                                //    //new NigamJenningsModel(),
-                                //};
-
-                                //var waveCsv = new FileInfo(@$"{basePath_B001}\Hachinohe-NS.csv");
-                                //var wave = TimeHistory.FromCsv(waveCsv, new string[] { "t", "ytt" });
-
-                                //foreach (var waveAnalysisModel in waveAnalysisModelList)
-                                //{
-                                //    var epList = new List<ElastoplasticCharacteristicBase>
-                                //    {
-                                //        //new ElasticModel(2),
-                                //        //new BilinearModel(2, 0.1, 8),
-                                //        new TrilinearModel(2, 0.5, 5, 0.1, 7),
-                                //        //new CloughModel(2, 0.1, 8),
-                                //        //new DegradingCloughModel(2, 0.1, 8, 0.4),
-                                //    };
-
-                                //    foreach (var ep in epList)
-                                //    {
-                                //        try
-                                //        {
-                                //            var model = SDoFModel.FromT(1, 0.03, ep);
-                                //            var result = model.Calc(wave, waveAnalysisModel);
-                                //            result.DrawLineGraph("x", "t");
-                                //            result.DrawLineGraph("f", "x");
-                                //            result.SaveToCsv();
-                                //            Console.WriteLine("[O]");
-                                //        }
-                                //        catch (Exception ex)
-                                //        {
-                                //            Console.WriteLine($"[X]: {ex.Message}");
-                                //            throw;
-                                //        }
-                                //    }
-                                //}
-                            }
-
-                            // spectrum analysis
-                            {
-                                //var ep = new ElasticModel(2);
-                                ////var ep = new DegradingCloughModel(2, 0.1, 8, 0.4);
-
-                                //var TList = Enumerable.Range(100, 400).Select(x => x / 100d).ToArray();
-                                //var hList = new double[] { 0.00, 0.03, 0.05, 0.10 };
-
-                                //var waveCsv = new FileInfo(@$"{basePath_B001}\Hachinohe-NS.csv");
-                                //var wave = TimeHistory.FromCsv(waveCsv, new string[] { "t", "ytt" });
-
-                                ////var waveAnalysisModel = new NewmarkBetaModel(0.25);
-                                //var waveAnalysisModel = new NigamJenningsModel();
-
-                                //var resultSet = SDoFModel.CalcResponseSpectrum(TList, hList, wave, waveAnalysisModel, ep);
-                                //resultSet.SaveToExcel(waveCsv.Directory);
-                            }
-
                         }
 
-                    }
+                        // spectrum analysis
+                        {
+                            //var ep = new ElasticModel(2);
+                            ////var ep = new DegradingCloughModel(2, 0.1, 8, 0.4);
 
-                    // B002 RainflowCycleCounting
-                    {
-                        //var inputCsv = new FileInfo(Path.Combine(basePath, "B002 RainflowCycleCounting", @"input3.csv"));
-                        ////var inputCsv = new FileInfo(@"C:\Users\aki32\Desktop\anaAll_beam.csv");
+                            //var TList = Enumerable.Range(100, 400).Select(x => x / 100d).ToArray();
+                            //var hList = new double[] { 0.00, 0.03, 0.05, 0.10 };
 
-                        //var rainflow = RainflowCalculator.FromCsv(inputCsv);
-                        //rainflow.CalcRainflow(4, 1 / 3d, false);
-                        //rainflow.SaveResultHistoryToCsv();
-                        //rainflow.SaveRainBranchesToCsv();
-                    }
+                            //var waveCsv = new FileInfo(@$"{basePath_B001}\Hachinohe-NS.csv");
+                            //var wave = TimeHistory.FromCsv(waveCsv, new string[] { "t", "ytt" });
 
-                    // B003 RDTechnique
-                    {
-                        //// Define IO paths
-                        //var input = new FileInfo(Path.Combine(basePath, "B003 RDTechnique", @"input.csv"));
+                            ////var waveAnalysisModel = new NewmarkBetaModel(0.25);
+                            //var waveAnalysisModel = new NigamJenningsModel();
 
-                        //// Read input csv
-                        //var rd = RDTechniqueCalculator.FromCsv(input);
+                            //var resultSet = SDoFModel.CalcResponseSpectrum(TList, hList, wave, waveAnalysisModel, ep);
+                            //resultSet.SaveToExcel(waveCsv.Directory);
+                        }
 
-                        //// Calc and show
-                        //rd.Calc(200);
-                        //rd.InputHistory.DrawLineGraph("v");
-                        //rd.ResultHistory.DrawLineGraph("v");
-
-                        //// Calc AttenuationConstant and show
-                        //var att = rd.CalcAttenuationConstant(4, true);
-                        //Console.WriteLine();
-                        //Console.WriteLine($"result h = {att}");
                     }
 
                 }
 
-                // X - SoftwareHelper
+                // B002 RainflowCycleCounting
                 {
-                    var basePath = @"..\..\..\# TestModel\E - SpecificPurposeModels\A - StructuralEngineering\X - SoftwareHelper";
+                    //var inputCsv = new FileInfo(Path.Combine(basePath, "B002 RainflowCycleCounting", @"input3.csv"));
+                    ////var inputCsv = new FileInfo(@"C:\Users\aki32\Desktop\anaAll_beam.csv");
 
-                    // A - SNAP
-                    {
+                    //var rainflow = RainflowCalculator.FromCsv(inputCsv);
+                    //rainflow.CalcRainflow(4, 1 / 3d, false);
+                    //rainflow.SaveResultHistoryToCsv();
+                    //rainflow.SaveRainBranchesToCsv();
+                }
 
-                        // XA001 KeepClosingExcel
-                        {
+                // B003 RDTechnique
+                {
+                    //// Define IO paths
+                    //var input = new FileInfo(Path.Combine(basePath, "B003 RDTechnique", @"input.csv"));
 
-                            //Aki32_Utilities.StructuralEngineering.Extensions.KeepClosingExcel();
+                    //// Read input csv
+                    //var rd = RDTechniqueCalculator.FromCsv(input);
 
-                        }
+                    //// Calc and show
+                    //rd.Calc(200);
+                    //rd.InputHistory.DrawLineGraph("v");
+                    //rd.ResultHistory.DrawLineGraph("v");
 
-                    }
+                    //// Calc AttenuationConstant and show
+                    //var att = rd.CalcAttenuationConstant(4, true);
+                    //Console.WriteLine();
+                    //Console.WriteLine($"result h = {att}");
 
-                    // B - DynamicPro
-                    {
+                }
 
-                        // XB001 CreateAccFromCsv
-                        {
-                            //new FileInfo(Path.Combine(basePath, "XB001 CreateAccFromCsvExtension", @"kobe L1.csv"))
-                            //    .CreateAccFromCsv_For_DynamicPro();
+                // X001 SNAPHelper
+                {
+                    //SNAPHelper.KeepClosingExcel(5000);
 
-                            //Aki32_Utilities.StructuralEngineering.Extensions.CreateAccFromCsvConversationally_For_DynamicPro();
-                        }
+                }
 
-                    }
+                // X002 X002 DynamicProHelper
+                {
+                    //var input = new FileInfo(Path.Combine(basePath, "X002 DynamicProHelper", @"kobe L1.csv"));
+                    //var output = new FileInfo(Path.Combine(basePath, "X002 DynamicProHelper", @"kobe L1.acc"));
+                    //DynamicProHelper.CreateAccFromCsv(input, output);
 
                 }
 
@@ -689,10 +691,10 @@ public class TestHelper
         {
             var baseDir = @"..\..\..\# TestModel\Z - UsageExample";
 
-            // Books2PDF
+            // 001 Books2PDF
             {
-                //var outputDir = new DirectoryInfo($@"{baseDir}\Books2PDF");
-                //MiniApps.Books2PDF(outputDir, 10);
+                var outputDir = new DirectoryInfo($@"{baseDir}\001 Books2PDF");
+                MiniApps.Books2PDF(outputDir, 10);
 
             }
 

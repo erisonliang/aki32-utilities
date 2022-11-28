@@ -5,14 +5,14 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Aki32_Utilities.StructuralEngineering;
-public static class CreateAccFromCsv
+public static class DynamicProHelper
 {
-    // TODO: ちゃんとしたフォーマットにする！
-
     // ★★★★★★★★★★★★★★★ main
 
-    public static void CreateAccFromCsv_For_DynamicPro(FileInfo inputFile, FileInfo outputFile)
+    public static void CreateAccFromCsv(FileInfo inputFile, FileInfo outputFile)
     {
+        // TODO: ちゃんとしたフォーマットにする！
+
         var inputFilePath = inputFile.FullName;
         const int STEP = 8;
         try

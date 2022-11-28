@@ -21,10 +21,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Remove="E - SpecificPurposeModels\A - StructuralEngineering\X - SoftwareHelpers\XA001 KeepClosingExcel.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Remove=".gitattributes" />
     <None Remove=".gitignore" />
     <None Remove="LICENSE.md" />
@@ -33,7 +29,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="E - SpecificPurposeModels\A - StructuralEngineering\X - SoftwareHelpers\A - SNAP\XA001 KeepClosingExcel.cs" />
+    <None Include="E - SpecificPurposeModels\A - StructuralEngineering\X - SoftwareHelpers\X001 SNAPHelper.cs" />
   </ItemGroup>
 
   <ItemGroup>
