@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Threading.Tasks;
 
-using Aki32_Utilities.General.ChainableExtensions;
+using Aki32_Utilities.General;
 using Aki32_Utilities.OwesomeModels;
+using Aki32_Utilities.StructuralEngineering;
 using Aki32_Utilities.StructuralEngineering;
 
 namespace Aki32_Utilities.UsageExamples;
@@ -304,13 +305,14 @@ public class TestHelper
                 // A - TimeHistoryModel
                 {
 
-                    // ★ FFT
+                    // B001 FFT
                     {
-                        //var input = new FileInfo($@"{baseDir2}\FFT\input.csv");
+                        //var input = new FileInfo($@"{baseDir2}\B001 FFT\input.csv");
                         //TimeHistory
                         //    .FromCsv(input, new string[] { "t", "x" })
                         //    .FFT("x").Result
                         //    .SaveToCsv();
+
                     }
 
                 }
@@ -321,6 +323,49 @@ public class TestHelper
             {
                 var baseDir = @"..\..\..\# TestModel\A - ChainableExtensions\E - StructuralEngineering";
 
+                // A001 RainflowCycleCounting
+                {
+                    //new FileInfo(Path.Combine(baseDir, "A001 RainflowCycleCounting", @"input3.csv"))
+                    //    .Rainflow(null, 4, 1 / 3d, false);
+
+                    new DirectoryInfo(Path.Combine(baseDir, "A001 RainflowCycleCounting"))
+                        .Rainflow_Loop(null, 4, 1 / 3d, false);
+
+                }
+
+                // A002 RDTechnique
+                {
+                    //// Define IO paths
+                    //var input = new FileInfo(Path.Combine(basePath, "B003 RDTechnique", @"input.csv"));
+
+                    //// Read input csv
+                    //var rd = RDTechniqueCalculator.FromCsv(input);
+
+                    //// Calc and show
+                    //rd.Calc(200);
+                    //rd.InputHistory.DrawLineGraph("v");
+                    //rd.ResultHistory.DrawLineGraph("v");
+
+                    //// Calc AttenuationConstant and show
+                    //var att = rd.CalcAttenuationConstant(4, true);
+                    //Console.WriteLine();
+                    //Console.WriteLine($"result h = {att}");
+
+                }
+
+                // A003 CreateAccFromCsv
+                {
+                    //var input = new FileInfo(Path.Combine(basePath, "X002 DynamicProHelper", @"kobe L1.csv"));
+                    //var output = new FileInfo(Path.Combine(basePath, "X002 DynamicProHelper", @"kobe L1.acc"));
+                    //DynamicProHelper.CreateAccFromCsv(input, output);
+
+                }
+
+                // V001 KeepClosingExcel
+                {
+                    //SNAPHelper.KeepClosingExcel(5000);
+
+                }
 
             }
 
@@ -476,6 +521,7 @@ public class TestHelper
 
         // D - ExternalAPIControllers
         {
+
             // 001 LINEController
             {
                 //var accessToken = ""; // LINE Notify
@@ -502,6 +548,7 @@ public class TestHelper
 
                 //gc.Sync();
             }
+
         }
 
         // E - SpecificPurposeModels
@@ -509,18 +556,18 @@ public class TestHelper
 
             // A - StructuralEngineering
             {
-                var basePath = @"..\..\..\# TestModel\E - SpecificPurposeModels\A - StructuralEngineering";
+                var baseDir = @"..\..\..\# TestModel\E - SpecificPurposeModels\A - StructuralEngineering";
 
 
                 // B001 ElastoplasticAnalysis
                 {
-                    var basePath_B001 = @$"{basePath}\B001 EPAnalysis";
+                    var baseDir_B001 = @$"{baseDir}\B001 EPAnalysis";
 
                     // newmark beta
                     {
                         //var model = SDoFModel.FromT(1, 0.03);
 
-                        //var waveCsv = new FileInfo(@$"{basePath_B001}\Hachinohe-NS.csv");
+                        //var waveCsv = new FileInfo(@$"{baseDir_B001}\Hachinohe-NS.csv");
                         //var wave = TimeHistory.FromCsv(waveCsv, new string[] { "t", "ytt" });
 
                         //var waveAnalysisModel = new NewmarkBetaModel(0.25);
@@ -534,7 +581,7 @@ public class TestHelper
                     {
                         //var model = SDoFModel.FromT(1, 0.03);
 
-                        //var waveCsv = new FileInfo(@$"{basePath_B001}\Hachinohe-NS.csv");
+                        //var waveCsv = new FileInfo(@$"{baseDir_B001}\Hachinohe-NS.csv");
                         //var wave = TimeHistory.FromCsv(waveCsv, new string[] { "t", "ytt" });
 
                         //var waveAnalysisModel = new NigamJenningsModel();
@@ -568,7 +615,7 @@ public class TestHelper
                         //    var tester = new EPTester(ep);
                         //    var result = tester.Calc(EPTester.TestWave.TestWave1);
 
-                        //    var saveDir = new DirectoryInfo(@$"{basePath_B001}\output");
+                        //    var saveDir = new DirectoryInfo(@$"{baseDir_B001}\output");
                         //    result.SaveToCsv(saveDir);
                         //    result.DrawLineGraph("f", "x");
                         //}
@@ -582,7 +629,7 @@ public class TestHelper
                             //    //new NigamJenningsModel(),
                             //};
 
-                            //var waveCsv = new FileInfo(@$"{basePath_B001}\Hachinohe-NS.csv");
+                            //var waveCsv = new FileInfo(@$"{baseDir_B001}\Hachinohe-NS.csv");
                             //var wave = TimeHistory.FromCsv(waveCsv, new string[] { "t", "ytt" });
 
                             //foreach (var waveAnalysisModel in waveAnalysisModelList)
@@ -624,7 +671,7 @@ public class TestHelper
                             //var TList = Enumerable.Range(100, 400).Select(x => x / 100d).ToArray();
                             //var hList = new double[] { 0.00, 0.03, 0.05, 0.10 };
 
-                            //var waveCsv = new FileInfo(@$"{basePath_B001}\Hachinohe-NS.csv");
+                            //var waveCsv = new FileInfo(@$"{baseDir_B001}\Hachinohe-NS.csv");
                             //var wave = TimeHistory.FromCsv(waveCsv, new string[] { "t", "ytt" });
 
                             ////var waveAnalysisModel = new NewmarkBetaModel(0.25);
@@ -640,7 +687,7 @@ public class TestHelper
 
                 // B002 RainflowCycleCounting
                 {
-                    //var inputCsv = new FileInfo(Path.Combine(basePath, "B002 RainflowCycleCounting", @"input3.csv"));
+                    //var inputCsv = new FileInfo(Path.Combine(baseDir, "B002 RainflowCycleCounting", @"input3.csv"));
                     ////var inputCsv = new FileInfo(@"C:\Users\aki32\Desktop\anaAll_beam.csv");
 
                     //var rainflow = RainflowCalculator.FromCsv(inputCsv);
@@ -652,7 +699,7 @@ public class TestHelper
                 // B003 RDTechnique
                 {
                     //// Define IO paths
-                    //var input = new FileInfo(Path.Combine(basePath, "B003 RDTechnique", @"input.csv"));
+                    //var input = new FileInfo(Path.Combine(baseDir, "B003 RDTechnique", @"input.csv"));
 
                     //// Read input csv
                     //var rd = RDTechniqueCalculator.FromCsv(input);
@@ -671,15 +718,22 @@ public class TestHelper
 
                 // X001 SNAPHelper
                 {
-                    //SNAPHelper.KeepClosingExcel(5000);
+                    // KeepClosingExcel
+                    {
+                        //SNAPHelper.KeepClosingExcel(5000);
+
+                    }
 
                 }
 
-                // X002 X002 DynamicProHelper
+                // X002 DynamicProHelper
                 {
-                    //var input = new FileInfo(Path.Combine(basePath, "X002 DynamicProHelper", @"kobe L1.csv"));
-                    //var output = new FileInfo(Path.Combine(basePath, "X002 DynamicProHelper", @"kobe L1.acc"));
-                    //DynamicProHelper.CreateAccFromCsv(input, output);
+                    // CreateAccFromCsv
+                    {
+                        //var input = new FileInfo(Path.Combine(baseDir, "X002 DynamicProHelper", @"kobe L1.csv"));
+                        //var output = new FileInfo(Path.Combine(baseDir, "X002 DynamicProHelper", @"kobe L1.acc"));
+                        //DynamicProHelper.CreateAccFromCsv(input, output);
+                    }
 
                 }
 
@@ -693,8 +747,8 @@ public class TestHelper
 
             // 001 Books2PDF
             {
-                var outputDir = new DirectoryInfo($@"{baseDir}\001 Books2PDF");
-                MiniApps.Books2PDF(outputDir, 10);
+                //var outputDir = new DirectoryInfo($@"{baseDir}\001 Books2PDF");
+                //MiniApps.Books2PDF(outputDir, 10);
 
             }
 
@@ -709,7 +763,6 @@ public class TestHelper
             }
 
         }
-
 
     }
 

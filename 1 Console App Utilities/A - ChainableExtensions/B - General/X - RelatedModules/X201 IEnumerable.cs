@@ -1,7 +1,7 @@
 ﻿using System.Runtime.InteropServices;
 using System.Security;
 
-namespace Aki32_Utilities.General.ChainableExtensions;
+namespace Aki32_Utilities.General;
 public static partial class ChainableExtensions
 {
 

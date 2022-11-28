@@ -1,4 +1,4 @@
-﻿using Aki32_Utilities.General.ChainableExtensions;
+﻿using Aki32_Utilities.General;
 using Aki32_Utilities.UsageExamples;
 
 namespace Aki32_Utilities;

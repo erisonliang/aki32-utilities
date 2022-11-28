@@ -1,4 +1,4 @@
-﻿using Aki32_Utilities.General.ChainableExtensions;
+﻿using Aki32_Utilities.General;
 
 namespace Aki32_Utilities.UsefulClasses;
 public class ProgressManager

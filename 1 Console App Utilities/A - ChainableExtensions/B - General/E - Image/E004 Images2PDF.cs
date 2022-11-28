@@ -3,7 +3,7 @@
 using iTextSharp.text;
 using iTextSharp.text.pdf;
 
-namespace Aki32_Utilities.General.ChainableExtensions;
+namespace Aki32_Utilities.General;
 public static partial class ChainableExtensions
 {
 
@@ -25,7 +25,7 @@ public static partial class ChainableExtensions
 
         // main
         var pngFIs = inputDir
-            .GetFilesWithRegexen(SearchOption.TopDirectoryOnly, GetImageFilesRegexen())
+            .GetFilesWithRegexen(SearchOption.TopDirectoryOnly, GetRegexen_ImageFiles())
             .Sort()
             .ToArray();
 

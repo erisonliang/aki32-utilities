@@ -2,7 +2,7 @@
 
 using Aki32_Utilities.UsefulClasses;
 
-namespace Aki32_Utilities.General.ChainableExtensions;
+namespace Aki32_Utilities.General;
 public static partial class ChainableExtensions
 {
 
@@ -24,6 +24,8 @@ public static partial class ChainableExtensions
         // preprocess
         UtilPreprocessors.PreprocessOutDir(ref outputDir, true, overrideTargetOutputDirCandidate ?? inputDir, methodName: methodName);
         searchRegexen ??= new string[] { ".*" };
+        var initialConsoleOutput = UtilConfig.ConsoleOutput;
+        UtilConfig.ConsoleOutput = false;
 
 
         // main
@@ -67,7 +69,11 @@ public static partial class ChainableExtensions
 
         progress.WriteDone();
 
+
         // post process
+        UtilConfig.ConsoleOutput = initialConsoleOutput;
+
+
         return outputDir!;
     }
 

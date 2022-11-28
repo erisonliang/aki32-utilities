@@ -1,8 +1,13 @@
 ﻿using System.Text;
 
-using Aki32_Utilities.General.ChainableExtensions;
+using Aki32_Utilities.UsefulClasses;
 
-namespace Aki32_Utilities.StructuralEngineering.ChainableExtensions;
+using iTextSharp.text;
+using iTextSharp.text.pdf;
+
+using Aki32_Utilities.General;
+
+namespace Aki32_Utilities.StructuralEngineering;
 public static partial class ChainableExtensions
 {
 
@@ -15,24 +20,15 @@ public static partial class ChainableExtensions
     public static FileInfo Rainflow(this FileInfo inputFile, FileInfo? outputFile, double C, double beta, bool consoleOutput = false, bool outputRainFlowResultHistory = true, bool outputRainBranches = false, FileInfo? outputFileForRainBranches = null)
     {
         // preprocess
-        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance); // to handle Shift-JIS
+        UtilPreprocessors.PreprocessOutFile(ref outputFile, true, inputFile.Directory!, inputFile.Name);
+        if (outputRainBranches && outputFileForRainBranches is null)
+            UtilPreprocessors.PreprocessOutFile(ref outputFileForRainBranches, false, outputFile!.Directory!, $"{Path.GetFileNameWithoutExtension(outputFile.Name)}_Branches.csv");
 
-        if (outputFile is null)
-            outputFile = new FileInfo(Path.Combine(inputFile.DirectoryName!, "output_Rainflow", inputFile.Name));
-        if (!outputFile.Directory!.Exists) outputFile.Directory.Create();
-        if (outputFile.Exists) outputFile.Delete();
-
-        if (outputRainBranches)
-        {
-            if (outputFileForRainBranches is null)
-                outputFileForRainBranches = new FileInfo(Path.Combine(inputFile.DirectoryName!, "output_Rainflow", $"{Path.GetFileNameWithoutExtension(inputFile.Name)}_Branches.csv"));
-            if (!outputFileForRainBranches.Directory!.Exists) outputFileForRainBranches.Directory.Create();
-            if (outputFileForRainBranches.Exists) outputFileForRainBranches.Delete();
-        }
 
         // main
         var rainflow = RainflowCalculator.FromCsv(inputFile);
         rainflow.CalcRainflow(C, beta, consoleOutput);
+
 
         // output
         if (outputRainFlowResultHistory && outputRainBranches)
@@ -66,16 +62,6 @@ public static partial class ChainableExtensions
         DirectoryInfo? outputDirForRainBranches = null,
         int maxDegreeOfParallelism = 999)
     {
-        // preprocess
-        UtilPreprocessors.PreprocessOutDir(ref outputDir, true, inputDir);
-        if (outputRainFlowResultHistory && outputRainBranches)
-        {
-            outputDirForRainBranches ??= outputDir;
-            if (!outputDirForRainBranches!.Exists)
-                outputDirForRainBranches.Create();
-        }
-
-
         // main
         var ProcessOne = (FileInfo inF, FileInfo outF) =>
         {
@@ -97,11 +83,13 @@ public static partial class ChainableExtensions
 
         inputDir.Loop(outputDir,
             ProcessOne,
-            maxDegreeOfParallelism: maxDegreeOfParallelism
+            maxDegreeOfParallelism: maxDegreeOfParallelism,
+            searchRegexen: General.ChainableExtensions.GetRegexen_CsvFiles()
             );
 
 
-        return outputDir;
+        // post process
+        return outputDir!;
 
     }
 

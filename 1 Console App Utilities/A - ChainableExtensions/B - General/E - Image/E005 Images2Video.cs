@@ -1,7 +1,7 @@
 ﻿using OpenCvSharp;
 using Aki32_Utilities.UsefulClasses;
 
-namespace Aki32_Utilities.General.ChainableExtensions;
+namespace Aki32_Utilities.General;
 public static partial class ChainableExtensions
 {
 
@@ -29,7 +29,7 @@ public static partial class ChainableExtensions
     {
         // preprocess
         UtilPreprocessors.PreprocessOutFile(ref outputFile, true, inputDir!, "output.mp4", takesTimeFlag: true);
-        if (!outputFile!.Name.IsMatchAny(GetVideoFilesRegexen()))
+        if (!outputFile!.Name.IsMatchAny(GetRegexen_VideoFiles()))
             throw new Exception("outputFile name must end with .mp4 or .avi");
 
 
@@ -41,7 +41,7 @@ public static partial class ChainableExtensions
 
         // main
         var imageFiles = inputDir
-            .GetFilesWithRegexen(SearchOption.TopDirectoryOnly, GetImageFilesRegexen())
+            .GetFilesWithRegexen(SearchOption.TopDirectoryOnly, GetRegexen_ImageFiles())
             .Sort()
             .ToArray();
 

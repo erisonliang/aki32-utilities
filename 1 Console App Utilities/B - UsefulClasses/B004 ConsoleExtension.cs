@@ -1,5 +1,5 @@
 ﻿
-namespace Aki32_Utilities.General.ChainableExtensions;
+namespace Aki32_Utilities.General;
 public class ConsoleExtension
 {
 

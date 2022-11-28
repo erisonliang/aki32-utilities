@@ -14,7 +14,7 @@ using iTextSharp.text.pdf.parser;
 
 using Newtonsoft.Json.Serialization;
 
-namespace Aki32_Utilities.General.ChainableExtensions;
+namespace Aki32_Utilities.General;
 public static partial class ChainableExtensions
 {
 

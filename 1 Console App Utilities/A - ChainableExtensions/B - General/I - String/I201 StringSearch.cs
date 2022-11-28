@@ -11,7 +11,7 @@ using Newtonsoft.Json.Serialization;
 
 using OpenCvSharp.Flann;
 
-namespace Aki32_Utilities.General.ChainableExtensions;
+namespace Aki32_Utilities.General;
 public static partial class ChainableExtensions
 {
 
@@ -46,7 +46,7 @@ public static partial class ChainableExtensions
 
     // ★★★★★★★★★★★★★★★ sub
 
-    public static string[] GetImageFilesRegexen(
+    public static string[] GetRegexen_ImageFiles(
         bool jpg = true,
         bool png = true,
         bool bmp = true,
@@ -80,7 +80,7 @@ public static partial class ChainableExtensions
         return regexen.ToArray();
     }
 
-    public static string[] GetVideoFilesRegexen(
+    public static string[] GetRegexen_VideoFiles(
         bool mp4 = true,
         bool avi = true)
     {
@@ -95,6 +95,20 @@ public static partial class ChainableExtensions
         {
             regexen.Add(@"^.*\.avi$");
             regexen.Add(@"^.*\.AVI$");
+        }
+
+        return regexen.ToArray();
+    }
+
+    public static string[] GetRegexen_CsvFiles(
+        bool csv = true)
+    {
+        var regexen = new List<string>();
+
+        if (csv)
+        {
+            regexen.Add(@"^.*\.csv$");
+            regexen.Add(@"^.*\.CSV$");
         }
 
         return regexen.ToArray();

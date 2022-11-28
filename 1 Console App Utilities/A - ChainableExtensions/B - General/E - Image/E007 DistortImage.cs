@@ -7,7 +7,7 @@ using HomographySharp;
 
 using MathNet.Numerics.LinearAlgebra;
 
-namespace Aki32_Utilities.General.ChainableExtensions;
+namespace Aki32_Utilities.General;
 public static partial class ChainableExtensions
 {
 
@@ -95,7 +95,7 @@ public static partial class ChainableExtensions
 
 
         // main
-        var firstImageFile = inputDir.GetFilesWithRegexen(SearchOption.TopDirectoryOnly, GetImageFilesRegexen()).FirstOrDefault();
+        var firstImageFile = inputDir.GetFilesWithRegexen(SearchOption.TopDirectoryOnly, GetRegexen_ImageFiles()).FirstOrDefault();
         if (firstImageFile == null)
             return outputDir;
 
@@ -134,7 +134,7 @@ public static partial class ChainableExtensions
 
         // main
         var inputImageFiles = inputDir
-            .GetFilesWithRegexen(SearchOption.TopDirectoryOnly, GetImageFilesRegexen())
+            .GetFilesWithRegexen(SearchOption.TopDirectoryOnly, GetRegexen_ImageFiles())
             .Sort();
 
         if (!inputImageFiles.Any())

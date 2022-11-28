@@ -1,6 +1,6 @@
 ﻿
 
-namespace Aki32_Utilities.MachineLearning.ChainableExtensions;
+namespace Aki32_Utilities.MachineLearning;
 public static partial class ChainableExtensions
 {
 
