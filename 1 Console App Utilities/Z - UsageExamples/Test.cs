@@ -612,14 +612,6 @@ public class TestHelper
 
                 jstage.DownloadData().Wait();
 
-
-
-
-
-
-
-
-
             }
 
         }
