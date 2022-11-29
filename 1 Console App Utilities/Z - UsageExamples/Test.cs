@@ -297,14 +297,22 @@ public class TestHelper
                     //input.PDFPageCount();
                 }
 
+                // H101 DownloadFile
+                {
+                    var source = new Uri("https://raw.githubusercontent.com/aki32/aki32-utilities/main/1%20Console%20App%20Utilities/%23%20TestModel/A%20-%20ChainableExtensions/B%20-%20General/E001%20CropImage/input.bmp");
+                    var output = new FileInfo($@"{baseDir}\H101 DownloadFile\output.bmp");
+                    source.DownloadFileAsync(output).Wait();
+                }
+
             }
 
             // B - UsefulClasses
             {
                 var baseDir = $@"..\..\..\# TestModel\A - ChainableExtensions\B- UsefulClasses";
 
-                // A001 aaa
+                // A001 XXXXXX
                 {
+
 
 
 
@@ -312,7 +320,7 @@ public class TestHelper
 
                 }
 
-                // A002 bb
+                // A002 XXXXXX
                 {
 
 
@@ -508,21 +516,6 @@ public class TestHelper
 
             }
 
-            // B006 DataFileManager
-            {
-                var baseDir = $@"..\..\..\# TestModel\B - UsefulClasses\B006 DataFileManager";
-
-
-
-
-
-
-
-
-
-
-            }
-
         }
 
         // C - OwesomeModels
@@ -570,6 +563,7 @@ public class TestHelper
 
         // D - ExternalAPIControllers
         {
+            var baseDir = $@"..\..\..\# TestModel\D - ExternalAPIControllers";
 
             // 001 LINEController
             {
@@ -599,11 +593,11 @@ public class TestHelper
                 //gc.Sync();
             }
 
-            // 002 JStageController
+            // 003 JStageController
             {
-                //var baseDir = $@"..\..\..\# TestModel\D - ExternalAPIControllers\003 JStageController\archive";
+                var baseDir_003 = $@"{baseDir}\003 JStageController";
 
-                //var jstage = new JStageController(baseDir);
+                //var jstage = new JStageController(baseDir_003);
 
                 //var result = jstage.GetData().Result;
 
@@ -619,15 +613,16 @@ public class TestHelper
 
         // E - SpecificPurposeModels
         {
+            var baseDir = $@"..\..\..\# TestModel\E - SpecificPurposeModels";
 
             // A - StructuralEngineering
             {
-                var baseDir = $@"..\..\..\# TestModel\E - SpecificPurposeModels\A - StructuralEngineering";
+                var baseDir_A = $@"{baseDir}\A - StructuralEngineering";
 
 
                 // B001 ElastoplasticAnalysis
                 {
-                    var baseDir_B001 = @$"{baseDir}\B001 EPAnalysis";
+                    var baseDir_B001 = @$"{baseDir_A}\B001 EPAnalysis";
 
                     // newmark beta
                     {
@@ -753,7 +748,7 @@ public class TestHelper
 
                 // B002 RainflowCycleCounting
                 {
-                    //var inputCsv = new FileInfo(Path.Combine(baseDir, "B002 RainflowCycleCounting", @"input3.csv"));
+                    //var inputCsv = new FileInfo($@"{baseDir_A}\B002 RainflowCycleCounting\input3.csv");
                     ////var inputCsv = new FileInfo(@"C:\Users\aki32\Desktop\anaAll_beam.csv");
 
                     //var rainflow = RainflowCalculator.FromCsv(inputCsv);
@@ -765,7 +760,7 @@ public class TestHelper
                 // B003 RDTechnique
                 {
                     //// Define IO paths
-                    //var input = new FileInfo(Path.Combine(baseDir, "B003 RDTechnique", @"input.csv"));
+                    //var input = new FileInfo($@"{baseDir_A}\B003 RDTechnique\input.csv");
 
                     //// Read input csv
                     //var rd = RDTechniqueCalculator.FromCsv(input);
@@ -796,15 +791,22 @@ public class TestHelper
                 {
                     // CreateAccFromCsv
                     {
-                        //var input = new FileInfo(Path.Combine(baseDir, "X002 DynamicProHelper", @"kobe L1.csv"));
-                        //var output = new FileInfo(Path.Combine(baseDir, "X002 DynamicProHelper", @"kobe L1.acc"));
-                        //DynamicProHelper.CreateAccFromCsv(input, output);
+                        var input = new FileInfo($@"{baseDir_A}\X002 DynamicProHelper\kobe L1.csv");
+                        var output = new FileInfo($@"{baseDir_A}\X002 DynamicProHelper\kobe L1.acc");
+                        DynamicProHelper.CreateAccFromCsv(input, output);
                     }
 
                 }
 
             }
 
+            // B - MachineLearning
+            {
+                var baseDir_B = $@"{baseDir}\B - MachineLearning";
+
+
+
+            }
         }
 
         // Z - MiniApps

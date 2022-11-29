@@ -39,7 +39,7 @@ public partial class MiniApps
         var progress = new ProgressManager(PageCount);
         for (int i = 0; i < PageCount; i++)
         {
-            ChainableExtensions.SaveScreenShot(targetDirectory, UL, BR);
+            General.ChainableExtensions.SaveScreenShot(targetDirectory, UL, BR);
             IODeviceExtension.MouseCursorMoveAndClick(ProceedButton);
             progress.WriteCurrentState(i);
             Thread.Sleep(TimePerPageMilliSeconds);
