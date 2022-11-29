@@ -1,6 +1,6 @@
 ﻿
 
-namespace Aki32_Utilities.StructuralEngineering;
+namespace Aki32_Utilities.SpecificPurposeModels.StructuralEngineering;
 
 /// <summary>
 /// Bilinear Model where K2=0

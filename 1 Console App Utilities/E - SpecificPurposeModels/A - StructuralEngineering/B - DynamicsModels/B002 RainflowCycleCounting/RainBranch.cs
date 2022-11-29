@@ -1,6 +1,6 @@
 ﻿
 
-namespace Aki32_Utilities.StructuralEngineering;
+namespace Aki32_Utilities.SpecificPurposeModels.StructuralEngineering;
 public class RainBranch
 {
     public double SourceMu { get; set; }

@@ -1,6 +1,6 @@
 ﻿
 
-namespace Aki32_Utilities.StructuralEngineering;
+namespace Aki32_Utilities.SpecificPurposeModels.StructuralEngineering;
 
 /// <summary>
 /// Base abstruct class of Elastoplastic Characteristics

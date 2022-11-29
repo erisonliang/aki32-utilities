@@ -1,13 +1,6 @@
-﻿using System.Text;
+﻿using Aki32_Utilities.General;
 
-using Aki32_Utilities.UsefulClasses;
-
-using iTextSharp.text;
-using iTextSharp.text.pdf;
-
-using Aki32_Utilities.General;
-
-namespace Aki32_Utilities.StructuralEngineering;
+namespace Aki32_Utilities.SpecificPurposeModels.StructuralEngineering;
 public static partial class ChainableExtensions
 {
 

@@ -1,7 +1,7 @@
 ﻿using Aki32_Utilities.OwesomeModels;
-using Aki32_Utilities.StructuralEngineering;
+using Aki32_Utilities.SpecificPurposeModels.StructuralEngineering;
 
-namespace Aki32_Utilities.StructuralEngineering;
+namespace Aki32_Utilities.SpecificPurposeModels.StructuralEngineering;
 public class NigamJenningsModel : ITimeHistoryAnalysisModel
 {
 

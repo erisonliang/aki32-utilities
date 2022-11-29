@@ -1,6 +1,6 @@
 ﻿using Aki32_Utilities.OwesomeModels;
 
-namespace Aki32_Utilities.StructuralEngineering;
+namespace Aki32_Utilities.SpecificPurposeModels.StructuralEngineering;
 public interface ITimeHistoryAnalysisModel
 {
     
