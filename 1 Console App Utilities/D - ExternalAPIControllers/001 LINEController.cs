@@ -40,7 +40,7 @@ public class LINEController
             var content = new FormUrlEncodedContent(new Dictionary<string, string> { { "message", message } });
 
             // request
-            await FileManager.AccessAPIAsync_ForJsonData<object>(HttpMethod.Post, new Uri("https://notify-api.line.me/api/notify"),
+            await DataFileManager.AccessAPIAsync_ForJsonData<object>(HttpMethod.Post, new Uri("https://notify-api.line.me/api/notify"),
                 authBearerToken: LineAccessToken, httpContent: content);
 
             return true;

@@ -12,7 +12,7 @@ using System.Xml.Serialization;
 using DocumentFormat.OpenXml.Wordprocessing;
 
 namespace Aki32_Utilities.UsefulClasses;
-public static class FileManager
+public static class DataFileManager
 {
 
     // ★★★★★★★★★★★★★★★ server

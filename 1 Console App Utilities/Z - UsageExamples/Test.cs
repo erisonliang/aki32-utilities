@@ -18,10 +18,16 @@ public class TestHelper
     {
         // A - ChainableExtensions
         {
-            // B - General
+            // _ - Base
+            {
+                var baseDir = $@"..\..\..\# TestModel\A - ChainableExtensions\_ - Base";
+
+            }
+
+            // A - General
             {
 
-                var baseDir = @"..\..\..\# TestModel\A - ChainableExtensions\B - General";
+                var baseDir = $@"..\..\..\# TestModel\A - ChainableExtensions\A - General";
 
                 // B001 CollectFiles
                 {
@@ -293,22 +299,40 @@ public class TestHelper
 
             }
 
-            // C - MachineLearning
+            // B - UsefulClasses
             {
-                var baseDir = @"..\..\..\# TestModel\A - ChainableExtensions\C - MachineLearning";
+                var baseDir = $@"..\..\..\# TestModel\A - ChainableExtensions\B- UsefulClasses";
 
+                // A001 aaa
+                {
+
+
+
+
+
+                }
+
+                // A002 bb
+                {
+
+
+
+
+                }
 
             }
 
-            // D - OwesomeModels
+            // C - OwesomeModels
             {
+                var baseDir = $@"..\..\..\# TestModel\A - ChainableExtensions\C - OwesomeModels";
+
                 // A - TimeHistoryModel
                 {
-                    var baseDir = @"..\..\..\# TestModel\A - ChainableExtensions\D - OwesomeModels\A - TimeHistoryModel";
+                    var baseDir_A = $@"{baseDir}\A - TimeHistoryModel";
 
                     // B001 FFT
                     {
-                        //new FileInfo($@"{baseDir}\B001 FFT\input.csv")
+                        //new FileInfo($@"{baseDir_A}\B001 FFT\input.csv")
                         //    .GetTimeHistoryFromFile(new string[] { "t", "x" })
                         //    .FFT("x").Result
                         //    .SaveToCsv();
@@ -317,15 +341,15 @@ public class TestHelper
 
                     // B002 DrawGraph
                     {
-                        //new FileInfo($@"{baseDir}\B002 DrawGraph\input1.csv")
+                        //new FileInfo($@"{baseDir_A}\B002 DrawGraph\input1.csv")
                         //    .DrawGraph("t", "v", TimeHistory.ChartType.Line);
 
 
-                        //new FileInfo($@"{baseDir}\B002 DrawGraph\input1.csv")
+                        //new FileInfo($@"{baseDir_A}\B002 DrawGraph\input1.csv")
                         //    .DrawGraph(0, 1, TimeHistory.ChartType.Line);
 
 
-                        //new FileInfo($@"{baseDir}\B002 DrawGraph\input2.csv")
+                        //new FileInfo($@"{baseDir_A}\B002 DrawGraph\input2.csv")
                         //    .DrawGraph_ForAll(TimeHistory.ChartType.Line);
 
                     }
@@ -334,35 +358,48 @@ public class TestHelper
 
             }
 
-            // E - StructuralEngineering
+            // E - SpecificPurposeModels
             {
-                var baseDir = @"..\..\..\# TestModel\A - ChainableExtensions\E - StructuralEngineering";
+                var baseDir = $@"..\..\..\# TestModel\A - ChainableExtensions\E - SpecificPurposeModels";
 
-                // A001 RainflowCycleCounting
+                // A - StructuralEngineering
                 {
-                    //new FileInfo(Path.Combine(baseDir, "A001 RainflowCycleCounting", @"input3.csv"))
-                    //    .Rainflow(null, 4, 1 / 3d, false);
+                    var baseDir_A = $@"{baseDir}\A - StructuralEngineering";
 
-                    //new DirectoryInfo(Path.Combine(baseDir, "A001 RainflowCycleCounting"))
-                    //    .Rainflow_Loop(null, 4, 1 / 3d, false);
+                    // A001 RainflowCycleCounting
+                    {
+                        //new FileInfo(Path.Combine(baseDir_A, "A001 RainflowCycleCounting", @"input3.csv"))
+                        //    .Rainflow(null, 4, 1 / 3d, false);
+
+                        //new DirectoryInfo(Path.Combine(baseDir_A, "A001 RainflowCycleCounting"))
+                        //    .Rainflow_Loop(null, 4, 1 / 3d, false);
+
+                    }
+
+                    // A002 RDTechnique
+                    {
+                        //new FileInfo(Path.Combine(baseDir_A, "A002 RDTechnique", @"input.csv"))
+                        //    .CalcRD(null, 200)
+                        //    ;
+
+                    }
+
+                    // A003 CreateAccFromCsv
+                    {
+                        //new FileInfo(Path.Combine(baseDir_A, "A003 CreateAccFromCsv", @"kobe L1.csv"))
+                        //    .CreateAccFromCsv_For_DynamicPro(null);
+
+                    }
 
                 }
 
-                // A002 RDTechnique
+                // B - MachineLearning
                 {
-                    //new FileInfo(Path.Combine(baseDir, "A002 RDTechnique", @"input.csv"))
-                    //    .CalcRD(null, 200)
-                    //    ;
+                    var baseDir_B = $@"{baseDir}\B - MachineLearning";
+
+
 
                 }
-
-                // A003 CreateAccFromCsv
-                {
-                    //new FileInfo(Path.Combine(baseDir, "A003 CreateAccFromCsv", @"kobe L1.csv"))
-                    //    .CreateAccFromCsv_For_DynamicPro(null);
-
-                }
-
             }
 
         }
@@ -473,7 +510,7 @@ public class TestHelper
 
             // B006 DataFileManager
             {
-                var baseDir = @"..\..\..\# TestModel\B - UsefulClasses\B006 DataFileManager";
+                var baseDir = $@"..\..\..\# TestModel\B - UsefulClasses\B006 DataFileManager";
 
 
 
@@ -490,11 +527,11 @@ public class TestHelper
 
         // C - OwesomeModels
         {
-            var baseDir = @"..\..\..\# TestModel\C - OwesomeModels";
+            var baseDir = $@"..\..\..\# TestModel\C - OwesomeModels";
 
             // A - TimeHistoryModel
             {
-                var baseDir2 = $@"{baseDir}\A - TimeHistoryModel";
+                var baseDir_A = $@"{baseDir}\A - TimeHistoryModel";
 
                 // ★ TimeHistory
                 {
@@ -564,7 +601,7 @@ public class TestHelper
 
             // 002 JStageController
             {
-                //var baseDir = @"..\..\..\# TestModel\D - ExternalAPIControllers\003 JStageController\archive";
+                //var baseDir = $@"..\..\..\# TestModel\D - ExternalAPIControllers\003 JStageController\archive";
 
                 //var jstage = new JStageController(baseDir);
 
@@ -585,7 +622,7 @@ public class TestHelper
 
             // A - StructuralEngineering
             {
-                var baseDir = @"..\..\..\# TestModel\E - SpecificPurposeModels\A - StructuralEngineering";
+                var baseDir = $@"..\..\..\# TestModel\E - SpecificPurposeModels\A - StructuralEngineering";
 
 
                 // B001 ElastoplasticAnalysis
@@ -772,7 +809,7 @@ public class TestHelper
 
         // Z - MiniApps
         {
-            var baseDir = @"..\..\..\# TestModel\Z - UsageExample";
+            var baseDir = $@"..\..\..\# TestModel\Z - UsageExample";
 
             // A001 Books2PDF
             {
