@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Threading.Tasks;
 
+using Aki32_Utilities.ExternalAPIControllers;
 using Aki32_Utilities.General;
 using Aki32_Utilities.OwesomeModels;
 using Aki32_Utilities.OwesomeModels.ChainableExtensions;
 using Aki32_Utilities.StructuralEngineering;
-using Aki32_Utilities.StructuralEngineering;
+using Aki32_Utilities.UsefulClasses;
 
 namespace Aki32_Utilities.UsageExamples;
 public class TestHelper
@@ -362,12 +363,6 @@ public class TestHelper
 
                 }
 
-                // V001 KeepClosingExcel
-                {
-                    //StructuralEngineering.ChainableExtensions.KeepClosingExcel_For_SNAP(5000);
-
-                }
-
             }
 
         }
@@ -476,6 +471,21 @@ public class TestHelper
 
             }
 
+            // B006 DataFileManager
+            {
+                var baseDir = @"..\..\..\# TestModel\B - UsefulClasses\B006 DataFileManager";
+
+
+
+
+
+
+
+
+
+
+            }
+
         }
 
         // C - OwesomeModels
@@ -518,6 +528,7 @@ public class TestHelper
                 }
 
             }
+
         }
 
         // D - ExternalAPIControllers
@@ -527,7 +538,8 @@ public class TestHelper
             {
                 //var accessToken = ""; // LINE Notify
                 //var line = new LINEController(accessToken);
-                //line.SendMessageAsync(@"Hello LINE from C#. 日本語");
+                //var result = line.SendMessageAsync(@"Hello LINE from C#. 日本語").Result;
+
             }
 
             // 002 GitController
@@ -548,6 +560,22 @@ public class TestHelper
                 //};
 
                 //gc.Sync();
+            }
+
+            // 002 JStageController
+            {
+                //var baseDir = @"..\..\..\# TestModel\D - ExternalAPIControllers\003 JStageController\archive";
+
+                //var jstage = new JStageController(baseDir);
+
+                //var result = jstage.GetData().Result;
+
+
+
+
+
+
+
             }
 
         }
@@ -746,9 +774,9 @@ public class TestHelper
         {
             var baseDir = @"..\..\..\# TestModel\Z - UsageExample";
 
-            // 001 Books2PDF
+            // A001 Books2PDF
             {
-                //var outputDir = new DirectoryInfo($@"{baseDir}\001 Books2PDF");
+                //var outputDir = new DirectoryInfo($@"{baseDir}\A001 Books2PDF");
                 //MiniApps.Books2PDF(outputDir, 10);
 
             }

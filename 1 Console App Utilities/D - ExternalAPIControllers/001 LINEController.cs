@@ -1,5 +1,7 @@
 ﻿using System.Net.Http.Headers;
 
+using Aki32_Utilities.UsefulClasses;
+
 namespace Aki32_Utilities.ExternalAPIControllers;
 public class LINEController
 {
@@ -34,25 +36,19 @@ public class LINEController
     {
         try
         {
-            using var client = new HttpClient();
-
-            // auth
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", LineAccessToken);
-
             // content
             var content = new FormUrlEncodedContent(new Dictionary<string, string> { { "message", message } });
 
             // request
-            var result = await client.PostAsync("https://notify-api.line.me/api/notify", content);
+            await FileManager.AccessAPIAsync_ForJsonData<object>(HttpMethod.Post, new Uri("https://notify-api.line.me/api/notify"),
+                authBearerToken: LineAccessToken, httpContent: content);
 
+            return true;
         }
         catch (Exception)
         {
             return false;
         }
-
-        return true;
-
     }
 
 
