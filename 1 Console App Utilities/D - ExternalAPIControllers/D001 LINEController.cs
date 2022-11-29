@@ -1,6 +1,4 @@
-﻿using System.Net.Http.Headers;
-
-using Aki32_Utilities.UsefulClasses;
+﻿using Aki32_Utilities.UsefulClasses;
 
 namespace Aki32_Utilities.ExternalAPIControllers;
 public class LINEController
@@ -23,6 +21,10 @@ public class LINEController
     public LINEController(string lineAccessToken)
     {
         LineAccessToken = lineAccessToken;
+
+        Console.WriteLine("LINEController Instance Created.");
+        Console.WriteLine("Data Powered by LINE Notify (https://notify-bot.line.me/ja/)");
+
         //ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
     }
 
@@ -42,7 +44,7 @@ public class LINEController
             // request
             var url = new Uri("https://notify-api.line.me/api/notify");
             await url.CallAPIAsync_ForJsonData<object>(HttpMethod.Post,
-                authBearerToken: LineAccessToken, 
+                authBearerToken: LineAccessToken,
                 httpContent: content);
 
             return true;

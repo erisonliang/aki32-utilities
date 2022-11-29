@@ -13,7 +13,7 @@ public static class DataFileManager
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
-    internal static async Task<T> ReadJsonFromLocalAsync<T>(FileInfo inputFile) where T : new()
+    public static async Task<T> ReadJsonFromLocalAsync<T>(FileInfo inputFile) where T : new()
     {
         using var sr = new StreamReader(inputFile.FullName);
         var json = await sr.ReadToEndAsync();
@@ -30,7 +30,7 @@ public static class DataFileManager
     /// <param name="outputFile"></param>
     /// <param name="data"></param>
     /// <returns></returns>
-    internal static async Task<FileInfo> WriteJsonToLocalAsync<T>(FileInfo outputFile, T data, bool formatted = false)
+    public static async Task<FileInfo> WriteJsonToLocalAsync<T>(FileInfo outputFile, T data, bool formatted = false)
     {
         var json = JsonConvert.SerializeObject(data, formatted ? Newtonsoft.Json.Formatting.Indented : Newtonsoft.Json.Formatting.None);
 

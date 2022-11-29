@@ -12,29 +12,28 @@ public static partial class ChainableExtensions
     /// <exception cref="HttpRequestException">
     /// response was not OK
     /// </exception>
-    public static async Task<FileInfo> DownloadFileAsync(this Uri url, FileInfo outputFile)
+    public static async Task<FileInfo> DownloadFileAsync(this Uri url, FileInfo outputFile,
+        bool ignoreWhenExists = false
+        )
     {
         // preprocess
         General.UtilPreprocessors.PreprocessBasic(true);
 
 
-        // main
-        using var response = await url.CallAPIAsync_ForResponse(HttpMethod.Get);
+        // ignore
+        if (ignoreWhenExists && !outputFile.Exists)
+            return outputFile!;
 
-        if (response.StatusCode != HttpStatusCode.OK)
-            throw new HttpRequestException(response.ReasonPhrase);
 
-        using var content = response.Content;
-        using var receivedStream = await content.ReadAsStreamAsync();
+        // access and save
+        using var responseStream = await url.CallAPIAsync_ForResponseStream(HttpMethod.Get);
         using var localStream = new StreamWriter(outputFile.FullName, false).BaseStream;
-
-        receivedStream.CopyTo(localStream);
+        responseStream.CopyTo(localStream);
 
 
         // post process
         return outputFile!;
 
     }
-
 
 }

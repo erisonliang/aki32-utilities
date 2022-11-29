@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 
 using Aki32_Utilities.ExternalAPIControllers;
@@ -299,9 +300,19 @@ public class TestHelper
 
                 // H101 DownloadFile
                 {
-                    var source = new Uri("https://raw.githubusercontent.com/aki32/aki32-utilities/main/1%20Console%20App%20Utilities/%23%20TestModel/A%20-%20ChainableExtensions/B%20-%20General/E001%20CropImage/input.bmp");
-                    var output = new FileInfo($@"{baseDir}\H101 DownloadFile\output.bmp");
-                    source.DownloadFileAsync(output).Wait();
+                    //var source = new Uri("https://raw.githubusercontent.com/aki32/aki32-utilities/main/1%20Console%20App%20Utilities/%23%20TestModel/A%20-%20ChainableExtensions/B%20-%20General/E001%20CropImage/input.bmp");
+                    //var output = new FileInfo($@"{baseDir}\H101 DownloadFile\output.bmp");
+                    //source.DownloadFileAsync(output).Wait();
+
+                }
+
+                // H201 CallAPI
+                {
+                    //var source = new Uri("https://weather.tsukumijima.net/api/forecast/city/400040");
+                    //var result = source.CallAPIAsync_ForJsonData<dynamic>(HttpMethod.Get).Result;
+
+                    //Console.WriteLine(result);
+
                 }
 
             }
@@ -565,7 +576,7 @@ public class TestHelper
         {
             var baseDir = $@"..\..\..\# TestModel\D - ExternalAPIControllers";
 
-            // 001 LINEController
+            // D001 LINEController
             {
                 //var accessToken = ""; // LINE Notify
                 //var line = new LINEController(accessToken);
@@ -573,7 +584,7 @@ public class TestHelper
 
             }
 
-            // 002 GitController
+            // D002 GitController
             {
                 //var remotePath = $@"https://github.com/aki32/test"; // remote url
                 //var localPath = $@"C:\Users\aki32\Dropbox\PC\Desktop\test"; // local path
@@ -593,13 +604,15 @@ public class TestHelper
                 //gc.Sync();
             }
 
-            // 003 JStageController
+            // D003 JStageController
             {
-                var baseDir_003 = $@"{baseDir}\003 JStageController";
+                var localDir = new DirectoryInfo($@"{baseDir}\D003 JStageController");
 
-                //var jstage = new JStageController(baseDir_003);
+                var jstage = new JStageController(localDir);
 
-                //var result = jstage.GetData().Result;
+                jstage.DownloadData().Wait();
+
+
 
 
 
@@ -791,9 +804,9 @@ public class TestHelper
                 {
                     // CreateAccFromCsv
                     {
-                        var input = new FileInfo($@"{baseDir_A}\X002 DynamicProHelper\kobe L1.csv");
-                        var output = new FileInfo($@"{baseDir_A}\X002 DynamicProHelper\kobe L1.acc");
-                        DynamicProHelper.CreateAccFromCsv(input, output);
+                        //var input = new FileInfo($@"{baseDir_A}\X002 DynamicProHelper\kobe L1.csv");
+                        //var output = new FileInfo($@"{baseDir_A}\X002 DynamicProHelper\kobe L1.acc");
+                        //DynamicProHelper.CreateAccFromCsv(input, output);
                     }
 
                 }

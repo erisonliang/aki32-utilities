@@ -1,0 +1,345 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed  xmlns="http://www.w3.org/2005/Atom"
+  xmlns:prism="http://prismstandard.org/namespaces/basic/2.0/"
+  xmlns:opensearch="http://a9.com/-/spec/opensearch/1.1/"
+  xml:lang="ja" > 
+  <result>
+    <status>0</status>
+    <message/>
+  </result>
+  <title>Articles</title>
+  <link href="https://api.jstage.jst.go.jp/searchapi/do?service=3&amp;pubyearfrom=2022&amp;issn=1881-8153&amp;count=5"/>
+  <id>https://api.jstage.jst.go.jp/searchapi/do?service=3&amp;pubyearfrom=2022&amp;issn=1881-8153&amp;count=5</id>
+  <servicecd>3</servicecd>
+  <updated>2022-11-29T16:23+09:00</updated>
+  <opensearch:totalResults>104</opensearch:totalResults>
+  <opensearch:startIndex>1</opensearch:startIndex>
+  <opensearch:itemsPerPage>5</opensearch:itemsPerPage>
+  <entry>
+    <article_title>
+      <en>
+        <![CDATA[STUDY ON THE EFFECT OF GROUND GRANULATED BLAST FURNACE SLAG ON SUPPRESSION EFFECT OF HEXAVALENT CHROMIUM ELUTION FROM CEMENT HARDENED]]>
+      </en>
+      <ja>
+        <![CDATA[セメント硬化体の六価クロム溶出抑制効果に及ぼす高炉スラグ微粉末の影響に関する研究]]>
+      </ja>
+    </article_title>
+    <article_link>
+      <en>https://www.jstage.jst.go.jp/article/aijs/87/791/87_1/_article</en>
+      <ja>https://www.jstage.jst.go.jp/article/aijs/87/791/87_1/_article/-char/ja/</ja>
+    </article_link>
+    <author>
+      <en>
+        <name>
+          <![CDATA[Hikaru FUMINO]]>
+        </name>
+        <name>
+          <![CDATA[Junho KIM]]>
+        </name>
+        <name>
+          <![CDATA[Yuhei NISHIO]]>
+        </name>
+        <name>
+          <![CDATA[Manabu KANEMATSU]]>
+        </name>
+      </en>
+      <ja>
+        <name>
+          <![CDATA[文野 光]]>
+        </name>
+        <name>
+          <![CDATA[金 準鎬]]>
+        </name>
+        <name>
+          <![CDATA[西尾 悠平]]>
+        </name>
+        <name>
+          <![CDATA[兼松 学]]>
+        </name>
+      </ja>
+    </author>
+    <cdjournal>aijs</cdjournal>
+    <material_title>
+      <en>
+        <![CDATA[Journal of Structural and Construction Engineering (Transactions of AIJ)]]>
+      </en>
+      <ja>
+        <![CDATA[日本建築学会構造系論文集]]>
+      </ja>
+    </material_title>
+    <prism:issn>1340-4202</prism:issn>
+    <prism:eIssn>1881-8153</prism:eIssn>
+    <prism:volume>87</prism:volume>
+    <prism:number>791</prism:number>
+    <prism:startingPage>1</prism:startingPage>
+    <prism:endingPage>8</prism:endingPage>
+    <pubyear>2022</pubyear>
+    <prism:doi>10.3130/aijs.87.1</prism:doi>
+    <systemcode>1</systemcode>
+    <systemname>J-STAGE</systemname>
+    <title>
+      <![CDATA[セメント硬化体の六価クロム溶出抑制効果に及ぼす高炉スラグ微粉末の影響に関する研究]]>
+    </title>
+    <link href="https://www.jstage.jst.go.jp/article/aijs/87/791/87_1/_article/-char/ja/"/>
+    <id>https://www.jstage.jst.go.jp/article/aijs/87/791/87_1/_article/-char/ja/</id>
+    <updated>2022-01-01T09:00+09:00</updated>
+  </entry>
+  <entry>
+    <article_title>
+      <en>
+        <![CDATA[CREEP BEHAVIOR AT HIGH TEMPERATURE OF HYBRID REBAR-GLULAM TIMBER BEAM UNDER LONG-TERM LOADING]]>
+      </en>
+      <ja>
+        <![CDATA[高温環境における鉄筋集成材梁のクリープたわみに関する実験的研究]]>
+      </ja>
+    </article_title>
+    <article_link>
+      <en>https://www.jstage.jst.go.jp/article/aijs/87/791/87_104/_article</en>
+      <ja>https://www.jstage.jst.go.jp/article/aijs/87/791/87_104/_article/-char/ja/</ja>
+    </article_link>
+    <author>
+      <en>
+        <name>
+          <![CDATA[Nao MATSUOKA]]>
+        </name>
+        <name>
+          <![CDATA[Shinichi SHIOYA]]>
+        </name>
+      </en>
+      <ja>
+        <name>
+          <![CDATA[松岡 直]]>
+        </name>
+        <name>
+          <![CDATA[塩屋 晋一]]>
+        </name>
+      </ja>
+    </author>
+    <cdjournal>aijs</cdjournal>
+    <material_title>
+      <en>
+        <![CDATA[Journal of Structural and Construction Engineering (Transactions of AIJ)]]>
+      </en>
+      <ja>
+        <![CDATA[日本建築学会構造系論文集]]>
+      </ja>
+    </material_title>
+    <prism:issn>1340-4202</prism:issn>
+    <prism:eIssn>1881-8153</prism:eIssn>
+    <prism:volume>87</prism:volume>
+    <prism:number>791</prism:number>
+    <prism:startingPage>104</prism:startingPage>
+    <prism:endingPage>115</prism:endingPage>
+    <pubyear>2022</pubyear>
+    <prism:doi>10.3130/aijs.87.104</prism:doi>
+    <systemcode>1</systemcode>
+    <systemname>J-STAGE</systemname>
+    <title>
+      <![CDATA[高温環境における鉄筋集成材梁のクリープたわみに関する実験的研究]]>
+    </title>
+    <link href="https://www.jstage.jst.go.jp/article/aijs/87/791/87_104/_article/-char/ja/"/>
+    <id>https://www.jstage.jst.go.jp/article/aijs/87/791/87_104/_article/-char/ja/</id>
+    <updated>2022-01-01T09:00+09:00</updated>
+  </entry>
+  <entry>
+    <article_title>
+      <en>
+        <![CDATA[STUDY ON ASSURANCE DESIGN METHOD OF CONNECTIONS AT THE BOTTOM OF COLUMNS IN WOODEN WALL STRUCTURE (PART 1): PROPOSAL OF DESIGN FLOW FOR CONNECTIONS AND EXPERIMENTAL AND ANALYTICAL STUDY ON THE MODELING OF VERTICAL STRUCTURAL PLANE]]>
+      </en>
+      <ja>
+        <![CDATA[木造耐力壁構造の柱脚接合部の保証設計法に関する研究（その１）：接合部設計フローの提案と鉛直構面のモデル化に関する実験的・解析的検証]]>
+      </ja>
+    </article_title>
+    <article_link>
+      <en>https://www.jstage.jst.go.jp/article/aijs/87/791/87_116/_article</en>
+      <ja>https://www.jstage.jst.go.jp/article/aijs/87/791/87_116/_article/-char/ja/</ja>
+    </article_link>
+    <author>
+      <en>
+        <name>
+          <![CDATA[Taro NAKA]]>
+        </name>
+        <name>
+          <![CDATA[Ryuki ODANI]]>
+        </name>
+        <name>
+          <![CDATA[Kenji AOKI]]>
+        </name>
+        <name>
+          <![CDATA[Masahiro INAYAMA]]>
+        </name>
+      </en>
+      <ja>
+        <name>
+          <![CDATA[中 太郎]]>
+        </name>
+        <name>
+          <![CDATA[小谷 竜城]]>
+        </name>
+        <name>
+          <![CDATA[青木 謙治]]>
+        </name>
+        <name>
+          <![CDATA[稲山 正弘]]>
+        </name>
+      </ja>
+    </author>
+    <cdjournal>aijs</cdjournal>
+    <material_title>
+      <en>
+        <![CDATA[Journal of Structural and Construction Engineering (Transactions of AIJ)]]>
+      </en>
+      <ja>
+        <![CDATA[日本建築学会構造系論文集]]>
+      </ja>
+    </material_title>
+    <prism:issn>1340-4202</prism:issn>
+    <prism:eIssn>1881-8153</prism:eIssn>
+    <prism:volume>87</prism:volume>
+    <prism:number>791</prism:number>
+    <prism:startingPage>116</prism:startingPage>
+    <prism:endingPage>127</prism:endingPage>
+    <pubyear>2022</pubyear>
+    <prism:doi>10.3130/aijs.87.116</prism:doi>
+    <systemcode>1</systemcode>
+    <systemname>J-STAGE</systemname>
+    <title>
+      <![CDATA[木造耐力壁構造の柱脚接合部の保証設計法に関する研究（その１）：接合部設計フローの提案と鉛直構面のモデル化に関する実験的・解析的検証]]>
+    </title>
+    <link href="https://www.jstage.jst.go.jp/article/aijs/87/791/87_116/_article/-char/ja/"/>
+    <id>https://www.jstage.jst.go.jp/article/aijs/87/791/87_116/_article/-char/ja/</id>
+    <updated>2022-01-01T09:00+09:00</updated>
+  </entry>
+  <entry>
+    <article_title>
+      <en>
+        <![CDATA[EFFECTS OF CONVENTIONAL AND DAMAGE CONTROL FLAT WALLS ON THE SEISMIC PERFORMANCE OF HIGH RISE RC BUILDINGS]]>
+      </en>
+      <ja>
+        <![CDATA[従来型および損傷抑制型の方立壁が高層RC建築の耐震性能に与える影響]]>
+      </ja>
+    </article_title>
+    <article_link>
+      <en>https://www.jstage.jst.go.jp/article/aijs/87/791/87_128/_article</en>
+      <ja>https://www.jstage.jst.go.jp/article/aijs/87/791/87_128/_article/-char/ja/</ja>
+    </article_link>
+    <author>
+      <en>
+        <name>
+          <![CDATA[Keito MATSUO]]>
+        </name>
+        <name>
+          <![CDATA[Yasushi SANADA]]>
+        </name>
+        <name>
+          <![CDATA[Rokhyun YOON]]>
+        </name>
+      </en>
+      <ja>
+        <name>
+          <![CDATA[松尾 啓斗]]>
+        </name>
+        <name>
+          <![CDATA[真田 靖士]]>
+        </name>
+        <name>
+          <![CDATA[尹 ロク現]]>
+        </name>
+      </ja>
+    </author>
+    <cdjournal>aijs</cdjournal>
+    <material_title>
+      <en>
+        <![CDATA[Journal of Structural and Construction Engineering (Transactions of AIJ)]]>
+      </en>
+      <ja>
+        <![CDATA[日本建築学会構造系論文集]]>
+      </ja>
+    </material_title>
+    <prism:issn>1340-4202</prism:issn>
+    <prism:eIssn>1881-8153</prism:eIssn>
+    <prism:volume>87</prism:volume>
+    <prism:number>791</prism:number>
+    <prism:startingPage>128</prism:startingPage>
+    <prism:endingPage>138</prism:endingPage>
+    <pubyear>2022</pubyear>
+    <prism:doi>10.3130/aijs.87.128</prism:doi>
+    <systemcode>1</systemcode>
+    <systemname>J-STAGE</systemname>
+    <title>
+      <![CDATA[従来型および損傷抑制型の方立壁が高層RC建築の耐震性能に与える影響]]>
+    </title>
+    <link href="https://www.jstage.jst.go.jp/article/aijs/87/791/87_128/_article/-char/ja/"/>
+    <id>https://www.jstage.jst.go.jp/article/aijs/87/791/87_128/_article/-char/ja/</id>
+    <updated>2022-01-01T09:00+09:00</updated>
+  </entry>
+  <entry>
+    <article_title>
+      <en>
+        <![CDATA[STRENGTH AND BEHAVIOR OF ELASTIC DISTORTIONAL BUCKLING FOR COLD-FORMED CHANNEL MEMBER UNDER COMPRESSION]]>
+      </en>
+      <ja>
+        <![CDATA[圧縮力が作用する冷間成形溝形断面部材の弾性ゆがみ座屈耐力と座屈挙動]]>
+      </ja>
+    </article_title>
+    <article_link>
+      <en>https://www.jstage.jst.go.jp/article/aijs/87/791/87_139/_article</en>
+      <ja>https://www.jstage.jst.go.jp/article/aijs/87/791/87_139/_article/-char/ja/</ja>
+    </article_link>
+    <author>
+      <en>
+        <name>
+          <![CDATA[Kazuya MITSUI]]>
+        </name>
+        <name>
+          <![CDATA[Kikuo IKARASHI]]>
+        </name>
+        <name>
+          <![CDATA[Tomoki KOBASHI]]>
+        </name>
+        <name>
+          <![CDATA[Ryohei KUWADA]]>
+        </name>
+      </en>
+      <ja>
+        <name>
+          <![CDATA[三井 和也]]>
+        </name>
+        <name>
+          <![CDATA[五十嵐 規矩夫]]>
+        </name>
+        <name>
+          <![CDATA[小橋 知季]]>
+        </name>
+        <name>
+          <![CDATA[桑田 涼平]]>
+        </name>
+      </ja>
+    </author>
+    <cdjournal>aijs</cdjournal>
+    <material_title>
+      <en>
+        <![CDATA[Journal of Structural and Construction Engineering (Transactions of AIJ)]]>
+      </en>
+      <ja>
+        <![CDATA[日本建築学会構造系論文集]]>
+      </ja>
+    </material_title>
+    <prism:issn>1340-4202</prism:issn>
+    <prism:eIssn>1881-8153</prism:eIssn>
+    <prism:volume>87</prism:volume>
+    <prism:number>791</prism:number>
+    <prism:startingPage>139</prism:startingPage>
+    <prism:endingPage>148</prism:endingPage>
+    <pubyear>2022</pubyear>
+    <prism:doi>10.3130/aijs.87.139</prism:doi>
+    <systemcode>1</systemcode>
+    <systemname>J-STAGE</systemname>
+    <title>
+      <![CDATA[圧縮力が作用する冷間成形溝形断面部材の弾性ゆがみ座屈耐力と座屈挙動]]>
+    </title>
+    <link href="https://www.jstage.jst.go.jp/article/aijs/87/791/87_139/_article/-char/ja/"/>
+    <id>https://www.jstage.jst.go.jp/article/aijs/87/791/87_139/_article/-char/ja/</id>
+    <updated>2022-01-01T09:00+09:00</updated>
+  </entry>
+</feed>

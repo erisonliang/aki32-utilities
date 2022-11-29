@@ -11,8 +11,11 @@ public static partial class ChainableExtensions
     /// <summary>
     /// generalized api access
     /// </summary>
+    /// <exception cref="HttpRequestException">
+    /// response was not OK
+    /// </exception>
     /// <returns></returns>
-    internal static async Task<HttpResponseMessage> CallAPIAsync_ForResponse(this Uri url, HttpMethod method,
+    public static async Task<Stream> CallAPIAsync_ForResponseStream(this Uri url, HttpMethod method,
         string authBearerToken = "",
         string jsonStringContent = null,
         HttpContent httpContent = null
@@ -27,6 +30,7 @@ public static partial class ChainableExtensions
         if (!string.IsNullOrEmpty(authBearerToken))
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", authBearerToken);
 
+
         // content
         using var req = new HttpRequestMessage(method, url);
 
@@ -35,12 +39,15 @@ public static partial class ChainableExtensions
         else if (httpContent != null)
             req.Content = httpContent;
 
+
         // access
         var response = await client.SendAsync(req);
+        if (!response.IsSuccessStatusCode)
+            throw new HttpRequestException(response.ReasonPhrase);
 
 
         // post process
-        return response;
+        return await response.Content.ReadAsStreamAsync();
 
     }
 
@@ -51,7 +58,7 @@ public static partial class ChainableExtensions
     /// <exception cref="HttpRequestException">
     /// response was not OK
     /// </exception>
-    internal static async Task<T> CallAPIAsync_ForXmlData<T>(this Uri url, HttpMethod method,
+    public static async Task<T> CallAPIAsync_ForXmlData<T>(this Uri url, HttpMethod method,
         string authBearerToken = "",
         string jsonStringContent = null,
         HttpContent httpContent = null
@@ -62,27 +69,21 @@ public static partial class ChainableExtensions
 
 
         // access
-        using var response = await url.CallAPIAsync_ForResponse(method,
-           authBearerToken: authBearerToken,
-          jsonStringContent: jsonStringContent,
-          httpContent: httpContent
-          );
-
-
-        // response
-        if (!response.IsSuccessStatusCode)
-            throw new HttpRequestException(response.ReasonPhrase);
+        using var responseStream = await url.CallAPIAsync_ForResponseStream(method,
+            authBearerToken: authBearerToken,
+            jsonStringContent: jsonStringContent,
+            httpContent: httpContent
+            );
 
 
         // post process
         if (typeof(T) == typeof(object))
         {
-            string responseString = await response.Content.ReadAsStringAsync();
-            return (dynamic)responseString;
+            using var responseReadStream = new StreamReader(responseStream);
+            return (dynamic)responseReadStream.ReadToEnd();
         }
         else
         {
-            using var responseStream = await response.Content.ReadAsStreamAsync();
             var serializer = new XmlSerializer(typeof(T));
             return (T)serializer.Deserialize(responseStream)!;
         }
@@ -94,7 +95,7 @@ public static partial class ChainableExtensions
     /// <exception cref="HttpRequestException">
     /// response was not OK
     /// </exception>
-    internal static async Task<T> CallAPIAsync_ForJsonData<T>(this Uri url, HttpMethod method,
+    public static async Task<T> CallAPIAsync_ForJsonData<T>(this Uri url, HttpMethod method,
         string authBearerToken = "",
         string jsonStringContent = null,
         HttpContent httpContent = null
@@ -105,29 +106,22 @@ public static partial class ChainableExtensions
 
 
         // access
-        using var response = await url.CallAPIAsync_ForResponse(method,
+        using var responseStream = await url.CallAPIAsync_ForResponseStream(method,
            authBearerToken: authBearerToken,
           jsonStringContent: jsonStringContent,
           httpContent: httpContent
           );
 
-        // response
-        if (!response.IsSuccessStatusCode)
-            throw new HttpRequestException(response.ReasonPhrase);
-
 
         // post process
-        if (typeof(T) == typeof(object))
-        {
-            var responseString = await response.Content.ReadAsStringAsync();
-            return (dynamic)responseString;
-        }
-        else
-        {
-            var responseString = await response.Content.ReadAsStringAsync();
-            return JsonConvert.DeserializeObject<T>(responseString);
-        }
-    }
+        using var responseReadStream = new StreamReader(responseStream);
+        var responseString = responseReadStream.ReadToEnd();
 
+        if (typeof(T) == typeof(object))
+            return (dynamic)responseString;
+        else
+            return JsonConvert.DeserializeObject<T>(responseString);
+
+    }
 
 }
