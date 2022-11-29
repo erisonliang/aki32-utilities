@@ -1,5 +1,5 @@
-﻿using System.IO.Compression;
-using System.Text;
+﻿using System.Text;
+using System.Xml.Serialization;
 
 using Newtonsoft.Json;
 
@@ -14,12 +14,29 @@ public static partial class ChainableExtensions
     /// <param name="outputFile"></param>
     /// <param name="data"></param>
     /// <returns></returns>
-    public static async Task<FileInfo> WriteJsonToLocalAsync<T>(this T data, FileInfo outputFile, bool formatted = false)
+    public static FileInfo WriteJsonToLocal<T>(this T data, FileInfo outputFile, bool formatted = false)
     {
         var json = JsonConvert.SerializeObject(data, formatted ? Formatting.Indented : Formatting.None);
 
-        using var sr = new StreamWriter(outputFile.FullName, false, Encoding.UTF8);
-        await sr.WriteAsync(json);
+        using var sw = new StreamWriter(outputFile.FullName, false, Encoding.UTF8);
+        sw.Write(json);
+
+        return outputFile;
+    }
+
+    /// <summary>
+    /// write data as xml local file
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="outputFile"></param>
+    /// <param name="data"></param>
+    /// <returns></returns>
+    public static FileInfo WriteXmlToLocal<T>(this T data, FileInfo outputFile, bool formatted = false)
+    {
+        using var sw = new StreamWriter(outputFile.FullName, false, Encoding.UTF8);
+
+        var serializer = new XmlSerializer(typeof(T));
+        serializer.Serialize(sw, data);
 
         return outputFile;
     }

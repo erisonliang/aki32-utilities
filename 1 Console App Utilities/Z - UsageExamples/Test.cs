@@ -86,6 +86,17 @@ public class TestHelper
                     //    .Unzip(null);
                 }
 
+                // B102 ReadObjectToLocal, J101 WriteObjectToLocal
+                {
+
+
+
+
+
+
+
+                }
+
                 // C004 ExtractCsvColumns
                 {
                     //new FileInfo($@"{baseDir}\C004 ExtractCsvColumns\input.csv")
@@ -314,6 +325,7 @@ public class TestHelper
                     //Console.WriteLine(result);
 
                 }
+
 
             }
 
@@ -606,11 +618,11 @@ public class TestHelper
 
             // D003 JStageController
             {
-                var localDir = new DirectoryInfo($@"{baseDir}\D003 JStageController");
+                //var localDir = new DirectoryInfo($@"{baseDir}\D003 JStageController");
 
-                var jstage = new JStageController(localDir);
+                //var jstage = new JStageController(localDir);
 
-                jstage.DownloadData().Wait();
+                //jstage.DownloadData().Wait();
 
             }
 

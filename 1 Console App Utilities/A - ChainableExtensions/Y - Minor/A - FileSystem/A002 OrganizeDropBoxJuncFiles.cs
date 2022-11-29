@@ -1,18 +1,16 @@
-﻿using System.Text;
+﻿
 
-namespace Aki32_Utilities.General;
+namespace Aki32_Utilities.Minor;
 public static partial class ChainableExtensions
 {
-    // TODO: test
-
     /// <summary>
-    /// 選んだフォルダ内のデータのPhotoとVideoの接頭辞を削除
+    /// delete prefix of Dropbox updated files. (e.g.: Photo, Video,...)
     /// </summary>
     /// <param name="inputDir"></param>
     public static DirectoryInfo OrganizeDropBoxJuncFiles(this DirectoryInfo inputDir)
     {
         // preprocess
-        UtilPreprocessors.PreprocessBasic(true);
+        General.UtilPreprocessors.PreprocessBasic(true);
 
 
         // main
@@ -34,13 +32,11 @@ public static partial class ChainableExtensions
                 try
                 {
                     fi.MoveTo(newFullName);
-                    Console.WriteLine($"変更");
-                    Console.WriteLine($"　前：{oldFullName}");
-                    Console.WriteLine($"　後：{newFullName}");
+                    Console.WriteLine($"updated from: {oldFullName}");
                 }
                 catch (Exception)
                 {
-                    Console.WriteLine($"エラー：{newFullName}");
+                    Console.WriteLine($"error: {newFullName}");
                 }
             }
         }

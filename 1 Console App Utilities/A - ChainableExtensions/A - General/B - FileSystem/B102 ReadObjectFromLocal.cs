@@ -1,4 +1,4 @@
-﻿using System.IO.Compression;
+﻿using System.Xml.Serialization;
 
 using Newtonsoft.Json;
 
@@ -11,12 +11,27 @@ public static partial class ChainableExtensions
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
-    public static async Task<T> ReadJsonFromLocalAsync<T>(FileInfo inputFile) where T : new()
+    public static T ReadJsonFromLocal<T>(this FileInfo inputFile) where T : new()
     {
         using var sr = new StreamReader(inputFile.FullName);
-        var json = await sr.ReadToEndAsync();
+        var json = sr.ReadToEnd();
 
         var data = JsonConvert.DeserializeObject<T>(json);
+
+        return data;
+    }
+
+    /// <summary>
+    /// read xml from local
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
+    public static T ReadXmlFromLocal<T>(this FileInfo inputFile) where T : new()
+    {
+        using var sr = new StreamReader(inputFile.FullName);
+
+        var serializer = new XmlSerializer(typeof(T));
+        var data = (T)serializer.Deserialize(sr)!;
 
         return data;
     }

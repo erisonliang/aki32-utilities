@@ -59,7 +59,6 @@
 
   <ItemGroup>
     <Folder Include="A - ChainableExtensions\B - UsefulClasses\A - FileSystem\" />
-    <Folder Include="A - ChainableExtensions\B - UsefulClasses\B - Uri\" />
     <Folder Include="E - SpecificPurposeModels\B - MachineLearning\" />
   </ItemGroup>
 

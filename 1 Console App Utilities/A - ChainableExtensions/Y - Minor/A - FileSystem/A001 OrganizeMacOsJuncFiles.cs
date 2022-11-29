@@ -1,18 +1,17 @@
-﻿using System.Text;
+﻿
 
-namespace Aki32_Utilities.General;
+namespace Aki32_Utilities.Minor;
 public static partial class ChainableExtensions
 {
-    // TODO: test
 
     /// <summary>
-    /// MacOS が生成するゴミを削除
+    /// delete junc files that MacOS creates 
     /// </summary>
     /// <param name="inputDir"></param>
     public static DirectoryInfo OrganizeMacOsJuncFiles(this DirectoryInfo inputDir)
     {
         // preprocess
-        UtilPreprocessors.PreprocessBasic(true);
+        General.UtilPreprocessors.PreprocessBasic(true);
 
 
         // main
@@ -21,7 +20,7 @@ public static partial class ChainableExtensions
             if (fi.Name == "_DS_Store" || fi.Name.StartsWith("._"))
             {
                 fi.Delete();
-                Console.WriteLine($"削除：{fi}");
+                Console.WriteLine($"deleted: {fi}");
             }
         }
 
