@@ -34,17 +34,17 @@ public class LINEController
     {
         try
         {
-            using (var client = new HttpClient())
-            {
-                // 通知するメッセージ
-                var content = new FormUrlEncodedContent(new Dictionary<string, string> { { "message", message } });
+            using var client = new HttpClient();
 
-                // ヘッダーにアクセストークンを追加
-                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", LineAccessToken);
+            // auth
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", LineAccessToken);
 
-                // 実行
-                var result = await client.PostAsync("https://notify-api.line.me/api/notify", content);
-            }
+            // content
+            var content = new FormUrlEncodedContent(new Dictionary<string, string> { { "message", message } });
+
+            // request
+            var result = await client.PostAsync("https://notify-api.line.me/api/notify", content);
+
         }
         catch (Exception)
         {
@@ -53,13 +53,6 @@ public class LINEController
 
         return true;
 
-        //string ConvertEncoding(string src, Encoding destEnc)
-        //{
-        //    byte[] src_temp = Encoding.GetEncoding("Shift_JIS").GetBytes(src);
-        //    byte[] dest_temp = Encoding.Convert(Encoding.ASCII, destEnc, src_temp);
-        //    string ret = destEnc.GetString(dest_temp);
-        //    return ret;
-        //}
     }
 
 
