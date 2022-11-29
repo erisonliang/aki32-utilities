@@ -24,6 +24,7 @@ public class LINEController
 
         Console.WriteLine("LINEController Instance Created.");
         Console.WriteLine("Data Powered by LINE Notify (https://notify-bot.line.me/ja/)");
+        Console.WriteLine();
 
         //ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
     }

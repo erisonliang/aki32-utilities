@@ -1,10 +1,20 @@
 ﻿using System.Collections.Generic;
+using System.Data;
 using System.Net.Http.Headers;
+using System.Xml.Linq;
 
+using Aki32_Utilities.General;
 using Aki32_Utilities.UsefulClasses;
 
 using DocumentFormat.OpenXml.Bibliography;
+using DocumentFormat.OpenXml.Office2010.Excel;
+using DocumentFormat.OpenXml.Office2013.PowerPoint.Roaming;
+using DocumentFormat.OpenXml.Spreadsheet;
 using DocumentFormat.OpenXml.Wordprocessing;
+
+using static Aki32_Utilities.ExternalAPIControllers.JStageUriBuilder;
+
+using static ClosedXML.Excel.XLPredefinedFormat;
 
 namespace Aki32_Utilities.ExternalAPIControllers;
 
@@ -13,6 +23,7 @@ namespace Aki32_Utilities.ExternalAPIControllers;
 /// <remarks>
 /// 
 /// 参考：
+/// https://www.jstage.jst.go.jp/static/files/ja/manual_api.pdf
 /// https://ooooooha.hatenablog.com/entry/2017/05/03/023516
 /// 
 /// </remarks>
@@ -22,15 +33,17 @@ public partial class JStageController
     // ★★★★★★★★★★★★★★★ paths
 
     public DirectoryInfo LocalDirectory { get; set; }
-
-    public DirectoryInfo DatabaseDirectory => new DirectoryInfo($@"{LocalDirectory.FullName}\DB");
-
-
-
-
-    public const string BASE_URL = $@"http://api.jstage.jst.go.jp/searchapi/do";
+    public DirectoryInfo DatabaseDirectory => new($@"{LocalDirectory.FullName}\DB");
+    public FileInfo VolumeDatabase => new($@"{DatabaseDirectory.FullName}\volumes.xml");
+    public FileInfo ArticleDB => new($@"{DatabaseDirectory.FullName}\articles.xml");
 
     public const string TEST_URL = "http://api.jstage.jst.go.jp/searchapi/do?service=3&pubyearfrom=2022&issn=1881-8153&count=5";
+
+
+    // ★★★★★★★★★★★★★★★ props
+
+    public IEnumerable<PaperArticle> Articles { get; set; }
+    public IEnumerable<PaperVolume> Volumes { get; set; }
 
 
     // ★★★★★★★★★★★★★★★ init
@@ -45,130 +58,152 @@ public partial class JStageController
 
         Console.WriteLine("JStageController Instance Created.");
         Console.WriteLine("Data Powered by J-STAGE (https://www.jstage.jst.go.jp/browse/-char/ja)");
+        Console.WriteLine();
 
+        DatabaseDirectory.Create();
     }
 
 
     // ★★★★★★★★★★★★★★★ methods
 
-    public async Task DownloadData()
+    public void GetDataAndRenewDB(JStageUriBuilder jsUriBuilder)
     {
-        var uri = new Uri(TEST_URL);
+        // get xml
+        var uri = jsUriBuilder.Build();
+        var xml = XElement.Load(uri.AbsoluteUri);
 
-        var newFileName = $"{uri.Query.Replace("?", "").Replace("&", "_")}.xml";
 
-        var outputFile = new FileInfo($@"{LocalDirectory.FullName}\{newFileName}");
+        // analyse 
+        var totalResults = xml.Element(ExpandOpenSearch("totalResults"))!.Value;
+        var startIndex = xml.Element(ExpandOpenSearch("startIndex"))!.Value;
+        var itemsPerPage = xml.Element(ExpandOpenSearch("itemsPerPage"))!.Value;
+        var toIndex = int.Parse(startIndex) + int.Parse(itemsPerPage) - 1;
 
-        await uri.DownloadFileAsync(outputFile);
+        var entries = xml.Elements(ExpandXml("entry"));
+
+        Console.WriteLine($"★ Obtained {itemsPerPage} items out of {totalResults} matches ( From #{startIndex} to #{toIndex} )");
+        Console.WriteLine();
+
+        foreach (var entry in entries)
+        {
+            switch (jsUriBuilder.Service)
+            {
+                case JStageWebAPIService.GetVolumeListService:
+                    {
+                        var volume = new PaperVolume
+                        {
+
+                            Title_English = entry.Element(ExpandXml("vols_title"))?.Element(ExpandXml("en"))?.Value,
+                            Title_Japanese = entry.Element(ExpandXml("vols_title"))?.Element(ExpandXml("ja"))?.Value,
+
+                            Link_English = entry.Element(ExpandXml("vols_link"))?.Element(ExpandXml("en"))?.Value,
+                            Link_Japanese = entry.Element(ExpandXml("vols_link"))?.Element(ExpandXml("ja"))?.Value,
+
+                            PrintISSN = entry.Element(ExpandPrism("issn"))?.Value,
+                            OnlineISSN = entry.Element(ExpandPrism("eIssn"))?.Value,
+
+                            PublisherName_English = entry.Element(ExpandXml("publisher"))?.Element(ExpandXml("name"))?.Element(ExpandXml("en"))?.Value,
+                            PublisherName_Japanese = entry.Element(ExpandXml("publisher"))?.Element(ExpandXml("name"))?.Element(ExpandXml("ja"))?.Value,
+                            PublisherUri_English = entry.Element(ExpandXml("publisher"))?.Element(ExpandXml("url"))?.Element(ExpandXml("en"))?.Value,
+                            PublisherUri_Japanese = entry.Element(ExpandXml("publisher"))?.Element(ExpandXml("url"))?.Element(ExpandXml("ja"))?.Value,
+
+                            JournalCode_JStage = entry.Element(ExpandXml("cdjournal"))?.Value,
+
+                            MaterialTitle_English = entry.Element(ExpandXml("material_title"))?.Element(ExpandXml("en"))?.Value,
+                            MaterialTitle_Japanese = entry.Element(ExpandXml("material_title"))?.Element(ExpandXml("ja"))?.Value,
+
+                            Volume = entry.Element(ExpandPrism("volume"))?.Value,
+                            SubVolume = entry.Element(ExpandXml("cdvols"))?.Value,
+
+                            Number = entry.Element(ExpandPrism("number"))?.Value,
+                            StartingPage = entry.Element(ExpandPrism("startingPage"))?.Value,
+                            EndingPage = entry.Element(ExpandPrism("endingPage"))?.Value,
+
+                            PublishedYear = entry.Element(ExpandXml("pubyear"))?.Value,
+
+                            SystemCode = entry.Element(ExpandXml("systemcode"))?.Value,
+                            SystemName = entry.Element(ExpandXml("systemname"))?.Value,
+
+                            Title = entry.Element(ExpandXml("title"))?.Value,
+                            Link = entry.Element(ExpandXml("link"))?.Value,
+                            Id = entry.Element(ExpandXml("id"))?.Value,
+                            UpdatedOn = entry.Element(ExpandXml("updated"))?.Value,
+
+                        };
+
+                        Console.WriteLine(" - " + volume.MaterialTitle_Japanese + volume.Title_Japanese);
+
+                    }
+                    break;
+                case JStageWebAPIService.GetArticleSearchService:
+                    {
+
+                        var article = new PaperArticle
+                        {
+
+                            Title_English = entry.Element(ExpandXml("article_title"))?.Element(ExpandXml("en"))?.Value,
+                            Title_Japanese = entry.Element(ExpandXml("article_title"))?.Element(ExpandXml("ja"))?.Value,
+
+                            Link_English = entry.Element(ExpandXml("article_link"))?.Element(ExpandXml("en"))?.Value,
+                            Link_Japanese = entry.Element(ExpandXml("article_link"))?.Element(ExpandXml("ja"))?.Value,
+
+                            Authors_English = entry.Element(ExpandXml("author"))?.Element(ExpandXml("en"))?.Elements("name")?.Select(e => e?.Value ?? "")?.ToArray(),
+                            Authors_Japanese = entry.Element(ExpandXml("author"))?.Element(ExpandXml("ja"))?.Elements("name")?.Select(e => e?.Value ?? "")?.ToArray(),
+
+                            JournalCode_JStage = entry.Element(ExpandXml("cdjournal"))?.Value,
+
+                            MaterialTitle_English = entry.Element(ExpandXml("material_title"))?.Element(ExpandXml("en"))?.Value,
+                            MaterialTitle_Japanese = entry.Element(ExpandXml("material_title"))?.Element(ExpandXml("ja"))?.Value,
+
+                            PrintISSN = entry.Element(ExpandPrism("issn"))?.Value,
+                            OnlineISSN = entry.Element(ExpandPrism("eIssn"))?.Value,
+
+                            Volume = entry.Element(ExpandPrism("volume"))?.Value,
+                            SubVolume = entry.Element(ExpandXml("cdvols"))?.Value,
+
+                            Number = entry.Element(ExpandPrism("number"))?.Value,
+                            StartingPage = entry.Element(ExpandPrism("startingPage"))?.Value,
+                            EndingPage = entry.Element(ExpandPrism("endingPage"))?.Value,
+
+                            PublishedYear = entry.Element(ExpandXml("pubyear"))?.Value,
+
+                            JOI = entry.Element(ExpandXml("joi"))?.Value,
+                            DOI = entry.Element(ExpandPrism("doi"))?.Value,
+
+                            SystemCode = entry.Element(ExpandXml("systemcode"))?.Value,
+                            SystemName = entry.Element(ExpandXml("systemname"))?.Value,
+
+                            Title = entry.Element(ExpandXml("title"))?.Value,
+
+                            Link = entry.Element(ExpandXml("link"))?.Value,
+                            Id = entry.Element(ExpandXml("id"))?.Value,
+                            UpdatedOn = entry.Element(ExpandXml("updated"))?.Value,
+
+                        };
+
+                        Console.WriteLine(" - " + article.Title_Japanese);
+
+                    }
+                    break;
+                default:
+                    throw new NotImplementedException();
+            }
+        }
 
     }
 
-    public static string BuildUri(string service,
-        string pubyearfrom = "",
-        string pubyearto = "",
-        string material = "",
-        string issn = "",
-        string cdjournal = "",
-        string volorder = "",
-        string start = "",
-        string count = ""
-        )
+    public void OpenArticleDBFromLocal()
     {
-        var queryList = new Dictionary<string, string>();
+        var db = ArticleDB.ReadXmlFromLocal<object>();
 
 
-        // 巻号取得一覧
-        if (service == "2")
-        {
-            //1   service 必須  利用する機能を指定 巻号一覧取得は2、論文検索結果取得は3を指定
-            if (!string.IsNullOrEmpty(service))
-                queryList.Add("service", service);
-
-            //3   pubyearfrom 任意  発行年を指定(from)    西暦４桁
-            if (!string.IsNullOrEmpty(pubyearfrom))
-                queryList.Add("pubyearfrom", pubyearfrom);
-
-            //4   pubyearto 任意  発行年を指定(to)  西暦４桁
-            if (!string.IsNullOrEmpty(pubyearto))
-                queryList.Add("pubyearto", pubyearto);
-
-            //5   material 任意  資料名の検索語句を指定 完全一致検索
-            if (!string.IsNullOrEmpty(material))
-                queryList.Add("material", material);
-
-            //6   issn 任意  onlineISSN またはPrintISSNを指定  完全一致検索 xxxx-xxxx形式
-            if (!string.IsNullOrEmpty(issn))
-                queryList.Add("issn", issn);
-
-            //7   cdjournal 任意  資料コードを指定 J-STAGEで付与される資料を識別するコード
-            if (!string.IsNullOrEmpty(cdjournal))
-                queryList.Add("cdjournal", cdjournal);
-
-            //8   volorder 任意  巻の並び順を指定    1:昇順, 2:降順, 未指定時は1
-            if (!string.IsNullOrEmpty(volorder))
-                queryList.Add("volorder", volorder);
-
-            if (!string.IsNullOrEmpty(start))
-                queryList.Add("start", start);
-
-            if (!string.IsNullOrEmpty(count))
-                queryList.Add("count", count);
-
-        }
-
-        // 論文検索結果取得
-        else if (service == "3")
-        {
-            //1   service 必須  利用する機能を指定 巻号一覧取得は2、論文検索結果取得は3を指定
-            if (!string.IsNullOrEmpty(service))
-                queryList.Add("service", service);
-
-            //3   pubyearfrom 任意  発行年を指定(from)    西暦４桁
-            if (!string.IsNullOrEmpty(pubyearfrom))
-                queryList.Add("pubyearfrom", pubyearfrom);
-
-            //4   pubyearto 任意  発行年を指定(to)  西暦４桁
-            if (!string.IsNullOrEmpty(pubyearto))
-                queryList.Add("pubyearto", pubyearto);
-
-            //5   material 任意  資料名の検索語句を指定 完全一致検索
-            if (!string.IsNullOrEmpty(material))
-                queryList.Add("material", material);
-
-            //6   issn 任意  onlineISSN またはPrintISSNを指定  完全一致検索 xxxx-xxxx形式
-            if (!string.IsNullOrEmpty(issn))
-                queryList.Add("issn", issn);
-
-            //7   cdjournal 任意  資料コードを指定 J-STAGEで付与される資料を識別するコード
-            if (!string.IsNullOrEmpty(cdjournal))
-                queryList.Add("cdjournal", cdjournal);
-
-            //8   volorder 任意  巻の並び順を指定    1:昇順, 2:降順, 未指定時は1
-            if (!string.IsNullOrEmpty(volorder))
-                queryList.Add("volorder", volorder);
-
-            if (!string.IsNullOrEmpty(start))
-                queryList.Add("start", start);
-
-            if (!string.IsNullOrEmpty(count))
-                queryList.Add("count", count);
-
-        }
-
-
-
-
-
-
-
-
-
-
-
-        return $"{BASE_URL}?{string.Join("&", queryList.Select(x => $"{x.Key}={x.Value}"))}";
     }
 
 
+
+    private string ExpandXml(string s) => "{http://www.w3.org/2005/Atom}" + s;
+    private string ExpandOpenSearch(string s) => "{http://a9.com/-/spec/opensearch/1.1/}" + s;
+    private string ExpandPrism(string s) => "{http://prismstandard.org/namespaces/basic/2.0/}" + s;
 
     // ★★★★★★★★★★★★★★★
 

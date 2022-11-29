@@ -92,9 +92,6 @@ public class TestHelper
 
 
 
-
-
-
                 }
 
                 // C004 ExtractCsvColumns
@@ -618,12 +615,26 @@ public class TestHelper
 
             // D003 JStageController
             {
-                //var localDir = new DirectoryInfo($@"{baseDir}\D003 JStageController");
+                var localDir = new DirectoryInfo($@"{baseDir}\D003 JStageController");
+                var jstage = new JStageController(localDir);
 
-                //var jstage = new JStageController(localDir);
+                var jsUriBuilder = new JStageUriBuilder(JStageWebAPIService.GetVolumeListService)
+                {
+                    Pubyearfrom = "2021",
+                    Issn = JStageUriBuilder.ISSN.Architecture_Structure,
+                };
 
-                //jstage.DownloadData().Wait();
+                //var jsUriBuilder = new JStageUriBuilder(JStageWebAPIService.GetArticleSearchService)
+                //{
+                //    Pubyearfrom = "2022",
+                //    Issn = JStageUriBuilder.ISSN.Architecture_Structure,
+                //    Count = "3",
+                //};
 
+                jstage.GetDataAndRenewDB(jsUriBuilder);
+
+
+                //jstage.OpenArticleDBFromLocal();
             }
 
         }
