@@ -74,13 +74,25 @@ public static partial class ChainableExtensions
             var csvLine = new List<string>();
             foreach (var prop in props)
             {
-                var value = prop.GetValue(dataLine);
+                var addingValue = "";
 
-                if (value is not string && value is IEnumerable enumProp)
-                    csvLine.Add(JsonConvert.SerializeObject(enumProp));
-                else
-                    csvLine.Add(value?.ToString() ?? "");
+                try
+                {
+                    var value = prop.GetValue(dataLine);
 
+                    if (value is not string && value is IEnumerable enumProp)
+                        addingValue = JsonConvert.SerializeObject(enumProp);
+                    else
+                        addingValue = value?.ToString() ?? "";
+
+                }
+                catch (Exception)
+                {
+                }
+                finally
+                {
+                    csvLine.Add(addingValue);
+                }
             }
 
             csvGrid.Add(csvLine.ToArray());

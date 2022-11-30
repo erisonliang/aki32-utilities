@@ -103,7 +103,6 @@ public static partial class ChainableExtensions
         }
 
         return outputDataList;
-
     }
 
 }
