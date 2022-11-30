@@ -1,4 +1,6 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System.Collections;
+using System.Diagnostics.CodeAnalysis;
+using System.Reflection;
 using System.Xml.Serialization;
 
 using DocumentFormat.OpenXml.Drawing;
@@ -44,73 +46,63 @@ public static partial class ChainableExtensions
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
-    public static T ReadObjectFromLocalCsv<T>(this FileInfo inputFile) where T : new()
+    public static List<T> ReadObjectFromLocalCsv<T>(this FileInfo inputFile, bool withHeader = true) where T : new()
     {
-        throw new NotImplementedException();
+        var outputDataList = new List<T>();
+        var csvGrid = inputFile.ReadCsv_Rows();
 
-        using var sr = new StreamReader(inputFile.FullName);
+        // get props in order 
+        PropertyInfo[] props;
+        if (withHeader)
+        {
+            var fullProps = typeof(T).GetProperties();
 
-        var serializer = new XmlSerializer(typeof(T));
-        var data = (T)serializer.Deserialize(sr)!;
+            props = csvGrid[0]
+                .Select(c => fullProps.FirstOrDefault(p => p.Name == c))
+                .Where(p => p is not null)
+                .ToArray()
+                ;
 
-        return data;
+            csvGrid = csvGrid[1..^0];
+        }
+        else
+        {
+            props = typeof(T).GetProperties();
+        }
 
+        // contents
+        foreach (var csvLine in csvGrid)
+        {
+            var data = new T();
+            for (int i = 0; i < props.Length; i++)
+            {
+                var propType = props[i].PropertyType;
 
+                if (propType == typeof(string))
+                {
+                    props[i].SetValue(data, csvLine[i]);
+                }
+                else
+                {
+                    var deserializedObject = JsonConvert.DeserializeObject(csvLine[i], propType, (JsonSerializerSettings?)null);
 
+                    // same as above
+                    //
+                    //var deserializedObject = typeof(JsonConvert)
+                    //    .GetMethods()
+                    //    .FirstOrDefault(c => { return c.Name == "DeserializeObject" && c.IsGenericMethod && c.GetParameters()[0].ParameterType == typeof(string); })?
+                    //    .MakeGenericMethod(propType)
+                    //    .Invoke(null, new object[] { csvLine[i] });
 
+                    props[i].SetValue(data, deserializedObject);
+                }
 
+            }
 
-        //csvGrid.ToArray().SaveCsv_Rows(outputFile);
+            outputDataList.Add(data);
+        }
 
-
-
-
-        //var csvGrid = inputFile.read   new List<string[]>();
-        //var props = typeof(T).GetProperties();
-
-        //// header
-        //if (withHeader)
-        //{
-        //    var csvLine = new List<string>();
-        //    foreach (var prop in props)
-        //        csvLine.Add(prop.Name);
-
-        //    csvGrid.Add(csvLine.ToArray());
-        //}
-
-        //// contents
-        //foreach (var dataLine in dataList)
-        //{
-        //    var csvLine = new List<string>();
-        //    foreach (var prop in props)
-        //    {
-        //        var value = prop.GetValue(dataLine);
-
-        //        if (value is IEnumerable enumProp)
-        //        {
-        //            csvLine.Add(JsonConvert.SerializeObject(enumProp));
-        //        }
-        //        else
-        //        {
-        //            csvLine.Add(value?.ToString()!);
-        //        }
-        //    }
-
-        //    csvGrid.Add(csvLine.ToArray());
-        //}
-
-        //csvGrid.ToArray().SaveCsv_Rows(outputFile);
-
-        //return outputFile;
-
-
-
-
-
-
-
-
-
+        return outputDataList;
 
     }
 

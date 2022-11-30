@@ -12,19 +12,10 @@ public class UtilTestClass1
     public string StringProp3 { get; set; }
     public int IntProp { get; set; }
 
-    public string[] PropArray { get; set; }
+    public string[] StringArrayProp { get; set; }
+    public int[] IntArrayProp { get; set; }
 
-    //[JsonIgnore, XmlIgnore]
-    //public string PropArrayJsonString
-    //{
-    //    get
-    //    {
-    //        return JsonConvert.SerializeObject(PropArray);
-    //    }
-    //    set
-    //    {
-    //        PropArray = JsonConvert.DeserializeObject<string[]>(value);
-    //    }
-    //}
+    public List<string> StringListProp { get; set; }
+    public List<int> IntListProp { get; set; }
 
 }

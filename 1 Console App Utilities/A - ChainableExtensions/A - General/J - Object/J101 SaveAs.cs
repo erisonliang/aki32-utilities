@@ -76,14 +76,11 @@ public static partial class ChainableExtensions
             {
                 var value = prop.GetValue(dataLine);
 
-                if (value is IEnumerable enumProp)
-                {
+                if (value is not string && value is IEnumerable enumProp)
                     csvLine.Add(JsonConvert.SerializeObject(enumProp));
-                }
                 else
-                {
-                    csvLine.Add(value?.ToString()!);
-                }
+                    csvLine.Add(value?.ToString() ?? "");
+
             }
 
             csvGrid.Add(csvLine.ToArray());

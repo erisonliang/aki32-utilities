@@ -1,11 +1,26 @@
 ﻿{
-  "StringProp1": "11111",
-  "StringProp2": "22222",
-  "StringProp3": "33333",
-  "IntProp": 44444,
-  "PropArray": [
-    "11",
-    "22",
-    "33"
+  "StringProp1": "aaa",
+  "StringProp2": "あああ",
+  "StringProp3": "阿阿阿",
+  "IntProp": 11111,
+  "StringArrayProp": [
+    "iii",
+    "いいい",
+    "胃胃胃"
+  ],
+  "IntArrayProp": [
+    1,
+    2,
+    3
+  ],
+  "StringListProp": [
+    "uuu",
+    "ううう",
+    "宇宇宇"
+  ],
+  "IntListProp": [
+    11,
+    22,
+    33
   ]
 }

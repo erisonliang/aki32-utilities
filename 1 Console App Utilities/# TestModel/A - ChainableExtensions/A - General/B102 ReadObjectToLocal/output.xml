@@ -1,12 +1,27 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <UtilTestClass1 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <StringProp1>11111</StringProp1>
-  <StringProp2>22222</StringProp2>
-  <StringProp3>33333</StringProp3>
-  <IntProp>44444</IntProp>
-  <PropArray>
-    <string>11</string>
-    <string>22</string>
-    <string>33</string>
-  </PropArray>
+  <StringProp1>aaa</StringProp1>
+  <StringProp2>あああ</StringProp2>
+  <StringProp3>阿阿阿</StringProp3>
+  <IntProp>11111</IntProp>
+  <StringArrayProp>
+    <string>iii</string>
+    <string>いいい</string>
+    <string>胃胃胃</string>
+  </StringArrayProp>
+  <IntArrayProp>
+    <int>1</int>
+    <int>2</int>
+    <int>3</int>
+  </IntArrayProp>
+  <StringListProp>
+    <string>uuu</string>
+    <string>ううう</string>
+    <string>宇宇宇</string>
+  </StringListProp>
+  <IntListProp>
+    <int>11</int>
+    <int>22</int>
+    <int>33</int>
+  </IntListProp>
 </UtilTestClass1>

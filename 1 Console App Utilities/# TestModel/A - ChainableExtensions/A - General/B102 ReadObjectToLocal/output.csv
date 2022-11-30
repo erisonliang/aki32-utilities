@@ -1,2 +1,2 @@
-StringProp1,StringProp2,StringProp3,IntProp,PropArray
-"""11111""","""22222""","""33333""",44444,"[""11"",""22"",""33""]"
+StringProp1,StringProp2,StringProp3,IntProp,StringArrayProp,IntArrayProp,StringListProp,IntListProp
+aaa,‚ ‚ ‚ ,ˆ¢ˆ¢ˆ¢,11111,"[""iii"",""‚¢‚¢‚¢"",""ˆÝˆÝˆÝ""]","[1,2,3]","[""uuu"",""‚¤‚¤‚¤"",""‰F‰F‰F""]","[11,22,33]"

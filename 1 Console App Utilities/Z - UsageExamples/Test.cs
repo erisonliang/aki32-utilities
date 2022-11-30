@@ -99,46 +99,51 @@ public class TestHelper
                 // B102 ReadObjectFromLocalXXX, J101 SaveAsXXX
                 {
 
-                    // test class
-                    var testClassToWrite = new UtilTestClass1()
-                    {
-                        StringProp1 = "11111",
-                        StringProp2 = "22222",
-                        StringProp3 = "33333",
-                        IntProp = 44444,
-                        PropArray = new string[] { "11", "22", "33" },
-                    };
+                    //// test class
+                    //var testClassToWrite = new UtilTestClass1()
+                    //{
+                    //    StringProp1 = "aaa",
+                    //    StringProp2 = "あああ",
+                    //    StringProp3 = "阿阿阿",
+                    //    IntProp = 11111,
 
-                    // json
-                    {
-                        //var outputFile = new FileInfo($@"{baseDir}\B102 ReadObjectToLocal\output.json");
+                    //    StringArrayProp = new string[] { "iii", "いいい", "胃胃胃" },
+                    //    IntArrayProp = new int[] { 1, 2, 3 },
 
-                        //testClassToWrite.SaveAsJson(outputFile, true);
+                    //    StringListProp = new List<string> { "uuu", "ううう", "宇宇宇" },
+                    //    IntListProp = new List<int> { 11, 22, 33 },
+                    //};
 
-                        //var testClassRead = outputFile.ReadObjectFromLocalJson<UtilTestClass1>();
+                    //// json
+                    //{
+                    //    var outputFile = new FileInfo($@"{baseDir}\B102 ReadObjectToLocal\output.json");
 
-                    }
+                    //    testClassToWrite.SaveAsJson(outputFile, true);
 
-                    // xml
-                    {
-                        //var outputFile = new FileInfo($@"{baseDir}\B102 ReadObjectToLocal\output.xml");
+                    //    var testClassRead = outputFile.ReadObjectFromLocalJson<UtilTestClass1>();
 
-                        //testClassToWrite.SaveAsXml(outputFile);
+                    //}
 
-                        //var testClassRead = outputFile.ReadObjectFromLocalXml<UtilTestClass1>();
+                    //// xml
+                    //{
+                    //    var outputFile = new FileInfo($@"{baseDir}\B102 ReadObjectToLocal\output.xml");
 
-                    }
+                    //    testClassToWrite.SaveAsXml(outputFile);
 
-                    // csv
-                    {
-                        var outputFile = new FileInfo($@"{baseDir}\B102 ReadObjectToLocal\output.csv");
+                    //    var testClassRead = outputFile.ReadObjectFromLocalXml<UtilTestClass1>();
 
-                        var testClassListToWrite = new List<UtilTestClass1> { testClassToWrite };
-                        testClassListToWrite.SaveAsCsv(outputFile);
+                    //}
 
-                        var testClassRead = outputFile.ReadObjectFromLocalCsv<UtilTestClass1>();
+                    //// csv
+                    //{
+                    //    var outputFile = new FileInfo($@"{baseDir}\B102 ReadObjectToLocal\output.csv");
 
-                    }
+                    //    var testClassListToWrite = new List<UtilTestClass1> { testClassToWrite };
+                    //    testClassListToWrite.SaveAsCsv(outputFile);
+
+                    //    var testClassRead = outputFile.ReadObjectFromLocalCsv<UtilTestClass1>();
+
+                    //}
 
                 }
 
