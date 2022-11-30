@@ -1,6 +1,8 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Xml.Serialization;
 
+using DocumentFormat.OpenXml.Drawing;
+
 using Newtonsoft.Json;
 
 namespace Aki32_Utilities.General;
@@ -52,6 +54,64 @@ public static partial class ChainableExtensions
         var data = (T)serializer.Deserialize(sr)!;
 
         return data;
+
+
+
+
+
+
+        //csvGrid.ToArray().SaveCsv_Rows(outputFile);
+
+
+
+
+        //var csvGrid = inputFile.read   new List<string[]>();
+        //var props = typeof(T).GetProperties();
+
+        //// header
+        //if (withHeader)
+        //{
+        //    var csvLine = new List<string>();
+        //    foreach (var prop in props)
+        //        csvLine.Add(prop.Name);
+
+        //    csvGrid.Add(csvLine.ToArray());
+        //}
+
+        //// contents
+        //foreach (var dataLine in dataList)
+        //{
+        //    var csvLine = new List<string>();
+        //    foreach (var prop in props)
+        //    {
+        //        var value = prop.GetValue(dataLine);
+
+        //        if (value is IEnumerable enumProp)
+        //        {
+        //            csvLine.Add(JsonConvert.SerializeObject(enumProp));
+        //        }
+        //        else
+        //        {
+        //            csvLine.Add(value?.ToString()!);
+        //        }
+        //    }
+
+        //    csvGrid.Add(csvLine.ToArray());
+        //}
+
+        //csvGrid.ToArray().SaveCsv_Rows(outputFile);
+
+        //return outputFile;
+
+
+
+
+
+
+
+
+
+
     }
 
 }

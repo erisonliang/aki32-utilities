@@ -14,17 +14,17 @@ public class UtilTestClass1
 
     public string[] PropArray { get; set; }
 
-    [JsonIgnore, XmlIgnore]
-    public string PropArrayJsonString
-    {
-        get
-        {
-            return JsonConvert.SerializeObject(PropArray);
-        }
-        set
-        {
-            PropArray = JsonConvert.DeserializeObject<string[]>(value);
-        }
-    }
+    //[JsonIgnore, XmlIgnore]
+    //public string PropArrayJsonString
+    //{
+    //    get
+    //    {
+    //        return JsonConvert.SerializeObject(PropArray);
+    //    }
+    //    set
+    //    {
+    //        PropArray = JsonConvert.DeserializeObject<string[]>(value);
+    //    }
+    //}
 
 }

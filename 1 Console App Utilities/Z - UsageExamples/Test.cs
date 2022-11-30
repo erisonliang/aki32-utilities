@@ -132,12 +132,12 @@ public class TestHelper
                     // csv
                     {
 
-                        //var outputFile = new FileInfo($@"{baseDir}\B102 ReadObjectToLocal\output.csv");
+                        var outputFile = new FileInfo($@"{baseDir}\B102 ReadObjectToLocal\output.csv");
 
-                        //testClassToWrite.WriteCsvToLocal(outputFile);
+                        new List<UtilTestClass1> { testClassToWrite }.WriteCsvToLocal(outputFile);
 
-                        //var testClassRead = outputFile.ReadCsvFromLocal<UtilTestClass1>();
-                    
+                        var testClassRead = outputFile.ReadCsvFromLocal<UtilTestClass1>();
+
                     }
 
                 }
@@ -663,27 +663,27 @@ public class TestHelper
 
             // D003 ResearchController
             {
-                var localDir = new DirectoryInfo($@"{baseDir}\D003 JStageController");
-                var research = new ResearchController(localDir);
+                //var localDir = new DirectoryInfo($@"{baseDir}\D003 JStageController");
+                //var research = new ResearchController(localDir);
 
-                var jsUriBuilder = new JStageUriBuilder(JStageWebAPIService.GetVolumeListService)
-                {
-                    Pubyearfrom = "2021",
-                    Issn = JStageUriBuilder.ISSN.Architecture_Structure,
-                };
-
-                //var jsUriBuilder = new JStageUriBuilder(JStageWebAPIService.GetArticleSearchService)
+                //var jsUriBuilder = new JStageUriBuilder(JStageWebAPIService.GetVolumeListService)
                 //{
-                //    Pubyearfrom = "2022",
+                //    Pubyearfrom = "2021",
                 //    Issn = JStageUriBuilder.ISSN.Architecture_Structure,
-                //    Count = "3",
                 //};
 
-                research.GetDataAndRenewDB(jsUriBuilder);
+                ////var jsUriBuilder = new JStageUriBuilder(JStageWebAPIService.GetArticleSearchService)
+                ////{
+                ////    Pubyearfrom = "2022",
+                ////    Issn = JStageUriBuilder.ISSN.Architecture_Structure,
+                ////    Count = "3",
+                ////};
+
+                //research.GetDataAndRenewDB(jsUriBuilder);
 
 
 
-                //research.OpenArticleDBFromLocal();
+                ////research.OpenArticleDBFromLocal();
             }
 
         }
