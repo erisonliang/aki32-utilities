@@ -6,6 +6,20 @@ public class ResearchArticle
 
     // ★★★★★★★★★★★★★★★ prop
 
+    // ★ private info
+
+    public bool? Private_Favorite { get; set; }
+
+
+    // ★ meta info
+
+    public bool? ReferredFrom_JStage { get; set; }
+    public bool? ReferredFrom_CiNii { get; set; }
+    public bool? ReferredFrom_CrossRef { get; set; }
+
+
+    // ★ mainly from J-Stage
+
     public string? Title_English { get; set; }
     public string? Title_Japanese { get; set; }
 
@@ -44,9 +58,12 @@ public class ResearchArticle
     public string? Id { get; set; }
     public string? UpdatedOn { get; set; }
 
-    public bool RefInfo_JStage { get; set; } = false;
-    public bool RefInfo_CiNii { get; set; } = false;
-    public bool RefInfo_CrossRef { get; set; } = false;
+    // ★ mainly from CiNii
+
+
+
+    // ★ mainly from CrossRef
+
 
 
     // ★★★★★★★★★★★★★★★ method
@@ -55,6 +72,12 @@ public class ResearchArticle
     {
         // TODO define!!!
         throw new NotImplementedException();
+
+        // nullじゃないほうを採用。
+        // 両方nullじゃないなら，後からの情報が優先（最新）
+
+
+
 
 
     }

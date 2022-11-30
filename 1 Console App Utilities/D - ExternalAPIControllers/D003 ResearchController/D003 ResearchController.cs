@@ -150,7 +150,7 @@ public partial class ResearchController
                 Id = entry.Element(ExpandXml("id"))?.Value,
                 UpdatedOn = entry.Element(ExpandXml("updated"))?.Value,
 
-                RefInfo_JStage = true,
+                ReferredFrom_JStage = true,
 
             };
 
@@ -159,16 +159,16 @@ public partial class ResearchController
             {
                 var existingArticle = ArticleDatabase.First(a => a.Id == article.Id);
 
-                // あっても，情報源がここじゃなかったら情報追加！
-                if (!existingArticle.RefInfo_JStage)
-                {
-                    existingArticle.ConvoluteInfo(article);
-                    if (UtilConfig.ConsoleOutput_Contents)
-                        Console.WriteLine($"@@@ {article.Title_Japanese}");
+                if (existingArticle.ReferredFrom_JStage ?? false)
+                    continue;
 
-                    updatedCount++;
-                    articleDatabaseUpdated = true;
-                }
+                // あっても，情報源がここじゃなかったら情報追加！
+                existingArticle.ConvoluteInfo(article);
+                if (UtilConfig.ConsoleOutput_Contents)
+                    Console.WriteLine($"@@@ {article.Title_Japanese}");
+
+                updatedCount++;
+                articleDatabaseUpdated = true;
             }
             else
             {
