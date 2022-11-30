@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Runtime.InteropServices;
@@ -10,6 +11,15 @@ using Aki32_Utilities.OwesomeModels;
 using Aki32_Utilities.OwesomeModels.ChainableExtensions;
 using Aki32_Utilities.SpecificPurposeModels.StructuralEngineering;
 using Aki32_Utilities.UsefulClasses;
+
+using ClosedXML;
+
+using DocumentFormat.OpenXml.Office2010.CustomUI;
+using DocumentFormat.OpenXml.Spreadsheet;
+
+using Newtonsoft.Json;
+
+using Org.BouncyCastle.Asn1.X509.Qualified;
 
 namespace Aki32_Utilities.UsageExamples;
 public class TestHelper
@@ -89,8 +99,46 @@ public class TestHelper
                 // B102 ReadObjectToLocal, J101 WriteObjectToLocal
                 {
 
+                    // test class
+                    var testClassToWrite = new UtilTestClass1()
+                    {
+                        StringProp1 = "11111",
+                        StringProp2 = "22222",
+                        StringProp3 = "33333",
+                        IntProp = 44444,
+                        PropArray = new string[] { "11", "22", "33" },
+                    };
 
+                    // json
+                    {
+                        //var outputFile = new FileInfo($@"{baseDir}\B102 ReadObjectToLocal\output.json");
 
+                        //testClassToWrite.WriteJsonToLocal(outputFile, true);
+
+                        //var testClassRead = outputFile.ReadJsonFromLocal<UtilTestClass1>();
+
+                    }
+
+                    // xml
+                    {
+                        //var outputFile = new FileInfo($@"{baseDir}\B102 ReadObjectToLocal\output.xml");
+
+                        //testClassToWrite.WriteXmlToLocal(outputFile);
+
+                        //var testClassRead = outputFile.ReadXmlFromLocal<UtilTestClass1>();
+
+                    }
+
+                    // csv
+                    {
+
+                        //var outputFile = new FileInfo($@"{baseDir}\B102 ReadObjectToLocal\output.csv");
+
+                        //testClassToWrite.WriteCsvToLocal(outputFile);
+
+                        //var testClassRead = outputFile.ReadCsvFromLocal<UtilTestClass1>();
+                    
+                    }
 
                 }
 
@@ -615,26 +663,26 @@ public class TestHelper
 
             // D003 JStageController
             {
-                var localDir = new DirectoryInfo($@"{baseDir}\D003 JStageController");
-                var jstage = new JStageController(localDir);
+                //var localDir = new DirectoryInfo($@"{baseDir}\D003 JStageController");
+                //var jstage = new JStageController(localDir);
 
-                var jsUriBuilder = new JStageUriBuilder(JStageWebAPIService.GetVolumeListService)
-                {
-                    Pubyearfrom = "2021",
-                    Issn = JStageUriBuilder.ISSN.Architecture_Structure,
-                };
-
-                //var jsUriBuilder = new JStageUriBuilder(JStageWebAPIService.GetArticleSearchService)
+                //var jsUriBuilder = new JStageUriBuilder(JStageWebAPIService.GetVolumeListService)
                 //{
-                //    Pubyearfrom = "2022",
+                //    Pubyearfrom = "2021",
                 //    Issn = JStageUriBuilder.ISSN.Architecture_Structure,
-                //    Count = "3",
                 //};
 
-                jstage.GetDataAndRenewDB(jsUriBuilder);
+                ////var jsUriBuilder = new JStageUriBuilder(JStageWebAPIService.GetArticleSearchService)
+                ////{
+                ////    Pubyearfrom = "2022",
+                ////    Issn = JStageUriBuilder.ISSN.Architecture_Structure,
+                ////    Count = "3",
+                ////};
+
+                //jstage.GetDataAndRenewDB(jsUriBuilder);
 
 
-                //jstage.OpenArticleDBFromLocal();
+                ////jstage.OpenArticleDBFromLocal();
             }
 
         }

@@ -8,6 +8,7 @@ using Aki32_Utilities.UsefulClasses;
 
 using DocumentFormat.OpenXml.Bibliography;
 using DocumentFormat.OpenXml.Office2010.Excel;
+using DocumentFormat.OpenXml.Office2010.PowerPoint;
 using DocumentFormat.OpenXml.Office2013.PowerPoint.Roaming;
 using DocumentFormat.OpenXml.Spreadsheet;
 using DocumentFormat.OpenXml.Wordprocessing;
@@ -42,9 +43,8 @@ public partial class JStageController
 
     // ★★★★★★★★★★★★★★★ props
 
-    public IEnumerable<PaperArticle> Articles { get; set; }
-    public IEnumerable<PaperVolume> Volumes { get; set; }
-
+    public IEnumerable<PaperArticle> Articles { get; set; } = new List<PaperArticle>();
+    public IEnumerable<PaperVolume> Volumes { get; set; } = new List<PaperVolume>();
 
     // ★★★★★★★★★★★★★★★ init
 

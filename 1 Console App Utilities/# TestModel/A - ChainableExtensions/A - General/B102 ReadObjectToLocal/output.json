@@ -1,0 +1,11 @@
+﻿{
+  "StringProp1": "11111",
+  "StringProp2": "22222",
+  "StringProp3": "33333",
+  "IntProp": 44444,
+  "PropArray": [
+    "11",
+    "22",
+    "33"
+  ]
+}
