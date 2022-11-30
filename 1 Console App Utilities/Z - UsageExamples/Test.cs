@@ -668,31 +668,54 @@ public class TestHelper
 
             // D003 ResearchController
             {
-                var localDir = new DirectoryInfo($@"{baseDir}\D003 ResearchController");
-                var research = new ResearchController(localDir);
 
-                var jsUriBuilder = new JStageUriBuilder(JStageWebAPIService.GetVolumeListService)
-                {
-                    Pubyearfrom = "2021",
-                    Issn = JStageUriBuilder.ISSN.Architecture_Structure,
-                };
+                //UtilConfig.ConsoleOutput_Contents = false;
 
-                //var jsUriBuilder = new JStageUriBuilder(JStageWebAPIService.GetArticleSearchService)
+                //var localDir = new DirectoryInfo($@"{baseDir}\D003 ResearchController");
+
+                //var research = new ResearchController(localDir);
+                //research.OpenDatabase();
+
+
+                //// articles from j-stage
                 //{
-                //    Pubyearfrom = "2022",
-                //    Issn = JStageUriBuilder.ISSN.Architecture_Structure,
-                //    Count = "3",
-                //};
+                //    //var jsArticleUriBuilder = new JStageArticleSearchServiceUriBuilder()
+                //    //{
+                //    //    Pubyearfrom = "2022",
+                //    //    Issn = ISSN.Architecture_Structure,
+                //    //    Count = 1000,
+                //    //    //Start = 1,
+                //    //};
+                //    //research.GetDataAndRenewDB(jsArticleUriBuilder);
 
-                research.GetDataAndRenewDB(jsUriBuilder);
+                //}
 
+                //// volumes from j-stage
+                //{
+                //    //var jsVolumeUriBuilder = new JStageVolumeServiceUriBuilder()
+                //    //{
+                //    //    Pubyearfrom = "1000",
+                //    //    Issn = ISSN.Architecture_Structure,
+                //    //};
+                //    //research.GetDataAndRenewDB(jsVolumeUriBuilder);
+                //}
 
+                //// display
+                //{
 
-                //research.OpenArticleDBFromLocal();
-
-
-
-
+                //    //Console.WriteLine();
+                //    Console.WriteLine("★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★");
+                //    //Console.WriteLine();
+                //    Console.WriteLine($"{research.ArticleDatabase.Count} found in total");
+                //    //Console.WriteLine();
+                //    //foreach (var article in research.ArticleDatabase)
+                //    //{
+                //    //    Console.WriteLine($" + {article.Title_Japanese}");
+                //    //}
+                //    //Console.WriteLine();
+                //    Console.WriteLine("★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★");
+                //    //Console.WriteLine();
+                //}
 
             }
 
