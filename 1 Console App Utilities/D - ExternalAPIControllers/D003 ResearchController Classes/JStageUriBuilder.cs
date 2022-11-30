@@ -1,7 +1,7 @@
 ﻿
 
 namespace Aki32_Utilities.ExternalAPIControllers;
-public class JStageUriBuilder
+public class JStageUriBuilder : IResearchUriBuilder
 {
 
     // ★★★★★★★★★★★★★★★ props
@@ -46,11 +46,10 @@ public class JStageUriBuilder
     // ★★★★★★★★★★★★★★★ methods
 
     /// <summary>
-    /// build uri for GetVolumeListService
-    /// 巻号取得一覧
+    /// build uri
     /// </summary>
     /// <returns></returns>
-    internal Uri Build()
+    public Uri Build()
     {
         var queryList = new Dictionary<string, string>();
 

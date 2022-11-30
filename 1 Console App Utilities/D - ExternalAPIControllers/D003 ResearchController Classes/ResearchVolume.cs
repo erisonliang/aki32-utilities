@@ -8,7 +8,7 @@ namespace Aki32_Utilities.ExternalAPIControllers;
 /// ref 
 /// https://www.jstage.jst.go.jp/static/files/ja/manual_api.pdf
 /// </remarks>
-public class PaperVolume
+public class ResearchVolume
 {
 
     public string? Title_English { get; set; }

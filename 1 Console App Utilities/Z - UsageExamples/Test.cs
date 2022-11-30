@@ -661,28 +661,29 @@ public class TestHelper
                 //gc.Sync();
             }
 
-            // D003 JStageController
+            // D003 ResearchController
             {
-                //var localDir = new DirectoryInfo($@"{baseDir}\D003 JStageController");
-                //var jstage = new JStageController(localDir);
+                var localDir = new DirectoryInfo($@"{baseDir}\D003 JStageController");
+                var research = new ResearchController(localDir);
 
-                //var jsUriBuilder = new JStageUriBuilder(JStageWebAPIService.GetVolumeListService)
+                var jsUriBuilder = new JStageUriBuilder(JStageWebAPIService.GetVolumeListService)
+                {
+                    Pubyearfrom = "2021",
+                    Issn = JStageUriBuilder.ISSN.Architecture_Structure,
+                };
+
+                //var jsUriBuilder = new JStageUriBuilder(JStageWebAPIService.GetArticleSearchService)
                 //{
-                //    Pubyearfrom = "2021",
+                //    Pubyearfrom = "2022",
                 //    Issn = JStageUriBuilder.ISSN.Architecture_Structure,
+                //    Count = "3",
                 //};
 
-                ////var jsUriBuilder = new JStageUriBuilder(JStageWebAPIService.GetArticleSearchService)
-                ////{
-                ////    Pubyearfrom = "2022",
-                ////    Issn = JStageUriBuilder.ISSN.Architecture_Structure,
-                ////    Count = "3",
-                ////};
-
-                //jstage.GetDataAndRenewDB(jsUriBuilder);
+                research.GetDataAndRenewDB(jsUriBuilder);
 
 
-                ////jstage.OpenArticleDBFromLocal();
+
+                //research.OpenArticleDBFromLocal();
             }
 
         }

@@ -28,7 +28,7 @@ namespace Aki32_Utilities.ExternalAPIControllers;
 /// https://ooooooha.hatenablog.com/entry/2017/05/03/023516
 /// 
 /// </remarks>
-public partial class JStageController
+public partial class ResearchController
 {
 
     // ★★★★★★★★★★★★★★★ paths
@@ -43,8 +43,8 @@ public partial class JStageController
 
     // ★★★★★★★★★★★★★★★ props
 
-    public IEnumerable<PaperArticle> Articles { get; set; } = new List<PaperArticle>();
-    public IEnumerable<PaperVolume> Volumes { get; set; } = new List<PaperVolume>();
+    public List<ResearchArticle> Articles { get; set; } = new List<ResearchArticle>();
+    public List<ResearchVolume> Volumes { get; set; } = new List<ResearchVolume>();
 
     // ★★★★★★★★★★★★★★★ init
 
@@ -52,12 +52,14 @@ public partial class JStageController
     /// constructor
     /// </summary>
     /// <param name="lineAccessToken"></param>
-    public JStageController(DirectoryInfo baseDir)
+    public ResearchController(DirectoryInfo baseDir)
     {
         LocalDirectory = baseDir;
 
-        Console.WriteLine("JStageController Instance Created.");
-        Console.WriteLine("Data Powered by J-STAGE (https://www.jstage.jst.go.jp/browse/-char/ja)");
+        Console.WriteLine("Data Powered by");
+        Console.WriteLine("+ J-STAGE (https://www.jstage.jst.go.jp/browse/-char/ja)");
+        Console.WriteLine("+ ");
+        Console.WriteLine("+ ");
         Console.WriteLine();
 
         DatabaseDirectory.Create();
@@ -90,7 +92,7 @@ public partial class JStageController
             {
                 case JStageWebAPIService.GetVolumeListService:
                     {
-                        var volume = new PaperVolume
+                        var volume = new ResearchVolume
                         {
 
                             Title_English = entry.Element(ExpandXml("vols_title"))?.Element(ExpandXml("en"))?.Value,
@@ -139,7 +141,7 @@ public partial class JStageController
                 case JStageWebAPIService.GetArticleSearchService:
                     {
 
-                        var article = new PaperArticle
+                        var article = new ResearchArticle
                         {
 
                             Title_English = entry.Element(ExpandXml("article_title"))?.Element(ExpandXml("en"))?.Value,
