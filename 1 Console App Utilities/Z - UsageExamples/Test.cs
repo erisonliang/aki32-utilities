@@ -676,7 +676,6 @@ public class TestHelper
                 //var research = new ResearchController(localDir);
                 //research.OpenDatabase();
 
-
                 //// articles from j-stage
                 //{
                 //    //var jsArticleUriBuilder = new JStageArticleSearchServiceUriBuilder()
@@ -690,31 +689,19 @@ public class TestHelper
 
                 //}
 
-                //// volumes from j-stage
-                //{
-                //    //var jsVolumeUriBuilder = new JStageVolumeServiceUriBuilder()
-                //    //{
-                //    //    Pubyearfrom = "1000",
-                //    //    Issn = ISSN.Architecture_Structure,
-                //    //};
-                //    //research.GetDataAndRenewDB(jsVolumeUriBuilder);
-                //}
-
                 //// display
                 //{
 
-                //    //Console.WriteLine();
+                //    Console.WriteLine();
                 //    Console.WriteLine("★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★");
-                //    //Console.WriteLine();
-                //    Console.WriteLine($"{research.ArticleDatabase.Count} found in total");
-                //    //Console.WriteLine();
+                //    Console.WriteLine();
+                //    Console.WriteLine($"★ {research.ArticleDatabase.Count} found in total");
+                //    Console.WriteLine();
                 //    //foreach (var article in research.ArticleDatabase)
-                //    //{
                 //    //    Console.WriteLine($" + {article.Title_Japanese}");
-                //    //}
                 //    //Console.WriteLine();
                 //    Console.WriteLine("★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★");
-                //    //Console.WriteLine();
+                //    Console.WriteLine();
                 //}
 
             }

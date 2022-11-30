@@ -53,8 +53,8 @@ public class ResearchArticle
 
     public void ConvoluteInfo(ResearchArticle addingArticleInfo)
     {
-
-
+        // TODO define!!!
+        throw new NotImplementedException();
 
 
     }
