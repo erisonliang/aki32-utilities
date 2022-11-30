@@ -131,7 +131,8 @@ public partial class JStageController
 
                         };
 
-                        Console.WriteLine(" - " + volume.MaterialTitle_Japanese + volume.Title_Japanese);
+
+                        Console.WriteLine(" + " + volume.MaterialTitle_Japanese + volume.Title_Japanese);
 
                     }
                     break;
