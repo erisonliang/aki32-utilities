@@ -46,29 +46,21 @@ public static partial class ChainableExtensions
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
-    public static List<T> ReadObjectFromLocalCsv<T>(this FileInfo inputFile, bool withHeader = true) where T : new()
+    public static List<T> ReadObjectFromLocalCsv<T>(this FileInfo inputFile) where T : new()
     {
         var outputDataList = new List<T>();
         var csvGrid = inputFile.ReadCsv_Rows();
 
-        // get props in order 
-        PropertyInfo[] props;
-        if (withHeader)
-        {
-            var fullProps = typeof(T).GetProperties();
+        // get props in order
 
-            props = csvGrid[0]
-                .Select(c => fullProps.FirstOrDefault(p => p.Name == c))
-                .Where(p => p is not null)
-                .ToArray()
-                ;
-
-            csvGrid = csvGrid[1..^0];
-        }
-        else
-        {
-            props = typeof(T).GetProperties();
-        }
+        var fullProps = typeof(T).GetProperties();
+        var props = csvGrid[0]
+            .Select(c => fullProps.FirstOrDefault(p => p.Name == c))
+            .Where(p => p is not null)
+            .Where(p => p.CanWrite)
+            .ToArray()
+            ;
+        csvGrid = csvGrid[1..^0];
 
         // contents
         foreach (var csvLine in csvGrid)

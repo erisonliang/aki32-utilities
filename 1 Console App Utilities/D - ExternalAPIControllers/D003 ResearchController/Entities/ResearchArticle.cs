@@ -20,7 +20,7 @@ public class ResearchArticle
 
     public string? PrintISSN { get; set; }
     public string? OnlineISSN { get; set; }
-    
+
     public string? Volume { get; set; }
     public string? SubVolume { get; set; }
 
@@ -32,6 +32,7 @@ public class ResearchArticle
 
     public string? JOI { get; set; }
     public string? DOI { get; set; }
+    public string? DOI_Link => DOI == null ? null : $"https://doi.org/{DOI}";
 
     public string? SystemCode { get; set; }
     public string? SystemName { get; set; }

@@ -18,4 +18,6 @@ public class UtilTestClass1
     public List<string> StringListProp { get; set; }
     public List<int> IntListProp { get; set; }
 
+    public string IntProp_InString => IntProp.ToString();
+
 }

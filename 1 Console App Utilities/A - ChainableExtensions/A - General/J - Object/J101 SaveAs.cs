@@ -53,13 +53,12 @@ public static partial class ChainableExtensions
     /// <param name="outputFile"></param>
     /// <param name="dataList"></param>
     /// <returns></returns>
-    public static FileInfo SaveAsCsv<T>(this IEnumerable<T> dataList, FileInfo outputFile, bool withHeader = true)
+    public static FileInfo SaveAsCsv<T>(this IEnumerable<T> dataList, FileInfo outputFile)
     {
         var csvGrid = new List<string[]>();
         var props = typeof(T).GetProperties();
 
         // header
-        if (withHeader)
         {
             var csvLine = new List<string>();
             foreach (var prop in props)
