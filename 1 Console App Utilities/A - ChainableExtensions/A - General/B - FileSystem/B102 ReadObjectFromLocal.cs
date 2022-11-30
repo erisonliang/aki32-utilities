@@ -14,7 +14,7 @@ public static partial class ChainableExtensions
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
-    public static T ReadJsonFromLocal<T>(this FileInfo inputFile) where T : new()
+    public static T ReadObjectFromLocalJson<T>(this FileInfo inputFile) where T : new()
     {
         using var sr = new StreamReader(inputFile.FullName);
         var json = sr.ReadToEnd();
@@ -29,7 +29,7 @@ public static partial class ChainableExtensions
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
-    public static T ReadXmlFromLocal<T>(this FileInfo inputFile) where T : new()
+    public static T ReadObjectFromLocalXml<T>(this FileInfo inputFile) where T : new()
     {
         using var sr = new StreamReader(inputFile.FullName);
 
@@ -44,7 +44,7 @@ public static partial class ChainableExtensions
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
-    public static T ReadCsvFromLocal<T>(this FileInfo inputFile) where T : new()
+    public static T ReadObjectFromLocalCsv<T>(this FileInfo inputFile) where T : new()
     {
         throw new NotImplementedException();
 

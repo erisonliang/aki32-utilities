@@ -197,7 +197,7 @@ public partial class ResearchController
 
     public void OpenArticleDBFromLocal()
     {
-        var db = ArticleDB.ReadXmlFromLocal<object>();
+        var db = ArticleDB.ReadObjectFromLocalXml<object>();
 
 
     }

@@ -96,7 +96,7 @@ public class TestHelper
                     //    .Unzip(null);
                 }
 
-                // B102 ReadObjectToLocal, J101 WriteObjectToLocal
+                // B102 ReadObjectFromLocalXXX, J101 SaveAsXXX
                 {
 
                     // test class
@@ -113,9 +113,9 @@ public class TestHelper
                     {
                         //var outputFile = new FileInfo($@"{baseDir}\B102 ReadObjectToLocal\output.json");
 
-                        //testClassToWrite.WriteJsonToLocal(outputFile, true);
+                        //testClassToWrite.SaveAsJson(outputFile, true);
 
-                        //var testClassRead = outputFile.ReadJsonFromLocal<UtilTestClass1>();
+                        //var testClassRead = outputFile.ReadObjectFromLocalJson<UtilTestClass1>();
 
                     }
 
@@ -123,20 +123,20 @@ public class TestHelper
                     {
                         //var outputFile = new FileInfo($@"{baseDir}\B102 ReadObjectToLocal\output.xml");
 
-                        //testClassToWrite.WriteXmlToLocal(outputFile);
+                        //testClassToWrite.SaveAsXml(outputFile);
 
-                        //var testClassRead = outputFile.ReadXmlFromLocal<UtilTestClass1>();
+                        //var testClassRead = outputFile.ReadObjectFromLocalXml<UtilTestClass1>();
 
                     }
 
                     // csv
                     {
-
                         var outputFile = new FileInfo($@"{baseDir}\B102 ReadObjectToLocal\output.csv");
 
-                        new List<UtilTestClass1> { testClassToWrite }.WriteCsvToLocal(outputFile);
+                        var testClassListToWrite = new List<UtilTestClass1> { testClassToWrite };
+                        testClassListToWrite.SaveAsCsv(outputFile);
 
-                        var testClassRead = outputFile.ReadCsvFromLocal<UtilTestClass1>();
+                        var testClassRead = outputFile.ReadObjectFromLocalCsv<UtilTestClass1>();
 
                     }
 

@@ -19,7 +19,7 @@ public static partial class ChainableExtensions
     /// <param name="outputFile"></param>
     /// <param name="data"></param>
     /// <returns></returns>
-    public static FileInfo WriteJsonToLocal<T>(this T data, FileInfo outputFile, bool formatted = false)
+    public static FileInfo SaveAsJson<T>(this T data, FileInfo outputFile, bool formatted = false)
     {
         var json = JsonConvert.SerializeObject(data, formatted ? Formatting.Indented : Formatting.None);
 
@@ -36,7 +36,7 @@ public static partial class ChainableExtensions
     /// <param name="outputFile"></param>
     /// <param name="data"></param>
     /// <returns></returns>
-    public static FileInfo WriteXmlToLocal<T>(this T data, FileInfo outputFile)
+    public static FileInfo SaveAsXml<T>(this T data, FileInfo outputFile)
     {
         using var sw = new StreamWriter(outputFile.FullName, false, Encoding.UTF8);
 
@@ -53,7 +53,7 @@ public static partial class ChainableExtensions
     /// <param name="outputFile"></param>
     /// <param name="dataList"></param>
     /// <returns></returns>
-    public static FileInfo WriteCsvToLocal<T>(this IEnumerable<T> dataList, FileInfo outputFile, bool withHeader = true)
+    public static FileInfo SaveAsCsv<T>(this IEnumerable<T> dataList, FileInfo outputFile, bool withHeader = true)
     {
         var csvGrid = new List<string[]>();
         var props = typeof(T).GetProperties();
