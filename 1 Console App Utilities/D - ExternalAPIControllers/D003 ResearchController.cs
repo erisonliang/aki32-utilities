@@ -63,6 +63,7 @@ public partial class ResearchController
         Console.WriteLine();
 
         DatabaseDirectory.Create();
+
     }
 
 
