@@ -3,6 +3,8 @@ using System.Xml.Linq;
 
 using Aki32_Utilities.General;
 
+using DocumentFormat.OpenXml.Bibliography;
+
 namespace Aki32_Utilities.ExternalAPIControllers;
 
 /// <summary>
@@ -104,6 +106,7 @@ public partial class ResearchController
     {
         // preprocess
         var addedCount = 0;
+        var updatedCount = 0;
         if (ArticleDatabase == null)
             throw new InvalidOperationException("Database has not been opened yet. Use OpenDataBase() first.");
 
@@ -166,23 +169,43 @@ public partial class ResearchController
                 Id = entry.Element(ExpandXml("id"))?.Value,
                 UpdatedOn = entry.Element(ExpandXml("updated"))?.Value,
 
+                RefInfo_JStage = true,
+
             };
 
-            if (!ArticleDatabase.Any(a => a.DOI == article.DOI))
+
+            if (ArticleDatabase.Any(a => a.Id == article.Id))
             {
+                var existingArticle = ArticleDatabase.First(a => a.Id == article.Id);
+
+                // あっても，情報源がここじゃなかったら情報追加！
+                if (!existingArticle.RefInfo_JStage)
+                {
+                    existingArticle.ConvoluteInfo(article);
+                    if (UtilConfig.ConsoleOutput_Contents)
+                        Console.WriteLine($"@@@ {article.Title_Japanese}");
+
+                    updatedCount++;
+                    articleDatabaseUpdated = true;
+                }
+            }
+            else
+            {
+                // 無いなら登録。
                 ArticleDatabase.Add(article);
 
                 if (UtilConfig.ConsoleOutput_Contents)
-                    Console.WriteLine($" + {article.Title_Japanese}");
+                    Console.WriteLine($"+++ {article.Title_Japanese}");
 
                 addedCount++;
                 articleDatabaseUpdated = true;
+
             }
 
         }
 
         SaveDatabase();
-        Console.WriteLine($"★ Added {addedCount} items to database");
+        Console.WriteLine($"★ {addedCount} added, {updatedCount} updated.");
 
     }
 
@@ -195,6 +218,7 @@ public partial class ResearchController
     {
         // preprocess
         var addedCount = 0;
+        var updatedCount = 0;
         if (VolumeDatabase == null)
             throw new InvalidOperationException("Database has not been opened yet. Use OpenDataBase() first.");
 
@@ -254,14 +278,33 @@ public partial class ResearchController
                 Id = entry.Element(ExpandXml("id"))?.Value,
                 UpdatedOn = entry.Element(ExpandXml("updated"))?.Value,
 
+                RefInfo_JStage = true,
+
             };
 
-            if (!VolumeDatabase.Any(v => v.Id == volume.Id))
+            if (VolumeDatabase.Any(v => v.Id == volume.Id))
             {
+                var existingVolume = VolumeDatabase.First(v => v.Id == volume.Id);
+
+                // あっても，情報源がここじゃなかったら情報追加！
+                if (!existingVolume.RefInfo_JStage)
+                {
+                    existingVolume.ConvoluteInfo(volume);
+
+                    if (UtilConfig.ConsoleOutput_Contents)
+                        Console.WriteLine($"@@@ {volume.MaterialTitle_Japanese} {volume.Title_Japanese}");
+
+                    updatedCount++;
+                    volumeDatabaseUpdated = true;
+                }
+            }
+            else
+            {
+                // 無いなら登録。
                 VolumeDatabase.Add(volume);
 
                 if (UtilConfig.ConsoleOutput_Contents)
-                    Console.WriteLine($" + {volume.MaterialTitle_Japanese} {volume.Title_Japanese}");
+                    Console.WriteLine($"+++ {volume.MaterialTitle_Japanese} {volume.Title_Japanese}");
 
                 addedCount++;
                 volumeDatabaseUpdated = true;
@@ -270,7 +313,7 @@ public partial class ResearchController
         }
 
         SaveDatabase();
-        Console.WriteLine($"★ Added {addedCount} items to database");
+        Console.WriteLine($"★ {addedCount} added, {updatedCount} updated.");
 
     }
 

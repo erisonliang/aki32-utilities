@@ -4,6 +4,8 @@ namespace Aki32_Utilities.ExternalAPIControllers;
 public class ResearchVolume
 {
 
+    // ★★★★★★★★★★★★★★★ prop
+
     public string? Title_English { get; set; }
     public string? Title_Japanese { get; set; }
 
@@ -39,5 +41,21 @@ public class ResearchVolume
     public string? Link { get; set; }
     public string? Id { get; set; }
     public string? UpdatedOn { get; set; }
+
+    public bool RefInfo_JStage { get; set; } = false;
+
+
+    // ★★★★★★★★★★★★★★★ method
+
+    public void ConvoluteInfo(ResearchVolume addingVolumeInfo)
+    {
+
+
+
+
+    }
+
+
+    // ★★★★★★★★★★★★★★★ 
 
 }

@@ -4,6 +4,8 @@ namespace Aki32_Utilities.ExternalAPIControllers;
 public class ResearchArticle
 {
 
+    // ★★★★★★★★★★★★★★★ prop
+
     public string? Title_English { get; set; }
     public string? Title_Japanese { get; set; }
 
@@ -41,5 +43,23 @@ public class ResearchArticle
     public string? Link { get; set; }
     public string? Id { get; set; }
     public string? UpdatedOn { get; set; }
+
+    public bool RefInfo_JStage { get; set; } = false;
+    public bool RefInfo_CiNii { get; set; } = false;
+    public bool RefInfo_CrossRef { get; set; } = false;
+
+
+    // ★★★★★★★★★★★★★★★ method
+
+    public void ConvoluteInfo(ResearchArticle addingArticleInfo)
+    {
+
+
+
+
+    }
+
+
+    // ★★★★★★★★★★★★★★★ 
 
 }
