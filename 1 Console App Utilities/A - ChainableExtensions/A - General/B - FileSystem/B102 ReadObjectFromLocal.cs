@@ -90,13 +90,23 @@ public static partial class ChainableExtensions
 
                 var propType = prop!.PropertyType;
 
+                object settingItem;
+
                 if (propType == typeof(string))
                 {
-                    prop!.SetValue(data, csvLine[index]);
+                    // Since JsonConvert.DeserializeObject does not accept string.
+                    settingItem = csvLine[index];
+                }
+                else if (propType == typeof(bool?))
+                {
+                    // Since JsonConvert.DeserializeObject does not accept upper bool.
+                    // If csv has been processed by Excel, true/false automatically turned into TRUE/FALSE...
+                    settingItem = JsonConvert.DeserializeObject(csvLine[index].ToLower(), propType, (JsonSerializerSettings?)null)!;
                 }
                 else
                 {
-                    var deserializedObject = JsonConvert.DeserializeObject(csvLine[index], propType, (JsonSerializerSettings?)null);
+                    // General
+                    settingItem = JsonConvert.DeserializeObject(csvLine[index], propType, (JsonSerializerSettings?)null)!;
 
                     // same as above
                     //
@@ -106,9 +116,9 @@ public static partial class ChainableExtensions
                     //    .MakeGenericMethod(propType)
                     //    .Invoke(null, new object[] { csvLine[i] });
 
-                    prop!.SetValue(data, deserializedObject);
                 }
 
+                prop!.SetValue(data, settingItem);
             }
 
             outputDataList.Add(data);
