@@ -216,7 +216,7 @@ public partial class ResearchArticlesManager
 
                             // Add DOI or AOI to ReferenceDOIs.
                             article.ReferenceDOIs = (article.ReferenceDOIs ?? Array.Empty<string>())
-                            .Append(article.DOI ?? (article.AOI = Guid.NewGuid().ToString()))!
+                            .Append(addingArticle.DOI ?? (addingArticle.AOI = Guid.NewGuid().ToString()))!
                             .ToArray();
 
                             fetchedArticles.Add(addingArticle);
@@ -229,8 +229,6 @@ public partial class ResearchArticlesManager
 
             // add article
             fetchedArticles.Add(article);
-
-
 
         }
         else
@@ -265,27 +263,51 @@ public partial class ResearchArticlesManager
         // main
         foreach (var article in articles)
         {
-            if (ArticleDatabase.Any(a => a.DOI == article.DOI))
+            IEnumerable<ResearchArticle?> matchedArticleFinder()
             {
-                // 更新・マージ
-                ArticleDatabase.First(a => a.Id_JS == article.Id_JS).MergeInfo(article);
-                if (UtilConfig.ConsoleOutput_Contents)
-                    Console.WriteLine($"@@@ {article.ArticleTitle_Japanese_JS}");
+                yield return ArticleDatabase.FirstOrDefault(a => a.DOI != null && a.DOI == article!.DOI);
 
-                updatedCount++;
-                articleDatabaseUpdated = true;
+                yield return ArticleDatabase.FirstOrDefault(a => a.ArticleTitle_CR != null && a.ArticleTitle_CR == article!.ArticleTitle_CR);
+                yield return ArticleDatabase.FirstOrDefault(a => a.Id_JS != null && a.Id_JS == article!.Id_JS);
+                yield return ArticleDatabase.FirstOrDefault(a => a.ArticleTitle_Manual != null && a.ArticleTitle_Manual == article!.ArticleTitle_Manual);
+
+                // 最終手段。
+                yield return ArticleDatabase.FirstOrDefault(a => a.AOI != null && a.AOI == article!.AOI);
+
             }
-            else
+
+            void UpdateOrCretae()
             {
+                foreach (var matchedArticle in matchedArticleFinder())
+                {
+                    // 更新・マージ
+                    if (matchedArticle != null)
+                    {
+                        matchedArticle.MergeInfo(article!);
+                        if (UtilConfig.ConsoleOutput_Contents)
+                            Console.WriteLine($"@@@ {article!.ArticleTitle_CR}");
+
+                        updatedCount++;
+                        articleDatabaseUpdated = true;
+                        return;
+                    }
+                }
+
                 // 新規登録
-                ArticleDatabase.Add(article);
+                {
+                    ArticleDatabase.Add(article!);
 
-                if (UtilConfig.ConsoleOutput_Contents)
-                    Console.WriteLine($"+++ {article.ArticleTitle_Japanese_JS}");
+                    if (UtilConfig.ConsoleOutput_Contents)
+                        Console.WriteLine($"+++ {article!.ArticleTitle_CR}");
 
-                addedCount++;
-                articleDatabaseUpdated = true;
-            }
+                    addedCount++;
+                    articleDatabaseUpdated = true;
+                }
+
+            };
+
+            UpdateOrCretae();
+
         }
 
 

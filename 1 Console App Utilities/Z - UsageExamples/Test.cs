@@ -873,7 +873,7 @@ public class TestHelper
 
                 // A - ResearchManager
                 {
-                    UtilConfig.ConsoleOutput_Contents = false;
+                    //UtilConfig.ConsoleOutput_Contents = false;
 
                     var localDir = new DirectoryInfo($@"{baseDir_C}\A - ResearchManager\@Private");
                     var research = new ResearchArticlesManager(localDir);

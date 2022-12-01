@@ -2,6 +2,8 @@
 
 using Aki32_Utilities.General;
 
+using ClosedXML;
+
 using Newtonsoft.Json;
 
 namespace Aki32_Utilities.SpecificPurposeModels.Research;
@@ -11,8 +13,12 @@ public class ResearchArticle
     // ★★★★★★★★★★★★★★★ prop
 
     // ★ Links
+
     public string? DOI_Link => (DOI == null) ? null : $"https://dx.doi.org/{DOI}";
+
+    [CsvIgnore]
     public string? CrossRef_Link => (DOI == null) ? null : $"https://api.crossref.org/v1/works/{DOI}";
+
     public string? PDF_Link
     {
         get
@@ -24,6 +30,27 @@ public class ResearchArticle
             {
                 // get data from aij
                 return Link_JS?.Replace($"_article/-char/ja/", $"_pdf");
+            }
+
+            return null;
+        }
+    }
+
+    [CsvIgnore]
+    public string? LocalPDFName
+    {
+        get
+        {
+            if (ManuallyAddedPdfName != null)
+                return ManuallyAddedPdfName;
+
+            if (DOI != null)
+                return DOI.Replace("/", "_");
+
+            if (PDF_Link != null)
+            {
+                var candidate = PDF_Link.Replace("/", "_").Replace(":", "_");
+                return (candidate.Length > 30) ? candidate[^29..] : candidate;
             }
 
             return null;
@@ -47,7 +74,21 @@ public class ResearchArticle
     /// Aki32 Object Identifier
     /// When DOI does not exist, automatically create AOI to connect ref data.
     /// </summary>
+    /// <remarks>
+    /// AOIで接続するのは，本当に最終手段。
+    /// </remarks>
     public string? AOI { get; set; }
+
+
+    // ★ manual info
+
+    /// <summary>
+    /// Put your pdf in {LocalPath}\PDFs\Manual\{ManuallyAddedPdfName}.pdf
+    /// </summary>
+    public string? ManuallyAddedPdfName { get; set; }
+
+    public string? ArticleTitle_Manual { get; set; }
+    public string[]? Authors_Manual { get; set; }
 
 
     // ★ mainly from CrossRef (2/2 of main common info)
@@ -114,17 +155,44 @@ public class ResearchArticle
 
     public void MergeInfo(ResearchArticle addingArticleInfo)
     {
-        // TODO define!!!
-        throw new NotImplementedException();
-
         // nullじゃないほうを採用。
         // 両方nullじゃないなら，後からの情報が優先（最新）
 
+        var props = GetType()
+            .GetProperties()
+            .Where(p => !p.HasAttribute<CsvIgnoreAttribute>())
+            .Where(p => p.CanWrite)
+            ;
 
+        // addingのほうを上書きして，元のを書き換える。
+        foreach (var prop in props)
+        {
+            var addingArticleInfoProp = prop.GetValue(addingArticleInfo);
+            if (addingArticleInfoProp != null)
+                prop.SetValue(this, addingArticleInfoProp);
 
-
+        }
 
     }
+
+
+    public static ResearchArticle CreateManually(
+
+
+        )
+    {
+        // AOI自動生成。
+        // 参照先リスト指定可能にする。。
+
+
+        throw new NotImplementedException();
+
+        return new ResearchArticle()
+        {
+            AOI = Guid.NewGuid().ToString(),
+        };
+    }
+
 
     public static string? CleanUp_UnstructuredRefString(string? rawUnstructuredRefString, int checkCount = 4)
     {
