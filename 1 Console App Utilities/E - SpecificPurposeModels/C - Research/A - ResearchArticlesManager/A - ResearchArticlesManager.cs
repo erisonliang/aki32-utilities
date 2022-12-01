@@ -4,6 +4,7 @@ using System.Xml.Linq;
 using Aki32_Utilities.General;
 
 using DocumentFormat.OpenXml.Bibliography;
+using DocumentFormat.OpenXml.Wordprocessing;
 
 namespace Aki32_Utilities.SpecificPurposeModels.Research;
 /// <remarks>
@@ -74,111 +75,138 @@ public partial class ResearchArticlesManager
         }
     }
 
+
     /// <summary>
-    /// get data from dataserver and add to local dataase
+    /// pull data from dataserver to local database
     /// </summary>
     /// <param name="uriBuilder"></param>
     /// <exception cref="InvalidOperationException"></exception>
-    public void PullArticleInfo_From_JStage(JStageArticleSearchServiceUriBuilder uriBuilder)
+    public void PullArticleInfo(IResearchUriBuilder uriBuilder)
+    {
+        FetchArticleInfo(uriBuilder);
+        MergeArticleInfo();
+
+    }
+
+    /// <summary>
+    /// fetch data from dataserver
+    /// </summary>
+    /// <param name="uriBuilder"></param>
+    /// <exception cref="InvalidOperationException"></exception>
+    public IEnumerable<ResearchArticle> FetchArticleInfo(IResearchUriBuilder uriBuilder)
     {
         // preprocess
         var addedCount = 0;
         var updatedCount = 0;
+        var uri = uriBuilder.Build();
         if (ArticleDatabase == null)
             throw new InvalidOperationException("Database has not been opened yet. Use OpenDataBase() first.");
 
-
-        // get xml
-        var uri = uriBuilder.Build();
-        var xml = XElement.Load(uri.AbsoluteUri);
-
-
-        // analyse 
-        var totalResults = xml.Element(ExpandOpenSearch("totalResults"))!.Value;
-        var startIndex = xml.Element(ExpandOpenSearch("startIndex"))!.Value;
-        var itemsPerPage = xml.Element(ExpandOpenSearch("itemsPerPage"))!.Value;
-        var toIndex = int.Parse(startIndex) + int.Parse(itemsPerPage) - 1;
-        var entries = xml.Elements(ExpandXml("entry"));
-
-        Console.WriteLine($"★ Obtained {itemsPerPage} items out of {totalResults} matches ( From #{startIndex} to #{toIndex} )");
-        Console.WriteLine();
-
-        foreach (var entry in entries)
+        // main
+        if (uriBuilder is JStageArticleUriBuilder)
         {
-            var article = new ResearchArticle
+            // get xml
+            var xml = XElement.Load(uri.AbsoluteUri);
+
+
+            // analyse 
+            var totalResults = xml.Element(ExpandOpenSearch("totalResults"))!.Value;
+            var startIndex = xml.Element(ExpandOpenSearch("startIndex"))!.Value;
+            var itemsPerPage = xml.Element(ExpandOpenSearch("itemsPerPage"))!.Value;
+            var toIndex = int.Parse(startIndex) + int.Parse(itemsPerPage) - 1;
+            var entries = xml.Elements(ExpandXml("entry"));
+
+            Console.WriteLine($"★ Obtained {itemsPerPage} items out of {totalResults} matches ( From #{startIndex} to #{toIndex} )");
+            Console.WriteLine();
+
+            foreach (var entry in entries)
             {
+                var article = new ResearchArticle
+                {
 
-                Title_English = entry.Element(ExpandXml("article_title"))?.Element(ExpandXml("en"))?.Value,
-                Title_Japanese = entry.Element(ExpandXml("article_title"))?.Element(ExpandXml("ja"))?.Value,
+                    Title_English = entry.Element(ExpandXml("article_title"))?.Element(ExpandXml("en"))?.Value,
+                    Title_Japanese = entry.Element(ExpandXml("article_title"))?.Element(ExpandXml("ja"))?.Value,
 
-                Link_English = entry.Element(ExpandXml("article_link"))?.Element(ExpandXml("en"))?.Value,
-                Link_Japanese = entry.Element(ExpandXml("article_link"))?.Element(ExpandXml("ja"))?.Value,
+                    Link_English = entry.Element(ExpandXml("article_link"))?.Element(ExpandXml("en"))?.Value,
+                    Link_Japanese = entry.Element(ExpandXml("article_link"))?.Element(ExpandXml("ja"))?.Value,
 
-                Authors_English = entry.Element(ExpandXml("author"))?.Element(ExpandXml("en"))?.Elements(ExpandXml("name"))?.Select(e => e?.Value ?? "")?.ToArray(),
-                Authors_Japanese = entry.Element(ExpandXml("author"))?.Element(ExpandXml("ja"))?.Elements(ExpandXml("name"))?.Select(e => e?.Value ?? "")?.ToArray(),
+                    Authors_English = entry.Element(ExpandXml("author"))?.Element(ExpandXml("en"))?.Elements(ExpandXml("name"))?.Select(e => e?.Value ?? "")?.ToArray(),
+                    Authors_Japanese = entry.Element(ExpandXml("author"))?.Element(ExpandXml("ja"))?.Elements(ExpandXml("name"))?.Select(e => e?.Value ?? "")?.ToArray(),
 
-                JournalCode_JStage = entry.Element(ExpandXml("cdjournal"))?.Value,
+                    JournalCode_JStage = entry.Element(ExpandXml("cdjournal"))?.Value,
 
-                MaterialTitle_English = entry.Element(ExpandXml("material_title"))?.Element(ExpandXml("en"))?.Value,
-                MaterialTitle_Japanese = entry.Element(ExpandXml("material_title"))?.Element(ExpandXml("ja"))?.Value,
+                    MaterialTitle_English = entry.Element(ExpandXml("material_title"))?.Element(ExpandXml("en"))?.Value,
+                    MaterialTitle_Japanese = entry.Element(ExpandXml("material_title"))?.Element(ExpandXml("ja"))?.Value,
 
-                PrintISSN = entry.Element(ExpandPrism("issn"))?.Value,
-                OnlineISSN = entry.Element(ExpandPrism("eIssn"))?.Value,
+                    PrintISSN = entry.Element(ExpandPrism("issn"))?.Value,
+                    OnlineISSN = entry.Element(ExpandPrism("eIssn"))?.Value,
 
-                Volume = entry.Element(ExpandPrism("volume"))?.Value,
-                SubVolume = entry.Element(ExpandXml("cdvols"))?.Value,
+                    Volume = entry.Element(ExpandPrism("volume"))?.Value,
+                    SubVolume = entry.Element(ExpandXml("cdvols"))?.Value,
 
-                Number = entry.Element(ExpandPrism("number"))?.Value,
-                StartingPage = entry.Element(ExpandPrism("startingPage"))?.Value,
-                EndingPage = entry.Element(ExpandPrism("endingPage"))?.Value,
+                    Number = entry.Element(ExpandPrism("number"))?.Value,
+                    StartingPage = entry.Element(ExpandPrism("startingPage"))?.Value,
+                    EndingPage = entry.Element(ExpandPrism("endingPage"))?.Value,
 
-                PublishedYear = entry.Element(ExpandXml("pubyear"))?.Value,
+                    PublishedYear = entry.Element(ExpandXml("pubyear"))?.Value,
 
-                JOI = entry.Element(ExpandXml("joi"))?.Value,
-                DOI = entry.Element(ExpandPrism("doi"))?.Value,
+                    JOI = entry.Element(ExpandXml("joi"))?.Value,
+                    DOI = entry.Element(ExpandPrism("doi"))?.Value,
 
-                SystemCode = entry.Element(ExpandXml("systemcode"))?.Value,
-                SystemName = entry.Element(ExpandXml("systemname"))?.Value,
+                    SystemCode = entry.Element(ExpandXml("systemcode"))?.Value,
+                    SystemName = entry.Element(ExpandXml("systemname"))?.Value,
 
-                Title = entry.Element(ExpandXml("title"))?.Value,
+                    Title = entry.Element(ExpandXml("title"))?.Value,
 
-                Link = entry.Element(ExpandXml("link"))?.Value,
-                Id = entry.Element(ExpandXml("id"))?.Value,
-                UpdatedOn = entry.Element(ExpandXml("updated"))?.Value,
+                    Link = entry.Element(ExpandXml("link"))?.Value,
+                    Id = entry.Element(ExpandXml("id"))?.Value,
+                    UpdatedOn = entry.Element(ExpandXml("updated"))?.Value,
 
-                ReferredFrom_JStage = true,
+                    ReferredFrom_JStage = true,
 
-            };
+                };
 
 
-            if (ArticleDatabase.Any(a => a.Id == article.Id))
-            {
-                var existingArticle = ArticleDatabase.First(a => a.Id == article.Id);
+                if (ArticleDatabase.Any(a => a.Id == article.Id))
+                {
+                    var existingArticle = ArticleDatabase.First(a => a.Id == article.Id);
 
-                if (existingArticle.ReferredFrom_JStage ?? false)
-                    continue;
+                    if (existingArticle.ReferredFrom_JStage ?? false)
+                        continue;
 
-                // あっても，情報源がここじゃなかったら情報追加！
-                existingArticle.ConvoluteInfo(article);
-                if (UtilConfig.ConsoleOutput_Contents)
-                    Console.WriteLine($"@@@ {article.Title_Japanese}");
+                    // あっても，情報源がここじゃなかったら情報追加！
+                    existingArticle.ConvoluteInfo(article);
+                    if (UtilConfig.ConsoleOutput_Contents)
+                        Console.WriteLine($"@@@ {article.Title_Japanese}");
 
-                updatedCount++;
-                articleDatabaseUpdated = true;
+                    updatedCount++;
+                    articleDatabaseUpdated = true;
+                }
+                else
+                {
+                    // 無いなら登録。
+                    ArticleDatabase.Add(article);
+
+                    if (UtilConfig.ConsoleOutput_Contents)
+                        Console.WriteLine($"+++ {article.Title_Japanese}");
+
+                    addedCount++;
+                    articleDatabaseUpdated = true;
+
+                }
+
             }
-            else
-            {
-                // 無いなら登録。
-                ArticleDatabase.Add(article);
 
-                if (UtilConfig.ConsoleOutput_Contents)
-                    Console.WriteLine($"+++ {article.Title_Japanese}");
+        }
+        else if (uriBuilder is CrossRefArticleUriBuilder)
+        {
 
-                addedCount++;
-                articleDatabaseUpdated = true;
 
-            }
 
+        }
+        else
+        {
+            throw new NotImplementedException();
         }
 
         SaveDatabase();
@@ -187,114 +215,12 @@ public partial class ResearchArticlesManager
     }
 
     /// <summary>
-    /// get data from dataserver and add to local dataase
+    /// merge articles to local database
     /// </summary>
     /// <param name="uriBuilder"></param>
     /// <exception cref="InvalidOperationException"></exception>
-    public void PullArticleInfo_FromCrossRef(string DOI)
+    public void MergeArticleInfo(IEnumerable<ResearchArticle> articles)
     {
-        // preprocess
-        var addedCount = 0;
-        var updatedCount = 0;
-        if (ArticleDatabase == null)
-            throw new InvalidOperationException("Database has not been opened yet. Use OpenDataBase() first.");
-
-
-        // get xml
-        var uri = new Uri(DOI);
-        var xml = XElement.Load(uri.AbsoluteUri);
-
-
-        // analyse 
-        var totalResults = xml.Element(ExpandOpenSearch("totalResults"))!.Value;
-        var startIndex = xml.Element(ExpandOpenSearch("startIndex"))!.Value;
-        var itemsPerPage = xml.Element(ExpandOpenSearch("itemsPerPage"))!.Value;
-        var toIndex = int.Parse(startIndex) + int.Parse(itemsPerPage) - 1;
-        var entries = xml.Elements(ExpandXml("entry"));
-
-        Console.WriteLine($"★ Obtained {itemsPerPage} items out of {totalResults} matches ( From #{startIndex} to #{toIndex} )");
-        Console.WriteLine();
-
-        foreach (var entry in entries)
-        {
-            var article = new ResearchArticle
-            {
-
-                Title_English = entry.Element(ExpandXml("article_title"))?.Element(ExpandXml("en"))?.Value,
-                Title_Japanese = entry.Element(ExpandXml("article_title"))?.Element(ExpandXml("ja"))?.Value,
-
-                Link_English = entry.Element(ExpandXml("article_link"))?.Element(ExpandXml("en"))?.Value,
-                Link_Japanese = entry.Element(ExpandXml("article_link"))?.Element(ExpandXml("ja"))?.Value,
-
-                Authors_English = entry.Element(ExpandXml("author"))?.Element(ExpandXml("en"))?.Elements(ExpandXml("name"))?.Select(e => e?.Value ?? "")?.ToArray(),
-                Authors_Japanese = entry.Element(ExpandXml("author"))?.Element(ExpandXml("ja"))?.Elements(ExpandXml("name"))?.Select(e => e?.Value ?? "")?.ToArray(),
-
-                JournalCode_JStage = entry.Element(ExpandXml("cdjournal"))?.Value,
-
-                MaterialTitle_English = entry.Element(ExpandXml("material_title"))?.Element(ExpandXml("en"))?.Value,
-                MaterialTitle_Japanese = entry.Element(ExpandXml("material_title"))?.Element(ExpandXml("ja"))?.Value,
-
-                PrintISSN = entry.Element(ExpandPrism("issn"))?.Value,
-                OnlineISSN = entry.Element(ExpandPrism("eIssn"))?.Value,
-
-                Volume = entry.Element(ExpandPrism("volume"))?.Value,
-                SubVolume = entry.Element(ExpandXml("cdvols"))?.Value,
-
-                Number = entry.Element(ExpandPrism("number"))?.Value,
-                StartingPage = entry.Element(ExpandPrism("startingPage"))?.Value,
-                EndingPage = entry.Element(ExpandPrism("endingPage"))?.Value,
-
-                PublishedYear = entry.Element(ExpandXml("pubyear"))?.Value,
-
-                JOI = entry.Element(ExpandXml("joi"))?.Value,
-                DOI = entry.Element(ExpandPrism("doi"))?.Value,
-
-                SystemCode = entry.Element(ExpandXml("systemcode"))?.Value,
-                SystemName = entry.Element(ExpandXml("systemname"))?.Value,
-
-                Title = entry.Element(ExpandXml("title"))?.Value,
-
-                Link = entry.Element(ExpandXml("link"))?.Value,
-                Id = entry.Element(ExpandXml("id"))?.Value,
-                UpdatedOn = entry.Element(ExpandXml("updated"))?.Value,
-
-                ReferredFrom_JStage = true,
-
-            };
-
-
-            if (ArticleDatabase.Any(a => a.Id == article.Id))
-            {
-                var existingArticle = ArticleDatabase.First(a => a.Id == article.Id);
-
-                if (existingArticle.ReferredFrom_JStage ?? false)
-                    continue;
-
-                // あっても，情報源がここじゃなかったら情報追加！
-                existingArticle.ConvoluteInfo(article);
-                if (UtilConfig.ConsoleOutput_Contents)
-                    Console.WriteLine($"@@@ {article.Title_Japanese}");
-
-                updatedCount++;
-                articleDatabaseUpdated = true;
-            }
-            else
-            {
-                // 無いなら登録。
-                ArticleDatabase.Add(article);
-
-                if (UtilConfig.ConsoleOutput_Contents)
-                    Console.WriteLine($"+++ {article.Title_Japanese}");
-
-                addedCount++;
-                articleDatabaseUpdated = true;
-
-            }
-
-        }
-
-        SaveDatabase();
-        Console.WriteLine($"★ {addedCount} added, {updatedCount} updated.");
 
     }
 

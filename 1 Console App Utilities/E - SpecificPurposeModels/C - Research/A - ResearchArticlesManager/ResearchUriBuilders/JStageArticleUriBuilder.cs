@@ -1,7 +1,7 @@
 ﻿
 
 namespace Aki32_Utilities.SpecificPurposeModels.Research;
-public class JStageArticleSearchServiceUriBuilder : IResearchUriBuilder
+public class JStageArticleUriBuilder : IResearchUriBuilder
 {
 
     // ★★★★★★★★★★★★★★★ props
@@ -36,7 +36,7 @@ public class JStageArticleSearchServiceUriBuilder : IResearchUriBuilder
 
     // ★★★★★★★★★★★★★★★ inits
 
-    public JStageArticleSearchServiceUriBuilder()
+    public JStageArticleUriBuilder()
     {
     }
 

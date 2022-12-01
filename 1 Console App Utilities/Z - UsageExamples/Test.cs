@@ -881,14 +881,24 @@ public class TestHelper
 
                     // articles from j-stage
                     {
-                        var jsArticleUriBuilder = new JStageArticleSearchServiceUriBuilder()
+                        //var builder = new JStageArticleUriBuilder()
+                        //{
+                        //    Pubyearfrom = "2022",
+                        //    Issn = ISSN.Architecture_Structure,
+                        //    Count = 1000,
+                        //    //Start = 1,
+                        //};
+                        //research.PullArticleInfo_From_JStage(builder);
+
+                    }
+
+                    // article from crossref
+                    {
+                        var builder = new CrossRefArticleUriBuilder()
                         {
-                            Pubyearfrom = "2022",
-                            Issn = ISSN.Architecture_Structure,
-                            Count = 1000,
-                            //Start = 1,
+                            DOI=
                         };
-                        research.PullArticleInfo_From_JStage(jsArticleUriBuilder);
+                        research.FetchArticleInfo(builder);
 
                     }
 
