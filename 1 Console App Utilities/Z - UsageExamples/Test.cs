@@ -874,7 +874,7 @@ public class TestHelper
                 // A - ResearchManager
                 {
                     UtilConfig.ConsoleOutput_Contents = false;
-                    
+
                     var localDir = new DirectoryInfo($@"{baseDir_C}\A - ResearchManager");
                     var research = new ResearchArticlesManager(localDir);
                     research.OpenDatabase();
@@ -896,7 +896,7 @@ public class TestHelper
                     {
                         var builder = new CrossRefArticleUriBuilder()
                         {
-                            DOI=
+                            DOI = "10.3130/aijs.87.822"
                         };
                         research.FetchArticleInfo(builder);
 

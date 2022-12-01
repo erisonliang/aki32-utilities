@@ -6,7 +6,7 @@ public class CrossRefArticleUriBuilder : IResearchUriBuilder
 
     // ★★★★★★★★★★★★★★★ props
 
-    public const string BASE_URL = $@"https://api.crossref.org/v1/works/";
+    public const string BASE_URL = $@"https://api.crossref.org/v1/works";
 
     internal Uri builtUri = null;
 

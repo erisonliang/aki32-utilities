@@ -13,9 +13,10 @@ public class ResearchArticle
 
     // ★ meta info
 
-    public bool? ReferredFrom_JStage { get; set; }
-    public bool? ReferredFrom_CiNii { get; set; }
-    public bool? ReferredFrom_CrossRef { get; set; }
+    public bool? DataFrom_Manual { get; set; }
+    public bool? DataFrom_JStage { get; set; }
+    public bool? DataFrom_CiNii { get; set; }
+    public bool? DataFrom_CrossRef { get; set; }
 
 
     // ★ Links
@@ -95,7 +96,7 @@ public class ResearchArticle
 
     // ★★★★★★★★★★★★★★★ method
 
-    public void ConvoluteInfo(ResearchArticle addingArticleInfo)
+    public void MergeInfo(ResearchArticle addingArticleInfo)
     {
         // TODO define!!!
         throw new NotImplementedException();

@@ -1,4 +1,5 @@
-﻿using System.Data;
+﻿using System;
+using System.Data;
 using System.Xml.Linq;
 
 using Aki32_Utilities.General;
@@ -83,8 +84,8 @@ public partial class ResearchArticlesManager
     /// <exception cref="InvalidOperationException"></exception>
     public void PullArticleInfo(IResearchUriBuilder uriBuilder)
     {
-        FetchArticleInfo(uriBuilder);
-        MergeArticleInfo();
+        var articles = FetchArticleInfo(uriBuilder);
+        MergeArticleInfo(articles);
 
     }
 
@@ -96,11 +97,12 @@ public partial class ResearchArticlesManager
     public IEnumerable<ResearchArticle> FetchArticleInfo(IResearchUriBuilder uriBuilder)
     {
         // preprocess
-        var addedCount = 0;
-        var updatedCount = 0;
         var uri = uriBuilder.Build();
         if (ArticleDatabase == null)
             throw new InvalidOperationException("Database has not been opened yet. Use OpenDataBase() first.");
+
+        var fetchedArticles = new List<ResearchArticle>();
+
 
         // main
         if (uriBuilder is JStageArticleUriBuilder)
@@ -162,38 +164,11 @@ public partial class ResearchArticlesManager
                     Id = entry.Element(ExpandXml("id"))?.Value,
                     UpdatedOn = entry.Element(ExpandXml("updated"))?.Value,
 
-                    ReferredFrom_JStage = true,
+                    DataFrom_JStage = true,
 
                 };
 
-
-                if (ArticleDatabase.Any(a => a.Id == article.Id))
-                {
-                    var existingArticle = ArticleDatabase.First(a => a.Id == article.Id);
-
-                    if (existingArticle.ReferredFrom_JStage ?? false)
-                        continue;
-
-                    // あっても，情報源がここじゃなかったら情報追加！
-                    existingArticle.ConvoluteInfo(article);
-                    if (UtilConfig.ConsoleOutput_Contents)
-                        Console.WriteLine($"@@@ {article.Title_Japanese}");
-
-                    updatedCount++;
-                    articleDatabaseUpdated = true;
-                }
-                else
-                {
-                    // 無いなら登録。
-                    ArticleDatabase.Add(article);
-
-                    if (UtilConfig.ConsoleOutput_Contents)
-                        Console.WriteLine($"+++ {article.Title_Japanese}");
-
-                    addedCount++;
-                    articleDatabaseUpdated = true;
-
-                }
+                fetchedArticles.Add(article);
 
             }
 
@@ -203,14 +178,21 @@ public partial class ResearchArticlesManager
 
 
 
+
+
+
+
+
+
         }
         else
         {
             throw new NotImplementedException();
         }
 
-        SaveDatabase();
-        Console.WriteLine($"★ {addedCount} added, {updatedCount} updated.");
+
+        // post process
+        return fetchedArticles;
 
     }
 
@@ -221,6 +203,46 @@ public partial class ResearchArticlesManager
     /// <exception cref="InvalidOperationException"></exception>
     public void MergeArticleInfo(IEnumerable<ResearchArticle> articles)
     {
+        // preprocess
+        var addedCount = 0;
+        var updatedCount = 0;
+        if (ArticleDatabase == null)
+            throw new InvalidOperationException("Database has not been opened yet. Call OpenDataBase() first.");
+
+        Console.WriteLine($"★ Merging {articles} articles in total...");
+
+
+        // main
+        foreach (var article in articles)
+        {
+            if (ArticleDatabase.Any(a => a.Id == article.Id))
+            {
+                // 更新・マージ
+                ArticleDatabase.First(a => a.Id == article.Id).MergeInfo(article);
+                if (UtilConfig.ConsoleOutput_Contents)
+                    Console.WriteLine($"@@@ {article.Title_Japanese}");
+
+                updatedCount++;
+                articleDatabaseUpdated = true;
+            }
+            else
+            {
+                // 新規登録
+                ArticleDatabase.Add(article);
+
+                if (UtilConfig.ConsoleOutput_Contents)
+                    Console.WriteLine($"+++ {article.Title_Japanese}");
+
+                addedCount++;
+                articleDatabaseUpdated = true;
+            }
+        }
+
+
+        // save local
+        SaveDatabase();
+        Console.WriteLine($"★ {addedCount} added, {updatedCount} updated. {articles} in total.");
+        Console.WriteLine();
 
     }
 
