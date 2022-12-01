@@ -85,7 +85,7 @@ public static partial class ChainableExtensions
 
                     if (value == null)
                         addingValue = null;
-                    else if (value is string) //&& value is IEnumerable enumProp
+                    else if (value is string)
                         addingValue = value?.ToString() ?? "";
                     else
                         addingValue = JsonConvert.SerializeObject(value);

@@ -10,20 +10,6 @@ public class ResearchArticle
 
     // ★★★★★★★★★★★★★★★ prop
 
-    // ★ private info
-
-    public bool? Private_Favorite { get; set; }
-
-
-    // ★ meta info
-
-    public bool? DataFrom_Manual { get; set; }
-    public bool? DataFrom_JStage { get; set; }
-    public bool? DataFrom_CiNii { get; set; }
-    public bool? DataFrom_CrossRef { get; set; }
-
-
-
     // ★ Links
     public string? DOI_Link => (DOI == null) ? null : $"https://dx.doi.org/{DOI}";
     public string? CrossRef_Link => (DOI == null) ? null : $"https://api.crossref.org/v1/works/{DOI}";
@@ -45,17 +31,39 @@ public class ResearchArticle
     }
 
 
-    // ★ mainly from CrossRef (Think this as main common info)
+    // ★ original meta info (1/2 of main common info)
+
+    /// <summary>
+    /// favorite flag
+    /// </summary>
+    public bool? Private_Favorite { get; set; }
+
+    public bool? DataFrom_Manual { get; set; }
+    public bool? DataFrom_JStage { get; set; }
+    public bool? DataFrom_CiNii { get; set; }
+    public bool? DataFrom_CrossRef { get; set; }
+
+    /// <summary>
+    /// Aki32 Object Identifier
+    /// When DOI does not exist, automatically create AOI to connect ref data.
+    /// </summary>
+    public string? AOI { get; set; }
+
+
+    // ★ mainly from CrossRef (2/2 of main common info)
 
     public string? DOI { get; set; }
+    public string[]? ReferenceDOIs { get; set; }
 
     public string? UnstructuredRefString { get; set; }
 
     public string? PrintISSN { get; set; }
     public string? OnlineISSN { get; set; }
 
-    public string? CR_PublishedYear { get; set; }
+    public string? ArticleTitle_CR { get; set; }
+    public string[]? Authors_CR { get; set; }
 
+    public string? PublishedDate_CR { get; set; }
 
 
     // ★ mainly from J-Stage
@@ -100,6 +108,8 @@ public class ResearchArticle
 
 
 
+
+
     // ★★★★★★★★★★★★★★★ method
 
     public void MergeInfo(ResearchArticle addingArticleInfo)
@@ -114,6 +124,24 @@ public class ResearchArticle
 
 
 
+    }
+
+    public static string? CleanUp_UnstructuredRefString(string? rawUnstructuredRefString, int checkCount = 4)
+    {
+        if (rawUnstructuredRefString == null)
+            return rawUnstructuredRefString;
+
+        var unstructuredRefString = rawUnstructuredRefString;
+
+        for (int i = 0; i < checkCount; i++)
+        {
+            if (unstructuredRefString.Trim() == unstructuredRefString[1..].Trim())
+                return unstructuredRefString;
+            else
+                unstructuredRefString = unstructuredRefString[1..];
+        }
+
+        return rawUnstructuredRefString;
     }
 
 

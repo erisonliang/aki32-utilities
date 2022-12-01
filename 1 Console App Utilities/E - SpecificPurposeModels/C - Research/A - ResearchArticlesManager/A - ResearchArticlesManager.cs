@@ -1,13 +1,9 @@
-﻿using System;
-using System.ComponentModel;
-using System.Data;
-using System.Xml.Linq;
+﻿using System.Xml.Linq;
 
 using Aki32_Utilities.General;
 using Aki32_Utilities.UsefulClasses;
 
-using DocumentFormat.OpenXml.Bibliography;
-using DocumentFormat.OpenXml.Wordprocessing;
+using LibGit2Sharp;
 
 using Newtonsoft.Json.Linq;
 
@@ -128,50 +124,52 @@ public partial class ResearchArticlesManager
 
             foreach (var entry in entries)
             {
-                var article = new ResearchArticle
+                var article = new ResearchArticle()
+                {
+                    DataFrom_JStage = true
+                };
+
                 {
 
-                    ArticleTitle_English_JS = entry.Element(ExpandXml("article_title"))?.Element(ExpandXml("en"))?.Value,
-                    ArticleTitle_Japanese_JS = entry.Element(ExpandXml("article_title"))?.Element(ExpandXml("ja"))?.Value,
+                    article.ArticleTitle_English_JS = entry.Element(ExpandXml("article_title"))?.Element(ExpandXml("en"))?.Value;
+                    article.ArticleTitle_Japanese_JS = entry.Element(ExpandXml("article_title"))?.Element(ExpandXml("ja"))?.Value;
 
-                    Link_English_JS = entry.Element(ExpandXml("article_link"))?.Element(ExpandXml("en"))?.Value,
-                    Link_Japanese_JS = entry.Element(ExpandXml("article_link"))?.Element(ExpandXml("ja"))?.Value,
+                    article.Link_English_JS = entry.Element(ExpandXml("article_link"))?.Element(ExpandXml("en"))?.Value;
+                    article.Link_Japanese_JS = entry.Element(ExpandXml("article_link"))?.Element(ExpandXml("ja"))?.Value;
 
-                    Authors_English_JS = entry.Element(ExpandXml("author"))?.Element(ExpandXml("en"))?.Elements(ExpandXml("name"))?.Select(e => e?.Value ?? "")?.ToArray(),
-                    Authors_Japanese_JS = entry.Element(ExpandXml("author"))?.Element(ExpandXml("ja"))?.Elements(ExpandXml("name"))?.Select(e => e?.Value ?? "")?.ToArray(),
+                    article.Authors_English_JS = entry.Element(ExpandXml("author"))?.Element(ExpandXml("en"))?.Elements(ExpandXml("name"))?.Select(e => e?.Value ?? "")?.ToArray();
+                    article.Authors_Japanese_JS = entry.Element(ExpandXml("author"))?.Element(ExpandXml("ja"))?.Elements(ExpandXml("name"))?.Select(e => e?.Value ?? "")?.ToArray();
 
-                    JournalCode_JS = entry.Element(ExpandXml("cdjournal"))?.Value,
+                    article.JournalCode_JS = entry.Element(ExpandXml("cdjournal"))?.Value;
 
-                    MaterialTitle_English_JS = entry.Element(ExpandXml("material_title"))?.Element(ExpandXml("en"))?.Value,
-                    MaterialTitle_Japanese_JS = entry.Element(ExpandXml("material_title"))?.Element(ExpandXml("ja"))?.Value,
+                    article.MaterialTitle_English_JS = entry.Element(ExpandXml("material_title"))?.Element(ExpandXml("en"))?.Value;
+                    article.MaterialTitle_Japanese_JS = entry.Element(ExpandXml("material_title"))?.Element(ExpandXml("ja"))?.Value;
 
-                    PrintISSN = entry.Element(ExpandPrism("issn"))?.Value,
-                    OnlineISSN = entry.Element(ExpandPrism("eIssn"))?.Value,
+                    article.PrintISSN = entry.Element(ExpandPrism("issn"))?.Value;
+                    article.OnlineISSN = entry.Element(ExpandPrism("eIssn"))?.Value;
 
-                    Volume_JS = entry.Element(ExpandPrism("volume"))?.Value,
-                    SubVolume_JS = entry.Element(ExpandXml("cdvols"))?.Value,
+                    article.Volume_JS = entry.Element(ExpandPrism("volume"))?.Value;
+                    article.SubVolume_JS = entry.Element(ExpandXml("cdvols"))?.Value;
 
-                    Number_JS = entry.Element(ExpandPrism("number"))?.Value,
-                    StartingPage_JS = entry.Element(ExpandPrism("startingPage"))?.Value,
-                    EndingPage_JS = entry.Element(ExpandPrism("endingPage"))?.Value,
+                    article.Number_JS = entry.Element(ExpandPrism("number"))?.Value;
+                    article.StartingPage_JS = entry.Element(ExpandPrism("startingPage"))?.Value;
+                    article.EndingPage_JS = entry.Element(ExpandPrism("endingPage"))?.Value;
 
-                    PublishedYear_JS = entry.Element(ExpandXml("pubyear"))?.Value,
+                    article.PublishedYear_JS = entry.Element(ExpandXml("pubyear"))?.Value;
 
-                    JOI_JS = entry.Element(ExpandXml("joi"))?.Value,
-                    DOI = entry.Element(ExpandPrism("doi"))?.Value,
+                    article.JOI_JS = entry.Element(ExpandXml("joi"))?.Value;
+                    article.DOI = entry.Element(ExpandPrism("doi"))?.Value;
 
-                    SystemCode_JS = entry.Element(ExpandXml("systemcode"))?.Value,
-                    SystemName_JS = entry.Element(ExpandXml("systemname"))?.Value,
+                    article.SystemCode_JS = entry.Element(ExpandXml("systemcode"))?.Value;
+                    article.SystemName_JS = entry.Element(ExpandXml("systemname"))?.Value;
 
-                    Title_JS = entry.Element(ExpandXml("title"))?.Value,
+                    article.Title_JS = entry.Element(ExpandXml("title"))?.Value;
 
-                    Link_JS = entry.Element(ExpandXml("link"))?.Value,
-                    Id_JS = entry.Element(ExpandXml("id"))?.Value,
-                    UpdatedOn_JS = entry.Element(ExpandXml("updated"))?.Value,
+                    article.Link_JS = entry.Element(ExpandXml("link"))?.Value;
+                    article.Id_JS = entry.Element(ExpandXml("id"))?.Value;
+                    article.UpdatedOn_JS = entry.Element(ExpandXml("updated"))?.Value;
 
-                    DataFrom_JStage = true,
-
-                };
+                }
 
                 fetchedArticles.Add(article);
 
@@ -180,32 +178,57 @@ public partial class ResearchArticlesManager
         }
         else if (uriBuilder is CrossRefArticleUriBuilder)
         {
-            dynamic json = uri.CallAPIAsync_ForJsonData<object>(HttpMethod.Get).Result;
+            dynamic json = uri.CallAPIAsync_ForJsonData<dynamic>(HttpMethod.Get).Result;
 
-            string? status = json?["status"];
+            //if (json == null || json!["status"].ToString() != "ok"){}
 
-
-
-            string? DOI = json?["message"]?["DOI"];
-
-
-            string? title = (json?.message?["title"] as JArray)?[0].ToString();
-
-            string[]? author = (json?.message?["author"] as JArray)?.Select(x => x?["given"]?.ToString() + " " + x?["family"]?.ToString()).ToArray();
-
-
-            ResearchArticle[]? reference = (json?.message?["reference"] as JArray)?.Select(x =>
+            var article = new ResearchArticle()
             {
-                return new ResearchArticle
+                DataFrom_CrossRef = true
+            };
+
+            {
+
+                article.DOI = json?["message"]?["DOI"]?.ToString();
+
+                article.ArticleTitle_CR = (json?["message"]?["title"] as JArray)?.FirstOrDefault()?.ToString();
+
+                article.Authors_CR = (json?["message"]?["author"] as JArray)?.Select(x => $"{x?["given"]?.ToString()} {x?["family"]?.ToString()}").ToArray();
+
+                article.PrintISSN = (json?["message"]?["issn-type"] as JArray)?.FirstOrDefault(i => (dynamic)i?["type"]?.ToString()! == "print")?["value"]?.ToString();
+                article.OnlineISSN = (json?["message"]?["issn-type"] as JArray)?.FirstOrDefault(i => (dynamic)i?["type"]?.ToString()! == "electronic")?["value"]?.ToString();
+
+                var publishedDateAray = (json?["message"]?["published"]?["date-parts"] as JArray)?.FirstOrDefault();
+                article.PublishedDate_CR = (publishedDateAray == null) ? null : string.Join('/', publishedDateAray!.AsEnumerable());
+
+
+                // add reference
                 {
-                    DOI = x?["DOI"]?.ToString(),
-                    UnstructuredRefString = x?["unstructured"]?.ToString()
-                };
-            }).ToArray();
+                    _ = (json?["message"]?["reference"] as JArray)?
+                        .Select(x =>
+                        {
+                            // Get referred article
+                            var addingArticle = new ResearchArticle
+                            {
+                                DOI = x?["DOI"]?.ToString(),
+                                UnstructuredRefString = ResearchArticle.CleanUp_UnstructuredRefString(x?["unstructured"]?.ToString())
+                            };
 
+                            // Add DOI or AOI to ReferenceDOIs.
+                            article.ReferenceDOIs = (article.ReferenceDOIs ?? Array.Empty<string>())
+                            .Append(article.DOI ?? (article.AOI = Guid.NewGuid().ToString()))!
+                            .ToArray();
 
-            string[]? short_container_title = (json?.message?["short-container-title"] as JArray)?.Select(x => x.ToString()).ToArray();
+                            fetchedArticles.Add(addingArticle);
 
+                            return "";
+                        })
+                        .ToArray();
+                }
+            }
+
+            // add article
+            fetchedArticles.Add(article);
 
 
 

@@ -62,14 +62,6 @@ public static partial class ChainableExtensions
             .Select(c => fullProps.FirstOrDefault(p => p.Name == c))
             .ToArray();
 
-        //csvGrid[0]
-        //    .Select(c => fullProps.FirstOrDefault(p => p.Name == c))
-        //    .Where(p => p is not null)
-        //    .Where(p => !p.HasAttribute<CsvIgnoreAttribute>())
-        //    .Where(p => p.CanWrite)
-        //    .ToArray()
-        //    ;
-
         var propIndexPair = new List<(int index, PropertyInfo prop)>();
         for (int i = 0; i < headerProps.Length; i++)
         {
@@ -92,19 +84,19 @@ public static partial class ChainableExtensions
         foreach (var csvLine in csvGrid)
         {
             var data = new T();
-            foreach (var pi in propIndexPair)
+            foreach (var (index, prop) in propIndexPair)
             {
-                var propType = pi.prop!.PropertyType;
+                Console.WriteLine(prop.Name);
 
-                Console.WriteLine(pi.prop!.Name);
+                var propType = prop!.PropertyType;
 
                 if (propType == typeof(string))
                 {
-                    pi.prop!.SetValue(data, csvLine[pi.index]);
+                    prop!.SetValue(data, csvLine[index]);
                 }
                 else
                 {
-                    var deserializedObject = JsonConvert.DeserializeObject(csvLine[pi.index], propType, (JsonSerializerSettings?)null);
+                    var deserializedObject = JsonConvert.DeserializeObject(csvLine[index], propType, (JsonSerializerSettings?)null);
 
                     // same as above
                     //
@@ -114,7 +106,7 @@ public static partial class ChainableExtensions
                     //    .MakeGenericMethod(propType)
                     //    .Invoke(null, new object[] { csvLine[i] });
 
-                    pi.prop!.SetValue(data, deserializedObject);
+                    prop!.SetValue(data, deserializedObject);
                 }
 
             }
