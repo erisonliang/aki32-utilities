@@ -1,7 +1,10 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using System.Xml.Serialization;
+
+using ClosedXML;
 
 using DocumentFormat.OpenXml.Drawing;
 
@@ -54,29 +57,54 @@ public static partial class ChainableExtensions
         // get props in order
 
         var fullProps = typeof(T).GetProperties();
-        var props = csvGrid[0]
+
+        var headerProps = csvGrid[0]
             .Select(c => fullProps.FirstOrDefault(p => p.Name == c))
-            .Where(p => p is not null)
-            .Where(p => p.CanWrite)
-            .ToArray()
-            ;
+            .ToArray();
+
+        //csvGrid[0]
+        //    .Select(c => fullProps.FirstOrDefault(p => p.Name == c))
+        //    .Where(p => p is not null)
+        //    .Where(p => !p.HasAttribute<CsvIgnoreAttribute>())
+        //    .Where(p => p.CanWrite)
+        //    .ToArray()
+        //    ;
+
+        var propIndexPair = new List<(int index, PropertyInfo prop)>();
+        for (int i = 0; i < headerProps.Length; i++)
+        {
+            var p = headerProps[i];
+            if (p == null)
+                continue;
+
+            if (p.HasAttribute<CsvIgnoreAttribute>())
+                continue;
+
+            if (!p.CanWrite)
+                continue;
+
+            propIndexPair.Add((i, p));
+        }
+
         csvGrid = csvGrid[1..^0];
 
         // contents
         foreach (var csvLine in csvGrid)
         {
             var data = new T();
-            for (int i = 0; i < props.Length; i++)
+            foreach (var pi in propIndexPair)
             {
-                var propType = props[i].PropertyType;
+                var propType = pi.prop!.PropertyType;
+
+                Console.WriteLine(pi.prop!.Name);
 
                 if (propType == typeof(string))
                 {
-                    props[i].SetValue(data, csvLine[i]);
+                    pi.prop!.SetValue(data, csvLine[pi.index]);
                 }
                 else
                 {
-                    var deserializedObject = JsonConvert.DeserializeObject(csvLine[i], propType, (JsonSerializerSettings?)null);
+                    var deserializedObject = JsonConvert.DeserializeObject(csvLine[pi.index], propType, (JsonSerializerSettings?)null);
 
                     // same as above
                     //
@@ -86,7 +114,7 @@ public static partial class ChainableExtensions
                     //    .MakeGenericMethod(propType)
                     //    .Invoke(null, new object[] { csvLine[i] });
 
-                    props[i].SetValue(data, deserializedObject);
+                    pi.prop!.SetValue(data, deserializedObject);
                 }
 
             }

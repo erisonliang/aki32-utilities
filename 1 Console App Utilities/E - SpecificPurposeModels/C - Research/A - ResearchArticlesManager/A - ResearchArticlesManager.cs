@@ -1,11 +1,15 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Data;
 using System.Xml.Linq;
 
 using Aki32_Utilities.General;
+using Aki32_Utilities.UsefulClasses;
 
 using DocumentFormat.OpenXml.Bibliography;
 using DocumentFormat.OpenXml.Wordprocessing;
+
+using Newtonsoft.Json.Linq;
 
 namespace Aki32_Utilities.SpecificPurposeModels.Research;
 /// <remarks>
@@ -118,6 +122,7 @@ public partial class ResearchArticlesManager
             var toIndex = int.Parse(startIndex) + int.Parse(itemsPerPage) - 1;
             var entries = xml.Elements(ExpandXml("entry"));
 
+            Console.WriteLine();
             Console.WriteLine($"★ Obtained {itemsPerPage} items out of {totalResults} matches ( From #{startIndex} to #{toIndex} )");
             Console.WriteLine();
 
@@ -126,43 +131,43 @@ public partial class ResearchArticlesManager
                 var article = new ResearchArticle
                 {
 
-                    Title_English = entry.Element(ExpandXml("article_title"))?.Element(ExpandXml("en"))?.Value,
-                    Title_Japanese = entry.Element(ExpandXml("article_title"))?.Element(ExpandXml("ja"))?.Value,
+                    ArticleTitle_English_JS = entry.Element(ExpandXml("article_title"))?.Element(ExpandXml("en"))?.Value,
+                    ArticleTitle_Japanese_JS = entry.Element(ExpandXml("article_title"))?.Element(ExpandXml("ja"))?.Value,
 
-                    Link_English = entry.Element(ExpandXml("article_link"))?.Element(ExpandXml("en"))?.Value,
-                    Link_Japanese = entry.Element(ExpandXml("article_link"))?.Element(ExpandXml("ja"))?.Value,
+                    Link_English_JS = entry.Element(ExpandXml("article_link"))?.Element(ExpandXml("en"))?.Value,
+                    Link_Japanese_JS = entry.Element(ExpandXml("article_link"))?.Element(ExpandXml("ja"))?.Value,
 
-                    Authors_English = entry.Element(ExpandXml("author"))?.Element(ExpandXml("en"))?.Elements(ExpandXml("name"))?.Select(e => e?.Value ?? "")?.ToArray(),
-                    Authors_Japanese = entry.Element(ExpandXml("author"))?.Element(ExpandXml("ja"))?.Elements(ExpandXml("name"))?.Select(e => e?.Value ?? "")?.ToArray(),
+                    Authors_English_JS = entry.Element(ExpandXml("author"))?.Element(ExpandXml("en"))?.Elements(ExpandXml("name"))?.Select(e => e?.Value ?? "")?.ToArray(),
+                    Authors_Japanese_JS = entry.Element(ExpandXml("author"))?.Element(ExpandXml("ja"))?.Elements(ExpandXml("name"))?.Select(e => e?.Value ?? "")?.ToArray(),
 
-                    JournalCode_JStage = entry.Element(ExpandXml("cdjournal"))?.Value,
+                    JournalCode_JS = entry.Element(ExpandXml("cdjournal"))?.Value,
 
-                    MaterialTitle_English = entry.Element(ExpandXml("material_title"))?.Element(ExpandXml("en"))?.Value,
-                    MaterialTitle_Japanese = entry.Element(ExpandXml("material_title"))?.Element(ExpandXml("ja"))?.Value,
+                    MaterialTitle_English_JS = entry.Element(ExpandXml("material_title"))?.Element(ExpandXml("en"))?.Value,
+                    MaterialTitle_Japanese_JS = entry.Element(ExpandXml("material_title"))?.Element(ExpandXml("ja"))?.Value,
 
                     PrintISSN = entry.Element(ExpandPrism("issn"))?.Value,
                     OnlineISSN = entry.Element(ExpandPrism("eIssn"))?.Value,
 
-                    Volume = entry.Element(ExpandPrism("volume"))?.Value,
-                    SubVolume = entry.Element(ExpandXml("cdvols"))?.Value,
+                    Volume_JS = entry.Element(ExpandPrism("volume"))?.Value,
+                    SubVolume_JS = entry.Element(ExpandXml("cdvols"))?.Value,
 
-                    Number = entry.Element(ExpandPrism("number"))?.Value,
-                    StartingPage = entry.Element(ExpandPrism("startingPage"))?.Value,
-                    EndingPage = entry.Element(ExpandPrism("endingPage"))?.Value,
+                    Number_JS = entry.Element(ExpandPrism("number"))?.Value,
+                    StartingPage_JS = entry.Element(ExpandPrism("startingPage"))?.Value,
+                    EndingPage_JS = entry.Element(ExpandPrism("endingPage"))?.Value,
 
-                    PublishedYear = entry.Element(ExpandXml("pubyear"))?.Value,
+                    PublishedYear_JS = entry.Element(ExpandXml("pubyear"))?.Value,
 
-                    JOI = entry.Element(ExpandXml("joi"))?.Value,
+                    JOI_JS = entry.Element(ExpandXml("joi"))?.Value,
                     DOI = entry.Element(ExpandPrism("doi"))?.Value,
 
-                    SystemCode = entry.Element(ExpandXml("systemcode"))?.Value,
-                    SystemName = entry.Element(ExpandXml("systemname"))?.Value,
+                    SystemCode_JS = entry.Element(ExpandXml("systemcode"))?.Value,
+                    SystemName_JS = entry.Element(ExpandXml("systemname"))?.Value,
 
-                    Title = entry.Element(ExpandXml("title"))?.Value,
+                    Title_JS = entry.Element(ExpandXml("title"))?.Value,
 
-                    Link = entry.Element(ExpandXml("link"))?.Value,
-                    Id = entry.Element(ExpandXml("id"))?.Value,
-                    UpdatedOn = entry.Element(ExpandXml("updated"))?.Value,
+                    Link_JS = entry.Element(ExpandXml("link"))?.Value,
+                    Id_JS = entry.Element(ExpandXml("id"))?.Value,
+                    UpdatedOn_JS = entry.Element(ExpandXml("updated"))?.Value,
 
                     DataFrom_JStage = true,
 
@@ -175,11 +180,31 @@ public partial class ResearchArticlesManager
         }
         else if (uriBuilder is CrossRefArticleUriBuilder)
         {
+            dynamic json = uri.CallAPIAsync_ForJsonData<object>(HttpMethod.Get).Result;
+
+            string? status = json?["status"];
 
 
 
+            string? DOI = json?["message"]?["DOI"];
 
 
+            string? title = (json?.message?["title"] as JArray)?[0].ToString();
+
+            string[]? author = (json?.message?["author"] as JArray)?.Select(x => x?["given"]?.ToString() + " " + x?["family"]?.ToString()).ToArray();
+
+
+            ResearchArticle[]? reference = (json?.message?["reference"] as JArray)?.Select(x =>
+            {
+                return new ResearchArticle
+                {
+                    DOI = x?["DOI"]?.ToString(),
+                    UnstructuredRefString = x?["unstructured"]?.ToString()
+                };
+            }).ToArray();
+
+
+            string[]? short_container_title = (json?.message?["short-container-title"] as JArray)?.Select(x => x.ToString()).ToArray();
 
 
 
@@ -209,18 +234,20 @@ public partial class ResearchArticlesManager
         if (ArticleDatabase == null)
             throw new InvalidOperationException("Database has not been opened yet. Call OpenDataBase() first.");
 
-        Console.WriteLine($"★ Merging {articles} articles in total...");
 
+        Console.WriteLine();
+        Console.WriteLine($"★ Merging {articles.Count()} articles in total...");
+        Console.WriteLine();
 
         // main
         foreach (var article in articles)
         {
-            if (ArticleDatabase.Any(a => a.Id == article.Id))
+            if (ArticleDatabase.Any(a => a.DOI == article.DOI))
             {
                 // 更新・マージ
-                ArticleDatabase.First(a => a.Id == article.Id).MergeInfo(article);
+                ArticleDatabase.First(a => a.Id_JS == article.Id_JS).MergeInfo(article);
                 if (UtilConfig.ConsoleOutput_Contents)
-                    Console.WriteLine($"@@@ {article.Title_Japanese}");
+                    Console.WriteLine($"@@@ {article.ArticleTitle_Japanese_JS}");
 
                 updatedCount++;
                 articleDatabaseUpdated = true;
@@ -231,7 +258,7 @@ public partial class ResearchArticlesManager
                 ArticleDatabase.Add(article);
 
                 if (UtilConfig.ConsoleOutput_Contents)
-                    Console.WriteLine($"+++ {article.Title_Japanese}");
+                    Console.WriteLine($"+++ {article.ArticleTitle_Japanese_JS}");
 
                 addedCount++;
                 articleDatabaseUpdated = true;
@@ -241,7 +268,7 @@ public partial class ResearchArticlesManager
 
         // save local
         SaveDatabase();
-        Console.WriteLine($"★ {addedCount} added, {updatedCount} updated. {articles} in total.");
+        Console.WriteLine($"★ {addedCount} added, {updatedCount} updated.");
         Console.WriteLine();
 
     }

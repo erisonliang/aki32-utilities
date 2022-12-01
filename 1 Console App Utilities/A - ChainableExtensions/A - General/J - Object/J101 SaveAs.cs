@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Xml.Serialization;
 
+using ClosedXML;
+
 using Newtonsoft.Json;
 
 using OpenCvSharp.LineDescriptor;
@@ -56,7 +58,9 @@ public static partial class ChainableExtensions
     public static FileInfo SaveAsCsv<T>(this IEnumerable<T> dataList, FileInfo outputFile)
     {
         var csvGrid = new List<string[]>();
-        var props = typeof(T).GetProperties();
+        var props = typeof(T)
+            .GetProperties()
+            .Where(p => !p.HasAttribute<CsvIgnoreAttribute>());
 
         // header
         {
@@ -79,10 +83,12 @@ public static partial class ChainableExtensions
                 {
                     var value = prop.GetValue(dataLine);
 
-                    if (value is not string && value is IEnumerable enumProp)
-                        addingValue = JsonConvert.SerializeObject(enumProp);
-                    else
+                    if (value == null)
+                        addingValue = null;
+                    else if (value is string) //&& value is IEnumerable enumProp
                         addingValue = value?.ToString() ?? "";
+                    else
+                        addingValue = JsonConvert.SerializeObject(value);
 
                 }
                 catch (Exception)

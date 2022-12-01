@@ -10,8 +10,8 @@ public class JStageArticleUriBuilder : IResearchUriBuilder
 
     internal Uri builtUri = null;
 
-    public string Pubyearfrom { get; set; } = "";
-    public string Pubyearto { get; set; } = "";
+    public int? Pubyearfrom { get; set; } = null;
+    public int? Pubyearto { get; set; } = null;
     public string Material { get; set; } = "";
 
     public string Article { get; set; }
@@ -56,12 +56,12 @@ public class JStageArticleUriBuilder : IResearchUriBuilder
         };
 
         //2 pubyearfrom 任意 発行年の範囲（From）を指定します西暦 4 桁
-        if (!string.IsNullOrEmpty(Pubyearfrom))
-            queryList.Add("pubyearfrom", Pubyearfrom);
+        if (Pubyearfrom!=null)
+            queryList.Add("pubyearfrom", Pubyearfrom!.ToString()!);
 
         //3 pubyearto 任意 発行年の範囲（To）を指定します西暦 4 桁
-        if (!string.IsNullOrEmpty(Pubyearto))
-            queryList.Add("pubyearto", Pubyearto);
+        if (Pubyearto!=null)
+            queryList.Add("pubyearto", Pubyearto!.ToString()!);
 
         //4 material 任意 資料名の検索語句を指定します中間一致検索大文字・小文字、全角・半角は区別しない
         if (!string.IsNullOrEmpty(Material))

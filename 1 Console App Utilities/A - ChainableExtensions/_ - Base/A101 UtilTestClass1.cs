@@ -18,6 +18,9 @@ public class UtilTestClass1
     public List<string> StringListProp { get; set; }
     public List<int> IntListProp { get; set; }
 
+    [JsonIgnore, XmlIgnore, CsvIgnore]
+    public string StringProp_Ignored { get; set; }
+
     public string IntProp_InString => IntProp.ToString();
 
 }

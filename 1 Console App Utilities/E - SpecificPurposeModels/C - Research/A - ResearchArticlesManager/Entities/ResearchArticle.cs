@@ -1,5 +1,9 @@
 ﻿
 
+using Aki32_Utilities.General;
+
+using Newtonsoft.Json;
+
 namespace Aki32_Utilities.SpecificPurposeModels.Research;
 public class ResearchArticle
 {
@@ -19,8 +23,9 @@ public class ResearchArticle
     public bool? DataFrom_CrossRef { get; set; }
 
 
+
     // ★ Links
-    public string? DOI_Link => (DOI == null) ? null : $"https://doi.org/{DOI}";
+    public string? DOI_Link => (DOI == null) ? null : $"https://dx.doi.org/{DOI}";
     public string? CrossRef_Link => (DOI == null) ? null : $"https://api.crossref.org/v1/works/{DOI}";
     public string? PDF_Link
     {
@@ -32,7 +37,7 @@ public class ResearchArticle
             if (DOI.Contains("aijs"))
             {
                 // get data from aij
-                return Link?.Replace($"_article/-char/ja/", $"_pdf");
+                return Link_JS?.Replace($"_article/-char/ja/", $"_pdf");
             }
 
             return null;
@@ -42,51 +47,52 @@ public class ResearchArticle
 
     // ★ mainly from CrossRef (Think this as main common info)
 
+    public string? DOI { get; set; }
 
+    public string? UnstructuredRefString { get; set; }
 
+    public string? PrintISSN { get; set; }
+    public string? OnlineISSN { get; set; }
 
-
+    public string? CR_PublishedYear { get; set; }
 
 
 
     // ★ mainly from J-Stage
 
-    public string? Title_English { get; set; }
-    public string? Title_Japanese { get; set; }
+    public string? ArticleTitle_English_JS { get; set; }
+    public string? ArticleTitle_Japanese_JS { get; set; }
 
-    public string? Link_English { get; set; }
-    public string? Link_Japanese { get; set; }
+    public string? Link_English_JS { get; set; }
+    public string? Link_Japanese_JS { get; set; }
 
-    public string[]? Authors_English { get; set; }
-    public string[]? Authors_Japanese { get; set; }
+    public string[]? Authors_English_JS { get; set; }
+    public string[]? Authors_Japanese_JS { get; set; }
 
-    public string? JournalCode_JStage { get; set; }
+    public string? JournalCode_JS { get; set; }
 
-    public string? MaterialTitle_English { get; set; }
-    public string? MaterialTitle_Japanese { get; set; }
+    public string? MaterialTitle_English_JS { get; set; }
+    public string? MaterialTitle_Japanese_JS { get; set; }
 
-    public string? PrintISSN { get; set; }
-    public string? OnlineISSN { get; set; }
 
-    public string? Volume { get; set; }
-    public string? SubVolume { get; set; }
+    public string? Volume_JS { get; set; }
+    public string? SubVolume_JS { get; set; }
 
-    public string? Number { get; set; }
-    public string? StartingPage { get; set; }
-    public string? EndingPage { get; set; }
+    public string? Number_JS { get; set; }
+    public string? StartingPage_JS { get; set; }
+    public string? EndingPage_JS { get; set; }
 
-    public string? PublishedYear { get; set; }
+    public string? PublishedYear_JS { get; set; }
 
-    public string? JOI { get; set; }
-    public string? DOI { get; set; }
+    public string? JOI_JS { get; set; }
 
-    public string? SystemCode { get; set; }
-    public string? SystemName { get; set; }
+    public string? SystemCode_JS { get; set; }
+    public string? SystemName_JS { get; set; }
 
-    public string? Title { get; set; }
-    public string? Link { get; set; }
-    public string? Id { get; set; }
-    public string? UpdatedOn { get; set; }
+    public string? Title_JS { get; set; }
+    public string? Link_JS { get; set; }
+    public string? Id_JS { get; set; }
+    public string? UpdatedOn_JS { get; set; }
 
 
     // ★ mainly from CiNii

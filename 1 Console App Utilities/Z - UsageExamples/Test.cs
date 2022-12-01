@@ -883,12 +883,12 @@ public class TestHelper
                     {
                         //var builder = new JStageArticleUriBuilder()
                         //{
-                        //    Pubyearfrom = "2022",
+                        //    Pubyearfrom = 2022,
                         //    Issn = ISSN.Architecture_Structure,
                         //    Count = 1000,
                         //    //Start = 1,
                         //};
-                        //research.PullArticleInfo_From_JStage(builder);
+                        //research.PullArticleInfo(builder);
 
                     }
 
@@ -898,7 +898,7 @@ public class TestHelper
                         {
                             DOI = "10.3130/aijs.87.822"
                         };
-                        research.FetchArticleInfo(builder);
+                        research.PullArticleInfo(builder);
 
                     }
 
@@ -906,14 +906,12 @@ public class TestHelper
                     {
 
                         Console.WriteLine();
-                        Console.WriteLine("★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★");
                         Console.WriteLine();
                         Console.WriteLine($"★ {research.ArticleDatabase.Count} found in total");
                         Console.WriteLine();
                         //foreach (var article in research.ArticleDatabase)
                         //    Console.WriteLine($" + {article.Title_Japanese}");
                         //Console.WriteLine();
-                        Console.WriteLine("★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★");
                         Console.WriteLine();
                     }
 

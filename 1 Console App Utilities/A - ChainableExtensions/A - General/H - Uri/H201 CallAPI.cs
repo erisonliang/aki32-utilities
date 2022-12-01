@@ -117,10 +117,27 @@ public static partial class ChainableExtensions
         using var responseReadStream = new StreamReader(responseStream);
         var responseString = responseReadStream.ReadToEnd();
 
-        if (typeof(T) == typeof(object))
-            return (dynamic)responseString;
-        else
+
+        // obsolite. since dynamic type will be recognized as object...
+        {
+            //if (typeof(T) == typeof(object))
+            //    return (dynamic)responseString;
+            //else
+            //    return JsonConvert.DeserializeObject<T>(responseString);
+        }
+
+        // Avoiding dynamic type recognized as object this way
+        try
+        {
             return JsonConvert.DeserializeObject<T>(responseString);
+        }
+        catch (Exception ex)
+        {
+            if (typeof(T) == typeof(object))
+                return (dynamic)responseString;
+
+            throw;
+        }
 
     }
 
