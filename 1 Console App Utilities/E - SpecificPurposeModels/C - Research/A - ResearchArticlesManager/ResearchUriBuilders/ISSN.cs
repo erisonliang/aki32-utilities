@@ -1,6 +1,6 @@
 ﻿
 
-namespace Aki32_Utilities.ExternalAPIControllers;
+namespace Aki32_Utilities.SpecificPurposeModels.Research;
 public static class ISSN
 {
 

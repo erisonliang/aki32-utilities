@@ -1,6 +1,6 @@
 ﻿
 
-namespace Aki32_Utilities.ExternalAPIControllers;
+namespace Aki32_Utilities.SpecificPurposeModels.Research;
 public class ResearchArticle
 {
 
@@ -16,6 +16,36 @@ public class ResearchArticle
     public bool? ReferredFrom_JStage { get; set; }
     public bool? ReferredFrom_CiNii { get; set; }
     public bool? ReferredFrom_CrossRef { get; set; }
+
+
+    // ★ Links
+    public string? DOI_Link => (DOI == null) ? null : $"https://doi.org/{DOI}";
+    public string? CrossRef_Link => (DOI == null) ? null : $"https://api.crossref.org/v1/works/{DOI}";
+    public string? PDF_Link
+    {
+        get
+        {
+            if (DOI == null)
+                return null;
+
+            if (DOI.Contains("aijs"))
+            {
+                // get data from aij
+                return Link?.Replace($"_article/-char/ja/", $"_pdf");
+            }
+
+            return null;
+        }
+    }
+
+
+    // ★ mainly from CrossRef (Think this as main common info)
+
+
+
+
+
+
 
 
     // ★ mainly from J-Stage
@@ -48,7 +78,6 @@ public class ResearchArticle
 
     public string? JOI { get; set; }
     public string? DOI { get; set; }
-    public string? DOI_Link => DOI == null ? null : $"https://doi.org/{DOI}";
 
     public string? SystemCode { get; set; }
     public string? SystemName { get; set; }
@@ -58,11 +87,9 @@ public class ResearchArticle
     public string? Id { get; set; }
     public string? UpdatedOn { get; set; }
 
+
     // ★ mainly from CiNii
 
-
-
-    // ★ mainly from CrossRef
 
 
 

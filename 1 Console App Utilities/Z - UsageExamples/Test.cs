@@ -9,6 +9,7 @@ using Aki32_Utilities.ExternalAPIControllers;
 using Aki32_Utilities.General;
 using Aki32_Utilities.OwesomeModels;
 using Aki32_Utilities.OwesomeModels.ChainableExtensions;
+using Aki32_Utilities.SpecificPurposeModels.Research;
 using Aki32_Utilities.SpecificPurposeModels.StructuralEngineering;
 using Aki32_Utilities.UsefulClasses;
 
@@ -666,46 +667,6 @@ public class TestHelper
                 //gc.Sync();
             }
 
-            // D003 ResearchController
-            {
-
-                //UtilConfig.ConsoleOutput_Contents = false;
-
-                //var localDir = new DirectoryInfo($@"{baseDir}\D003 ResearchController");
-
-                //var research = new ResearchController(localDir);
-                //research.OpenDatabase();
-
-                //// articles from j-stage
-                //{
-                //    //var jsArticleUriBuilder = new JStageArticleSearchServiceUriBuilder()
-                //    //{
-                //    //    Pubyearfrom = "2022",
-                //    //    Issn = ISSN.Architecture_Structure,
-                //    //    Count = 1000,
-                //    //    //Start = 1,
-                //    //};
-                //    //research.GetDataAndRenewDB(jsArticleUriBuilder);
-
-                //}
-
-                //// display
-                //{
-
-                //    Console.WriteLine();
-                //    Console.WriteLine("★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★");
-                //    Console.WriteLine();
-                //    Console.WriteLine($"★ {research.ArticleDatabase.Count} found in total");
-                //    Console.WriteLine();
-                //    //foreach (var article in research.ArticleDatabase)
-                //    //    Console.WriteLine($" + {article.Title_Japanese}");
-                //    //Console.WriteLine();
-                //    Console.WriteLine("★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★");
-                //    Console.WriteLine();
-                //}
-
-            }
-
         }
 
         // E - SpecificPurposeModels
@@ -904,6 +865,51 @@ public class TestHelper
 
 
             }
+
+            // C - Research
+            {
+                var baseDir_C = new DirectoryInfo($@"{baseDir}\C - Research");
+
+
+                // A - ResearchManager
+                {
+                    UtilConfig.ConsoleOutput_Contents = false;
+                    
+                    var localDir = new DirectoryInfo($@"{baseDir_C}\A - ResearchManager");
+                    var research = new ResearchArticlesManager(localDir);
+                    research.OpenDatabase();
+
+                    // articles from j-stage
+                    {
+                        var jsArticleUriBuilder = new JStageArticleSearchServiceUriBuilder()
+                        {
+                            Pubyearfrom = "2022",
+                            Issn = ISSN.Architecture_Structure,
+                            Count = 1000,
+                            //Start = 1,
+                        };
+                        research.PullArticleInfo_From_JStage(jsArticleUriBuilder);
+
+                    }
+
+                    // display
+                    {
+
+                        Console.WriteLine();
+                        Console.WriteLine("★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★");
+                        Console.WriteLine();
+                        Console.WriteLine($"★ {research.ArticleDatabase.Count} found in total");
+                        Console.WriteLine();
+                        //foreach (var article in research.ArticleDatabase)
+                        //    Console.WriteLine($" + {article.Title_Japanese}");
+                        //Console.WriteLine();
+                        Console.WriteLine("★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★");
+                        Console.WriteLine();
+                    }
+
+                }
+            }
+
         }
 
         // Z - MiniApps
