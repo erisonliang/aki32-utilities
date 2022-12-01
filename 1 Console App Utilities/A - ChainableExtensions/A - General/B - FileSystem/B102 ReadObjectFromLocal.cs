@@ -86,8 +86,6 @@ public static partial class ChainableExtensions
             var data = new T();
             foreach (var (index, prop) in propIndexPair)
             {
-                Console.WriteLine(prop.Name);
-
                 var propType = prop!.PropertyType;
 
                 object settingItem;
