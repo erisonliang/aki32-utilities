@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 using Aki32_Utilities.General;
 
@@ -324,7 +325,7 @@ public class ResearchArticle : IComparable
         var result = 0;
         var power = (int)Math.Pow(2, 10);
 
-        if (string.IsNullOrEmpty(DOI) && string.IsNullOrEmpty(comparingArticle.DOI))
+        if (!string.IsNullOrEmpty(DOI) && !string.IsNullOrEmpty(comparingArticle.DOI))
         {
             var com = DOI!.CompareTo(comparingArticle.DOI);
             if (com == 0) return 0;
@@ -333,7 +334,7 @@ public class ResearchArticle : IComparable
 
         power /= 2;
 
-        if (string.IsNullOrEmpty(CrossRef_ArticleTitle) && string.IsNullOrEmpty(comparingArticle.CrossRef_ArticleTitle))
+        if (!string.IsNullOrEmpty(CrossRef_ArticleTitle) && !string.IsNullOrEmpty(comparingArticle.CrossRef_ArticleTitle))
         {
             var com = CrossRef_ArticleTitle!.CompareTo(comparingArticle.CrossRef_ArticleTitle);
             if (com == 0) return 0;
@@ -342,7 +343,7 @@ public class ResearchArticle : IComparable
 
         power /= 2;
 
-        if (string.IsNullOrEmpty(JStage_Id) && string.IsNullOrEmpty(comparingArticle.JStage_Id))
+        if (!string.IsNullOrEmpty(JStage_Id) && !string.IsNullOrEmpty(comparingArticle.JStage_Id))
         {
             var com = JStage_Id!.CompareTo(comparingArticle.JStage_Id);
             if (com == 0) return 0;
@@ -351,7 +352,7 @@ public class ResearchArticle : IComparable
 
         power /= 2;
 
-        if (string.IsNullOrEmpty(Manual_ArticleTitle) && string.IsNullOrEmpty(comparingArticle.Manual_ArticleTitle))
+        if (!string.IsNullOrEmpty(Manual_ArticleTitle) && !string.IsNullOrEmpty(comparingArticle.Manual_ArticleTitle))
         {
             var com = Manual_ArticleTitle!.CompareTo(comparingArticle.Manual_ArticleTitle);
             if (com == 0) return 0;
@@ -360,7 +361,7 @@ public class ResearchArticle : IComparable
 
         power /= 2;
 
-        if (string.IsNullOrEmpty(AOI) && string.IsNullOrEmpty(comparingArticle.AOI))
+        if (!string.IsNullOrEmpty(AOI) && !string.IsNullOrEmpty(comparingArticle.AOI))
         {
             var com = AOI!.CompareTo(comparingArticle.AOI);
             if (com == 0) return 0;
