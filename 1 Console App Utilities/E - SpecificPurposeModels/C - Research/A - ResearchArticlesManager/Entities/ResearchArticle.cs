@@ -202,7 +202,7 @@ public class ResearchArticle
         for (int i = 0; i < checkCount; i++)
         {
             if (unstructuredRefString.Trim() == unstructuredRefString[1..].Trim())
-                return unstructuredRefString;
+                return unstructuredRefString.Trim();
             else
                 unstructuredRefString = unstructuredRefString[1..];
         }
