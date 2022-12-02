@@ -1,23 +1,71 @@
-﻿
-
-using Aki32_Utilities.General;
+﻿using Aki32_Utilities.General;
 
 using ClosedXML;
 
-using Newtonsoft.Json;
+using DocumentFormat.OpenXml.Bibliography;
 
 namespace Aki32_Utilities.SpecificPurposeModels.Research;
-public class ResearchArticle
+public class ResearchArticle : IComparable
 {
 
     // ★★★★★★★★★★★★★★★ prop
 
-    // ★ Links
+    // ★★★★★ shared info (*main common info)
+
+    public string? Common_ArticleTitle
+    {
+        get
+        {
+            return null
+                ?? Manual_ArticleTitle
+                ?? JStage_ArticleTitle_Japanese
+                ?? CrossRef_ArticleTitle
+                ?? JStage_ArticleTitle_English
+                ?? null
+                ;
+        }
+    }
+    public string[]? Common_Authors
+    {
+        get
+        {
+            return null
+                ?? Manual_Authors
+                ?? JStage_Authors_Japanese
+                ?? CrossRef_Authors
+                ?? JStage_Authors_English
+                ?? null
+                ;
+        }
+    }
+
+    public string? DOI { get; set; }
+
+    private string? __UnstructuredRefString;
+    public string? UnstructuredRefString
+    {
+        get
+        {
+            return __UnstructuredRefString;
+        }
+        set
+        {
+            __UnstructuredRefString = value;
+        }
+    }
+
+    public string? PrintISSN { get; set; }
+    public string? OnlineISSN { get; set; }
+
+
+
+
+    // ★★★★★ shared links (*main common info)
 
     public string? DOI_Link => (DOI == null) ? null : $"https://dx.doi.org/{DOI}";
 
     [CsvIgnore]
-    public string? CrossRef_Link => (DOI == null) ? null : $"https://api.crossref.org/v1/works/{DOI}";
+    public string? CrossRefAPI_Link => (DOI == null) ? null : $"https://api.crossref.org/v1/works/{DOI}";
 
     public string? PDF_Link
     {
@@ -28,35 +76,37 @@ public class ResearchArticle
 
             // get data from aij
             if (DOI.Contains("aijs"))
-                return Link_JS?.Replace($"_article/-char/ja/", $"_pdf");
-
-            return null;
-        }
-    }
-
-    [CsvIgnore]
-    public string? LocalPDFName
-    {
-        get
-        {
-            if (ManuallyAddedPdfName != null)
-                return ManuallyAddedPdfName;
-
-            if (DOI != null)
-                return DOI.Replace("/", "_");
-
-            if (PDF_Link != null)
             {
-                var candidate = PDF_Link.Replace("/", "_").Replace(":", "_");
-                return (candidate.Length > 30) ? candidate[^29..] : candidate;
+                return JStage_Link?.Replace($"_article/-char/ja/", $"_pdf");
             }
 
             return null;
         }
     }
 
+    public IEnumerable<string> LocalPDFNameCandidates
+    {
+        get
+        {
+            if (AOI != null)
+                yield return AOI;
 
-    // ★ original meta info (1/2 of main common info)
+            if (DOI != null)
+                yield return DOI.Replace("/", "_");
+
+            if (PDF_Link != null)
+            {
+                var candidate = PDF_Link.Replace("/", "_").Replace(":", "_");
+                yield return (candidate.Length > 30) ? candidate[^29..] : candidate;
+            }
+
+        }
+    }
+
+
+
+
+    // ★★★★★ original meta info
 
     /// <summary>
     /// favorite flag
@@ -71,6 +121,8 @@ public class ResearchArticle
     /// <summary>
     /// Aki32 Object Identifier
     /// When DOI does not exist, automatically create AOI to connect ref data.
+    /// 
+    /// Put your pdf in {LocalPath}\PDFs\Manual\{ManuallyAddedPdfName}.pdf
     /// </summary>
     /// <remarks>
     /// AOIで接続するのは，本当に最終手段。
@@ -78,71 +130,68 @@ public class ResearchArticle
     public string? AOI { get; set; }
 
 
-    // ★ manual info
+    // ★★★★★ manual info
 
-    /// <summary>
-    /// Put your pdf in {LocalPath}\PDFs\Manual\{ManuallyAddedPdfName}.pdf
-    /// </summary>
-    public string? ManuallyAddedPdfName { get; set; }
-
-    public string? ArticleTitle_Manual { get; set; }
-    public string[]? Authors_Manual { get; set; }
+    public string? Manual_ArticleTitle { get; set; }
+    public string[]? Manual_Authors { get; set; }
 
 
-    // ★ mainly from CrossRef (2/2 of main common info)
-
-    public string? DOI { get; set; }
-    public string[]? ReferenceDOIs { get; set; }
-
-    public string? UnstructuredRefString { get; set; }
-
-    public string? PrintISSN { get; set; }
-    public string? OnlineISSN { get; set; }
-
-    public string? ArticleTitle_CR { get; set; }
-    public string[]? Authors_CR { get; set; }
-
-    public string? PublishedDate_CR { get; set; }
 
 
-    // ★ mainly from J-Stage
+    // ★★★★★ CrossRef
 
-    public string? ArticleTitle_English_JS { get; set; }
-    public string? ArticleTitle_Japanese_JS { get; set; }
+    public string[]? CrossRef_ReferenceDOIs { get; set; }
 
-    public string? Link_English_JS { get; set; }
-    public string? Link_Japanese_JS { get; set; }
+    public string? CrossRef_ArticleTitle { get; set; }
+    public string[]? CrossRef_Authors { get; set; }
 
-    public string[]? Authors_English_JS { get; set; }
-    public string[]? Authors_Japanese_JS { get; set; }
-
-    public string? JournalCode_JS { get; set; }
-
-    public string? MaterialTitle_English_JS { get; set; }
-    public string? MaterialTitle_Japanese_JS { get; set; }
+    public string? CrossRef_PublishedDate { get; set; }
 
 
-    public string? Volume_JS { get; set; }
-    public string? SubVolume_JS { get; set; }
-
-    public string? Number_JS { get; set; }
-    public string? StartingPage_JS { get; set; }
-    public string? EndingPage_JS { get; set; }
-
-    public string? PublishedYear_JS { get; set; }
-
-    public string? JOI_JS { get; set; }
-
-    public string? SystemCode_JS { get; set; }
-    public string? SystemName_JS { get; set; }
-
-    public string? Title_JS { get; set; }
-    public string? Link_JS { get; set; }
-    public string? Id_JS { get; set; }
-    public string? UpdatedOn_JS { get; set; }
 
 
-    // ★ mainly from CiNii
+    // ★★★★★ mainly from J-Stage
+
+    public string? JStage_ArticleTitle_English { get; set; }
+    public string? JStage_ArticleTitle_Japanese { get; set; }
+
+    public string? JStage_Link_English { get; set; }
+    public string? JStage_Link_Japanese { get; set; }
+
+    public string[]? JStage_Authors_English { get; set; }
+    public string[]? JStage_Authors_Japanese { get; set; }
+
+    public string? JStage_JournalCode { get; set; }
+
+    public string? JStage_MaterialTitle_English { get; set; }
+    public string? JStage_MaterialTitle_Japanese { get; set; }
+
+
+    public string? JStage_Volume { get; set; }
+    public string? JStage_SubVolume { get; set; }
+
+    public string? JStage_Number { get; set; }
+    public string? JStage_StartingPage { get; set; }
+    public string? JStage_EndingPage { get; set; }
+
+    public string? JStage_PublishedYear { get; set; }
+
+    public string? JStage_JOI { get; set; }
+
+    public string? JStage_SystemCode { get; set; }
+    public string? JStage_SystemName { get; set; }
+
+    public string? JStage_Title { get; set; }
+    public string? JStage_Link { get; set; }
+    public string? JStage_Id { get; set; }
+    public string? JStage_UpdatedOn { get; set; }
+
+
+
+
+    // ★★★★★ mainly from CiNii
+
+
 
 
 
@@ -151,6 +200,10 @@ public class ResearchArticle
 
     // ★★★★★★★★★★★★★★★ method
 
+    /// <summary>
+    /// Merge two ResearchArticle instances.
+    /// </summary>
+    /// <param name="addingArticleInfo"></param>
     public void MergeInfo(ResearchArticle addingArticleInfo)
     {
         // nullじゃないほうを採用。
@@ -173,21 +226,46 @@ public class ResearchArticle
 
     }
 
-
+    /// <summary>
+    /// Create ResearchArticle instance manually.
+    /// </summary>
+    /// <returns></returns>
+    /// <exception cref="NotImplementedException"></exception>
     public static ResearchArticle CreateManually(
 
+        string? title = null,
+        string[]? authors = null,
 
+
+        FileInfo? pdfFile = null,
+        DirectoryInfo? pdfStockDirectory = null
         )
     {
         // AOI自動生成。
         // 参照先リスト指定可能にする。。
 
-
         throw new NotImplementedException();
+
+        if (pdfFile != null)
+        {
+            if (pdfStockDirectory == null)
+                throw new InvalidDataException("When try initializing {pdfFile}, {pdfStockDirectory} must not be null");
+
+
+            // TODO
+
+        }
+
+
 
         return new ResearchArticle()
         {
+            Manual_ArticleTitle = title,
+            Manual_Authors = authors,
+
             AOI = Guid.NewGuid().ToString(),
+
+            DataFrom_Manual = true,
         };
     }
 
@@ -208,6 +286,59 @@ public class ResearchArticle
         }
 
         return rawUnstructuredRefString;
+    }
+
+    public int CompareTo(object? obj)
+    {
+        var comparingArticle = (ResearchArticle)obj!;
+
+        var result = 0;
+        var power = (int)Math.Pow(2, 10);
+
+        if (comparingArticle.DOI != null)
+        {
+            var com = DOI!.CompareTo(comparingArticle.DOI);
+            if (com == 0) return 0;
+            result += power * Math.Sign(com);
+        }
+
+        power /= 2;
+
+        if (comparingArticle.DOI != null)
+        {
+            var com = CrossRef_ArticleTitle!.CompareTo(comparingArticle.CrossRef_ArticleTitle);
+            if (com == 0) return 0;
+            result += power * Math.Sign(com);
+        }
+
+        power /= 2;
+
+        if (comparingArticle.DOI != null)
+        {
+            var com = JStage_Id!.CompareTo(comparingArticle.JStage_Id);
+            if (com == 0) return 0;
+            result += power * Math.Sign(com);
+        }
+
+        power /= 2;
+
+        if (comparingArticle.DOI != null)
+        {
+            var com = Manual_ArticleTitle!.CompareTo(comparingArticle.Manual_ArticleTitle);
+            if (com == 0) return 0;
+            result += power * Math.Sign(com);
+        }
+
+        power /= 2;
+
+        if (comparingArticle.DOI != null)
+        {
+            var com = AOI!.CompareTo(comparingArticle.AOI);
+            if (com == 0) return 0;
+            result += power * Math.Sign(com);
+        }
+
+        return result;
     }
 
 
