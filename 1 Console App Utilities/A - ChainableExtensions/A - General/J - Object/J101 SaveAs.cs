@@ -8,8 +8,6 @@ using ClosedXML;
 
 using Newtonsoft.Json;
 
-using OpenCvSharp.LineDescriptor;
-
 namespace Aki32_Utilities.General;
 public static partial class ChainableExtensions
 {
