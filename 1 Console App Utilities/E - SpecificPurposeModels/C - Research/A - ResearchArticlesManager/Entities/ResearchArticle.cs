@@ -26,11 +26,9 @@ public class ResearchArticle
             if (DOI == null)
                 return null;
 
+            // get data from aij
             if (DOI.Contains("aijs"))
-            {
-                // get data from aij
                 return Link_JS?.Replace($"_article/-char/ja/", $"_pdf");
-            }
 
             return null;
         }
