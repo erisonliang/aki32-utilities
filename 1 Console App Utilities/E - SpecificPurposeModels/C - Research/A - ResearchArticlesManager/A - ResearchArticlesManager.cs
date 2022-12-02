@@ -285,7 +285,7 @@ public partial class ResearchArticlesManager
                     {
                         matchedArticle.MergeInfo(article!);
                         if (UtilConfig.ConsoleOutput_Contents)
-                            Console.WriteLine($"@@@ {article!.CrossRef_ArticleTitle}");
+                            Console.WriteLine($"@@@ {article!.ArticleTitle}");
 
                         updatedCount++;
                         articleDatabaseUpdated = true;
@@ -298,7 +298,7 @@ public partial class ResearchArticlesManager
                     ArticleDatabase.Add(article!);
 
                     if (UtilConfig.ConsoleOutput_Contents)
-                        Console.WriteLine($"+++ {article!.CrossRef_ArticleTitle}");
+                        Console.WriteLine($"+++ {article!.ArticleTitle}");
 
                     addedCount++;
                     articleDatabaseUpdated = true;

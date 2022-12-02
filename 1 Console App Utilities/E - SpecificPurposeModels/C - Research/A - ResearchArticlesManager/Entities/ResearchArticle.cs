@@ -12,7 +12,7 @@ public class ResearchArticle : IComparable
 
     // ★★★★★ shared info (*main common info)
 
-    public string? Common_ArticleTitle
+    public string? ArticleTitle
     {
         get
         {
@@ -21,11 +21,14 @@ public class ResearchArticle : IComparable
                 ?? JStage_ArticleTitle_Japanese
                 ?? CrossRef_ArticleTitle
                 ?? JStage_ArticleTitle_English
+
+                // 最終手段。
+                ?? UnstructuredRefString
                 ?? null
                 ;
         }
     }
-    public string[]? Common_Authors
+    public string[]? Authors
     {
         get
         {
@@ -34,6 +37,9 @@ public class ResearchArticle : IComparable
                 ?? JStage_Authors_Japanese
                 ?? CrossRef_Authors
                 ?? JStage_Authors_English
+
+                // 最終手段。
+                ?? ((UnstructuredRefString == null) ? null : new string[] { UnstructuredRefString })
                 ?? null
                 ;
         }
