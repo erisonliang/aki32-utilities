@@ -264,7 +264,8 @@ public partial class ResearchArticlesManager
             // 更新・マージ
             if (matchedArticles != null && matchedArticles.Count() == 1)
             {
-                matchedArticles.First().MergeInfo(article!);
+                ArticleDatabase.MergeArticles(matchedArticles.First(), article!);
+
                 if (UtilConfig.ConsoleOutput_Contents)
                     Console.WriteLine($"@@@ {article!.ArticleTitle}");
 

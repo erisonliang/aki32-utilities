@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 using Aki32_Utilities.General;
@@ -210,44 +211,6 @@ public class ResearchArticle : IComparable
 
 
     // ★★★★★★★★★★★★★★★ method
-
-    /// <summary>
-    /// Merge two ResearchArticle instances.
-    /// </summary>
-    /// <param name="addingArticleInfo"></param>
-    public void MergeInfo(ResearchArticle addingArticleInfo)
-    {
-        // nullじゃないほうを採用。
-        // 両方nullじゃないなら，後からの情報が優先（最新）
-
-        var props = GetType()
-            .GetProperties()
-            .Where(p => !p.HasAttribute<CsvIgnoreAttribute>())
-            .Where(p => p.CanWrite)
-            ;
-
-        // addingのほうを上書きして，元のを書き換える。
-        foreach (var prop in props)
-        {
-            var addingArticleInfoProp = prop.GetValue(addingArticleInfo);
-
-
-            if (prop.PropertyType == typeof(string))
-            {
-                if (addingArticleInfoProp?.ToString().NullIfNullOrEmpty() != null)
-                    prop.SetValue(this, addingArticleInfoProp);
-
-            }
-            else
-            {
-                if (addingArticleInfoProp != null)
-                    prop.SetValue(this, addingArticleInfoProp);
-
-            }
-
-        }
-
-    }
 
     /// <summary>
     /// Create ResearchArticle instance manually.
