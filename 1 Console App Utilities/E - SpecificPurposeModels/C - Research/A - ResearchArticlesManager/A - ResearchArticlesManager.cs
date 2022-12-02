@@ -15,7 +15,7 @@ namespace Aki32_Utilities.SpecificPurposeModels.Research;
 /// 参考：
 /// Crossref: https://www.crossref.org/documentation/retrieve-metadata/rest-api/
 /// J-Stage:  https://www.jstage.jst.go.jp/static/files/ja/manual_api.pdf
-/// CiNii:    https://support.nii.ac.jp/ja/cinii/api/api_outline
+/// CiNii:    https://support.nii.ac.jp/ja/cir/r_opensearch
 /// </remarks>
 public partial class ResearchArticlesManager
 {
@@ -110,7 +110,6 @@ public partial class ResearchArticlesManager
         var fetchedArticles = new List<ResearchArticle>();
 
 
-        // main
         if (uriBuilder is JStageArticleUriBuilder)
         {
             // get xml
@@ -122,13 +121,13 @@ public partial class ResearchArticlesManager
             var startIndex = xml.Element(ExpandOpenSearch("startIndex"))!.Value;
             var itemsPerPage = xml.Element(ExpandOpenSearch("itemsPerPage"))!.Value;
             var toIndex = int.Parse(startIndex) + int.Parse(itemsPerPage) - 1;
-            var entries = xml.Elements(ExpandXml("entry"));
+            var entities = xml.Elements(ExpandXml("entry"));
 
             Console.WriteLine();
             Console.WriteLine($"★ Obtained {itemsPerPage} items out of {totalResults} matches ( From #{startIndex} to #{toIndex} )");
             Console.WriteLine();
 
-            foreach (var entry in entries)
+            foreach (var entity in entities)
             {
                 var article = new ResearchArticle()
                 {
@@ -137,46 +136,101 @@ public partial class ResearchArticlesManager
 
                 {
 
-                    article.JStage_ArticleTitle_English = entry.Element(ExpandXml("article_title"))?.Element(ExpandXml("en"))?.Value;
-                    article.JStage_ArticleTitle_Japanese = entry.Element(ExpandXml("article_title"))?.Element(ExpandXml("ja"))?.Value;
+                    article.JStage_ArticleTitle_English = entity.Element(ExpandXml("article_title"))?.Element(ExpandXml("en"))?.Value;
+                    article.JStage_ArticleTitle_Japanese = entity.Element(ExpandXml("article_title"))?.Element(ExpandXml("ja"))?.Value;
 
-                    article.JStage_Link_English = entry.Element(ExpandXml("article_link"))?.Element(ExpandXml("en"))?.Value;
-                    article.JStage_Link_Japanese = entry.Element(ExpandXml("article_link"))?.Element(ExpandXml("ja"))?.Value;
+                    article.JStage_Link_English = entity.Element(ExpandXml("article_link"))?.Element(ExpandXml("en"))?.Value;
+                    article.JStage_Link_Japanese = entity.Element(ExpandXml("article_link"))?.Element(ExpandXml("ja"))?.Value;
 
-                    article.JStage_Authors_English = entry.Element(ExpandXml("author"))?.Element(ExpandXml("en"))?.Elements(ExpandXml("name"))?.Select(e => e?.Value ?? "")?.ToArray();
-                    article.JStage_Authors_Japanese = entry.Element(ExpandXml("author"))?.Element(ExpandXml("ja"))?.Elements(ExpandXml("name"))?.Select(e => e?.Value ?? "")?.ToArray();
+                    article.JStage_Authors_English = entity.Element(ExpandXml("author"))?.Element(ExpandXml("en"))?.Elements(ExpandXml("name"))?.Select(e => e?.Value ?? "")?.ToArray();
+                    article.JStage_Authors_Japanese = entity.Element(ExpandXml("author"))?.Element(ExpandXml("ja"))?.Elements(ExpandXml("name"))?.Select(e => e?.Value ?? "")?.ToArray();
 
-                    article.JStage_JournalCode = entry.Element(ExpandXml("cdjournal"))?.Value;
+                    article.JStage_JournalCode = entity.Element(ExpandXml("cdjournal"))?.Value;
 
-                    article.JStage_MaterialTitle_English = entry.Element(ExpandXml("material_title"))?.Element(ExpandXml("en"))?.Value;
-                    article.JStage_MaterialTitle_Japanese = entry.Element(ExpandXml("material_title"))?.Element(ExpandXml("ja"))?.Value;
+                    article.JStage_MaterialTitle_English = entity.Element(ExpandXml("material_title"))?.Element(ExpandXml("en"))?.Value;
+                    article.JStage_MaterialTitle_Japanese = entity.Element(ExpandXml("material_title"))?.Element(ExpandXml("ja"))?.Value;
 
-                    article.PrintISSN = entry.Element(ExpandPrism("issn"))?.Value;
-                    article.OnlineISSN = entry.Element(ExpandPrism("eIssn"))?.Value;
+                    article.PrintISSN = entity.Element(ExpandPrism("issn"))?.Value;
+                    article.OnlineISSN = entity.Element(ExpandPrism("eIssn"))?.Value;
 
-                    article.JStage_Volume = entry.Element(ExpandPrism("volume"))?.Value;
-                    article.JStage_SubVolume = entry.Element(ExpandXml("cdvols"))?.Value;
+                    article.JStage_Volume = entity.Element(ExpandPrism("volume"))?.Value;
+                    article.JStage_SubVolume = entity.Element(ExpandXml("cdvols"))?.Value;
 
-                    article.JStage_Number = entry.Element(ExpandPrism("number"))?.Value;
-                    article.JStage_StartingPage = entry.Element(ExpandPrism("startingPage"))?.Value;
-                    article.JStage_EndingPage = entry.Element(ExpandPrism("endingPage"))?.Value;
+                    article.JStage_Number = entity.Element(ExpandPrism("number"))?.Value;
+                    article.JStage_StartingPage = entity.Element(ExpandPrism("startingPage"))?.Value;
+                    article.JStage_EndingPage = entity.Element(ExpandPrism("endingPage"))?.Value;
 
-                    article.JStage_PublishedYear = entry.Element(ExpandXml("pubyear"))?.Value;
+                    article.JStage_PublishedYear = entity.Element(ExpandXml("pubyear"))?.Value;
 
-                    article.JStage_JOI = entry.Element(ExpandXml("joi"))?.Value;
-                    article.DOI = entry.Element(ExpandPrism("doi"))?.Value;
+                    article.JStage_JOI = entity.Element(ExpandXml("joi"))?.Value;
+                    article.DOI = entity.Element(ExpandPrism("doi"))?.Value;
 
-                    article.JStage_SystemCode = entry.Element(ExpandXml("systemcode"))?.Value;
-                    article.JStage_SystemName = entry.Element(ExpandXml("systemname"))?.Value;
+                    article.JStage_SystemCode = entity.Element(ExpandXml("systemcode"))?.Value;
+                    article.JStage_SystemName = entity.Element(ExpandXml("systemname"))?.Value;
 
-                    article.JStage_Title = entry.Element(ExpandXml("title"))?.Value;
+                    //article.JStage_ArticleTitle = entity.Element(ExpandXml("title"))?.Value;
 
-                    article.JStage_Link = entry.Element(ExpandXml("link"))?.Value;
-                    article.JStage_Id = entry.Element(ExpandXml("id"))?.Value;
-                    article.JStage_UpdatedOn = entry.Element(ExpandXml("updated"))?.Value;
+                    //article.JStage_Link = entity.Element(ExpandXml("link"))?.Value;
+                    article.JStage_Id = entity.Element(ExpandXml("id"))?.Value;
+                    article.JStage_UpdatedOn = entity.Element(ExpandXml("updated"))?.Value;
 
                 }
 
+                fetchedArticles.Add(article);
+
+            }
+
+        }
+        else if (uriBuilder is CiNiiArticleUriBuilder)
+        {
+            dynamic json = uri.CallAPIAsync_ForJsonData<dynamic>(HttpMethod.Get).Result;
+
+
+            // analyse 
+            var totalResults = json?["opensearch:totalResults"]?.ToString();
+            var startIndex = json?["opensearch:startIndex"]?.ToString();
+            var itemsPerPage = json?["opensearch:itemsPerPage"]?.ToString();
+            var toIndex = int.Parse(startIndex) + int.Parse(itemsPerPage) - 1;
+            var entities = json?["items"] as JArray;
+
+            Console.WriteLine();
+            Console.WriteLine($"★ Obtained {itemsPerPage} items out of {totalResults} matches ( From #{startIndex} to #{toIndex} )");
+            Console.WriteLine();
+
+            foreach (var entity in entities)
+            {
+                var article = new ResearchArticle()
+                {
+                    DataFrom_CiNii = true
+                };
+
+                {
+
+                    article.CiNii_ArticleTitle = entity?["title"]?.ToString();
+
+                    article.CiNii_Link = entity?["link"]?["@id"]?.ToString();
+
+                    article.CiNii_Authors = (entity?["dc:creator"] as JArray)?.Select(a => a.ToString())?.ToArray();
+
+                    article.CiNii_Publisher = entity?["dc:publisher"]?.ToString();
+                    article.CiNii_PublicationName = entity?["prism:publicationName"]?.ToString();
+
+                    article.PrintISSN = entity?["prism:issn"]?.ToString();
+
+                    article.CiNii_Volume = entity?["prism:volume"]?.ToString();
+                    article.CiNii_Number = entity?["prism:number"]?.ToString();
+                    article.CiNii_StartingPage = entity?["prism:startingPage"]?.ToString();
+                    article.CiNii_EndingPage = entity?["prism:endingPage"]?.ToString();
+                    article.CiNii_PublishedDate = entity?["prism:publicationDate"]?.ToString();
+
+
+                    article.CiNii_Description = entity?["description"]?.ToString();
+
+                    article.DOI = (entity?["dc:identifier"] as JArray)?.FirstOrDefault(x => x?["@type"]?.ToString() == "cir:DOI")?["@value"]?.ToString();
+
+                }
+
+                // add article
                 fetchedArticles.Add(article);
 
             }

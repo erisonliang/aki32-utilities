@@ -892,18 +892,31 @@ public class TestHelper
 
                     }
 
+                    // articles from cinii
+                    {
+                        //var builder = new CiNiiArticleUriBuilder()
+                        //{
+                        //    Count = 5,
+                        //    ISSN = ISSN.Architecture_Structure,
+                        //    FreeWord = "小振幅"
+                        //};
+                        //research.PullArticleInfo(builder);
+
+                    }
+
                     // article from crossref
                     {
-                        var builder = new CrossRefArticleUriBuilder()
-                        {
-                            DOI = "10.3130/aijs.87.822"
-                        };
-                        research.PullArticleInfo(builder);
+                        //var builder = new CrossRefArticleUriBuilder()
+                        //{
+                        //    DOI = "10.3130/aijs.87.822"
+                        //};
+                        //research.PullArticleInfo(builder);
 
                     }
 
                     // display
                     {
+                        research.SaveDatabase(true);
 
                         Console.WriteLine();
                         Console.WriteLine();
@@ -914,11 +927,7 @@ public class TestHelper
                         //Console.WriteLine();
                         Console.WriteLine();
 
-
-                        research.ArticleDatabase.First(x => x.DOI == "10.3130/aijs.87.822").TryOpenPDF(research.PDFsDirectory);
-
-
-
+                        //research.ArticleDatabase.First(x => x.DOI == "10.3130/aijs.87.822").TryOpenPDF(research.PDFsDirectory);
 
                     }
 

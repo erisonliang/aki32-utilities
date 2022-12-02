@@ -31,6 +31,9 @@ public class ResearchArticle : IComparable
             return null
                 ?? Manual_ArticleTitle.NullIfNullOrEmpty()
                 ?? JStage_ArticleTitle_Japanese.NullIfNullOrEmpty()
+                ?? CiNii_ArticleTitle.NullIfNullOrEmpty()
+
+                // 英語は後回し
                 ?? CrossRef_ArticleTitle.NullIfNullOrEmpty()
                 ?? JStage_ArticleTitle_English.NullIfNullOrEmpty()
 
@@ -47,6 +50,9 @@ public class ResearchArticle : IComparable
             return null
                 ?? Manual_Authors
                 ?? JStage_Authors_Japanese
+                ?? CiNii_Authors
+                
+                // 英語は後回し
                 ?? CrossRef_Authors
                 ?? JStage_Authors_English
 
@@ -157,12 +163,10 @@ public class ResearchArticle : IComparable
 
     public string? Manual_ArticleTitle { get; set; }
     public string[]? Manual_Authors { get; set; }
-
-
+    public string? Manual_CreatedDate { get; set; }
 
 
     // ★★★★★ CrossRef
-
 
     public string? CrossRef_ArticleTitle { get; set; }
     public string[]? CrossRef_Authors { get; set; }
@@ -177,47 +181,54 @@ public class ResearchArticle : IComparable
     public string? JStage_ArticleTitle_English { get; set; }
     public string? JStage_ArticleTitle_Japanese { get; set; }
 
-    public string? JStage_Link_English { get; set; }
-    public string? JStage_Link_Japanese { get; set; }
-
     public string[]? JStage_Authors_English { get; set; }
     public string[]? JStage_Authors_Japanese { get; set; }
+
+
+    public string? JStage_Link_English { get; set; }
+    public string? JStage_Link_Japanese { get; set; }
 
     public string? JStage_JournalCode { get; set; }
 
     public string? JStage_MaterialTitle_English { get; set; }
     public string? JStage_MaterialTitle_Japanese { get; set; }
 
+    public string? JStage_PublishedYear { get; set; }
 
     public string? JStage_Volume { get; set; }
     public string? JStage_SubVolume { get; set; }
-
     public string? JStage_Number { get; set; }
     public string? JStage_StartingPage { get; set; }
     public string? JStage_EndingPage { get; set; }
 
-    public string? JStage_PublishedYear { get; set; }
 
     public string? JStage_JOI { get; set; }
 
     public string? JStage_SystemCode { get; set; }
     public string? JStage_SystemName { get; set; }
 
-    public string? JStage_Title { get; set; }
-    public string? JStage_Link { get; set; }
     public string? JStage_Id { get; set; }
     public string? JStage_UpdatedOn { get; set; }
 
 
 
-
     // ★★★★★ mainly from CiNii
 
+    public string? CiNii_ArticleTitle { get; set; }
+    public string[]? CiNii_Authors { get; set; }
 
+    public string? CiNii_Description { get; set; }
 
+    public string? CiNii_Link { get; set; }
 
+    public string? CiNii_Publisher { get; set; }
+    public string? CiNii_PublicationName { get; set; }
+    public string? CiNii_PublishedDate { get; set; }
 
-
+    public string? CiNii_Volume { get; set; }
+    public string? CiNii_Number { get; set; }
+    public string? CiNii_StartingPage { get; set; }
+    public string? CiNii_EndingPage { get; set; }
 
 
 
@@ -263,6 +274,8 @@ public class ResearchArticle : IComparable
         {
             Manual_ArticleTitle = title,
             Manual_Authors = authors,
+
+            Manual_CreatedDate = DateTime.Today.ToLongDateString(),
 
             AOI = aoi,
 
