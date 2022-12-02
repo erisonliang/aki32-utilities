@@ -21,7 +21,7 @@ public static partial class ChainableExtensions
 
 
         // ignore
-        if (ignoreWhenExists && !outputFile.Exists)
+        if (ignoreWhenExists && outputFile.Exists)
             return outputFile!;
 
 
