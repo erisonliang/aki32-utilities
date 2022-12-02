@@ -1,4 +1,6 @@
-﻿using Aki32_Utilities.General;
+﻿using System.Diagnostics.CodeAnalysis;
+
+using Aki32_Utilities.General;
 
 using ClosedXML;
 
@@ -17,13 +19,13 @@ public class ResearchArticle : IComparable
         get
         {
             return null
-                ?? Manual_ArticleTitle
-                ?? JStage_ArticleTitle_Japanese
-                ?? CrossRef_ArticleTitle
-                ?? JStage_ArticleTitle_English
+                ?? Manual_ArticleTitle.NullIfNullOrEmpty()
+                ?? JStage_ArticleTitle_Japanese.NullIfNullOrEmpty()
+                ?? CrossRef_ArticleTitle.NullIfNullOrEmpty()
+                ?? JStage_ArticleTitle_English.NullIfNullOrEmpty()
 
                 // 最終手段。
-                ?? UnstructuredRefString
+                ?? UnstructuredRefString.NullIfNullOrEmpty()
                 ?? null
                 ;
         }
@@ -204,6 +206,7 @@ public class ResearchArticle : IComparable
 
 
 
+
     // ★★★★★★★★★★★★★★★ method
 
     /// <summary>
@@ -242,7 +245,6 @@ public class ResearchArticle : IComparable
         string? title = null,
         string[]? authors = null,
 
-
         FileInfo? pdfFile = null,
         DirectoryInfo? pdfStockDirectory = null
         )
@@ -250,14 +252,15 @@ public class ResearchArticle : IComparable
         // AOI自動生成。
         // 参照先リスト指定可能にする。。
 
-        throw new NotImplementedException();
+        var aoi = Guid.NewGuid().ToString();
+
 
         if (pdfFile != null)
         {
             if (pdfStockDirectory == null)
                 throw new InvalidDataException("When try initializing {pdfFile}, {pdfStockDirectory} must not be null");
 
-
+            pdfFile.CopyTo(new FileInfo(Path.Combine(pdfStockDirectory.FullName, $"{aoi}")));
             // TODO
 
         }
@@ -269,12 +272,24 @@ public class ResearchArticle : IComparable
             Manual_ArticleTitle = title,
             Manual_Authors = authors,
 
-            AOI = Guid.NewGuid().ToString(),
+            AOI = aoi,
 
             DataFrom_Manual = true,
         };
     }
 
+    public void AddArticleReference(ResearchArticle addingArticle)
+    {
+        // Add DOI or AOI to ReferenceDOIs.
+        ReferenceDOIs =
+            (ReferenceDOIs ?? Array.Empty<string>())
+            .Append(addingArticle.DOI ?? (addingArticle.AOI = Guid.NewGuid().ToString()))!
+            .ToArray();
+
+    }
+
+
+    // ★★★★★★★★★★★★★★★ helper
 
     public static string? CleanUp_UnstructuredRefString(string? rawUnstructuredRefString, int checkCount = 4)
     {
@@ -294,9 +309,6 @@ public class ResearchArticle : IComparable
         return rawUnstructuredRefString;
     }
 
-
-    // ★★★★★★★★★★★★★★★ override
-
     public override bool Equals(object obj)
     {
         if (obj == null || GetType() != obj.GetType())
@@ -312,7 +324,7 @@ public class ResearchArticle : IComparable
         var result = 0;
         var power = (int)Math.Pow(2, 10);
 
-        if (DOI != null && comparingArticle.DOI != null)
+        if (string.IsNullOrEmpty(DOI) && string.IsNullOrEmpty(comparingArticle.DOI))
         {
             var com = DOI!.CompareTo(comparingArticle.DOI);
             if (com == 0) return 0;
@@ -321,7 +333,7 @@ public class ResearchArticle : IComparable
 
         power /= 2;
 
-        if (CrossRef_ArticleTitle != null && comparingArticle.CrossRef_ArticleTitle != null)
+        if (string.IsNullOrEmpty(CrossRef_ArticleTitle) && string.IsNullOrEmpty(comparingArticle.CrossRef_ArticleTitle))
         {
             var com = CrossRef_ArticleTitle!.CompareTo(comparingArticle.CrossRef_ArticleTitle);
             if (com == 0) return 0;
@@ -330,7 +342,7 @@ public class ResearchArticle : IComparable
 
         power /= 2;
 
-        if (JStage_Id != null && comparingArticle.JStage_Id != null)
+        if (string.IsNullOrEmpty(JStage_Id) && string.IsNullOrEmpty(comparingArticle.JStage_Id))
         {
             var com = JStage_Id!.CompareTo(comparingArticle.JStage_Id);
             if (com == 0) return 0;
@@ -339,7 +351,7 @@ public class ResearchArticle : IComparable
 
         power /= 2;
 
-        if (Manual_ArticleTitle != null && comparingArticle.Manual_ArticleTitle != null)
+        if (string.IsNullOrEmpty(Manual_ArticleTitle) && string.IsNullOrEmpty(comparingArticle.Manual_ArticleTitle))
         {
             var com = Manual_ArticleTitle!.CompareTo(comparingArticle.Manual_ArticleTitle);
             if (com == 0) return 0;
@@ -348,7 +360,7 @@ public class ResearchArticle : IComparable
 
         power /= 2;
 
-        if (AOI != null && comparingArticle.AOI != null)
+        if (string.IsNullOrEmpty(AOI) && string.IsNullOrEmpty(comparingArticle.AOI))
         {
             var com = AOI!.CompareTo(comparingArticle.AOI);
             if (com == 0) return 0;

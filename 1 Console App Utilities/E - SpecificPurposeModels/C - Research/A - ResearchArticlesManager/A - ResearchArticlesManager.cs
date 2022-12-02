@@ -207,17 +207,13 @@ public partial class ResearchArticlesManager
                     _ = (json?["message"]?["reference"] as JArray)?
                         .Select(x =>
                         {
-                            // Get referred article
+                            // Create and add referred article
                             var addingArticle = new ResearchArticle
                             {
                                 DOI = x?["DOI"]?.ToString(),
                                 UnstructuredRefString = ResearchArticle.CleanUp_UnstructuredRefString(x?["unstructured"]?.ToString())
                             };
-
-                            // Add DOI or AOI to ReferenceDOIs.
-                            article.ReferenceDOIs = (article.ReferenceDOIs ?? Array.Empty<string>())
-                            .Append(addingArticle.DOI ?? (addingArticle.AOI = Guid.NewGuid().ToString()))!
-                            .ToArray();
+                            article.AddArticleReference(addingArticle);
 
                             fetchedArticles.Add(addingArticle);
 
