@@ -1,7 +1,10 @@
-﻿using System.Xml.Linq;
+﻿using System.Diagnostics;
+using System.Xml.Linq;
 
 using Aki32_Utilities.General;
 using Aki32_Utilities.UsefulClasses;
+
+using iTextSharp.text.pdf;
 
 using LibGit2Sharp;
 
@@ -10,7 +13,9 @@ using Newtonsoft.Json.Linq;
 namespace Aki32_Utilities.SpecificPurposeModels.Research;
 /// <remarks>
 /// 参考：
-/// https://www.jstage.jst.go.jp/static/files/ja/manual_api.pdf
+/// Crossref: https://www.crossref.org/documentation/retrieve-metadata/rest-api/
+/// J-Stage:  https://www.jstage.jst.go.jp/static/files/ja/manual_api.pdf
+/// CiNii:    https://support.nii.ac.jp/ja/cinii/api/api_outline
 /// </remarks>
 public partial class ResearchArticlesManager
 {
@@ -41,7 +46,9 @@ public partial class ResearchArticlesManager
 
         Console.WriteLine("Data Powered by");
         Console.WriteLine("+ ");
-        Console.WriteLine("+ J-STAGE (https://www.jstage.jst.go.jp/browse/-char/ja)");
+        Console.WriteLine("+ Crossref (https://www.crossref.org/)");
+        Console.WriteLine("+ J-STAGE (https://www.jstage.jst.go.jp/)");
+        Console.WriteLine("+ CiNii (https://cir.nii.ac.jp/)");
         Console.WriteLine("+ ");
         Console.WriteLine();
 
@@ -50,7 +57,7 @@ public partial class ResearchArticlesManager
     }
 
 
-    // ★★★★★★★★★★★★★★★ methods
+    // ★★★★★★★★★★★★★★★ methods (data handle)
 
     /// <summary>
     /// Open database. If not exist, automatically create new ones.
@@ -75,7 +82,6 @@ public partial class ResearchArticlesManager
             articleDatabaseUpdated = false;
         }
     }
-
 
     /// <summary>
     /// pull data from dataserver to local database
@@ -299,7 +305,12 @@ public partial class ResearchArticlesManager
     }
 
 
-    // ★★★★★★★★★★★★★★★ helper
+    // ★★★★★★★★★★★★★★★ methods (practical use)
+
+
+
+
+    // ★★★★★★★★★★★★★★★ methods (helper)
 
     private static string ExpandXml(string s) => "{http://www.w3.org/2005/Atom}" + s;
     private static string ExpandOpenSearch(string s) => "{http://a9.com/-/spec/opensearch/1.1/}" + s;

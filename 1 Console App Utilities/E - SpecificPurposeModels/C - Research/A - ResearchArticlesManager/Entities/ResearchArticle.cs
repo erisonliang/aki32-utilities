@@ -3,6 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 using Aki32_Utilities.General;
+using Aki32_Utilities.UsefulClasses;
 
 using ClosedXML;
 
@@ -95,29 +96,33 @@ public class ResearchArticle : IComparable
             // get data from aij
             if (DOI.Contains("aijs"))
             {
-                return JStage_Link?.Replace($"_article/-char/ja/", $"_pdf");
+                if (JStage_Link_Japanese != null)
+                    return JStage_Link_Japanese!.Replace($"_article/", $"_pdf/");
+                if (JStage_Link_English != null)
+                    return JStage_Link_English!.Replace($"_article/", $"_pdf/");
             }
 
             return null;
         }
     }
 
-    public IEnumerable<string> LocalPDFNameCandidates
+    public string? LocalPDFName
     {
         get
         {
-            if (!string.IsNullOrEmpty(AOI))
-                yield return AOI;
-
             if (!string.IsNullOrEmpty(DOI))
-                yield return DOI.Replace("/", "_");
+                return DOI.Replace("/", "_");
+
+            if (!string.IsNullOrEmpty(AOI))
+                return AOI;
 
             if (!string.IsNullOrEmpty(PDF_Link))
             {
                 var candidate = PDF_Link.Replace("/", "_").Replace(":", "_");
-                yield return candidate.Shorten(GENERATED_PDF_FILE_NAME_RANGE);
+                return candidate.Shorten(GENERATED_PDF_FILE_NAME_RANGE);
             }
 
+            return null;
         }
     }
 
@@ -216,7 +221,7 @@ public class ResearchArticle : IComparable
 
 
 
-    // ★★★★★★★★★★★★★★★ method
+    // ★★★★★★★★★★★★★★★ method (data handling)
 
     /// <summary>
     /// Create ResearchArticle instance manually.
@@ -295,7 +300,71 @@ public class ResearchArticle : IComparable
     }
 
 
-    // ★★★★★★★★★★★★★★★ helper
+    // ★★★★★★★★★★★★★★★ method (practical use)
+
+    public void TryDownloadPDF(DirectoryInfo pdfStockDirectory)
+    {
+        UtilPreprocessors.PreprocessBasic();
+
+        try
+        {
+            if (LocalPDFName == null)
+                throw new Exception("Local PDF Name cannot be implied.");
+
+            var outputFile = new FileInfo(Path.Combine(pdfStockDirectory.FullName, $"{LocalPDFName}.pdf"));
+            new Uri(PDF_Link!).DownloadFileAsync(outputFile, true).Wait();
+        }
+        catch (Exception ex)
+        {
+            ConsoleExtension.WriteLineWithColor($"Failed: {ex.Message}", ConsoleColor.Red);
+        }
+    }
+
+    public void TryOpenPDF(DirectoryInfo pdfStockDirectory)
+    {
+        UtilPreprocessors.PreprocessBasic();
+
+        try
+        {
+            if (LocalPDFName == null)
+                throw new Exception("Local PDF Name couldn't be implied.");
+
+            var outputFilePath = Path.Combine(pdfStockDirectory.FullName, $"{LocalPDFName}.pdf");
+
+            if (!File.Exists(outputFilePath))
+                TryDownloadPDF(pdfStockDirectory);
+
+            var p = Process.Start(new ProcessStartInfo()
+            {
+                FileName = outputFilePath,
+                UseShellExecute = true,
+            });
+
+            return;
+
+        }
+        catch (Exception ex)
+        {
+            ConsoleExtension.WriteLineWithColor($"Failed: {ex.Message}", ConsoleColor.Red);
+        }
+    }
+
+    public void TryOpenDOI()
+    {
+        UtilPreprocessors.PreprocessBasic();
+
+        try
+        {
+            var p = Process.Start(DOI_Link!);
+        }
+        catch (Exception ex)
+        {
+            ConsoleExtension.WriteLineWithColor($"Failed: {ex.Message}", ConsoleColor.Red);
+        }
+    }
+
+
+    // ★★★★★★★★★★★★★★★ method (helper)
 
     public static string? CleanUp_UnstructuredRefString(string? rawUnstructuredRefString, int checkCount = 4)
     {

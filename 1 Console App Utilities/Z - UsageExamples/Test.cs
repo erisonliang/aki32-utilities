@@ -913,6 +913,13 @@ public class TestHelper
                         //    Console.WriteLine($" + {article.Title_Japanese}");
                         //Console.WriteLine();
                         Console.WriteLine();
+
+
+                        research.ArticleDatabase.First(x => x.DOI == "10.3130/aijs.87.822").TryOpenPDF(research.PDFsDirectory);
+
+
+
+
                     }
 
                 }
