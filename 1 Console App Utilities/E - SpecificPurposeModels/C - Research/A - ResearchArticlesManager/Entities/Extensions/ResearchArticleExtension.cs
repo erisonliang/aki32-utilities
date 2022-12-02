@@ -57,11 +57,16 @@ public static class ResearchArticleExtension
 
         }
 
-
         //delete
-
         if (articles.Contains(mergingArticle))
+        {
+            // TODO: Ref整合性。消す場合はRefから消したい。
+
+
+
+
             articles.Remove(mergingArticle);
+        }
 
     }
 

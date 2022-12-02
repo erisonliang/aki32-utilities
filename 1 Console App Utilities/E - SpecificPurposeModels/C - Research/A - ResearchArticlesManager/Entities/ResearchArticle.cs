@@ -242,8 +242,6 @@ public class ResearchArticle : IComparable
 
         }
 
-
-
         return new ResearchArticle()
         {
             Manual_ArticleTitle = title,
@@ -260,8 +258,11 @@ public class ResearchArticle : IComparable
         // Add DOI or AOI to ReferenceDOIs.
         ReferenceDOIs ??= Array.Empty<string>();
 
-        if (!ReferenceDOIs.Any(a => a.Equals(addingArticle)))
-            ReferenceDOIs = ReferenceDOIs.Append(addingArticle.DOI ?? (addingArticle.AOI = Guid.NewGuid().ToString()))!.ToArray();
+        ReferenceDOIs = ReferenceDOIs
+            .Append(addingArticle.DOI ?? (addingArticle.AOI = Guid.NewGuid().ToString()))!
+            .Distinct()
+            .ToArray()
+            ;
 
     }
 
@@ -284,14 +285,6 @@ public class ResearchArticle : IComparable
         }
 
         return rawUnstructuredRefString;
-    }
-
-    public override bool Equals(object obj)
-    {
-        if (obj == null || GetType() != obj.GetType())
-            return false;
-
-        return CompareTo(obj) == 0;
     }
 
     public int CompareTo(object? obj)
@@ -340,6 +333,15 @@ public class ResearchArticle : IComparable
         if (!string.IsNullOrEmpty(AOI) && !string.IsNullOrEmpty(comparingArticle.AOI))
         {
             var com = AOI!.CompareTo(comparingArticle.AOI);
+            if (com == 0) return 0;
+            result += power * Math.Sign(com);
+        }
+
+        power /= 2;
+
+        if (!string.IsNullOrEmpty(UnstructuredRefString) && !string.IsNullOrEmpty(comparingArticle.UnstructuredRefString))
+        {
+            var com = UnstructuredRefString!.CompareTo(comparingArticle.UnstructuredRefString);
             if (com == 0) return 0;
             result += power * Math.Sign(com);
         }
