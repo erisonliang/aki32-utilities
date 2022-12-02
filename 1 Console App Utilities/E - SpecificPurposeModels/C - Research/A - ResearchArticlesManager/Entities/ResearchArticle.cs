@@ -28,7 +28,7 @@ public class ResearchArticle : IComparable
                 ?? JStage_ArticleTitle_English.NullIfNullOrEmpty()
 
                 // 最終手段。
-                ?? ((UnstructuredRefString.NullIfNullOrEmpty() == null) ? null : "See UnstructuredRefString")
+                ?? ((UnstructuredRefString.NullIfNullOrEmpty() == null) ? null : UnstructuredRefString!.Shorten(..30))
                 ?? null
                 ;
         }
@@ -44,7 +44,7 @@ public class ResearchArticle : IComparable
                 ?? JStage_Authors_English
 
                 // 最終手段。
-                ?? ((UnstructuredRefString.NullIfNullOrEmpty() == null) ? null : new string[] { "See UnstructuredRefString" })
+                ?? ((UnstructuredRefString.NullIfNullOrEmpty() == null) ? null : new string[] { UnstructuredRefString!.Shorten(..30) })
                 ?? null
                 ;
         }
@@ -74,16 +74,16 @@ public class ResearchArticle : IComparable
 
     // ★★★★★ shared links (*main common info)
 
-    public string? DOI_Link => (DOI == null) ? null : $"https://dx.doi.org/{DOI}";
+    public string? DOI_Link => (string.IsNullOrEmpty(DOI)) ? null : $"https://dx.doi.org/{DOI}";
 
     [CsvIgnore]
-    public string? CrossRefAPI_Link => (DOI == null) ? null : $"https://api.crossref.org/v1/works/{DOI}";
+    public string? CrossRefAPI_Link => (string.IsNullOrEmpty(DOI)) ? null : $"https://api.crossref.org/v1/works/{DOI}";
 
     public string? PDF_Link
     {
         get
         {
-            if (DOI == null)
+            if (string.IsNullOrEmpty(DOI))
                 return null;
 
             // get data from aij
@@ -100,16 +100,16 @@ public class ResearchArticle : IComparable
     {
         get
         {
-            if (AOI != null)
+            if (!string.IsNullOrEmpty(AOI))
                 yield return AOI;
 
-            if (DOI != null)
+            if (!string.IsNullOrEmpty(DOI))
                 yield return DOI.Replace("/", "_");
 
-            if (PDF_Link != null)
+            if (!string.IsNullOrEmpty(PDF_Link))
             {
                 var candidate = PDF_Link.Replace("/", "_").Replace(":", "_");
-                yield return (candidate.Length > 30) ? candidate[^29..] : candidate;
+                yield return candidate.Shorten(^29..);
             }
 
         }
@@ -222,27 +222,33 @@ public class ResearchArticle : IComparable
         string? title = null,
         string[]? authors = null,
 
+        ResearchArticle[]? references = null,
+
         FileInfo? pdfFile = null,
-        DirectoryInfo? pdfStockDirectory = null
+        DirectoryInfo? pdfStockDirectory = null,
+
+        bool movePdfFile = true
         )
     {
-        // AOI自動生成。
-        // 参照先リスト指定可能にする。。
-
+        // AOI creation
         var aoi = Guid.NewGuid().ToString();
 
-
+        // stock pdf file to database
         if (pdfFile != null)
         {
             if (pdfStockDirectory == null)
-                throw new InvalidDataException("When try initializing {pdfFile}, {pdfStockDirectory} must not be null");
+                throw new InvalidDataException("When tring initializing {pdfFile}, {pdfStockDirectory} must not be null");
 
-            pdfFile.CopyTo(new FileInfo(Path.Combine(pdfStockDirectory.FullName, $"{aoi}")));
-            // TODO
+            var targetFile = new FileInfo(Path.Combine(pdfStockDirectory.FullName, $"{aoi}.pdf"));
+
+            if (movePdfFile)
+                pdfFile.MoveTo(targetFile);
+            else
+                pdfFile.CopyTo(targetFile);
 
         }
 
-        return new ResearchArticle()
+        var raddingArticle = new ResearchArticle()
         {
             Manual_ArticleTitle = title,
             Manual_Authors = authors,
@@ -251,6 +257,15 @@ public class ResearchArticle : IComparable
 
             DataFrom_Manual = true,
         };
+
+        if (references != null)
+        {
+            foreach (var reference in references)
+                reference.AddArticleReference(raddingArticle);
+
+        }
+
+        return raddingArticle;
     }
 
     public void AddArticleReference(ResearchArticle addingArticle)
@@ -259,7 +274,7 @@ public class ResearchArticle : IComparable
         ReferenceDOIs ??= Array.Empty<string>();
 
         ReferenceDOIs = ReferenceDOIs
-            .Append(addingArticle.DOI ?? (addingArticle.AOI = Guid.NewGuid().ToString()))!
+            .Append(addingArticle.DOI ?? (addingArticle.AOI ??= Guid.NewGuid().ToString()))!
             .Distinct()
             .ToArray()
             ;

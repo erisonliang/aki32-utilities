@@ -25,7 +25,7 @@ public static class ResearchArticleExtension
     {
         // prerocess
         if (!articles.Contains(mergedArticle))
-            throw new InvalidDataException("{mergedArticle} and {mergingArticle} has to be in {articles}");
+            throw new InvalidDataException("{mergedArticle} need to be in {articles}");
 
 
         // main
