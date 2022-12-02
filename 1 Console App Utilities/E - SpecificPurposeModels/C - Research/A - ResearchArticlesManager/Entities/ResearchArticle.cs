@@ -46,6 +46,7 @@ public class ResearchArticle : IComparable
     }
 
     public string? DOI { get; set; }
+    public string[]? ReferenceDOIs { get; set; }
 
     private string? __UnstructuredRefString;
     public string? UnstructuredRefString
@@ -146,7 +147,6 @@ public class ResearchArticle : IComparable
 
     // ★★★★★ CrossRef
 
-    public string[]? CrossRef_ReferenceDOIs { get; set; }
 
     public string? CrossRef_ArticleTitle { get; set; }
     public string[]? CrossRef_Authors { get; set; }
@@ -294,6 +294,17 @@ public class ResearchArticle : IComparable
         return rawUnstructuredRefString;
     }
 
+
+    // ★★★★★★★★★★★★★★★ override
+
+    public override bool Equals(object obj)
+    {
+        if (obj == null || GetType() != obj.GetType())
+            return false;
+
+        return CompareTo(obj) == 0;
+    }
+
     public int CompareTo(object? obj)
     {
         var comparingArticle = (ResearchArticle)obj!;
@@ -301,7 +312,7 @@ public class ResearchArticle : IComparable
         var result = 0;
         var power = (int)Math.Pow(2, 10);
 
-        if (comparingArticle.DOI != null)
+        if (DOI != null && comparingArticle.DOI != null)
         {
             var com = DOI!.CompareTo(comparingArticle.DOI);
             if (com == 0) return 0;
@@ -310,7 +321,7 @@ public class ResearchArticle : IComparable
 
         power /= 2;
 
-        if (comparingArticle.DOI != null)
+        if (CrossRef_ArticleTitle != null && comparingArticle.CrossRef_ArticleTitle != null)
         {
             var com = CrossRef_ArticleTitle!.CompareTo(comparingArticle.CrossRef_ArticleTitle);
             if (com == 0) return 0;
@@ -319,7 +330,7 @@ public class ResearchArticle : IComparable
 
         power /= 2;
 
-        if (comparingArticle.DOI != null)
+        if (JStage_Id != null && comparingArticle.JStage_Id != null)
         {
             var com = JStage_Id!.CompareTo(comparingArticle.JStage_Id);
             if (com == 0) return 0;
@@ -328,7 +339,7 @@ public class ResearchArticle : IComparable
 
         power /= 2;
 
-        if (comparingArticle.DOI != null)
+        if (Manual_ArticleTitle != null && comparingArticle.Manual_ArticleTitle != null)
         {
             var com = Manual_ArticleTitle!.CompareTo(comparingArticle.Manual_ArticleTitle);
             if (com == 0) return 0;
@@ -337,14 +348,14 @@ public class ResearchArticle : IComparable
 
         power /= 2;
 
-        if (comparingArticle.DOI != null)
+        if (AOI != null && comparingArticle.AOI != null)
         {
             var com = AOI!.CompareTo(comparingArticle.AOI);
             if (com == 0) return 0;
             result += power * Math.Sign(com);
         }
 
-        return result;
+        return (result == 0) ? (GetHashCode() - comparingArticle.GetHashCode()) : result;
     }
 
 

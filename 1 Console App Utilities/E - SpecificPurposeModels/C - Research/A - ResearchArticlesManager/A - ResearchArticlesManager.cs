@@ -215,7 +215,7 @@ public partial class ResearchArticlesManager
                             };
 
                             // Add DOI or AOI to ReferenceDOIs.
-                            article.CrossRef_ReferenceDOIs = (article.CrossRef_ReferenceDOIs ?? Array.Empty<string>())
+                            article.ReferenceDOIs = (article.ReferenceDOIs ?? Array.Empty<string>())
                             .Append(addingArticle.DOI ?? (addingArticle.AOI = Guid.NewGuid().ToString()))!
                             .ToArray();
 
@@ -263,51 +263,34 @@ public partial class ResearchArticlesManager
         // main
         foreach (var article in articles)
         {
-            IEnumerable<ResearchArticle?> matchedArticleFinder()
+            var matchedArticles = ArticleDatabase.Where(a => a.Equals(article));
+
+            // 更新・マージ
+            if (matchedArticles != null && matchedArticles.Count() == 1)
             {
-                yield return ArticleDatabase.FirstOrDefault(a => a.DOI != null && a.DOI == article!.DOI);
+                matchedArticles.First().MergeInfo(article!);
+                if (UtilConfig.ConsoleOutput_Contents)
+                    Console.WriteLine($"@@@ {article!.ArticleTitle}");
 
-                yield return ArticleDatabase.FirstOrDefault(a => a.CrossRef_ArticleTitle != null && a.CrossRef_ArticleTitle == article!.CrossRef_ArticleTitle);
-                yield return ArticleDatabase.FirstOrDefault(a => a.JStage_Id != null && a.JStage_Id == article!.JStage_Id);
-                yield return ArticleDatabase.FirstOrDefault(a => a.Manual_ArticleTitle != null && a.Manual_ArticleTitle == article!.Manual_ArticleTitle);
-
-                // 最終手段。
-                yield return ArticleDatabase.FirstOrDefault(a => a.AOI != null && a.AOI == article!.AOI);
-
+                updatedCount++;
+                articleDatabaseUpdated = true;
             }
 
-            void UpdateOrCretae()
+            // おかしい
+            else if (matchedArticles!.Count() > 1)
+                throw new InvalidDataException($"{matchedArticles!.Count()} articles matched to {article.ArticleTitle}");
+
+            // 新規登録
+            else
             {
-                foreach (var matchedArticle in matchedArticleFinder())
-                {
-                    // 更新・マージ
-                    if (matchedArticle != null)
-                    {
-                        matchedArticle.MergeInfo(article!);
-                        if (UtilConfig.ConsoleOutput_Contents)
-                            Console.WriteLine($"@@@ {article!.ArticleTitle}");
+                ArticleDatabase.Add(article!);
 
-                        updatedCount++;
-                        articleDatabaseUpdated = true;
-                        return;
-                    }
-                }
+                if (UtilConfig.ConsoleOutput_Contents)
+                    Console.WriteLine($"+++ {article!.ArticleTitle}");
 
-                // 新規登録
-                {
-                    ArticleDatabase.Add(article!);
-
-                    if (UtilConfig.ConsoleOutput_Contents)
-                        Console.WriteLine($"+++ {article!.ArticleTitle}");
-
-                    addedCount++;
-                    articleDatabaseUpdated = true;
-                }
-
-            };
-
-            UpdateOrCretae();
-
+                addedCount++;
+                articleDatabaseUpdated = true;
+            }
         }
 
 
