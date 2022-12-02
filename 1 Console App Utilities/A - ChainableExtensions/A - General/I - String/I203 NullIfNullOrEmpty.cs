@@ -6,7 +6,7 @@ public static partial class ChainableExtensions
 {
 
     /// <summary>
-    /// return Null if IsNullOrEmpty is true
+    /// Return null if IsNullOrEmpty() is true
     /// </summary>
     /// <param name="input"></param>
     /// <returns></returns>
