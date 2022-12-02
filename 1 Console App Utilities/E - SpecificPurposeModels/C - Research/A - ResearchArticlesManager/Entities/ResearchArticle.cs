@@ -27,7 +27,7 @@ public class ResearchArticle : IComparable
                 ?? JStage_ArticleTitle_English.NullIfNullOrEmpty()
 
                 // 最終手段。
-                ?? UnstructuredRefString.NullIfNullOrEmpty()
+                ?? ((UnstructuredRefString.NullIfNullOrEmpty() == null) ? null : "See UnstructuredRefString")
                 ?? null
                 ;
         }
@@ -43,7 +43,7 @@ public class ResearchArticle : IComparable
                 ?? JStage_Authors_English
 
                 // 最終手段。
-                ?? ((UnstructuredRefString == null) ? null : new string[] { UnstructuredRefString })
+                ?? ((UnstructuredRefString.NullIfNullOrEmpty() == null) ? null : new string[] { "See UnstructuredRefString" })
                 ?? null
                 ;
         }
