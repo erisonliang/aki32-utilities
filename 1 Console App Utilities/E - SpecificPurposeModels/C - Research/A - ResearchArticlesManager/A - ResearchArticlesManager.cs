@@ -67,7 +67,7 @@ public partial class ResearchArticlesManager
         }
     }
 
-    public void SaveDatabase(bool forceSaveArticleDatabase = false)
+    public void SaveDatabase(bool forceSaveArticleDatabase = true)
     {
         if (articleDatabaseUpdated || forceSaveArticleDatabase)
         {
