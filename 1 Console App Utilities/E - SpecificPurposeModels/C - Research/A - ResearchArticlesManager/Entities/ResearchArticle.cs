@@ -6,6 +6,7 @@ using Aki32_Utilities.General;
 using ClosedXML;
 
 using DocumentFormat.OpenXml.Bibliography;
+using DocumentFormat.OpenXml.Office2010.Ink;
 
 namespace Aki32_Utilities.SpecificPurposeModels.Research;
 public class ResearchArticle : IComparable
@@ -229,8 +230,20 @@ public class ResearchArticle : IComparable
         foreach (var prop in props)
         {
             var addingArticleInfoProp = prop.GetValue(addingArticleInfo);
-            if (addingArticleInfoProp != null)
-                prop.SetValue(this, addingArticleInfoProp);
+
+
+            if (prop.PropertyType == typeof(string))
+            {
+                if (addingArticleInfoProp?.ToString().NullIfNullOrEmpty() != null)
+                    prop.SetValue(this, addingArticleInfoProp);
+
+            }
+            else
+            {
+                if (addingArticleInfoProp != null)
+                    prop.SetValue(this, addingArticleInfoProp);
+
+            }
 
         }
 
