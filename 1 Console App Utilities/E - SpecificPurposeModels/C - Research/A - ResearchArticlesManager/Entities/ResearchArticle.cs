@@ -13,6 +13,12 @@ namespace Aki32_Utilities.SpecificPurposeModels.Research;
 public class ResearchArticle : IComparable
 {
 
+    // ★★★★★★★★★★★★★★★ field
+
+    private static readonly Range UNSTRUCTURED_REF_STRING_RANGE = ..130;
+    private static readonly Range GENERATED_PDF_FILE_NAME_RANGE = ^30..;
+
+
     // ★★★★★★★★★★★★★★★ prop
 
     // ★★★★★ shared info (*main common info)
@@ -28,7 +34,7 @@ public class ResearchArticle : IComparable
                 ?? JStage_ArticleTitle_English.NullIfNullOrEmpty()
 
                 // 最終手段。
-                ?? ((UnstructuredRefString.NullIfNullOrEmpty() == null) ? null : UnstructuredRefString!.Shorten(..30))
+                ?? ((UnstructuredRefString.NullIfNullOrEmpty() == null) ? null : UnstructuredRefString!.Shorten(UNSTRUCTURED_REF_STRING_RANGE))
                 ?? null
                 ;
         }
@@ -44,7 +50,7 @@ public class ResearchArticle : IComparable
                 ?? JStage_Authors_English
 
                 // 最終手段。
-                ?? ((UnstructuredRefString.NullIfNullOrEmpty() == null) ? null : new string[] { UnstructuredRefString!.Shorten(..30) })
+                ?? ((UnstructuredRefString.NullIfNullOrEmpty() == null) ? null : new string[] { UnstructuredRefString!.Shorten(UNSTRUCTURED_REF_STRING_RANGE) })
                 ?? null
                 ;
         }
@@ -109,7 +115,7 @@ public class ResearchArticle : IComparable
             if (!string.IsNullOrEmpty(PDF_Link))
             {
                 var candidate = PDF_Link.Replace("/", "_").Replace(":", "_");
-                yield return candidate.Shorten(^29..);
+                yield return candidate.Shorten(GENERATED_PDF_FILE_NAME_RANGE);
             }
 
         }
