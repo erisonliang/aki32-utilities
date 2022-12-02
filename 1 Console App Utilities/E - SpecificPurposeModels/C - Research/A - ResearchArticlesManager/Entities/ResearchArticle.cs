@@ -1,14 +1,7 @@
 ﻿using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
 
 using Aki32_Utilities.General;
 using Aki32_Utilities.UsefulClasses;
-
-using ClosedXML;
-
-using DocumentFormat.OpenXml.Bibliography;
-using DocumentFormat.OpenXml.Office2010.Ink;
 
 namespace Aki32_Utilities.SpecificPurposeModels.Research;
 public class ResearchArticle : IComparable
@@ -200,7 +193,6 @@ public class ResearchArticle : IComparable
     public string? JStage_Number { get; set; }
     public string? JStage_StartingPage { get; set; }
     public string? JStage_EndingPage { get; set; }
-
 
     public string? JStage_JOI { get; set; }
 

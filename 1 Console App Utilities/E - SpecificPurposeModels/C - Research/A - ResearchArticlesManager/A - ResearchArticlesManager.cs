@@ -1,12 +1,7 @@
-﻿using System.Diagnostics;
-using System.Xml.Linq;
+﻿using System.Xml.Linq;
 
 using Aki32_Utilities.General;
 using Aki32_Utilities.UsefulClasses;
-
-using iTextSharp.text.pdf;
-
-using LibGit2Sharp;
 
 using Newtonsoft.Json.Linq;
 

@@ -1,8 +1,5 @@
 ﻿
 
-using DocumentFormat.OpenXml.Bibliography;
-using DocumentFormat.OpenXml.Wordprocessing;
-
 namespace Aki32_Utilities.SpecificPurposeModels.Research;
 /// <summary>
 /// https://support.nii.ac.jp/ja/cir/r_opensearch
