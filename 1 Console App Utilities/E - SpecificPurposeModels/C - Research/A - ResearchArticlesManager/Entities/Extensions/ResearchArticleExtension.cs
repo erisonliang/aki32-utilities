@@ -19,12 +19,12 @@ public static class ResearchArticleExtension
     /// 
     /// </remarks>
     /// <param name="articles">Article List</param>
-    /// <param name="mergedArticle">Article that will be eventually remained</param>
+    /// <param name="baseArticle">Article that will be eventually remained</param>
     /// <param name="mergingArticle">Article that will be eventually deleted</param>
-    public static void MergeArticles(this List<ResearchArticle> articles, ResearchArticle mergedArticle, ResearchArticle mergingArticle)
+    public static void MergeArticles(this List<ResearchArticle> articles, ResearchArticle baseArticle, ResearchArticle mergingArticle)
     {
         // prerocess
-        if (!articles.Contains(mergedArticle))
+        if (!articles.Contains(baseArticle))
             throw new InvalidDataException("{mergedArticle} need to be in {articles}");
 
 
@@ -45,13 +45,13 @@ public static class ResearchArticleExtension
             if (prop.PropertyType == typeof(string))
             {
                 if (addingArticleInfoProp?.ToString().NullIfNullOrEmpty() != null)
-                    prop.SetValue(mergedArticle, addingArticleInfoProp);
+                    prop.SetValue(baseArticle, addingArticleInfoProp);
 
             }
             else
             {
                 if (addingArticleInfoProp != null)
-                    prop.SetValue(mergedArticle, addingArticleInfoProp);
+                    prop.SetValue(baseArticle, addingArticleInfoProp);
 
             }
 

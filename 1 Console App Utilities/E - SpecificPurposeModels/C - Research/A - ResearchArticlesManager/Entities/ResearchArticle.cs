@@ -274,13 +274,20 @@ public class ResearchArticle : IComparable
         return raddingArticle;
     }
 
-    public void AddArticleReference(ResearchArticle addingArticle)
+    /// <summary>
+    /// Add reference connection info to Article.
+    /// </summary>
+    /// <param name="referredArticle">
+    /// Article that is begin referred. 
+    /// 参照される側の論文。
+    /// </param>
+    public void AddArticleReference(ResearchArticle referredArticle)
     {
         // Add DOI or AOI to ReferenceDOIs.
         ReferenceDOIs ??= Array.Empty<string>();
 
         ReferenceDOIs = ReferenceDOIs
-            .Append(addingArticle.DOI ?? (addingArticle.AOI ??= Guid.NewGuid().ToString()))!
+            .Append(referredArticle.DOI ?? (referredArticle.AOI ??= Guid.NewGuid().ToString()))!
             .Distinct()
             .ToArray()
             ;

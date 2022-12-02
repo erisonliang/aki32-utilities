@@ -92,8 +92,8 @@ public static partial class ChainableExtensions
                 }
                 else if (propType == typeof(bool?))
                 {
-                    // Since JsonConvert.DeserializeObject does not accept upper bool.
                     // If csv has been processed by Excel, true/false automatically turned into TRUE/FALSE...
+                    // and since JsonConvert.DeserializeObject does not accept TRUE/FALSE, explicitly defined to convert to true/false.
                     settingItem = JsonConvert.DeserializeObject(csvLine[index].ToLower(), propType, (JsonSerializerSettings?)null)!;
                 }
                 else
