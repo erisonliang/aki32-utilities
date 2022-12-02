@@ -281,10 +281,10 @@ public class ResearchArticle : IComparable
     public void AddArticleReference(ResearchArticle addingArticle)
     {
         // Add DOI or AOI to ReferenceDOIs.
-        ReferenceDOIs =
-            (ReferenceDOIs ?? Array.Empty<string>())
-            .Append(addingArticle.DOI ?? (addingArticle.AOI = Guid.NewGuid().ToString()))!
-            .ToArray();
+        ReferenceDOIs ??= Array.Empty<string>();
+
+        if (!ReferenceDOIs.Any(a => a.Equals(addingArticle)))
+            ReferenceDOIs = ReferenceDOIs.Append(addingArticle.DOI ?? (addingArticle.AOI = Guid.NewGuid().ToString()))!.ToArray();
 
     }
 
