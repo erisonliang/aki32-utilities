@@ -29,7 +29,7 @@ public static class ResearchArticleExtension
 
 
         // main
-        var props = typeof(ResearchArticle).GetType()
+        var props = typeof(ResearchArticle)
             .GetProperties()
             .Where(p => !p.HasAttribute<CsvIgnoreAttribute>())
             .Where(p => p.CanWrite)
