@@ -259,7 +259,7 @@ public partial class ResearchArticlesManager
         // main
         foreach (var article in articles)
         {
-            var matchedArticles = ArticleDatabase.Where(a => a.Equals(article));
+            var matchedArticles = ArticleDatabase.Where(a => a.CompareTo(article) == 0);
 
             // 更新・マージ
             if (matchedArticles != null && matchedArticles.Count() == 1)
