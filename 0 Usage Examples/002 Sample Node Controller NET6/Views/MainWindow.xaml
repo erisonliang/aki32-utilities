@@ -7,13 +7,14 @@
         xmlns:vm="clr-namespace:Aki32Utilities.UsageExamples.SampleNodeController.ViewModels"
         xmlns:ctrl="clr-namespace:Aki32Utilities.WPFAppUtilities.NodeController.Controls;assembly=NodeController"
         mc:Ignorable="d"
-        Title="NodeGraph - prototype" Height="600" Width="1000">
+        Title="Research Articles Node Controll" Height="600" Width="1000">
 
     <Window.DataContext>
         <vm:MainWindowViewModel/>
     </Window.DataContext>
 
     <Window.Resources>
+
         <ContextMenu x:Key="NodeGraphContextMenu">
             <MenuItem Header="AddNode" Command="{Binding AddNodeCommand}"/>
             <MenuItem Header="AddGroupNode" Command="{Binding AddGroupNodeCommand}"/>
@@ -38,7 +39,8 @@
             <Setter Property="OutputConnectorGuid" Value="{Binding OutputConnectorGuid, Mode=OneWay}"/>
             <Setter Property="InputConnectorGuid" Value="{Binding InputConnectorGuid, Mode=OneWay}"/>
             <Setter Property="IsLocked" Value="{Binding IsLocked, Mode=OneWay}"/>
-            <Setter Property="IsSelected" Value="{Binding IsSelected}"/> <!--dont need to specify Mode=TwoWay because link is set default two way property.-->
+            <Setter Property="IsSelected" Value="{Binding IsSelected}"/>
+            <!--dont need to specify Mode=TwoWay because link is set default two way property.-->
         </Style>
 
         <Style x:Key="DefaultNodeStyle" TargetType="{x:Type ctrl:DefaultNode}" BasedOn="{StaticResource {x:Type ctrl:DefaultNode}}">
@@ -59,9 +61,14 @@
                 <Setter.Value>
                     <DataTemplate>
                         <StackPanel Background="#FF666666">
-                            <StackPanel HorizontalAlignment="Center">
-                                <Label Content="{Binding Name}"/>
-                            </StackPanel>
+                            <Grid>
+                                <StackPanel HorizontalAlignment="Center">
+                                    <Label Content="{Binding Name}"/>
+                                </StackPanel>
+                                <StackPanel HorizontalAlignment="Left">
+                                    <Label Content="★"/>
+                                </StackPanel>
+                            </Grid>
                         </StackPanel>
                     </DataTemplate>
                 </Setter.Value>
@@ -69,12 +76,49 @@
             <Setter Property="ContentTemplate">
                 <Setter.Value>
                     <DataTemplate>
-                        <StackPanel>
-                            <TextBox Text="{Binding Body}"/>
-                            <DockPanel TextBlock.Foreground="WhiteSmoke">
-                                <TextBlock Margin="0,0,0,4" Text="{Binding Width, StringFormat=Width:{0:F2}}"/>
-                                <TextBlock Margin="4,0,0,0" Text="{Binding Height, StringFormat=Height:{0:F2}}"/>
-                            </DockPanel>
+
+                        <!-- グリッド内に表示する情報 -->
+                        <StackPanel TextBlock.Foreground="White">
+
+                            <Grid MinWidth="300" MaxWidth="500" Margin="5">
+
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="5"/>
+                                    <ColumnDefinition Width="3*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+
+                                <TextBlock Grid.Row="0" Grid.Column="0" Text="幅:" HorizontalAlignment="Right"/>
+                                <TextBlock Grid.Row="0" Grid.Column="2" Text="{Binding Width}"/>
+
+                                <TextBlock Grid.Row="1" Grid.Column="0" Text="高さ:" HorizontalAlignment="Right"/>
+                                <TextBlock Grid.Row="1" Grid.Column="2" Text="{Binding Height}"/>
+
+                                <TextBlock Grid.Row="2" Grid.Column="0" Text="メモ:" HorizontalAlignment="Right"/>
+                                <TextBox Grid.Row="2" Grid.Column="2" Text="{Binding Memo}" AcceptsReturn="True" TextWrapping="Wrap"/>
+                                <TextBlock Grid.Row="3" Grid.Column="2" Text="{Binding Memo}" TextWrapping="Wrap"/>
+
+                                <Button Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="3" Content="PDFを表示"/>
+
+                                
+                                
+                                
+                                
+                                
+                                
+                                
+                                
+                                
+                            </Grid>
+
                         </StackPanel>
                     </DataTemplate>
                 </Setter.Value>
@@ -105,14 +149,18 @@
                 </Setter.Value>
             </Setter>
         </Style>
+
     </Window.Resources>
 
     <Grid>
+
         <Grid.RowDefinitions>
             <RowDefinition Height="64"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
+
         <StackPanel Grid.Row="0">
+
             <DockPanel LastChildFill="False">
                 <Button Margin="4" Height="24" Content="AddTestNodeLink" Command="{Binding AddTestNodeLinkCommand}"/>
                 <Button Margin="4" Height="24" Content="MoveTestNode" Command="{Binding MoveTestNodesCommand}"/>
@@ -125,30 +173,34 @@
             </DockPanel>
 
             <DockPanel>
+
+
+                <!-- コピペ用に残す。 -->
                 <ComboBox Margin="4" Height="24" ItemsSource="{Binding GroupIntersectTypes, Mode=OneTime}" SelectedItem="{Binding SelectedGroupIntersectType}" ToolTip="group intersection type."/>
                 <ComboBox Margin="4" Height="24" ItemsSource="{Binding RangeSelectionModes, Mode=OneTime}" SelectedItem="{Binding SelectedRangeSelectionMode}" ToolTip="range selection mode."/>
                 <CheckBox Margin="4" Height="24" Content="IsLockedAllNodeLinks" IsChecked="{Binding IsLockedAllNodeLinks}" VerticalContentAlignment="Center"/>
                 <CheckBox Margin="4" Height="24" Content="IsEnableAllNodeConnectors" IsChecked="{Binding IsEnableAllNodeConnectors}" VerticalContentAlignment="Center"/>
-                <CheckBox Margin="4" Height="24" Content="AllowToOverrideConnection" IsChecked="{Binding AllowToOverrideConnection}" VerticalContentAlignment="Center" ToolTip="You can't connect multiple links if true."/>
-                <CheckBox Margin="4" Height="24" Content="ClipToBounds" IsChecked="{Binding ClipToBounds}" VerticalContentAlignment="Center"/>
             </DockPanel>
+
         </StackPanel>
-        <ctrl:NodeGraph Grid.Row="3"
-                        x:Name="NodeGraph"
-                        MoveWithMouse="Right"
-                        Scale="{Binding Scale}"
-                        ItemsSource="{Binding NodeViewModels}"
-                        ItemContainerStyle="{StaticResource DefaultNodeStyle}"
-                        NodeLinks="{Binding NodeLinkViewModels}"
-                        NodeLinkStyle="{StaticResource NodeLinkStyle}"                        
-                        GroupNodes="{Binding GroupNodeViewModels}"
-                        GroupNodeStyle="{StaticResource GroupNodeStyle}"
-                        PreviewConnectLinkCommand="{Binding PreviewConnectLinkCommand}"
-                        ConnectedLinkCommand="{Binding ConnectedLinkCommand}"
-                        DisconnectedLinkCommand="{Binding DisconnectedLinkCommand}"
-                        AllowToOverrideConnection="{Binding AllowToOverrideConnection}"
-                        ClipToBounds="{Binding ClipToBounds}"
-                        ContextMenu="{StaticResource NodeGraphContextMenu}">
+
+        <ctrl:NodeGraph
+            Grid.Row="3"
+            x:Name="NodeGraph"
+            MoveWithMouse="Right"
+            Scale="{Binding Scale}"
+            ItemsSource="{Binding NodeViewModels}"
+            ItemContainerStyle="{StaticResource DefaultNodeStyle}"
+            NodeLinks="{Binding NodeLinkViewModels}"
+            NodeLinkStyle="{StaticResource NodeLinkStyle}"
+            GroupNodes="{Binding GroupNodeViewModels}"
+            GroupNodeStyle="{StaticResource GroupNodeStyle}"
+            PreviewConnectLinkCommand="{Binding PreviewConnectLinkCommand}"
+            ConnectedLinkCommand="{Binding ConnectedLinkCommand}"
+            DisconnectedLinkCommand="{Binding DisconnectedLinkCommand}"
+            AllowToOverrideConnection="False"
+            ClipToBounds="True"
+            ContextMenu="{StaticResource NodeGraphContextMenu}">
 
             <ctrl:NodeGraph.Style>
                 <Style TargetType="{x:Type ctrl:NodeGraph}" BasedOn="{StaticResource {x:Type ctrl:NodeGraph}}">
@@ -171,12 +223,13 @@
                     </Style.Triggers>
                 </Style>
             </ctrl:NodeGraph.Style>
-            
+
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="SelectionChanged">
                     <i:InvokeCommandAction Command="{Binding SelectionChangedCommand}" CommandParameter="{Binding SelectedItems, ElementName=NodeGraph}"/>
                 </i:EventTrigger>
             </i:Interaction.Triggers>
         </ctrl:NodeGraph>
+
     </Grid>
 </Window>

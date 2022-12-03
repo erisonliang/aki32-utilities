@@ -1,61 +1,55 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Media;
 using System.Windows.Shapes;
 
-namespace Aki32Utilities.WPFAppUtilities.NodeController.Controls
+namespace Aki32Utilities.WPFAppUtilities.NodeController.Controls;
+
+public class RangeSelector : Shape
 {
-    public class RangeSelector : Shape
+    public Rect RangeRect
     {
-        public Rect RangeRect
-        {
-            get => (Rect)GetValue(RangeRectProperty);
-            set => SetValue(RangeRectProperty, value);
-        }
-        public static readonly DependencyProperty RangeRectProperty = DependencyProperty.Register(
-            nameof(RangeRect),
-            typeof(Rect),
-            typeof(RangeSelector),
-            new FrameworkPropertyMetadata(new Rect(), FrameworkPropertyMetadataOptions.AffectsRender));
+        get => (Rect)GetValue(RangeRectProperty);
+        set => SetValue(RangeRectProperty, value);
+    }
+    public static readonly DependencyProperty RangeRectProperty = DependencyProperty.Register(
+        nameof(RangeRect),
+        typeof(Rect),
+        typeof(RangeSelector),
+        new FrameworkPropertyMetadata(new Rect(), FrameworkPropertyMetadataOptions.AffectsRender));
 
-        public bool IsIntersects
-        {
-            get => (bool)GetValue(IsIntersectsProperty);
-            set => SetValue(IsIntersectsProperty, value);
-        }
-        public static readonly DependencyProperty IsIntersectsProperty = DependencyProperty.Register(
-            nameof(IsIntersects),
-            typeof(bool),
-            typeof(RangeSelector),
-            new FrameworkPropertyMetadata(false));
+    public bool IsIntersects
+    {
+        get => (bool)GetValue(IsIntersectsProperty);
+        set => SetValue(IsIntersectsProperty, value);
+    }
+    public static readonly DependencyProperty IsIntersectsProperty = DependencyProperty.Register(
+        nameof(IsIntersects),
+        typeof(bool),
+        typeof(RangeSelector),
+        new FrameworkPropertyMetadata(false));
 
-        protected override Geometry DefiningGeometry => Geometry.Empty;
+    protected override Geometry DefiningGeometry => Geometry.Empty;
 
-        Pen _StrokePen = null;
+    Pen _StrokePen = null;
 
-        static RangeSelector()
-        {
-            DefaultStyleKeyProperty.OverrideMetadata(typeof(RangeSelector), new FrameworkPropertyMetadata(typeof(RangeSelector)));
-        }
+    static RangeSelector()
+    {
+        DefaultStyleKeyProperty.OverrideMetadata(typeof(RangeSelector), new FrameworkPropertyMetadata(typeof(RangeSelector)));
+    }
 
-        public void Reset(Point pos)
-        {
-            RangeRect = new Rect(pos, Size.Empty);
-            IsIntersects = false;
-        }
+    public void Reset(Point pos)
+    {
+        RangeRect = new Rect(pos, Size.Empty);
+        IsIntersects = false;
+    }
 
-        protected override void OnRender(DrawingContext drawingContext)
-        {
-            base.OnRender(drawingContext);
+    protected override void OnRender(DrawingContext drawingContext)
+    {
+        base.OnRender(drawingContext);
 
-            _StrokePen = new Pen(Stroke, StrokeThickness);
-            _StrokePen.Freeze();
+        _StrokePen = new Pen(Stroke, StrokeThickness);
+        _StrokePen.Freeze();
 
-            drawingContext.DrawRectangle(Fill, _StrokePen, RangeRect);
-        }
+        drawingContext.DrawRectangle(Fill, _StrokePen, RangeRect);
     }
 }

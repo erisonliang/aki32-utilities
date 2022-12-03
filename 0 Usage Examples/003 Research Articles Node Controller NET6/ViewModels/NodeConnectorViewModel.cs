@@ -1,37 +1,36 @@
 ﻿using Livet;
 
-namespace Aki32Utilities.UsageExamples.ResearchArticlesNodeController.ViewModels
+namespace Aki32Utilities.UsageExamples.ResearchArticlesNodeController.ViewModels;
+
+public interface NodeConnectorViewModel
 {
-    public interface NodeConnectorViewModel
+    Guid Guid { get; set; }
+    string Label { get; set; }
+    bool IsEnable { get; set; }
+}
+
+public class NodeInputViewModel : ViewModel, NodeConnectorViewModel
+{
+    public Guid Guid { get; set; } = Guid.NewGuid();
+    public string Label { get; set; } = string.Empty;
+    public bool IsEnable { get; set; } = true;
+    public bool AllowToConnectMultiple { get; set; } = false;
+
+    public NodeInputViewModel(string label, bool allowToConnectMultiple)
     {
-        Guid Guid { get; set; }
-        string Label { get; set; }
-        bool IsEnable { get; set; }
+        Label = label;
+        AllowToConnectMultiple = allowToConnectMultiple;
     }
+}
 
-    public class NodeInputViewModel : ViewModel, NodeConnectorViewModel
+public class NodeOutputViewModel : ViewModel, NodeConnectorViewModel
+{
+    public Guid Guid { get; set; } = Guid.NewGuid();
+    public string Label { get; set; } = string.Empty;
+    public bool IsEnable { get; set; } = true;
+
+    public NodeOutputViewModel(string label)
     {
-        public Guid Guid { get; set; } = Guid.NewGuid();
-        public string Label { get; set; } = string.Empty;
-        public bool IsEnable { get; set; } = true;
-        public bool AllowToConnectMultiple { get; set; } = false;
-
-        public NodeInputViewModel(string label, bool allowToConnectMultiple)
-        {
-            Label = label;
-            AllowToConnectMultiple = allowToConnectMultiple;
-        }
-    }
-
-    public class NodeOutputViewModel : ViewModel, NodeConnectorViewModel
-    {
-        public Guid Guid { get; set; } = Guid.NewGuid();
-        public string Label { get; set; } = string.Empty;
-        public bool IsEnable { get; set; } = true;
-
-        public NodeOutputViewModel(string label)
-        {
-            Label = label;
-        }
+        Label = label;
     }
 }

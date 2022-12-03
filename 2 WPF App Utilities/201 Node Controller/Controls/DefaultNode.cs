@@ -1,23 +1,13 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Aki32Utilities.WPFAppUtilities.NodeController.Controls;
+
 public class DefaultNode : NodeBase
 {
     public DataTemplate HeaderContentTemplate
@@ -25,7 +15,11 @@ public class DefaultNode : NodeBase
         get => (DataTemplate)GetValue(HeaderContentTemplateProperty);
         set => SetValue(HeaderContentTemplateProperty, value);
     }
-    public static readonly DependencyProperty HeaderContentTemplateProperty = DependencyProperty.Register(nameof(HeaderContentTemplate), typeof(DataTemplate), typeof(DefaultNode), new FrameworkPropertyMetadata(null));
+    public static readonly DependencyProperty HeaderContentTemplateProperty = DependencyProperty.Register(
+        nameof(HeaderContentTemplate),
+        typeof(DataTemplate),
+        typeof(DefaultNode),
+        new FrameworkPropertyMetadata(null));
 
     public Thickness ContentMargin
     {

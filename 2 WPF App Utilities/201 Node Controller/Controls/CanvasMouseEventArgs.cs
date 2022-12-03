@@ -7,6 +7,7 @@ using System.Windows;
 using System.Windows.Input;
 
 namespace Aki32Utilities.WPFAppUtilities.NodeController.Controls;
+
 public class CanvasMouseEventArgs : EventArgs
 {
     // This position has taken scale and offset into account.

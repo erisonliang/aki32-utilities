@@ -1,30 +1,25 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Aki32Utilities.WPFAppUtilities.NodeController.Operation
+namespace Aki32Utilities.WPFAppUtilities.NodeController.Operation;
+
+public class PreviewConnectOperationEventArgs
 {
-    public class PreviewConnectOperationEventArgs
+    public bool CanConnect { get; set; } = true;
+
+    public Guid ConnectStartNodeGuid { get; } = Guid.Empty;
+    public Guid ConnectStartConnectorGuid { get; } = Guid.Empty;
+    public Guid ConnectToEndNodeGuid { get; } = Guid.Empty;
+    public Guid ConnectToEndConnectorGuid { get; } = Guid.Empty;
+
+    public PreviewConnectOperationEventArgs(
+        Guid connectStartNodeGuid,
+        Guid connectStartConnectorGuid,
+        Guid connectToEndNodeGuid,
+        Guid connectToEndConnectorGuid)
     {
-        public bool CanConnect { get; set; } = true;
-
-        public Guid ConnectStartNodeGuid { get; } = Guid.Empty;
-        public Guid ConnectStartConnectorGuid { get; } = Guid.Empty;
-        public Guid ConnectToEndNodeGuid { get; } = Guid.Empty;
-        public Guid ConnectToEndConnectorGuid { get; } = Guid.Empty;
-
-        public PreviewConnectOperationEventArgs(
-            Guid connectStartNodeGuid,
-            Guid connectStartConnectorGuid,
-            Guid connectToEndNodeGuid,
-            Guid connectToEndConnectorGuid)
-        {
-            ConnectStartNodeGuid = connectStartNodeGuid;
-            ConnectStartConnectorGuid = connectStartConnectorGuid;
-            ConnectToEndNodeGuid = connectToEndNodeGuid;
-            ConnectToEndConnectorGuid = connectToEndConnectorGuid;
-        }
+        ConnectStartNodeGuid = connectStartNodeGuid;
+        ConnectStartConnectorGuid = connectStartConnectorGuid;
+        ConnectToEndNodeGuid = connectToEndNodeGuid;
+        ConnectToEndConnectorGuid = connectToEndConnectorGuid;
     }
 }

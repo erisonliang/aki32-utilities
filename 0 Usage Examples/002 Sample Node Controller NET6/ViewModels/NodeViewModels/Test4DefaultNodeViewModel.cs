@@ -1,10 +1,10 @@
-﻿using Aki32Utilities.UsageExamples.ResearchArticlesNodeController.ViewModels;
+﻿using Aki32Utilities.UsageExamples.SampleNodeController.ViewModels;
 
 using System.Collections.ObjectModel;
 
 namespace Aki32_Utilities.ViewModels.NodeViewModels;
 
-public class Test3DefaultNodeViewModel : DefaultNodeViewModel
+public class Test4DefaultNodeViewModel : DefaultNodeViewModel
 {
     public string Name { get; set; }
     public string Memo { get; set; }
@@ -15,17 +15,21 @@ public class Test3DefaultNodeViewModel : DefaultNodeViewModel
     public override IEnumerable<NodeConnectorViewModel> Outputs => _Outputs;
     readonly ObservableCollection<NodeOutputViewModel> _Outputs = new();
 
-    public Test3DefaultNodeViewModel()
+    public Test4DefaultNodeViewModel()
     {
-        for (int i = 0; i < 2; ++i)
+        for (int i = 0; i < 5; ++i)
         {
-            _Outputs.Add(new NodeOutputViewModel($"Output{i}"));
+            var label = $"Input{i}";
+            if (i > 2)
+            {
+                label += " Allow to connect multiple";
+            }
+            _Inputs.Add(new NodeInputViewModel(label, i > 2));
         }
     }
 
     public override NodeConnectorViewModel FindConnector(Guid guid)
     {
-        return Outputs.FirstOrDefault(arg => arg.Guid == guid);
+        return Inputs.FirstOrDefault(arg => arg.Guid == guid);
     }
-
 }

@@ -1,16 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
 
-namespace Aki32Utilities.WPFAppUtilities.NodeController.Controls
+namespace Aki32Utilities.WPFAppUtilities.NodeController.Controls;
+
+public interface ICanvasObject : IDisposable
 {
-    public interface ICanvasObject : IDisposable
-    {
-        Guid Guid { get; set; }
-        void UpdateOffset(Point offset);
-    }
+    Guid Guid { get; set; }
+    void UpdateOffset(Point offset);
 }

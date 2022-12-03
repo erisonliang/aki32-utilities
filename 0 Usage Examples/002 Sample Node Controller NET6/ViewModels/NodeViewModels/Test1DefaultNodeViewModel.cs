@@ -1,10 +1,10 @@
-﻿using Aki32Utilities.UsageExamples.ResearchArticlesNodeController.ViewModels;
+﻿using Aki32Utilities.UsageExamples.SampleNodeController.ViewModels;
 
 using System.Collections.ObjectModel;
 
 namespace Aki32_Utilities.ViewModels.NodeViewModels;
 
-public class Test2DefaultNodeViewModel : DefaultNodeViewModel
+public class Test1DefaultNodeViewModel : DefaultNodeViewModel
 {
     public string Name { get; set; }
     public string Memo { get; set; }
@@ -15,19 +15,26 @@ public class Test2DefaultNodeViewModel : DefaultNodeViewModel
     public override IEnumerable<NodeConnectorViewModel> Outputs => _Outputs;
     readonly ObservableCollection<NodeOutputViewModel> _Outputs = new();
 
-    public Test2DefaultNodeViewModel()
+    public Test1DefaultNodeViewModel()
     {
-        for (int i = 0; i < 5; ++i)
+        for (int i = 0; i < 4; ++i)
         {
-            var label = $"Input{i}";
-            if (i > 2)
+            if (i % 2 == 0)
             {
-                label += " Allow to connect multiple";
+                var label = $"Input{i}";
+                if (i > 1)
+                {
+                    label += " Allow to connect multiple";
+                }
+                _Inputs.Add(new NodeInputViewModel(label, i > 1));
             }
-            _Inputs.Add(new NodeInputViewModel(label, i > 2));
+            else
+            {
+                _Inputs.Add(new NodeInputViewModel($"Limited Input", false));
+            }
         }
 
-        for (int i = 0; i < 2; ++i)
+        for (int i = 0; i < 5; ++i)
         {
             _Outputs.Add(new NodeOutputViewModel($"Output{i}"));
         }
@@ -37,9 +44,7 @@ public class Test2DefaultNodeViewModel : DefaultNodeViewModel
     {
         var input = Inputs.FirstOrDefault(arg => arg.Guid == guid);
         if (input != null)
-        {
             return input;
-        }
 
         var output = Outputs.FirstOrDefault(arg => arg.Guid == guid);
         return output;
