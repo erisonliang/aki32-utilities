@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Aki32_Utilities.SpecificPurposeModels.StructuralEngineering;
+namespace Aki32_Utilities.Console_App_Utilities.SpecificPurposeModels.StructuralEngineering;
 public static class DynamicProHelper
 {
     // ★★★★★★★★★★★★★★★ main

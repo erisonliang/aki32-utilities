@@ -1,6 +1,6 @@
 ﻿
 
-namespace Aki32_Utilities.SpecificPurposeModels.Research;
+namespace Aki32_Utilities.Console_App_Utilities.SpecificPurposeModels.Research;
 public static class ISSN
 {
 

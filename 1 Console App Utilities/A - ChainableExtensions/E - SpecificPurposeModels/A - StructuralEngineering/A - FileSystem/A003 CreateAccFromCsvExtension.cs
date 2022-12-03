@@ -1,7 +1,7 @@
-﻿using Aki32_Utilities.General;
-using Aki32_Utilities.SpecificPurposeModels.StructuralEngineering;
+﻿using Aki32_Utilities.Console_App_Utilities.General;
+using Aki32_Utilities.Console_App_Utilities.SpecificPurposeModels.StructuralEngineering;
 
-namespace Aki32_Utilities.SpecificPurposeModels.StructuralEngineering;
+namespace Aki32_Utilities.Console_App_Utilities.SpecificPurposeModels.StructuralEngineering;
 public static partial class ChainableExtensions
 {
 

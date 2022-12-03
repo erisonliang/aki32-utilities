@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Threading.Tasks;
 
-using Aki32_Utilities.ExternalAPIControllers;
-using Aki32_Utilities.General;
-using Aki32_Utilities.OwesomeModels;
-using Aki32_Utilities.OwesomeModels.ChainableExtensions;
-using Aki32_Utilities.SpecificPurposeModels.StructuralEngineering;
-using Aki32_Utilities.UsefulClasses;
+using Aki32_Utilities.Console_App_Utilities.ExternalAPIControllers;
+using Aki32_Utilities.Console_App_Utilities.General;
+using Aki32_Utilities.Console_App_Utilities.OwesomeModels;
+using Aki32_Utilities.Console_App_Utilities.OwesomeModels.ChainableExtensions;
+using Aki32_Utilities.Console_App_Utilities.SpecificPurposeModels.StructuralEngineering;
+using Aki32_Utilities.Console_App_Utilities.UsefulClasses;
 
-namespace Aki32_Utilities.UsageExamples;
+namespace Aki32_Utilities.Console_App_Utilities.UsageExamples;
 public class Memo
 {
 

@@ -5,6 +5,12 @@ VisualStudioVersion = 17.2.32526.322
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "1 Console App Utilities", "1 Console App Utilities\1 Console App Utilities.csproj", "{43AF90B7-76CB-49DA-B1B3-85A9F5EBD8D6}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "0 Usage Examples", "0 Usage Examples", "{E70FBD90-F1AF-4B1A-8166-4635EAEE4D9B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2 WPF App Utilities", "2 WPF App Utilities", "{6B224D67-E18F-4B9A-8286-E075E2C665C0}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1 Console App Utilities", "1 Console App Utilities", "{12CA4997-7908-4FE0-982F-2FC56A7CC832}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,6 +24,9 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{43AF90B7-76CB-49DA-B1B3-85A9F5EBD8D6} = {12CA4997-7908-4FE0-982F-2FC56A7CC832}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E6152233-E9D8-4E47-935B-F8AE00F7FD90}

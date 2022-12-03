@@ -8,7 +8,7 @@ using ClosedXML;
 
 using Newtonsoft.Json;
 
-namespace Aki32_Utilities.General;
+namespace Aki32_Utilities.Console_App_Utilities.General;
 public static partial class ChainableExtensions
 {
 

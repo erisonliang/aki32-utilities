@@ -1,6 +1,6 @@
 ﻿using System.Net;
 
-namespace Aki32_Utilities.UsefulClasses;
+namespace Aki32_Utilities.Console_App_Utilities.UsefulClasses;
 public static partial class ChainableExtensions
 {
 
