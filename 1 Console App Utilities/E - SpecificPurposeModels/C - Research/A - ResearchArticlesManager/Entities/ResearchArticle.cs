@@ -3,6 +3,8 @@
 using Aki32Utilities.ConsoleAppUtilities.General;
 using Aki32Utilities.ConsoleAppUtilities.UsefulClasses;
 
+using ClosedXML;
+
 namespace Aki32Utilities.ConsoleAppUtilities.SpecificPurposeModels.Research;
 public class ResearchArticle : IComparable
 {
@@ -55,22 +57,26 @@ public class ResearchArticle : IComparable
                 ;
         }
     }
-
-    public string? DOI { get; set; }
-    public string[]? ReferenceDOIs { get; set; }
-
-    private string? __UnstructuredRefString;
-    public string? UnstructuredRefString
+    public string? Description
     {
         get
         {
-            return __UnstructuredRefString;
-        }
-        set
-        {
-            __UnstructuredRefString = value;
+            return null
+                ?? Manual_Description.NullIfNullOrEmpty()
+                ?? CiNii_Description.NullIfNullOrEmpty()
+
+                // 英語は後回し
+
+
+                // 最終手段。
+                ?? null
+                ;
         }
     }
+
+    public string? DOI { get; set; }
+    public string[]? ReferenceDOIs { get; set; }
+    public string? UnstructuredRefString { get; set; }
 
     public string? PrintISSN { get; set; }
     public string? OnlineISSN { get; set; }
@@ -127,7 +133,6 @@ public class ResearchArticle : IComparable
 
 
 
-
     // ★★★★★ original meta info
 
     /// <summary>
@@ -142,11 +147,10 @@ public class ResearchArticle : IComparable
 
     /// <summary>
     /// Aki32 Object Identifier
-    /// When DOI does not exist, automatically create AOI to connect ref data.
-    /// 
-    /// Put your pdf in {LocalPath}\PDFs\Manual\{ManuallyAddedPdfName}.pdf
+    /// All object has its own AOI.
     /// </summary>
     /// <remarks>
+    /// 全ての要素に対して発行。
     /// AOIで接続するのは，本当に最終手段。
     /// </remarks>
     public string? AOI { get; set; }
@@ -156,6 +160,8 @@ public class ResearchArticle : IComparable
 
     public string? Manual_ArticleTitle { get; set; }
     public string[]? Manual_Authors { get; set; }
+    public string? Manual_Description { get; set; }
+
     public string? Manual_CreatedDate { get; set; }
 
     public string? Memo { get; set; }
@@ -224,6 +230,12 @@ public class ResearchArticle : IComparable
     public string? CiNii_StartingPage { get; set; }
     public string? CiNii_EndingPage { get; set; }
 
+    // ★★★★★★★★★★★★★★★ init
+
+    public ResearchArticle()
+    {
+        AOI = Guid.NewGuid().ToString();
+    }
 
 
     // ★★★★★★★★★★★★★★★ method (data handling)
@@ -246,7 +258,7 @@ public class ResearchArticle : IComparable
         bool movePdfFile = true
         )
     {
-        // AOI creation
+        // Create AOI first
         var aoi = Guid.NewGuid().ToString();
 
         // stock pdf file to database
@@ -368,6 +380,83 @@ public class ResearchArticle : IComparable
         {
             ConsoleExtension.WriteLineWithColor($"Failed: {ex.Message}", ConsoleColor.Red);
         }
+    }
+
+    /// <summary>
+    /// 
+    /// Merge two ResearchArticle instances.
+    /// 
+    /// </summary>
+    /// <remarks>
+    /// 
+    /// 後からの情報が優先（最新）
+    /// 
+    /// </remarks>
+    /// <param name="mergingArticle">Article that will be merged and eventually deleted</param>
+    /// <param name="articles">If given, this method will make sure to delete {mergingArticle} from this list for you</param>
+    public void MergeArticles(ResearchArticle mergingArticle, List<ResearchArticle>? articles = null)
+    {
+        // prerocess
+        if (articles != null && !articles!.Contains(this))
+            throw new InvalidDataException("{mergedArticle} need to be in {articles}");
+
+
+        // main
+        var props = typeof(ResearchArticle)
+            .GetProperties()
+            .Where(p => !p.HasAttribute<CsvIgnoreAttribute>())
+            .Where(p => p.CanWrite)
+            .Where(p => p.Name != "DOI")
+            .Where(p => p.Name != "AOI")
+            ;
+
+
+        // DOIが存在する場合は，最優先で採用。
+        // AOIは，前の情報を正とする。
+        if (DOI != null)
+        {
+            if (mergingArticle.DOI != null && DOI != mergingArticle.DOI)
+                throw new InvalidDataException("DOIが異なる2つがマージされようとしました。");
+        }
+        else if (mergingArticle.DOI != null)
+            DOI = mergingArticle.DOI;
+
+
+        // 後からの情報優先で上書き。
+        foreach (var prop in props)
+        {
+            var addingArticleInfoProp = prop.GetValue(mergingArticle);
+
+            if (prop.PropertyType == typeof(string))
+            {
+                if (addingArticleInfoProp?.ToString().NullIfNullOrEmpty() != null)
+                    prop.SetValue(this, addingArticleInfoProp);
+
+            }
+            else
+            {
+                if (addingArticleInfoProp != null)
+                    prop.SetValue(this, addingArticleInfoProp);
+
+            }
+
+        }
+
+        //delete
+        if (articles != null && articles.Contains(mergingArticle))
+        {
+            // Ref整合性。消す場合はRefから消したい。つまり，前のやつのAOIを今のAOIに書き換える。
+
+            articles = articles.Select(a =>
+            {
+                if (a.ReferenceDOIs != null && a.ReferenceDOIs.Contains(mergingArticle.AOI))
+                    a.ReferenceDOIs = a.ReferenceDOIs.Select(r => r.Replace(mergingArticle.AOI, AOI)).ToArray();
+                return a;
+            }).ToList();
+
+            articles.Remove(mergingArticle);
+        }
+
     }
 
 
