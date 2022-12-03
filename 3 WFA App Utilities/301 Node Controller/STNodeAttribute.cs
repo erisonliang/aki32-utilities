@@ -14,49 +14,27 @@ namespace Aki32Utilities.WFAAppUtilities.NodeController
 
         // ★★★★★★★★★★★★★★★ props
 
-
         private string _Path;
         public string Path => _Path;
-
-        private string _Author;
-        public string Author => _Author;
-
-        private string _Mail;
-        public string Mail => _Mail;
-
-        private string _Link;
-        public string Link => _Link;
 
         private string _Description;
         public string Description => _Description;
 
-
         private static char[] m_ch_splitter = new char[] { '/', '\\' };
-        private static Regex m_reg = new Regex(@"^https?://", RegexOptions.IgnoreCase);
 
         private static Dictionary<Type, MethodInfo> m_dic = new Dictionary<Type, MethodInfo>();
 
 
-
-
         // ★★★★★★★★★★★★★★★ init
 
-        public STNodeAttribute(string strPath) : this(strPath, null, null, null, null) { }
-        public STNodeAttribute(string strPath, string strDescription) : this(strPath, null, null, null, strDescription) { }
-        public STNodeAttribute(string strPath, string strAuthor, string strMail, string strLink, string strDescription)
+        public STNodeAttribute(string strPath) : this(strPath, null) { }
+        public STNodeAttribute(string strPath, string strDescription)
         {
             if (!string.IsNullOrEmpty(strPath))
                 strPath = strPath.Trim().Trim(m_ch_splitter).Trim();
 
             _Path = strPath;
-
-            _Author = strAuthor;
-            _Mail = strMail;
             _Description = strDescription;
-
-            if (string.IsNullOrEmpty(strLink) || strLink.Trim() == string.Empty) return;
-            strLink = strLink.Trim();
-            _Link = m_reg.IsMatch(strLink) ? strLink : "http://" + strLink;
         }
 
 

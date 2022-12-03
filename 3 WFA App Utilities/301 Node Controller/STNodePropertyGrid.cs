@@ -218,7 +218,7 @@ namespace Aki32Utilities.WFAAppUtilities.NodeController
         #endregion
 
         private Type m_type;
-        private string[] m_KeysString = new string[] { "Author", "Mail", "Link", "Show Help"};
+        private string[] m_KeysString = new string[] { "Author", "Mail", "Link", "Show Help" };
 
         private int m_nTitleHeight = 20;
         private int m_item_height = 30;
@@ -449,10 +449,7 @@ namespace Aki32Utilities.WFAAppUtilities.NodeController
             Point pt = new Point(e.X, e.Y - (int)m_nOffsetY);
             MouseEventArgs mea = new MouseEventArgs(e.Button, e.Clicks, pt.X, pt.Y, e.Delta);
 
-            if (m_b_current_draw_info)
-                this.OnProcessInfoMouseDown(mea);
-            else
-                this.OnProcessPropertyMouseDown(mea);
+            this.OnProcessPropertyMouseDown(mea);
             if (bRedraw) this.Invalidate();
         }
         /// <summary>
@@ -690,37 +687,9 @@ namespace Aki32Utilities.WFAAppUtilities.NodeController
             Color clr_r = Color.FromArgb(this.ForeColor.A / 2, this.ForeColor);
             m_sf.Alignment = StringAlignment.Near;
             Rectangle rect = new Rectangle(0, this._ShowTitle ? m_nTitleHeight : 0, this.Width, m_item_height);
-            Rectangle rect_l = new Rectangle(2, rect.Top, m_nInfoLeft - 2, m_item_height);
-            Rectangle rect_r = new Rectangle(m_nInfoLeft, rect.Top, this.Width - m_nInfoLeft, m_item_height);
-            m_brush.Color = m_clr_item_2;
-            g.FillRectangle(m_brush, rect);
-            m_brush.Color = this.ForeColor;
-            m_sf.FormatFlags = StringFormatFlags.NoWrap;
-            m_sf.Alignment = StringAlignment.Near;
-            g.DrawString(m_KeysString[0], this.Font, m_brush, rect_l, m_sf);          //author
-            m_brush.Color = clr_r;
-            g.DrawString(attr.Author, this.Font, m_brush, rect_r, m_sf);
-            rect.Y += m_item_height; rect_l.Y += m_item_height; rect_r.Y += m_item_height;
 
-            m_brush.Color = m_clr_item_1;
-            g.FillRectangle(m_brush, rect);
-            m_brush.Color = this.ForeColor;
-            g.DrawString(m_KeysString[1], this.Font, m_brush, rect_l, m_sf);          //mail
-            m_brush.Color = clr_r;
-            g.DrawString(attr.Mail, this.Font, m_brush, rect_r, m_sf);
-            rect.Y += m_item_height; rect_l.Y += m_item_height; rect_r.Y += m_item_height;
-
-            m_brush.Color = m_clr_item_2;
-            g.FillRectangle(m_brush, rect);
-            m_brush.Color = this.ForeColor;
-            g.DrawString(m_KeysString[2], this.Font, m_brush, rect_l, m_sf);          //link_key
-            m_brush.Color = clr_r;
-            g.DrawString(attr.Link, this.Font, Brushes.CornflowerBlue, rect_r, m_sf); //link
-            if (!string.IsNullOrEmpty(attr.Link)) m_rect_link = rect_r;
-            //fill left
+            // description
             m_brush.Color = Color.FromArgb(40, 125, 125, 125);
-            g.FillRectangle(m_brush, 0, this._ShowTitle ? m_nTitleHeight : 0, m_nInfoLeft - 1, m_item_height * 3);
-
             rect.X = 5; rect.Y += m_item_height;
             rect.Width = this.Width - 10;
             if (!string.IsNullOrEmpty(m_node_attribute.Description))
@@ -732,23 +701,10 @@ namespace Aki32Utilities.WFAAppUtilities.NodeController
                 g.DrawString(m_node_attribute.Description, this.Font, m_brush, rect, m_sf);
             }
             m_nInfoVHeight = rect.Bottom;
-            bool bHasHelp = STNodeAttribute.GetHelpMethod(m_type) != null;
             rect.X = 5; rect.Y += rect.Height;
             rect.Height = m_item_height;
             m_sf.Alignment = StringAlignment.Center;
-            m_brush.Color = Color.FromArgb(125, 125, 125, 125);
-            g.FillRectangle(m_brush, rect);
-            if (bHasHelp) m_brush.Color = Color.CornflowerBlue;
-            g.DrawString(m_KeysString[3], this.Font, m_brush, rect, m_sf);
-            if (bHasHelp) m_rect_help = rect;
-            else
-            {
-                int w = (int)g.MeasureString(m_KeysString[3], this.Font).Width + 1;
-                int x = rect.X + (rect.Width - w) / 2, y = rect.Y + rect.Height / 2;
-                m_pen.Color = m_brush.Color;
-                g.DrawLine(m_pen, x, y, x + w, y);
-            }
-            m_nInfoVHeight = rect.Bottom;
+
         }
         /// <summary>
         /// 当在属性面板鼠标点下时候发生
@@ -784,28 +740,6 @@ namespace Aki32Utilities.WFAAppUtilities.NodeController
                 bRedraw = true;
             }
             if (bRedraw) this.Invalidate();
-        }
-        /// <summary>
-        /// 当在信息面板鼠标点下时候发生
-        /// </summary>
-        /// <param name="e">鼠标事件参数</param>
-        protected virtual void OnProcessInfoMouseDown(MouseEventArgs e)
-        {
-            try
-            {
-                if (m_rect_link.Contains(e.Location))
-                {
-                    System.Diagnostics.Process.Start(m_node_attribute.Link);
-                }
-                else if (m_rect_help.Contains(e.Location))
-                {
-                    STNodeAttribute.ShowHelp(m_type);
-                }
-            }
-            catch (Exception ex)
-            {
-                this.SetErrorMessage(ex.Message);
-            }
         }
         /// <summary>
         /// 当在属性面板鼠标移动时候发生

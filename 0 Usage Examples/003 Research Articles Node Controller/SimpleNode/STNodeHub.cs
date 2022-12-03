@@ -21,7 +21,7 @@ namespace Aki32Utilities.UsageExamples.ResearchArticlesNodeController
     /// <summary>
     /// 类库自带的STNodeHub并未被STNodeAttribute标记 无法被STNodeTreeView显示 所以需要扩展
     /// </summary>
-    [STNode("/", "Crystal_lz", "2212233137@qq.com", "st233.com", "This multi is Hub")]
+    [STNode("/", "This multi is Hub")]
     public class STNodeHubMulti : STNodeHub
     {
         public STNodeHubMulti()
