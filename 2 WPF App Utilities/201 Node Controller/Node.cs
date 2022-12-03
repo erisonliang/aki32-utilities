@@ -14,17 +14,17 @@ namespace Aki32Utilities.WPFAppUtilities.NodeController
         public delegate void NodeEventHandler(Node node);
         public event NodeEventHandler moved;
 
-        public NodeGraph graph { get; private set; }
-        public NodeChest chest { get; private set; }
+        public NodeGraph Graph { get; private set; }
+        public NodeChest Chest { get; private set; }
         private Point? dragStart = null;
 
-        public NodeGraphContext context => (graph != null) ? graph.context : chest.context;
+        public NodeGraphContext context => (Graph != null) ? Graph.context : Chest.context;
 
         public InputDock[] getInputs() => Dispatcher.Invoke(() => stackInputs.Children.OfType<InputDock>().ToArray());
         public OutputDock[] getOutputs() => Dispatcher.Invoke(() => stackOutputs.Children.OfType<OutputDock>().ToArray());
         public Dictionary<string, object> parameters => Dispatcher.Invoke(() => stackParameters.Children.OfType<IProperty>().ToDictionary(x => x.label, y => y.value));
 
-        public bool isTemplate => chest != null;
+        public bool isTemplate => Chest != null;
 
         public string title
         {
@@ -94,9 +94,9 @@ namespace Aki32Utilities.WPFAppUtilities.NodeController
                 current = (current as FrameworkElement)?.Parent;
                 if (current == null)
                     break;
-                graph = current as NodeGraph;
-                chest = current as NodeChest;
-                if (graph != null || chest != null)
+                Graph = current as NodeGraph;
+                Chest = current as NodeChest;
+                if (Graph != null || Chest != null)
                     break;
             }
 
@@ -230,7 +230,7 @@ namespace Aki32Utilities.WPFAppUtilities.NodeController
                 if (dragStart != null && args.LeftButton == MouseButtonState.Pressed)
                 {
                     UIElement element = (UIElement)sender;
-                    Point p2 = args.GetPosition(graph.canvas);
+                    Point p2 = args.GetPosition(Graph.canvas);
                     position = new Point(p2.X - dragStart.Value.X, p2.Y - dragStart.Value.Y);
                     isAboutToBeRemoved = !isPointWithin(p2);
                 }
@@ -239,7 +239,7 @@ namespace Aki32Utilities.WPFAppUtilities.NodeController
 
         private bool isPointWithin(Point point)
         {
-            if (point.X < 0 || point.Y < 0 || point.X > graph.ActualWidth || point.Y > graph.ActualHeight)
+            if (point.X < 0 || point.Y < 0 || point.X > Graph.ActualWidth || point.Y > Graph.ActualHeight)
                 return false;
             return true;
         }
@@ -250,7 +250,7 @@ namespace Aki32Utilities.WPFAppUtilities.NodeController
             dragStart = null;
             element.ReleaseMouseCapture();
             if (isAboutToBeRemoved)
-                graph.removeNode(this);
+                Graph.removeNode(this);
         }
 
         private void mouseDown(object sender, MouseEventArgs args)

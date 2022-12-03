@@ -8,14 +8,13 @@ namespace Aki32Utilities.WPFAppUtilities.NodeController
 {
     public class Pipe : IDisposable
     {
-
         public static Pipe EditingPipe;
 
         public readonly PathFigure pathFigure;
         public readonly BezierSegment bezier;
         public readonly Path path;
 
-        public NodeGraph graph => (inputDock != null) ? inputDock.node.graph : outputDock.node.graph;
+        public NodeGraph Graph => (inputDock != null) ? inputDock.node.Graph : outputDock.node.Graph;
 
         public object result = null;
 
@@ -102,45 +101,45 @@ namespace Aki32Utilities.WPFAppUtilities.NodeController
             pathFigure.Segments.Add(bezier);
             path = new Path();
             path.IsHitTestVisible = false;
-            path.Stroke = graph.context.getPipeColor((input != null) ? input.type : output.type);
+            path.Stroke = Graph.context.getPipeColor((input != null) ? input.type : output.type);
             path.StrokeThickness = 2;
             path.Data = pathGeometry;
 
-            graph.canvas.Children.Add(path);
-            ((UIElement)graph.canvas.Parent).MouseMove += Canvas_MouseMove;
+            Graph.canvas.Children.Add(path);
+            ((UIElement)Graph.canvas.Parent).MouseMove += Canvas_MouseMove;
         }
 
         private void Canvas_MouseMove(object sender, MouseEventArgs e)
         {
             if (EditingPipe == null)
-                ((UIElement)graph.canvas.Parent).MouseMove -= Canvas_MouseMove;
+                ((UIElement)Graph.canvas.Parent).MouseMove -= Canvas_MouseMove;
 
             if (outputDock == null)
             {
-                setAnchorPointA(Mouse.GetPosition(graph.canvas));
+                setAnchorPointA(Mouse.GetPosition(Graph.canvas));
             }
             else if (inputDock == null)
             {
-                setAnchorPointB(Mouse.GetPosition(graph.canvas));
+                setAnchorPointB(Mouse.GetPosition(Graph.canvas));
             }
         }
 
         private void setAnchorPointB(Point point)
         {
             bezier.Point3 = point;
-            switch (graph.context.orientation)
+            switch (Graph.context.orientation)
             {
                 case NodeGraphOrientation.LeftToRight:
-                    bezier.Point2 = new Point(bezier.Point3.X - graph.pipeStiffness, bezier.Point3.Y);
+                    bezier.Point2 = new Point(bezier.Point3.X - Graph.pipeStiffness, bezier.Point3.Y);
                     break;
                 case NodeGraphOrientation.RightToLeft:
-                    bezier.Point2 = new Point(bezier.Point3.X + graph.pipeStiffness, bezier.Point3.Y);
+                    bezier.Point2 = new Point(bezier.Point3.X + Graph.pipeStiffness, bezier.Point3.Y);
                     break;
                 case NodeGraphOrientation.UpToBottom:
-                    bezier.Point2 = new Point(bezier.Point3.X, bezier.Point3.Y - graph.pipeStiffness);
+                    bezier.Point2 = new Point(bezier.Point3.X, bezier.Point3.Y - Graph.pipeStiffness);
                     break;
                 case NodeGraphOrientation.BottomToUp:
-                    bezier.Point2 = new Point(bezier.Point3.X, bezier.Point3.Y + graph.pipeStiffness);
+                    bezier.Point2 = new Point(bezier.Point3.X, bezier.Point3.Y + Graph.pipeStiffness);
                     break;
             }
         }
@@ -148,19 +147,19 @@ namespace Aki32Utilities.WPFAppUtilities.NodeController
         private void setAnchorPointA(Point point)
         {
             pathFigure.StartPoint = point;
-            switch (graph.context.orientation)
+            switch (Graph.context.orientation)
             {
                 case NodeGraphOrientation.LeftToRight:
-                    bezier.Point1 = new Point(pathFigure.StartPoint.X + graph.pipeStiffness, pathFigure.StartPoint.Y);
+                    bezier.Point1 = new Point(pathFigure.StartPoint.X + Graph.pipeStiffness, pathFigure.StartPoint.Y);
                     break;
                 case NodeGraphOrientation.RightToLeft:
-                    bezier.Point1 = new Point(pathFigure.StartPoint.X - graph.pipeStiffness, pathFigure.StartPoint.Y);
+                    bezier.Point1 = new Point(pathFigure.StartPoint.X - Graph.pipeStiffness, pathFigure.StartPoint.Y);
                     break;
                 case NodeGraphOrientation.UpToBottom:
-                    bezier.Point1 = new Point(pathFigure.StartPoint.X, pathFigure.StartPoint.Y + graph.pipeStiffness);
+                    bezier.Point1 = new Point(pathFigure.StartPoint.X, pathFigure.StartPoint.Y + Graph.pipeStiffness);
                     break;
                 case NodeGraphOrientation.BottomToUp:
-                    bezier.Point1 = new Point(pathFigure.StartPoint.X, pathFigure.StartPoint.Y - graph.pipeStiffness);
+                    bezier.Point1 = new Point(pathFigure.StartPoint.X, pathFigure.StartPoint.Y - Graph.pipeStiffness);
                     break;
             }
         }
@@ -181,8 +180,8 @@ namespace Aki32Utilities.WPFAppUtilities.NodeController
                 inputDock.pipe = null;
             if (outputDock != null)
                 outputDock.pipes.Remove(this);
-            graph.canvas.Children.Remove(path);
-            ((UIElement)graph.canvas.Parent).MouseMove -= Canvas_MouseMove;
+            Graph.canvas.Children.Remove(path);
+            ((UIElement)Graph.canvas.Parent).MouseMove -= Canvas_MouseMove;
         }
     }
 }

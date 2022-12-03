@@ -14,13 +14,13 @@ namespace Aki32Utilities.UsageExamples.ResearchArticlesNodeController
     /// </summary>
     public partial class MainWindow : Window
     {
-
-        NodeGraph nodeGraph;
-        NodeChest nodeChest;
-        NodeGraphContext context;
+        private readonly NodeGraph nodeGraph;
+        private readonly NodeChest nodeChest;
+        private readonly NodeGraphContext context;
 
         public MainWindow()
         {
+
             InitializeComponent();
 
             context = new NodeGraphContext();

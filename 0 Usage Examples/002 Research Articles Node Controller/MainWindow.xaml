@@ -5,16 +5,31 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Aki32Utilities.UsageExamples.ResearchArticlesNodeController"
         mc:Ignorable="d"
-        Title="MainWindow" Height="600" Width="1700">
+        Title="MainWindow" 
+        VerticalAlignment="Stretch"
+        HorizontalAlignment="Stretch"
+        
+        d:Height="400" 
+        d:Width="500"
+        >
     <Grid>
         <Grid x:Name="container">
 
         </Grid>
-        <StackPanel VerticalAlignment="Bottom" Orientation="Horizontal" HorizontalAlignment="Center">
+        <StackPanel
+            VerticalAlignment="Top"
+            Orientation="Vertical"
+            HorizontalAlignment="Left"
+            >
+            
             <Button Panel.ZIndex="1000" Width="100" Height="25" Content="Run" Click="runClick"/>
+            
             <Button Panel.ZIndex="1000" Width="100" Height="25" Content="Add" Click="addClick"/>
+            
             <Button Panel.ZIndex="1000" Width="100" Height="25" Content="ReArrange" Click="rearrange"/>
+            
             <Button Panel.ZIndex="1000" Width="100" Height="25" Content="Rotate" Click="rotate"/>
+        
         </StackPanel> 
     </Grid>
 </Window>
