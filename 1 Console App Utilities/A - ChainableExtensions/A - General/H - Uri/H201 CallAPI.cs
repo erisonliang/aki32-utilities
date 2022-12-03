@@ -4,7 +4,7 @@ using System.Xml.Serialization;
 
 using Newtonsoft.Json;
 
-namespace Aki32_Utilities.Console_App_Utilities.UsefulClasses;
+namespace Aki32Utilities.ConsoleAppUtilities.UsefulClasses;
 public static partial class ChainableExtensions
 {
 

@@ -1,7 +1,7 @@
-﻿using Aki32_Utilities.Console_App_Utilities.UsageExamples;
-using Aki32_Utilities.Console_App_Utilities.UsefulClasses;
+﻿using Aki32Utilities.ConsoleAppUtilities.UsageExamples;
+using Aki32Utilities.ConsoleAppUtilities.UsefulClasses;
 
-namespace Aki32_Utilities;
+namespace Aki32Utilities;
 public partial class Program
 {
     static void Main(string[] args)

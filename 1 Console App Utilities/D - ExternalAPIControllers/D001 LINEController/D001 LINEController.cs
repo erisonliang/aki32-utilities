@@ -1,6 +1,6 @@
-﻿using Aki32_Utilities.Console_App_Utilities.UsefulClasses;
+﻿using Aki32Utilities.ConsoleAppUtilities.UsefulClasses;
 
-namespace Aki32_Utilities.Console_App_Utilities.ExternalAPIControllers;
+namespace Aki32Utilities.ConsoleAppUtilities.ExternalAPIControllers;
 public class LINEController
 {
 

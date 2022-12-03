@@ -1,5 +1,5 @@
 ﻿
-namespace Aki32_Utilities.Console_App_Utilities.UsefulClasses;
+namespace Aki32Utilities.ConsoleAppUtilities.UsefulClasses;
 public class ConsoleExtension
 {
 

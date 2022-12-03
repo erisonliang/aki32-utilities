@@ -1,6 +1,6 @@
 ﻿
 
-namespace Aki32_Utilities.Console_App_Utilities.SpecificPurposeModels.StructuralEngineering;
+namespace Aki32Utilities.ConsoleAppUtilities.SpecificPurposeModels.StructuralEngineering;
 
 /// <summary>
 /// Normal Bilinear Model with Kinematic Hardening (移動硬化)

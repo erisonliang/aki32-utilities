@@ -1,8 +1,8 @@
 ﻿using System.Runtime.CompilerServices;
-using Aki32_Utilities.Console_App_Utilities.UsefulClasses;
+using Aki32Utilities.ConsoleAppUtilities.UsefulClasses;
 using System.Text;
 
-namespace Aki32_Utilities.Console_App_Utilities.General;
+namespace Aki32Utilities.ConsoleAppUtilities.General;
 public static class UtilPreprocessors
 {
     public static void PreprocessOutDir(

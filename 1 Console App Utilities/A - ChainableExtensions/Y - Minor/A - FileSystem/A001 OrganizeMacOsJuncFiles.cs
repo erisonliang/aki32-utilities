@@ -1,6 +1,6 @@
 ﻿
 
-namespace Aki32_Utilities.Console_App_Utilities.Minor;
+namespace Aki32Utilities.ConsoleAppUtilities.Minor;
 public static partial class ChainableExtensions
 {
 

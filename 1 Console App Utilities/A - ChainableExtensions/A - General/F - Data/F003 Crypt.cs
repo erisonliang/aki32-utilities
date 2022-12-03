@@ -7,7 +7,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace Aki32_Utilities.Console_App_Utilities.General;
+namespace Aki32Utilities.ConsoleAppUtilities.General;
 public static partial class ChainableExtensions
 {
     // ref: https://qiita.com/hibara/items/6c7476ceec5a9caf2e81

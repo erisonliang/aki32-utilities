@@ -3,7 +3,7 @@ using System.Xml.Linq;
 
 using XPlot.Plotly;
 
-namespace Aki32_Utilities.Console_App_Utilities.OwesomeModels;
+namespace Aki32Utilities.ConsoleAppUtilities.OwesomeModels;
 /// <summary>
 /// Time history data table with its columns and rows dynamically and automatically expands
 /// </summary>

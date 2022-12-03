@@ -5,13 +5,13 @@ using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 
-using Aki32_Utilities.Console_App_Utilities.ExternalAPIControllers;
-using Aki32_Utilities.Console_App_Utilities.General;
-using Aki32_Utilities.Console_App_Utilities.OwesomeModels;
-using Aki32_Utilities.Console_App_Utilities.OwesomeModels.ChainableExtensions;
-using Aki32_Utilities.Console_App_Utilities.SpecificPurposeModels.Research;
-using Aki32_Utilities.Console_App_Utilities.SpecificPurposeModels.StructuralEngineering;
-using Aki32_Utilities.Console_App_Utilities.UsefulClasses;
+using Aki32Utilities.ConsoleAppUtilities.ExternalAPIControllers;
+using Aki32Utilities.ConsoleAppUtilities.General;
+using Aki32Utilities.ConsoleAppUtilities.OwesomeModels;
+using Aki32Utilities.ConsoleAppUtilities.OwesomeModels.ChainableExtensions;
+using Aki32Utilities.ConsoleAppUtilities.SpecificPurposeModels.Research;
+using Aki32Utilities.ConsoleAppUtilities.SpecificPurposeModels.StructuralEngineering;
+using Aki32Utilities.ConsoleAppUtilities.UsefulClasses;
 
 using ClosedXML;
 
@@ -22,7 +22,7 @@ using Newtonsoft.Json;
 
 using Org.BouncyCastle.Asn1.X509.Qualified;
 
-namespace Aki32_Utilities.Console_App_Utilities.UsageExamples;
+namespace Aki32Utilities.ConsoleAppUtilities.UsageExamples;
 public class TestHelper
 {
 

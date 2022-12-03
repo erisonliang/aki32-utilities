@@ -1,9 +1,9 @@
 ﻿using System.Diagnostics;
 
-using Aki32_Utilities.Console_App_Utilities.General;
-using Aki32_Utilities.Console_App_Utilities.UsefulClasses;
+using Aki32Utilities.ConsoleAppUtilities.General;
+using Aki32Utilities.ConsoleAppUtilities.UsefulClasses;
 
-namespace Aki32_Utilities.Console_App_Utilities.SpecificPurposeModels.StructuralEngineering;
+namespace Aki32Utilities.ConsoleAppUtilities.SpecificPurposeModels.StructuralEngineering;
 public static class SNAPHelper
 {
 

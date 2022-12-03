@@ -1,6 +1,6 @@
 ﻿
 
-namespace Aki32_Utilities.Console_App_Utilities.SpecificPurposeModels.Research;
+namespace Aki32Utilities.ConsoleAppUtilities.SpecificPurposeModels.Research;
 /// <summary>
 /// https://support.nii.ac.jp/ja/cir/r_opensearch
 /// </summary>

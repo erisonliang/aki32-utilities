@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Aki32_Utilities.Console_App_Utilities.Properties {
+namespace Aki32Utilities.ConsoleAppUtilities.Properties {
     using System;
     
     

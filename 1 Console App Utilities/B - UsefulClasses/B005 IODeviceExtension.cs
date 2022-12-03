@@ -1,7 +1,7 @@
 ﻿using System.Drawing;
 using System.Runtime.InteropServices;
 
-namespace Aki32_Utilities.Console_App_Utilities.UsefulClasses;
+namespace Aki32Utilities.ConsoleAppUtilities.UsefulClasses;
 
 /// <summary>
 /// Mainly, syntax sugar of device IO OS commands.

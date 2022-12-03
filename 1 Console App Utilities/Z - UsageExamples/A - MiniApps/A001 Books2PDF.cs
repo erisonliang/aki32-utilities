@@ -1,9 +1,9 @@
-﻿using Aki32_Utilities.Console_App_Utilities.UsefulClasses;
-using Aki32_Utilities.Console_App_Utilities.General;
+﻿using Aki32Utilities.ConsoleAppUtilities.UsefulClasses;
+using Aki32Utilities.ConsoleAppUtilities.General;
 
 using Org.BouncyCastle.Asn1.UA;
 
-namespace Aki32_Utilities.Console_App_Utilities.UsageExamples;
+namespace Aki32Utilities.ConsoleAppUtilities.UsageExamples;
 public partial class MiniApps
 {
 

@@ -1,6 +1,6 @@
 ﻿
 
-namespace Aki32_Utilities.Console_App_Utilities.MachineLearning;
+namespace Aki32Utilities.ConsoleAppUtilities.MachineLearning;
 public static partial class ChainableExtensions
 {
 

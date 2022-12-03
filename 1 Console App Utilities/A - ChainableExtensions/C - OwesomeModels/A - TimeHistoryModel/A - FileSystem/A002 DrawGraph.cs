@@ -1,6 +1,6 @@
 ﻿
 
-namespace Aki32_Utilities.Console_App_Utilities.OwesomeModels.ChainableExtensions;
+namespace Aki32Utilities.ConsoleAppUtilities.OwesomeModels.ChainableExtensions;
 public static partial class TimeHistoryExensions
 {
 

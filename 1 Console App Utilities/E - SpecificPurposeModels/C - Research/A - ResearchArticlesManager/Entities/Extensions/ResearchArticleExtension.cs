@@ -1,8 +1,8 @@
-﻿using Aki32_Utilities.Console_App_Utilities.General;
+﻿using Aki32Utilities.ConsoleAppUtilities.General;
 
 using ClosedXML;
 
-namespace Aki32_Utilities.Console_App_Utilities.SpecificPurposeModels.Research;
+namespace Aki32Utilities.ConsoleAppUtilities.SpecificPurposeModels.Research;
 public static class ResearchArticleExtension
 {
 

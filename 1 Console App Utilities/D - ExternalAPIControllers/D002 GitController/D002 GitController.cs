@@ -1,7 +1,7 @@
 ﻿using LibGit2Sharp.Handlers;
 using LibGit2Sharp;
 
-namespace Aki32_Utilities.Console_App_Utilities.ExternalAPIControllers;
+namespace Aki32Utilities.ConsoleAppUtilities.ExternalAPIControllers;
 public class GitController
 {
     // ★★★★★★★★★★★★★★★ props
