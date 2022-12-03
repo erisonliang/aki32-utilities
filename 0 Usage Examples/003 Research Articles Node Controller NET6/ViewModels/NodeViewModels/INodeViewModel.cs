@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace Aki32_Utilities.ViewModels.NodeViewModels;
+namespace Aki32Utilities.ViewModels.NodeViewModels;
 
 public interface INodeViewModel
 {

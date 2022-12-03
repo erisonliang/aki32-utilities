@@ -1,45 +1,83 @@
 ﻿using Aki32Utilities.ConsoleAppUtilities.SpecificPurposeModels.Research;
 using Aki32Utilities.UsageExamples.ResearchArticlesNodeController.ViewModels;
 
-using System.Collections.ObjectModel;
+using DocumentFormat.OpenXml.Spreadsheet;
 
-namespace Aki32_Utilities.ViewModels.NodeViewModels;
+using Newtonsoft.Json;
+
+using PropertyChanged;
+
+using System.Collections.ObjectModel;
+using System.Text.Json.Nodes;
+
+namespace Aki32Utilities.ViewModels.NodeViewModels;
 
 public class ResearchArticleNodeViewModel : DefaultNodeViewModel
 {
-    public ResearchArticle Article { get; set; }
+
+    // ★★★★★★★★★★★★★★★ props
+
+    public ResearchArticle Article { get; set; } = new();
+
+    [AlsoNotifyFor(nameof(Name), nameof(ArticleTitle), nameof(Authors), nameof(Description), nameof(Memo), nameof(DOI))]
+    private int NotifyArticleUpdatedBridge { get; set; } = 0;
 
     public string Name { get; set; }
 
+    public string ArticleTitle
+    {
+        get => Article.ArticleTitle ?? "不明";
+        set
+        {
+            var temp = Article.ArticleTitle;
+            RaisePropertyChangedIfSet(ref temp, value);
+            Article.Manual_ArticleTitle = temp;
+        }
+    }
+
+    public string Authors
+    {
+        get => (Article.Authors == null) ? "不明" : JsonConvert.SerializeObject(Article.Authors);
+        set
+        {
+            var temp = JsonConvert.SerializeObject(Article.Authors);
+            RaisePropertyChangedIfSet(ref temp, value);
+            Article.Manual_Authors = JsonConvert.DeserializeObject<string[]>(temp);
+        }
+    }
+
+    public string Description
+    {
+        get => Article.Description ?? "";
+        set
+        {
+            var temp = Article.Description;
+            RaisePropertyChangedIfSet(ref temp, value);
+            Article.Manual_Description = temp;
+        }
+    }
+
     public string Memo
     {
-        get => _Memo;
-        set => RaisePropertyChangedIfSet(ref _Memo, value);
+        get => Article.Memo ?? "";
+        set
+        {
+            var temp = Article.Memo;
+            RaisePropertyChangedIfSet(ref temp, value);
+            Article.Memo = temp;
+        }
     }
-    string _Memo = string.Empty;
-
-    public string Title
-    {
-        get => _Title;
-        set => RaisePropertyChangedIfSet(ref _Title, value);
-    }
-    string _Title = string.Empty;
-
-    public string Author
-    {
-        get => _Author;
-        set => RaisePropertyChangedIfSet(ref _Author, value);
-    }
-    string _Author = string.Empty;
 
     public string DOI
     {
-        get => _DOI;
-        set => RaisePropertyChangedIfSet(ref _DOI, value);
+        get => Article.DOI ?? "";
+        set
+        {
+            var temp = Article.DOI;
+            RaisePropertyChangedIfSet(ref temp, value);
+            Article.DOI = temp;
+        }
     }
-    string _DOI = string.Empty;
-
-
 
 
     public override IEnumerable<NodeConnectorViewModel> Inputs => _Inputs;
@@ -48,10 +86,21 @@ public class ResearchArticleNodeViewModel : DefaultNodeViewModel
     public override IEnumerable<NodeConnectorViewModel> Outputs => _Outputs;
     readonly ObservableCollection<NodeOutputViewModel> _Outputs = new();
 
+
+    // ★★★★★★★★★★★★★★★ init
+
     public ResearchArticleNodeViewModel()
     {
         _Inputs.Add(new NodeInputViewModel("引用", true));
         _Outputs.Add(new NodeOutputViewModel($"被引用"));
+    }
+
+
+    // ★★★★★★★★★★★★★★★ methods
+
+    public void NotifyArticleUpdated()
+    {
+        NotifyArticleUpdatedBridge++;
     }
 
     public override NodeConnectorViewModel FindConnector(Guid guid)
@@ -65,4 +114,7 @@ public class ResearchArticleNodeViewModel : DefaultNodeViewModel
         var output = Outputs.FirstOrDefault(arg => arg.Guid == guid);
         return output;
     }
+
+    // ★★★★★★★★★★★★★★★
+
 }

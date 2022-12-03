@@ -5,7 +5,8 @@ using NodeGraph.Utilities;
 using System.Collections;
 using System.Collections.ObjectModel;
 using System.Windows;
-using Aki32_Utilities.ViewModels.NodeViewModels;
+using Aki32Utilities.ViewModels.NodeViewModels;
+using Aki32Utilities.ConsoleAppUtilities.SpecificPurposeModels.Research;
 
 namespace Aki32Utilities.UsageExamples.ResearchArticlesNodeController.ViewModels;
 
@@ -105,9 +106,13 @@ public class MainWindowViewModel : ViewModel
 
     public MainWindowViewModel()
     {
-        _NodeViewModels.Add(new ResearchArticleNodeViewModel() { Name = "ResearchArticle", Memo = "ここに題名", Position = new Point(100, 100) });
-        _NodeViewModels.Add(new ResearchArticleNodeViewModel() { Name = "ResearchArticle", Memo = "ここに題名", Position = new Point(600, 100) });
-        _NodeViewModels.Add(new ResearchArticleNodeViewModel() { Name = "ResearchArticle", Memo = "ここに題名", Position = new Point(1100, 100) });
+        var addingArticle1 = ResearchArticle.CreateManually("タイトル1", new string[] { "著者1" }, null);
+        var addingArticle2 = ResearchArticle.CreateManually("タイトル2", new string[] { "著者2" }, null);
+        var addingArticle3 = ResearchArticle.CreateManually("タイトル3", new string[] { "著者3" }, null);
+
+        _NodeViewModels.Add(new ResearchArticleNodeViewModel() { Name = "ResearchArticle", Article = addingArticle1, Position = new Point(100, 100) });
+        _NodeViewModels.Add(new ResearchArticleNodeViewModel() { Name = "ResearchArticle", Article = addingArticle2, Position = new Point(600, 100) });
+        _NodeViewModels.Add(new ResearchArticleNodeViewModel() { Name = "ResearchArticle", Article = addingArticle3, Position = new Point(1100, 100) });
 
 
         //_GroupNodeViewModels.Add(new GroupNodeViewModel() { Name = "Group1" });

@@ -7,7 +7,7 @@ using NodeGraph.Utilities;
 using System.Windows;
 using System.Windows.Input;
 
-namespace Aki32_Utilities.ViewModels.NodeViewModels;
+namespace Aki32Utilities.ViewModels.NodeViewModels;
 
 public abstract class DefaultNodeViewModel : ViewModel, INodeViewModel
 {

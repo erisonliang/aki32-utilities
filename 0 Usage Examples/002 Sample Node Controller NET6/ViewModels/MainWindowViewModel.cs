@@ -5,7 +5,7 @@ using NodeGraph.Utilities;
 using System.Collections;
 using System.Collections.ObjectModel;
 using System.Windows;
-using Aki32_Utilities.ViewModels.NodeViewModels;
+using Aki32Utilities.ViewModels.NodeViewModels;
 
 namespace Aki32Utilities.UsageExamples.SampleNodeController.ViewModels;
 

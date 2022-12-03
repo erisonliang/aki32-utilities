@@ -94,19 +94,25 @@
                                     <RowDefinition Height="Auto"/>
                                     <RowDefinition Height="Auto"/>
                                     <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
                                 </Grid.RowDefinitions>
 
-                                <TextBlock Grid.Row="0" Grid.Column="0" Text="幅:" HorizontalAlignment="Right"/>
-                                <TextBlock Grid.Row="0" Grid.Column="2" Text="{Binding Width}"/>
+                                <TextBlock Grid.Row="0" Grid.Column="0" Text="タイトル:" HorizontalAlignment="Right"/>
+                                <TextBlock Grid.Row="0" Grid.Column="2" Text="{Binding ArticleTitle}"/>
 
-                                <TextBlock Grid.Row="1" Grid.Column="0" Text="高さ:" HorizontalAlignment="Right"/>
-                                <TextBlock Grid.Row="1" Grid.Column="2" Text="{Binding Height}"/>
+                                <TextBlock Grid.Row="1" Grid.Column="0" Text="著者:" HorizontalAlignment="Right"/>
+                                <TextBlock Grid.Row="1" Grid.Column="2" Text="{Binding Authors}"/>
 
-                                <TextBlock Grid.Row="2" Grid.Column="0" Text="メモ:" HorizontalAlignment="Right"/>
-                                <TextBox Grid.Row="2" Grid.Column="2" Text="{Binding Memo}" AcceptsReturn="True" TextWrapping="Wrap"/>
-                                <TextBlock Grid.Row="3" Grid.Column="2" Text="{Binding Memo}" TextWrapping="Wrap"/>
+                                <TextBlock Grid.Row="2" Grid.Column="0" Text="概要:" HorizontalAlignment="Right"/>
+                                <TextBlock Grid.Row="2" Grid.Column="2" Text="{Binding Height}"/>
 
-                                <Button Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="3" Content="PDFを表示"/>
+                                <TextBlock Grid.Row="5" Grid.Column="0" Text="メモ:" HorizontalAlignment="Right"/>
+                                <TextBox Grid.Row="5" Grid.Column="2" Text="{Binding Memo}" AcceptsReturn="True" TextWrapping="Wrap"/>
+                                <TextBlock Grid.Row="6" Grid.Column="2" Text="{Binding Memo}" TextWrapping="Wrap"/>
+
+                                <Button Grid.Row="7" Grid.Column="1" Grid.ColumnSpan="3" Content="PDFを表示"/>
 
                                 
                                 

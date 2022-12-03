@@ -7,7 +7,7 @@ using PropertyChanged;
 using System.Windows;
 using System.Windows.Input;
 
-namespace Aki32_Utilities.ViewModels.NodeViewModels;
+namespace Aki32Utilities.ViewModels.NodeViewModels;
 
 public class GroupNodeViewModel : ViewModel, INodeViewModel
 {
