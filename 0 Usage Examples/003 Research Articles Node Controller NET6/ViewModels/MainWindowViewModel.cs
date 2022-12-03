@@ -16,86 +16,78 @@ namespace Aki32Utilities.UsageExamples.ResearchArticlesNodeController.ViewModels
 {
     public class MainWindowViewModel : ViewModel
     {
-        public double Scale
-        {
-            get => _Scale;
-            set => RaisePropertyChangedIfSet(ref _Scale, value);
-        }
-        double _Scale = 1.0f;
+
+        // ★★★★★★★★★★★★★★★ props
+
+        public double Scale { get; set; } = 1d;
+
+        #region Commands
 
         public ViewModelCommand AddNodeCommand => _AddNodeCommand.Get(AddNode);
-        ViewModelCommandHandler _AddNodeCommand = new ViewModelCommandHandler();
+        ViewModelCommandHandler _AddNodeCommand = new();
 
         public ViewModelCommand AddGroupNodeCommand => _AddGroupNodeCommand.Get(AddGroupNode);
-        ViewModelCommandHandler _AddGroupNodeCommand = new ViewModelCommandHandler();
+        ViewModelCommandHandler _AddGroupNodeCommand = new();
 
         public ViewModelCommand RemoveNodesCommand => _RemoveNodesCommand.Get(RemoveNodes);
-        ViewModelCommandHandler _RemoveNodesCommand = new ViewModelCommandHandler();
+        ViewModelCommandHandler _RemoveNodesCommand = new();
 
         public ListenerCommand<PreviewConnectLinkOperationEventArgs> PreviewConnectLinkCommand => _PreviewConnectLinkCommand.Get(PreviewConnect);
-        ViewModelCommandHandler<PreviewConnectLinkOperationEventArgs> _PreviewConnectLinkCommand = new ViewModelCommandHandler<PreviewConnectLinkOperationEventArgs>();
+        ViewModelCommandHandler<PreviewConnectLinkOperationEventArgs> _PreviewConnectLinkCommand = new();
 
         public ListenerCommand<ConnectedLinkOperationEventArgs> ConnectedLinkCommand => _ConnectedLinkCommand.Get(Connected);
-        ViewModelCommandHandler<ConnectedLinkOperationEventArgs> _ConnectedLinkCommand = new ViewModelCommandHandler<ConnectedLinkOperationEventArgs>();
+        ViewModelCommandHandler<ConnectedLinkOperationEventArgs> _ConnectedLinkCommand = new();
 
         public ListenerCommand<DisconnectedLinkOperationEventArgs> DisconnectedLinkCommand => _DisconnectedLinkCommand.Get(Disconnected);
-        ViewModelCommandHandler<DisconnectedLinkOperationEventArgs> _DisconnectedLinkCommand = new ViewModelCommandHandler<DisconnectedLinkOperationEventArgs>();
+        ViewModelCommandHandler<DisconnectedLinkOperationEventArgs> _DisconnectedLinkCommand = new();
 
         public ListenerCommand<EndMoveNodesOperationEventArgs> EndMoveNodesCommand => _EndMoveNodesCommand.Get(NodesMoved);
-        ViewModelCommandHandler<EndMoveNodesOperationEventArgs> _EndMoveNodesCommand = new ViewModelCommandHandler<EndMoveNodesOperationEventArgs>();
+        ViewModelCommandHandler<EndMoveNodesOperationEventArgs> _EndMoveNodesCommand = new();
 
         public ListenerCommand<IList> SelectionChangedCommand => _SelectionChangedCommand.Get(SelectionChanged);
-        ViewModelCommandHandler<IList> _SelectionChangedCommand = new ViewModelCommandHandler<IList>();
+        ViewModelCommandHandler<IList> _SelectionChangedCommand = new();
 
         public ViewModelCommand AddTestNodeLinkCommand => _AddTestNodeLinkCommand.Get(AddTestNodeLink);
-        ViewModelCommandHandler _AddTestNodeLinkCommand = new ViewModelCommandHandler();
+        ViewModelCommandHandler _AddTestNodeLinkCommand = new();
 
         public ViewModelCommand MoveTestNodesCommand => _MoveTestNodesCommand.Get(MoveTestNodes);
-        ViewModelCommandHandler _MoveTestNodesCommand = new ViewModelCommandHandler();
+        ViewModelCommandHandler _MoveTestNodesCommand = new();
 
         public ViewModelCommand ClearNodesCommand => _ClearNodesCommand.Get(ClearNodes);
-        ViewModelCommandHandler _ClearNodesCommand = new ViewModelCommandHandler();
+        ViewModelCommandHandler _ClearNodesCommand = new();
 
         public ViewModelCommand ClearNodeLinksCommand => _ClearNodeLinksCommand.Get(ClearNodeLinks);
-        ViewModelCommandHandler _ClearNodeLinksCommand = new ViewModelCommandHandler();
+        ViewModelCommandHandler _ClearNodeLinksCommand = new();
 
         public ViewModelCommand MoveGroupNodeCommand => _MoveGroupNodeCommand.Get(MoveGroupNode);
-        ViewModelCommandHandler _MoveGroupNodeCommand = new ViewModelCommandHandler();
+        ViewModelCommandHandler _MoveGroupNodeCommand = new();
 
         public ViewModelCommand ChangeGroupInnerSizeCommand => _ChangeGroupInnerSizeCommand.Get(ChangeGroupInnerSize);
-        ViewModelCommandHandler _ChangeGroupInnerSizeCommand = new ViewModelCommandHandler();
+        ViewModelCommandHandler _ChangeGroupInnerSizeCommand = new();
 
         public ViewModelCommand ChangeGroupInnerPositionCommand => _ChangeGroupInnerPositionCommand.Get(ChangeGroupInnerPosition);
-        ViewModelCommandHandler _ChangeGroupInnerPositionCommand = new ViewModelCommandHandler();
+        ViewModelCommandHandler _ChangeGroupInnerPositionCommand = new();
 
         public ViewModelCommand ResetScaleCommand => _ResetScaleCommand.Get(ResetScale);
-        ViewModelCommandHandler _ResetScaleCommand = new ViewModelCommandHandler();
+        ViewModelCommandHandler _ResetScaleCommand = new();
+
+        #endregion
 
         public IEnumerable<DefaultNodeViewModel> NodeViewModels => _NodeViewModels;
-        ObservableCollection<DefaultNodeViewModel> _NodeViewModels = new ObservableCollection<DefaultNodeViewModel>();
+        ObservableCollection<DefaultNodeViewModel> _NodeViewModels = new();
 
         public IEnumerable<NodeLinkViewModel> NodeLinkViewModels => _NodeLinkViewModels;
-        ObservableCollection<NodeLinkViewModel> _NodeLinkViewModels = new ObservableCollection<NodeLinkViewModel>();
+        ObservableCollection<NodeLinkViewModel> _NodeLinkViewModels = new();
 
         public IEnumerable<GroupNodeViewModel> GroupNodeViewModels => _GroupNodeViewModels;
-        ObservableCollection<GroupNodeViewModel> _GroupNodeViewModels = new ObservableCollection<GroupNodeViewModel>();
+        ObservableCollection<GroupNodeViewModel> _GroupNodeViewModels = new();
 
         public GroupIntersectType[] GroupIntersectTypes { get; } = Enum.GetValues(typeof(GroupIntersectType)).OfType<GroupIntersectType>().ToArray();
         public RangeSelectionMode[] RangeSelectionModes { get; } = Enum.GetValues(typeof(RangeSelectionMode)).OfType<RangeSelectionMode>().ToArray();
 
-        public GroupIntersectType SelectedGroupIntersectType
-        {
-            get => _SelectedGroupIntersectType;
-            set => RaisePropertyChangedIfSet(ref _SelectedGroupIntersectType, value);
-        }
-        GroupIntersectType _SelectedGroupIntersectType;
+        public GroupIntersectType SelectedGroupIntersectType { get; set; }
 
-        public RangeSelectionMode SelectedRangeSelectionMode
-        {
-            get => _SelectedRangeSelectionMode;
-            set => RaisePropertyChangedIfSet(ref _SelectedRangeSelectionMode, value);
-        }
-        RangeSelectionMode _SelectedRangeSelectionMode = RangeSelectionMode.ContainVMDefine;
+        public RangeSelectionMode SelectedRangeSelectionMode{ get; set; } = RangeSelectionMode.ContainVMDefine;
 
         public bool IsLockedAllNodeLinks
         {
@@ -110,6 +102,9 @@ namespace Aki32Utilities.UsageExamples.ResearchArticlesNodeController.ViewModels
             set => UpdateIsEnableAllNodeConnectorsProperty(value);
         }
         bool _IsEnableAllNodeConnectors = true;
+
+
+        // ★★★★★★★★★★★★★★★ inits
 
         public MainWindowViewModel()
         {
@@ -128,6 +123,9 @@ namespace Aki32Utilities.UsageExamples.ResearchArticlesNodeController.ViewModels
 
 
         }
+
+
+        // ★★★★★★★★★★★★★★★ methods
 
         void AddNode()
         {
@@ -269,6 +267,10 @@ namespace Aki32Utilities.UsageExamples.ResearchArticlesNodeController.ViewModels
                 _NodeViewModels[0].Position = new Point(0, 0);
             }
         }
+
+
+        // ★★★★★★★★★★★★★★★ 
+
     }
 
     public enum GroupIntersectType

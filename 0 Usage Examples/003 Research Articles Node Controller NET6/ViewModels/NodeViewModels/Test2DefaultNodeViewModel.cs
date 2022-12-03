@@ -6,25 +6,14 @@ namespace Aki32_Utilities.ViewModels.NodeViewModels
 {
     public class Test2DefaultNodeViewModel : DefaultNodeViewModel
     {
-        public string Name
-        {
-            get => _Name;
-            set => RaisePropertyChangedIfSet(ref _Name, value);
-        }
-        string _Name = string.Empty;
-
-        public string Memo
-        {
-            get => _Memo;
-            set => RaisePropertyChangedIfSet(ref _Memo, value);
-        }
-        string _Memo = string.Empty;
+        public string Name { get; set; }
+        public string Memo { get; set; }
 
         public override IEnumerable<NodeConnectorViewModel> Inputs => _Inputs;
-        readonly ObservableCollection<NodeInputViewModel> _Inputs = new ObservableCollection<NodeInputViewModel>();
+        readonly ObservableCollection<NodeInputViewModel> _Inputs = new();
 
         public override IEnumerable<NodeConnectorViewModel> Outputs => _Outputs;
-        readonly ObservableCollection<NodeOutputViewModel> _Outputs = new ObservableCollection<NodeOutputViewModel>();
+        readonly ObservableCollection<NodeOutputViewModel> _Outputs = new();
 
         public Test2DefaultNodeViewModel()
         {

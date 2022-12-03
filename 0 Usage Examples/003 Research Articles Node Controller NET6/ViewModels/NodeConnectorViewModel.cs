@@ -1,9 +1,4 @@
 ﻿using Livet;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Aki32Utilities.UsageExamples.ResearchArticlesNodeController.ViewModels
 {
@@ -16,33 +11,10 @@ namespace Aki32Utilities.UsageExamples.ResearchArticlesNodeController.ViewModels
 
     public class NodeInputViewModel : ViewModel, NodeConnectorViewModel
     {
-        public Guid Guid
-        {
-            get => _Guid;
-            set => RaisePropertyChangedIfSet(ref _Guid, value);
-        }
-        Guid _Guid = Guid.NewGuid();
-
-        public string Label
-        {
-            get => _Label;
-            set => RaisePropertyChangedIfSet(ref _Label, value);
-        }
-        string _Label = string.Empty;
-
-        public bool IsEnable
-        {
-            get => _IsEnable;
-            set => RaisePropertyChangedIfSet(ref _IsEnable, value);
-        }
-        bool _IsEnable = true;
-
-        public bool AllowToConnectMultiple
-        {
-            get => _AllowToConnectMultiple;
-            set => RaisePropertyChangedIfSet(ref _AllowToConnectMultiple, value);
-        }
-        bool _AllowToConnectMultiple = false;
+        public Guid Guid { get; set; } = Guid.NewGuid();
+        public string Label { get; set; } = string.Empty;
+        public bool IsEnable { get; set; } = true;
+        public bool AllowToConnectMultiple { get; set; } = false;
 
         public NodeInputViewModel(string label, bool allowToConnectMultiple)
         {
@@ -53,26 +25,9 @@ namespace Aki32Utilities.UsageExamples.ResearchArticlesNodeController.ViewModels
 
     public class NodeOutputViewModel : ViewModel, NodeConnectorViewModel
     {
-        public Guid Guid
-        {
-            get => _Guid;
-            set => RaisePropertyChangedIfSet(ref _Guid, value);
-        }
-        Guid _Guid = Guid.NewGuid();
-
-        public string Label
-        {
-            get => _Label;
-            set => RaisePropertyChangedIfSet(ref _Label, value);
-        }
-        string _Label = string.Empty;
-
-        public bool IsEnable
-        {
-            get => _IsEnable;
-            set => RaisePropertyChangedIfSet(ref _IsEnable, value);
-        }
-        bool _IsEnable = true;
+        public Guid Guid { get; set; } = Guid.NewGuid();
+        public string Label { get; set; } = string.Empty;
+        public bool IsEnable { get; set; } = true;
 
         public NodeOutputViewModel(string label)
         {

@@ -79,12 +79,12 @@
 
                         <!-- グリッド内に表示する情報 -->
                         <StackPanel TextBlock.Foreground="White">
-                            <TextBox Text="{Binding Memo}"/>
-                            
-                            <Grid MinWidth="200">
-                                
+
+                            <Grid MinWidth="300" MaxWidth="500" Margin="5">
+
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="5"/>
                                     <ColumnDefinition Width="3*"/>
                                 </Grid.ColumnDefinitions>
 
@@ -96,29 +96,28 @@
                                     <RowDefinition Height="Auto"/>
                                 </Grid.RowDefinitions>
 
-                                <TextBlock Grid.Row="0" Grid.Column="0" Text="Width:"/>
-                                <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Width}"/>
+                                <TextBlock Grid.Row="0" Grid.Column="0" Text="幅:" HorizontalAlignment="Right"/>
+                                <TextBlock Grid.Row="0" Grid.Column="2" Text="{Binding Width}"/>
 
-                                <TextBlock Grid.Row="1" Grid.Column="0" Text="Height:"/>
-                                <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding Height}"/>
+                                <TextBlock Grid.Row="1" Grid.Column="0" Text="高さ:" HorizontalAlignment="Right"/>
+                                <TextBlock Grid.Row="1" Grid.Column="2" Text="{Binding Height}"/>
 
+                                <TextBlock Grid.Row="2" Grid.Column="0" Text="メモ:" HorizontalAlignment="Right"/>
+                                <TextBox Grid.Row="2" Grid.Column="2" Text="{Binding Memo}" AcceptsReturn="True" TextWrapping="Wrap"/>
+                                <TextBlock Grid.Row="3" Grid.Column="2" Text="{Binding Memo}" TextWrapping="Wrap"/>
 
+                                <Button Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="3" Content="PDFを表示"/>
+
+                                
+                                
+                                
+                                
+                                
+                                
                                 
                                 
                                 
                             </Grid>
-
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="aaa"/>
-                            </StackPanel>
-
-
-
-
-
-
-
-
 
                         </StackPanel>
                     </DataTemplate>

@@ -1,4 +1,5 @@
 ﻿using Aki32Utilities.ConsoleAppUtilities.SpecificPurposeModels.Research;
+using Aki32Utilities.ConsoleAppUtilities.UsageExamples;
 using Aki32Utilities.UsageExamples.ResearchArticlesNodeController.ViewModels;
 
 using System.Collections.ObjectModel;
@@ -9,17 +10,11 @@ namespace Aki32_Utilities.ViewModels.NodeViewModels
     {
         public ResearchArticle Article { get; set; }
 
-
-        public string Name
-        {
-            get => _Name;
-            set => RaisePropertyChangedIfSet(ref _Name, value);
-        }
-        string _Name = string.Empty;
+        public string Name { get; set; }
 
         public string Memo
         {
-            get => Article.Memo;
+            get => _Memo;
             set => RaisePropertyChangedIfSet(ref _Memo, value);
         }
         string _Memo = string.Empty;
