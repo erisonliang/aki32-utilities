@@ -1,7 +1,7 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:converters="clr-namespace:NodeGraph.NET6.Converters"
-                    xmlns:local="clr-namespace:NodeGraph.NET6.Controls">
+                    xmlns:converters="clr-namespace:Aki32Utilities.WPFAppUtilities.NodeController.Converters"
+                    xmlns:local="clr-namespace:Aki32Utilities.WPFAppUtilities.NodeController.Controls">
 
     <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
     <converters:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibility"/>

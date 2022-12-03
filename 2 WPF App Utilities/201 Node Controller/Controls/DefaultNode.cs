@@ -17,7 +17,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace NodeGraph.NET6.Controls
+namespace Aki32Utilities.WPFAppUtilities.NodeController.Controls
 {
     public class DefaultNode : NodeBase
     {

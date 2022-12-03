@@ -8,7 +8,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 
-namespace NodeGraph.NET6.Controls
+namespace Aki32Utilities.WPFAppUtilities.NodeController.Controls
 {
     internal class Ruler : ContentControl
     {

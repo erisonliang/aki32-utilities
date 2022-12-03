@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
 
-namespace NodeGraph.NET6.Utilities
+namespace Aki32Utilities.WPFAppUtilities.NodeController.Utilities
 {
     public class ResourceInstance<T> where T : DispatcherObject
     {

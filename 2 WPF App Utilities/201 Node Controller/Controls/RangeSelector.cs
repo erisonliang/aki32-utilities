@@ -7,7 +7,7 @@ using System.Windows;
 using System.Windows.Media;
 using System.Windows.Shapes;
 
-namespace NodeGraph.NET6.Controls
+namespace Aki32Utilities.WPFAppUtilities.NodeController.Controls
 {
     public class RangeSelector : Shape
     {

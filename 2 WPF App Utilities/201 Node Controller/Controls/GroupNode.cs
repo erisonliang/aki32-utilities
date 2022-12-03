@@ -9,7 +9,7 @@ using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
 
-namespace NodeGraph.NET6.Controls
+namespace Aki32Utilities.WPFAppUtilities.NodeController.Controls
 {
     enum DragResizeType
     {

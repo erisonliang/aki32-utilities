@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
 
-namespace NodeGraph.NET6.Converters
+namespace Aki32Utilities.WPFAppUtilities.NodeController.Converters
 {
     public class InverseBooleanToVisibilityConverter : IValueConverter
     {

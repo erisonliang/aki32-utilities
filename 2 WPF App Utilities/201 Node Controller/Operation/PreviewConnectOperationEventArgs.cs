@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NodeGraph.NET6.Operation
+namespace Aki32Utilities.WPFAppUtilities.NodeController.Operation
 {
     public class PreviewConnectOperationEventArgs
     {

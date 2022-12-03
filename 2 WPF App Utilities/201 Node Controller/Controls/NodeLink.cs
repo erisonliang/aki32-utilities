@@ -1,4 +1,4 @@
-﻿using NodeGraph.NET6.Extensions;
+﻿using Aki32Utilities.WPFAppUtilities.NodeController.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -12,7 +12,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
 
-namespace NodeGraph.NET6.Controls
+namespace Aki32Utilities.WPFAppUtilities.NodeController.Controls
 {
     public enum NodeLinkType
     {

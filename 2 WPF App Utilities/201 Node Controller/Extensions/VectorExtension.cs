@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace NodeGraph.NET6.Extensions
+namespace Aki32Utilities.WPFAppUtilities.NodeController.Extensions
 {
     public static class VectorExtension
     {

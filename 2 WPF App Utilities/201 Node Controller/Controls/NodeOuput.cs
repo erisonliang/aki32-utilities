@@ -1,4 +1,4 @@
-﻿using NodeGraph.NET6.Utilities;
+﻿using Aki32Utilities.WPFAppUtilities.NodeController.Utilities;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -9,7 +9,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 
-namespace NodeGraph.NET6.Controls
+namespace Aki32Utilities.WPFAppUtilities.NodeController.Controls
 {
     public class NodeOutputContent : NodeConnectorContent
     {

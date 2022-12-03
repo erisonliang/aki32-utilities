@@ -1,6 +1,6 @@
-﻿using NodeGraph.NET6.Extensions;
-using NodeGraph.NET6.Utilities;
-using NodeGraph.NET6.Operation;
+﻿using Aki32Utilities.WPFAppUtilities.NodeController.Extensions;
+using Aki32Utilities.WPFAppUtilities.NodeController.Utilities;
+using Aki32Utilities.WPFAppUtilities.NodeController.Operation;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -13,7 +13,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 
-namespace NodeGraph.NET6.Controls
+namespace Aki32Utilities.WPFAppUtilities.NodeController.Controls
 {
     public enum GroupIntersectType
     {

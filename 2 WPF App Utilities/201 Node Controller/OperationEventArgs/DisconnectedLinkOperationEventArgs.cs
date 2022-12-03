@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NodeGraph.NET6.OperationEventArgs
+namespace Aki32Utilities.WPFAppUtilities.NodeController.OperationEventArgs
 {
     public class DisconnectedLinkOperationEventArgs : EventArgs
     {

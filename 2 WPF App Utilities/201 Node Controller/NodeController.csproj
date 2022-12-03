@@ -1,9 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+    <RootNamespace>Aki32Utilities.WPFAppUtilities.NodeController</RootNamespace>
     <TargetFramework>net6.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
+    <AssemblyName>NodeController</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>

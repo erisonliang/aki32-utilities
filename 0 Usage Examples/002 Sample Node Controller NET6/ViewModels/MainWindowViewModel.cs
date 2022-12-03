@@ -1,6 +1,6 @@
 ﻿using Livet;
 using Livet.Commands;
-using NodeGraph.NET6.Operation;
+using Aki32Utilities.WPFAppUtilities.NodeController.Operation;
 using Aki32Utilities.UsageExamples.SampleNodeController.ViewModels;
 using NodeGraph.Utilities;
 using System;

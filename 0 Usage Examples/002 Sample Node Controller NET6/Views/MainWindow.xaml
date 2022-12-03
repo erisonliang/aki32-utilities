@@ -5,8 +5,7 @@
         xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:vm="clr-namespace:Aki32Utilities.UsageExamples.SampleNodeController.ViewModels"
-        xmlns:ctrl="clr-namespace:NodeGraph.NET6.Controls;assembly=NodeGraph.NET6"
-        xmlns:local="clr-namespace:Aki32Utilities.UsageExamples.SampleNodeController"
+        xmlns:ctrl="clr-namespace:Aki32Utilities.WPFAppUtilities.NodeController.Controls;assembly=NodeController"
         mc:Ignorable="d"
         Title="NodeGraph - prototype" Height="600" Width="1000">
 

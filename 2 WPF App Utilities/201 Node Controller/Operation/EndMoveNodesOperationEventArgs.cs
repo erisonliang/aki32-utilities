@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace NodeGraph.NET6.Operation
+namespace Aki32Utilities.WPFAppUtilities.NodeController.Operation
 {
     public class EndMoveNodesOperationEventArgs : EventArgs
     {

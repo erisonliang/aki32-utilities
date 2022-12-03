@@ -15,7 +15,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3 WFA App Utilities", "3 WF
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "002 Sample Node Controller", "0 Usage Examples\002 Sample Node Controller NET6\002 Sample Node Controller.csproj", "{A3AE8DFB-25D7-4315-8B86-23D8FA924500}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NodeGraph.NET6", "2 WPF App Utilities\201 Node Controller\NodeGraph.NET6.csproj", "{50F91BAF-531E-4395-804B-7B37996EBD5F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NodeController", "2 WPF App Utilities\201 Node Controller\NodeController.csproj", "{50F91BAF-531E-4395-804B-7B37996EBD5F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
