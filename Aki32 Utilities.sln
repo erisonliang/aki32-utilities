@@ -3,13 +3,19 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.2.32526.322
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "1 Console App Utilities", "1 Console App Utilities\1 Console App Utilities.csproj", "{43AF90B7-76CB-49DA-B1B3-85A9F5EBD8D6}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "0 Usage Examples", "0 Usage Examples", "{E70FBD90-F1AF-4B1A-8166-4635EAEE4D9B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "101 Console App Utilities", "1 Console App Utilities\101 Console App Utilities.csproj", "{43AF90B7-76CB-49DA-B1B3-85A9F5EBD8D6}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2 WPF App Utilities", "2 WPF App Utilities", "{6B224D67-E18F-4B9A-8286-E075E2C665C0}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1 Console App Utilities", "1 Console App Utilities", "{12CA4997-7908-4FE0-982F-2FC56A7CC832}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "0 Usage Examples", "0 Usage Examples", "{290C3C10-EFB9-4571-B388-926637C9E111}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "201 Node Controller", "2 WPF App Utilities\201 Node Controller\201 Node Controller.csproj", "{B8CDDDF0-7BD1-4294-80BA-F55D488A2FC5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "001 Chainable Extension Node Controller", "0 Usage Examples\001 Chainable Extensions Node Controller\001 Chainable Extension Node Controller.csproj", "{3373C6B8-BC52-41A6-9376-08A7A8437334}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "002 Research Articles Node Controller", "0 Usage Examples\002 Research Articles Node Controller\002 Research Articles Node Controller.csproj", "{22AA3E5C-27D7-449F-AEF4-F5461C77A3E2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,12 +27,27 @@ Global
 		{43AF90B7-76CB-49DA-B1B3-85A9F5EBD8D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{43AF90B7-76CB-49DA-B1B3-85A9F5EBD8D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{43AF90B7-76CB-49DA-B1B3-85A9F5EBD8D6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B8CDDDF0-7BD1-4294-80BA-F55D488A2FC5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B8CDDDF0-7BD1-4294-80BA-F55D488A2FC5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B8CDDDF0-7BD1-4294-80BA-F55D488A2FC5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B8CDDDF0-7BD1-4294-80BA-F55D488A2FC5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3373C6B8-BC52-41A6-9376-08A7A8437334}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3373C6B8-BC52-41A6-9376-08A7A8437334}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3373C6B8-BC52-41A6-9376-08A7A8437334}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3373C6B8-BC52-41A6-9376-08A7A8437334}.Release|Any CPU.Build.0 = Release|Any CPU
+		{22AA3E5C-27D7-449F-AEF4-F5461C77A3E2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{22AA3E5C-27D7-449F-AEF4-F5461C77A3E2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{22AA3E5C-27D7-449F-AEF4-F5461C77A3E2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{22AA3E5C-27D7-449F-AEF4-F5461C77A3E2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{43AF90B7-76CB-49DA-B1B3-85A9F5EBD8D6} = {12CA4997-7908-4FE0-982F-2FC56A7CC832}
+		{B8CDDDF0-7BD1-4294-80BA-F55D488A2FC5} = {6B224D67-E18F-4B9A-8286-E075E2C665C0}
+		{3373C6B8-BC52-41A6-9376-08A7A8437334} = {290C3C10-EFB9-4571-B388-926637C9E111}
+		{22AA3E5C-27D7-449F-AEF4-F5461C77A3E2} = {290C3C10-EFB9-4571-B388-926637C9E111}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E6152233-E9D8-4E47-935B-F8AE00F7FD90}
