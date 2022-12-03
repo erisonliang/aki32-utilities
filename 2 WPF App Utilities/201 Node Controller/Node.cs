@@ -7,16 +7,16 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 
-namespace Ogxd.NodeGraph {
-
-    public abstract class Node : Border, IDisposable {
-
+namespace Aki32Utilities.WPFAppUtilities.NodeController
+{
+    public abstract class Node : Border, IDisposable
+    {
         public delegate void NodeEventHandler(Node node);
         public event NodeEventHandler moved;
 
         public NodeGraph graph { get; private set; }
         public NodeChest chest { get; private set; }
-        private Nullable<Point> dragStart = null;
+        private Point? dragStart = null;
 
         public NodeGraphContext context => (graph != null) ? graph.context : chest.context;
 
@@ -26,16 +26,20 @@ namespace Ogxd.NodeGraph {
 
         public bool isTemplate => chest != null;
 
-        public string title {
-            get {
+        public string title
+        {
+            get
+            {
                 return titleUI.Text;
             }
-            set {
+            set
+            {
                 titleUI.Text = value;
             }
         }
 
-        public Node() {
+        public Node()
+        {
             initialize();
         }
 
@@ -45,7 +49,8 @@ namespace Ogxd.NodeGraph {
         private StackPanel stackOutputs;
         private Grid grid;
 
-        private void initialize() {
+        private void initialize()
+        {
             Width = 250;
             MinHeight = 50;
             CornerRadius = new CornerRadius(5);
@@ -54,7 +59,8 @@ namespace Ogxd.NodeGraph {
             BorderBrush = Brushes.White;
             BorderThickness = new Thickness(0);
 
-            titleUI = new TextBlock {
+            titleUI = new TextBlock
+            {
                 Foreground = Brushes.White,
                 FontWeight = FontWeights.Bold,
                 HorizontalAlignment = HorizontalAlignment.Center
@@ -72,16 +78,19 @@ namespace Ogxd.NodeGraph {
 
         Point startPoint;
 
-        private void Node_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
+        private void Node_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
             startPoint = e.GetPosition(null);
         }
 
         public abstract void setConnections();
 
-        protected override void OnVisualParentChanged(DependencyObject oldParent) {
+        protected override void OnVisualParentChanged(DependencyObject oldParent)
+        {
             base.OnVisualParentChanged(oldParent);
             DependencyObject current = this;
-            for (int i = 0; i < 5; i++) {
+            for (int i = 0; i < 5; i++)
+            {
                 current = (current as FrameworkElement)?.Parent;
                 if (current == null)
                     break;
@@ -94,13 +103,15 @@ namespace Ogxd.NodeGraph {
             updateOrientation();
         }
 
-        public void updateOrientation() {
+        public void updateOrientation()
+        {
 
             if (grid != null)
                 grid.Children.Clear();
 
             grid = new Grid();
-            switch (context.orientation) {
+            switch (context.orientation)
+            {
                 case NodeGraphOrientation.LeftToRight:
                     grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(8) });
                     grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
@@ -195,24 +206,29 @@ namespace Ogxd.NodeGraph {
             moved?.Invoke(this);
         }
 
-        private void mouseMove(object sender, MouseEventArgs args) {
+        private void mouseMove(object sender, MouseEventArgs args)
+        {
 
-            if (isTemplate) {
+            if (isTemplate)
+            {
                 // Get the current mouse position
                 Point mousePos = args.GetPosition(null);
                 Vector diff = startPoint - mousePos;
 
                 if (args.LeftButton == MouseButtonState.Pressed &&
                     (Math.Abs(diff.X) > SystemParameters.MinimumHorizontalDragDistance ||
-                    Math.Abs(diff.Y) > SystemParameters.MinimumVerticalDragDistance)) {
+                    Math.Abs(diff.Y) > SystemParameters.MinimumVerticalDragDistance))
+                {
 
                     // Initialize the drag & drop operation
                     DataObject dragData = new DataObject("node", this);
                     DragDrop.DoDragDrop(this, dragData, DragDropEffects.Move);
                 }
             }
-            else {
-                if (dragStart != null && args.LeftButton == MouseButtonState.Pressed) {
+            else
+            {
+                if (dragStart != null && args.LeftButton == MouseButtonState.Pressed)
+                {
                     UIElement element = (UIElement)sender;
                     Point p2 = args.GetPosition(graph.canvas);
                     position = new Point(p2.X - dragStart.Value.X, p2.Y - dragStart.Value.Y);
@@ -221,13 +237,15 @@ namespace Ogxd.NodeGraph {
             }
         }
 
-        private bool isPointWithin(Point point) {
+        private bool isPointWithin(Point point)
+        {
             if (point.X < 0 || point.Y < 0 || point.X > graph.ActualWidth || point.Y > graph.ActualHeight)
                 return false;
             return true;
         }
 
-        private void mouseUp(object sender, MouseEventArgs args) {
+        private void mouseUp(object sender, MouseEventArgs args)
+        {
             var element = (UIElement)sender;
             dragStart = null;
             element.ReleaseMouseCapture();
@@ -235,40 +253,49 @@ namespace Ogxd.NodeGraph {
                 graph.removeNode(this);
         }
 
-        private void mouseDown(object sender, MouseEventArgs args) {
+        private void mouseDown(object sender, MouseEventArgs args)
+        {
             var element = (UIElement)sender;
             dragStart = args.GetPosition(element);
             element.CaptureMouse();
         }
 
         private bool _isAboutToBeRemoved = false;
-        public bool isAboutToBeRemoved {
+        public bool isAboutToBeRemoved
+        {
             get { return _isAboutToBeRemoved; }
-            private set {
+            private set
+            {
                 if (_isAboutToBeRemoved == value)
                     return;
 
                 _isAboutToBeRemoved = value;
-                if (_isAboutToBeRemoved) {
+                if (_isAboutToBeRemoved)
+                {
                     BorderBrush = Brushes.Red;
                     BorderThickness = new Thickness(2);
-                } else {
+                }
+                else
+                {
                     BorderBrush = Brushes.White;
                     BorderThickness = new Thickness(0);
                 }
             }
         }
 
-        public Point position {
+        public Point position
+        {
             get { return new Point(Canvas.GetLeft(this), Canvas.GetTop(this)); }
-            set {
+            set
+            {
                 Canvas.SetLeft(this, value.X);
                 Canvas.SetTop(this, value.Y);
                 moved?.Invoke(this);
             }
         }
 
-        public Dock addInput(int type) {
+        public Dock addInput(int type)
+        {
             InputDock dock = new InputDock(this, type);
             stackInputs.Children.Add(dock);
             //stackInputs.UpdateLayout();
@@ -278,47 +305,59 @@ namespace Ogxd.NodeGraph {
             return dock;
         }
 
-        public void removeInput(Dock dock) {
+        public void removeInput(Dock dock)
+        {
             stackInputs.Children.Remove(dock);
         }
 
-        public OutputDock addOutput(int type) {
+        public OutputDock addOutput(int type)
+        {
             OutputDock dock = new OutputDock(this, type);
             stackOutputs.Children.Add(dock);
             return dock;
         }
 
-        public void removeOutput(Dock dock) {
+        public void removeOutput(Dock dock)
+        {
             stackOutputs.Children.Remove(dock);
         }
 
-        public void clearInputs() {
-            foreach (InputDock input in getInputs()) {
-                if (input.pipe != null) {
+        public void clearInputs()
+        {
+            foreach (InputDock input in getInputs())
+            {
+                if (input.pipe != null)
+                {
                     input.pipe.Dispose();
                 }
             }
             stackInputs.Children.Clear();
         }
 
-        public void clearOutputs() {
-            foreach (OutputDock output in getOutputs()) {
-                foreach (Pipe pipe in output.pipes) {
+        public void clearOutputs()
+        {
+            foreach (OutputDock output in getOutputs())
+            {
+                foreach (Pipe pipe in output.pipes)
+                {
                     pipe.Dispose();
                 }
             }
             stackOutputs.Children.Clear();
         }
 
-        public IProperty addProperty<IProperty>(IProperty property) {
+        public IProperty addProperty<IProperty>(IProperty property)
+        {
             stackParameters.Children.Add(property as UIElement);
             return property;
         }
 
-        public int getMaximumDepth() {
+        public int getMaximumDepth()
+        {
             InputDock[] inputs = getInputs();
             int maxDepth = 0;
-            foreach (InputDock input in inputs) {
+            foreach (InputDock input in inputs)
+            {
                 Node previousNode = input.pipe?.outputDock?.node;
                 if (previousNode == null)
                     continue;
@@ -329,7 +368,8 @@ namespace Ogxd.NodeGraph {
             return maxDepth;
         }
 
-        public void queryProcess() {
+        public void queryProcess()
+        {
 
             // Makes sure all inputs are ready for processing. Otherwise, cancel.
             InputDock[] ins = getInputs();
@@ -345,8 +385,10 @@ namespace Ogxd.NodeGraph {
 
             // Tranfers results to next nodes
             OutputDock[] outs = getOutputs();
-            for (int i = 0; i < outs.Length; i++) {
-                foreach (Pipe pipe in outs[i].pipes) {
+            for (int i = 0; i < outs.Length; i++)
+            {
+                foreach (Pipe pipe in outs[i].pipes)
+                {
                     pipe.result = results[i];
                     pipe.inputDock.node.queryProcess();
                 }
@@ -355,14 +397,18 @@ namespace Ogxd.NodeGraph {
 
         public abstract object[] process(object[] ins, Dictionary<string, object> parameters);
 
-        public void Dispose() {
+        public void Dispose()
+        {
             Visibility = Visibility.Collapsed;
-            foreach (InputDock input in getInputs()) {
+            foreach (InputDock input in getInputs())
+            {
                 if (input.pipe != null)
                     input.pipe.Dispose();
             }
-            foreach (OutputDock output in getOutputs()) {
-                foreach (Pipe pipe in output.pipes.ToArray()) {
+            foreach (OutputDock output in getOutputs())
+            {
+                foreach (Pipe pipe in output.pipes.ToArray())
+                {
                     pipe.Dispose();
                 }
             }

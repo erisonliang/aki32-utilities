@@ -5,18 +5,22 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace Ogxd.NodeGraph {
+using Aki32Utilities.WPFAppUtilities.NodeController;
 
+namespace Aki32Utilities.UsageExamples.ResearchArticlesNodeController
+{
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window {
+    public partial class MainWindow : Window
+    {
 
         NodeGraph nodeGraph;
         NodeChest nodeChest;
         NodeGraphContext context;
 
-        public MainWindow() {
+        public MainWindow()
+        {
             InitializeComponent();
 
             context = new NodeGraphContext();
@@ -44,7 +48,7 @@ namespace Ogxd.NodeGraph {
             AdditionNode additionNode3 = nodeGraph.addNode(new AdditionNode() { position = new Point(500, 160) });
             IntToHexNode intToHexNode = nodeGraph.addNode(intToHexNode = new IntToHexNode() { position = new Point(700, 120) });
             ConsoleOutputNode consoleOutputNode = nodeGraph.addNode(consoleOutputNode = new ConsoleOutputNode() { position = new Point(1050, 120) });
-            
+
             new Pipe(intNode1.getOutputs()[0], additionNode1.getInputs()[0]);
             new Pipe(intNode1.getOutputs()[0], additionNode2.getInputs()[0]);
             new Pipe(intNode2.getOutputs()[0], additionNode1.getInputs()[1]);
@@ -59,28 +63,36 @@ namespace Ogxd.NodeGraph {
             new Pipe(intToHexNode.getOutputs()[0], consoleOutputNode.getInputs()[0]);
         }
 
-        private void runClick(object sender, RoutedEventArgs e) {
+        private void runClick(object sender, RoutedEventArgs e)
+        {
             nodeGraph.process();
         }
 
-        private void addClick(object sender, RoutedEventArgs e) {
+        private void addClick(object sender, RoutedEventArgs e)
+        {
             nodeGraph.addNode(new IntNode() { position = new Point(10, 10) });
         }
 
-        private void rearrange(object sender, RoutedEventArgs e) {
+        private void rearrange(object sender, RoutedEventArgs e)
+        {
             nodeGraph.autoArrange();
         }
 
-        private void rotate(object sender, RoutedEventArgs e) {
+        private void rotate(object sender, RoutedEventArgs e)
+        {
             context.orientation = GetNextEnumValueOf(context.orientation);
         }
 
-        public static NodeGraphOrientation GetNextEnumValueOf(NodeGraphOrientation value) {
+        public static NodeGraphOrientation GetNextEnumValueOf(NodeGraphOrientation value)
+        {
             var values = (NodeGraphOrientation[])Enum.GetValues(typeof(NodeGraphOrientation));
             var nextValues = values.Where(x => (int)x > (int)value);
-            if (nextValues.Count() == 0) {
+            if (nextValues.Count() == 0)
+            {
                 return values.First();
-            } else {
+            }
+            else
+            {
                 return nextValues.First();
             }
         }

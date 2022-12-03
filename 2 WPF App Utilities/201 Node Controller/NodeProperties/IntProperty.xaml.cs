@@ -3,7 +3,7 @@ using System.Text.RegularExpressions;
 using System.Windows.Controls;
 using System.Windows.Input;
 
-namespace Ogxd.NodeGraph {
+namespace Aki32Utilities.WPFAppUtilities.NodeController {
 
     /// <summary>
     /// Logique d'interaction pour TextProperty.xaml

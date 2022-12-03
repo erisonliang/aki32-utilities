@@ -3,12 +3,13 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 
-namespace Ogxd.NodeGraph {
-
+namespace Aki32Utilities.WPFAppUtilities.NodeController
+{
     /// <summary>
     /// Abstract class that defines a visual anchor point for Pipes.
     /// </summary>
-    public abstract class Dock : Border {
+    public abstract class Dock : Border
+    {
 
         /// <summary>
         /// Node associated with this Dock
@@ -20,7 +21,8 @@ namespace Ogxd.NodeGraph {
         /// </summary>
         public readonly int type;
 
-        public Dock(Node node, int type) {
+        public Dock(Node node, int type)
+        {
             Width = 16;
             Height = 16;
             Background = Brushes.White;
@@ -36,12 +38,14 @@ namespace Ogxd.NodeGraph {
             MouseLeave += onDockMouseLeave;
         }
 
-        protected override void OnVisualParentChanged(DependencyObject oldParent) {
+        protected override void OnVisualParentChanged(DependencyObject oldParent)
+        {
             base.OnVisualParentChanged(oldParent);
             Background = node.context.getPipeColor(type); /// Sets the background color to match the color selection delegate from the current NodeGraphContext
         }
 
-        public Point getPositionInCanvas() {
+        public Point getPositionInCanvas()
+        {
             return this.TransformToVisual(node).Transform(new Point(Canvas.GetLeft(node) + 8, Canvas.GetTop(node) + 8));
         }
 
@@ -58,16 +62,19 @@ namespace Ogxd.NodeGraph {
         /// - Not editing
         /// </summary>
         /// <returns></returns>
-        public bool isCompatibleWithEditingPipe() {
+        public bool isCompatibleWithEditingPipe()
+        {
             if (Pipe.EditingPipe == null)
                 return false;
             // If input is set
-            if (Pipe.EditingPipe.inputDock != null) {
+            if (Pipe.EditingPipe.inputDock != null)
+            {
                 if (this is InputDock || Pipe.EditingPipe.inputDock.node == node || Pipe.EditingPipe.inputDock.type != type)
                     return false;
             }
             // Otherwise, if output is set
-            else {
+            else
+            {
                 if (this is OutputDock || Pipe.EditingPipe.outputDock.node == node || Pipe.EditingPipe.outputDock.type != type)
                     return false;
             }

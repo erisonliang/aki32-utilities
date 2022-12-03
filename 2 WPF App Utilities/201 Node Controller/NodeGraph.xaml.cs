@@ -6,24 +6,29 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
-namespace Ogxd.NodeGraph {
-
-    public partial class NodeGraph : Border {
+namespace Aki32Utilities.WPFAppUtilities.NodeController
+{
+    public partial class NodeGraph : Border
+    {
 
         public readonly NodeGraphContext context;
 
         private double _pipeStiffness = 50;
-        public double pipeStiffness {
-            get {
+        public double pipeStiffness
+        {
+            get
+            {
                 return _pipeStiffness;
             }
-            set {
+            set
+            {
                 if (_pipeStiffness == value)
                     return;
             }
         }
 
-        public NodeGraph(NodeGraphContext context) {
+        public NodeGraph(NodeGraphContext context)
+        {
             InitializeComponent();
 
             context.propertyChanged += Context_propertyChanged;
@@ -35,17 +40,21 @@ namespace Ogxd.NodeGraph {
             this.AllowDrop = true;
         }
 
-        private void Context_propertyChanged(string propertyName) {
-            switch (propertyName) {
+        private void Context_propertyChanged(string propertyName)
+        {
+            switch (propertyName)
+            {
                 case "orientation":
-                    foreach (Node node in getNodes()) {
+                    foreach (Node node in getNodes())
+                    {
                         node.updateOrientation();
                     }
                     break;
             }
         }
 
-        private void NodeGraph_Drop(object sender, DragEventArgs e) {
+        private void NodeGraph_Drop(object sender, DragEventArgs e)
+        {
             Node node = e.Data.GetData("node") as Node;
             if (node == null)
                 return;
@@ -54,30 +63,39 @@ namespace Ogxd.NodeGraph {
             copy.position = e.GetPosition(canvas);
         }
 
-        private void Canvas_DragEnter(object sender, DragEventArgs e) {
+        private void Canvas_DragEnter(object sender, DragEventArgs e)
+        {
             Node node = e.Data.GetData("node") as Node;
-            if (node == null || sender == e.Source) {
+            if (node == null || sender == e.Source)
+            {
                 e.Effects = DragDropEffects.None;
-            } else {
+            }
+            else
+            {
                 e.Effects = DragDropEffects.Copy;
             }
         }
 
-        private void NodeGraph_MouseDown(object sender, MouseButtonEventArgs e) {
-            if (Pipe.EditingPipe != null && (Mouse.DirectlyOver == this || Mouse.DirectlyOver == canvas)) {
+        private void NodeGraph_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (Pipe.EditingPipe != null && (Mouse.DirectlyOver == this || Mouse.DirectlyOver == canvas))
+            {
                 Pipe.EditingPipe.Dispose();
                 Pipe.EditingPipe = null;
             }
         }
 
-        public T addNode<T>(T node) where T : Node {
+        public T addNode<T>(T node) where T : Node
+        {
             canvas.Children.Add(node);
             node.setConnections();
             return node;
         }
 
-        public bool tryAddNode(Node node) {
-            if (!canvas.Children.Contains(node)) {
+        public bool tryAddNode(Node node)
+        {
+            if (!canvas.Children.Contains(node))
+            {
                 canvas.Children.Add(node);
                 node.setConnections();
                 return true;
@@ -85,13 +103,16 @@ namespace Ogxd.NodeGraph {
             return false;
         }
 
-        public void removeNode(Node node) {
+        public void removeNode(Node node)
+        {
             canvas.Children.Remove(node);
             node.Dispose();
         }
 
-        public bool tryRemoveNode(Node node) {
-            if (canvas.Children.Contains(node)) {
+        public bool tryRemoveNode(Node node)
+        {
+            if (canvas.Children.Contains(node))
+            {
                 canvas.Children.Remove(node);
                 node.Dispose();
                 return true;
@@ -99,29 +120,35 @@ namespace Ogxd.NodeGraph {
             return false;
         }
 
-        public void autoArrange() {
+        public void autoArrange()
+        {
 
             Node[] nodes = getNodes();
             Dictionary<int, int> columns = new Dictionary<int, int>();
             int maxMaxDepth = -1;
 
-            for (int i = 0; i < nodes.Length; i++) {
+            for (int i = 0; i < nodes.Length; i++)
+            {
                 int maxDepth = nodes[i].getMaximumDepth();
                 if (maxDepth > maxMaxDepth)
                     maxMaxDepth = maxDepth;
             }
 
-            for (int i = 0; i < nodes.Length; i++) {
+            for (int i = 0; i < nodes.Length; i++)
+            {
                 int maxDepth = nodes[i].getMaximumDepth();
 
-                if (columns.ContainsKey(maxDepth)) {
+                if (columns.ContainsKey(maxDepth))
+                {
                     columns[maxDepth]++;
                 }
-                else {
+                else
+                {
                     columns.Add(maxDepth, 1);
                 }
 
-                switch (context.orientation) {
+                switch (context.orientation)
+                {
                     case NodeGraphOrientation.LeftToRight:
                         nodes[i].position = new Point(maxDepth * 350, columns[maxDepth] * 100);
                         break;
@@ -138,23 +165,30 @@ namespace Ogxd.NodeGraph {
             }
         }
 
-        public Node[] getNodes() {
+        public Node[] getNodes()
+        {
             return canvas.Children.OfType<Node>().ToArray();
         }
 
-        public void process() {
+        public void process()
+        {
             var nodes = getNodes();
             // Clears all the previous run results
-            foreach (Node node in nodes) {
-                foreach (OutputDock dock in node.getOutputs()) {
-                    foreach (Pipe pipe in dock.pipes) {
+            foreach (Node node in nodes)
+            {
+                foreach (OutputDock dock in node.getOutputs())
+                {
+                    foreach (Pipe pipe in dock.pipes)
+                    {
                         pipe.result = null;
                     }
                 }
             }
             // Runs !
-            foreach (Node node in nodes.Where(x => x.getInputs().Length == 0)) {
-                Thread thread = new Thread(new ThreadStart(() => {
+            foreach (Node node in nodes.Where(x => x.getInputs().Length == 0))
+            {
+                Thread thread = new Thread(new ThreadStart(() =>
+                {
                     node.queryProcess();
                 }));
                 thread.Start();

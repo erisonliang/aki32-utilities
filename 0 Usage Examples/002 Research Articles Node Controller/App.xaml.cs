@@ -6,10 +6,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace Ogxd.NodeGraph {
+namespace Aki32Utilities.UsageExamples.ResearchArticlesNodeController
+{
     /// <summary>
     /// Interaction logic for App.xaml
     /// </summary>
-    public partial class App : Application {
+    public partial class App : Application
+    {
     }
 }

@@ -3,16 +3,20 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
-namespace Ogxd.NodeGraph {
+using Aki32Utilities.WPFAppUtilities.NodeController;
 
-    public partial class FloatingChest : Border {
+namespace Aki32Utilities.UsageExamples.ChainableExtensionNodeController
+{
+    public partial class FloatingChest : Border
+    {
 
-        private Nullable<Point> dragStart = null;
+        private Point? dragStart = null;
         private Point startPoint;
         private readonly NodeChest chest;
         private readonly NodeGraph graph;
 
-        public FloatingChest(NodeChest chest, NodeGraph graph) {
+        public FloatingChest(NodeChest chest, NodeGraph graph)
+        {
             InitializeComponent();
 
             this.chest = chest;
@@ -26,34 +30,41 @@ namespace Ogxd.NodeGraph {
             MouseUp += mouseUp;
         }
 
-        private void Node_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
+        private void Node_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
             startPoint = e.GetPosition(null);
         }
 
-        private void mouseMove(object sender, MouseEventArgs args) {
+        private void mouseMove(object sender, MouseEventArgs args)
+        {
 
-            if (dragStart != null && args.LeftButton == MouseButtonState.Pressed) {
+            if (dragStart != null && args.LeftButton == MouseButtonState.Pressed)
+            {
                 UIElement element = (UIElement)sender;
                 Point p2 = args.GetPosition(graph.canvas);
                 position = new Point(p2.X - dragStart.Value.X, p2.Y - dragStart.Value.Y);
             }
         }
 
-        private void mouseUp(object sender, MouseEventArgs args) {
+        private void mouseUp(object sender, MouseEventArgs args)
+        {
             var element = (UIElement)sender;
             dragStart = null;
             element.ReleaseMouseCapture();
         }
 
-        private void mouseDown(object sender, MouseEventArgs args) {
+        private void mouseDown(object sender, MouseEventArgs args)
+        {
             var element = (UIElement)sender;
             dragStart = args.GetPosition(element);
             element.CaptureMouse();
         }
 
-        public Point position {
+        public Point position
+        {
             get { return new Point(Canvas.GetLeft(this), Canvas.GetTop(this)); }
-            set {
+            set
+            {
                 Canvas.SetLeft(this, value.X);
                 Canvas.SetTop(this, value.Y);
             }

@@ -4,13 +4,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Ogxd.NodeGraph {
+using Aki32Utilities.WPFAppUtilities.NodeController;
 
-    public class ShuffleNode : Node {
-
+namespace Aki32Utilities.UsageExamples.ResearchArticlesNodeController
+{
+    public class ShuffleNode : Node
+    {
         IntProperty intProp;
 
-        public override void setConnections() {
+        public override void setConnections()
+        {
             //stackParameters.Children.
             title = "Shuffle";
             addOutput(0);
@@ -19,14 +22,17 @@ namespace Ogxd.NodeGraph {
             IntProp_valueChanged();
         }
 
-        private void IntProp_valueChanged() {
+        private void IntProp_valueChanged()
+        {
             clearInputs();
-            for (int i = 0; i < (int)intProp.value; i ++) {
+            for (int i = 0; i < (int)intProp.value; i++)
+            {
                 addInput(0);
             }
         }
 
-        public override object[] process(object[] ins, Dictionary<string, object> parameters) {
+        public override object[] process(object[] ins, Dictionary<string, object> parameters)
+        {
             var inputs = getInputs();
             Random rnd = new Random();
             int c = rnd.Next(0, inputs.Length);

@@ -4,13 +4,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Ogxd.NodeGraph {
+using Aki32Utilities.WPFAppUtilities.NodeController;
 
-    public class DuplicationNode : Node {
+namespace Aki32Utilities.UsageExamples.ChainableExtensionNodeController
+{
+
+    public class DuplicationNode : Node
+    {
 
         IntProperty intProp;
 
-        public override void setConnections() {
+        public override void setConnections()
+        {
             //stackParameters.Children.
             title = "Duplication";
             addInput(0);
@@ -19,16 +24,20 @@ namespace Ogxd.NodeGraph {
             IntProp_valueChanged();
         }
 
-        private void IntProp_valueChanged() {
+        private void IntProp_valueChanged()
+        {
             clearOutputs();
-            for (int i = 0; i < (int)intProp.value; i ++) {
+            for (int i = 0; i < (int)intProp.value; i++)
+            {
                 addOutput(0);
             }
         }
 
-        public override object[] process(object[] ins, Dictionary<string, object> parameters) {
+        public override object[] process(object[] ins, Dictionary<string, object> parameters)
+        {
             object[] results = new object[(int)parameters["Clones"]];
-            for (int i = 0; i < (int)parameters["Clones"]; i++) {
+            for (int i = 0; i < (int)parameters["Clones"]; i++)
+            {
                 results[i] = ins[0];
             }
             return results;

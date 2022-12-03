@@ -6,7 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace Ogxd.NodeGraph {
+namespace Aki32Utilities.UsageExamples.ChainableExtensionNodeController {
     /// <summary>
     /// Interaction logic for App.xaml
     /// </summary>

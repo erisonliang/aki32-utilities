@@ -10,38 +10,44 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 
-namespace Ogxd.NodeGraph {
+namespace Aki32Utilities.WPFAppUtilities.NodeController
+{
 
     /// <summary>
     /// InputDock for input data channel
     /// </summary>
-    public sealed class InputDock : Dock {
-
+    public sealed class InputDock : Dock
+    {
         /// <summary>
         /// Connected pipe.
         /// An InputDock can have only one Pipe connected at once (or none if unassigned)
         /// </summary>
         public Pipe pipe;
 
-        public InputDock(Node node, int type) : base(node, type) {
+        public InputDock(Node node, int type) : base(node, type)
+        {
 
         }
 
-        internal override void onDockClick(object sender, RoutedEventArgs e) {
+        internal override void onDockClick(object sender, RoutedEventArgs e)
+        {
 
             if (node.isTemplate)
                 return;
 
-            if (pipe != null) {
+            if (pipe != null)
+            {
                 pipe.Dispose();
             }
 
-            if (Pipe.EditingPipe == null) {
+            if (Pipe.EditingPipe == null)
+            {
                 new Pipe(null, this);
                 return;
             }
 
-            if (isCompatibleWithEditingPipe()) {
+            if (isCompatibleWithEditingPipe())
+            {
                 /// Prevent from having duplicate pipes
                 if (Pipe.EditingPipe.outputDock.pipes.Any(x => x.inputDock == this))
                     return;
@@ -49,13 +55,16 @@ namespace Ogxd.NodeGraph {
             }
         }
 
-        internal override void onDockMouseEnter(object sender, MouseEventArgs e) {
-            if (isCompatibleWithEditingPipe()) {
+        internal override void onDockMouseEnter(object sender, MouseEventArgs e)
+        {
+            if (isCompatibleWithEditingPipe())
+            {
                 BorderBrush = Brushes.White;
             }
         }
 
-        internal override void onDockMouseLeave(object sender, MouseEventArgs e) {
+        internal override void onDockMouseLeave(object sender, MouseEventArgs e)
+        {
             BorderBrush = Brushes.Black;
         }
     }

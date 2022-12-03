@@ -5,16 +5,22 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace Ogxd.NodeGraph {
+using Aki32Utilities.WPFAppUtilities.NodeController;
 
-    public class ConsoleOutputNode : Node {
+namespace Aki32Utilities.UsageExamples.ChainableExtensionNodeController
+{
 
-        public override void setConnections() {
+    public class ConsoleOutputNode : Node
+    {
+
+        public override void setConnections()
+        {
             title = "Console";
             addInput(1);
         }
 
-        public override object[] process(object[] ins, Dictionary<string, object> parameters) {
+        public override object[] process(object[] ins, Dictionary<string, object> parameters)
+        {
             //Console.WriteLine("Result : " + ins[0]);
             MessageBox.Show("Result : " + ins[0]);
             return null;
