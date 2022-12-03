@@ -15,7 +15,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3 WFA App Utilities", "3 WF
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "002 Sample Node Controller", "0 Usage Examples\002 Sample Node Controller NET6\002 Sample Node Controller.csproj", "{A3AE8DFB-25D7-4315-8B86-23D8FA924500}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NodeGraph.NET6", "2 WPF App Utilities\NodeGraph.NET6\NodeGraph.NET6.csproj", "{CD03810B-0A6F-4C0B-B44D-13F11E32B4DB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NodeGraph.NET6", "2 WPF App Utilities\201 Node Controller\NodeGraph.NET6.csproj", "{50F91BAF-531E-4395-804B-7B37996EBD5F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,14 +41,14 @@ Global
 		{A3AE8DFB-25D7-4315-8B86-23D8FA924500}.Release|Any CPU.Build.0 = Release|Any CPU
 		{A3AE8DFB-25D7-4315-8B86-23D8FA924500}.Release|x86.ActiveCfg = Release|Any CPU
 		{A3AE8DFB-25D7-4315-8B86-23D8FA924500}.Release|x86.Build.0 = Release|Any CPU
-		{CD03810B-0A6F-4C0B-B44D-13F11E32B4DB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CD03810B-0A6F-4C0B-B44D-13F11E32B4DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CD03810B-0A6F-4C0B-B44D-13F11E32B4DB}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{CD03810B-0A6F-4C0B-B44D-13F11E32B4DB}.Debug|x86.Build.0 = Debug|Any CPU
-		{CD03810B-0A6F-4C0B-B44D-13F11E32B4DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CD03810B-0A6F-4C0B-B44D-13F11E32B4DB}.Release|Any CPU.Build.0 = Release|Any CPU
-		{CD03810B-0A6F-4C0B-B44D-13F11E32B4DB}.Release|x86.ActiveCfg = Release|Any CPU
-		{CD03810B-0A6F-4C0B-B44D-13F11E32B4DB}.Release|x86.Build.0 = Release|Any CPU
+		{50F91BAF-531E-4395-804B-7B37996EBD5F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{50F91BAF-531E-4395-804B-7B37996EBD5F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{50F91BAF-531E-4395-804B-7B37996EBD5F}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{50F91BAF-531E-4395-804B-7B37996EBD5F}.Debug|x86.Build.0 = Debug|Any CPU
+		{50F91BAF-531E-4395-804B-7B37996EBD5F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{50F91BAF-531E-4395-804B-7B37996EBD5F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{50F91BAF-531E-4395-804B-7B37996EBD5F}.Release|x86.ActiveCfg = Release|Any CPU
+		{50F91BAF-531E-4395-804B-7B37996EBD5F}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -56,7 +56,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{43AF90B7-76CB-49DA-B1B3-85A9F5EBD8D6} = {12CA4997-7908-4FE0-982F-2FC56A7CC832}
 		{A3AE8DFB-25D7-4315-8B86-23D8FA924500} = {290C3C10-EFB9-4571-B388-926637C9E111}
-		{CD03810B-0A6F-4C0B-B44D-13F11E32B4DB} = {6B224D67-E18F-4B9A-8286-E075E2C665C0}
+		{50F91BAF-531E-4395-804B-7B37996EBD5F} = {6B224D67-E18F-4B9A-8286-E075E2C665C0}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E6152233-E9D8-4E47-935B-F8AE00F7FD90}

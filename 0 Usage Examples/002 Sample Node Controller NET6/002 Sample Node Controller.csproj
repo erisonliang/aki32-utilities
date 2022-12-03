@@ -17,7 +17,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\1 Console App Utilities\101 Console App Utilities.csproj" />
-    <ProjectReference Include="..\..\2 WPF App Utilities\NodeGraph.NET6\NodeGraph.NET6.csproj" />
+    <ProjectReference Include="..\..\2 WPF App Utilities\201 Node Controller\NodeGraph.NET6.csproj" />
   </ItemGroup>
 
   <ItemGroup>
