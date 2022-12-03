@@ -7,6 +7,7 @@ using System.Collections.ObjectModel;
 using System.Windows;
 using Aki32Utilities.ViewModels.NodeViewModels;
 using Aki32Utilities.ConsoleAppUtilities.SpecificPurposeModels.Research;
+using System.IO;
 
 namespace Aki32Utilities.UsageExamples.ResearchArticlesNodeController.ViewModels;
 
@@ -15,7 +16,7 @@ public class MainWindowViewModel : ViewModel
 
     // ★★★★★★★★★★★★★★★ props
 
-    #region props
+    #region inner props
 
     public double Scale { get; set; } = 1d;
 
@@ -101,18 +102,64 @@ public class MainWindowViewModel : ViewModel
 
     #endregion
 
+    public ResearchArticlesManager ArticlesManager { get; set; }
+
 
     // ★★★★★★★★★★★★★★★ inits
 
     public MainWindowViewModel()
     {
-        var addingArticle1 = ResearchArticle.CreateManually("タイトル1", new string[] { "著者1" }, null);
-        var addingArticle2 = ResearchArticle.CreateManually("タイトル2", new string[] { "著者2" }, null);
-        var addingArticle3 = ResearchArticle.CreateManually("タイトル3", new string[] { "著者3" }, null);
+        var localDir = new DirectoryInfo($@"{Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory)}\ResearchArticleDB");
+        ArticlesManager = new ResearchArticlesManager(localDir);
+        ArticlesManager.OpenDatabase();
 
-        _NodeViewModels.Add(new ResearchArticleNodeViewModel() { Name = "ResearchArticle", Article = addingArticle1, Position = new Point(100, 100) });
-        _NodeViewModels.Add(new ResearchArticleNodeViewModel() { Name = "ResearchArticle", Article = addingArticle2, Position = new Point(600, 100) });
-        _NodeViewModels.Add(new ResearchArticleNodeViewModel() { Name = "ResearchArticle", Article = addingArticle3, Position = new Point(1100, 100) });
+        var positionCounter = 100;
+
+        foreach (var article in ArticlesManager.ArticleDatabase)
+        {
+            _NodeViewModels.Add(new ResearchArticleNodeViewModel() { Name = "ResearchArticle", Article = article, Position = new Point(100, positionCounter) });
+            positionCounter += 300;
+        }
+
+        foreach (var article in ArticlesManager.ArticleDatabase)
+        {
+            if (article.ReferenceDOIs == null || !article.ReferenceDOIs.Any())
+                continue;
+
+            var articleNode = _NodeViewModels.FirstOrDefault(x => x is ResearchArticleNodeViewModel ran && ran.Article == article);
+            if (articleNode == null)
+                continue;
+
+            foreach (var referenceDOI in article.ReferenceDOIs)
+            {
+                var referenceArticle = ArticlesManager.ArticleDatabase.FirstOrDefault(a => a.DOI == referenceDOI || a.AOI == referenceDOI);
+                if (referenceArticle == null)
+                    continue;
+
+                var referenceNode = _NodeViewModels.FirstOrDefault(x => x is ResearchArticleNodeViewModel ran && ran.Article == referenceArticle);
+                if (referenceNode == null)
+                    continue;
+
+                var nodeLink = new NodeLinkViewModel
+                {
+                    OutputConnectorGuid = referenceNode.Outputs.ElementAt(0).Guid,
+                    InputConnectorGuid = articleNode.Inputs.ElementAt(0).Guid
+                };
+                _NodeLinkViewModels.Add(nodeLink);
+
+            }
+        }
+
+
+
+        //var addingArticle1 = ResearchArticle.CreateManually("タイトル1", new string[] { "著者1" }, null);
+        //var addingArticle2 = ResearchArticle.CreateManually("タイトル2", new string[] { "著者2" }, null);
+        //var addingArticle3 = ResearchArticle.CreateManually("タイトル3", new string[] { "著者3" }, null);
+
+        //_NodeViewModels.Add(new ResearchArticleNodeViewModel() { Name = "ResearchArticle", Article = addingArticle1, Position = new Point(100, 100) });
+        //_NodeViewModels.Add(new ResearchArticleNodeViewModel() { Name = "ResearchArticle", Article = addingArticle2, Position = new Point(600, 100) });
+        //_NodeViewModels.Add(new ResearchArticleNodeViewModel() { Name = "ResearchArticle", Article = addingArticle3, Position = new Point(1100, 100) });
+
 
 
         //_GroupNodeViewModels.Add(new GroupNodeViewModel() { Name = "Group1" });
@@ -121,6 +168,52 @@ public class MainWindowViewModel : ViewModel
         //_NodeViewModels.Add(new Test1DefaultNodeViewModel() { Name = "Node3", Body = "Content3", Position = new Point(200, 300) });
         //_NodeViewModels.Add(new Test3DefaultNodeViewModel() { Name = "Node4", Body = "OutputsOnlyNode", Position = new Point(500, 100) });
         //_NodeViewModels.Add(new Test4DefaultNodeViewModel() { Name = "Node5", Body = "InputsOnlyNode", Position = new Point(600, 200) });
+
+
+
+
+
+        // articles from j-stage
+        {
+            //var builder = new JStageArticleUriBuilder()
+            //{
+            //    Pubyearfrom = 2022,
+            //    Issn = ISSN.Architecture_Structure,
+            //    Count = 1000,
+            //    //Start = 1,
+            //};
+            //research.PullArticleInfo(builder);
+
+        }
+
+        // articles from cinii
+        {
+            //var builder = new CiNiiArticleUriBuilder()
+            //{
+            //    Count = 5,
+            //    ISSN = ISSN.Architecture_Structure,
+            //    FreeWord = "小振幅"
+            //};
+            //research.PullArticleInfo(builder);
+
+        }
+
+        // article from crossref
+        {
+            //var builder = new CrossRefArticleUriBuilder()
+            //{
+            //    DOI = "10.3130/aijs.87.822"
+            //};
+            //research.PullArticleInfo(builder);
+
+        }
+
+        // display
+        {
+            //research.SaveDatabase(true);
+            //research.ArticleDatabase.First(x => x.DOI == "10.3130/aijs.87.822").TryOpenPDF(research.PDFsDirectory);
+        }
+
 
 
 

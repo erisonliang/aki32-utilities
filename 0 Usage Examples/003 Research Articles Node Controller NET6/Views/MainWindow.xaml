@@ -80,7 +80,7 @@
                         <!-- グリッド内に表示する情報 -->
                         <StackPanel TextBlock.Foreground="White">
 
-                            <Grid MinWidth="300" MaxWidth="500" Margin="5">
+                            <Grid MinWidth="300" MaxWidth="300" Margin="5">
 
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*"/>
@@ -100,13 +100,13 @@
                                 </Grid.RowDefinitions>
 
                                 <TextBlock Grid.Row="0" Grid.Column="0" Text="タイトル:" HorizontalAlignment="Right"/>
-                                <TextBlock Grid.Row="0" Grid.Column="2" Text="{Binding ArticleTitle}"/>
+                                <TextBlock Grid.Row="0" Grid.Column="2" Text="{Binding ArticleTitle}" TextWrapping="Wrap"/>
 
                                 <TextBlock Grid.Row="1" Grid.Column="0" Text="著者:" HorizontalAlignment="Right"/>
-                                <TextBlock Grid.Row="1" Grid.Column="2" Text="{Binding Authors}"/>
+                                <TextBlock Grid.Row="1" Grid.Column="2" Text="{Binding Authors}" TextWrapping="Wrap"/>
 
                                 <TextBlock Grid.Row="2" Grid.Column="0" Text="概要:" HorizontalAlignment="Right"/>
-                                <TextBlock Grid.Row="2" Grid.Column="2" Text="{Binding Height}"/>
+                                <TextBlock Grid.Row="2" Grid.Column="2" Text="{Binding Height}" TextWrapping="Wrap"/>
 
                                 <TextBlock Grid.Row="5" Grid.Column="0" Text="メモ:" HorizontalAlignment="Right"/>
                                 <TextBox Grid.Row="5" Grid.Column="2" Text="{Binding Memo}" AcceptsReturn="True" TextWrapping="Wrap"/>

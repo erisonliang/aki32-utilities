@@ -875,7 +875,9 @@ public class TestHelper
                 {
                     //UtilConfig.ConsoleOutput_Contents = false;
 
-                    var localDir = new DirectoryInfo($@"{baseDir_C}\A - ResearchManager\@Private");
+                    //var localDir = new DirectoryInfo($@"{baseDir_C}\A - ResearchManager\@Private");
+                    var localDir = new DirectoryInfo($@"{Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory)}\ResearchArticleDB");
+
                     var research = new ResearchArticlesManager(localDir);
                     research.OpenDatabase();
 
