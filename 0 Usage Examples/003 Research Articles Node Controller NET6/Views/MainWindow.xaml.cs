@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace NodeGraph.PreviewTest.Views
+namespace Aki32Utilities.UsageExamples.ResearchArticlesNodeController.Views
 {
     /// <summary>
     /// MainWindow.xaml の相互作用ロジック

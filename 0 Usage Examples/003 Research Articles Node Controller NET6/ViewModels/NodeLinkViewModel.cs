@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NodeGraph.PreviewTest.ViewModels
+namespace Aki32Utilities.UsageExamples.ResearchArticlesNodeController.ViewModels
 {
     public class NodeLinkViewModel : ViewModel
     {

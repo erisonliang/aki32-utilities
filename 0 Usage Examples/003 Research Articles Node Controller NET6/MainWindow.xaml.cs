@@ -15,7 +15,7 @@ using System.Windows.Shapes;
 
 using Aki32Utilities.ConsoleAppUtilities.SpecificPurposeModels.Research;
 
-namespace Aki32Utilities.UsageExamples.ResearchArticlesNodeController
+namespace Aki32Utilities.UsageExamples.ResearchArticlesNodeController.NET6
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml

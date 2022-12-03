@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 
-namespace NodeGraph.PreviewTest.ViewModels
+namespace Aki32Utilities.UsageExamples.ResearchArticlesNodeController.ViewModels
 {
     public interface INodeViewModel
     {

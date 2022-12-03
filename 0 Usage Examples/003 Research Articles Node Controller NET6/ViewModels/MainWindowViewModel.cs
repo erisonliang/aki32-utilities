@@ -1,7 +1,7 @@
 ﻿using Livet;
 using Livet.Commands;
-using NodeGraph.NET6.Operation;
-using NodeGraph.PreviewTest.ViewModels;
+using Aki32Utilities.WPFAppUtilities.NodeController.Operation;
+using Aki32Utilities.UsageExamples.ResearchArticlesNodeController.ViewModels;
 using NodeGraph.Utilities;
 using System;
 using System.Collections;
@@ -12,7 +12,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace NodeGraph.PreviewTest.ViewModels
+namespace Aki32Utilities.UsageExamples.ResearchArticlesNodeController.ViewModels
 {
     public enum GroupIntersectType
     {

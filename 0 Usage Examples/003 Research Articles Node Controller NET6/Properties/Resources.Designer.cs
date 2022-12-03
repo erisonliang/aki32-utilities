@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace NodeGraph.PreviewTest.Properties
+namespace Aki32Utilities.UsageExamples.ResearchArticlesNodeController.Properties
 {
 
 
@@ -44,7 +44,7 @@ namespace NodeGraph.PreviewTest.Properties
             {
                 if ((resourceMan == null))
                 {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("NodeGraph.PreviewTest.Properties.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Aki32Utilities.UsageExamples.ResearchArticlesNodeController.Properties.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;

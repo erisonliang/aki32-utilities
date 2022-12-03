@@ -1,12 +1,11 @@
-﻿<Window x:Class="NodeGraph.PreviewTest.Views.MainWindow"
+﻿<Window x:Class="Aki32Utilities.UsageExamples.ResearchArticlesNodeController.Views.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:vm="clr-namespace:NodeGraph.PreviewTest.ViewModels"
-        xmlns:ctrl="clr-namespace:NodeGraph.NET6.Controls;assembly=NodeGraph.NET6"
-        xmlns:local="clr-namespace:NodeGraph.PreviewTest"
+        xmlns:vm="clr-namespace:Aki32Utilities.UsageExamples.ResearchArticlesNodeController.ViewModels"
+        xmlns:ctrl="clr-namespace:Aki32Utilities.WPFAppUtilities.NodeController.Controls;assembly=NodeController"
         mc:Ignorable="d"
         Title="NodeGraph - prototype" Height="600" Width="1000">
 
