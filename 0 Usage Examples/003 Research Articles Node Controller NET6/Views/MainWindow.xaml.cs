@@ -24,5 +24,10 @@ namespace Aki32Utilities.UsageExamples.ResearchArticlesNodeController.Views
         {
             InitializeComponent();
         }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

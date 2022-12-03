@@ -44,7 +44,7 @@ public class ResearchArticle : IComparable
                 ?? Manual_Authors
                 ?? JStage_Authors_Japanese
                 ?? CiNii_Authors
-                
+
                 // 英語は後回し
                 ?? CrossRef_Authors
                 ?? JStage_Authors_English
@@ -157,6 +157,8 @@ public class ResearchArticle : IComparable
     public string? Manual_ArticleTitle { get; set; }
     public string[]? Manual_Authors { get; set; }
     public string? Manual_CreatedDate { get; set; }
+
+    public string? Memo { get; set; }
 
 
     // ★★★★★ CrossRef

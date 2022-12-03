@@ -1,7 +1,6 @@
 ﻿using Livet;
 using Livet.Commands;
 using Aki32Utilities.WPFAppUtilities.NodeController.Operation;
-using Aki32Utilities.UsageExamples.ResearchArticlesNodeController.ViewModels;
 using NodeGraph.Utilities;
 using System;
 using System.Collections;
@@ -11,21 +10,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using Aki32_Utilities.ViewModels.NodeViewModels;
 
 namespace Aki32Utilities.UsageExamples.ResearchArticlesNodeController.ViewModels
 {
-    public enum GroupIntersectType
-    {
-        CursorPointVMDefine,
-        BoundingBoxVMDefine,
-    }
-
-    public enum RangeSelectionMode
-    {
-        ContainVMDefine,
-        IntersectVMDefine,
-    }
-
     public class MainWindowViewModel : ViewModel
     {
         public double Scale
@@ -123,38 +111,32 @@ namespace Aki32Utilities.UsageExamples.ResearchArticlesNodeController.ViewModels
         }
         bool _IsEnableAllNodeConnectors = true;
 
-        public bool AllowToOverrideConnection
-        {
-            get => _AllowToOverrideConnection;
-            set => RaisePropertyChangedIfSet(ref _AllowToOverrideConnection, value);
-        }
-        bool _AllowToOverrideConnection = true;
-
-        public bool ClipToBounds
-        {
-            get => _ClipToBounds;
-            set => RaisePropertyChangedIfSet(ref _ClipToBounds, value);
-        }
-        bool _ClipToBounds = true;
-
         public MainWindowViewModel()
         {
-            _GroupNodeViewModels.Add(new GroupNodeViewModel() { Name = "Group1" });
-            _NodeViewModels.Add(new Test1DefaultNodeViewModel() { Name = "Node1", Body = "Content1", Position = new Point(0, 100) });
-            _NodeViewModels.Add(new Test1DefaultNodeViewModel() { Name = "Node2", Body = "Content2", Position = new Point(100, 200) });
-            _NodeViewModels.Add(new Test1DefaultNodeViewModel() { Name = "Node3", Body = "Content3", Position = new Point(200, 300) });
-            _NodeViewModels.Add(new Test3DefaultNodeViewModel() { Name = "Node4", Body = "OutputsOnlyNode", Position = new Point(500, 100) });
-            _NodeViewModels.Add(new Test4DefaultNodeViewModel() { Name = "Node5", Body = "InputsOnlyNode", Position = new Point(600, 200) });
+            _NodeViewModels.Add(new ResearchArticleNodeViewModel() { Name = "ResearchArticle", Memo = "ここに題名", Position = new Point(0, 0) });
+            _NodeViewModels.Add(new ResearchArticleNodeViewModel() { Name = "ResearchArticle", Memo = "ここに題名", Position = new Point(500, 0) });
+            _NodeViewModels.Add(new ResearchArticleNodeViewModel() { Name = "ResearchArticle", Memo = "ここに題名", Position = new Point(1000, 0) });
+
+
+            //_GroupNodeViewModels.Add(new GroupNodeViewModel() { Name = "Group1" });
+            //_NodeViewModels.Add(new Test1DefaultNodeViewModel() { Name = "Node1", Body = "Content1", Position = new Point(0, 100) });
+            //_NodeViewModels.Add(new Test1DefaultNodeViewModel() { Name = "Node2", Body = "Content2", Position = new Point(100, 200) });
+            //_NodeViewModels.Add(new Test1DefaultNodeViewModel() { Name = "Node3", Body = "Content3", Position = new Point(200, 300) });
+            //_NodeViewModels.Add(new Test3DefaultNodeViewModel() { Name = "Node4", Body = "OutputsOnlyNode", Position = new Point(500, 100) });
+            //_NodeViewModels.Add(new Test4DefaultNodeViewModel() { Name = "Node5", Body = "InputsOnlyNode", Position = new Point(600, 200) });
+
+
+
         }
 
         void AddNode()
         {
-            _NodeViewModels.Add(new Test2DefaultNodeViewModel() { Name = "NewNode", Body = "NewContent" });
+            _NodeViewModels.Add(new ResearchArticleNodeViewModel() { Name = "ResearchArticle", Memo = "ここに題名" });
         }
 
         void AddGroupNode()
         {
-            _GroupNodeViewModels.Add(new GroupNodeViewModel() { Name = "NewGroupNode" });
+            _GroupNodeViewModels.Add(new GroupNodeViewModel() { Name = "Group" });
         }
 
         void RemoveNodes()
@@ -288,4 +270,17 @@ namespace Aki32Utilities.UsageExamples.ResearchArticlesNodeController.ViewModels
             }
         }
     }
+
+    public enum GroupIntersectType
+    {
+        CursorPointVMDefine,
+        BoundingBoxVMDefine,
+    }
+
+    public enum RangeSelectionMode
+    {
+        ContainVMDefine,
+        IntersectVMDefine,
+    }
+
 }

@@ -6,16 +6,14 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 
-namespace Aki32Utilities.WPFAppUtilities.NodeController.Controls
+namespace Aki32Utilities.WPFAppUtilities.NodeController.Controls;
+public class CanvasMouseEventArgs : EventArgs
 {
-    public class CanvasMouseEventArgs : EventArgs
-    {
-        // This position has taken scale and offset into account.
-        public Point TransformedPosition { get; }
+    // This position has taken scale and offset into account.
+    public Point TransformedPosition { get; }
 
-        public CanvasMouseEventArgs(Point transformedPosition)
-        {
-            TransformedPosition = transformedPosition;
-        }
+    public CanvasMouseEventArgs(Point transformedPosition)
+    {
+        TransformedPosition = transformedPosition;
     }
 }
