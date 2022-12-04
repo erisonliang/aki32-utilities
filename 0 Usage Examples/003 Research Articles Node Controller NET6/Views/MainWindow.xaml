@@ -78,51 +78,68 @@
                     <DataTemplate>
 
                         <!-- グリッド内に表示する情報 -->
-                        <StackPanel TextBlock.Foreground="White">
+                        <StackPanel TextBlock.Foreground="White" Orientation="Vertical" MinWidth="300" MaxWidth="300" Margin="5">
 
-                            <Grid MinWidth="300" MaxWidth="300" Margin="5">
-
+                            <Grid Margin="5">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*"/>
                                     <ColumnDefinition Width="5"/>
                                     <ColumnDefinition Width="3*"/>
                                 </Grid.ColumnDefinitions>
 
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="Auto"/>
-                                </Grid.RowDefinitions>
+                                <TextBlock Grid.Column="0" Text="タイトル:" HorizontalAlignment="Right"/>
+                                <TextBlock Grid.Column="2" Text="{Binding ArticleTitle}" TextWrapping="Wrap"/>
 
-                                <TextBlock Grid.Row="0" Grid.Column="0" Text="タイトル:" HorizontalAlignment="Right"/>
-                                <TextBlock Grid.Row="0" Grid.Column="2" Text="{Binding ArticleTitle}" TextWrapping="Wrap"/>
+                            </Grid>
 
-                                <TextBlock Grid.Row="1" Grid.Column="0" Text="著者:" HorizontalAlignment="Right"/>
-                                <TextBlock Grid.Row="1" Grid.Column="2" Text="{Binding Authors}" TextWrapping="Wrap"/>
+                            <Grid Margin="5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="5"/>
+                                    <ColumnDefinition Width="3*"/>
+                                </Grid.ColumnDefinitions>
 
-                                <TextBlock Grid.Row="2" Grid.Column="0" Text="概要:" HorizontalAlignment="Right"/>
-                                <TextBlock Grid.Row="2" Grid.Column="2" Text="{Binding Height}" TextWrapping="Wrap"/>
+                                <TextBlock Grid.Column="0" Text="著者:" HorizontalAlignment="Right"/>
+                                <TextBlock Grid.Column="2" Text="{Binding Authors}" TextWrapping="Wrap"/>
 
-                                <TextBlock Grid.Row="5" Grid.Column="0" Text="メモ:" HorizontalAlignment="Right"/>
-                                <TextBox Grid.Row="5" Grid.Column="2" Text="{Binding Memo}" AcceptsReturn="True" TextWrapping="Wrap"/>
-                                <TextBlock Grid.Row="6" Grid.Column="2" Text="{Binding Memo}" TextWrapping="Wrap"/>
+                            </Grid>
 
-                                <Button Grid.Row="7" Grid.Column="1" Grid.ColumnSpan="3" Content="PDFを表示"/>
+                            <Grid Margin="5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="5"/>
+                                    <ColumnDefinition Width="3*"/>
+                                </Grid.ColumnDefinitions>
 
-                                
-                                
-                                
-                                
-                                
-                                
-                                
-                                
-                                
+                                <TextBlock Grid.Column="0" Text="概要:" HorizontalAlignment="Right"/>
+                                <TextBlock Grid.Column="2" Text="{Binding Description}" TextWrapping="Wrap"/>
+
+                            </Grid>
+
+                            <Grid Margin="5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="5"/>
+                                    <ColumnDefinition Width="3*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <TextBlock Grid.Column="0" Text="メモ:" HorizontalAlignment="Right"/>
+                                <TextBox Grid.Column="2" Text="{Binding Memo}" AcceptsReturn="True" TextWrapping="Wrap"/>
+
+                            </Grid>
+
+                            <Grid Height="10"/>
+
+                            <Grid Margin="5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="5"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <Button Grid.Column="0" Content="情報を取得"/>
+                                <Button Grid.Column="2" Content="PDFを表示"/>
+
                             </Grid>
 
                         </StackPanel>
@@ -175,7 +192,7 @@
                 <Button Margin="4" Height="24" Content="MoveGroupNode" Command="{Binding MoveGroupNodeCommand}"/>
                 <Button Margin="4" Height="24" Content="ChangeGroupInnerSize" Command="{Binding ChangeGroupInnerSizeCommand}"/>
                 <Button Margin="4" Height="24" Content="ChangeGroupInnerPosition" Command="{Binding ChangeGroupInnerPositionCommand}"/>
-                <Button Margin="4" Height="24" Content="ResetScale" Command="{Binding ResetScaleCommand}"/>
+                <Button Margin="4" Height="24" Content="RearrangeNodes" Command="{Binding RearrangeNodesCommand}"/>
             </DockPanel>
 
             <DockPanel>

@@ -307,8 +307,15 @@ public class NodeLink : Shape, ICanvasObject, ISelectableObject
 
     void UpdateConnectPosition()
     {
-        _EndPoint = Input.GetContentPosition(Canvas, 0, 0.5);
-        _StartPoint = Output.GetContentPosition(Canvas, 0.5, 0.5);
+        try
+        {
+            _EndPoint = Input.GetContentPosition(Canvas, 0, 0.5);
+            _StartPoint = Output.GetContentPosition(Canvas, 0.5, 0.5);
+        }
+        catch (Exception)
+        {
+            // ignore
+        }
     }
 
     void DrawLine(DrawingContext drawingContext)

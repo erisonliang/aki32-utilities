@@ -11,6 +11,8 @@ namespace Aki32Utilities.ViewModels.NodeViewModels;
 
 public abstract class DefaultNodeViewModel : ViewModel, INodeViewModel
 {
+    public int __InnerMemo = 0;
+
     public double Width { get; set; } = 0;
     public double Height { get; set; } = 0;
     public Guid Guid { get; set; } = Guid.NewGuid();

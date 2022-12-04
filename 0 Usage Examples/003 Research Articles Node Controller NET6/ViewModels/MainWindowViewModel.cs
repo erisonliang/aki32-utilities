@@ -8,11 +8,23 @@ using System.Windows;
 using Aki32Utilities.ViewModels.NodeViewModels;
 using Aki32Utilities.ConsoleAppUtilities.SpecificPurposeModels.Research;
 using System.IO;
+using System.DirectoryServices.ActiveDirectory;
+using System.Windows.Media.Animation;
+using Aki32Utilities.WPFAppUtilities.NodeController.Controls;
+using System.DirectoryServices;
 
 namespace Aki32Utilities.UsageExamples.ResearchArticlesNodeController.ViewModels;
 
 public class MainWindowViewModel : ViewModel
 {
+
+    // ★★★★★★★★★★★★★★★ felds
+
+    const int NODE_MARGIN_LEFT = 50;
+    const int NODE_MARGIN_TOP = 50;
+    const int NODE_VERTICAL_SPAN = 300;
+    const int NODE_HORIZONTAL_SPAN = 600;
+
 
     // ★★★★★★★★★★★★★★★ props
 
@@ -65,9 +77,11 @@ public class MainWindowViewModel : ViewModel
     public ViewModelCommand ChangeGroupInnerPositionCommand => _ChangeGroupInnerPositionCommand.Get(ChangeGroupInnerPosition);
     ViewModelCommandHandler _ChangeGroupInnerPositionCommand = new();
 
-    public ViewModelCommand ResetScaleCommand => _ResetScaleCommand.Get(ResetScale);
-    ViewModelCommandHandler _ResetScaleCommand = new();
+    public ViewModelCommand RearrangeNodesCommand => _RearrangeNodesCommand.Get(RearrangeNodes);
+    ViewModelCommandHandler _RearrangeNodesCommand = new();
 
+    public ViewModelCommand TestCommand => _TestCommand.Get(Test);
+    ViewModelCommandHandler _TestCommand = new();
 
 
     public IEnumerable<DefaultNodeViewModel> NodeViewModels => _NodeViewModels;
@@ -102,26 +116,49 @@ public class MainWindowViewModel : ViewModel
 
     #endregion
 
-    public ResearchArticlesManager ArticlesManager { get; set; }
+    public ResearchArticlesManager ResearchArticlesManager { get; set; }
 
 
     // ★★★★★★★★★★★★★★★ inits
 
     public MainWindowViewModel()
     {
+        _NodeViewModels.Add(new ResearchArticleNodeViewModel() { Name = "ResearchArticle", Article = new ResearchArticle { Manual_ArticleTitle = "a1" }, Position = new Point(NODE_MARGIN_LEFT, NODE_MARGIN_TOP) });
+        _NodeViewModels.Add(new ResearchArticleNodeViewModel() { Name = "ResearchArticle", Article = new ResearchArticle { Manual_ArticleTitle = "a2" }, Position = new Point(NODE_MARGIN_LEFT, NODE_MARGIN_TOP) });
+        _NodeViewModels.Add(new ResearchArticleNodeViewModel() { Name = "ResearchArticle", Article = new ResearchArticle { Manual_ArticleTitle = "a3" }, Position = new Point(NODE_MARGIN_LEFT, NODE_MARGIN_TOP) });
+        _NodeViewModels.Add(new ResearchArticleNodeViewModel() { Name = "ResearchArticle", Article = new ResearchArticle { Manual_ArticleTitle = "a4" }, Position = new Point(NODE_MARGIN_LEFT, NODE_MARGIN_TOP) });
+        _NodeViewModels.Add(new ResearchArticleNodeViewModel() { Name = "ResearchArticle", Article = new ResearchArticle { Manual_ArticleTitle = "a5" }, Position = new Point(NODE_MARGIN_LEFT, NODE_MARGIN_TOP) });
+
+
+
+
+
+        InitResearchArticlesManager();
+
+        RearrangeNodes();
+
+
+        //ResearchArticlesManager.ArticleDatabase[0].Memo = "hello from code behind";
+        //NotifyResearchArticlesPropertiesChanged();
+
+    }
+
+    private void InitResearchArticlesManager()
+    {
+
         var localDir = new DirectoryInfo($@"{Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory)}\ResearchArticleDB");
-        ArticlesManager = new ResearchArticlesManager(localDir);
-        ArticlesManager.OpenDatabase();
+        ResearchArticlesManager = new ResearchArticlesManager(localDir);
+        ResearchArticlesManager.OpenDatabase();
 
         var positionCounter = 100;
 
-        foreach (var article in ArticlesManager.ArticleDatabase)
+        foreach (var article in ResearchArticlesManager.ArticleDatabase)
         {
             _NodeViewModels.Add(new ResearchArticleNodeViewModel() { Name = "ResearchArticle", Article = article, Position = new Point(100, positionCounter) });
-            positionCounter += 300;
+            positionCounter += NODE_VERTICAL_SPAN;
         }
 
-        foreach (var article in ArticlesManager.ArticleDatabase)
+        foreach (var article in ResearchArticlesManager.ArticleDatabase)
         {
             if (article.ReferenceDOIs == null || !article.ReferenceDOIs.Any())
                 continue;
@@ -132,7 +169,7 @@ public class MainWindowViewModel : ViewModel
 
             foreach (var referenceDOI in article.ReferenceDOIs)
             {
-                var referenceArticle = ArticlesManager.ArticleDatabase.FirstOrDefault(a => a.DOI == referenceDOI || a.AOI == referenceDOI);
+                var referenceArticle = ResearchArticlesManager.ArticleDatabase.FirstOrDefault(a => a.DOI == referenceDOI || a.AOI == referenceDOI);
                 if (referenceArticle == null)
                     continue;
 
@@ -142,36 +179,35 @@ public class MainWindowViewModel : ViewModel
 
                 var nodeLink = new NodeLinkViewModel
                 {
+                    OutputConnectorNodeGuid = referenceNode.Guid,
                     OutputConnectorGuid = referenceNode.Outputs.ElementAt(0).Guid,
-                    InputConnectorGuid = articleNode.Inputs.ElementAt(0).Guid
+                    InputConnectorNodeGuid = articleNode.Guid,
+                    InputConnectorGuid = articleNode.Inputs.ElementAt(0).Guid,
                 };
                 _NodeLinkViewModels.Add(nodeLink);
+
 
             }
         }
 
+    }
 
 
-        //var addingArticle1 = ResearchArticle.CreateManually("タイトル1", new string[] { "著者1" }, null);
-        //var addingArticle2 = ResearchArticle.CreateManually("タイトル2", new string[] { "著者2" }, null);
-        //var addingArticle3 = ResearchArticle.CreateManually("タイトル3", new string[] { "著者3" }, null);
-
-        //_NodeViewModels.Add(new ResearchArticleNodeViewModel() { Name = "ResearchArticle", Article = addingArticle1, Position = new Point(100, 100) });
-        //_NodeViewModels.Add(new ResearchArticleNodeViewModel() { Name = "ResearchArticle", Article = addingArticle2, Position = new Point(600, 100) });
-        //_NodeViewModels.Add(new ResearchArticleNodeViewModel() { Name = "ResearchArticle", Article = addingArticle3, Position = new Point(1100, 100) });
+    // ★★★★★★★★★★★★★★★ methods (util)
 
 
 
-        //_GroupNodeViewModels.Add(new GroupNodeViewModel() { Name = "Group1" });
-        //_NodeViewModels.Add(new Test1DefaultNodeViewModel() { Name = "Node1", Body = "Content1", Position = new Point(0, 100) });
-        //_NodeViewModels.Add(new Test1DefaultNodeViewModel() { Name = "Node2", Body = "Content2", Position = new Point(100, 200) });
-        //_NodeViewModels.Add(new Test1DefaultNodeViewModel() { Name = "Node3", Body = "Content3", Position = new Point(200, 300) });
-        //_NodeViewModels.Add(new Test3DefaultNodeViewModel() { Name = "Node4", Body = "OutputsOnlyNode", Position = new Point(500, 100) });
-        //_NodeViewModels.Add(new Test4DefaultNodeViewModel() { Name = "Node5", Body = "InputsOnlyNode", Position = new Point(600, 200) });
+    // ★★★★★★★★★★★★★★★ methods (my node handling)
 
+    #region my node handle methods
 
+    void Test()
+    {
+        MessageBox.Show("NotImplemented");
+    }
 
-
+    void aaa()
+    {
 
         // articles from j-stage
         {
@@ -215,18 +251,126 @@ public class MainWindowViewModel : ViewModel
         }
 
 
+    }
+
+    void NotifyResearchArticlesPropertiesChanged()
+    {
+        var articleNodes = _NodeViewModels.Select(n => (n is ResearchArticleNodeViewModel run) ? run : null).Where(run => run != null);
+        foreach (var articleNode in articleNodes)
+            articleNode!.NotifyArticleUpdated();
+
+    }
+
+    void RearrangeNodes()
+    {
+        var rearrangingNodes = new List<DefaultNodeViewModel>(_NodeViewModels);
+        var OutputConnectorNodeGuids = _NodeLinkViewModels.Select(link => link.OutputConnectorNodeGuid).ToArray();
+        var InputConnectorNodeGuids = _NodeLinkViewModels.Select(link => link.InputConnectorNodeGuid).ToArray();
+
+        // ★★★★★ 用いる変数のリセット
+        foreach (var rearrangingNode in rearrangingNodes)
+        {
+            rearrangingNode.__InnerMemo = 0;
+            rearrangingNode.Position = new Point(0, 0);
+        }
+
+
+        // ★★★★★ 最初にinputNodeにもoutputNodeにも何もない人をかき集めて問答無用で並べておく。
+        var noConnectionNodes = rearrangingNodes.Where(n => !InputConnectorNodeGuids.Contains(n.Guid) && !OutputConnectorNodeGuids.Contains(n.Guid)).ToArray();
+
+        for (int i = 0; i < noConnectionNodes.Length; i++)
+        {
+            var noConnectionNode = noConnectionNodes[i];
+            rearrangingNodes.Remove(noConnectionNode);
+            noConnectionNode.Position = new Point(
+                NODE_MARGIN_LEFT + 0 * NODE_HORIZONTAL_SPAN,
+                NODE_MARGIN_TOP + i * NODE_VERTICAL_SPAN);
+
+        }
+
+
+        // ★★★★★ 水平方向の座標候補を算出。
+        var noInputNodes = rearrangingNodes.Where(n => !InputConnectorNodeGuids.Contains(n.Guid)).ToList();
+        var withInputNodes = rearrangingNodes.Where(n => InputConnectorNodeGuids.Contains(n.Guid)).ToList();
+
+        // ★ inputNodeに何もないNodeを1とする。
+        for (int i = 0; i < noInputNodes.Count; i++)
+            noInputNodes[i].__InnerMemo = 1;
+
+        // ★ そいつらを最初の親として，全てのNodeに対して，一番経路の長いものを算定する。
+        var parentNodeQueue = new Queue<DefaultNodeViewModel>(noInputNodes);
+
+        while (parentNodeQueue.Count > 0)
+        {
+            var parentNode = parentNodeQueue.Dequeue();
+            var childrenNodes = GetChildrenNodes(parentNode, withInputNodes);
+            foreach (var childNode in childrenNodes)
+            {
+                childNode.__InnerMemo = Math.Max(childNode.__InnerMemo, parentNode.__InnerMemo + 1);
+                parentNodeQueue.Enqueue(childNode);
+            }
+        }
+
+
+        // ★★★★★ どんどん接続していく。深さ優先で。最深まで達したら次の列に進む。
+
+        var currentVerticalIndex = 0;
+
+        void ProcessOne(DefaultNodeViewModel parentNode)
+        {
+            parentNode.Position = new Point(
+                NODE_MARGIN_LEFT + parentNode.__InnerMemo * NODE_HORIZONTAL_SPAN,
+                NODE_MARGIN_TOP + currentVerticalIndex * NODE_VERTICAL_SPAN);
+
+            var childrenNodes = GetChildrenNodes(parentNode, withInputNodes);
+            if (childrenNodes.Any())
+            {
+                foreach (var childNode in childrenNodes)
+                {
+                    ProcessOne(childNode);
+                    withInputNodes.Remove(childNode);
+                }
+            }
+            else
+            {
+                currentVerticalIndex++;
+            }
+        }
+
+        foreach (var noInputNode in noInputNodes)
+            ProcessOne(noInputNode);
 
 
     }
 
+    private IEnumerable<DefaultNodeViewModel> GetChildrenNodes(DefaultNodeViewModel parentNode, IEnumerable<DefaultNodeViewModel> fromThisList = null)
+    {
+        var childrenNodes = new List<DefaultNodeViewModel>();
 
-    // ★★★★★★★★★★★★★★★ methods
+        var childNodeGuids = NodeLinkViewModels.Where(link => link.OutputConnectorNodeGuid == parentNode.Guid).Select(link => link.InputConnectorNodeGuid);
+        foreach (var childNodeGuid in childNodeGuids)
+        {
+            var childNode = (fromThisList ?? NodeViewModels).FirstOrDefault(n => n.Guid == childNodeGuid);
+            if (childNode == null)
+                continue;
 
-    #region methods
+            childrenNodes.Add(childNode);
+        }
+
+        return childrenNodes;
+    }
+
+
+    #endregion
+
+
+    // ★★★★★★★★★★★★★★★ methods (node handling)
+
+    #region node handle methods
 
     void AddNode()
     {
-        _NodeViewModels.Add(new ResearchArticleNodeViewModel() { Name = "ResearchArticle", Memo = "ここに題名" });
+        _NodeViewModels.Add(new ResearchArticleNodeViewModel() { Name = "ResearchArticle", Memo = "ここにメモ" });
     }
 
     void AddGroupNode()
@@ -351,18 +495,20 @@ public class MainWindowViewModel : ViewModel
         {
             return;
         }
-        var nodeLink = new NodeLinkViewModel();
-        nodeLink.OutputConnectorGuid = _NodeViewModels[0].Outputs.ElementAt(0).Guid;
-        nodeLink.InputConnectorGuid = _NodeViewModels[1].Inputs.ElementAt(0).Guid;
+        var nodeLink = new NodeLinkViewModel
+        {
+            OutputConnectorNodeGuid = _NodeViewModels[0].Guid,
+            OutputConnectorGuid = _NodeViewModels[0].Outputs.ElementAt(0).Guid,
+            InputConnectorNodeGuid = _NodeViewModels[1].Guid,
+            InputConnectorGuid = _NodeViewModels[1].Inputs.ElementAt(0).Guid,
+        };
         _NodeLinkViewModels.Add(nodeLink);
     }
 
     void MoveTestNodes()
     {
-        if (_NodeLinkViewModels.Count > 0)
-        {
+        if (_NodeLinkViewModels.Any())
             _NodeViewModels[0].Position = new Point(0, 0);
-        }
     }
 
     #endregion
