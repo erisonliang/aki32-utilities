@@ -15,6 +15,14 @@
 
     <Window.Resources>
 
+        <Style x:Key="UserTextBoxStyle" TargetType="TextBox">
+            <Setter Property="Foreground" Value="WhiteSmoke"/>
+            <Setter Property="Background" Value="#CC000000"/>
+            <Setter Property="AcceptsReturn" Value="True"/>
+            <Setter Property="TextWrapping" Value="Wrap"/>
+            <Setter Property="BorderThickness" Value="0"/>
+        </Style>
+
         <ContextMenu x:Key="NodeGraphContextMenu">
             <MenuItem Header="AddNode" Command="{Binding AddNodeCommand}"/>
             <MenuItem Header="AddGroupNode" Command="{Binding AddGroupNodeCommand}"/>
@@ -52,8 +60,8 @@
             <Setter Property="InputLayout" Value="Center"/>
             <Setter Property="Outputs" Value="{Binding Outputs}"/>
             <Setter Property="OutputLayout" Value="Center"/>
-            <Setter Property="InputMargin" Value="5,1,5,1"/>
-            <Setter Property="OutputMargin" Value="4,0,4,10"/>
+            <Setter Property="InputMargin" Value="10"/>
+            <Setter Property="OutputMargin" Value="10"/>
             <Setter Property="InputStyle" Value="{StaticResource NodeInputStyle}"/>
             <Setter Property="OutputStyle" Value="{StaticResource NodeOutputStyle}"/>
             <Setter Property="SizeChangedCommand" Value="{Binding SizeChangedCommand}"/>
@@ -78,67 +86,104 @@
                     <DataTemplate>
 
                         <!-- グリッド内に表示する情報 -->
-                        <StackPanel TextBlock.Foreground="White" Orientation="Vertical" MinWidth="300" MaxWidth="300" Margin="5">
+                        <StackPanel
+                            Orientation="Vertical"
+                            Width="444"
+                            Margin="5"
+                            TextBlock.Foreground="White"
+                            >
 
                             <Grid Margin="5">
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="50"/>
                                     <ColumnDefinition Width="5"/>
-                                    <ColumnDefinition Width="3*"/>
+                                    <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
 
-                                <TextBlock Grid.Column="0" Text="タイトル:" HorizontalAlignment="Right"/>
-                                <TextBlock Grid.Column="2" Text="{Binding ArticleTitle}" TextWrapping="Wrap"/>
+                                <TextBlock 
+                                    Grid.Column="0" 
+                                    Text="タイトル:" 
+                                    HorizontalAlignment="Right"
+                                    />
+                                <TextBox
+                                    Grid.Column="2" 
+                                    Style="{StaticResource UserTextBoxStyle}"
+                                    Text="{Binding ArticleTitle}" 
+                                    />
 
                             </Grid>
 
                             <Grid Margin="5">
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="50"/>
                                     <ColumnDefinition Width="5"/>
-                                    <ColumnDefinition Width="3*"/>
+                                    <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
 
-                                <TextBlock Grid.Column="0" Text="著者:" HorizontalAlignment="Right"/>
-                                <TextBlock Grid.Column="2" Text="{Binding Authors}" TextWrapping="Wrap"/>
+                                <TextBlock 
+                                    Grid.Column="0"
+                                    Text="著者:" 
+                                    HorizontalAlignment="Right"
+                                    />
+                                <TextBox 
+                                    Grid.Column="2"
+                                    Style="{StaticResource UserTextBoxStyle}"
+                                    Text="{Binding Authors}"
+                                    />
 
                             </Grid>
 
                             <Grid Margin="5">
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="50"/>
                                     <ColumnDefinition Width="5"/>
-                                    <ColumnDefinition Width="3*"/>
+                                    <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
 
-                                <TextBlock Grid.Column="0" Text="概要:" HorizontalAlignment="Right"/>
-                                <TextBlock Grid.Column="2" Text="{Binding Description}" TextWrapping="Wrap"/>
+                                <TextBlock 
+                                    Grid.Column="0" 
+                                    Text="概要:"
+                                    HorizontalAlignment="Right"
+                                    />
+                                <TextBox
+                                    Grid.Column="2"
+                                    Style="{StaticResource UserTextBoxStyle}"
+                                    Text="{Binding Description}"
+                                    />
 
                             </Grid>
 
                             <Grid Margin="5">
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="50"/>
                                     <ColumnDefinition Width="5"/>
-                                    <ColumnDefinition Width="3*"/>
+                                    <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
 
                                 <TextBlock Grid.Column="0" Text="メモ:" HorizontalAlignment="Right"/>
-                                <TextBox Grid.Column="2" Text="{Binding Memo}" AcceptsReturn="True" TextWrapping="Wrap"/>
+                                <TextBox 
+                                    Grid.Column="2"
+                                    Style="{StaticResource UserTextBoxStyle}"
+                                    Text="{Binding Memo}" 
+                                    />
 
                             </Grid>
 
-                            <Grid Height="10"/>
-
-                            <Grid Margin="5">
+                            <Grid Margin="10">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*"/>
                                     <ColumnDefinition Width="5"/>
                                     <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
 
-                                <Button Grid.Column="0" Content="情報を取得"/>
-                                <Button Grid.Column="2" Content="PDFを表示"/>
+                                <Button
+                                    Grid.Column="0" 
+                                    Content="オンラインで情報を取得"
+                                    />
+                                <Button 
+                                    Grid.Column="2" 
+                                    Content="PDFをダウンロード・表示"
+                                    />
 
                             </Grid>
 

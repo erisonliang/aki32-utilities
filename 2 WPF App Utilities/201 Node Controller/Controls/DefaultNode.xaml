@@ -27,13 +27,67 @@
                 BorderThickness="{TemplateBinding BorderThickness}">
             <StackPanel>
                 <Border BorderThickness="0,0,0,1" BorderBrush="Black">
-                    <ContentPresenter x:Name="__NodeHeaderContentTemplate__"
-                                      VerticalAlignment="Stretch"
-                                      HorizontalAlignment="Stretch"
-                                      Content="{TemplateBinding DataContext}"
-                                      ContentTemplate="{TemplateBinding HeaderContentTemplate}"/>
+                    <ContentPresenter
+                        x:Name="__NodeHeaderContentTemplate__"
+                        VerticalAlignment="Stretch"
+                        HorizontalAlignment="Stretch"
+                        Content="{TemplateBinding DataContext}"
+                        ContentTemplate="{TemplateBinding HeaderContentTemplate}"/>
                 </Border>
 
+
+
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" x:Name="__NodeInputGridColumnDefinition__"/>
+                        <ColumnDefinition Width="*" x:Name="__NodeContentTemplateGridColumnDefinition__"/>
+                        <ColumnDefinition Width="*" x:Name="__NodeOutputGridColumnDefinition__"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                    </Grid.RowDefinitions>
+
+                    <local:NodeInput
+                        Grid.Column="0"
+                        Grid.Row="0"
+                        x:Name="__NodeInput__"
+                        ItemsSource="{TemplateBinding Inputs}"
+                        ConnectorMargin="{TemplateBinding InputMargin}"
+                        VerticalAlignment="{TemplateBinding InputLayout}"
+                        ItemContainerStyle="{TemplateBinding InputStyle}"
+                        />
+
+                    <!--Grid.Column="1"
+                        Grid.Row="0"
+                        Grid.ColumnSpan="1"-->
+                    <ContentPresenter 
+                        Grid.Column="0"
+                        Grid.Row="1"
+                        Grid.ColumnSpan="3"
+                        x:Name="__NodeContentTemplate__"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Top"
+                        Margin="{TemplateBinding ContentMargin}"
+                        Content="{TemplateBinding DataContext}"
+                        ContentTemplate="{TemplateBinding ContentTemplate}"
+                        />
+
+                    <local:NodeOutput 
+                        Grid.Column="2"
+                        Grid.Row="0"
+                        x:Name="__NodeOutput__"
+                        ItemsSource="{TemplateBinding Outputs}"
+                        ConnectorMargin="{TemplateBinding OutputMargin}"
+                        VerticalAlignment="{TemplateBinding OutputLayout}"
+                        ItemContainerStyle="{TemplateBinding OutputStyle}"
+                        />
+
+                </Grid>
+
+
+                <!--
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" x:Name="__NodeInputGridColumnDefinition__"/>
@@ -63,6 +117,8 @@
                                       VerticalAlignment="{TemplateBinding OutputLayout}"
                                       ItemContainerStyle="{TemplateBinding OutputStyle}"/>
                 </Grid>
+                -->
+
             </StackPanel>
         </Border>
     </ControlTemplate>
