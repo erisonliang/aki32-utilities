@@ -1,0 +1,27 @@
+﻿{
+  "StringProp1": "aaa",
+  "StringProp2": "あああ",
+  "StringProp3": "阿阿阿",
+  "IntProp": 11111,
+  "StringArrayProp": [
+    "iii",
+    "いいい",
+    "胃胃胃"
+  ],
+  "IntArrayProp": [
+    1,
+    2,
+    3
+  ],
+  "StringListProp": [
+    "uuu",
+    "ううう",
+    "宇宇宇"
+  ],
+  "IntListProp": [
+    11,
+    22,
+    33
+  ],
+  "IntProp_InString": "11111"
+}
