@@ -42,7 +42,7 @@ public class TestHelper
 
                 // B001 CollectFiles
                 {
-                    var input = new DirectoryInfo($@"{baseDir}\B001 CollectFiles\input");
+                    //var input = new DirectoryInfo($@"{baseDir}\B001 CollectFiles\input");
                     //input.CollectFiles(null, @"^.*a\.txt$", @"^.*3.*$");
                     //input.CollectFiles(null, @"^.*a\.txt$");
                     //input.CollectFiles(null, @"^.*[0-9]*\\a\.txt$");
