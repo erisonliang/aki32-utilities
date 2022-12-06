@@ -1,6 +1,6 @@
 ﻿
 
-namespace Aki32Utilities.ConsoleAppUtilities.SpecificPurposeModels.Research;
+namespace Aki32Utilities.ConsoleAppUtilities.Research;
 public class CrossRefArticleUriBuilder : IResearchUriBuilder
 {
 

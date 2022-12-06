@@ -10,13 +10,10 @@
 
   <ItemGroup>
     <Compile Remove="# Referring dlls\**" />
-    <Compile Remove="# TestModel\FileUtil\**" />
     <Compile Remove="Aki32 Utilities\**" />
     <EmbeddedResource Remove="# Referring dlls\**" />
-    <EmbeddedResource Remove="# TestModel\FileUtil\**" />
     <EmbeddedResource Remove="Aki32 Utilities\**" />
     <None Remove="# Referring dlls\**" />
-    <None Remove="# TestModel\FileUtil\**" />
     <None Remove="Aki32 Utilities\**" />
   </ItemGroup>
 

@@ -1,10 +1,11 @@
 ﻿using System.Xml.Linq;
 
 using Aki32Utilities.ConsoleAppUtilities.General;
+using Aki32Utilities.ConsoleAppUtilities.UsefulClasses;
 
 using Newtonsoft.Json.Linq;
 
-namespace Aki32Utilities.ConsoleAppUtilities.SpecificPurposeModels.Research;
+namespace Aki32Utilities.ConsoleAppUtilities.Research;
 /// <remarks>
 /// 参考：
 /// Crossref: https://www.crossref.org/documentation/retrieve-metadata/rest-api/

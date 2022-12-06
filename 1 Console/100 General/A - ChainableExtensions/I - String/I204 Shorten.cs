@@ -10,7 +10,7 @@ public static partial class ChainableExtensions
     /// </summary>
     /// <param name="input"></param>
     /// <returns></returns>
-    internal static string Shorten(this string input, Range range)
+    public static string Shorten(this string input, Range range)
     {
         try
         {

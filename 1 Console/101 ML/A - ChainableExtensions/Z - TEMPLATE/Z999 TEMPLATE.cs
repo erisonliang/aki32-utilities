@@ -24,7 +24,7 @@ public static partial class ChainableExtensions
     public static FileInfo TEMPLATE(this FileInfo inputFile, FileInfo? outputFile)
     {
         // preprocess
-        General.UtilPreprocessors.PreprocessOutFile(ref outputFile, inputFile.Directory!, inputFile.Name);
+        UtilPreprocessors.PreprocessOutFile(ref outputFile, inputFile.Directory!, inputFile.Name);
 
 
         // main
