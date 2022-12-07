@@ -24,7 +24,6 @@ public static partial class ChainableExtensions
         return outputFile!;
     }
 
-
     /// <summary>
     /// Unzip
     /// </summary>
@@ -33,15 +32,28 @@ public static partial class ChainableExtensions
     /// <returns></returns>
     public static DirectoryInfo Unzip(this FileInfo inputFile, DirectoryInfo? outputDir)
     {
-        //// preprocess
-        UtilPreprocessors.PreprocessOutDir(ref outputDir, inputFile.Directory);
+        // preprocess
+        outputDir ??= new DirectoryInfo(inputFile.FullName.Replace(Path.GetExtension(inputFile.Name), ""));
+        UtilPreprocessors.PreprocessOutDir(ref outputDir, inputFile.Directory!);
 
 
         // main
-        ZipFile.ExtractToDirectory(inputFile.FullName, outputDir.FullName, true);
+        ZipFile.ExtractToDirectory(inputFile.FullName, outputDir!.FullName, true);
 
 
         // post process
         return outputDir!;
     }
+
+    /// <summary>
+    /// Unzip_Loop
+    /// </summary>
+    /// <param name="inputDir"></param>
+    /// <param name="outputDir">when null, automatically set</param>
+    /// <returns></returns>
+    public static DirectoryInfo Unzip_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir)
+        => inputDir.Loop(outputDir, (inF, _) => inF.Unzip(null),
+            searchRegexen: new string[] { @"^.*\.zip$" });
+
+
 }
