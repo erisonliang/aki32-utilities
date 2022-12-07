@@ -92,6 +92,15 @@ public static partial class ExampleExecuter
                     //    .Unzip(null);
                 }
 
+                // B008 Encrypt, Decrypt
+                {
+                    //var input = new FileInfo($@"{baseDir_A_100}\B008 Crypt\input.txt");
+                    //input
+                    //    .Encrypt(null, "aiueo")
+                    //    .Decrypt(null, "aiueo")
+                    //    ;
+                }
+
                 // B102 ReadObjectFromLocalXXX, J101 SaveAsXXX
                 {
 
@@ -308,15 +317,6 @@ public static partial class ExampleExecuter
                 {
                     //var output = new DirectoryInfo($@"{baseDir_A_100}\E102 SaveScreenShot");
                     //OwesomeExtensions.SaveScreenShot(output, new Point(0, 0), new Point(1000, 1000));
-                }
-
-                // F003 Encrypt, Decrypt
-                {
-                    //var input = new FileInfo($@"{baseDir_A_100}\F003 Crypt\input.txt");
-                    //input
-                    //    .Encrypt(null, "aiueo")
-                    //    .Decrypt(null, "aiueo")
-                    //    ;
                 }
 
                 // F202 To2DArray, ToJaggedArray
