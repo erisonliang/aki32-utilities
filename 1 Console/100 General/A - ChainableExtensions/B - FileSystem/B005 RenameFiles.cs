@@ -147,20 +147,29 @@ public static partial class ChainableExtensions
     /// rename a file
     /// </summary>
     /// <param name="inputFile"></param>
-    /// <param name="outputFile"></param>
+    /// <param name="newNameWithoutExtension">"*" will be replaced with old name</param>
     /// <returns></returns>
     public static FileInfo RenameFile(this FileInfo inputFile, string newNameWithoutExtension)
     {
         // main
-        var ext = Path.GetExtension(inputFile.Name);
-        var outputFileName = $"{newNameWithoutExtension}{ext}";
-        var outputFilePath = Path.Combine(inputFile.DirectoryName, outputFileName);
-        var outputFile = new FileInfo(outputFilePath);
+        var outputFile = inputFile.GetRenamedFileInfo(newNameWithoutExtension);
         inputFile.MoveTo(outputFile);
 
 
         // post process
         return outputFile;
+    }
+
+    /// <summary>
+    /// rename a file
+    /// </summary>
+    /// <param name="inputFile"></param>
+    /// <param name="newNameWithoutExtension">"*" will be replaced with old name</param>
+    /// <returns></returns>
+    public static FileInfo GetRenamedFileInfo(this FileInfo inputFile, string newNameWithoutExtension)
+    {
+        // sugar
+        return new FileInfo(GetRenamedPath(inputFile.FullName, newNameWithoutExtension));
     }
 
 }
