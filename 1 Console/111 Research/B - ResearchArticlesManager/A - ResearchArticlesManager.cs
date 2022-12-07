@@ -47,8 +47,8 @@ public partial class ResearchArticlesManager
         Console.WriteLine("+ ");
         Console.WriteLine();
 
+        LocalDirectory.Create();
         PDFsDirectory.Create();
-
     }
 
 

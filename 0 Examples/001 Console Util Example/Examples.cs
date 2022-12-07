@@ -22,7 +22,7 @@ using Newtonsoft.Json;
 using Org.BouncyCastle.Asn1.X509.Qualified;
 
 namespace Aki32Utilities.UsageExamples.ConsoleAppUtilities;
-public class TestHelper
+public class Examples
 {
 
     public static void All()
@@ -871,10 +871,10 @@ public class TestHelper
 
 
                 // A - ResearchManager
+                if (false)
                 {
                     //UtilConfig.ConsoleOutput_Contents = false;
 
-                    //var localDir = new DirectoryInfo($@"{baseDir_C}\A - ResearchManager\@Private");
                     var localDir = new DirectoryInfo($@"{Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory)}\ResearchArticleDB");
 
                     var research = new ResearchArticlesManager(localDir);

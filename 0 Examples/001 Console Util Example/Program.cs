@@ -10,7 +10,7 @@ public partial class Program
         Console.WriteLine();
 
 
-        TestHelper.All();
+        Examples.All();
 
 
         Console.WriteLine();
