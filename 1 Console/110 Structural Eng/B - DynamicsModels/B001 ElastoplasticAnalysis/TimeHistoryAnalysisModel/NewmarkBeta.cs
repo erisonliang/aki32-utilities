@@ -29,7 +29,7 @@ public class NewmarkBetaModel : ITimeHistoryAnalysisModel
     public TimeHistory Calc(SDoFModel model, TimeHistory wave)
     {
         var resultHistory = wave.Clone();
-        resultHistory.Name = $"result_{wave.Name}_{model.EP.GetType().Name}_{GetType().Name}";
+        resultHistory.Name = $"{wave.Name}_{model.EP.GetType().Name}_{GetType().Name}_Result";
 
         var epModel = model.EP;
         var m = model.m;
