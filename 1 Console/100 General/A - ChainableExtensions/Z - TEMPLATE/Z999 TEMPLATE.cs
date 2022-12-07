@@ -7,6 +7,8 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
+using Aki32Utilities.ConsoleAppUtilities.UsefulClasses;
+
 namespace Aki32Utilities.ConsoleAppUtilities.General;
 public static partial class ChainableExtensions
 {
@@ -44,6 +46,7 @@ public static partial class ChainableExtensions
         => inputDir.Loop(outputDir, (inF, outF) => inF.TEMPLATE(outF),
             maxDegreeOfParallelism: 1);
 
+
     /// <summary>
     /// TEMPLATE
     /// </summary>
@@ -54,26 +57,49 @@ public static partial class ChainableExtensions
     {
         // preprocess
         UtilPreprocessors.PreprocessOutDir(ref outputDir, inputDir);
-
+        var maxRetryCount = 10;
+        var maxDegreeOfParallelism = 10;
 
         // main
         var inputFiles = inputDir.GetFiles();
-        foreach (var inputFile in inputFiles)
+        var option = new ParallelOptions { MaxDegreeOfParallelism = maxDegreeOfParallelism };
+
+        var progress = new ProgressManager(inputFiles.Count());
+        progress.StartAutoWrite(100);
+
+        Parallel.ForEach(inputFiles, option, inputFile =>
         {
             try
             {
-                var outputFile = new FileInfo(Path.Combine(outputDir!.FullName, inputFile.Name));
-                inputFile.TEMPLATE(outputFile);
-
-                if (UtilConfig.ConsoleOutput_Contents)
-                    Console.WriteLine($"O: {inputFile.FullName}");
+                var retryCount = 0;
+                while (true)
+                {
+                    try
+                    {
+                        var outputFile = new FileInfo(Path.Combine(outputDir!.FullName, inputFile.Name));
+                        inputFile.TEMPLATE(outputFile);
+                        break;
+                    }
+                    catch (Exception ex)
+                    {
+                        if (++retryCount < maxRetryCount)
+                        {
+                            Thread.Sleep(100);
+                            GC.Collect();
+                            continue;
+                        }
+                        progress.AddErrorMessage($"{inputFile.FullName}, {ex.Message}");
+                        break;
+                    }
+                }
             }
-            catch (Exception ex)
+            finally
             {
-                if (UtilConfig.ConsoleOutput_Contents)
-                    Console.WriteLine($"X: {inputFile.FullName}, {ex.Message}");
+                progress.CurrentStep++;
             }
-        }
+        });
+
+        progress.WriteDone();
 
 
         // post process
