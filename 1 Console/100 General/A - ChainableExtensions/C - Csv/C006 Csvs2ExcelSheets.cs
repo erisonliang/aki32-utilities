@@ -1,4 +1,6 @@
-﻿using ClosedXML.Excel;
+﻿using System.Diagnostics.CodeAnalysis;
+
+using ClosedXML.Excel;
 
 namespace Aki32Utilities.ConsoleAppUtilities.General;
 public static partial class ChainableExtensions
@@ -34,7 +36,7 @@ public static partial class ChainableExtensions
         }
 
         foreach (var csv in csvs)
-            csv.Csv2Excel(workbook);
+            csv.Csv2ExcelSheet(workbook);
 
         workbook.SaveAs(outputFile.FullName, true);
 
@@ -50,7 +52,7 @@ public static partial class ChainableExtensions
     /// <param name="outputFile">when null, automatically set</param>
     /// <returns></returns>
     /// <exception cref="NotImplementedException"></exception>
-    public static FileInfo Csv2Excel(this FileInfo inputFile, FileInfo? outputFile)
+    public static FileInfo Csv2ExcelSheet(this FileInfo inputFile, FileInfo? outputFile)
     {
         // preprocess
         UtilPreprocessors.PreprocessOutFile(ref outputFile, inputFile.Directory!, "output.xlsx");
@@ -60,7 +62,7 @@ public static partial class ChainableExtensions
 
         // main
         using var workbook = new XLWorkbook();
-        inputFile.Csv2Excel(workbook);
+        inputFile.Csv2ExcelSheet(workbook);
         workbook.SaveAs(outputFile.FullName, true);
 
 
@@ -73,7 +75,7 @@ public static partial class ChainableExtensions
     /// </summary>
     /// <param name="inputFile"></param>
     /// <param name="excelWorkBook"></param>
-    static void Csv2Excel(this FileInfo inputFile, XLWorkbook excelWorkBook)
+    private static void Csv2ExcelSheet(this FileInfo inputFile, XLWorkbook excelWorkBook)
     {
         var sheetName = Path.GetFileNameWithoutExtension(inputFile.Name);
         var worksheet = excelWorkBook.AddWorksheet(sheetName);

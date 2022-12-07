@@ -24,7 +24,7 @@ using Org.BouncyCastle.Asn1.X509.Qualified;
 namespace Aki32Utilities.UsageExamples.ConsoleAppUtilities;
 public static partial class ExampleExecuter
 {
-    const string BASE_DIR = $@"..\..\..\# TestModel\";
+    const string BASE_DIR = $@"..\..\..\# ExampleModel\";
 
     public static void All()
     {
@@ -160,8 +160,12 @@ public static partial class ExampleExecuter
 
                 // C006 Csvs2ExcelSheets
                 {
-                    var input = new DirectoryInfo($@"{baseDir_A_100}\C006 Csvs2ExcelSheets\input");
-                    input.Csvs2ExcelSheets(null);
+                    //new DirectoryInfo($@"{baseDir_A_100}\C006 Csvs2ExcelSheets\input")
+                    //    .Csvs2ExcelSheets(null);
+
+                    //new FileInfo($@"{baseDir_A_100}\C006 Csvs2ExcelSheets\input\data1.csv")
+                    //    .Csv2ExcelSheet(null);
+
                 }
 
                 // C101 ReadCsv, F201 Transpose2DArray, C103 SaveCsv

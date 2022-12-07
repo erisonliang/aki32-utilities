@@ -1,4 +1,6 @@
-﻿using ClosedXML.Excel;
+﻿using Aki32Utilities.ConsoleAppUtilities.UsefulClasses;
+
+using ClosedXML.Excel;
 
 using System.Text;
 
@@ -20,12 +22,13 @@ public static partial class ChainableExtensions
     {
         // preprocess
         UtilPreprocessors.PreprocessOutFile(ref outputFile, inputDir!, "output.csv");
+        if (Path.GetExtension(outputFile!.Name).EndsWith(".csv"))
+            throw new NotImplementedException("outputFile need to be .csv or null.");
 
 
         // main
         var outputDirPath = outputFile!.DirectoryName;
         var itemName = Path.GetFileNameWithoutExtension(outputFile.Name);
-        var outputExtension = Path.GetExtension(outputFile.Name);
 
         var csvs = inputDir
             .GetFiles("*.csv", SearchOption.TopDirectoryOnly)
@@ -35,89 +38,48 @@ public static partial class ChainableExtensions
 
         if (csvs.Length == 0)
         {
-            Console.WriteLine($"※ No csv file found in {inputDir.FullName}");
+            ConsoleExtension.WriteLineWithColor($"※ No csv file found in {inputDir.FullName}", ConsoleColor.Red);
             return outputFile;
         }
 
-        if (outputExtension == ".csv")
+        var UseInitColumnThen1 = initialColumn.HasValue ? 1 : 0;
+
+        // collect all data to this column list and save eventually
+        var resultColumnList = new string[csvs.Length + UseInitColumnThen1][];
+
+        // copy one column from inputCsv to outputCsv method
+        void AddColumnToResultColumnList(FileInfo csv, int targetInputCsvColumn, int targetOutputCsvColumn, string header = "")
         {
-            var UseInitColumnThen1 = initialColumn.HasValue ? 1 : 0;
-
-            // collect all data to this column list and save eventually
-            var resultColumnList = new string[csvs.Length + UseInitColumnThen1][];
-
-            // copy one column from inputCsv to outputCsv method
-            void AddColumnToResultColumnList(FileInfo csv, int targetInputCsvColumn, int targetOutputCsvColumn, string header = "")
+            var csvData = csv.ReadCsv_Rows(0, skipRowCount);
+            var tempCsvColumn = new List<string> { header };
+            for (int i = 0; i < csvData.Length; i++)
             {
-                var csvData = csv.ReadCsv_Rows(0, skipRowCount);
-                var tempCsvColumn = new List<string> { header };
-                for (int i = 0; i < csvData.Length; i++)
+                try
                 {
-                    try
-                    {
-                        tempCsvColumn.Add(csvData[i][targetInputCsvColumn]);
-                    }
-                    catch (Exception)
-                    {
-                        tempCsvColumn.Add("");
-                    }
+                    tempCsvColumn.Add(csvData[i][targetInputCsvColumn]);
                 }
-                resultColumnList[targetOutputCsvColumn] = tempCsvColumn.ToArray();
+                catch (Exception)
+                {
+                    tempCsvColumn.Add("");
+                }
             }
-
-            // copy initialColumn 
-            if (initialColumn.HasValue)
-                AddColumnToResultColumnList(csvs[0], initialColumn.Value, 0);
-
-            // copy all of the rest
-            for (int i = 0; i < csvs.Length; i++)
-            {
-                var csvPath = csvs[i].FullName;
-                var header = Path.GetFileNameWithoutExtension(csvPath);
-                AddColumnToResultColumnList(csvs[i], targetColumn, i + UseInitColumnThen1, header);
-            }
-
-
-            // save
-            resultColumnList.SaveCsv_Columns(outputFile);
+            resultColumnList[targetOutputCsvColumn] = tempCsvColumn.ToArray();
         }
-        else if (outputExtension == ".xlsx")
+
+        // copy initialColumn 
+        if (initialColumn.HasValue)
+            AddColumnToResultColumnList(csvs[0], initialColumn.Value, 0);
+
+        // copy all of the rest
+        for (int i = 0; i < csvs.Length; i++)
         {
-            // Excel (※[1,1] refers A1 cell)
-            using var workbook = new XLWorkbook();
-            var worksheet = workbook.AddWorksheet("All");
-
-            // copy one column from csv to excel method
-            void CopyCsvToExcelColumn(FileInfo csv, int targetCsvColumn, int targetExcelColumn)
-            {
-                var sr = new StreamReader(csv.FullName, Encoding.GetEncoding("SHIFT_JIS"));
-                var all = sr.ReadToEnd().Split("\r\n").Select(x => { try { return x.Split(',')[targetCsvColumn]; } catch { return ""; } }).ToArray();
-
-                for (int i = 0; i < all.Count(); i++)
-                    worksheet.Cell(i + 2, targetExcelColumn + 1).Value = all[i];
-            }
-
-            // copy initialColumn 
-            if (initialColumn.HasValue)
-                CopyCsvToExcelColumn(csvs[0], initialColumn.Value, 0);
-
-            // copy all of the rest
-            foreach (var csv in csvs)
-            {
-                var csvPath = csv.FullName;
-
-                int lastColumn = worksheet.LastColumnUsed().ColumnNumber();
-                CopyCsvToExcelColumn(csv, targetColumn, lastColumn);
-                worksheet.Cell(1, lastColumn + 1).Value = Path.GetFileNameWithoutExtension(csvPath);
-            }
-
-            // save
-            workbook.SaveAs(outputFile.FullName, true);
+            var csvPath = csvs[i].FullName;
+            var header = Path.GetFileNameWithoutExtension(csvPath);
+            AddColumnToResultColumnList(csvs[i], targetColumn, i + UseInitColumnThen1, header);
         }
-        else
-        {
-            throw new NotImplementedException("outputFile need to be .csv or .xlsx or null.");
-        }
+
+        // save
+        resultColumnList.SaveCsv_Columns(outputFile);
 
 
         // post process
