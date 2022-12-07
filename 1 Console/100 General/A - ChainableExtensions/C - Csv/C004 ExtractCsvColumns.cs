@@ -44,7 +44,7 @@ public static partial class ChainableExtensions
         }
 
         resultList.ToArray().SaveCsv_Rows(outputFile!, header);
-
+        GC.Collect();
 
         // post process
         return outputFile!;
@@ -67,7 +67,8 @@ public static partial class ChainableExtensions
         // main
         foreach (var (name, extractingColumns, header) in targets)
         {
-            var newOutputFile = new FileInfo(Path.Combine(outputFile!.Directory!.FullName, $"{outputFile.Name}_{name}{inputFile.Extension}"));
+            var oldname = Path.GetFileNameWithoutExtension(outputFile!.Name);
+            var newOutputFile = new FileInfo(Path.Combine(outputFile!.Directory!.FullName, $"{oldname}_{name}{inputFile.Extension}"));
             inputFile.ExtractCsvColumns(newOutputFile, extractingColumns, skipRowCount, header);
         }
 
@@ -89,7 +90,7 @@ public static partial class ChainableExtensions
     /// <param name="header"></param>
     /// <returns></returns>
     public static DirectoryInfo ExtractCsvColumns_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir, int[] extractingColumns, int skipRowCount = 0, string? header = null)
-        => inputDir.Loop(outputDir, (inF, outF) => ExtractCsvColumns(inF, outF, extractingColumns, skipRowCount, header));
+        => inputDir.Loop(outputDir, (inF, outF) => inF.ExtractCsvColumns(outF, extractingColumns, skipRowCount, header));
 
     /// <summary>
     /// extranct designated columns from csv to new csv
@@ -100,7 +101,7 @@ public static partial class ChainableExtensions
     /// <param name="targets"></param>
     /// <returns></returns>
     public static DirectoryInfo ExtractCsvColumnsForMany_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir, int skipRowCount = 0, params (string name, int[] extractingColumns, string? header)[] targets)
-        => inputDir.Loop(outputDir, (inF, outF) => ExtractCsvColumnsForMany(inF, outF, skipRowCount, targets));
+        => inputDir.Loop(outputDir, (inF, outF) => inF.ExtractCsvColumnsForMany(outF, skipRowCount, targets));
 
 
     // ★★★★★★★★★★★★★★★ 

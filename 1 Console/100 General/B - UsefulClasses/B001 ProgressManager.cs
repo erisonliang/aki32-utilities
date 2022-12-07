@@ -55,7 +55,9 @@ public class ProgressManager
         if (!ConsoleOutput)
             return;
 
-        if (isRewriting) Thread.Sleep(10);
+        while (isRewriting)
+            Thread.Sleep(10);
+
         isRewriting = true;
 
         if (useConsoleOverwrite)

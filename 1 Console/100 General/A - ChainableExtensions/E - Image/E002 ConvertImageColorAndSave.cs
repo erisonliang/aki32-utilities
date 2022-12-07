@@ -44,7 +44,7 @@ public static partial class ChainableExtensions
     {
         // preprocess
         UtilPreprocessors.PreprocessOutDir(ref outputDir, inputFile.Directory!);
-        (var init_ConsoleOutput_Preprocess, UtilConfig.ConsoleOutput_Preprocess) = (UtilConfig.ConsoleOutput_Preprocess, false);
+        UtilConfig.StopTemporary_ConsoleOutput_Preprocess();
 
 
         // main
@@ -56,7 +56,7 @@ public static partial class ChainableExtensions
 
 
         // post process
-        UtilConfig.ConsoleOutput_Preprocess = init_ConsoleOutput_Preprocess;
+        UtilConfig.TryRestart_ConsoleOutput_Preprocess();
         return outputDir!;
     }
 

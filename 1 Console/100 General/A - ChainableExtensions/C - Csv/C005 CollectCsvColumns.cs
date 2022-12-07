@@ -73,20 +73,10 @@ public static partial class ChainableExtensions
             for (int i = 0; i < csvs.Length; i++)
             {
                 var csvPath = csvs[i].FullName;
-                try
-                {
-                    var header = Path.GetFileNameWithoutExtension(csvPath);
-                    AddColumnToResultColumnList(csvs[i], targetColumn, i + UseInitColumnThen1, header);
-
-                    if (UtilConfig.ConsoleOutput_Contents)
-                        Console.WriteLine($"O: {csvPath}");
-                }
-                catch (Exception ex)
-                {
-                    if (UtilConfig.ConsoleOutput_Contents)
-                        Console.WriteLine($"X: {csvPath}, {ex.Message}");
-                }
+                var header = Path.GetFileNameWithoutExtension(csvPath);
+                AddColumnToResultColumnList(csvs[i], targetColumn, i + UseInitColumnThen1, header);
             }
+
 
             // save
             resultColumnList.SaveCsv_Columns(outputFile);
@@ -115,20 +105,10 @@ public static partial class ChainableExtensions
             foreach (var csv in csvs)
             {
                 var csvPath = csv.FullName;
-                try
-                {
-                    int lastColumn = worksheet.LastColumnUsed().ColumnNumber();
-                    CopyCsvToExcelColumn(csv, targetColumn, lastColumn);
-                    worksheet.Cell(1, lastColumn + 1).Value = Path.GetFileNameWithoutExtension(csvPath);
 
-                    if (UtilConfig.ConsoleOutput_Contents)
-                        Console.WriteLine($"O: {csvPath}");
-                }
-                catch (Exception ex)
-                {
-                    if (UtilConfig.ConsoleOutput_Contents)
-                        Console.WriteLine($"X: {csvPath}, {ex.Message}");
-                }
+                int lastColumn = worksheet.LastColumnUsed().ColumnNumber();
+                CopyCsvToExcelColumn(csv, targetColumn, lastColumn);
+                worksheet.Cell(1, lastColumn + 1).Value = Path.GetFileNameWithoutExtension(csvPath);
             }
 
             // save
@@ -136,7 +116,7 @@ public static partial class ChainableExtensions
         }
         else
         {
-            throw new NotImplementedException("outputFile need to be .csv or .xlsx file null.");
+            throw new NotImplementedException("outputFile need to be .csv or .xlsx or null.");
         }
 
 
@@ -158,8 +138,9 @@ public static partial class ChainableExtensions
         UtilPreprocessors.PreprocessOutDir(ref outputDir, inputDir, takesTimeFlag: true);
         if (inputDir.FullName == outputDir!.FullName)
             throw new InvalidOperationException("※ inputDir and outputDir must be different");
-        (var init_ConsoleOutput_Preprocess, UtilConfig.ConsoleOutput_Preprocess) = (UtilConfig.ConsoleOutput_Preprocess, false);
-        
+        UtilConfig.StopTemporary_ConsoleOutput_Preprocess();
+
+
         // main
         foreach (var (name, initialColumn, targetColumn) in targets)
         {
@@ -167,8 +148,9 @@ public static partial class ChainableExtensions
             inputDir.CollectCsvColumns(outputFile, targetColumn, initialColumn, skipRowCount);
         }
 
+
         // post process
-        UtilConfig.ConsoleOutput_Preprocess = init_ConsoleOutput_Preprocess;
+        UtilConfig.TryRestart_ConsoleOutput_Preprocess();
         return outputDir;
     }
 

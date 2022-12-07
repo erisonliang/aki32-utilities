@@ -50,7 +50,8 @@ public static partial class ChainableExtensions
         // preprocess
         if (outputFile is null)
             throw new ArgumentNullException(nameof(outputFile));
-        UtilPreprocessors.PreprocessOutFile(ref outputFile!, null!, null!);
+        UtilPreprocessors.PreprocessOutFile(ref outputFile!, null!, null!,
+            deletingExistingOutputFile: false);
 
 
         // main

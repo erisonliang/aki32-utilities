@@ -8,14 +8,24 @@ public static partial class ChainableExtensions
     /// rename a file path
     /// </summary>
     /// <param name="inputPath"></param>
-    /// <param name="newNameWithoutExtension">"*" will be replaced with old name</param>
+    /// <param name="newFileNameWithoutExtension">"*" will be replaced with old name</param>
+    /// <param name="replaceSets">replace strings in original file name</param>
     /// <returns></returns>
-    public static string GetRenamedPath(this string inputPath, string newNameWithoutExtension)
+    public static string GetRenamedPath(this string inputPath, string newFileNameWithoutExtension, params (string from, string to)[] replaceSets)
     {
         // main
         var ext = Path.GetExtension(inputPath);
-        newNameWithoutExtension = newNameWithoutExtension.Replace("*", Path.GetFileNameWithoutExtension(inputPath));
-        var outputFileName = $"{newNameWithoutExtension}{ext}";
+
+        newFileNameWithoutExtension = newFileNameWithoutExtension
+            .Replace("*", Path.GetFileNameWithoutExtension(inputPath));
+
+        foreach (var (from, to) in replaceSets)
+            newFileNameWithoutExtension = newFileNameWithoutExtension.Replace(from, to);
+
+        if (newFileNameWithoutExtension == "")
+            newFileNameWithoutExtension = "output";
+
+        var outputFileName = $"{newFileNameWithoutExtension}{ext}";
         var outputFilePath = Path.Combine(Path.GetDirectoryName(inputPath)!, outputFileName);
 
 

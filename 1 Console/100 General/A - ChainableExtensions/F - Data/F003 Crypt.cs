@@ -114,7 +114,7 @@ public static partial class ChainableExtensions
     /// <param name="password">password for encryption</param>
     /// <returns></returns>
     public static DirectoryInfo Encrypt_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir, string password)
-        => inputDir.Loop(outputDir, (inF, outF) => Encrypt(inF, outF, password));
+        => inputDir.Loop(outputDir, (inF, outF) => inF.Encrypt(outF, password));
 
     /// <summary>
     /// Decrypt
@@ -124,7 +124,7 @@ public static partial class ChainableExtensions
     /// <param name="password">password for decryption</param>
     /// <returns></returns>
     public static DirectoryInfo Decrypt_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir, string password)
-        => inputDir.Loop(outputDir, (inF, outF) => Decrypt(inF, outF, password));
+        => inputDir.Loop(outputDir, (inF, outF) => inF.Decrypt(outF, password));
 
 
     // ★★★★★★★★★★★★★★★

@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using System.util;
 
 namespace Aki32Utilities.ConsoleAppUtilities.General;
 public static partial class ChainableExtensions
@@ -11,25 +12,26 @@ public static partial class ChainableExtensions
     /// <returns></returns>
     public static DirectoryInfo RenameFiles(this DirectoryInfo targetDir)
     {
-        return targetDir.RenameFiles_AppendAndReplace("*", new (string from, string to)[] { });
+        return targetDir.RenameFiles_AppendAndReplace("*", Array.Empty<(string from, string to)>());
     }
 
     /// <summary>
     /// rename all file names in targetDir
     /// </summary>
     /// <param name="inputDir"></param>
-    /// <param name="pattern">with "abc*def", "123" will be "abc123def". must include "*".</param>
+    /// <param name="newFileNameWithoutExtension">with "abc*def", "123" will be "abc123def". must include "*".</param>
     /// <param name="replaceSets">
     /// replace designated strings in filenames
     /// If 0-length array was given, replaceSet will be automatically decided.
     /// </param>
     /// <returns></returns>
-    public static DirectoryInfo RenameFiles_AppendAndReplace(this DirectoryInfo inputDir, string pattern, params (string from, string to)[] replaceSets)
+    public static DirectoryInfo RenameFiles_AppendAndReplace(this DirectoryInfo inputDir, string newFileNameWithoutExtension, params (string from, string to)[] replaceSets)
     {
         // preprocess
         UtilPreprocessors.PreprocessBasic(true);
-        if (!pattern.Contains("*"))
-            throw new InvalidOperationException(@"""pattern"" must contain "" * """);
+        if (!newFileNameWithoutExtension.Contains('*'))
+            throw new InvalidOperationException(@"""newFileNameWithoutExtension"" must contain "" * """);
+        UtilConfig.StopTemporary_ConsoleOutput_Preprocess();
 
 
         // main
@@ -71,30 +73,12 @@ public static partial class ChainableExtensions
             replaceSets = replaceSetList.ToArray();
         }
 
-        foreach (var inputFile in inputFiles)
-        {
-            try
-            {
-                var outputFileName = Path.GetFileNameWithoutExtension(inputFile.Name);
-                foreach (var replaceSet in replaceSets)
-                    outputFileName = outputFileName.Replace(replaceSet.from, replaceSet.to);
-                outputFileName = pattern.Replace(" * ", outputFileName);
-                if (outputFileName == "") outputFileName = "output";
-                var outputFilePath = Path.Combine(inputFile.DirectoryName!, outputFileName + Path.GetExtension(inputFile.Name));
 
-                inputFile.MoveTo(outputFilePath);
+        inputDir.Loop(null, (inF, _) => inF.RenameFile(newFileNameWithoutExtension, replaceSets));
+     
 
-                if (UtilConfig.ConsoleOutput_Contents)
-                    Console.WriteLine($"O: {inputFile.FullName}");
-            }
-            catch (Exception ex)
-            {
-                if (UtilConfig.ConsoleOutput_Contents)
-                    Console.WriteLine($"X: {inputFile.FullName}, {ex.Message}");
-            }
-        }
-
-
+        // post process
+        UtilConfig.TryRestart_ConsoleOutput_Preprocess();
         return inputDir;
     }
 
@@ -102,12 +86,12 @@ public static partial class ChainableExtensions
     /// rename all file names in targetDir
     /// </summary>
     /// <param name="targetDir"></param>
-    /// <param name="pattern">with "abc*def", "123" will be "abc123def". must include "*".</param>
+    /// <param name="newFileNameWithoutExtension">with "abc*def", "123" will be "abc123def". must include "*".</param>
     /// <param name="deletingStringSet">delete designated strings from filenames</param>
     /// <returns></returns>
-    public static DirectoryInfo RenameFiles_AppendAndReplace(this DirectoryInfo targetDir, string pattern, params string[] deletingStringSet)
+    public static DirectoryInfo RenameFiles_AppendAndReplace(this DirectoryInfo targetDir, string newFileNameWithoutExtension, params string[] deletingStringSet)
     {
-        return targetDir.RenameFiles_AppendAndReplace(pattern, deletingStringSet.Select(x => (x, "")).ToArray());
+        return targetDir.RenameFiles_AppendAndReplace(newFileNameWithoutExtension, deletingStringSet.Select(x => (x, "")).ToArray());
     }
 
     /// <summary>
@@ -148,11 +132,12 @@ public static partial class ChainableExtensions
     /// </summary>
     /// <param name="inputFile"></param>
     /// <param name="newNameWithoutExtension">"*" will be replaced with old name</param>
+    /// <param name="replaceSets">replace strings in original file name</param>
     /// <returns></returns>
-    public static FileInfo RenameFile(this FileInfo inputFile, string newNameWithoutExtension)
+    public static FileInfo RenameFile(this FileInfo inputFile, string newNameWithoutExtension, params (string from, string to)[] replaceSets)
     {
         // main
-        var outputFile = inputFile.GetRenamedFileInfo(newNameWithoutExtension);
+        var outputFile = inputFile.GetRenamedFileInfo(newNameWithoutExtension, replaceSets);
         inputFile.MoveTo(outputFile);
 
 
@@ -164,12 +149,13 @@ public static partial class ChainableExtensions
     /// rename a file
     /// </summary>
     /// <param name="inputFile"></param>
-    /// <param name="newNameWithoutExtension">"*" will be replaced with old name</param>
+    /// <param name="newFileNameWithoutExtension">"*" will be replaced with old name</param>
+    /// <param name="replaceSets">replace strings in original file name</param>
     /// <returns></returns>
-    public static FileInfo GetRenamedFileInfo(this FileInfo inputFile, string newNameWithoutExtension)
+    public static FileInfo GetRenamedFileInfo(this FileInfo inputFile, string newFileNameWithoutExtension, params (string from, string to)[] replaceSets)
     {
         // sugar
-        return new FileInfo(GetRenamedPath(inputFile.FullName, newNameWithoutExtension));
+        return new FileInfo(GetRenamedPath(inputFile.FullName, newFileNameWithoutExtension, replaceSets));
     }
 
 }

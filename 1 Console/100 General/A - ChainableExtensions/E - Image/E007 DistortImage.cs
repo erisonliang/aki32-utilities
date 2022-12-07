@@ -73,7 +73,7 @@ public static partial class ChainableExtensions
         int maxDegreeOfParallelism = 5,
         params (Point originalPoint, Point tagrtPoint)[] ps
         )
-        => inputDir.Loop(outputDir, (inF, outF) => DistortImage(inF, outF, fill, ps),
+        => inputDir.Loop(outputDir, (inF, outF) => inF.DistortImage(outF, fill, ps),
             maxDegreeOfParallelism: maxDegreeOfParallelism
             );
 

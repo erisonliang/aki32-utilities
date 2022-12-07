@@ -40,7 +40,7 @@ public static partial class ChainableExtensions
     /// <param name="header"></param>
     /// <returns></returns>
     public static DirectoryInfo TransposeCsv_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir)
-        => inputDir.Loop(outputDir, (inF, outF) => TransposeCsv(inF, outF));
+        => inputDir.Loop(outputDir, (inF, outF) => inF.TransposeCsv(outF));
 
 
     // ★★★★★★★★★★★★★★★ 

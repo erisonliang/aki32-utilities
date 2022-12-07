@@ -40,7 +40,7 @@ public static partial class ChainableExtensions
     {
         // preprocess
         UtilPreprocessors.PreprocessOutDir(ref outputDir, inputFile.Directory!);
-        (var init_ConsoleOutput_Preprocess, UtilConfig.ConsoleOutput_Preprocess) = (UtilConfig.ConsoleOutput_Preprocess, false);
+        UtilConfig.StopTemporary_ConsoleOutput_Preprocess();
 
 
         // main
@@ -52,7 +52,7 @@ public static partial class ChainableExtensions
 
 
         // post process
-        UtilConfig.ConsoleOutput_Preprocess = init_ConsoleOutput_Preprocess;
+        UtilConfig.TryRestart_ConsoleOutput_Preprocess();
         return outputDir!;
     }
 
@@ -67,7 +67,7 @@ public static partial class ChainableExtensions
     /// <param name="cropSize"></param>
     /// <returns></returns>
     public static DirectoryInfo CropImage_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir, Thickness cropSize)
-        => inputDir.Loop(outputDir, (inF, outF) => CropImage(inF, outF, cropSize));
+        => inputDir.Loop(outputDir, (inF, outF) => inF.CropImage(outF, cropSize));
 
     /// <summary>
     /// 
@@ -77,7 +77,7 @@ public static partial class ChainableExtensions
     /// <param name="crop"></param>
     /// <returns></returns>
     public static DirectoryInfo CropImageForMany_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir, Thickness[] crorpSizes)
-        => inputDir.Loop(outputDir, (inF, outF) => CropImageForMany(inF, outputDir, crorpSizes));
+        => inputDir.Loop(outputDir, (inF, outF) => inF.CropImageForMany(outputDir, crorpSizes));
 
 
     // ★★★★★★★★★★★★★★★ image process

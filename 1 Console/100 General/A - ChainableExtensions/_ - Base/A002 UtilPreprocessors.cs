@@ -10,7 +10,8 @@ public static class UtilPreprocessors
         DirectoryInfo targetOutputDirWhenNull,
         bool consoleOut = true,
         [CallerMemberName] string methodName = "",
-        bool takesTimeFlag = false
+        bool takesTimeFlag = false,
+        bool deletingExistingOutputDir = false
         )
     {
         PreprocessBasic(consoleOut, methodName: methodName, takesTimeFlag: takesTimeFlag);
@@ -22,6 +23,10 @@ public static class UtilPreprocessors
                 GetNewOutputDirName(methodName)
                 )
             );
+
+        if (deletingExistingOutputDir && outputDirReference.Exists)
+            outputDirReference.Delete(true);
+
         if (!outputDirReference.Exists)
             outputDirReference.Create();
 
@@ -33,7 +38,8 @@ public static class UtilPreprocessors
           string fileNameCandidate,
           bool consoleOut = true,
           [CallerMemberName] string methodName = "",
-          bool takesTimeFlag = false
+          bool takesTimeFlag = false,
+          bool deletingExistingOutputFile = true
           )
     {
         PreprocessBasic(consoleOut, methodName: methodName, takesTimeFlag: takesTimeFlag);
@@ -46,10 +52,13 @@ public static class UtilPreprocessors
                 fileNameCandidate
                 )
             );
+
+        if (deletingExistingOutputFile && outputFileReference.Exists)
+            outputFileReference.Delete();
+
         if (!outputFileReference.Directory!.Exists)
             outputFileReference.Directory.Create();
 
-        if (outputFileReference.Exists) outputFileReference.Delete();
     }
 
     public static void PreprocessBasic(

@@ -50,7 +50,8 @@ public static partial class ChainableExtensions
         )
     {
         // preprocess
-        UtilPreprocessors.PreprocessOutFile(ref outputFile, inputFile.Directory!, inputFile.Name);
+        UtilPreprocessors.PreprocessOutFile(ref outputFile, inputFile.Directory!, inputFile.Name,
+            deletingExistingOutputFile: false);
 
 
         // main

@@ -41,7 +41,7 @@ public static partial class ChainableExtensions
     /// <param name="outputDir">when null, automatically set</param>
     /// <returns></returns>
     public static DirectoryInfo TEMPLATE_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir)
-        => inputDir.Loop(outputDir, (inF, outF) => TEMPLATE(inF, outF),
+        => inputDir.Loop(outputDir, (inF, outF) => inF.TEMPLATE(outF),
             maxDegreeOfParallelism: 1);
 
     /// <summary>

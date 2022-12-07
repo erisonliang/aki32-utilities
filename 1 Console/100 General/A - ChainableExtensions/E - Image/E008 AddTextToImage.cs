@@ -98,11 +98,7 @@ public static partial class ChainableExtensions
         int fontSize = 20,
         Brush? brush = null,
         bool alignRight = false)
-        => inputDir.Loop(outputDir, (inF, outF) => AddTextToImage(inF, outF, addingText, textUpperLeftPoint,
-            fontSize: fontSize,
-            brush: brush,
-            alignRight: alignRight
-            ), maxDegreeOfParallelism: 1);
+        => inputDir.Loop(outputDir, (inF, outF) => inF.AddTextToImage(outF, addingText, textUpperLeftPoint, fontSize: fontSize, brush: brush, alignRight: alignRight), maxDegreeOfParallelism: 1);
 
     /// <summary>
     /// AddTextToImage
@@ -120,11 +116,7 @@ public static partial class ChainableExtensions
         double fontSizeRatio = 0.1,
         Brush? brush = null,
         bool alignRight = false)
-        => inputDir.Loop(outputDir, (inF, outF) => AddTextToImageProportionally(inF, outF, addingText, textUpperLeftPointRatio,
-            fontSizeRatio: fontSizeRatio,
-            brush: brush,
-            alignRight: alignRight
-            ), maxDegreeOfParallelism: 1);
+        => inputDir.Loop(outputDir, (inF, outF) => inF.AddTextToImageProportionally(outF, addingText, textUpperLeftPointRatio, fontSizeRatio: fontSizeRatio, brush: brush, alignRight: alignRight), maxDegreeOfParallelism: 1);
 
 
     // ★★★★★★★★★★★★★★★ Image process
