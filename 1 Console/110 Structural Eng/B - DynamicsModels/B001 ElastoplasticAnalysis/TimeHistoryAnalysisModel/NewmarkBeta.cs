@@ -15,7 +15,7 @@ public class NewmarkBetaModel : ITimeHistoryAnalysisModel
 
     // ★★★★★★★★★★★★★★★ inits
 
-    public NewmarkBetaModel(double beta, double gamma = 0.5)
+    public NewmarkBetaModel(double beta = 0.25, double gamma = 0.5)
     {
         this.beta = beta;
         this.gamma = gamma;
