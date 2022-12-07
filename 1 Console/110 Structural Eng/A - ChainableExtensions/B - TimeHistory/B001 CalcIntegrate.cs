@@ -10,25 +10,36 @@ public static partial class ChainableExtensions
 {
 
     /// <summary>
-    /// SimpleIntegrate
+    /// Calc integrate and add result as a new column
     /// </summary>
     /// <returns></returns>
-    public static TimeHistory CalcIntegrate_Simple(this TimeHistory inputHistory, string targetIndex, string newIndex)
+    public static TimeHistory CalcIntegrate_Simple(this TimeHistory inputHistory, string targetIndex, params string[] newIndexes)
     {
         // preprocess
         UtilPreprocessors.PreprocessBasic();
+        if (newIndexes.Length == 0)
+            newIndexes = new string[] { $"{targetIndex}_Integrated" };
 
 
         // main
         var dt = inputHistory.TimeStep;
-        for (int i = 0; i < inputHistory.DataRowCount - 1; i++)
+        var indexChain = new List<string> { targetIndex };
+        indexChain.AddRange(newIndexes);
+
+        for (int index = 0; index < indexChain.Count - 1; index++)
         {
-            var c = inputHistory.GetStep(i);
-            var n = inputHistory.GetStep(i + 1);
+            var oldIndex = indexChain[index];
+            var newIndex = indexChain[index + 1];
 
-            n[newIndex] = c[newIndex] + 0.5 * (c[targetIndex] + n[targetIndex]) * dt;
+            for (int targetRow = 0; targetRow < inputHistory.DataRowCount - 1; targetRow++)
+            {
+                var c = inputHistory.GetStep(targetRow);
+                var n = inputHistory.GetStep(targetRow + 1);
 
-            inputHistory.SetStep(i + 1, n);
+                n[newIndex] = c[newIndex] + 0.5 * (c[oldIndex] + n[oldIndex]) * dt;
+
+                inputHistory.SetStep(targetRow + 1, n);
+            }
         }
 
 
