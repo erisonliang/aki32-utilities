@@ -11,7 +11,7 @@ public static partial class ChainableExtensions
     /// <param name="outputFile"></param>
     /// <param name="header"></param>
     /// <returns></returns>
-    public static FileInfo SaveCsv_Rows(this string[][] inputFile_Rows, FileInfo outputFile, string? header = null)
+    public static FileInfo SaveCsv_Rows<T>(this T[][] inputFile_Rows, FileInfo outputFile, string? header = null)
     {
         // preprocess
         UtilPreprocessors.PreprocessBasic(false);
@@ -26,7 +26,7 @@ public static partial class ChainableExtensions
         foreach (var row in inputFile_Rows)
         {
             var correctedLine = row
-                .Select(x => x ?? "")
+                .Select(x => x?.ToString() ?? "")
                 .Select(x => x.Replace("\"", "\"\""))
                 .Select(x => (x.Contains(',') || x.Contains('\"')) ? $"\"{x}\"" : x);
             sw.WriteLine(string.Join(',', correctedLine));
@@ -44,7 +44,7 @@ public static partial class ChainableExtensions
     /// <param name="outputFile"></param>
     /// <param name="header"></param>
     /// <returns></returns>
-    public static FileInfo SaveCsv_Columns(this string[][] inputFile_Columns, FileInfo outputFile, string? header = null)
+    public static FileInfo SaveCsv_Columns<T>(this T[][] inputFile_Columns, FileInfo outputFile, string? header = null)
     {
         // main
         var inputFile_Rows = inputFile_Columns.Transpose();

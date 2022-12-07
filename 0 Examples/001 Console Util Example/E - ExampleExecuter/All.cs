@@ -36,6 +36,34 @@ public static partial class ExampleExecuter
             {
                 var baseDir_A_100 = $@"{baseDir_A}\100 - General";
 
+                // 2202 To2DArray, ToJaggedArray
+                {
+                    //var inputData = new int[][]
+                    //{
+                    //    new int[]{1,2,3,4,5,6,7},
+                    //    new int[]{1,2},
+                    //    new int[]{1,2,3},
+                    //    new int[]{1,2,3,4,5},
+                    //};
+                    //Console.WriteLine("inputData:");
+                    //foreach (var line in inputData)
+                    //    Console.WriteLine(string.Join(", ", line.Select(x => $"{x,3}")));
+
+                    //var outputData1 = inputData.ConvertTo2DArray(999);
+                    //Console.WriteLine("outputData1:");
+                    //for (int i = 0; i < outputData1.GetLength(0); i++)
+                    //{
+                    //    for (int j = 0; j < outputData1.GetLength(1); j++)
+                    //        Console.Write($"{outputData1[i, j],3}, ");
+                    //    Console.WriteLine();
+                    //}
+
+                    //var outputData2 = outputData1.ConvertToJaggedArray();
+                    //Console.WriteLine("outputData2:");
+                    //foreach (var line in outputData2)
+                    //    Console.WriteLine(string.Join(", ", line.Select(x => $"{x,3}")));
+                }
+
                 // B001 CollectFiles
                 {
                     //var input = new DirectoryInfo($@"{baseDir_A_100}\B001 CollectFiles\input");
@@ -101,7 +129,7 @@ public static partial class ExampleExecuter
                     //    ;
                 }
 
-                // B102 ReadObjectFromLocalXXX, J101 SaveAsXXX
+                // B102 ReadObjectFromLocalXXX, 0101 SaveAsXXX
                 {
 
                     //// test class
@@ -177,7 +205,7 @@ public static partial class ExampleExecuter
 
                 }
 
-                // C101 ReadCsv, F201 Transpose2DArray, C103 SaveCsv
+                // C101 ReadCsv, 2201 Transpose2DArray, 2103 SaveCsv
                 {
                     //var innerbaseDir_A_100 = $@"{baseDir_A_100}\C101 ReadCsv, SaveCsv";
                     //var input = new FileInfo($@"{innerbaseDir_A_100}\input.csv");
@@ -317,34 +345,6 @@ public static partial class ExampleExecuter
                 {
                     //var output = new DirectoryInfo($@"{baseDir_A_100}\E102 SaveScreenShot");
                     //OwesomeExtensions.SaveScreenShot(output, new Point(0, 0), new Point(1000, 1000));
-                }
-
-                // F202 To2DArray, ToJaggedArray
-                {
-                    //var inputData = new int[][]
-                    //{
-                    //    new int[]{1,2,3,4,5,6,7},
-                    //    new int[]{1,2},
-                    //    new int[]{1,2,3},
-                    //    new int[]{1,2,3,4,5},
-                    //};
-                    //Console.WriteLine("inputData:");
-                    //foreach (var line in inputData)
-                    //    Console.WriteLine(string.Join(", ", line.Select(x => $"{x,3}")));
-
-                    //var outputData1 = inputData.ConvertTo2DArray(999);
-                    //Console.WriteLine("outputData1:");
-                    //for (int i = 0; i < outputData1.GetLength(0); i++)
-                    //{
-                    //    for (int j = 0; j < outputData1.GetLength(1); j++)
-                    //        Console.Write($"{outputData1[i, j],3}, ");
-                    //    Console.WriteLine();
-                    //}
-
-                    //var outputData2 = outputData1.ConvertToJaggedArray();
-                    //Console.WriteLine("outputData2:");
-                    //foreach (var line in outputData2)
-                    //    Console.WriteLine(string.Join(", ", line.Select(x => $"{x,3}")));
                 }
 
                 // G002 PDF2Images
