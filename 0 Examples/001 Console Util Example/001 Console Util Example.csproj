@@ -10,13 +10,13 @@
 
   <ItemGroup>
     <Compile Remove="# Referring dlls\**" />
-    <Compile Remove="# TestModel\FileUtil\**" />
+    <Compile Remove="# TestModel\**" />
     <Compile Remove="Aki32 Utilities\**" />
     <EmbeddedResource Remove="# Referring dlls\**" />
-    <EmbeddedResource Remove="# TestModel\FileUtil\**" />
+    <EmbeddedResource Remove="# TestModel\**" />
     <EmbeddedResource Remove="Aki32 Utilities\**" />
     <None Remove="# Referring dlls\**" />
-    <None Remove="# TestModel\FileUtil\**" />
+    <None Remove="# TestModel\**" />
     <None Remove="Aki32 Utilities\**" />
   </ItemGroup>
 
@@ -58,6 +58,12 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="# ExampleModel\101 MachineLearning\" />
+    <Folder Include="# ExampleModel\111 - Research\A - ResearchManager\%40Private\" />
+    <Folder Include="# ExampleModel\M - MiniApps\M001 Books2PDF\" />
   </ItemGroup>
 
 </Project>

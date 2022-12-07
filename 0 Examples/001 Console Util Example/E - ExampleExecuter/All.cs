@@ -22,27 +22,23 @@ using Newtonsoft.Json;
 using Org.BouncyCastle.Asn1.X509.Qualified;
 
 namespace Aki32Utilities.UsageExamples.ConsoleAppUtilities;
-public class Examples
+public static partial class ExampleExecuter
 {
+    const string BASE_DIR = $@"..\..\..\# TestModel\";
 
     public static void All()
     {
         // A - ChainableExtensions
         {
-            // _ - Base
+            var baseDir_A = $@"{BASE_DIR}\A - ChainableExtensions";
+
+            // 100 - General
             {
-                var baseDir = $@"..\..\..\# TestModel\A - ChainableExtensions\_ - Base";
-
-            }
-
-            // A - General
-            {
-
-                var baseDir = $@"..\..\..\# TestModel\A - ChainableExtensions\A - General";
+                var baseDir_A_100 = $@"{baseDir_A}\100 - General";
 
                 // B001 CollectFiles
                 {
-                    //var input = new DirectoryInfo($@"{baseDir}\B001 CollectFiles\input");
+                    //var input = new DirectoryInfo($@"{baseDir_A_100}\B001 CollectFiles\input");
                     //input.CollectFiles(null, @"^.*a\.txt$", @"^.*3.*$");
                     //input.CollectFiles(null, @"^.*a\.txt$");
                     //input.CollectFiles(null, @"^.*[0-9]*\\a\.txt$");
@@ -50,35 +46,35 @@ public class Examples
 
                 // B002 MakeFilesFromCsv
                 {
-                    //var inputList = new FileInfo($@"{baseDir}\B002 MakeFilesFromCsv\list.csv");
-                    //var inputTemp = new FileInfo($@"{baseDir}\B002 MakeFilesFromCsv\template.docx");
+                    //var inputList = new FileInfo($@"{baseDir_A_100}\B002 MakeFilesFromCsv\list.csv");
+                    //var inputTemp = new FileInfo($@"{baseDir_A_100}\B002 MakeFilesFromCsv\template.docx");
                     //inputList.MakeFilesFromCsv(null, inputTemp);
                 }
 
                 // B003 MoveTo
                 {
-                    //var input = new DirectoryInfo($@"{baseDir}\B003 MoveTo\input");
-                    //var keep = new DirectoryInfo($@"{baseDir}\B003 MoveTo\keep");
-                    //var output = new DirectoryInfo($@"{baseDir}\B003 MoveTo\output");
+                    //var input = new DirectoryInfo($@"{baseDir_A_100}\B003 MoveTo\input");
+                    //var keep = new DirectoryInfo($@"{baseDir_A_100}\B003 MoveTo\keep");
+                    //var output = new DirectoryInfo($@"{baseDir_A_100}\B003 MoveTo\output");
                     //input.MoveTo(output);
                 }
 
                 // B004 CopyTo
                 {
                     // directry-wise
-                    //var input = new DirectoryInfo($@"{baseDir}\B004 CopyTo\input");
-                    //var output = new DirectoryInfo($@"{baseDir}\B004 CopyTo\output");
+                    //var input = new DirectoryInfo($@"{baseDir_A_100}\B004 CopyTo\input");
+                    //var output = new DirectoryInfo($@"{baseDir_A_100}\B004 CopyTo\output");
                     //input.CopyTo(output);
 
                     // file
-                    //var input = new FileInfo($@"{baseDir}\B004 CopyTo\a.txt");
+                    //var input = new FileInfo($@"{baseDir_A_100}\B004 CopyTo\a.txt");
                     //input.CopyTo();
                 }
 
                 // B005 RenameFiles
                 {
-                    //var input = new DirectoryInfo($@"{baseDir}\B005 RenameFiles\input");
-                    //var output = new DirectoryInfo($@"{baseDir}\B005 RenameFiles\output");
+                    //var input = new DirectoryInfo($@"{baseDir_A_100}\B005 RenameFiles\input");
+                    //var output = new DirectoryInfo($@"{baseDir_A_100}\B005 RenameFiles\output");
                     //input.CopyTo(output);
                     //// auto
                     //output.RenameFiles();
@@ -90,7 +86,7 @@ public class Examples
 
                 // B007 Zip
                 {
-                    //var input = new DirectoryInfo($@"{baseDir}\B007 Zip\input");
+                    //var input = new DirectoryInfo($@"{baseDir_A_100}\B007 Zip\input");
                     //input
                     //    .Zip(null)
                     //    .Unzip(null);
@@ -116,7 +112,7 @@ public class Examples
 
                     //// json
                     //{
-                    //    var outputFile = new FileInfo($@"{baseDir}\B102 ReadObjectToLocal\output.json");
+                    //    var outputFile = new FileInfo($@"{baseDir_A_100}\B102 ReadObjectToLocal\output.json");
 
                     //    testClassToWrite.SaveAsJson(outputFile, true);
 
@@ -126,7 +122,7 @@ public class Examples
 
                     //// xml
                     //{
-                    //    var outputFile = new FileInfo($@"{baseDir}\B102 ReadObjectToLocal\output.xml");
+                    //    var outputFile = new FileInfo($@"{baseDir_A_100}\B102 ReadObjectToLocal\output.xml");
 
                     //    testClassToWrite.SaveAsXml(outputFile);
 
@@ -136,7 +132,7 @@ public class Examples
 
                     //// csv
                     //{
-                    //    var outputFile = new FileInfo($@"{baseDir}\B102 ReadObjectToLocal\output.csv");
+                    //    var outputFile = new FileInfo($@"{baseDir_A_100}\B102 ReadObjectToLocal\output.csv");
 
                     //    var testClassListToWrite = new List<UtilTestClass1> { testClassToWrite };
                     //    testClassListToWrite.SaveAsCsv(outputFile);
@@ -149,33 +145,33 @@ public class Examples
 
                 // C004 ExtractCsvColumns
                 {
-                    //new FileInfo($@"{baseDir}\C004 ExtractCsvColumns\input.csv")
+                    //new FileInfo($@"{baseDir_A_100}\C004 ExtractCsvColumns\input.csv")
                     //    .ExtractCsvColumns(null, new int[] { 0, 3 }, 0, "t,x");
 
-                    //new DirectoryInfo($@"{baseDir}\C004 ExtractCsvColumns")
+                    //new DirectoryInfo($@"{baseDir_A_100}\C004 ExtractCsvColumns")
                     //    .ExtractCsvColumnsForMany_Loop(null, 0, ("a", new int[] { 0, 3 }, "t,x"), ("b", new int[] { 0, 4 }, "t,y"));
                 }
 
                 // C005 CollectCsvColumns
                 {
-                    //var input = new DirectoryInfo($@"{baseDir}\C005 CollectCsvColumns\input");
+                    //var input = new DirectoryInfo($@"{baseDir_A_100}\C005 CollectCsvColumns\input");
                     //input.CollectCsvColumns(null, 3);
                 }
 
                 // C006 Csvs2ExcelSheets
                 {
-                    //var input = new DirectoryInfo($@"{baseDir}\C006 Csvs2ExcelSheets\input");
-                    //input.Csvs2ExcelSheets(null);
+                    var input = new DirectoryInfo($@"{baseDir_A_100}\C006 Csvs2ExcelSheets\input");
+                    input.Csvs2ExcelSheets(null);
                 }
 
                 // C101 ReadCsv, F201 Transpose2DArray, C103 SaveCsv
                 {
-                    //var innerBaseDir = $@"{baseDir}\C101 ReadCsv, SaveCsv";
-                    //var input = new FileInfo($@"{innerBaseDir}\input.csv");
-                    //var output1 = new FileInfo($@"{innerBaseDir}\output1.csv");
-                    //var output2 = new FileInfo($@"{innerBaseDir}\output2.csv");
-                    //var output3 = new FileInfo($@"{innerBaseDir}\output3.csv");
-                    //var output4 = new FileInfo($@"{innerBaseDir}\output4.csv");
+                    //var innerbaseDir_A_100 = $@"{baseDir_A_100}\C101 ReadCsv, SaveCsv";
+                    //var input = new FileInfo($@"{innerbaseDir_A_100}\input.csv");
+                    //var output1 = new FileInfo($@"{innerbaseDir_A_100}\output1.csv");
+                    //var output2 = new FileInfo($@"{innerbaseDir_A_100}\output2.csv");
+                    //var output3 = new FileInfo($@"{innerbaseDir_A_100}\output3.csv");
+                    //var output4 = new FileInfo($@"{innerbaseDir_A_100}\output4.csv");
 
                     //input.ReadCsv_Rows().SaveCsv_Rows(output1);
                     //input.ReadCsv_Rows().SaveCsv_Columns(output2);
@@ -185,13 +181,13 @@ public class Examples
 
                 // D001 MergeAllLines
                 {
-                    //var input = new DirectoryInfo($@"{baseDir}\D001 MergeAllLines\input");
+                    //var input = new DirectoryInfo($@"{baseDir_A_100}\D001 MergeAllLines\input");
                     //input.MergeAllLines(null);
                 }
 
                 // E001 CropImage
                 {
-                    //var input = new FileInfo($@"{baseDir}\E001 CropImage\input.bmp");
+                    //var input = new FileInfo($@"{baseDir_A_100}\E001 CropImage\input.bmp");
                     //var crops = new OwesomeExtensions.Thickness[]
                     //{
                     //    new OwesomeExtensions.Thickness(0.13, 0.13, 0.13, 0.13),
@@ -207,7 +203,7 @@ public class Examples
 
                 // E002 ConvertImageColor
                 {
-                    //var input = new FileInfo($@"{baseDir}\E002 ConvertImageColor\input.png");
+                    //var input = new FileInfo($@"{baseDir_A_100}\E002 ConvertImageColor\input.png");
 
                     //var targetInfos = new (string, Color)[]
                     //{
@@ -230,33 +226,33 @@ public class Examples
 
                 // E004 Images2PDF
                 {
-                    //var input = new DirectoryInfo($@"{baseDir}\E004 Images2PDF");
+                    //var input = new DirectoryInfo($@"{baseDir_A_100}\E004 Images2PDF");
                     //input.Images2PDF(null);
                 }
 
                 // E005 Images2Video
                 {
-                    //var input = new DirectoryInfo($@"{baseDir}\E005 Images2Video");
+                    //var input = new DirectoryInfo($@"{baseDir_A_100}\E005 Images2Video");
                     //input.Images2Video(null, 3);
                 }
 
                 // E006 ResizeImage
                 {
-                    //var input = new DirectoryInfo($@"{baseDir}\E006 ResizeImage");
+                    //var input = new DirectoryInfo($@"{baseDir_A_100}\E006 ResizeImage");
                     //input.ResizeImage_Loop(null, new Size(100, 100));
                 }
 
                 // E007 DistortImage
                 {
-                    //var input5 = new FileInfo($@"{baseDir}\E007 DistortImage\5.png");
-                    //var output510 = new FileInfo($@"{baseDir}\E007 DistortImage\5-1-0.png");
-                    //var output520 = new FileInfo($@"{baseDir}\E007 DistortImage\5-2-0.png");
-                    //var output521 = new FileInfo($@"{baseDir}\E007 DistortImage\5-2-1.png");
-                    //var output530 = new FileInfo($@"{baseDir}\E007 DistortImage\5-3-0.png");
-                    //var output531 = new FileInfo($@"{baseDir}\E007 DistortImage\5-3-1.png");
-                    //var output540 = new FileInfo($@"{baseDir}\E007 DistortImage\5-4-0.png");
-                    //var output541 = new FileInfo($@"{baseDir}\E007 DistortImage\5-4-1.png");
-                    //var output542 = new FileInfo($@"{baseDir}\E007 DistortImage\5-4-2.png");
+                    //var input5 = new FileInfo($@"{baseDir_A_100}\E007 DistortImage\5.png");
+                    //var output510 = new FileInfo($@"{baseDir_A_100}\E007 DistortImage\5-1-0.png");
+                    //var output520 = new FileInfo($@"{baseDir_A_100}\E007 DistortImage\5-2-0.png");
+                    //var output521 = new FileInfo($@"{baseDir_A_100}\E007 DistortImage\5-2-1.png");
+                    //var output530 = new FileInfo($@"{baseDir_A_100}\E007 DistortImage\5-3-0.png");
+                    //var output531 = new FileInfo($@"{baseDir_A_100}\E007 DistortImage\5-3-1.png");
+                    //var output540 = new FileInfo($@"{baseDir_A_100}\E007 DistortImage\5-4-0.png");
+                    //var output541 = new FileInfo($@"{baseDir_A_100}\E007 DistortImage\5-4-1.png");
+                    //var output542 = new FileInfo($@"{baseDir_A_100}\E007 DistortImage\5-4-2.png");
 
                     ////★ 1 point → move
                     //input5.DistortImage(output510, Color.Orange,
@@ -299,20 +295,20 @@ public class Examples
 
                 // E008 AddTextToImage
                 {
-                    //var input = new DirectoryInfo($@"{baseDir}\E008 AddTextToImage");
+                    //var input = new DirectoryInfo($@"{baseDir_A_100}\E008 AddTextToImage");
                     //input.AddTextToImageProportionally_Loop(null, "%FN", new PointF(0.9f, 0.8f),
                     //    fontSizeRatio: 0.1, alignRight: true);
                 }
 
                 // E102 SaveScreenShot
                 {
-                    //var output = new DirectoryInfo($@"{baseDir}\E102 SaveScreenShot");
+                    //var output = new DirectoryInfo($@"{baseDir_A_100}\E102 SaveScreenShot");
                     //OwesomeExtensions.SaveScreenShot(output, new Point(0, 0), new Point(1000, 1000));
                 }
 
                 // F003 Encrypt, Decrypt
                 {
-                    //var input = new FileInfo($@"{baseDir}\F003 Crypt\input.txt");
+                    //var input = new FileInfo($@"{baseDir_A_100}\F003 Crypt\input.txt");
                     //input
                     //    .Encrypt(null, "aiueo")
                     //    .Decrypt(null, "aiueo")
@@ -349,20 +345,20 @@ public class Examples
 
                 // G002 PDF2Images
                 {
-                    //var input = new FileInfo($@"{baseDir}\G002 PDF2Images\input.pdf");
+                    //var input = new FileInfo($@"{baseDir_A_100}\G002 PDF2Images\input.pdf");
                     //input.PDF2Images(null);
                 }
 
                 // G101 PDFPageCount
                 {
-                    //var input = new DirectoryInfo($@"{baseDir}\G101 PDFPageCount\input");
+                    //var input = new DirectoryInfo($@"{baseDir_A_100}\G101 PDFPageCount\input");
                     //input.PDFPageCount();
                 }
 
                 // H101 DownloadFile
                 {
                     //var source = new Uri("https://raw.githubusercontent.com/aki32/aki32-utilities/main/1%20Console%20App%20Utilities/%23%20TestModel/A%20-%20ChainableExtensions/B%20-%20General/E001%20CropImage/input.bmp");
-                    //var output = new FileInfo($@"{baseDir}\H101 DownloadFile\output.bmp");
+                    //var output = new FileInfo($@"{baseDir_A_100}\H101 DownloadFile\output.bmp");
                     //source.DownloadFileAsync(output).Wait();
 
                 }
@@ -379,114 +375,87 @@ public class Examples
 
             }
 
-            // B - UsefulClasses
+            // 100C - OwesomeModels
             {
-                var baseDir = $@"..\..\..\# TestModel\A - ChainableExtensions\B- UsefulClasses";
-
-                // A001 XXXXXX
-                {
-
-
-
-
-
-
-                }
-
-                // A002 XXXXXX
-                {
-
-
-
-
-                }
-
-            }
-
-            // C - OwesomeModels
-            {
-                var baseDir = $@"..\..\..\# TestModel\A - ChainableExtensions\C - OwesomeModels";
+                var baseDir_A_100C = $@"{baseDir_A}\100C - OwesomeModels";
 
                 // A - TimeHistoryModel
                 {
-                    var baseDir_A = $@"{baseDir}\A - TimeHistoryModel";
+                    var baseDir_A_100C_A = $@"{baseDir_A_100C}\A - TimeHistoryModel";
+
+                    // A002 DrawGraph
+                    {
+                        //new FileInfo($@"{baseDir_A_100C_A}\A002 DrawGraph\input1.csv")
+                        //    .DrawGraph("t", "v", TimeHistory.ChartType.Line);
+
+
+                        //new FileInfo($@"{baseDir_A_100C_A}\A002 DrawGraph\input1.csv")
+                        //    .DrawGraph(0, 1, TimeHistory.ChartType.Line);
+
+
+                        //new FileInfo($@"{baseDir_A_100C_A}\A002 DrawGraph\input2.csv")
+                        //    .DrawGraph_ForAll(TimeHistory.ChartType.Line);
+
+                    }
 
                     // B001 FFT
                     {
-                        //new FileInfo($@"{baseDir_A}\B001 FFT\input.csv")
+                        //new FileInfo($@"{baseDir_A_100C_A}\B001 FFT\input.csv")
                         //    .GetTimeHistoryFromFile(new string[] { "t", "x" })
                         //    .FFT("x").Result
                         //    .SaveToCsv();
 
                     }
 
-                    // B002 DrawGraph
-                    {
-                        //new FileInfo($@"{baseDir_A}\B002 DrawGraph\input1.csv")
-                        //    .DrawGraph("t", "v", TimeHistory.ChartType.Line);
-
-
-                        //new FileInfo($@"{baseDir_A}\B002 DrawGraph\input1.csv")
-                        //    .DrawGraph(0, 1, TimeHistory.ChartType.Line);
-
-
-                        //new FileInfo($@"{baseDir_A}\B002 DrawGraph\input2.csv")
-                        //    .DrawGraph_ForAll(TimeHistory.ChartType.Line);
-
-                    }
 
                 }
 
             }
 
-            // E - SpecificPurposeModels
+            // 101 - MachineLearning
             {
-                var baseDir = $@"..\..\..\# TestModel\A - ChainableExtensions\E - SpecificPurposeModels";
+                var baseDir_A_101 = $@"{baseDir_A}\101 - MachineLearning";
 
-                // A - StructuralEngineering
+
+
+            }
+
+            // 110 - StructuralEngineering
+            {
+                var baseDir_A_110 = $@"{baseDir_A}\110 - StructuralEngineering";
+
+                // A001 RainflowCycleCounting
                 {
-                    var baseDir_A = $@"{baseDir}\A - StructuralEngineering";
+                    //new FileInfo(Path.Combine(baseDir_A_110, "A001 RainflowCycleCounting", @"input3.csv"))
+                    //    .Rainflow(null, 4, 1 / 3d, false);
 
-                    // A001 RainflowCycleCounting
-                    {
-                        //new FileInfo(Path.Combine(baseDir_A, "A001 RainflowCycleCounting", @"input3.csv"))
-                        //    .Rainflow(null, 4, 1 / 3d, false);
-
-                        //new DirectoryInfo(Path.Combine(baseDir_A, "A001 RainflowCycleCounting"))
-                        //    .Rainflow_Loop(null, 4, 1 / 3d, false);
-
-                    }
-
-                    // A002 RDTechnique
-                    {
-                        //new FileInfo(Path.Combine(baseDir_A, "A002 RDTechnique", @"input.csv"))
-                        //    .CalcRD(null, 200)
-                        //    ;
-
-                    }
-
-                    // A003 CreateAccFromCsv
-                    {
-                        //new FileInfo(Path.Combine(baseDir_A, "A003 CreateAccFromCsv", @"kobe L1.csv"))
-                        //    .CreateAccFromCsv_For_DynamicPro(null);
-
-                    }
+                    //new DirectoryInfo(Path.Combine(baseDir_A_110, "A001 RainflowCycleCounting"))
+                    //    .Rainflow_Loop(null, 4, 1 / 3d, false);
 
                 }
 
-                // B - MachineLearning
+                // A002 RDTechnique
                 {
-                    var baseDir_B = $@"{baseDir}\B - MachineLearning";
-
-
+                    //new FileInfo(Path.Combine(baseDir_A_110, "A002 RDTechnique", @"input.csv"))
+                    //    .CalcRD(null, 200)
+                    //    ;
 
                 }
+
+                // A003 CreateAccFromCsv
+                {
+                    //new FileInfo(Path.Combine(baseDir_A_110, "A003 CreateAccFromCsv", @"kobe L1.csv"))
+                    //    .CreateAccFromCsv_For_DynamicPro(null);
+
+                }
+
             }
 
         }
 
         // B - UsefulClasses
         {
+            var baseDir_B = $@"{BASE_DIR}\B - UsefulClasses";
 
             // 003 CommandPrompt
             {
@@ -593,11 +562,11 @@ public class Examples
 
         // C - OwesomeModels
         {
-            var baseDir = $@"..\..\..\# TestModel\C - OwesomeModels";
+            var baseDir_C = $@"{BASE_DIR}\C - OwesomeModels";
 
             // A - TimeHistoryModel
             {
-                var baseDir_A = $@"{baseDir}\A - TimeHistoryModel";
+                var baseDir_C_A = $@"{baseDir_C}\A - TimeHistoryModel";
 
                 // ★ TimeHistory
                 {
@@ -636,7 +605,7 @@ public class Examples
 
         // D - ExternalAPIControllers
         {
-            var baseDir = $@"..\..\..\# TestModel\D - ExternalAPIControllers";
+            var baseDir_D = $@"{BASE_DIR}\D - ExternalAPIControllers";
 
             // D001 LINEController
             {
@@ -668,282 +637,276 @@ public class Examples
 
         }
 
-        // E - SpecificPurposeModels
+        // 110 - StructuralEngineering
         {
-            var baseDir = $@"..\..\..\# TestModel\E - SpecificPurposeModels";
+            var baseDir_110 = $@"{BASE_DIR}\110 - StructuralEngineering";
 
-            // A - StructuralEngineering
+            // B001 ElastoplasticAnalysis
             {
-                var baseDir_A = $@"{baseDir}\A - StructuralEngineering";
+                var baseDir_110_B001 = @$"{baseDir_110}\B001 EPAnalysis";
 
-
-                // B001 ElastoplasticAnalysis
+                // newmark beta
                 {
-                    var baseDir_B001 = @$"{baseDir_A}\B001 EPAnalysis";
+                    //var model = SDoFModel.FromT(1, 0.03);
 
-                    // newmark beta
+                    //var waveCsv = new FileInfo(@$"{baseDir_110_B001}\Hachinohe-NS.csv");
+                    //var wave = TimeHistory.FromCsv(waveCsv, new string[] { "t", "ytt" });
+
+                    //var waveAnalysisModel = new NewmarkBetaModel(0.25);
+                    //var result = model.Calc(wave, waveAnalysisModel);
+
+                    //result.SaveToCsv();
+                    //result.DrawLineGraph("x", "t");
+                }
+
+                // nigam jennings
+                {
+                    //var model = SDoFModel.FromT(1, 0.03);
+
+                    //var waveCsv = new FileInfo(@$"{baseDir_110_B001}\Hachinohe-NS.csv");
+                    //var wave = TimeHistory.FromCsv(waveCsv, new string[] { "t", "ytt" });
+
+                    //var waveAnalysisModel = new NigamJenningsModel();
+                    //var result = model.Calc(wave, waveAnalysisModel);
+
+                    //result.SaveToCsv();
+                    //result.DrawLineGraph("x", "t");
+                }
+
+                // ep test
+                {
+                    //var epList = new List<ElastoplasticCharacteristicBase>
+                    //{
+                    //    //new ElasticModel(2),
+
+                    //    //new ElasticBilinearModel(2, 0.1, 80),
+                    //    //new BilinearModel(2, 0.1, 80),
+                    //    //new CloughModel(2, 0.1, 80),
+                    //    //new DegradingCloughModel(2, 0.1, 80, 0.4),
+                    //    //new PerfectElastoPlasticModel(2,80),
+
+                    //    //new ElasticTrilinearModel(2, 0.5, 80, 0.1, 100),
+                    //    new TrilinearModel(2, 0.5, 80, 0.1, 100),
+                    //    //new TrilinearModel_Obsolete(2, 0.5, 80, 0.1, 100),
+
+                    //    //new ElasticTetralinearModel(2, 0.5, 80, 0.25, 90, 0.1, 110),
+                    //};
+
+                    //foreach (var ep in epList)
+                    //{
+                    //    var tester = new EPTester(ep);
+                    //    var result = tester.Calc(EPTester.TestWave.TestWave1);
+
+                    //    var saveDir = new DirectoryInfo(@$"{baseDir_110_B001}\output");
+                    //    result.SaveToCsv(saveDir);
+                    //    result.DrawLineGraph("f", "x");
+                    //}
+
+                    // combined
                     {
-                        //var model = SDoFModel.FromT(1, 0.03);
-
-                        //var waveCsv = new FileInfo(@$"{baseDir_B001}\Hachinohe-NS.csv");
-                        //var wave = TimeHistory.FromCsv(waveCsv, new string[] { "t", "ytt" });
-
-                        //var waveAnalysisModel = new NewmarkBetaModel(0.25);
-                        //var result = model.Calc(wave, waveAnalysisModel);
-
-                        //result.SaveToCsv();
-                        //result.DrawLineGraph("x", "t");
-                    }
-
-                    // nigam jennings
-                    {
-                        //var model = SDoFModel.FromT(1, 0.03);
-
-                        //var waveCsv = new FileInfo(@$"{baseDir_B001}\Hachinohe-NS.csv");
-                        //var wave = TimeHistory.FromCsv(waveCsv, new string[] { "t", "ytt" });
-
-                        //var waveAnalysisModel = new NigamJenningsModel();
-                        //var result = model.Calc(wave, waveAnalysisModel);
-
-                        //result.SaveToCsv();
-                        //result.DrawLineGraph("x", "t");
-                    }
-
-                    // ep test
-                    {
-                        //var epList = new List<ElastoplasticCharacteristicBase>
+                        //var waveAnalysisModelList = new List<ITimeHistoryAnalysisModel>
                         //{
-                        //    //new ElasticModel(2),
-
-                        //    //new ElasticBilinearModel(2, 0.1, 80),
-                        //    //new BilinearModel(2, 0.1, 80),
-                        //    //new CloughModel(2, 0.1, 80),
-                        //    //new DegradingCloughModel(2, 0.1, 80, 0.4),
-                        //    //new PerfectElastoPlasticModel(2,80),
-
-                        //    //new ElasticTrilinearModel(2, 0.5, 80, 0.1, 100),
-                        //    new TrilinearModel(2, 0.5, 80, 0.1, 100),
-                        //    //new TrilinearModel_Obsolete(2, 0.5, 80, 0.1, 100),
-
-                        //    //new ElasticTetralinearModel(2, 0.5, 80, 0.25, 90, 0.1, 110),
+                        //    new NewmarkBetaModel(0.25),
+                        //    //new WilsonTheta(1.4,0.25),
+                        //    //new NigamJenningsModel(),
                         //};
 
-                        //foreach (var ep in epList)
-                        //{
-                        //    var tester = new EPTester(ep);
-                        //    var result = tester.Calc(EPTester.TestWave.TestWave1);
+                        //var waveCsv = new FileInfo(@$"{baseDir_110_B001}\Hachinohe-NS.csv");
+                        //var wave = TimeHistory.FromCsv(waveCsv, new string[] { "t", "ytt" });
 
-                        //    var saveDir = new DirectoryInfo(@$"{baseDir_B001}\output");
-                        //    result.SaveToCsv(saveDir);
-                        //    result.DrawLineGraph("f", "x");
+                        //foreach (var waveAnalysisModel in waveAnalysisModelList)
+                        //{
+                        //    var epList = new List<ElastoplasticCharacteristicBase>
+                        //    {
+                        //        //new ElasticModel(2),
+                        //        //new BilinearModel(2, 0.1, 8),
+                        //        new TrilinearModel(2, 0.5, 5, 0.1, 7),
+                        //        //new CloughModel(2, 0.1, 8),
+                        //        //new DegradingCloughModel(2, 0.1, 8, 0.4),
+                        //    };
+
+                        //    foreach (var ep in epList)
+                        //    {
+                        //        try
+                        //        {
+                        //            var model = SDoFModel.FromT(1, 0.03, ep);
+                        //            var result = model.Calc(wave, waveAnalysisModel);
+                        //            result.DrawLineGraph("x", "t");
+                        //            result.DrawLineGraph("f", "x");
+                        //            result.SaveToCsv();
+                        //            Console.WriteLine("[O]");
+                        //        }
+                        //        catch (Exception ex)
+                        //        {
+                        //            Console.WriteLine($"[X]: {ex.Message}");
+                        //            throw;
+                        //        }
+                        //    }
                         //}
-
-                        // combined
-                        {
-                            //var waveAnalysisModelList = new List<ITimeHistoryAnalysisModel>
-                            //{
-                            //    new NewmarkBetaModel(0.25),
-                            //    //new WilsonTheta(1.4,0.25),
-                            //    //new NigamJenningsModel(),
-                            //};
-
-                            //var waveCsv = new FileInfo(@$"{baseDir_B001}\Hachinohe-NS.csv");
-                            //var wave = TimeHistory.FromCsv(waveCsv, new string[] { "t", "ytt" });
-
-                            //foreach (var waveAnalysisModel in waveAnalysisModelList)
-                            //{
-                            //    var epList = new List<ElastoplasticCharacteristicBase>
-                            //    {
-                            //        //new ElasticModel(2),
-                            //        //new BilinearModel(2, 0.1, 8),
-                            //        new TrilinearModel(2, 0.5, 5, 0.1, 7),
-                            //        //new CloughModel(2, 0.1, 8),
-                            //        //new DegradingCloughModel(2, 0.1, 8, 0.4),
-                            //    };
-
-                            //    foreach (var ep in epList)
-                            //    {
-                            //        try
-                            //        {
-                            //            var model = SDoFModel.FromT(1, 0.03, ep);
-                            //            var result = model.Calc(wave, waveAnalysisModel);
-                            //            result.DrawLineGraph("x", "t");
-                            //            result.DrawLineGraph("f", "x");
-                            //            result.SaveToCsv();
-                            //            Console.WriteLine("[O]");
-                            //        }
-                            //        catch (Exception ex)
-                            //        {
-                            //            Console.WriteLine($"[X]: {ex.Message}");
-                            //            throw;
-                            //        }
-                            //    }
-                            //}
-                        }
-
-                        // spectrum analysis
-                        {
-                            //var ep = new ElasticModel(2);
-                            ////var ep = new DegradingCloughModel(2, 0.1, 8, 0.4);
-
-                            //var TList = Enumerable.Range(100, 400).Select(x => x / 100d).ToArray();
-                            //var hList = new double[] { 0.00, 0.03, 0.05, 0.10 };
-
-                            //var waveCsv = new FileInfo(@$"{baseDir_B001}\Hachinohe-NS.csv");
-                            //var wave = TimeHistory.FromCsv(waveCsv, new string[] { "t", "ytt" });
-
-                            ////var waveAnalysisModel = new NewmarkBetaModel(0.25);
-                            //var waveAnalysisModel = new NigamJenningsModel();
-
-                            //var resultSet = SDoFModel.CalcResponseSpectrum(TList, hList, wave, waveAnalysisModel, ep);
-                            //resultSet.SaveToExcel(waveCsv.Directory);
-                        }
-
                     }
 
-                }
-
-                // B002 RainflowCycleCounting
-                {
-                    //var inputCsv = new FileInfo($@"{baseDir_A}\B002 RainflowCycleCounting\input3.csv");
-                    ////var inputCsv = new FileInfo(@"C:\Users\aki32\Desktop\anaAll_beam.csv");
-
-                    //var rainflow = RainflowCalculator.FromCsv(inputCsv);
-                    //rainflow.CalcRainflow(4, 1 / 3d, false);
-                    //rainflow.SaveResultHistoryToCsv();
-                    //rainflow.SaveRainBranchesToCsv();
-                }
-
-                // B003 RDTechnique
-                {
-                    //// Define IO paths
-                    //var input = new FileInfo($@"{baseDir_A}\B003 RDTechnique\input.csv");
-
-                    //// Read input csv
-                    //var rd = RDTechniqueCalculator.FromCsv(input);
-
-                    //// Calc and show
-                    //rd.Calc(200);
-                    //rd.InputHistory.DrawLineGraph("v");
-                    //rd.ResultHistory.DrawLineGraph("v");
-
-                    //// Calc AttenuationConstant and show
-                    //var att = rd.CalcAttenuationConstant(4, true);
-                    //Console.WriteLine();
-                    //Console.WriteLine($"result h = {att}");
-
-                }
-
-                // X001 SNAPHelper
-                {
-                    // KeepClosingExcel
+                    // spectrum analysis
                     {
-                        //SNAPHelper.KeepClosingExcel(5000);
+                        //var ep = new ElasticModel(2);
+                        ////var ep = new DegradingCloughModel(2, 0.1, 8, 0.4);
 
-                    }
+                        //var TList = Enumerable.Range(100, 400).Select(x => x / 100d).ToArray();
+                        //var hList = new double[] { 0.00, 0.03, 0.05, 0.10 };
 
-                }
+                        //var waveCsv = new FileInfo(@$"{baseDir_110_B001}\Hachinohe-NS.csv");
+                        //var wave = TimeHistory.FromCsv(waveCsv, new string[] { "t", "ytt" });
 
-                // X002 DynamicProHelper
-                {
-                    // CreateAccFromCsv
-                    {
-                        //var input = new FileInfo($@"{baseDir_A}\X002 DynamicProHelper\kobe L1.csv");
-                        //var output = new FileInfo($@"{baseDir_A}\X002 DynamicProHelper\kobe L1.acc");
-                        //DynamicProHelper.CreateAccFromCsv(input, output);
+                        ////var waveAnalysisModel = new NewmarkBetaModel(0.25);
+                        //var waveAnalysisModel = new NigamJenningsModel();
+
+                        //var resultSet = SDoFModel.CalcResponseSpectrum(TList, hList, wave, waveAnalysisModel, ep);
+                        //resultSet.SaveToExcel(waveCsv.Directory);
                     }
 
                 }
 
             }
 
-            // B - MachineLearning
+            // B002 RainflowCycleCounting
             {
-                var baseDir_B = $@"{baseDir}\B - MachineLearning";
+                //var inputCsv = new FileInfo($@"{baseDir_110}\B002 RainflowCycleCounting\input3.csv");
+                ////var inputCsv = new FileInfo(@"C:\Users\aki32\Desktop\anaAll_beam.csv");
 
+                //var rainflow = RainflowCalculator.FromCsv(inputCsv);
+                //rainflow.CalcRainflow(4, 1 / 3d, false);
+                //rainflow.SaveResultHistoryToCsv();
+                //rainflow.SaveRainBranchesToCsv();
+            }
 
+            // B003 RDTechnique
+            {
+                //// Define IO paths
+                //var input = new FileInfo($@"{baseDir_110}\B003 RDTechnique\input.csv");
+
+                //// Read input csv
+                //var rd = RDTechniqueCalculator.FromCsv(input);
+
+                //// Calc and show
+                //rd.Calc(200);
+                //rd.InputHistory.DrawLineGraph("v");
+                //rd.ResultHistory.DrawLineGraph("v");
+
+                //// Calc AttenuationConstant and show
+                //var att = rd.CalcAttenuationConstant(4, true);
+                //Console.WriteLine();
+                //Console.WriteLine($"result h = {att}");
 
             }
 
-            // C - Research
+            // X001 SNAPHelper
             {
-                var baseDir_C = new DirectoryInfo($@"{baseDir}\C - Research");
-
-
-                // A - ResearchManager
-                if (false)
+                // KeepClosingExcel
                 {
-                    //UtilConfig.ConsoleOutput_Contents = false;
-
-                    var localDir = new DirectoryInfo($@"{Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory)}\ResearchArticleDB");
-
-                    var research = new ResearchArticlesManager(localDir);
-                    research.OpenDatabase();
-
-                    // articles from j-stage
-                    {
-                        //var builder = new JStageArticleUriBuilder()
-                        //{
-                        //    Pubyearfrom = 2022,
-                        //    Issn = ISSN.Architecture_Structure,
-                        //    Count = 1000,
-                        //    //Start = 1,
-                        //};
-                        //research.PullArticleInfo(builder);
-
-                    }
-
-                    // articles from cinii
-                    {
-                        //var builder = new CiNiiArticleUriBuilder()
-                        //{
-                        //    Count = 5,
-                        //    ISSN = ISSN.Architecture_Structure,
-                        //    FreeWord = "小振幅"
-                        //};
-                        //research.PullArticleInfo(builder);
-
-                    }
-
-                    // article from crossref
-                    {
-                        //var builder = new CrossRefArticleUriBuilder()
-                        //{
-                        //    DOI = "10.3130/aijs.87.822"
-                        //};
-                        //research.PullArticleInfo(builder);
-
-                    }
-
-                    // display
-                    {
-                        research.SaveDatabase(true);
-
-                        Console.WriteLine();
-                        Console.WriteLine();
-                        Console.WriteLine($"★ {research.ArticleDatabase.Count} found in total");
-                        Console.WriteLine();
-                        //foreach (var article in research.ArticleDatabase)
-                        //    Console.WriteLine($" + {article.Title_Japanese}");
-                        //Console.WriteLine();
-                        Console.WriteLine();
-
-                        //research.ArticleDatabase.First(x => x.DOI == "10.3130/aijs.87.822").TryOpenPDF(research.PDFsDirectory);
-
-                    }
+                    //SNAPHelper.KeepClosingExcel(5000);
 
                 }
+
+            }
+
+            // X002 DynamicProHelper
+            {
+                // CreateAccFromCsv
+                {
+                    //var input = new FileInfo($@"{baseDir_110}\X002 DynamicProHelper\kobe L1.csv");
+                    //var output = new FileInfo($@"{baseDir_110}\X002 DynamicProHelper\kobe L1.acc");
+                    //DynamicProHelper.CreateAccFromCsv(input, output);
+                }
+
             }
 
         }
 
-        // Z - MiniApps
+        // 101 MachineLearning
         {
-            var baseDir = $@"..\..\..\# TestModel\Z - MiniApps";
+            var baseDir_101 = $@"{BASE_DIR}\101 MachineLearning";
 
-            // A001 Books2PDF
+
+
+        }
+
+        // 111 - Research
+        {
+            var baseDir_101 = $@"{BASE_DIR}\111 - Research";
+
+
+            // A - ResearchManager
+            if (false)
             {
-                //var outputDir = new DirectoryInfo($@"{baseDir}\A001 Books2PDF");
+                //UtilConfig.ConsoleOutput_Contents = false;
+
+                var localDir = new DirectoryInfo($@"{Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory)}\ResearchArticleDB");
+
+                var research = new ResearchArticlesManager(localDir);
+                research.OpenDatabase();
+
+                // articles from j-stage
+                {
+                    //var builder = new JStageArticleUriBuilder()
+                    //{
+                    //    Pubyearfrom = 2022,
+                    //    Issn = ISSN.Architecture_Structure,
+                    //    Count = 1000,
+                    //    //Start = 1,
+                    //};
+                    //research.PullArticleInfo(builder);
+
+                }
+
+                // articles from cinii
+                {
+                    //var builder = new CiNiiArticleUriBuilder()
+                    //{
+                    //    Count = 5,
+                    //    ISSN = ISSN.Architecture_Structure,
+                    //    FreeWord = "小振幅"
+                    //};
+                    //research.PullArticleInfo(builder);
+
+                }
+
+                // article from crossref
+                {
+                    //var builder = new CrossRefArticleUriBuilder()
+                    //{
+                    //    DOI = "10.3130/aijs.87.822"
+                    //};
+                    //research.PullArticleInfo(builder);
+
+                }
+
+                // display
+                {
+                    research.SaveDatabase(true);
+
+                    Console.WriteLine();
+                    Console.WriteLine();
+                    Console.WriteLine($"★ {research.ArticleDatabase.Count} found in total");
+                    Console.WriteLine();
+                    //foreach (var article in research.ArticleDatabase)
+                    //    Console.WriteLine($" + {article.Title_Japanese}");
+                    //Console.WriteLine();
+                    Console.WriteLine();
+
+                    //research.ArticleDatabase.First(x => x.DOI == "10.3130/aijs.87.822").TryOpenPDF(research.PDFsDirectory);
+
+                }
+
+            }
+
+        }
+
+        // M - MiniApps
+        {
+            var baseDir_M = $@"{BASE_DIR}\M - MiniApps";
+
+            // M001 Books2PDF
+            {
+                //var outputDir = new DirectoryInfo($@"{baseDir_M}\M001 Books2PDF");
                 //MiniApps.Books2PDF(outputDir, 10);
 
             }

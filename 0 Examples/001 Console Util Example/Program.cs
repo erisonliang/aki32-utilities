@@ -10,7 +10,7 @@ public partial class Program
         Console.WriteLine();
 
 
-        Examples.All();
+        ExampleExecuter.All();
 
 
         Console.WriteLine();
