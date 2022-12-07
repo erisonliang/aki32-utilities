@@ -939,7 +939,7 @@ public class Examples
 
         // Z - MiniApps
         {
-            var baseDir = $@"..\..\..\# TestModel\Z - UsageExample";
+            var baseDir = $@"..\..\..\# TestModel\Z - MiniApps";
 
             // A001 Books2PDF
             {

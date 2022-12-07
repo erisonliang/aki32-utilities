@@ -60,8 +60,4 @@
     </EmbeddedResource>
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="# TestModel\Z - UsageExample\A001 Books2PDF\" />
-  </ItemGroup>
-
 </Project>
