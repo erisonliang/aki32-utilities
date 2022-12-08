@@ -22,7 +22,7 @@ public static partial class ChainableExtensions
     {
         // preprocess
         UtilPreprocessors.PreprocessOutFile(ref outputFile, inputDir!, "output.csv");
-        if (outputFile!.Name.EndsWith(".csv"))
+        if (!outputFile!.Name.EndsWith(".csv"))
             throw new NotImplementedException("outputFile need to be .csv or null.");
 
 
