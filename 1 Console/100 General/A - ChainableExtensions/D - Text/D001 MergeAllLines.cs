@@ -22,7 +22,7 @@ public static partial class ChainableExtensions
         // main
         var inputFiles = inputDir
             .GetFiles("*", SearchOption.TopDirectoryOnly)
-            .Where(x => !x.Name.Contains(outputFile!.DirectoryName!))
+            .Where(x => (x.FullName != outputFile!.FullName))
             .Sort()
             .ToArray();
 
