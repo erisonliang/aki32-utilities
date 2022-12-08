@@ -1,34 +1,35 @@
 # 💖 aki32-utilities
 
-## 🌟 Abstract
+## ❗Abstract
 
 My windows and C# utilities written in C#
-
-
-
-
+ 
+I'm trying to migrate all of my work to this repo eventually.
 
 <br>
 
-## 🌟 Important
 
-Since this repo has some git submodules, use following for correct cloning
+
+
+## ❗Download
+
+Since this repo has some git submodules, use following for correct cloning (* no submodules currently)
 
 ```
 git clone --recursive https://github.com/aki32/aki32-utilities
 ```
 
-If you've forgotten to use above, use following
+If you've forgotten to use above to install submodules, use following
 ```
 git submodule update --init --recursive
 ```
 
-
-
-
 <br>
 
-## 🌟 A, B - Extensions
+
+
+
+## 🌟 Chainable Extensions
 
 You can now handle files with beautiful method chain!!!
 
@@ -45,30 +46,62 @@ You can now handle files with beautiful method chain!!!
 <img name="G1" src="https://user-images.githubusercontent.com/49830756/203753654-71366a2e-cafd-4e4f-a931-11a18eaa81d1.jpg" width="666">
 <img name="H1" src="https://user-images.githubusercontent.com/49830756/203753656-ef38fa74-e425-4208-a5c7-8aced09b9b26.jpg" width="666">
 
-
 <br>
 
 
-## 🌟 C - OwesomeModels
+## 🌟 Owesome Models
 
 ### 🎇 TimeHistoryModel
 
 Model for handling time history data set (such as time-displacement relationship)
 
-* more descriptions to be added
+<br>
 
 
+
+
+## 🌟 Machine Learning
+
+Project for handling machine learning using ML.NET mainly.
 
 <br>
 
-## 🌟 Notice
+
+
+
+
+## 🌟 Structural Engineering
+
+Project for structural engineering
+
+<br>
+
+
+
+
+## 🌟 Research
+
+Project for handling research papers
+
+<br>
+
+
+
+
+
+## ❗Notice
 
 Any commitment to enhance this repo will be welcomed!
 
-
 <br>
 
-## 🌟 Japanese 日本語
+
+
+## ❗Japanese 日本語
 
 Windows および C# の便利機能を実装した C# ソリューションです！
+
+結構便利ですのでぜひお試しください！
+
+<br>
 
