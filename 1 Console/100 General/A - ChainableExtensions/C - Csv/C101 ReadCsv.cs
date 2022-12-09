@@ -12,7 +12,7 @@ public static partial class ChainableExtensions
     /// <param name="skipRowCount">negative to get from bottom. eg: -1 for only the last row</param>
     /// <param name="ignoreEmptyLine"></param>
     /// <returns></returns>
-    public static string[][] ReadCsv_Rows(this FileInfo inputFile, int skipColumnCount = 0, int skipRowCount = 0, bool ignoreEmptyLine = false)
+    public static string[][] ReadCsv_Rows(this FileInfo inputFile, int skipColumnCount = 0, int skipRowCount = 0, bool ignoreEmptyLine = false, char separater = ',', string encodeName = "SHIFT_JIS")
     {
         // preprocess
         UtilPreprocessors.PreprocessBasic(false);
@@ -21,10 +21,7 @@ public static partial class ChainableExtensions
         // main            
         var rows = new List<string[]>();
 
-        using var sr = new StreamReader(inputFile.FullName, Encoding.GetEncoding("SHIFT_JIS"));
-
-        for (int i = 0; i < skipRowCount; i++)
-            sr.ReadLine();
+        using var sr = new StreamReader(inputFile.FullName, Encoding.GetEncoding(encodeName));
 
         while (!sr.EndOfStream)
         {
@@ -32,11 +29,24 @@ public static partial class ChainableExtensions
             if (string.IsNullOrEmpty(line.Replace(",", "")))
             {
                 if (!ignoreEmptyLine)
-                    rows.Add(new string[0]);
+                    rows.Add(Array.Empty<string>());
             }
             else
             {
                 var escapedFlag = false;
+
+                // " が奇数の間は，行をまたぐ！
+                while (line.Count(c => c == '"') % 2 == 1)
+                {
+                    line += sr.ReadLine()!;
+                }
+
+                if (skipRowCount > 0)
+                {
+                    skipColumnCount--;
+                    continue;
+                }
+
                 if (line.Contains('"'))
                 {
                     escapedFlag = true;
