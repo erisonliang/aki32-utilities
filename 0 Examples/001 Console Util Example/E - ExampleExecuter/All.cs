@@ -853,44 +853,71 @@ public static partial class ExampleExecuter
                 var research = new ResearchArticlesManager(localDir);
                 research.OpenDatabase();
 
+                Console.WriteLine($"★ {research.ArticleDatabase.Count} found in total");
+
+
                 // articles from j-stage
                 {
-                    //var builder = new JStageArticleUriBuilder()
-                    //{
-                    //    Pubyearfrom = 2022,
-                    //    Issn = ISSN.Architecture_Structure,
-                    //    Count = 1000,
-                    //    //Start = 1,
-                    //};
-                    //research.PullArticleInfo(builder);
+                    var accessor = new JStageArticleAPIAccessor()
+                    {
+                        Pubyearfrom = 2022,
+                        Issn = ISSN.Architecture_Structure,
+                        Count = 3,
+                        //Start = 1,
+                    };
+                    research.PullArticleInfo(accessor);
 
                 }
+
+                Console.WriteLine($"★ {research.ArticleDatabase.Count} found in total");
+
 
                 // articles from cinii
                 {
-                    //var builder = new CiNiiArticleUriBuilder()
-                    //{
-                    //    Count = 5,
-                    //    ISSN = ISSN.Architecture_Structure,
-                    //    FreeWord = "小振幅"
-                    //};
-                    //research.PullArticleInfo(builder);
+                    var accessor = new CiNiiArticleAPIAccessor()
+                    {
+                        Count = 5,
+                        ISSN = ISSN.Architecture_Structure,
+                        FreeWord = "小振幅"
+                    };
+                    research.PullArticleInfo(accessor);
 
                 }
+
+                Console.WriteLine($"★ {research.ArticleDatabase.Count} found in total");
+
 
                 // article from crossref
                 {
-                    //var builder = new CrossRefArticleUriBuilder()
-                    //{
-                    //    DOI = "10.3130/aijs.87.822"
-                    //};
-                    //research.PullArticleInfo(builder);
+                    var accessor = new CrossRefAPIAccessor()
+                    {
+                        DOI = "10.3130/aijs.87.822"
+                    };
+                    research.PullArticleInfo(accessor);
 
                 }
 
+                Console.WriteLine($"★ {research.ArticleDatabase.Count} found in total");
+
+                // articles from ndl search
+                {
+                    var accessor = new NDLSearchAPIAccessor()
+                    {
+                        Pubyearfrom = 2022,
+                        Issn = ISSN.Architecture_Structure,
+                        Count = 3,
+                        //Start = 1,
+                    };
+                    research.PullArticleInfo(accessor);
+
+                }
+
+                Console.WriteLine($"★ {research.ArticleDatabase.Count} found in total");
+
+
                 // display
                 {
-                    research.SaveDatabase(true, true);
+                    //research.SaveDatabase(true, true);
 
                     Console.WriteLine();
                     Console.WriteLine();

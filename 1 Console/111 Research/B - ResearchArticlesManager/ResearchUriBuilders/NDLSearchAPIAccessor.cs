@@ -1,7 +1,9 @@
 ﻿
 
+using System.Xml.Linq;
+
 namespace Aki32Utilities.ConsoleAppUtilities.Research;
-public class JStageArticleUriBuilder : IResearchUriBuilder
+public class NDLSearchAPIAccessor : IResearchAPIAccessor
 {
 
     // ★★★★★★★★★★★★★★★ props
@@ -36,7 +38,7 @@ public class JStageArticleUriBuilder : IResearchUriBuilder
 
     // ★★★★★★★★★★★★★★★ inits
 
-    public JStageArticleUriBuilder()
+    public NDLSearchAPIAccessor()
     {
     }
 
@@ -47,8 +49,11 @@ public class JStageArticleUriBuilder : IResearchUriBuilder
     /// build uri
     /// </summary>
     /// <returns></returns>
-    public Uri Build()
+    public Uri BuildUri()
     {
+        return new Uri(@"https://iss.ndl.go.jp/api/opensearch?mediatype=2&cnt=3&title=低サイク");
+
+
         //1 service 必須 利用する機能を指定します論文検索結果取得は 3 を指定
         var queryList = new Dictionary<string, string>
         {
@@ -56,11 +61,11 @@ public class JStageArticleUriBuilder : IResearchUriBuilder
         };
 
         //2 pubyearfrom 任意 発行年の範囲（From）を指定します西暦 4 桁
-        if (Pubyearfrom!=null)
+        if (Pubyearfrom != null)
             queryList.Add("pubyearfrom", Pubyearfrom!.ToString()!);
 
         //3 pubyearto 任意 発行年の範囲（To）を指定します西暦 4 桁
-        if (Pubyearto!=null)
+        if (Pubyearto != null)
             queryList.Add("pubyearto", Pubyearto!.ToString()!);
 
         //4 material 任意 資料名の検索語句を指定します中間一致検索大文字・小文字、全角・半角は区別しない
@@ -126,7 +131,86 @@ public class JStageArticleUriBuilder : IResearchUriBuilder
 
     }
 
+    /// <summary>
+    /// fetch articles
+    /// </summary>
+    /// <returns></returns>
+    public IEnumerable<ResearchArticle> FetchArticles()
+    {
+        // get xml
+        var xml = XElement.Load(BuildUri().AbsoluteUri);
 
-    // ★★★★★★★★★★★★★★★ 
+
+        // analyse 
+        var totalResults = xml.Element(ExpandOpenSearch("totalResults"))!.Value;
+        var startIndex = xml.Element(ExpandOpenSearch("startIndex"))!.Value;
+        var itemsPerPage = xml.Element(ExpandOpenSearch("itemsPerPage"))!.Value;
+        var toIndex = int.Parse(startIndex) + int.Parse(itemsPerPage) - 1;
+        var entities = xml.Elements(ExpandXml("entry"));
+
+        Console.WriteLine();
+        Console.WriteLine($"★ Obtained {itemsPerPage} items out of {totalResults} matches ( From #{startIndex} to #{toIndex} )");
+        Console.WriteLine();
+
+        foreach (var entity in entities)
+        {
+            var article = new ResearchArticle();
+            {
+                article.DataFrom_JStage = true;
+
+                article.JStage_ArticleTitle_English = entity.Element(ExpandXml("article_title"))?.Element(ExpandXml("en"))?.Value;
+                article.JStage_ArticleTitle_Japanese = entity.Element(ExpandXml("article_title"))?.Element(ExpandXml("ja"))?.Value;
+
+                article.JStage_Link_English = entity.Element(ExpandXml("article_link"))?.Element(ExpandXml("en"))?.Value;
+                article.JStage_Link_Japanese = entity.Element(ExpandXml("article_link"))?.Element(ExpandXml("ja"))?.Value;
+
+                article.JStage_Authors_English = entity.Element(ExpandXml("author"))?.Element(ExpandXml("en"))?.Elements(ExpandXml("name"))?.Select(e => e?.Value ?? "")?.ToArray();
+                article.JStage_Authors_Japanese = entity.Element(ExpandXml("author"))?.Element(ExpandXml("ja"))?.Elements(ExpandXml("name"))?.Select(e => e?.Value ?? "")?.ToArray();
+
+                article.JStage_JournalCode = entity.Element(ExpandXml("cdjournal"))?.Value;
+
+                article.JStage_MaterialTitle_English = entity.Element(ExpandXml("material_title"))?.Element(ExpandXml("en"))?.Value;
+                article.JStage_MaterialTitle_Japanese = entity.Element(ExpandXml("material_title"))?.Element(ExpandXml("ja"))?.Value;
+
+                article.PrintISSN = entity.Element(ExpandPrism("issn"))?.Value;
+                article.OnlineISSN = entity.Element(ExpandPrism("eIssn"))?.Value;
+
+                article.JStage_Volume = entity.Element(ExpandPrism("volume"))?.Value;
+                article.JStage_SubVolume = entity.Element(ExpandXml("cdvols"))?.Value;
+
+                article.JStage_Number = entity.Element(ExpandPrism("number"))?.Value;
+                article.JStage_StartingPage = entity.Element(ExpandPrism("startingPage"))?.Value;
+                article.JStage_EndingPage = entity.Element(ExpandPrism("endingPage"))?.Value;
+
+                article.JStage_PublishedYear = entity.Element(ExpandXml("pubyear"))?.Value;
+
+                article.JStage_JOI = entity.Element(ExpandXml("joi"))?.Value;
+                article.DOI = entity.Element(ExpandPrism("doi"))?.Value;
+
+                article.JStage_SystemCode = entity.Element(ExpandXml("systemcode"))?.Value;
+                article.JStage_SystemName = entity.Element(ExpandXml("systemname"))?.Value;
+
+                //article.JStage_ArticleTitle = entity.Element(ExpandXml("title"))?.Value;
+
+                //article.JStage_Link = entity.Element(ExpandXml("link"))?.Value;
+                article.JStage_Id = entity.Element(ExpandXml("id"))?.Value;
+                article.JStage_UpdatedOn = entity.Element(ExpandXml("updated"))?.Value;
+
+            }
+
+            yield return article;
+
+        }
+    }
+
+
+    // ★★★★★★★★★★★★★★★ method helper
+
+    public static string ExpandXml(string s) => "{http://www.w3.org/2005/Atom}" + s;
+    public static string ExpandOpenSearch(string s) => "{http://a9.com/-/spec/opensearch/1.1/}" + s;
+    public static string ExpandPrism(string s) => "{http://prismstandard.org/namespaces/basic/2.0/}" + s;
+
+
+    // ★★★★★★★★★★★★★★★
 
 }

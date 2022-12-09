@@ -1,10 +1,16 @@
 ﻿
 
+using Aki32Utilities.ConsoleAppUtilities.UsefulClasses;
+
+using Newtonsoft.Json.Linq;
+
+using System;
+
 namespace Aki32Utilities.ConsoleAppUtilities.Research;
 /// <summary>
 /// https://support.nii.ac.jp/ja/cir/r_opensearch
 /// </summary>
-public class CiNiiArticleUriBuilder : IResearchUriBuilder
+public class CiNiiArticleAPIAccessor : IResearchAPIAccessor
 {
 
     // ★★★★★★★★★★★★★★★ props
@@ -40,7 +46,7 @@ public class CiNiiArticleUriBuilder : IResearchUriBuilder
 
     // ★★★★★★★★★★★★★★★ inits
 
-    public CiNiiArticleUriBuilder()
+    public CiNiiArticleAPIAccessor()
     {
     }
 
@@ -51,7 +57,7 @@ public class CiNiiArticleUriBuilder : IResearchUriBuilder
     /// build uri
     /// </summary>
     /// <returns></returns>
-    public Uri Build()
+    public Uri BuildUri()
     {
         // 参照： https://support.nii.ac.jp/ja/cir/r_opensearch
 
@@ -172,4 +178,64 @@ public class CiNiiArticleUriBuilder : IResearchUriBuilder
         // ★★★★★★★★★★★★★★★ 
 
     }
+
+    /// <summary>
+    /// fetch articles
+    /// </summary>
+    /// <returns></returns>
+    public IEnumerable<ResearchArticle> FetchArticles()
+    {
+        // get json
+        dynamic json = BuildUri().CallAPIAsync_ForJsonData<dynamic>(HttpMethod.Get).Result;
+
+
+        // analyse 
+        var totalResults = json?["opensearch:totalResults"]?.ToString();
+        var startIndex = json?["opensearch:startIndex"]?.ToString();
+        var itemsPerPage = json?["opensearch:itemsPerPage"]?.ToString();
+        var toIndex = int.Parse(startIndex) + int.Parse(itemsPerPage) - 1;
+
+        Console.WriteLine();
+        Console.WriteLine($"★ Obtained {itemsPerPage} items out of {totalResults} matches ( From #{startIndex} to #{toIndex} )");
+        Console.WriteLine();
+
+        if (json?["items"] is JArray entities)
+        {
+            foreach (var entity in entities)
+            {
+                var article = new ResearchArticle();
+                {
+                    article.DataFrom_CiNii = true;
+
+                    article.CiNii_ArticleTitle = entity?["title"]?.ToString();
+
+                    article.CiNii_Link = entity?["link"]?["@id"]?.ToString();
+
+                    article.CiNii_Authors = (entity?["dc:creator"] as JArray)?.Select(a => a.ToString())?.ToArray();
+
+                    article.CiNii_Publisher = entity?["dc:publisher"]?.ToString();
+                    article.CiNii_PublicationName = entity?["prism:publicationName"]?.ToString();
+
+                    article.PrintISSN = entity?["prism:issn"]?.ToString();
+
+                    article.CiNii_Volume = entity?["prism:volume"]?.ToString();
+                    article.CiNii_Number = entity?["prism:number"]?.ToString();
+                    article.CiNii_StartingPage = entity?["prism:startingPage"]?.ToString();
+                    article.CiNii_EndingPage = entity?["prism:endingPage"]?.ToString();
+                    article.CiNii_PublishedDate = entity?["prism:publicationDate"]?.ToString();
+
+
+                    article.CiNii_Description = entity?["description"]?.ToString();
+
+                    article.DOI = (entity?["dc:identifier"] as JArray)?.FirstOrDefault(x => x?["@type"]?.ToString() == "cir:DOI")?["@value"]?.ToString();
+                }
+
+                yield return article;
+            }
+        }
+    }
+
+
+    // ★★★★★★★★★★★★★★★
+
 }
