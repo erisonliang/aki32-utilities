@@ -91,7 +91,7 @@ public partial class ResearchArticlesManager
     /// </summary>
     /// <param name="apiAccessor"></param>
     /// <exception cref="InvalidOperationException"></exception>
-    public IEnumerable<ResearchArticle> FetchArticleInfo(IResearchAPIAccessor apiAccessor)
+    public List<ResearchArticle> FetchArticleInfo(IResearchAPIAccessor apiAccessor)
     {
         // preprocess
         if (ArticleDatabase == null)
@@ -100,7 +100,7 @@ public partial class ResearchArticlesManager
 
         // main
         // post process
-        return apiAccessor.FetchArticles();
+        return apiAccessor.FetchArticles().ToList();
 
     }
 
@@ -109,7 +109,7 @@ public partial class ResearchArticlesManager
     /// </summary>
     /// <param name="uriBuilder"></param>
     /// <exception cref="InvalidOperationException"></exception>
-    public void MergeArticleInfo(IEnumerable<ResearchArticle> articles)
+    public void MergeArticleInfo(List<ResearchArticle> articles)
     {
         // preprocess
         if (ArticleDatabase == null)
@@ -119,7 +119,7 @@ public partial class ResearchArticlesManager
 
 
         Console.WriteLine();
-        Console.WriteLine($"★ Merging {articles.Count()} articles in total...");
+        Console.WriteLine($"★ Merging {articles.Count} articles in total...");
         Console.WriteLine();
 
 
@@ -169,13 +169,6 @@ public partial class ResearchArticlesManager
     // ★★★★★★★★★★★★★★★ methods (practical use)
 
 
-
-
-    // ★★★★★★★★★★★★★★★ methods (helper)
-
-    private static string ExpandXml(string s) => "{http://www.w3.org/2005/Atom}" + s;
-    private static string ExpandOpenSearch(string s) => "{http://a9.com/-/spec/opensearch/1.1/}" + s;
-    private static string ExpandPrism(string s) => "{http://prismstandard.org/namespaces/basic/2.0/}" + s;
 
 
     // ★★★★★★★★★★★★★★★

@@ -306,56 +306,60 @@ public class ResearchArticle : IComparable
     /// <returns></returns>
     /// <exception cref="NotImplementedException"></exception>
     public static ResearchArticle CreateManually(
+        ResearchArticle_ManualInitInfo addingArticleBasicInfo,
+        ResearchArticle[]? references_parents = null,
+        ResearchArticle[]? references_children = null,
 
-        string? title = null,
-        string[]? authors = null,
-
-        ResearchArticle[]? references = null,
-
-        FileInfo? pdfFile = null,
         DirectoryInfo? pdfStockDirectory = null,
-
-        bool movePdfFile = true
+        FileInfo? addingPdfFile = null,
+        bool deleteOriginalPdfFile = true
         )
     {
         // Create AOI first
-        var aoi = Guid.NewGuid().ToString();
-
-        // stock pdf file to database
-        if (pdfFile != null)
+        var addingArticle = new ResearchArticle()
         {
-            if (pdfStockDirectory == null)
-                throw new InvalidDataException("When tring initializing {pdfFile}, {pdfStockDirectory} must not be null");
-
-            var targetFile = new FileInfo(Path.Combine(pdfStockDirectory.FullName, $"{aoi}.pdf"));
-
-            if (movePdfFile)
-                pdfFile.MoveTo(targetFile);
-            else
-                pdfFile.CopyTo(targetFile);
-
-        }
-
-        var raddingArticle = new ResearchArticle()
-        {
-            Manual_ArticleTitle = title,
-            Manual_Authors = authors,
-
+            AOI = Guid.NewGuid().ToString(),
             Manual_CreatedDate = DateTime.Today.ToLongDateString(),
-
-            AOI = aoi,
-
             DataFrom_Manual = true,
+
+            DOI = addingArticleBasicInfo.DOI,
+            Private_Favorite = addingArticleBasicInfo.Private_Favorite,
+
+            Manual_ArticleTitle = addingArticleBasicInfo.Manual_ArticleTitle,
+            Manual_Authors = addingArticleBasicInfo.Manual_Authors,
+            Manual_Description = addingArticleBasicInfo.Manual_Description,
+            Manual_PublishedDate = addingArticleBasicInfo.Manual_PublishedDate,
+
+            Memo = addingArticleBasicInfo.Memo,
         };
 
-        if (references != null)
+        if (references_parents != null)
         {
-            foreach (var reference in references)
-                reference.AddArticleReference(raddingArticle);
+            foreach (var references_parent in references_parents)
+                addingArticle.AddArticleReference(references_parent);
+        }
+        if (references_children != null)
+        {
+            foreach (var references_child in references_children)
+                references_child.AddArticleReference(addingArticle);
+        }
+
+        // stock pdf file to database
+        if (addingPdfFile != null)
+        {
+            if (pdfStockDirectory == null)
+                throw new InvalidDataException("When tring to add PDF file, {pdfStockDirectory} must not be null");
+
+            var targetFile = new FileInfo(Path.Combine(pdfStockDirectory.FullName, $"{addingArticle.LocalPDFName}.pdf"));
+
+            if (deleteOriginalPdfFile)
+                addingPdfFile.MoveTo(targetFile);
+            else
+                addingPdfFile.CopyTo(targetFile);
 
         }
 
-        return raddingArticle;
+        return addingArticle;
     }
 
     /// <summary>

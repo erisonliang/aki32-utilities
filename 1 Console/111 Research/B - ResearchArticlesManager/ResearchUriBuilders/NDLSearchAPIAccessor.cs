@@ -231,12 +231,7 @@ public class NDLSearchAPIAccessor : IResearchAPIAccessor
 
     private static string ExpandDC(string s) => "{http://purl.org/dc/elements/1.1/}" + s;
     private static string ExpandOpenSearch(string s) => "{http://a9.com/-/spec/opensearchrss/1.0/}" + s;
-    private static string ExpandDcndl(string s) => "{http://ndl.go.jp/dcndl/terms/}" + s;
-    private static string ExpandDcmiType(string s) => "{http://purl.org/dc/dcmitype/}" + s;
     private static string ExpandDcTerms(string s) => "{http://purl.org/dc/terms/}" + s;
-    private static string ExpandXsi(string s) => "{http://www.w3.org/2001/XMLSchema-instance}" + s;
-    private static string ExpandDefs(string s) => "{http://www.w3.org/2000/01/rdf-schema#}" + s;
-    private static string ExpandRdf(string s) => "{http://www.w3.org/1999/02/22-rdf-syntax-ns#}" + s;
 
 
     // ★★★★★★★★★★★★★★★
