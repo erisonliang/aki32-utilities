@@ -79,7 +79,7 @@ public partial class ResearchArticlesManager
             if (withBackUp)
             {
                 ArticleDatabaseBackUpFileInfo.Directory!.Create();
-                ArticleDatabase.SaveAsCsv(ArticleDatabaseBackUpFileInfo);
+                ArticleDatabaseFileInfo.CopyTo(ArticleDatabaseBackUpFileInfo);
             }
             articleDatabaseUpdated = false;
         }
