@@ -545,58 +545,43 @@ public class ResearchArticle : IComparable
         var comparingArticle = (ResearchArticle)obj!;
 
         var result = 0;
-        var power = (int)Math.Pow(2, 10);
+        var power = (int)Math.Pow(2, 20);
 
-        if (!string.IsNullOrEmpty(DOI) && !string.IsNullOrEmpty(comparingArticle.DOI))
+        static IEnumerable<string> Targets()
         {
-            var com = DOI!.CompareTo(comparingArticle.DOI);
-            if (com == 0) return 0;
-            result += power * Math.Sign(com);
+            // id
+            yield return nameof(DOI);
+            yield return nameof(AOI);
+            yield return nameof(JStage_Id);
+
+            // title
+            yield return nameof(JStage_ArticleTitle_Japanese);
+            yield return nameof(JStage_ArticleTitle_English);
+            yield return nameof(CrossRef_ArticleTitle);
+            yield return nameof(CiNii_ArticleTitle);
+            yield return nameof(NDLSearch_ArticleTitle);
+            yield return nameof(Manual_ArticleTitle);
+            yield return nameof(ArticleTitle);
+
+            // others
+            yield return nameof(CrossRef_UnstructuredRefString);
+
         }
 
-        power /= 2;
-
-        if (!string.IsNullOrEmpty(CrossRef_ArticleTitle) && !string.IsNullOrEmpty(comparingArticle.CrossRef_ArticleTitle))
+        foreach (var target in Targets())
         {
-            var com = CrossRef_ArticleTitle!.CompareTo(comparingArticle.CrossRef_ArticleTitle);
-            if (com == 0) return 0;
-            result += power * Math.Sign(com);
-        }
+            var prop = GetType().GetProperty(target);
+            var value1 = prop?.GetValue(this)?.ToString();
+            var value2 = prop?.GetValue(comparingArticle)?.ToString();
 
-        power /= 2;
+            if (!string.IsNullOrEmpty(value1) && !string.IsNullOrEmpty(value2))
+            {
+                var com = value1!.CompareTo(value2);
+                if (com == 0) return 0;
+                result += power * Math.Sign(com);
+            }
 
-        if (!string.IsNullOrEmpty(JStage_Id) && !string.IsNullOrEmpty(comparingArticle.JStage_Id))
-        {
-            var com = JStage_Id!.CompareTo(comparingArticle.JStage_Id);
-            if (com == 0) return 0;
-            result += power * Math.Sign(com);
-        }
-
-        power /= 2;
-
-        if (!string.IsNullOrEmpty(Manual_ArticleTitle) && !string.IsNullOrEmpty(comparingArticle.Manual_ArticleTitle))
-        {
-            var com = Manual_ArticleTitle!.CompareTo(comparingArticle.Manual_ArticleTitle);
-            if (com == 0) return 0;
-            result += power * Math.Sign(com);
-        }
-
-        power /= 2;
-
-        if (!string.IsNullOrEmpty(AOI) && !string.IsNullOrEmpty(comparingArticle.AOI))
-        {
-            var com = AOI!.CompareTo(comparingArticle.AOI);
-            if (com == 0) return 0;
-            result += power * Math.Sign(com);
-        }
-
-        power /= 2;
-
-        if (!string.IsNullOrEmpty(CrossRef_UnstructuredRefString) && !string.IsNullOrEmpty(comparingArticle.CrossRef_UnstructuredRefString))
-        {
-            var com = CrossRef_UnstructuredRefString!.CompareTo(comparingArticle.CrossRef_UnstructuredRefString);
-            if (com == 0) return 0;
-            result += power * Math.Sign(com);
+            power /= 2;
         }
 
         return (result == 0) ? (GetHashCode() - comparingArticle.GetHashCode()) : result;
