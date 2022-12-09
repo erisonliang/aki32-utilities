@@ -845,7 +845,6 @@ public static partial class ExampleExecuter
 
 
             // A - ResearchManager
-            if (false)
             {
                 //UtilConfig.ConsoleOutput_Contents = false;
 
@@ -891,7 +890,7 @@ public static partial class ExampleExecuter
 
                 // display
                 {
-                    research.SaveDatabase(true);
+                    research.SaveDatabase(true, true);
 
                     Console.WriteLine();
                     Console.WriteLine();

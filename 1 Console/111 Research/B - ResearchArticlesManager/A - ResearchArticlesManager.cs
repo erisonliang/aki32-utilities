@@ -18,8 +18,10 @@ public partial class ResearchArticlesManager
     // ★★★★★★★★★★★★★★★ paths
 
     public DirectoryInfo LocalDirectory { get; set; }
-    private FileInfo ArticleDatabaseFileInfo => new($@"{LocalDirectory.FullName}\ResearchArticles.csv");
+    private FileInfo ArticleDatabaseFileInfo => new(Path.Combine(LocalDirectory.FullName, "ResearchArticles.csv"));
+    private FileInfo ArticleDatabaseBackUpFileInfo => new(Path.Combine(LocalDirectory.FullName, "ResearchArticles.csv.bak", $"ResearchArticles_{DateTime.Now:s}.csv".Replace(':', '-')));
     public DirectoryInfo PDFsDirectory => new($@"{LocalDirectory.FullName}\PDFs");
+
 
 
     // ★★★★★★★★★★★★★★★ props
@@ -69,11 +71,16 @@ public partial class ResearchArticlesManager
         }
     }
 
-    public void SaveDatabase(bool forceSaveArticleDatabase = true)
+    public void SaveDatabase(bool forceSaveArticleDatabase = true, bool withBackUp = true)
     {
         if (articleDatabaseUpdated || forceSaveArticleDatabase)
         {
             ArticleDatabase.SaveAsCsv(ArticleDatabaseFileInfo);
+            if (withBackUp)
+            {
+                ArticleDatabaseBackUpFileInfo.Directory!.Create();
+                ArticleDatabase.SaveAsCsv(ArticleDatabaseBackUpFileInfo);
+            }
             articleDatabaseUpdated = false;
         }
     }
