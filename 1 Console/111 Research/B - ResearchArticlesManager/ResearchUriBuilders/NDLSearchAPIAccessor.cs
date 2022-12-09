@@ -2,38 +2,60 @@
 
 using System.Xml.Linq;
 
+using Aki32Utilities.ConsoleAppUtilities.General;
+
+using DocumentFormat.OpenXml.Bibliography;
+using DocumentFormat.OpenXml.Spreadsheet;
+
 namespace Aki32Utilities.ConsoleAppUtilities.Research;
 public class NDLSearchAPIAccessor : IResearchAPIAccessor
 {
 
     // ★★★★★★★★★★★★★★★ props
 
-    public const string BASE_URL = $@"http://api.jstage.jst.go.jp/searchapi/do";
+    public const string BASE_URL = $@"https://iss.ndl.go.jp/api/opensearch";
 
     internal Uri builtUri = null;
 
-    public int? Pubyearfrom { get; set; } = null;
-    public int? Pubyearto { get; set; } = null;
-    public string Material { get; set; } = "";
 
-    public string Article { get; set; }
-    public string Author { get; set; }
-    public string Affil { get; set; }
+    /// <summary>
+    /// 資料種別//国立国会図書館サーチの詳細検索の資料種別に対応
+    /// “1”：本
+    /// “2”：記事・論文
+    /// “3”：新聞
+    /// “4”：児童書
+    /// “5”：レファレンス情報
+    /// “6”：デジタル資料
+    /// “7”：その他
+    /// “8”：障害者向け資料（障害者向け検索対象資料）
+    /// “9”：立法情報
+    /// </summary>
+    public int? MediaType { get; set; } = 2;
 
-    public string Keyword { get; set; }
-    public string Abst { get; set; }
-    public string Text { get; set; }
 
-    public string Issn { get; set; } = "";
-    public string Cdjournal { get; set; } = "";
+    public string SearchFreeWord { get; set; }
+    public string SearchTitle { get; set; }
+    public string SearchAuthorName { get; set; }
+    public string SearchPublisherName { get; set; }
+    public string SearchDigitizedPublisherName { get; set; }
 
-    public bool? AscendingOrder { get; set; } = null;
 
-    public string Vol { get; set; }
-    public string No { get; set; }
+    /// <summary>
+    /// YYYY, YYYYMM or YYYYMMDD
+    /// </summary>
+    public int? PublishedFrom { get; set; } = null;
+    /// <summary>
+    /// YYYY, YYYYMM or YYYYMMDD
+    /// </summary>
+    public int? PublishedUntil { get; set; } = null;
+    public int? RecordCount { get; set; } = null;
+    public int? RecordStart { get; set; } = null;
 
-    public int? Start { get; set; }
-    public int? Count { get; set; }
+
+    public string DataProviderId { get; set; }
+    public string DataProviderGroupId { get; set; }
+    public string NDC { get; set; }
+    public string ISBN { get; set; }
 
 
     // ★★★★★★★★★★★★★★★ inits
@@ -51,78 +73,96 @@ public class NDLSearchAPIAccessor : IResearchAPIAccessor
     /// <returns></returns>
     public Uri BuildUri()
     {
-        return new Uri(@"https://iss.ndl.go.jp/api/opensearch?mediatype=2&cnt=3&title=低サイク");
+        //mediatype=2&cnt=3&title=低サイク
+        //return new Uri(@"https://iss.ndl.go.jp/api/opensearch?mediatype=2&cnt=3&title=低サイク");
+
+        var queryList = new Dictionary<string, string>();
 
 
-        //1 service 必須 利用する機能を指定します論文検索結果取得は 3 を指定
-        var queryList = new Dictionary<string, string>
+        // 1//dpid//データプロバイダID//完全一致//○
+        if (!string.IsNullOrEmpty(DataProviderId))
+            queryList.Add("dpid", DataProviderId);
+
+        // 2//dpgroupid//データプロバイダグループID//完全一致//×
+        if (!string.IsNullOrEmpty(DataProviderGroupId))
+            queryList.Add("dpgroupid", DataProviderGroupId);
+
+        // 3//any//すべての項目を対象に検索//部分一致//○
+        if (!string.IsNullOrEmpty(SearchFreeWord))
+            queryList.Add("any", SearchFreeWord);
+
+        // 4//title//タイトル//部分一致//○
+        if (!string.IsNullOrEmpty(SearchTitle))
+            queryList.Add("title", SearchTitle);
+
+        // 5//creator//作成者//部分一致//○
+        if (!string.IsNullOrEmpty(SearchAuthorName))
+            queryList.Add("creator", SearchAuthorName);
+
+        // 6//publisher//出版者//部分一致//○
+        if (!string.IsNullOrEmpty(SearchPublisherName))
+            queryList.Add("publisher", SearchPublisherName);
+
+        // 7//digitized_publisher//デジタル化した製作者//部分一致//○
+        if (!string.IsNullOrEmpty(SearchDigitizedPublisherName))
+            queryList.Add("digitized_publisher", SearchDigitizedPublisherName);
+
+        // 8//ndc//分類（NDC）//前方一致//×
+        if (!string.IsNullOrEmpty(NDC))
+            queryList.Add("ndc", NDC);
+
+        // 9//from//開始出版年月日//（YYYY、YYYY-MM、YYYY-MM-DD）//×
+        if (PublishedFrom != null)
         {
-            { "service", "3" }
-        };
+            var fromString = PublishedFrom.ToString()!;
+            if (PublishedFrom > 999999)
+                fromString = fromString.Insert(6, "-");
+            if (PublishedFrom > 9999)
+                fromString = fromString.Insert(4, "-");
 
-        //2 pubyearfrom 任意 発行年の範囲（From）を指定します西暦 4 桁
-        if (Pubyearfrom != null)
-            queryList.Add("pubyearfrom", Pubyearfrom!.ToString()!);
+            queryList.Add("from", fromString);
+        }
 
-        //3 pubyearto 任意 発行年の範囲（To）を指定します西暦 4 桁
-        if (Pubyearto != null)
-            queryList.Add("pubyearto", Pubyearto!.ToString()!);
+        // 10//until//終了出版年月日//（YYYY、YYYY-MM、YYYY-MM-DD）//×
+        if (PublishedUntil != null)
+        {
+            var untilString = PublishedUntil.ToString()!;
+            if (PublishedUntil > 999999)
+                untilString = untilString.Insert(6, "-");
+            if (PublishedUntil > 9999)
+                untilString = untilString.Insert(4, "-");
 
-        //4 material 任意 資料名の検索語句を指定します中間一致検索大文字・小文字、全角・半角は区別しない
-        if (!string.IsNullOrEmpty(Material))
-            queryList.Add("material", Material);
+            queryList.Add("until", untilString);
+        }
 
-        //5 article 任意 論文タイトルの検索語句を指定します中間一致検索大文字・小文字、全角・半角は区別しない
-        if (!string.IsNullOrEmpty(Article))
-            queryList.Add("article", Article);
+        // 11//cnt//出力レコード上限値（省略時は200 とする）//×
+        if (RecordCount != null)
+            queryList.Add("cnt", RecordCount!.ToString()!);
 
-        //6 author 任意 著者名の検索語句を指定します中間一致検索大文字・小文字、全角・半角は区別しない
-        if (!string.IsNullOrEmpty(Author))
-            queryList.Add("author", Author);
+        // 12 //idx //レコード取得開始位置（省略時は1 とする） //×
+        if (RecordStart != null)
+            queryList.Add("idx", RecordStart!.ToString()!);
 
-        //7 affil 任意 著者所属機関の検索語句を指定します中間一致検索大文字・小文字、全角・半角は区別しない
-        if (!string.IsNullOrEmpty(Affil))
-            queryList.Add("affil", Affil);
+        // 13//isbn//ISBN
+        // 10桁または13桁で入力した場合は、10桁、13桁の両方に変換して完全一致検索を行う。
+        // それ以外の桁で入力した場合は前方一致検索を行う。
+        // 完全一致または前方一致//×
+        if (!string.IsNullOrEmpty(ISBN))
+            queryList.Add("isbn", ISBN);
 
-        //8 keyword 任意 キーワードの検索語句を指定します中間一致検索大文字・小文字、全角・半角は区別しない
-        if (!string.IsNullOrEmpty(Keyword))
-            queryList.Add("keyword", Keyword);
-
-        //9 abst 任意 抄録の検索語句を指定します中間一致検索大文字・小文字、全角・半角は区別しない
-        if (!string.IsNullOrEmpty(Abst))
-            queryList.Add("abst", Abst);
-
-        //10 text 任意 全文の検索語句を指定します中間一致検索大文字・小文字、全角・半角は区別しない
-        if (!string.IsNullOrEmpty(Text))
-            queryList.Add("text", Text);
-
-        //11 issn 任意 Online ISSN またはPrint ISSN を指定します完全一致検索XXXX - XXXX 形式
-        if (!string.IsNullOrEmpty(Issn))
-            queryList.Add("issn", Issn);
-
-        //12 cdjournal 任意 資料コードを指定しますJ - STAGE で付与される資料を識別するコード
-        if (!string.IsNullOrEmpty(Cdjournal))
-            queryList.Add("cdjournal", Cdjournal);
-
-        //13 sortflg 任意 検索結果の並び順を指定します1:検索結果のスコア順にソートする2:巻、分冊、号、開始ページでソートする未指定の場合は 1
-        if (AscendingOrder != null)
-            queryList.Add("sortflg", AscendingOrder.Value ? "1" : "2");
-
-        //14 vol 任意 巻を指定します 完全一致
-        if (!string.IsNullOrEmpty(Vol))
-            queryList.Add("vol", Vol);
-
-        //15 no 任意 号を指定します 完全一致
-        if (!string.IsNullOrEmpty(No))
-            queryList.Add("no", No);
-
-        //16 start 任意 検索結果の中から取得を開始する件数を指定します※
-        if (Start != null)
-            queryList.Add("start", Start!.Value.ToString());
-
-        //17 count 任意 取得件数を指定します※ 最大 1,000 件まで取得可能
-        if (Count != null)
-            queryList.Add("count", Count!.Value.ToString());
+        // 14//mediatype//資料種別//国立国会図書館サーチの詳細検索の資料種別に対応
+        // “1”：本
+        // “2”：記事・論文
+        // “3”：新聞
+        // “4”：児童書
+        // “5”：レファレンス情報
+        // “6”：デジタル資料
+        // “7”：その他
+        // “8”：障害者向け資料（障害者向け検索対象資料）
+        // “9”：立法情報
+        // 完全一致//○
+        if (MediaType != null)
+            queryList.Add("mediatype", MediaType!.ToString()!);
 
 
         // post process
@@ -142,59 +182,42 @@ public class NDLSearchAPIAccessor : IResearchAPIAccessor
 
 
         // analyse 
-        var totalResults = xml.Element(ExpandOpenSearch("totalResults"))!.Value;
-        var startIndex = xml.Element(ExpandOpenSearch("startIndex"))!.Value;
-        var itemsPerPage = xml.Element(ExpandOpenSearch("itemsPerPage"))!.Value;
+        var channel = xml.Element("channel")!;
+        var totalResults = channel.Element(ExpandOpenSearch("totalResults"))!.Value;
+        var startIndex = channel.Element(ExpandOpenSearch("startIndex"))!.Value;
+        var itemsPerPage = channel.Element(ExpandOpenSearch("itemsPerPage"))!.Value;
         var toIndex = int.Parse(startIndex) + int.Parse(itemsPerPage) - 1;
-        var entities = xml.Elements(ExpandXml("entry"));
 
         Console.WriteLine();
         Console.WriteLine($"★ Obtained {itemsPerPage} items out of {totalResults} matches ( From #{startIndex} to #{toIndex} )");
         Console.WriteLine();
 
+        var entities = channel.Elements("item");
         foreach (var entity in entities)
         {
             var article = new ResearchArticle();
             {
-                article.DataFrom_JStage = true;
+                article.DataFrom_NDLSearch = true;
 
-                article.JStage_ArticleTitle_English = entity.Element(ExpandXml("article_title"))?.Element(ExpandXml("en"))?.Value;
-                article.JStage_ArticleTitle_Japanese = entity.Element(ExpandXml("article_title"))?.Element(ExpandXml("ja"))?.Value;
+                article.NDLSearch_ArticleTitle = entity.Element("title")?.Value;
+                article.NDLSearch_Link = entity.Element("link")?.Value;
 
-                article.JStage_Link_English = entity.Element(ExpandXml("article_link"))?.Element(ExpandXml("en"))?.Value;
-                article.JStage_Link_Japanese = entity.Element(ExpandXml("article_link"))?.Element(ExpandXml("ja"))?.Value;
+                article.NDLSearch_Description = entity.Element("description")?.Value
+                    ?? entity.Elements(ExpandDC("description"))?.Select(e => e?.Value ?? "")?.Join(", ");
 
-                article.JStage_Authors_English = entity.Element(ExpandXml("author"))?.Element(ExpandXml("en"))?.Elements(ExpandXml("name"))?.Select(e => e?.Value ?? "")?.ToArray();
-                article.JStage_Authors_Japanese = entity.Element(ExpandXml("author"))?.Element(ExpandXml("ja"))?.Elements(ExpandXml("name"))?.Select(e => e?.Value ?? "")?.ToArray();
+                article.NDLSearch_PublishedDate = entity.Element(ExpandDcTerms("issued"))?.Value
+                    ?? entity.Element("pubDate")?.Value;
 
-                article.JStage_JournalCode = entity.Element(ExpandXml("cdjournal"))?.Value;
-
-                article.JStage_MaterialTitle_English = entity.Element(ExpandXml("material_title"))?.Element(ExpandXml("en"))?.Value;
-                article.JStage_MaterialTitle_Japanese = entity.Element(ExpandXml("material_title"))?.Element(ExpandXml("ja"))?.Value;
-
-                article.PrintISSN = entity.Element(ExpandPrism("issn"))?.Value;
-                article.OnlineISSN = entity.Element(ExpandPrism("eIssn"))?.Value;
-
-                article.JStage_Volume = entity.Element(ExpandPrism("volume"))?.Value;
-                article.JStage_SubVolume = entity.Element(ExpandXml("cdvols"))?.Value;
-
-                article.JStage_Number = entity.Element(ExpandPrism("number"))?.Value;
-                article.JStage_StartingPage = entity.Element(ExpandPrism("startingPage"))?.Value;
-                article.JStage_EndingPage = entity.Element(ExpandPrism("endingPage"))?.Value;
-
-                article.JStage_PublishedYear = entity.Element(ExpandXml("pubyear"))?.Value;
-
-                article.JStage_JOI = entity.Element(ExpandXml("joi"))?.Value;
-                article.DOI = entity.Element(ExpandPrism("doi"))?.Value;
-
-                article.JStage_SystemCode = entity.Element(ExpandXml("systemcode"))?.Value;
-                article.JStage_SystemName = entity.Element(ExpandXml("systemname"))?.Value;
-
-                //article.JStage_ArticleTitle = entity.Element(ExpandXml("title"))?.Value;
-
-                //article.JStage_Link = entity.Element(ExpandXml("link"))?.Value;
-                article.JStage_Id = entity.Element(ExpandXml("id"))?.Value;
-                article.JStage_UpdatedOn = entity.Element(ExpandXml("updated"))?.Value;
+                article.NDLSearch_Authors = entity.Element("author")?.Value?
+                    .Split(',', StringSplitOptions.RemoveEmptyEntries)?
+                    .Select(a => a.Trim())?
+                    .Where(a => !string.IsNullOrEmpty(a))?
+                    .Distinct()?
+                    .ToArray()
+                    ?? entity.Elements(ExpandDC("creator"))?
+                    .Select(e => e?.Value ?? "")?
+                    .Where(a => !string.IsNullOrEmpty(a))?
+                    .ToArray();
 
             }
 
@@ -206,9 +229,14 @@ public class NDLSearchAPIAccessor : IResearchAPIAccessor
 
     // ★★★★★★★★★★★★★★★ method helper
 
-    public static string ExpandXml(string s) => "{http://www.w3.org/2005/Atom}" + s;
-    public static string ExpandOpenSearch(string s) => "{http://a9.com/-/spec/opensearch/1.1/}" + s;
-    public static string ExpandPrism(string s) => "{http://prismstandard.org/namespaces/basic/2.0/}" + s;
+    private static string ExpandDC(string s) => "{http://purl.org/dc/elements/1.1/}" + s;
+    private static string ExpandOpenSearch(string s) => "{http://a9.com/-/spec/opensearchrss/1.0/}" + s;
+    private static string ExpandDcndl(string s) => "{http://ndl.go.jp/dcndl/terms/}" + s;
+    private static string ExpandDcmiType(string s) => "{http://purl.org/dc/dcmitype/}" + s;
+    private static string ExpandDcTerms(string s) => "{http://purl.org/dc/terms/}" + s;
+    private static string ExpandXsi(string s) => "{http://www.w3.org/2001/XMLSchema-instance}" + s;
+    private static string ExpandDefs(string s) => "{http://www.w3.org/2000/01/rdf-schema#}" + s;
+    private static string ExpandRdf(string s) => "{http://www.w3.org/1999/02/22-rdf-syntax-ns#}" + s;
 
 
     // ★★★★★★★★★★★★★★★

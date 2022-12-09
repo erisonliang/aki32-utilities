@@ -83,7 +83,7 @@ public class CrossRefAPIAccessor : IResearchAPIAccessor
                     var addingArticle = new ResearchArticle
                     {
                         DOI = reference?["DOI"]?.ToString(),
-                        UnstructuredRefString = ResearchArticle.CleanUp_UnstructuredRefString(reference?["unstructured"]?.ToString())
+                        CrossRef_UnstructuredRefString = ResearchArticle.CleanUp_UnstructuredRefString(reference?["unstructured"]?.ToString())
                     };
                     article.AddArticleReference(addingArticle);
 

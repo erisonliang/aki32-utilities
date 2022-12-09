@@ -1,17 +1,6 @@
-﻿using System.Xml.Linq;
-
-using Aki32Utilities.ConsoleAppUtilities.General;
-using Aki32Utilities.ConsoleAppUtilities.UsefulClasses;
-
-using Newtonsoft.Json.Linq;
+﻿using Aki32Utilities.ConsoleAppUtilities.General;
 
 namespace Aki32Utilities.ConsoleAppUtilities.Research;
-/// <remarks>
-/// 参考：
-/// Crossref: https://www.crossref.org/documentation/retrieve-metadata/rest-api/
-/// J-Stage:  https://www.jstage.jst.go.jp/static/files/ja/manual_api.pdf
-/// CiNii:    https://support.nii.ac.jp/ja/cir/r_opensearch
-/// </remarks>
 public partial class ResearchArticlesManager
 {
 
@@ -19,7 +8,7 @@ public partial class ResearchArticlesManager
 
     public DirectoryInfo LocalDirectory { get; set; }
     private FileInfo ArticleDatabaseFileInfo => new(Path.Combine(LocalDirectory.FullName, "ResearchArticles.csv"));
-    private FileInfo ArticleDatabaseBackUpFileInfo => new(Path.Combine(LocalDirectory.FullName, "ResearchArticles.csv.bak", $"ResearchArticles_{DateTime.Now:s}.csv".Replace(':', '-')));
+    private FileInfo ArticleDatabaseBackUpFileInfo => new(Path.Combine(LocalDirectory.FullName, "ResearchArticles.csv.bak", $"ResearchArticles_{DateTime.Now:s}-{DateTime.Now:ffff}.csv".Replace(':', '-')));
     public DirectoryInfo PDFsDirectory => new($@"{LocalDirectory.FullName}\PDFs");
 
 
@@ -46,6 +35,7 @@ public partial class ResearchArticlesManager
         Console.WriteLine("+ Crossref (https://www.crossref.org/)");
         Console.WriteLine("+ J-STAGE (https://www.jstage.jst.go.jp/)");
         Console.WriteLine("+ CiNii (https://cir.nii.ac.jp/)");
+        Console.WriteLine("+ NDL Search: (https://iss.ndl.go.jp/information/api/)");
         Console.WriteLine("+ ");
         Console.WriteLine();
 
@@ -92,9 +82,8 @@ public partial class ResearchArticlesManager
     /// <exception cref="InvalidOperationException"></exception>
     public void PullArticleInfo(IResearchAPIAccessor uriBuilder)
     {
-        var articles = FetchArticleInfo(uriBuilder);
-        MergeArticleInfo(articles);
-
+        var fetchedArticles = FetchArticleInfo(uriBuilder);
+        MergeArticleInfo(fetchedArticles);
     }
 
     /// <summary>

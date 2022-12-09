@@ -27,13 +27,14 @@ public class ResearchArticle : IComparable
                 ?? Manual_ArticleTitle.NullIfNullOrEmpty()
                 ?? JStage_ArticleTitle_Japanese.NullIfNullOrEmpty()
                 ?? CiNii_ArticleTitle.NullIfNullOrEmpty()
+                ?? NDLSearch_ArticleTitle.NullIfNullOrEmpty()
 
                 // 英語は後回し
                 ?? CrossRef_ArticleTitle.NullIfNullOrEmpty()
                 ?? JStage_ArticleTitle_English.NullIfNullOrEmpty()
 
                 // 最終手段。
-                ?? ((UnstructuredRefString.NullIfNullOrEmpty() == null) ? null : UnstructuredRefString!.Shorten(UNSTRUCTURED_REF_STRING_RANGE))
+                ?? ((CrossRef_UnstructuredRefString.NullIfNullOrEmpty() == null) ? null : CrossRef_UnstructuredRefString!.Shorten(UNSTRUCTURED_REF_STRING_RANGE))
                 ?? null
                 ;
         }
@@ -46,13 +47,14 @@ public class ResearchArticle : IComparable
                 ?? Manual_Authors
                 ?? JStage_Authors_Japanese
                 ?? CiNii_Authors
+                ?? NDLSearch_Authors
 
                 // 英語は後回し
                 ?? CrossRef_Authors
                 ?? JStage_Authors_English
 
                 // 最終手段。
-                ?? ((UnstructuredRefString.NullIfNullOrEmpty() == null) ? null : new string[] { UnstructuredRefString!.Shorten(UNSTRUCTURED_REF_STRING_RANGE) })
+                ?? ((CrossRef_UnstructuredRefString.NullIfNullOrEmpty() == null) ? null : new string[] { CrossRef_UnstructuredRefString!.Shorten(UNSTRUCTURED_REF_STRING_RANGE) })
                 ?? null
                 ;
         }
@@ -65,6 +67,9 @@ public class ResearchArticle : IComparable
                 ?? Manual_Description.NullIfNullOrEmpty()
                 ?? CiNii_Description.NullIfNullOrEmpty()
 
+                // 優先度低め
+                ?? NDLSearch_Description.NullIfNullOrEmpty() // 少々変な情報入りがち
+
                 // 英語は後回し
 
 
@@ -74,9 +79,44 @@ public class ResearchArticle : IComparable
         }
     }
 
+    /// <summary>
+    /// YYYY-MM-DD.
+    /// If only YYYY is given, return YYYY-00-00.
+    /// </summary>
+    public string? PublishedOn
+    {
+        get
+        {
+            return null
+                ?? Manual_PublishedDate.NullIfNullOrEmpty()
+                ?? CrossRef_PublishedDate.NullIfNullOrEmpty()
+                ?? CiNii_PublishedDate.NullIfNullOrEmpty()
+
+                // 優先度低め
+                ?? NDLSearch_PublishedDate.NullIfNullOrEmpty() // 超長い形式になる可能性あり
+                ?? JStage_PublishedYear.NullIfNullOrEmpty() // 年数しか来ない
+
+                // 最終手段。
+                ?? null
+                ;
+        }
+    }
+
+    public string? ReferenceString
+    {
+        get
+        {
+            return null
+               ?? CrossRef_UnstructuredRefString.NullIfNullOrEmpty()
+
+               // TODO: 手動作成！
+               ?? null
+               ;
+        }
+    }
+
     public string? DOI { get; set; }
     public string[]? ReferenceDOIs { get; set; }
-    public string? UnstructuredRefString { get; set; }
 
     public string? PrintISSN { get; set; }
     public string? OnlineISSN { get; set; }
@@ -144,6 +184,7 @@ public class ResearchArticle : IComparable
     public bool? DataFrom_JStage { get; set; }
     public bool? DataFrom_CiNii { get; set; }
     public bool? DataFrom_CrossRef { get; set; }
+    public bool? DataFrom_NDLSearch { get; set; }
 
     /// <summary>
     /// Aki32 Object Identifier
@@ -161,6 +202,7 @@ public class ResearchArticle : IComparable
     public string? Manual_ArticleTitle { get; set; }
     public string[]? Manual_Authors { get; set; }
     public string? Manual_Description { get; set; }
+    public string? Manual_PublishedDate { get; set; }
 
     public string? Manual_CreatedDate { get; set; }
 
@@ -172,9 +214,8 @@ public class ResearchArticle : IComparable
     public string? CrossRef_ArticleTitle { get; set; }
     public string[]? CrossRef_Authors { get; set; }
 
+    public string? CrossRef_UnstructuredRefString { get; set; }
     public string? CrossRef_PublishedDate { get; set; }
-
-
 
 
     // ★★★★★ mainly from J-Stage
@@ -211,8 +252,7 @@ public class ResearchArticle : IComparable
     public string? JStage_UpdatedOn { get; set; }
 
 
-
-    // ★★★★★ mainly from CiNii
+    // ★★★★★ from CiNii
 
     public string? CiNii_ArticleTitle { get; set; }
     public string[]? CiNii_Authors { get; set; }
@@ -229,6 +269,26 @@ public class ResearchArticle : IComparable
     public string? CiNii_Number { get; set; }
     public string? CiNii_StartingPage { get; set; }
     public string? CiNii_EndingPage { get; set; }
+
+
+    // ★★★★★ from NDL Search
+
+    public string? NDLSearch_ArticleTitle { get; set; }
+    public string[]? NDLSearch_Authors { get; set; }
+
+    public string? NDLSearch_Description { get; set; }
+
+    public string? NDLSearch_Link { get; set; }
+
+    public string? NDLSearch_Publisher { get; set; }
+    public string? NDLSearch_PublicationName { get; set; }
+    public string? NDLSearch_PublishedDate { get; set; }
+
+    public string? NDLSearch_Volume { get; set; }
+    public string? NDLSearch_Number { get; set; }
+    public string? NDLSearch_StartingPage { get; set; }
+    public string? NDLSearch_EndingPage { get; set; }
+
 
     // ★★★★★★★★★★★★★★★ init
 
@@ -532,9 +592,9 @@ public class ResearchArticle : IComparable
 
         power /= 2;
 
-        if (!string.IsNullOrEmpty(UnstructuredRefString) && !string.IsNullOrEmpty(comparingArticle.UnstructuredRefString))
+        if (!string.IsNullOrEmpty(CrossRef_UnstructuredRefString) && !string.IsNullOrEmpty(comparingArticle.CrossRef_UnstructuredRefString))
         {
-            var com = UnstructuredRefString!.CompareTo(comparingArticle.UnstructuredRefString);
+            var com = CrossRef_UnstructuredRefString!.CompareTo(comparingArticle.CrossRef_UnstructuredRefString);
             if (com == 0) return 0;
             result += power * Math.Sign(com);
         }

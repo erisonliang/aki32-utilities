@@ -853,71 +853,57 @@ public static partial class ExampleExecuter
                 var research = new ResearchArticlesManager(localDir);
                 research.OpenDatabase();
 
-                Console.WriteLine($"★ {research.ArticleDatabase.Count} found in total");
 
-
-                // articles from j-stage
+                ////articles from j - stage
                 {
-                    var accessor = new JStageArticleAPIAccessor()
-                    {
-                        Pubyearfrom = 2022,
-                        Issn = ISSN.Architecture_Structure,
-                        Count = 3,
-                        //Start = 1,
-                    };
-                    research.PullArticleInfo(accessor);
+                    //var accessor = new JStageArticleAPIAccessor()
+                    //{
+                    //    PublishedFrom = 2022,
+                    //    ISSN = ISSN.Architecture_Structure,
+                    //    RecordCount = 3,
+                    //    //Start = 1,
+                    //};
+                    //research.PullArticleInfo(accessor);
 
                 }
 
-                Console.WriteLine($"★ {research.ArticleDatabase.Count} found in total");
-
-
-                // articles from cinii
+                ////articles from cinii
                 {
-                    var accessor = new CiNiiArticleAPIAccessor()
-                    {
-                        Count = 5,
-                        ISSN = ISSN.Architecture_Structure,
-                        FreeWord = "小振幅"
-                    };
-                    research.PullArticleInfo(accessor);
+                    //var accessor = new CiNiiArticleAPIAccessor()
+                    //{
+                    //    RecordCount = 5,
+                    //    ISSN = ISSN.Architecture_Structure,
+                    //    SearchFreeWord = "小振幅"
+                    //};
+                    //research.PullArticleInfo(accessor);
 
                 }
 
-                Console.WriteLine($"★ {research.ArticleDatabase.Count} found in total");
-
-
-                // article from crossref
+                ////article from crossref
                 {
-                    var accessor = new CrossRefAPIAccessor()
-                    {
-                        DOI = "10.3130/aijs.87.822"
-                    };
-                    research.PullArticleInfo(accessor);
+                    //var accessor = new CrossRefAPIAccessor()
+                    //{
+                    //    DOI = "10.3130/aijs.87.822"
+                    //};
+                    //research.PullArticleInfo(accessor);
 
                 }
-
-                Console.WriteLine($"★ {research.ArticleDatabase.Count} found in total");
 
                 // articles from ndl search
                 {
                     var accessor = new NDLSearchAPIAccessor()
                     {
-                        Pubyearfrom = 2022,
-                        Issn = ISSN.Architecture_Structure,
-                        Count = 3,
-                        //Start = 1,
+                        RecordCount = 5,
+                        SearchFreeWord = "低サイクル疲労",
                     };
                     research.PullArticleInfo(accessor);
 
                 }
 
-                Console.WriteLine($"★ {research.ArticleDatabase.Count} found in total");
-
 
                 // display
                 {
-                    //research.SaveDatabase(true, true);
+                    research.SaveDatabase(true, true);
 
                     Console.WriteLine();
                     Console.WriteLine();
