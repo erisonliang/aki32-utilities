@@ -3,6 +3,7 @@
 using System.Xml.Linq;
 
 using Aki32Utilities.ConsoleAppUtilities.General;
+using Aki32Utilities.Properties;
 
 using DocumentFormat.OpenXml.Bibliography;
 using DocumentFormat.OpenXml.Spreadsheet;
@@ -199,15 +200,28 @@ public class NDLSearchAPIAccessor : IResearchAPIAccessor
             {
                 article.DataFrom_NDLSearch = true;
 
+                // タイトルはいつもここ
                 article.NDLSearch_ArticleTitle = entity.Element("title")?.Value;
-                article.NDLSearch_Link = entity.Element("link")?.Value;
 
+                // １，NDL Onlineなどの，より詳細に近い情報に到達する。
+                // ２，検索情報。
+                article.NDLSearch_Link = entity.Element(ExpandRdfs("seeAlso"))?.Attribute(ExpandRdf("resource"))?.Value
+                    ?? entity.Element("link")?.Value;
+
+                // １，より内容の説明に触れている。
+                // ２，出版社などの情報
                 article.NDLSearch_Description = entity.Element("description")?.Value
                     ?? entity.Elements(ExpandDC("description"))?.Select(e => e?.Value ?? "")?.Join(", ");
 
+                // １，ほぼ数値のみ。
+                // ２，ほぼ数値のみ。
+                // ３，長い表現文字列になっている。
                 article.NDLSearch_PublishedDate = entity.Element(ExpandDcTerms("issued"))?.Value
+                    ?? entity.Element(ExpandDC("date"))?.Value
                     ?? entity.Element("pubDate")?.Value;
 
+                // １，著者リストの文字列
+                // ２，著者がElementsとして保存。
                 article.NDLSearch_Authors = entity.Element("author")?.Value?
                     .Split(',', StringSplitOptions.RemoveEmptyEntries)?
                     .Select(a => a.Trim())?
@@ -218,6 +232,10 @@ public class NDLSearchAPIAccessor : IResearchAPIAccessor
                     .Select(e => e?.Value ?? "")?
                     .Where(a => !string.IsNullOrEmpty(a))?
                     .ToArray();
+
+                // DOIのタグはここ！
+                // 詳細： https://www.ndl.go.jp/jp/dlib/cooperation/doi.html
+                article.DOI = entity.Elements(ExpandDC("identifier"))?.FirstOrDefault(i => i.Attribute(ExpandXsi("type"))?.Value == "dcndl:DOI")?.Value;
 
             }
 
@@ -232,6 +250,9 @@ public class NDLSearchAPIAccessor : IResearchAPIAccessor
     private static string ExpandDC(string s) => "{http://purl.org/dc/elements/1.1/}" + s;
     private static string ExpandOpenSearch(string s) => "{http://a9.com/-/spec/opensearchrss/1.0/}" + s;
     private static string ExpandDcTerms(string s) => "{http://purl.org/dc/terms/}" + s;
+    private static string ExpandRdfs(string s) => "{http://www.w3.org/2000/01/rdf-schema#}" + s;
+    private static string ExpandRdf(string s) => "{http://www.w3.org/1999/02/22-rdf-syntax-ns#}" + s;
+    private static string ExpandXsi(string s) => "{http://www.w3.org/2001/XMLSchema-instance}" + s;
 
 
     // ★★★★★★★★★★★★★★★

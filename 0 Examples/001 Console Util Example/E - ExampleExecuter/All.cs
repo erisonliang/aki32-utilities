@@ -894,7 +894,7 @@ public static partial class ExampleExecuter
                     var accessor = new NDLSearchAPIAccessor()
                     {
                         RecordCount = 5,
-                        SearchFreeWord = "低サイクル疲労",
+                        SearchFreeWord = "空間情報を表現するグラフ構造",
                     };
                     research.PullArticleInfo(accessor);
 
