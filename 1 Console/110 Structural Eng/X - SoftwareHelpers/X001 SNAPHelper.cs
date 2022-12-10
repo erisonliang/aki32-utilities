@@ -9,7 +9,8 @@ public static class SNAPHelper
 
     // ★★★★★★★★★★★★★★★ KeepClosingExcel
 
-    private const int MAX_EXIT_WAITING_TIME = 5000;
+    private const int MAX_WAITING_TIME_CloseMainWindow = 5000;
+    private const int MAX_WAITING_TIME_Killl = 5000;
     public static int TotalKillCount { get; set; } = 0;
     public static void KeepClosingExcel(int interval = 5000)
     {
@@ -43,7 +44,18 @@ public static class SNAPHelper
             foreach (var p in ps)
             {
                 p.CloseMainWindow();
-                p.WaitForExit(MAX_EXIT_WAITING_TIME);
+                p.WaitForExit(MAX_WAITING_TIME_CloseMainWindow);
+                if (!p.HasExited)
+                {
+                    try
+                    {
+                        p.Kill();
+                        p.WaitForExit(MAX_WAITING_TIME_Killl);
+                    }
+                    catch (Exception)
+                    {
+                    }
+                }
                 if (p.HasExited)
                     ConsoleExtension.WriteLineWithColor($"プロセス終了！ ID = {p.Id}, 累計キル回数 = {++TotalKillCount}", ConsoleColor.Blue);
             }
