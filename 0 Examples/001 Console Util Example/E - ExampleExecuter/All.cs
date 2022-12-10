@@ -845,7 +845,6 @@ public static partial class ExampleExecuter
 
 
             // A - ResearchManager
-            if (false)
             {
                 //UtilConfig.ConsoleOutput_Contents = false;
 
@@ -854,44 +853,57 @@ public static partial class ExampleExecuter
                 var research = new ResearchArticlesManager(localDir);
                 research.OpenDatabase();
 
-                // articles from j-stage
+
+                ////articles from j - stage
                 {
-                    //var builder = new JStageArticleUriBuilder()
+                    //var accessor = new JStageArticleAPIAccessor()
                     //{
-                    //    Pubyearfrom = 2022,
-                    //    Issn = ISSN.Architecture_Structure,
-                    //    Count = 1000,
+                    //    PublishedFrom = 2022,
+                    //    ISSN = ISSN.Architecture_Structure,
+                    //    RecordCount = 3,
                     //    //Start = 1,
                     //};
-                    //research.PullArticleInfo(builder);
+                    //research.PullArticleInfo(accessor);
 
                 }
 
-                // articles from cinii
+                ////articles from cinii
                 {
-                    //var builder = new CiNiiArticleUriBuilder()
+                    //var accessor = new CiNiiArticleAPIAccessor()
                     //{
-                    //    Count = 5,
+                    //    RecordCount = 5,
                     //    ISSN = ISSN.Architecture_Structure,
-                    //    FreeWord = "小振幅"
+                    //    SearchFreeWord = "小振幅"
                     //};
-                    //research.PullArticleInfo(builder);
+                    //research.PullArticleInfo(accessor);
 
                 }
 
-                // article from crossref
+                ////article from crossref
                 {
-                    //var builder = new CrossRefArticleUriBuilder()
+                    //var accessor = new CrossRefAPIAccessor()
                     //{
                     //    DOI = "10.3130/aijs.87.822"
                     //};
-                    //research.PullArticleInfo(builder);
+                    //research.PullArticleInfo(accessor);
 
                 }
 
+                // articles from ndl search
+                {
+                    var accessor = new NDLSearchAPIAccessor()
+                    {
+                        RecordCount = 5,
+                        SearchFreeWord = "低サイクル疲労",
+                    };
+                    research.PullArticleInfo(accessor);
+
+                }
+
+
                 // display
                 {
-                    research.SaveDatabase(true);
+                    research.SaveDatabase(true, true);
 
                     Console.WriteLine();
                     Console.WriteLine();

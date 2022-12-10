@@ -27,13 +27,14 @@ public class ResearchArticle : IComparable
                 ?? Manual_ArticleTitle.NullIfNullOrEmpty()
                 ?? JStage_ArticleTitle_Japanese.NullIfNullOrEmpty()
                 ?? CiNii_ArticleTitle.NullIfNullOrEmpty()
+                ?? NDLSearch_ArticleTitle.NullIfNullOrEmpty()
 
                 // 英語は後回し
                 ?? CrossRef_ArticleTitle.NullIfNullOrEmpty()
                 ?? JStage_ArticleTitle_English.NullIfNullOrEmpty()
 
                 // 最終手段。
-                ?? ((UnstructuredRefString.NullIfNullOrEmpty() == null) ? null : UnstructuredRefString!.Shorten(UNSTRUCTURED_REF_STRING_RANGE))
+                ?? ((CrossRef_UnstructuredRefString.NullIfNullOrEmpty() == null) ? null : CrossRef_UnstructuredRefString!.Shorten(UNSTRUCTURED_REF_STRING_RANGE))
                 ?? null
                 ;
         }
@@ -46,13 +47,14 @@ public class ResearchArticle : IComparable
                 ?? Manual_Authors
                 ?? JStage_Authors_Japanese
                 ?? CiNii_Authors
+                ?? NDLSearch_Authors
 
                 // 英語は後回し
                 ?? CrossRef_Authors
                 ?? JStage_Authors_English
 
                 // 最終手段。
-                ?? ((UnstructuredRefString.NullIfNullOrEmpty() == null) ? null : new string[] { UnstructuredRefString!.Shorten(UNSTRUCTURED_REF_STRING_RANGE) })
+                ?? ((CrossRef_UnstructuredRefString.NullIfNullOrEmpty() == null) ? null : new string[] { CrossRef_UnstructuredRefString!.Shorten(UNSTRUCTURED_REF_STRING_RANGE) })
                 ?? null
                 ;
         }
@@ -65,6 +67,9 @@ public class ResearchArticle : IComparable
                 ?? Manual_Description.NullIfNullOrEmpty()
                 ?? CiNii_Description.NullIfNullOrEmpty()
 
+                // 優先度低め
+                ?? NDLSearch_Description.NullIfNullOrEmpty() // 少々変な情報入りがち
+
                 // 英語は後回し
 
 
@@ -74,9 +79,44 @@ public class ResearchArticle : IComparable
         }
     }
 
+    /// <summary>
+    /// YYYY-MM-DD.
+    /// If only YYYY is given, return YYYY-00-00.
+    /// </summary>
+    public string? PublishedOn
+    {
+        get
+        {
+            return null
+                ?? Manual_PublishedDate.NullIfNullOrEmpty()
+                ?? CrossRef_PublishedDate.NullIfNullOrEmpty()
+                ?? CiNii_PublishedDate.NullIfNullOrEmpty()
+
+                // 優先度低め
+                ?? NDLSearch_PublishedDate.NullIfNullOrEmpty() // 超長い形式になる可能性あり
+                ?? JStage_PublishedYear.NullIfNullOrEmpty() // 年数しか来ない
+
+                // 最終手段。
+                ?? null
+                ;
+        }
+    }
+
+    public string? ReferenceString
+    {
+        get
+        {
+            return null
+               ?? CrossRef_UnstructuredRefString.NullIfNullOrEmpty()
+
+               // TODO: 手動作成！
+               ?? null
+               ;
+        }
+    }
+
     public string? DOI { get; set; }
     public string[]? ReferenceDOIs { get; set; }
-    public string? UnstructuredRefString { get; set; }
 
     public string? PrintISSN { get; set; }
     public string? OnlineISSN { get; set; }
@@ -144,6 +184,7 @@ public class ResearchArticle : IComparable
     public bool? DataFrom_JStage { get; set; }
     public bool? DataFrom_CiNii { get; set; }
     public bool? DataFrom_CrossRef { get; set; }
+    public bool? DataFrom_NDLSearch { get; set; }
 
     /// <summary>
     /// Aki32 Object Identifier
@@ -161,6 +202,7 @@ public class ResearchArticle : IComparable
     public string? Manual_ArticleTitle { get; set; }
     public string[]? Manual_Authors { get; set; }
     public string? Manual_Description { get; set; }
+    public string? Manual_PublishedDate { get; set; }
 
     public string? Manual_CreatedDate { get; set; }
 
@@ -172,9 +214,8 @@ public class ResearchArticle : IComparable
     public string? CrossRef_ArticleTitle { get; set; }
     public string[]? CrossRef_Authors { get; set; }
 
+    public string? CrossRef_UnstructuredRefString { get; set; }
     public string? CrossRef_PublishedDate { get; set; }
-
-
 
 
     // ★★★★★ mainly from J-Stage
@@ -211,8 +252,7 @@ public class ResearchArticle : IComparable
     public string? JStage_UpdatedOn { get; set; }
 
 
-
-    // ★★★★★ mainly from CiNii
+    // ★★★★★ from CiNii
 
     public string? CiNii_ArticleTitle { get; set; }
     public string[]? CiNii_Authors { get; set; }
@@ -230,6 +270,26 @@ public class ResearchArticle : IComparable
     public string? CiNii_StartingPage { get; set; }
     public string? CiNii_EndingPage { get; set; }
 
+
+    // ★★★★★ from NDL Search
+
+    public string? NDLSearch_ArticleTitle { get; set; }
+    public string[]? NDLSearch_Authors { get; set; }
+
+    public string? NDLSearch_Description { get; set; }
+
+    public string? NDLSearch_Link { get; set; }
+
+    public string? NDLSearch_Publisher { get; set; }
+    public string? NDLSearch_PublicationName { get; set; }
+    public string? NDLSearch_PublishedDate { get; set; }
+
+    public string? NDLSearch_Volume { get; set; }
+    public string? NDLSearch_Number { get; set; }
+    public string? NDLSearch_StartingPage { get; set; }
+    public string? NDLSearch_EndingPage { get; set; }
+
+
     // ★★★★★★★★★★★★★★★ init
 
     public ResearchArticle()
@@ -246,56 +306,60 @@ public class ResearchArticle : IComparable
     /// <returns></returns>
     /// <exception cref="NotImplementedException"></exception>
     public static ResearchArticle CreateManually(
+        ResearchArticle_ManualInitInfo addingArticleBasicInfo,
+        ResearchArticle[]? references_parents = null,
+        ResearchArticle[]? references_children = null,
 
-        string? title = null,
-        string[]? authors = null,
-
-        ResearchArticle[]? references = null,
-
-        FileInfo? pdfFile = null,
         DirectoryInfo? pdfStockDirectory = null,
-
-        bool movePdfFile = true
+        FileInfo? addingPdfFile = null,
+        bool deleteOriginalPdfFile = true
         )
     {
         // Create AOI first
-        var aoi = Guid.NewGuid().ToString();
-
-        // stock pdf file to database
-        if (pdfFile != null)
+        var addingArticle = new ResearchArticle()
         {
-            if (pdfStockDirectory == null)
-                throw new InvalidDataException("When tring initializing {pdfFile}, {pdfStockDirectory} must not be null");
-
-            var targetFile = new FileInfo(Path.Combine(pdfStockDirectory.FullName, $"{aoi}.pdf"));
-
-            if (movePdfFile)
-                pdfFile.MoveTo(targetFile);
-            else
-                pdfFile.CopyTo(targetFile);
-
-        }
-
-        var raddingArticle = new ResearchArticle()
-        {
-            Manual_ArticleTitle = title,
-            Manual_Authors = authors,
-
+            AOI = Guid.NewGuid().ToString(),
             Manual_CreatedDate = DateTime.Today.ToLongDateString(),
-
-            AOI = aoi,
-
             DataFrom_Manual = true,
+
+            DOI = addingArticleBasicInfo.DOI,
+            Private_Favorite = addingArticleBasicInfo.Private_Favorite,
+
+            Manual_ArticleTitle = addingArticleBasicInfo.Manual_ArticleTitle,
+            Manual_Authors = addingArticleBasicInfo.Manual_Authors,
+            Manual_Description = addingArticleBasicInfo.Manual_Description,
+            Manual_PublishedDate = addingArticleBasicInfo.Manual_PublishedDate,
+
+            Memo = addingArticleBasicInfo.Memo,
         };
 
-        if (references != null)
+        if (references_parents != null)
         {
-            foreach (var reference in references)
-                reference.AddArticleReference(raddingArticle);
+            foreach (var references_parent in references_parents)
+                addingArticle.AddArticleReference(references_parent);
+        }
+        if (references_children != null)
+        {
+            foreach (var references_child in references_children)
+                references_child.AddArticleReference(addingArticle);
+        }
+
+        // stock pdf file to database
+        if (addingPdfFile != null)
+        {
+            if (pdfStockDirectory == null)
+                throw new InvalidDataException("When tring to add PDF file, {pdfStockDirectory} must not be null");
+
+            var targetFile = new FileInfo(Path.Combine(pdfStockDirectory.FullName, $"{addingArticle.LocalPDFName}.pdf"));
+
+            if (deleteOriginalPdfFile)
+                addingPdfFile.MoveTo(targetFile);
+            else
+                addingPdfFile.CopyTo(targetFile);
 
         }
 
-        return raddingArticle;
+        return addingArticle;
     }
 
     /// <summary>
@@ -485,58 +549,43 @@ public class ResearchArticle : IComparable
         var comparingArticle = (ResearchArticle)obj!;
 
         var result = 0;
-        var power = (int)Math.Pow(2, 10);
+        var power = (int)Math.Pow(2, 20);
 
-        if (!string.IsNullOrEmpty(DOI) && !string.IsNullOrEmpty(comparingArticle.DOI))
+        static IEnumerable<string> Targets()
         {
-            var com = DOI!.CompareTo(comparingArticle.DOI);
-            if (com == 0) return 0;
-            result += power * Math.Sign(com);
+            // id
+            yield return nameof(DOI);
+            yield return nameof(AOI);
+            yield return nameof(JStage_Id);
+
+            // title
+            yield return nameof(JStage_ArticleTitle_Japanese);
+            yield return nameof(JStage_ArticleTitle_English);
+            yield return nameof(CrossRef_ArticleTitle);
+            yield return nameof(CiNii_ArticleTitle);
+            yield return nameof(NDLSearch_ArticleTitle);
+            yield return nameof(Manual_ArticleTitle);
+            yield return nameof(ArticleTitle);
+
+            // others
+            yield return nameof(CrossRef_UnstructuredRefString);
+
         }
 
-        power /= 2;
-
-        if (!string.IsNullOrEmpty(CrossRef_ArticleTitle) && !string.IsNullOrEmpty(comparingArticle.CrossRef_ArticleTitle))
+        foreach (var target in Targets())
         {
-            var com = CrossRef_ArticleTitle!.CompareTo(comparingArticle.CrossRef_ArticleTitle);
-            if (com == 0) return 0;
-            result += power * Math.Sign(com);
-        }
+            var prop = GetType().GetProperty(target);
+            var value1 = prop?.GetValue(this)?.ToString();
+            var value2 = prop?.GetValue(comparingArticle)?.ToString();
 
-        power /= 2;
+            if (!string.IsNullOrEmpty(value1) && !string.IsNullOrEmpty(value2))
+            {
+                var com = value1!.CompareTo(value2);
+                if (com == 0) return 0;
+                result += power * Math.Sign(com);
+            }
 
-        if (!string.IsNullOrEmpty(JStage_Id) && !string.IsNullOrEmpty(comparingArticle.JStage_Id))
-        {
-            var com = JStage_Id!.CompareTo(comparingArticle.JStage_Id);
-            if (com == 0) return 0;
-            result += power * Math.Sign(com);
-        }
-
-        power /= 2;
-
-        if (!string.IsNullOrEmpty(Manual_ArticleTitle) && !string.IsNullOrEmpty(comparingArticle.Manual_ArticleTitle))
-        {
-            var com = Manual_ArticleTitle!.CompareTo(comparingArticle.Manual_ArticleTitle);
-            if (com == 0) return 0;
-            result += power * Math.Sign(com);
-        }
-
-        power /= 2;
-
-        if (!string.IsNullOrEmpty(AOI) && !string.IsNullOrEmpty(comparingArticle.AOI))
-        {
-            var com = AOI!.CompareTo(comparingArticle.AOI);
-            if (com == 0) return 0;
-            result += power * Math.Sign(com);
-        }
-
-        power /= 2;
-
-        if (!string.IsNullOrEmpty(UnstructuredRefString) && !string.IsNullOrEmpty(comparingArticle.UnstructuredRefString))
-        {
-            var com = UnstructuredRefString!.CompareTo(comparingArticle.UnstructuredRefString);
-            if (com == 0) return 0;
-            result += power * Math.Sign(com);
+            power /= 2;
         }
 
         return (result == 0) ? (GetHashCode() - comparingArticle.GetHashCode()) : result;
