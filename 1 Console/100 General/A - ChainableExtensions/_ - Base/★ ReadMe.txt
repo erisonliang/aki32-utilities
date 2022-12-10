@@ -7,26 +7,22 @@
  - Num: 100 * α + β
    
    - α: Depends on input and output
-     = 0 (both is FileSystemInfo)
+     = 0 (both are FileSystemInfo)
      = 1 (either)
      = 2 (neither)
 
    - β: Incremental num
  
- - Suffix:
-   
-   - M = Using Machine Learning  
 
 
 
+For example, "B102 ReadObjectFromLocal"
 
-For example, "Save Csv"
+ - input is FileSystem → classified to "B - FileSystem" → "B---"
 
- - input is double[][] → classified to "F - Data" → "F---"
+ - output is FileSystemInfo and input is not. → "B1--"
 
- - output is FileSystemInfo and input is not. → "F1--"
-
- - F101 is available → "F101"
+ - B101 is taken, and B102 is available → "B102"
 
 
 
@@ -39,7 +35,6 @@ For example, "Save Csv"
 
  - Second, accept and return as Image, Size or Point if possible.
 
- - not using async ideally for chaining
-
 
 ★★★★★
+
