@@ -10,7 +10,7 @@ public static partial class ChainableExtensions
     /// <param name="inputFile"></param>
     /// <param name="outputFile">when null, automatically set to {inputFile.DirectoryName}/output_Rainflow/{inputFile.Name}</param>
     /// <returns></returns>
-    public static FileInfo CalcRD(this FileInfo inputFile, FileInfo? outputFile, int resultStepLength, int maxOverlayCount = int.MaxValue, int skipingInitialPeakCount = 0)
+    public static FileInfo CalcRandomDecrement(this FileInfo inputFile, FileInfo? outputFile, int resultStepLength, int maxOverlayCount = int.MaxValue, int skipingInitialPeakCount = 0)
     {
         // preprocess
         UtilPreprocessors.PreprocessOutFile(ref outputFile, inputFile.Directory!, inputFile.Name);
