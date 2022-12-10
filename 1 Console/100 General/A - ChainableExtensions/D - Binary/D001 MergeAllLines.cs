@@ -42,7 +42,9 @@ public static partial class ChainableExtensions
                     {
                         var inputTexts = File.ReadLines(inputFile.FullName, Encoding.GetEncoding("SHIFT_JIS")).ToArray();
                         for (int i = skipRowCount; i < inputTexts.Length; i++)
+                        {
                             sw.WriteLine(inputTexts[i]);
+                        }
                         break;
                     }
                     catch (Exception ex)
