@@ -14,8 +14,6 @@ public static partial class ChainableExtensions
     {
         // preprocess
         UtilPreprocessors.PreprocessOutDir(ref outputDir, inputFile.Directory!);
-        if (!inputFile.Name.EndsWith(".xlsx"))
-            throw new Exception("inputFile name must end with .xlsx");
 
 
         // main
@@ -40,7 +38,7 @@ public static partial class ChainableExtensions
 
 
         // post process
-        return outputDir;
+        return outputDir!;
     }
 
 }
