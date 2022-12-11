@@ -1,10 +1,8 @@
-﻿
-
-using System.Numerics;
-
+﻿using System.Numerics;
 using MathNet.Numerics.IntegralTransforms;
+using Aki32Utilities.ConsoleAppUtilities.General;
 
-namespace Aki32Utilities.ConsoleAppUtilities.General;
+namespace Aki32Utilities.ConsoleAppUtilities.StructuralEngineering;
 public static partial class ChainableExtensions
 {
 

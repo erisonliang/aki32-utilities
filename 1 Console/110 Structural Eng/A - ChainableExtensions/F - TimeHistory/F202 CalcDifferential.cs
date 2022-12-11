@@ -31,6 +31,7 @@ public static partial class ChainableExtensions
                 var c = inputHistory.GetStep(targetRow);
                 var n = inputHistory.GetStep(targetRow + 1);
 
+                // ★ left
                 n[newIndex] = (n[oldIndex] - c[oldIndex]) / dt;
 
                 inputHistory.SetStep(targetRow + 1, n);

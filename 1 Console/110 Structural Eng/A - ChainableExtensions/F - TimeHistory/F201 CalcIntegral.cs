@@ -5,10 +5,10 @@ public static partial class ChainableExtensions
 {
 
     /// <summary>
-    /// Calc integrate and add result as a new column
+    /// Calc integral and add result as a new column
     /// </summary>
     /// <returns></returns>
-    public static TimeHistory CalcIntegrate_Simple(this TimeHistory inputHistory, string targetIndex, params string[] newIndexes)
+    public static TimeHistory CalcIntegral_Simple(this TimeHistory inputHistory, string targetIndex, params string[] newIndexes)
     {
         // preprocess
         UtilPreprocessors.PreprocessBasic();
@@ -31,6 +31,7 @@ public static partial class ChainableExtensions
                 var c = inputHistory.GetStep(targetRow);
                 var n = inputHistory.GetStep(targetRow + 1);
 
+                // ★ left
                 n[newIndex] = c[newIndex] + 0.5 * (c[oldIndex] + n[oldIndex]) * dt;
 
                 inputHistory.SetStep(targetRow + 1, n);
