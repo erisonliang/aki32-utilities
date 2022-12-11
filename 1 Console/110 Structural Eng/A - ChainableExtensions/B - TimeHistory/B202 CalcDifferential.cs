@@ -1,5 +1,4 @@
 ﻿using Aki32Utilities.ConsoleAppUtilities.General;
-using Aki32Utilities.ConsoleAppUtilities.OwesomeModels;
 
 namespace Aki32Utilities.ConsoleAppUtilities.StructuralEngineering;
 public static partial class ChainableExtensions
