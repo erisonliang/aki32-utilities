@@ -1,10 +1,6 @@
 ﻿using Aki32Utilities.ConsoleAppUtilities.General;
 using Aki32Utilities.ConsoleAppUtilities.OwesomeModels;
 
-using DocumentFormat.OpenXml.EMMA;
-
-using MathNet.Numerics.Distributions;
-
 namespace Aki32Utilities.ConsoleAppUtilities.StructuralEngineering;
 public static partial class ChainableExtensions
 {
