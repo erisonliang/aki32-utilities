@@ -9,12 +9,13 @@ public static partial class ChainableExtensions
     /// </summary>
     /// <param name="inputFile"></param>
     /// <param name="outputDir">when null, automatically set</param>
+    /// <param name="includeExcelFileName">include input excel file name as an output file name suffix</param>
     /// <returns></returns>
-    public static DirectoryInfo ExcelSheets2Csvs(this FileInfo inputFile, DirectoryInfo? outputDir)
+    public static DirectoryInfo ExcelSheets2Csvs(this FileInfo inputFile, DirectoryInfo? outputDir, bool includeExcelFileName = false)
     {
         // preprocess
         UtilPreprocessors.PreprocessOutDir(ref outputDir, inputFile.Directory!);
-
+        var outputFileSuffix = includeExcelFileName ? $"{Path.GetFileNameWithoutExtension(inputFile.Name)}_" : "";
 
         // main
         using var workbook = new XLWorkbook(inputFile.FullName);
@@ -30,9 +31,12 @@ public static partial class ChainableExtensions
                 for (int c = 0; c < maxColumn; c++)
                     csvCells[r, c] = sheet.Cell(r + 1, c + 1).Value.ToString() ?? "";
 
+
+            var outputFile = new FileInfo(Path.Combine(outputDir!.FullName, $"{outputFileSuffix}{sheet.Name}.csv"));
+
             csvCells
                 .ConvertToJaggedArray()
-                .SaveCsv_Rows(new FileInfo(Path.Combine(outputDir!.FullName, $"{sheet.Name}.csv")));
+                .SaveCsv_Rows(outputFile);
 
         }
 
@@ -48,7 +52,7 @@ public static partial class ChainableExtensions
     /// <param name="outputDir">when null, automatically set</param>
     /// <returns></returns>
     public static DirectoryInfo ExcelSheets2Csvs_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir)
-        => inputDir.Loop(outputDir, (inF, _) => inF.ExcelSheets2Csvs(null),
+        => inputDir.Loop(outputDir, (inF, outF) => inF.ExcelSheets2Csvs(outF.Directory!, includeExcelFileName: true),
             searchRegexen: GetRegexen_XmlExcelFiles()
             );
 
