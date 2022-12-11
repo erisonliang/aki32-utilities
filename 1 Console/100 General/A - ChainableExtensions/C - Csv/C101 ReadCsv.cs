@@ -43,7 +43,7 @@ public static partial class ChainableExtensions
 
                 if (skipRowCount > 0)
                 {
-                    skipColumnCount--;
+                    skipRowCount--;
                     continue;
                 }
 
@@ -67,7 +67,7 @@ public static partial class ChainableExtensions
                 if (lineItems.Length < skipColumnCount)
                 {
                     if (!ignoreEmptyLine)
-                        rows.Add(new string[0]);
+                        rows.Add(Array.Empty<string>());
                 }
                 else
                 {
