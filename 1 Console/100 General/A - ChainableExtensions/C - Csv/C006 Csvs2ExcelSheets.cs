@@ -32,7 +32,7 @@ public static partial class ChainableExtensions
         if (csvs.Length == 0)
         {
             Console.WriteLine($"※ No csv file found in {inputDir.FullName}");
-            return outputFile;
+            return outputFile!;
         }
 
         foreach (var csv in csvs)
@@ -42,7 +42,7 @@ public static partial class ChainableExtensions
 
 
         // post process
-        return outputFile;
+        return outputFile!;
     }
 
     /// <summary>
@@ -67,7 +67,7 @@ public static partial class ChainableExtensions
 
 
         // post process
-        return outputFile;
+        return outputFile!;
     }
 
     /// <summary>

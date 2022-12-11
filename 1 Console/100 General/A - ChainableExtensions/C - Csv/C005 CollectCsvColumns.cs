@@ -39,7 +39,7 @@ public static partial class ChainableExtensions
         if (csvs.Length == 0)
         {
             ConsoleExtension.WriteLineWithColor($"※ No csv file found in {inputDir.FullName}", ConsoleColor.Red);
-            return outputFile;
+            return outputFile!;
         }
 
         var UseInitColumnThen1 = initialColumn.HasValue ? 1 : 0;
@@ -83,7 +83,7 @@ public static partial class ChainableExtensions
 
 
         // post process
-        return outputFile;
+        return outputFile!;
     }
 
     /// <summary>
@@ -113,7 +113,7 @@ public static partial class ChainableExtensions
 
         // post process
         UtilConfig.TryRestart_ConsoleOutput_Preprocess();
-        return outputDir;
+        return outputDir!;
     }
 
 

@@ -97,7 +97,7 @@ public static partial class ChainableExtensions
         // main
         var firstImageFile = inputDir.GetFilesWithRegexen(SearchOption.TopDirectoryOnly, GetRegexen_ImageFiles()).FirstOrDefault();
         if (firstImageFile == null)
-            return outputDir;
+            return outputDir!;
 
         using var inputImage = firstImageFile.GetImageFromFile();
         var ps = inputImage.GetPointsFromPointRatios_For_DistortImage(pps);

@@ -26,7 +26,7 @@ public static partial class ChainableExtensions
         using var sw = new StreamWriter(outputFile.FullName, false, Encoding.UTF8);
         sw.Write(json);
 
-        return outputFile;
+        return outputFile!;
     }
 
     /// <summary>
@@ -43,7 +43,7 @@ public static partial class ChainableExtensions
         var serializer = new XmlSerializer(typeof(T));
         serializer.Serialize(sw, data);
 
-        return outputFile;
+        return outputFile!;
     }
 
     /// <summary>
@@ -82,7 +82,7 @@ public static partial class ChainableExtensions
                     var value = prop.GetValue(dataLine);
 
                     if (value == null)
-                        addingValue = null;
+                        addingValue = "";
                     else if (value is string)
                         addingValue = value?.ToString() ?? "";
                     else
@@ -103,7 +103,7 @@ public static partial class ChainableExtensions
 
         csvGrid.ToArray().SaveCsv_Rows(outputFile);
 
-        return outputFile;
+        return outputFile!;
     }
 
 
