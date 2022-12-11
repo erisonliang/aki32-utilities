@@ -28,7 +28,7 @@ public static partial class ChainableExtensions
             var correctedLine = row
                 .Select(x => x?.ToString() ?? "")
                 .Select(x => x.Replace("\"", "\"\""))
-                .Select(x => (x.Contains(',') || x.Contains('\"')) ? $"\"{x}\"" : x);
+                .Select(x => x.Any(x => x == ',' || x == '\"' || x == '\\' || x == '\n' || x == '\r') ? $"\"{x}\"" : x);
             sw.WriteLine(string.Join(',', correctedLine));
         }
 
