@@ -40,7 +40,7 @@ public static partial class ChainableExtensions
         }
 
 
-        return outputDir;
+        return outputDir!;
     }
 
     /// <summary>
@@ -83,7 +83,7 @@ public static partial class ChainableExtensions
         }
 
 
-        return outputDir;
+        return outputDir!;
     }
 
 }

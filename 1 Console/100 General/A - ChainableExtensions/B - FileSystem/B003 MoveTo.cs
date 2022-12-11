@@ -36,7 +36,7 @@ public static partial class ChainableExtensions
 
 
         // postprocess
-        return outputDir;
+        return outputDir!;
     }
 
     /// <summary>
@@ -68,7 +68,7 @@ public static partial class ChainableExtensions
         }
 
 
-        return outputFile;
+        return outputFile!;
     }
 
     /// <summary>
@@ -89,7 +89,7 @@ public static partial class ChainableExtensions
         inputFile.MoveTo(outputFile);
 
 
-        return outputFile;
+        return outputFile!;
     }
 
 }

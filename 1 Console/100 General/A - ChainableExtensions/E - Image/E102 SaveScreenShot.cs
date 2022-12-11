@@ -22,16 +22,16 @@ public static partial class ChainableExtensions
     public static FileInfo SaveScreenShot(this FileInfo outputFile, Point upperLeftCoordinate, Point bottomRightCoordinate)
     {
         // preprocess
-        UtilPreprocessors.PreprocessOutFile(ref outputFile, null, "output.png");
+        UtilPreprocessors.PreprocessOutFile(ref outputFile!, null!, "output.png");
 
 
         // main
         var outputImage = TakeScreenShot(upperLeftCoordinate, bottomRightCoordinate);
-        outputImage.Save(outputFile.FullName, ImageFormat.Png);
+        outputImage.Save(outputFile!.FullName, ImageFormat.Png);
 
 
         // post process
-        return outputFile;
+        return outputFile!;
     }
 
     /// <summary>
@@ -50,7 +50,7 @@ public static partial class ChainableExtensions
 
 
         // post process
-        return outputFile;
+        return outputFile!;
     }
 
 

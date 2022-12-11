@@ -162,7 +162,7 @@ public class RDTechniqueCalculator
     public FileInfo SaveResultHistoryToCsv(FileInfo? outputFile = null)
     {
         ResultHistory.SaveToCsv(outputFile);
-        return outputFile;
+        return outputFile!;
     }
 
 

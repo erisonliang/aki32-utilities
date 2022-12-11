@@ -25,7 +25,7 @@ public static partial class ChainableExtensions
         tempDir.Csvs2ExcelSheets(outputFile);
         tempDir.Delete(true);
 
-        return outputFile;
+        return outputFile!;
     }
 
     /// <summary>

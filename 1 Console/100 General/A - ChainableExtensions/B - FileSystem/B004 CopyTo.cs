@@ -35,7 +35,7 @@ public static partial class ChainableExtensions
 
 
         // postprocess
-        return outputDir;
+        return outputDir!;
     }
 
     /// <summary>
@@ -59,7 +59,7 @@ public static partial class ChainableExtensions
 
 
         // post process
-        return outputFile;
+        return outputFile!;
     }
 
     /// <summary>

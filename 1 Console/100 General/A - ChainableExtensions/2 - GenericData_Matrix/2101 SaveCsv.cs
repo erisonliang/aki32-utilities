@@ -34,7 +34,7 @@ public static partial class ChainableExtensions
 
 
         // post process
-        return outputFile;
+        return outputFile!;
     }
 
     /// <summary>

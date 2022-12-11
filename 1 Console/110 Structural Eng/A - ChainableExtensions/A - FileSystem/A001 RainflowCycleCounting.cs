@@ -40,7 +40,7 @@ public static partial class ChainableExtensions
             rainflow.SaveResultHistoryToCsv(outputFile);
         }
 
-        return outputFile;
+        return outputFile!;
     }
 
     /// <summary>

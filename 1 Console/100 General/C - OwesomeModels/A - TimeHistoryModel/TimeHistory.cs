@@ -226,7 +226,7 @@ public class TimeHistory
         using var sw = new StreamWriter(outputFile.FullName, false, Encoding.UTF8);
         WriteToStream(sw);
 
-        return outputFile;
+        return outputFile!;
     }
     /// <summary>
     /// Output TimeHistory to csv

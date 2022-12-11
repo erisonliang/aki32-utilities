@@ -1,19 +1,20 @@
 ﻿using Aki32Utilities.ConsoleAppUtilities.General;
+using Aki32Utilities.ConsoleAppUtilities.OwesomeModels;
 
 namespace Aki32Utilities.ConsoleAppUtilities.StructuralEngineering;
 public static partial class ChainableExtensions
 {
 
     /// <summary>
-    /// Calc integrate and add result as a new column
+    /// Calc differential and add result as a new column
     /// </summary>
     /// <returns></returns>
-    public static TimeHistory CalcIntegrate_Simple(this TimeHistory inputHistory, string targetIndex, params string[] newIndexes)
+    public static TimeHistory CalcDifferential_Simple(this TimeHistory inputHistory, string targetIndex, params string[] newIndexes)
     {
         // preprocess
         UtilPreprocessors.PreprocessBasic();
         if (newIndexes.Length == 0)
-            newIndexes = new string[] { $"{targetIndex}_Integrated" };
+            newIndexes = new string[] { $"{targetIndex}_Differentiated" };
 
 
         // main
@@ -31,7 +32,7 @@ public static partial class ChainableExtensions
                 var c = inputHistory.GetStep(targetRow);
                 var n = inputHistory.GetStep(targetRow + 1);
 
-                n[newIndex] = c[newIndex] + 0.5 * (c[oldIndex] + n[oldIndex]) * dt;
+                n[newIndex] = (n[oldIndex] - c[oldIndex]) / dt;
 
                 inputHistory.SetStep(targetRow + 1, n);
             }
