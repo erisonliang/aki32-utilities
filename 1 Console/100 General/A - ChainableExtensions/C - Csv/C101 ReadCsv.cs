@@ -28,14 +28,18 @@ public static partial class ChainableExtensions
             var line = sr.ReadLine()!;
             if (string.IsNullOrEmpty(line.Replace(",", "")))
             {
-                if (!ignoreEmptyLine)
+                if (!ignoreEmptyLine && skipRowCount <= 0)
                     rows.Add(Array.Empty<string>());
+
+                // even when ignoring empty line, think as skipped 
+                if (skipRowCount > 0)
+                    skipRowCount--;
             }
             else
             {
                 var escapedFlag = false;
 
-                // " が奇数の間は，行をまたぐ！
+                // While " count is odd number, merge next line
                 while (line.Count(c => c == '"') % 2 == 1)
                 {
                     line += sr.ReadLine()!;
