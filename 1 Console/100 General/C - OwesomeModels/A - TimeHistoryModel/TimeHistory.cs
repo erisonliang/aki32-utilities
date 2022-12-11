@@ -477,17 +477,10 @@ public class TimeHistory
             inputDir = inputDir,
             Name = $"{Name}_step{i}",
         };
+
         foreach (var key in ContentsTable.Keys)
-        {
-            try
-            {
-                step[key] = this[key][i];
-            }
-            catch (Exception)
-            {
-                step[key] = double.NaN;
-            }
-        }
+            step[key] = this[key][i];
+
         return step;
     }
     public TimeHistoryStep GetTheLastStep()
@@ -496,8 +489,17 @@ public class TimeHistory
     }
     public TimeHistory SetStep(int i, TimeHistoryStep step)
     {
-        foreach (var key in step.ContentsTable.Keys)
-            this[key][i] = step[key];
+        if (DataRowCount <= i)
+        {
+            while (DataRowCount < i)
+                AppendStep(new TimeHistoryStep());
+            AppendStep(step);
+        }
+        else
+        {
+            foreach (var key in step.ContentsTable.Keys)
+                this[key][i] = step[key];
+        }
 
         return this;
     }
