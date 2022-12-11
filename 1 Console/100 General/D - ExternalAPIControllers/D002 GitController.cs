@@ -1,7 +1,7 @@
 ﻿using LibGit2Sharp.Handlers;
 using LibGit2Sharp;
 
-namespace Aki32Utilities.ConsoleAppUtilities.ExternalAPIControllers;
+namespace Aki32Utilities.ConsoleAppUtilities.General;
 public class GitController
 {
     // ★★★★★★★★★★★★★★★ props
@@ -26,6 +26,10 @@ public class GitController
             throw new UnauthorizedAccessException("signatureName and signatureEmail can not be empty");
         TempSignature = new Signature(signatureName, signatureEmail, DateTime.Now);
         Repo = GetUpToDateRepo();
+
+        Console.WriteLine("GitController Instance Created.");
+        Console.WriteLine("Data Powered by Git (https://git-scm.com/)");
+        Console.WriteLine();
     }
     ~GitController()
     {

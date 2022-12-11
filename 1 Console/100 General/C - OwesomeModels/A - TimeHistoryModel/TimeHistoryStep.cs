@@ -1,6 +1,6 @@
 ﻿
 
-namespace Aki32Utilities.ConsoleAppUtilities.OwesomeModels;
+namespace Aki32Utilities.ConsoleAppUtilities.General;
 /// <summary>
 /// TimeHistory row data.
 /// </summary>

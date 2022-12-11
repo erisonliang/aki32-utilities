@@ -1,7 +1,7 @@
-﻿using Aki32Utilities.ConsoleAppUtilities.General;
+﻿
 
-namespace Aki32Utilities.ConsoleAppUtilities.OwesomeModels.ChainableExtensions;
-public static partial class TimeHistoryExensions
+namespace Aki32Utilities.ConsoleAppUtilities.General;
+public static partial class ChainableExtensions
 {
 
     /// <summary>

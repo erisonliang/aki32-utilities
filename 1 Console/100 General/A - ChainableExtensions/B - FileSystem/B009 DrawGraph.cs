@@ -1,7 +1,7 @@
 ﻿
 
-namespace Aki32Utilities.ConsoleAppUtilities.OwesomeModels.ChainableExtensions;
-public static partial class TimeHistoryExensions
+namespace Aki32Utilities.ConsoleAppUtilities.General;
+public static partial class ChainableExtensions
 {
 
     // ★★★★★★★★★★★★★★★ from index
@@ -10,7 +10,7 @@ public static partial class TimeHistoryExensions
     /// Create TimeHistory instance and return
     /// </summary>
     /// <param name="inputFile"></param>
-    /// <returns></returns>
+    /// <returns>pipe inputFile</returns>
     public static FileInfo DrawGraph(this FileInfo inputFile, int hAxisIndex, int vAxisIndex, TimeHistory.ChartType type = TimeHistory.ChartType.Line)
     {
         var th = inputFile.GetTimeHistoryFromFile();
@@ -27,7 +27,7 @@ public static partial class TimeHistoryExensions
     /// Create TimeHistory instance and return
     /// </summary>
     /// <param name="inputFile"></param>
-    /// <returns></returns>
+    /// <returns>pipe inputFile</returns>
     public static FileInfo DrawGraph(this FileInfo inputFile, string hAxisName, string vAxisName, TimeHistory.ChartType type = TimeHistory.ChartType.Line)
     {
         inputFile
@@ -44,7 +44,7 @@ public static partial class TimeHistoryExensions
     /// Create TimeHistory instance and return
     /// </summary>
     /// <param name="inputFile"></param>
-    /// <returns></returns>
+    /// <returns>pipe inputFile</returns>
     public static FileInfo DrawGraph_ForAll(this FileInfo inputFile, TimeHistory.ChartType type = TimeHistory.ChartType.Line)
     {
         var th = inputFile.GetTimeHistoryFromFile();

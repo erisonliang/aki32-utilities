@@ -5,10 +5,7 @@ using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 
-using Aki32Utilities.ConsoleAppUtilities.ExternalAPIControllers;
 using Aki32Utilities.ConsoleAppUtilities.General;
-using Aki32Utilities.ConsoleAppUtilities.OwesomeModels;
-using Aki32Utilities.ConsoleAppUtilities.OwesomeModels.ChainableExtensions;
 using Aki32Utilities.ConsoleAppUtilities.Research;
 using Aki32Utilities.ConsoleAppUtilities.UsefulClasses;
 

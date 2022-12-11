@@ -1,5 +1,4 @@
-﻿using Aki32Utilities.ConsoleAppUtilities.StructuralEngineering;
-using Aki32Utilities.ConsoleAppUtilities.OwesomeModels;
+﻿using Aki32Utilities.ConsoleAppUtilities.General;
 
 namespace Aki32Utilities.ConsoleAppUtilities.StructuralEngineering;
 public class NewmarkBetaModel : ITimeHistoryAnalysisModel

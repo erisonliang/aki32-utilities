@@ -1,9 +1,8 @@
 ﻿using System.Text;
-using System.Xml.Linq;
 
 using XPlot.Plotly;
 
-namespace Aki32Utilities.ConsoleAppUtilities.OwesomeModels;
+namespace Aki32Utilities.ConsoleAppUtilities.General;
 /// <summary>
 /// Time history data table with its columns and rows dynamically and automatically expands
 /// </summary>

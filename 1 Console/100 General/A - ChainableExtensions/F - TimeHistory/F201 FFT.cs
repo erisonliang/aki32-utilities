@@ -1,9 +1,11 @@
-﻿using MathNet.Numerics.IntegralTransforms;
+﻿
 
 using System.Numerics;
 
-namespace Aki32Utilities.ConsoleAppUtilities.OwesomeModels;
-public static partial class TimeHistoryExensions
+using MathNet.Numerics.IntegralTransforms;
+
+namespace Aki32Utilities.ConsoleAppUtilities.General;
+public static partial class ChainableExtensions
 {
 
     public static async Task<TimeHistory> FFT(this TimeHistory inputHistory, string targetIndex)
