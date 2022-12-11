@@ -74,7 +74,7 @@ public static partial class ChainableExtensions
         }
 
 
-        inputDir.Loop(null, (inF, _) => inF.RenameFile(newFileNameWithoutExtension, replaceSets));
+        inputDir.Loop(inputDir, (inF, _) => inF.RenameFile(newFileNameWithoutExtension, replaceSets));
      
 
         // post process
