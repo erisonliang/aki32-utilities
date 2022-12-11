@@ -114,6 +114,41 @@ public static partial class ChainableExtensions
         return regexen.ToArray();
     }
 
+    public static string[] GetRegexen_XmlExcelFiles(
+        bool xlsx = true,
+        bool xlsm = true,
+        bool xltx = true,
+        bool xltm = true)
+    {
+        var regexen = new List<string>();
+
+        if (xlsx)
+        {
+            regexen.Add(@"^.*\.xlsx$");
+            regexen.Add(@"^.*\.XLSX$");
+        }
+
+        if (xlsm)
+        {
+            regexen.Add(@"^.*\.xlsm$");
+            regexen.Add(@"^.*\.XLSM$");
+        }
+
+        if (xltx)
+        {
+            regexen.Add(@"^.*\.xltx$");
+            regexen.Add(@"^.*\.XLTX$");
+        }
+
+        if (xltm)
+        {
+            regexen.Add(@"^.*\.xltm$");
+            regexen.Add(@"^.*\.XLTM$");
+        }
+
+        return regexen.ToArray();
+    }
+
 
     // ★★★★★★★★★★★★★★★
 

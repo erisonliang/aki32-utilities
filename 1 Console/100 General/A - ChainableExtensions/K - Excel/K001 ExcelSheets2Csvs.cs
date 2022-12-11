@@ -41,4 +41,15 @@ public static partial class ChainableExtensions
         return outputDir;
     }
 
+    /// <summary>
+    /// create csvs from excel sheets
+    /// </summary>
+    /// <param name="inputFile"></param>
+    /// <param name="outputDir">when null, automatically set</param>
+    /// <returns></returns>
+    public static DirectoryInfo ExcelSheets2Csvs_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir)
+        => inputDir.Loop(outputDir, (inF, _) => inF.ExcelSheets2Csvs(null),
+            searchRegexen: GetRegexen_XmlExcelFiles()
+            );
+
 }
