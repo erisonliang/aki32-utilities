@@ -431,27 +431,27 @@ public static partial class ExampleExecuter
             {
                 var baseDir_A_110 = $@"{baseDir_A}\110 - StructuralEngineering";
 
-                // A001 RainflowCycleCounting
+                // B001 RainflowCycleCounting
                 {
-                    //new FileInfo(Path.Combine(baseDir_A_110, "A001 RainflowCycleCounting", @"input3.csv"))
+                    //new FileInfo(Path.Combine(baseDir_A_110, "B001 RainflowCycleCounting", @"input3.csv"))
                     //    .Rainflow(null, 4, 1 / 3d, false);
 
-                    //new DirectoryInfo(Path.Combine(baseDir_A_110, "A001 RainflowCycleCounting"))
+                    //new DirectoryInfo(Path.Combine(baseDir_A_110, "B001 RainflowCycleCounting"))
                     //    .Rainflow_Loop(null, 4, 1 / 3d, false);
 
                 }
 
-                // A002 RDTechnique
+                // B002 RDTechnique
                 {
-                    //new FileInfo(Path.Combine(baseDir_A_110, "A002 RDTechnique", @"input.csv"))
+                    //new FileInfo(Path.Combine(baseDir_A_110, "B002 RDTechnique", @"input.csv"))
                     //    .CalcRD(null, 200)
                     //    ;
 
                 }
 
-                // A003 CreateAccFromCsv
+                // B003 CreateAccFromCsv
                 {
-                    //new FileInfo(Path.Combine(baseDir_A_110, "A003 CreateAccFromCsv", @"kobe L1.csv"))
+                    //new FileInfo(Path.Combine(baseDir_A_110, "B003 CreateAccFromCsv", @"kobe L1.csv"))
                     //    .CreateAccFromCsv_For_DynamicPro(null);
 
                 }
