@@ -6,8 +6,8 @@ public class RainflowCalculator
 
     // ★★★★★★★★★★★★★★★ props
 
-    public TimeHistory inputHistory { get; set; }
-    public TimeHistory resultHistory { get; set; }
+    public TimeHistory InputHistory { get; set; }
+    public TimeHistory ResultHistory { get; set; }
     private RainBranches[] AllRainBranches { get; set; }
     private double lastUsedC = 0d;
     private double lastUsedBeta = 0d;
@@ -27,7 +27,7 @@ public class RainflowCalculator
     public static RainflowCalculator FromCsv(FileInfo inputCsv)
     {
         var rainflow = new RainflowCalculator();
-        rainflow.inputHistory = TimeHistory.FromCsv(inputCsv, new string[] { "t", "mu" });
+        rainflow.InputHistory = TimeHistory.FromCsv(inputCsv, new string[] { "t", "mu" });
         return rainflow;
     }
 
@@ -41,8 +41,8 @@ public class RainflowCalculator
     public void CalcRainflow(double C, double beta, bool consoleOutput = false)
     {
         // init
-        resultHistory = inputHistory.Clone();
-        resultHistory.Name += "_Rainflow";
+        ResultHistory = InputHistory.Clone();
+        ResultHistory.Name += "_Rainflow";
         lastUsedC = C;
         lastUsedBeta = beta;
         AllRainBranches = new RainBranches[]
@@ -53,13 +53,13 @@ public class RainflowCalculator
 
 
         // main
-        for (int i = 0; i < resultHistory.DataRowCount; i++)
+        for (int i = 0; i < ResultHistory.DataRowCount; i++)
         {
             if (consoleOutput)
                 Console.WriteLine($"step {i}");
 
-            var currentStep = resultHistory.GetStep(i);
-            var lastStep = i > 0 ? resultHistory.GetStep(i - 1) : new TimeHistoryStep() { mu = 0 };
+            var currentStep = ResultHistory.GetStep(i);
+            var lastStep = i > 0 ? ResultHistory.GetStep(i - 1) : new TimeHistoryStep() { mu = 0 };
 
             currentStep["totalMu"] = 0;
             currentStep["totalDamage"] = 0;
@@ -71,7 +71,7 @@ public class RainflowCalculator
                 currentStep["totalDamage"] += RainBranches.TotalDamage(C, beta);
             }
 
-            resultHistory.SetStep(i, currentStep);
+            ResultHistory.SetStep(i, currentStep);
         }
     }
 
@@ -81,7 +81,7 @@ public class RainflowCalculator
     /// <returns></returns>
     public FileInfo SaveResultHistoryToCsv(FileInfo? outputFile = null)
     {
-        return resultHistory.SaveToCsv(outputFile);
+        return ResultHistory.SaveToCsv(outputFile);
     }
 
     /// <summary>
@@ -90,7 +90,7 @@ public class RainflowCalculator
     /// <returns></returns>
     public FileInfo SaveRainBranchesToCsv(FileInfo? outputFile = null)
     {
-        var result = inputHistory.Clone();
+        var result = InputHistory.Clone();
         result.DropAllColumns();
         result.Name += "_RainflowBranches";
 
