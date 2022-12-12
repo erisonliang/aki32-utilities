@@ -26,9 +26,7 @@ public class RainflowCalculator
     /// <exception cref="Exception"></exception>
     public static RainflowCalculator FromCsv(FileInfo inputCsv)
     {
-        var rainflow = new RainflowCalculator();
-        rainflow.InputHistory = TimeHistory.FromCsv(inputCsv, new string[] { "t", "mu" });
-        return rainflow;
+        return new RainflowCalculator { InputHistory = TimeHistory.FromCsv(inputCsv, new string[] { "t", "mu" }) };
     }
 
     // ★★★★★★★★★★★★★★★ methods
