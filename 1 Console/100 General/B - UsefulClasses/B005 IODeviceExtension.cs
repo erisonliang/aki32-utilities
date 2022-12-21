@@ -1,5 +1,8 @@
 ﻿using System.Drawing;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+
+using OpenCvSharp.Internal;
 
 namespace Aki32Utilities.ConsoleAppUtilities.UsefulClasses;
 
@@ -227,7 +230,7 @@ public class IODeviceExtension
     }
 
 
-    [DllImport("user32.dll")]
+    [DllImport("USER32.dll")]
     public static extern uint keybd_event(byte bVk, byte bScan, uint dwFlags, UIntPtr dwExtraInfo);
     private static char CorrectKey(char c)
     {
@@ -246,7 +249,7 @@ public class IODeviceExtension
     }
 
 
-    [DllImport("user32.dll")]
+    [DllImport("USER32.dll")]
     static extern bool GetCursorPos(out POINT lpPoint);
     public struct POINT
     {

@@ -35,6 +35,7 @@ public class ProgressManager
         StartTime = DateTime.Now;
         MaxStep = maxStep;
 
+        UtilConfig.StopTemporary_ConsoleOutput_Preprocess();
         ConsoleOutput = consoleOutput == null ? UtilConfig.ConsoleOutput_Contents : consoleOutput.Value;
 
         if (!ConsoleOutput)
@@ -44,6 +45,10 @@ public class ProgressManager
         Console.WriteLine();
     }
 
+    ~ProgressManager()
+    {
+        UtilConfig.TryRestart_ConsoleOutput_Preprocess();
+    }
 
     // ★★★★★★★★★★★★★★★ methods
 

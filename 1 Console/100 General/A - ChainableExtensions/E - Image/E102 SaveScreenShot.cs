@@ -7,6 +7,7 @@ using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Runtime.InteropServices;
 
 namespace Aki32Utilities.ConsoleAppUtilities.General;
 public static partial class ChainableExtensions
@@ -73,7 +74,6 @@ public static partial class ChainableExtensions
 
         if (br.X - ul.X < 0) (br.X, ul.X) = (ul.X, br.X);
         if (br.Y - ul.Y < 0) (br.Y, ul.Y) = (ul.Y, br.Y);
-
         using var outputBitmap = new Bitmap(br.X - ul.X, br.Y - ul.Y);
         using var g = Graphics.FromImage(outputBitmap);
         g.CopyFromScreen(ul, new Point(0, 0), outputBitmap.Size);

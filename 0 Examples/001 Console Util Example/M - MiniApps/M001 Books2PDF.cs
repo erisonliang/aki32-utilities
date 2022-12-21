@@ -1,4 +1,5 @@
-﻿using Aki32Utilities.ConsoleAppUtilities.UsefulClasses;
+﻿using System.Drawing;
+using Aki32Utilities.ConsoleAppUtilities.UsefulClasses;
 using Aki32Utilities.ConsoleAppUtilities.General;
 using General = Aki32Utilities.ConsoleAppUtilities.General;
 
@@ -9,7 +10,10 @@ public partial class MiniApps
     /// <summary>
     /// keep taking screenshot of some dataset and save as PDF
     /// </summary>
-    public static void Books2PDF(DirectoryInfo targetDirectory, int PageCount, int TimePerPageMilliSeconds = 2000)
+    public static void Books2PDF(DirectoryInfo targetDirectory, int PageCount,
+        int TimePerPageMilliSeconds = 2000,
+        int zoom = 1
+        )
     {
         // preprocess
         UtilPreprocessors.PreprocessOutDir(ref targetDirectory!, null!);
@@ -30,6 +34,8 @@ public partial class MiniApps
         var BR = ps[1];
         var ProceedButton = ps[2];
 
+        UL = new Point(UL.X * zoom, UL.Y * zoom);
+        BR = new Point(BR.X * zoom, BR.Y * zoom);
 
         ConsoleExtension.WriteLineWithColor("\r\n★★★★★★★★★★★★★★★ 撮影\r\n");
 
