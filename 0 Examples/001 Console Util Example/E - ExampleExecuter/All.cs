@@ -642,6 +642,22 @@ public static partial class ExampleExecuter
                 //gc.Sync();
             }
 
+            // D004 PythonController
+            {
+                //PythonController.Init(
+                //    new DirectoryInfo(@"C:/Python310"),
+                //    myPackages: new string[] { }
+                //    );
+
+                //PythonController.Run(
+                //    PythonController.PythonExample
+                //    );
+
+                //PythonController.Close();
+
+
+            }
+
         }
 
         // 110 - StructuralEngineering
@@ -888,12 +904,12 @@ public static partial class ExampleExecuter
 
                 // articles from ndl search
                 {
-                    var accessor = new NDLSearchAPIAccessor()
-                    {
-                        RecordCount = 5,
-                        SearchFreeWord = "空間情報を表現するグラフ構造",
-                    };
-                    research.PullArticleInfo(accessor);
+                    //var accessor = new NDLSearchAPIAccessor()
+                    //{
+                    //    RecordCount = 5,
+                    //    SearchFreeWord = "空間情報を表現するグラフ構造",
+                    //};
+                    //research.PullArticleInfo(accessor);
 
                 }
 
