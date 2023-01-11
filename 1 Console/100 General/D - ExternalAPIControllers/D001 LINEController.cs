@@ -11,6 +11,8 @@ public class LINEController
     /// </summary>
     public string LineAccessToken { get; set; } = "";
 
+    private static readonly Uri TargetUri = new("https://notify-api.line.me/api/notify");
+
 
     // ★★★★★★★★★★★★★★★ init
 
@@ -40,11 +42,14 @@ public class LINEController
         try
         {
             // content
-            var content = new FormUrlEncodedContent(new Dictionary<string, string> { { "message", message } });
+            var data = new Dictionary<string, string>
+            {
+                { "message", message }
+            };
+            var content = new FormUrlEncodedContent(data);
 
             // request
-            var url = new Uri("https://notify-api.line.me/api/notify");
-            await url.CallAPIAsync_ForJsonData<object>(HttpMethod.Post,
+            await TargetUri.CallAPIAsync_ForJsonData<object>(HttpMethod.Post,
                 authBearerToken: LineAccessToken,
                 httpContent: content);
 
