@@ -644,17 +644,12 @@ public static partial class ExampleExecuter
 
             // D004 PythonController
             {
-                //PythonController.Init(
-                //    new DirectoryInfo(@"C:/Python310"),
-                //    myPackages: new string[] { }
-                //    );
+                //PythonController.PythonPath = new DirectoryInfo(@"C:/Python310");
+                //PythonController.DllName = @"python310.dll";
 
-                //PythonController.Run(
-                //    PythonController.PythonExample
-                //    );
-
-                //PythonController.Close();
-
+                //PythonController.Run(PythonController.PythonExample_WithStringInvoke);
+                //PythonController.Run(PythonController.PythonExample_WithDynamicInvoke);
+                //PythonController.Run(PythonController.PythonExample_WithOwnLibraryInvoke);
 
             }
 
@@ -859,12 +854,10 @@ public static partial class ExampleExecuter
 
             // A - ResearchManager
             {
-                //UtilConfig.ConsoleOutput_Contents = false;
+                //var localDir = new DirectoryInfo($@"{Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory)}\ResearchArticleDB");
 
-                var localDir = new DirectoryInfo($@"{Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory)}\ResearchArticleDB");
-
-                var research = new ResearchArticlesManager(localDir);
-                research.OpenDatabase();
+                //var research = new ResearchArticlesManager(localDir);
+                //research.OpenDatabase();
 
 
                 ////articles from j - stage
@@ -916,18 +909,18 @@ public static partial class ExampleExecuter
 
                 // display
                 {
-                    research.SaveDatabase(true, true);
+                    //research.SaveDatabase(true, true);
 
-                    Console.WriteLine();
-                    Console.WriteLine();
-                    Console.WriteLine($"★ {research.ArticleDatabase.Count} found in total");
-                    Console.WriteLine();
-                    //foreach (var article in research.ArticleDatabase)
-                    //    Console.WriteLine($" + {article.Title_Japanese}");
                     //Console.WriteLine();
-                    Console.WriteLine();
+                    //Console.WriteLine();
+                    //Console.WriteLine($"★ {research.ArticleDatabase.Count} found in total");
+                    //Console.WriteLine();
+                    ////foreach (var article in research.ArticleDatabase)
+                    ////    Console.WriteLine($" + {article.Title_Japanese}");
+                    ////Console.WriteLine();
+                    //Console.WriteLine();
 
-                    //research.ArticleDatabase.First(x => x.DOI == "10.3130/aijs.87.822").TryOpenPDF(research.PDFsDirectory);
+                    ////research.ArticleDatabase.First(x => x.DOI == "10.3130/aijs.87.822").TryOpenPDF(research.PDFsDirectory);
 
                 }
 
