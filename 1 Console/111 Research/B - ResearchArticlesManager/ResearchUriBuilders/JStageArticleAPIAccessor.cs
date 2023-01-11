@@ -128,10 +128,10 @@ public class JStageArticleAPIAccessor : IResearchAPIAccessor
         if (RecordCount != null)
             queryList.Add("count", RecordCount!.Value.ToString());
 
-
+        
         // post process
-        var builtUriString = $"{BASE_URL}?{string.Join("&", queryList.Select(x => $"{x.Key}={x.Value}"))}";
-        return builtUri = new Uri(builtUriString);
+        var query = new FormUrlEncodedContent(queryList).ReadAsStringAsync().Result;
+        return builtUri = new Uri($"{BASE_URL}?{query}");
 
     }
 
