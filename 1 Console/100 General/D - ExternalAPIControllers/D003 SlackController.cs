@@ -63,6 +63,22 @@ public class SlackController
 
                 return true;
 
+                // 元々
+                {
+                    //var data = new NameValueCollection();
+                    //data["token"] = slack_token;
+                    //data["channel"] = channel_name;
+                    //data["as_user"] = "true"; // to send this message as the user who owns the token, false by default
+                    //data["text"] = message;
+                    ////data["attachments"] = "[{\"fallback\":\"dummy\", \"text\":\"this is an attachment\"}]";
+
+                    //using (var client = new WebClient())
+                    //{
+                    //    var response = client.UploadValues("https://slack.com/api/chat.postMessage", "POST", data);
+                    //    string responseInString = Encoding.UTF8.GetString(response);
+                    //}
+                }
+
             });
         }
         catch (Exception)
