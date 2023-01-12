@@ -24,14 +24,13 @@ public static partial class ChainableExtensions
         // preprocess
         UtilPreprocessors.PreprocessOutDir(ref outputDir, overrideTargetOutputDirCandidate ?? inputDir, true, methodName: methodName);
         searchRegexen ??= new string[] { ".*" };
-        UtilConfig.StopTemporary_ConsoleOutput_Preprocess();
 
 
         // main
         var inputFiles = inputDir.GetFilesWithRegexen(targetFilesOption, searchRegexen).Sort();
         var option = new ParallelOptions { MaxDegreeOfParallelism = maxDegreeOfParallelism };
 
-        var progress = new ProgressManager(inputFiles.Count());
+        using var progress = new ProgressManager(inputFiles.Count());
         progress.StartAutoWrite(100);
 
         Parallel.ForEach(inputFiles, option, inputFile =>
@@ -70,7 +69,6 @@ public static partial class ChainableExtensions
 
 
         // post process
-        UtilConfig.TryRestart_ConsoleOutput_Preprocess();
         return outputDir!;
     }
 

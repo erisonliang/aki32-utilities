@@ -1,7 +1,7 @@
 ﻿using Aki32Utilities.ConsoleAppUtilities.General;
 
 namespace Aki32Utilities.ConsoleAppUtilities.UsefulClasses;
-public class ProgressManager
+public class ProgressManager : IDisposable
 {
 
     // ★★★★★★★★★★★★★★★ props
@@ -45,10 +45,12 @@ public class ProgressManager
         Console.WriteLine();
     }
 
-    ~ProgressManager()
+    public void Dispose()
     {
         UtilConfig.TryRestart_ConsoleOutput_Preprocess();
+        GC.SuppressFinalize(this);
     }
+
 
     // ★★★★★★★★★★★★★★★ methods
 
