@@ -1,7 +1,4 @@
 ﻿using Aki32Utilities.ConsoleAppUtilities.UsefulClasses;
-
-using DocumentFormat.OpenXml.Wordprocessing;
-
 using Python.Runtime;
 
 namespace Aki32Utilities.ConsoleAppUtilities.General;

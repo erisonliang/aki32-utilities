@@ -36,12 +36,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="Python.Runtime">
-      <HintPath>..\..\..\研究\修士論文研究\0 GitSubmodules\aki32-utilities\1 Console\100 General\Properties\Assets\pythonnet\Python.Runtime.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-
-  <ItemGroup>
     <Compile Update="Properties\Resources.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
