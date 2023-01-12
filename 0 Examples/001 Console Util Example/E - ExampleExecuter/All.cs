@@ -572,30 +572,30 @@ public static partial class ExampleExecuter
 
             // D001 LINEController
             {
-                var accessToken = ""; // LINE Notify
-                var line = new LINEController(accessToken);
-                var result = line.SendMessageAsync(@"Hello LINE from C#. 日本語").Result;
+                //var accessToken = ""; // LINE Notify
+                //var line = new LINEController(accessToken);
+                //var result = line.SendMessageAsync(@"Hello LINE from C#. 日本語").Result;
 
             }
 
             // D002 GitController
             {
-                var remotePath = $@"https://github.com/aki32/test"; // remote url
-                var localPath = $@"C:\Users\aki32\Dropbox\PC\Desktop\test"; // local path
-                var signatureName = $@"aki32"; // your name
-                var signatureEmail = $@"aki32@aaa"; // your email
+                //var remotePath = $@"https://github.com/aki32/test"; // remote url
+                //var localPath = $@"C:\Users\aki32\Dropbox\PC\Desktop\test"; // local path
+                //var signatureName = $@"aki32"; // your name
+                //var signatureEmail = $@"aki32@aaa"; // your email
 
-                var gc = new GitController(remotePath, localPath, signatureName, signatureEmail)
-                {
-                    Credentials = new LibGit2Sharp.UsernamePasswordCredentials
-                    {
-                        // your credidential info (obtainable from https://github.com/settings/tokens)
-                        Username = "",
-                        Password = "",
-                    },
-                };
+                //var gc = new GitController(remotePath, localPath, signatureName, signatureEmail)
+                //{
+                //    Credentials = new LibGit2Sharp.UsernamePasswordCredentials
+                //    {
+                //        // your credidential info (obtainable from https://github.com/settings/tokens)
+                //        Username = "",
+                //        Password = "",
+                //    },
+                //};
 
-                gc.Sync();
+                //gc.Sync();
             }
 
             // D004 Python
