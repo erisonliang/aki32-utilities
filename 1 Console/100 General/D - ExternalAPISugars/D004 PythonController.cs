@@ -90,16 +90,6 @@ public static class PythonController
     // ★★★★★★★★★★★★★★★ samples
 
     /// <summary>
-    /// Run python once
-    /// </summary>
-    /// <param name="pythonAction"></param>
-    public static void RunOnce(Action pythonAction)
-    {
-        using var py = new PythonController();
-        pythonAction();
-    }
-
-    /// <summary>
     /// pythonコードを直接指定して実行
     /// </summary>
     public static void PythonExample_WithStringInvoke()

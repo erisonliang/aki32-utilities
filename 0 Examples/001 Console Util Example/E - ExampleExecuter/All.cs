@@ -645,45 +645,27 @@ public static partial class ExampleExecuter
 
             // D004 PythonController
             {
-            
-                PythonController.Initialize(
-                    pythonPath: @"C:\Python310",
-                    dllName: @"python310.dll",
-                    additionalPath: new List<string> { @"C:\Users\aki32\Dropbox\Codes\# Projects\研究\修士論文研究\2 Python Jupyter" }
-                    );
 
-                Console.WriteLine("=======================================");
-                Console.WriteLine("PythonExample_WithDynamicInvoke");
-                Console.WriteLine();
-
-                dynamic np = PythonController.Import("numpy");
-                Console.WriteLine($"np.cos(np.pi/4) = {np.cos(np.pi / 4)}");
-
-                dynamic sin = np.sin;
-                Console.WriteLine($"sin(5) = {sin(5)}");
-
-                double c = np.cos(5) + sin(5);
-                Console.WriteLine($"c = {c}");
-
-                dynamic a = np.array(new List<int> { 1, 2, 3 });
-                Console.WriteLine($"a.dtype = {a.dtype}");
-
-                dynamic b = np.array(new List<int> { 6, 5, 4 }, dtype: np.int32);
-                Console.WriteLine($"b.dtype = {b.dtype}");
-                Console.WriteLine($"a * b = {a * b}");
-
-                Console.WriteLine("=======================================");
-                Console.WriteLine();
-
-                PythonController.Shutdown();
+                //PythonController.Initialize(
+                //    pythonPath: @"C:\Python310",
+                //    dllName: @"python310.dll",
+                //    additionalPath: new List<string>
+                //    {
+                //        @"C:\Users\aki32\Dropbox\Codes\# Projects\研究\修士論文研究\2 Python Jupyter"
+                //    }
+                //    );
 
 
-                // test
-                {
-                    PythonController.RunOnce(PythonController.PythonExample_WithStringInvoke);
-                    PythonController.RunOnce(PythonController.PythonExample_WithDynamicInvoke);
-                    PythonController.RunOnce(PythonController.PythonExample_WithOwnLibraryInvoke);
-                }
+                //dynamic np = PythonController.Import("numpy");
+                //Console.WriteLine($"np.cos(np.pi/4) = {np.cos(np.pi / 4)}");
+
+
+                //PythonController.PythonExample_WithStringInvoke();
+                ////PythonController.PythonExample_WithDynamicInvoke();
+                ////PythonController.PythonExample_WithOwnLibraryInvoke();
+
+                //PythonController.Shutdown();
+
             }
 
         }
