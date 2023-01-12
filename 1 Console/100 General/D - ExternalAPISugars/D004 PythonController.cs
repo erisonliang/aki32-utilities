@@ -28,13 +28,6 @@ public static class PythonController
         PythonPath = pythonPath;
         AdditionalPath = additionalPath;
 
-        // ★ force download required dll
-        var requiredDllName = "Python.Runtime.dll";
-        if (!File.Exists(requiredDllName))
-            new Uri($@"https://github.com/aki32/aki32-utilities/raw/main/1%20Console/100%20General/Properties/Assets/{requiredDllName}")
-                .DownloadFileAsync(new FileInfo(requiredDllName))
-                .Wait();
-
         // ★ Dllの名前を明示
         Runtime.PythonDLL = DllName;
 
