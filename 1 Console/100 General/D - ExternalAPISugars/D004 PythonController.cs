@@ -1,34 +1,103 @@
-﻿using System.Security.AccessControl;
+﻿using Aki32Utilities.ConsoleAppUtilities.UsefulClasses;
+
+using DocumentFormat.OpenXml.Wordprocessing;
 
 using Python.Runtime;
 
 namespace Aki32Utilities.ConsoleAppUtilities.General;
 /// <summary>
-/// Python Interpreter
+/// Mainly Sugar for pythonnet (Python.Runtime.dll).
 /// </summary>
-public class PythonController
+public static class PythonController
 {
     // ★★★★★★★★★★★★★★★ prop
 
-    public static DirectoryInfo PythonPath { get; set; }
-    public static List<string> AdditionalPath { get; set; } = new List<string>();
-    public static string DllName { get; set; } = @"python310.dll";
-    private static Py.GILState GIL { get; set; }
+    private static string DllName { get; set; }
+    private static string PythonPath { get; set; }
+    private static List<string> AdditionalPath { get; set; }
+    private static Py.GILState GIL;
 
-    // ★★★★★★★★★★★★★★★ method
 
-    public static void RunOnce(Action pythonAction)
+    // ★★★★★★★★★★★★★★★ main
+
+    public static void Initialize(
+        string dllName = @"python310.dll",
+        string pythonPath = null,
+        List<string> additionalPath = null
+        )
     {
-        Init();
+        // ★ セット
+        DllName = dllName;
+        PythonPath = pythonPath;
+        AdditionalPath = additionalPath;
 
-        GIL = Py.GIL(); // Global Interpreter Lockを取得
-        pythonAction();
+        // ★ Dllの名前を明示
+        Runtime.PythonDLL = DllName;
 
-        GIL.Dispose();
-        PythonEngine.Shutdown();
+        // ★ pythonnetがpython本体のDLLおよび依存DLLを見つけられるようにする。
+        //    使用しようとしているPythonをPATHに登録してない場合に呼ぶことを想定。
+        if (!string.IsNullOrEmpty(PythonPath))
+        {
+            var pythonPathEnvVar = Environment.ExpandEnvironmentVariables(PythonPath);
+            SystemExtension.AddEnvPath("PATH", new string[]
+            {
+                pythonPathEnvVar,
+                Path.Combine(pythonPathEnvVar, @"DLLs"),
+            });
+        }
+
+        // ★ 初期化 (明示的に呼ばなくても内部で自動実行されるようだが、一応呼ぶ)
+        PythonEngine.Initialize();
+
+        // ★ Global Interpreter Lockを取得
+        GIL = Py.GIL();
+
+        // ★ 追加のパスを通す。
+        if (AdditionalPath != null && AdditionalPath.Count > 0)
+        {
+            dynamic sys = Py.Import("sys");
+            foreach (var ap in AdditionalPath)
+                sys.path.append(ap);
+        }
+
     }
 
+    public static void Shutdown()
+    {
+        try
+        {
+            GIL?.Dispose();
+        }
+        catch (Exception)
+        {
+        }
+
+        try
+        {
+            PythonEngine.Shutdown();
+        }
+        catch (Exception)
+        {
+        }
+    }
+
+
+    // ★★★★★★★★★★★★★★★ helper
+
+    public static dynamic Import(string name) => Py.Import(name);
+
+
     // ★★★★★★★★★★★★★★★ samples
+
+    /// <summary>
+    /// Run python once
+    /// </summary>
+    /// <param name="pythonAction"></param>
+    public static void RunOnce(Action pythonAction)
+    {
+        using var py = new PythonController();
+        pythonAction();
+    }
 
     /// <summary>
     /// pythonコードを直接指定して実行
@@ -98,10 +167,6 @@ print(f'np.cos(np.pi/4) = {np.cos(np.pi/4)}')
         Console.WriteLine("PythonExample_WithOwnLibraryInvoke");
         Console.WriteLine();
 
-        dynamic sys = Py.Import("sys");
-        foreach (var ap in AdditionalPath)
-            sys.path.append(ap);
-
         dynamic snap = Py.Import("SNAPVisualizer");
         dynamic a = snap.SNAPBeamVisualizer;
 
@@ -117,51 +182,6 @@ print(f'np.cos(np.pi/4) = {np.cos(np.pi/4)}')
         Console.WriteLine("=======================================");
         Console.WriteLine();
 
-    }
-
-
-    // ★★★★★★★★★★★★★★★ private
-
-    /// <summary>
-    /// initialize all
-    /// </summary>
-    /// <param name="pythonPath">
-    /// python環境にパスを通す。pythonの場所，もしくは仮想環境のルート！
-    /// @"C:\Python310", @"C:\Users\user\AppData\Local\Programs\Python\Python310",...
-    /// </param>
-    /// <param name="dllName">
-    /// だいたい，python310.dll (Windows), libpython3.10.dylib (Mac), libpython3.10.so (most other *nix)。これしないと TypeInitializationException 吐く。
-    /// </param>
-    private static void Init()
-    {
-        // ★★★★★ 
-        Runtime.PythonDLL = DllName;
-
-        // ★★★★★ PATHに登録してない場合に使うべきかも。pythonnetがpython本体のDLLおよび依存DLLを見つけられるようにする。
-        //var pythonPathEnvVar = Environment.ExpandEnvironmentVariables(PythonPath.FullName);
-        //AddEnvPath("PATH", new string[]
-        //{
-        //    pythonPathEnvVar,
-        //    Path.Combine(pythonPathEnvVar, @"DLLs"),
-        //});
-
-        // 初期化 (明示的に呼ばなくても内部で自動実行されるようだが、一応呼ぶ)
-        PythonEngine.Initialize();
-
-    }
-
-    /// <summary>
-    /// プロセスの環境変数PATHに、指定されたディレクトリを追加する(パスを通す)。
-    /// </summary>
-    /// <param name="paths">PATHに追加するディレクトリ。</param>
-    private static void AddEnvPath(string pathName, params string[] paths)
-    {
-        var envPaths = Environment.GetEnvironmentVariable(pathName)?.Split(Path.PathSeparator).ToList() ?? new List<string>();
-        foreach (var path in paths)
-            if (path.Length > 0 && !envPaths!.Contains(path))
-                envPaths.Insert(0, path);
-
-        Environment.SetEnvironmentVariable(pathName, string.Join(Path.PathSeparator.ToString(), envPaths!), EnvironmentVariableTarget.Process);
     }
 
 
