@@ -644,13 +644,13 @@ public static partial class ExampleExecuter
 
             // D004 PythonController
             {
-                //PythonController.PythonPath = new DirectoryInfo(@"C:/Python310");
-                //PythonController.DllName = @"python310.dll";
-                //PythonController.AdditionalPath.Add(@"C:/Users/aki32/Dropbox/Codes/# Projects/研究/修士論文研究/2 Python Jupyter");
+                PythonController.PythonPath = new DirectoryInfo(@"C:\Python310");
+                PythonController.DllName = @"python310.dll";
+                PythonController.AdditionalPath.Add(@"C:\Users\aki32\Dropbox\Codes\# Projects\研究\修士論文研究\2 Python Jupyter");
 
-                //PythonController.Run(PythonController.PythonExample_WithStringInvoke);
-                //PythonController.Run(PythonController.PythonExample_WithDynamicInvoke);
-                //PythonController.Run(PythonController.PythonExample_WithOwnLibraryInvoke);
+                PythonController.RunOnce(PythonController.PythonExample_WithStringInvoke);
+                PythonController.RunOnce(PythonController.PythonExample_WithDynamicInvoke);
+                PythonController.RunOnce(PythonController.PythonExample_WithOwnLibraryInvoke);
 
             }
 

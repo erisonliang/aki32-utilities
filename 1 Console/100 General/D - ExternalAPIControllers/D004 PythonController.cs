@@ -6,24 +6,25 @@ namespace Aki32Utilities.ConsoleAppUtilities.General;
 /// <summary>
 /// Python Interpreter
 /// </summary>
-public static class PythonController
+public class PythonController
 {
     // ★★★★★★★★★★★★★★★ prop
 
     public static DirectoryInfo PythonPath { get; set; }
     public static List<string> AdditionalPath { get; set; } = new List<string>();
     public static string DllName { get; set; } = @"python310.dll";
+    private static Py.GILState GIL { get; set; }
 
+    // ★★★★★★★★★★★★★★★ method
 
-    // ★★★★★★★★★★★★★★★ main
-
-    public static void Run(Action pythonAction)
+    public static void RunOnce(Action pythonAction)
     {
         Init();
 
-        using (var gil = Py.GIL()) // Global Interpreter Lockを取得
-            pythonAction();
+        GIL = Py.GIL(); // Global Interpreter Lockを取得
+        pythonAction();
 
+        GIL.Dispose();
         PythonEngine.Shutdown();
     }
 
@@ -39,9 +40,8 @@ public static class PythonController
         Console.WriteLine();
 
         PythonEngine.RunSimpleString(@"
-import sys
-import pprint
-pprint.pprint(f'module path = {sys.path}')
+import numpy as np
+print(f'np.cos(np.pi/4) = {np.cos(np.pi/4)}')
 ");
 
         Console.WriteLine("=======================================");
@@ -60,7 +60,7 @@ pprint.pprint(f'module path = {sys.path}')
         Console.WriteLine();
 
         dynamic np = Py.Import("numpy");
-        Console.WriteLine($"np.cos(np.pi * 2) = {np.cos(np.pi * 2)}");
+        Console.WriteLine($"np.cos(np.pi/4) = {np.cos(np.pi / 4)}");
 
         dynamic sin = np.sin;
         Console.WriteLine($"sin(5) = {sin(5)}");
@@ -98,9 +98,12 @@ pprint.pprint(f'module path = {sys.path}')
         Console.WriteLine("PythonExample_WithOwnLibraryInvoke");
         Console.WriteLine();
 
+        dynamic sys = Py.Import("sys");
+        foreach (var ap in AdditionalPath)
+            sys.path.append(ap);
+
         dynamic snap = Py.Import("SNAPVisualizer");
         dynamic a = snap.SNAPBeamVisualizer;
-
 
 
         //dynamic myMath = Py.Import("my_awesome_lib.my_math"); // "from my_awesome_lib import my_math"
@@ -133,33 +136,14 @@ pprint.pprint(f'module path = {sys.path}')
     {
         // ★★★★★ 
         Runtime.PythonDLL = DllName;
-        var pythonPathEnvVar = Environment.ExpandEnvironmentVariables(PythonPath.FullName);
 
-
-        // ★★★★★ pythonnetがpython本体のDLLおよび依存DLLを見つけられるようにする。
-        var paths = new List<string>()
-        {
-            pythonPathEnvVar,
-            Path.Combine(pythonPathEnvVar, @"DLLs"),
-        };
-        paths.AddRange(AdditionalPath);
-        AddEnvPath("PATH", paths.ToArray());
-
-
-        // ★★★★★ python環境に、pythonPathEnvVar(標準pythonライブラリの場所)を設定。※不要だった。
-        //PythonEngine.PythonHome = pythonPathEnvVar;
-        //Environment.SetEnvironmentVariable("PYTHONNET_PYDLL", pythonPathEnvVar, EnvironmentVariableTarget.Process);
-
-
-        // ★★★★★ python環境に、PYTHON_PATH(モジュールファイルのデフォルトの検索パス)を設定 ※不要だった。
-        //var packages = new List<string>
+        // ★★★★★ PATHに登録してない場合に使うべきかも。pythonnetがpython本体のDLLおよび依存DLLを見つけられるようにする。
+        //var pythonPathEnvVar = Environment.ExpandEnvironmentVariables(PythonPath.FullName);
+        //AddEnvPath("PATH", new string[]
         //{
-        //    PythonEngine.PythonPath, // 元の設定を残す
-        //    Path.Combine(pythonPathEnvVar, "Lib", "site-packages"), //pipで入れたパッケージはここに入る？
-        //};
-        //if (myPackages != null) packages.AddRange(myPackages);
-        //PythonEngine.PythonPath = string.Join(Path.PathSeparator.ToString(), packages);
-        AddEnvPath("PYTHONPATH", AdditionalPath.ToArray());
+        //    pythonPathEnvVar,
+        //    Path.Combine(pythonPathEnvVar, @"DLLs"),
+        //});
 
         // 初期化 (明示的に呼ばなくても内部で自動実行されるようだが、一応呼ぶ)
         PythonEngine.Initialize();
