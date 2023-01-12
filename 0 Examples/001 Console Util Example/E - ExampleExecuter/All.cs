@@ -465,51 +465,6 @@ public static partial class ExampleExecuter
         {
             var baseDir_B = $@"{BASE_DIR}\B - UsefulClasses";
 
-            // 003 CommandPrompt
-            {
-
-                // objective
-                {
-                    //using var prompt = new CommandPrompt()
-                    //{
-                    //    RealTimeConsoleWriteLineOutput = true,
-                    //    OmitCurrentDirectoryDisplay = false,
-                    //};
-
-                    //prompt.WriteLine(@"");
-                    //prompt.WriteLine(@"cd ..\..\..\# TestModel\A - Extensions\E007 DistortImage");
-                    //prompt.WriteLine(@"");
-                    //prompt.WriteLine(@"lnn");
-                    //prompt.WriteLine(@"");
-                    //prompt.WriteLine(@"ls");
-                    //prompt.WriteLine(@"");
-
-                    //var outupt = prompt.ResponseList.ToArray();
-
-                }
-
-                // static
-                {
-
-                    //var commands = new string[] {
-                    //   @"",
-                    //   @"cd ..\..\..\# TestModel\A - Extensions\E007 DistortImage",
-                    //   @"",
-                    //   @"lnn",
-                    //   @"",
-                    //   @"ls",
-                    //   @""};
-
-                    //var outupt = CommandPrompt.Execute(
-                    //    realTimeConsoleWriteLineOutput: true,
-                    //    omitCurrentDirectoryDisplay: true,
-                    //    outputReceivedAction: null,
-                    //    commands: commands);
-
-                }
-
-            }
-
             // B004 ConsoleExtension
             {
                 //var timer = new System.Timers.Timer(500);
@@ -617,33 +572,33 @@ public static partial class ExampleExecuter
 
             // D001 LINEController
             {
-                //var accessToken = ""; // LINE Notify
-                //var line = new LINEController(accessToken);
-                //var result = line.SendMessageAsync(@"Hello LINE from C#. 日本語").Result;
+                var accessToken = ""; // LINE Notify
+                var line = new LINEController(accessToken);
+                var result = line.SendMessageAsync(@"Hello LINE from C#. 日本語").Result;
 
             }
 
             // D002 GitController
             {
-                //var remotePath = $@"https://github.com/aki32/test"; // remote url
-                //var localPath = $@"C:\Users\aki32\Dropbox\PC\Desktop\test"; // local path
-                //var signatureName = $@"aki32"; // your name
-                //var signatureEmail = $@"aki32@aaa"; // your email
+                var remotePath = $@"https://github.com/aki32/test"; // remote url
+                var localPath = $@"C:\Users\aki32\Dropbox\PC\Desktop\test"; // local path
+                var signatureName = $@"aki32"; // your name
+                var signatureEmail = $@"aki32@aaa"; // your email
 
-                //var gc = new GitController(remotePath, localPath, signatureName, signatureEmail)
-                //{
-                //    Credentials = new LibGit2Sharp.UsernamePasswordCredentials
-                //    {
-                //        // your credidential info (obtainable from https://github.com/settings/tokens)
-                //        Username = "",
-                //        Password = "",
-                //    },
-                //};
+                var gc = new GitController(remotePath, localPath, signatureName, signatureEmail)
+                {
+                    Credentials = new LibGit2Sharp.UsernamePasswordCredentials
+                    {
+                        // your credidential info (obtainable from https://github.com/settings/tokens)
+                        Username = "",
+                        Password = "",
+                    },
+                };
 
-                //gc.Sync();
+                gc.Sync();
             }
 
-            // D004 PythonController
+            // D004 Python
             {
 
                 //PythonController.Initialize(
@@ -665,6 +620,51 @@ public static partial class ExampleExecuter
                 ////PythonController.PythonExample_WithOwnLibraryInvoke();
 
                 //PythonController.Shutdown();
+
+            }
+
+            // D005 CommandPrompt
+            {
+
+                // objective
+                {
+                    //using var prompt = new CommandPromptController()
+                    //{
+                    //    RealTimeConsoleWriteLineOutput = true,
+                    //    OmitCurrentDirectoryDisplay = false,
+                    //};
+
+                    //prompt.WriteLine(@"");
+                    //prompt.WriteLine(@"cd ..\..\..\# TestModel\A - Extensions\E007 DistortImage");
+                    //prompt.WriteLine(@"");
+                    //prompt.WriteLine(@"lnn");
+                    //prompt.WriteLine(@"");
+                    //prompt.WriteLine(@"ls");
+                    //prompt.WriteLine(@"");
+
+                    //var outupt = prompt.ResponseList.ToArray();
+
+                }
+
+                // static
+                {
+
+                    //var commands = new string[] {
+                    //   @"",
+                    //   @"cd ..\..\..\# TestModel\A - Extensions\E007 DistortImage",
+                    //   @"",
+                    //   @"lnn",
+                    //   @"",
+                    //   @"ls",
+                    //   @""};
+
+                    //var outupt = CommandPromptController.Execute(
+                    //    realTimeConsoleWriteLineOutput: true,
+                    //    omitCurrentDirectoryDisplay: true,
+                    //    outputReceivedAction: null,
+                    //    commands: commands);
+
+                }
 
             }
 

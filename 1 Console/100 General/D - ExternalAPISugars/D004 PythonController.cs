@@ -82,9 +82,10 @@ public static class PythonController
     }
 
 
-    // ★★★★★★★★★★★★★★★ helper
+    // ★★★★★★★★★★★★★★★ sugar
 
     public static dynamic Import(string name) => Py.Import(name);
+    public static dynamic RunSimpleString(string code) => PythonEngine.RunSimpleString(code);
 
 
     // ★★★★★★★★★★★★★★★ samples
@@ -98,7 +99,7 @@ public static class PythonController
         Console.WriteLine("PythonExample_WithStringInvoke");
         Console.WriteLine();
 
-        PythonEngine.RunSimpleString(@"
+        RunSimpleString(@"
 import numpy as np
 print(f'np.cos(np.pi/4) = {np.cos(np.pi/4)}')
 ");
@@ -118,7 +119,7 @@ print(f'np.cos(np.pi/4) = {np.cos(np.pi/4)}')
         Console.WriteLine("PythonExample_WithDynamicInvoke");
         Console.WriteLine();
 
-        dynamic np = Py.Import("numpy");
+        dynamic np = Import("numpy");
         Console.WriteLine($"np.cos(np.pi/4) = {np.cos(np.pi / 4)}");
 
         dynamic sin = np.sin;
@@ -157,9 +158,8 @@ print(f'np.cos(np.pi/4) = {np.cos(np.pi/4)}')
         Console.WriteLine("PythonExample_WithOwnLibraryInvoke");
         Console.WriteLine();
 
-        dynamic snap = Py.Import("SNAPVisualizer");
+        dynamic snap = Import("SNAPVisualizer");
         dynamic a = snap.SNAPBeamVisualizer;
-
 
         //dynamic myMath = Py.Import("my_awesome_lib.my_math"); // "from my_awesome_lib import my_math"
         //dynamic calculator = myMath.Calculator(5, 7); // クラスのインスタンスを生成

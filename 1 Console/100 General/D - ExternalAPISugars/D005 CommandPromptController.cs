@@ -2,8 +2,8 @@
 
 using Aki32Utilities.ConsoleAppUtilities.General;
 
-namespace Aki32Utilities.ConsoleAppUtilities.UsefulClasses;
-public class CommandPrompt : IDisposable
+namespace Aki32Utilities.ConsoleAppUtilities.General;
+public class CommandPromptController : IDisposable
 {
     public bool RealTimeConsoleWriteLineOutput { get; set; }
     public bool OmitCurrentDirectoryDisplay { get; set; } = false;
@@ -16,7 +16,7 @@ public class CommandPrompt : IDisposable
     public List<string> ResponseList { get; set; } = new List<string>();
 
 
-    public CommandPrompt()
+    public CommandPromptController()
     {
         var processStartInfo = new ProcessStartInfo()
         {
@@ -119,7 +119,7 @@ public class CommandPrompt : IDisposable
         params string[] commands
         )
     {
-        using var prompt = new CommandPrompt
+        using var prompt = new CommandPromptController
         {
             RealTimeConsoleWriteLineOutput = realTimeConsoleWriteLineOutput,
             OmitCurrentDirectoryDisplay = omitCurrentDirectoryDisplay,
