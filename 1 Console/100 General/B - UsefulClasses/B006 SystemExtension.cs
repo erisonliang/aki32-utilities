@@ -18,13 +18,15 @@ public class SystemExtension
     /// </summary>
     /// <example>
     /// <code>
+    /// 
     /// AddEnvPath("PATH", new string[]
     /// {
     ///    pythonPathEnvVar,
     ///    Path.Combine(pythonPathEnvVar, @"DLLs"),
     /// });
+    /// 
+    /// </code>
     /// </example>
-    /// </remarks>
     /// <param name="paths">PATHに追加するディレクトリ。</param>
     public static void AddEnvPath(string pathName, string[] paths, EnvironmentVariableTarget target = EnvironmentVariableTarget.Process)
     {
@@ -35,7 +37,6 @@ public class SystemExtension
 
         Environment.SetEnvironmentVariable(pathName, string.Join(Path.PathSeparator.ToString(), envPaths!), target);
     }
-
 
 
     // ★★★★★★★★★★★★★★★ 
