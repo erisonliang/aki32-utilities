@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 
-using Aki32Utilities.ConsoleAppUtilities.General;
+using Aki32Utilities.ConsoleAppUtilities.UsefulClasses;
 
 namespace Aki32Utilities.ConsoleAppUtilities.General;
 public class CommandPromptController : IDisposable
