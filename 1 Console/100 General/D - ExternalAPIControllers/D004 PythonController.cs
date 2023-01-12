@@ -1,4 +1,6 @@
-﻿using Python.Runtime;
+﻿using System.Security.AccessControl;
+
+using Python.Runtime;
 
 namespace Aki32Utilities.ConsoleAppUtilities.General;
 /// <summary>
@@ -8,8 +10,9 @@ public static class PythonController
 {
     // ★★★★★★★★★★★★★★★ prop
 
-    public static DirectoryInfo PythonPath;
-    public static string DllName = @"python310.dll";
+    public static DirectoryInfo PythonPath { get; set; }
+    public static List<string> AdditionalPath { get; set; } = new List<string>();
+    public static string DllName { get; set; } = @"python310.dll";
 
 
     // ★★★★★★★★★★★★★★★ main
@@ -38,7 +41,7 @@ public static class PythonController
         PythonEngine.RunSimpleString(@"
 import sys
 import pprint
-pprint.pprint(f'module path ={sys.path}')
+pprint.pprint(f'module path = {sys.path}')
 ");
 
         Console.WriteLine("=======================================");
@@ -78,8 +81,16 @@ pprint.pprint(f'module path ={sys.path}')
     }
 
     /// <summary>
-    /// 自作コードも叩ける（環境変数の初期化のところに自作コードの場所の指定が必要！）
+    /// 自作コード叩く。
     /// </summary>
+    /// <remarks>
+    /// 
+    /// 他のパッケージが入ってるところ（C:\Python310\Lib\site-packages\）にフォルダ作って，中に（__init__.py）を追加でいけた！
+    /// なんか他の手段ないかな…。
+    /// 
+    /// もしくは，環境変数の初期化のところに自作コードの場所の指定とかすればいける？？
+    /// 
+    /// </remarks>
     /// <param name="paths"></param>
     public static void PythonExample_WithOwnLibraryInvoke()
     {
@@ -87,13 +98,18 @@ pprint.pprint(f'module path ={sys.path}')
         Console.WriteLine("PythonExample_WithOwnLibraryInvoke");
         Console.WriteLine();
 
-        dynamic myMath = Py.Import("my_awesome_lib.my_math"); // "from my_awesome_lib import my_math"
-        dynamic calculator = myMath.Calculator(5, 7); // クラスのインスタンスを生成
-        Console.WriteLine($"5 + 7 = {calculator.add()}"); // クラスのメソッド呼び出し
-        Console.WriteLine($"sum(1,2,3,4,5) = {myMath.Calculator.sum(new[] { 1, 2, 3, 4, 5 })}"); //staticメソッドも当然呼べる
-        dynamic dict = myMath.GetDict(); // 辞書型を返す関数呼び出し
-        Console.WriteLine(dict[3]); // 辞書からキーを指定して読み取り
-        Console.ReadKey();
+        dynamic snap = Py.Import("SNAPVisualizer");
+        dynamic a = snap.SNAPBeamVisualizer;
+
+
+
+        //dynamic myMath = Py.Import("my_awesome_lib.my_math"); // "from my_awesome_lib import my_math"
+        //dynamic calculator = myMath.Calculator(5, 7); // クラスのインスタンスを生成
+        //Console.WriteLine($"5 + 7 = {calculator.add()}"); // クラスのメソッド呼び出し
+        //Console.WriteLine($"sum(1,2,3,4,5) = {myMath.Calculator.sum(new[] { 1, 2, 3, 4, 5 })}"); //staticメソッドも当然呼べる
+        //dynamic dict = myMath.GetDict(); // 辞書型を返す関数呼び出し
+        //Console.WriteLine(dict[3]); // 辞書からキーを指定して読み取り
+        //Console.ReadKey();
 
         Console.WriteLine("=======================================");
         Console.WriteLine();
@@ -121,10 +137,13 @@ pprint.pprint(f'module path ={sys.path}')
 
 
         // ★★★★★ pythonnetがpython本体のDLLおよび依存DLLを見つけられるようにする。
-        AddEnvPath(
-          pythonPathEnvVar,
-          Path.Combine(pythonPathEnvVar, @"DLLs")
-        );
+        var paths = new List<string>()
+        {
+            pythonPathEnvVar,
+            Path.Combine(pythonPathEnvVar, @"DLLs"),
+        };
+        paths.AddRange(AdditionalPath);
+        AddEnvPath("PATH", paths.ToArray());
 
 
         // ★★★★★ python環境に、pythonPathEnvVar(標準pythonライブラリの場所)を設定。※不要だった。
@@ -140,6 +159,7 @@ pprint.pprint(f'module path ={sys.path}')
         //};
         //if (myPackages != null) packages.AddRange(myPackages);
         //PythonEngine.PythonPath = string.Join(Path.PathSeparator.ToString(), packages);
+        AddEnvPath("PYTHONPATH", AdditionalPath.ToArray());
 
         // 初期化 (明示的に呼ばなくても内部で自動実行されるようだが、一応呼ぶ)
         PythonEngine.Initialize();
@@ -150,14 +170,14 @@ pprint.pprint(f'module path ={sys.path}')
     /// プロセスの環境変数PATHに、指定されたディレクトリを追加する(パスを通す)。
     /// </summary>
     /// <param name="paths">PATHに追加するディレクトリ。</param>
-    private static void AddEnvPath(params string[] paths)
+    private static void AddEnvPath(string pathName, params string[] paths)
     {
-        var envPaths = Environment.GetEnvironmentVariable("PATH")?.Split(Path.PathSeparator).ToList();
+        var envPaths = Environment.GetEnvironmentVariable(pathName)?.Split(Path.PathSeparator).ToList() ?? new List<string>();
         foreach (var path in paths)
             if (path.Length > 0 && !envPaths!.Contains(path))
                 envPaths.Insert(0, path);
 
-        Environment.SetEnvironmentVariable("PATH", string.Join(Path.PathSeparator.ToString(), envPaths!), EnvironmentVariableTarget.Process);
+        Environment.SetEnvironmentVariable(pathName, string.Join(Path.PathSeparator.ToString(), envPaths!), EnvironmentVariableTarget.Process);
     }
 
 
