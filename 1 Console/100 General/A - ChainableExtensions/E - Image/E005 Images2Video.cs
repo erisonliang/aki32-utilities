@@ -32,7 +32,6 @@ public static partial class ChainableExtensions
         if (!outputFile!.Name.IsMatchAny(GetRegexen_VideoFiles()))
             throw new Exception("outputFile name must end with .mp4 or .avi");
 
-
         // force download required dll
         var requiredDllName = "openh264-1.8.0-win64.dll";
         if (!File.Exists(requiredDllName))
