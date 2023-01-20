@@ -129,7 +129,7 @@ public class ProgressManager : IDisposable
         if (WriteProgressBar)
         {
             var s1 = Enumerable.Repeat('■', (int)(percentage * ProgressBarBoxCount / 100.001 + 1)).ToString_Extension();
-            var s2 = Enumerable.Repeat('＿', (int)((100 - percentage) * ProgressBarBoxCount / 100)).ToString_Extension();
+            var s2 = Enumerable.Repeat('_', (int)((100 - percentage) * ProgressBarBoxCount / 100)).ToString_Extension();
             s += $"{s1}{s2}, ";
         }
 
