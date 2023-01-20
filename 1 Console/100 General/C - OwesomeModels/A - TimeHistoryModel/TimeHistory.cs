@@ -503,41 +503,6 @@ public class TimeHistory
 
         return this;
     }
-
-    public TimeHistory AddColumn(params string[] addingColumnNames)
-    {
-        foreach (var addingColumnName in addingColumnNames)
-            _ = this[addingColumnName][0];
-
-        return this;
-    }
-    public TimeHistory RenameColumn(string targetColumnName, string newColumnName)
-    {
-        DeplicateColumn(targetColumnName, newColumnName);
-        DropColumn(targetColumnName);
-
-        return this;
-    }
-    public TimeHistory DeplicateColumn(string baseColumnName, string newColumnName)
-    {
-        this[newColumnName] = this[baseColumnName];
-
-        return this;
-    }
-    public TimeHistory DropColumn(params string[] droppingColumnNames)
-    {
-        foreach (var droppingColumnName in droppingColumnNames)
-            ContentsTable.Remove(droppingColumnName);
-
-        return this;
-    }
-    public TimeHistory DropAllColumns()
-    {
-        ContentsTable.Clear();
-
-        return this;
-    }
-
     public TimeHistory AppendStep(TimeHistoryStep step)
     {
         var addingIndex = DataRowCount;
@@ -575,6 +540,66 @@ public class TimeHistory
 
         return this;
     }
+    public IEnumerable<TimeHistoryStep> GetAllSteps()
+    {
+        for (int i = 0; i < DataRowCount; i++)
+            yield return GetStep(i);
+    }
+    public TimeHistory SetAllSteps(List<TimeHistoryStep> allSteps)
+    {
+        foreach (var key in allSteps.First().ContentsTable.Keys)
+            ContentsTable[key] = allSteps.Select(x => x[key]).ToArray();
+        return this;
+    }
+
+    public TimeHistory AddColumn(params string[] addingColumnNames)
+    {
+        foreach (var addingColumnName in addingColumnNames)
+            _ = this[addingColumnName][0];
+
+        return this;
+    }
+    public TimeHistory RenameColumn(string targetColumnName, string newColumnName)
+    {
+        DeplicateColumn(targetColumnName, newColumnName);
+        DropColumn(targetColumnName);
+
+        return this;
+    }
+    public TimeHistory DeplicateColumn(string baseColumnName, string newColumnName)
+    {
+        this[newColumnName] = this[baseColumnName];
+
+        return this;
+    }
+    public TimeHistory DropColumn(params string[] droppingColumnNames)
+    {
+        foreach (var droppingColumnName in droppingColumnNames)
+            ContentsTable.Remove(droppingColumnName);
+
+        return this;
+    }
+    public TimeHistory DropAllColumns()
+    {
+        ContentsTable.Clear();
+
+        return this;
+    }
+
+    public TimeHistory OrderBy(string targetColumnName, bool descending = false)
+    {
+        var allSteps = GetAllSteps().ToList();
+        List<TimeHistoryStep> ordered;
+        if (descending)
+            ordered = allSteps.OrderByDescending(step => step[targetColumnName]).ToList();
+        else
+            ordered = allSteps.OrderBy(step => step[targetColumnName]).ToList();
+
+        SetAllSteps(ordered);
+
+        return this;
+    }
+    public TimeHistory OrderByDescending(string targetColumnName) => OrderBy(targetColumnName, true);
 
 
     // ★★★★★★★★★★★★★★★ for specific use
