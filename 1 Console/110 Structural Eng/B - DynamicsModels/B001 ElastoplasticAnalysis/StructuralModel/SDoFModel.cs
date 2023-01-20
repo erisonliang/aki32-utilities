@@ -66,27 +66,30 @@ public class SDoFModel
     /// <returns>
     /// List<TimeHistory> {Sd, Sv, Sa};
     /// </returns>
-    public static List<TimeHistory> CalcResponseSpectrum(double[] TList, double[] hList, TimeHistory wave, ITimeHistoryAnalysisModel thaModel, ElastoplasticCharacteristicBase ep = null)
+    public static List<TimeHistory> CalcResponseSpectrum(double[] TList, double[] hList, TimeHistory wave, ITimeHistoryAnalysisModel thaModel,
+        ElastoplasticCharacteristicBase ep = null,
+        int maxDegreeOfParallelism = 15
+        )
     {
         if (ep == null)
             ep = new ElasticModel(1);
 
         Console.WriteLine("============================================");
-        Console.WriteLine("calculating…");
 
         var SdList = new TimeHistory("1 Sd");
         var SvList = new TimeHistory("2 Sv");
         var SaList = new TimeHistory("3 Sa");
 
-        foreach (var T in TList)
-        {
-            var u = TList.ToList().IndexOf(T) * hList.Length;
-            var b = TList.Length * hList.Length;
-            Console.Write($"{u} / {b} ( {100 * u / b} %)");
+        using var progress = new ProgressManager(TList.Length * hList.Length);
+        progress.StartAutoWrite(200);
 
+        var option = new ParallelOptions { MaxDegreeOfParallelism = maxDegreeOfParallelism };
+        Parallel.ForEach(TList, option, T =>
+        {
             var Sd = new TimeHistoryStep();
             var Sv = new TimeHistoryStep();
             var Sa = new TimeHistoryStep();
+
             Sd["T"] = T;
             Sv["T"] = T;
             Sa["T"] = T;
@@ -98,16 +101,21 @@ public class SDoFModel
                 Sd[$"h={h:F4}"] = resultSpectrum.Sd;
                 Sv[$"h={h:F4}"] = resultSpectrum.Sv;
                 Sa[$"h={h:F4}"] = resultSpectrum.Sa;
+
+                progress.CurrentStep++;
             }
 
             SdList.AppendStep(Sd);
             SvList.AppendStep(Sv);
             SaList.AppendStep(Sa);
 
-            ConsoleExtension.ClearCurrentConsoleLine();
-        }
+        });
 
-        Console.WriteLine("calculation finished");
+        SdList.OrderBy("T");
+        SvList.OrderBy("T");
+        SaList.OrderBy("T");
+
+        progress.WriteDone();
         Console.WriteLine("============================================");
 
         return new List<TimeHistory> { SdList, SvList, SaList };
