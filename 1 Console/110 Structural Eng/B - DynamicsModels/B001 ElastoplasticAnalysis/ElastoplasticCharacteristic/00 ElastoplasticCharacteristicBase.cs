@@ -5,7 +5,7 @@ namespace Aki32Utilities.ConsoleAppUtilities.StructuralEngineering;
 /// <summary>
 /// Base abstruct class of Elastoplastic Characteristics
 /// </summary>
-public abstract class ElastoplasticCharacteristicBase
+public abstract class ElastoplasticCharacteristicBase : ICloneable
 {
 
     // ★★★★★★★★★★★★★★★ props for all
@@ -106,6 +106,11 @@ public abstract class ElastoplasticCharacteristicBase
             default:
                 throw new NotImplementedException();
         }
+    }
+
+    public object Clone()
+    {
+        return MemberwiseClone();
     }
 
 

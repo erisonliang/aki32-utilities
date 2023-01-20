@@ -67,25 +67,23 @@ public class SDoFModel
     /// List<TimeHistory> {Sd, Sv, Sa};
     /// </returns>
     public static List<TimeHistory> CalcResponseSpectrum(double[] TList, double[] hList, TimeHistory wave, ITimeHistoryAnalysisModel thaModel,
-        ElastoplasticCharacteristicBase ep = null,
+        ElastoplasticCharacteristicBase? ep = null,
         int maxDegreeOfParallelism = 15
         )
     {
-        if (ep == null)
-            ep = new ElasticModel(1);
-
-        Console.WriteLine("============================================");
+        ep ??= new ElasticModel(1);
 
         var SdList = new TimeHistory("1 Sd");
         var SvList = new TimeHistory("2 Sv");
         var SaList = new TimeHistory("3 Sa");
 
         using var progress = new ProgressManager(TList.Length * hList.Length);
-        progress.StartAutoWrite(200);
+        progress.StartAutoWrite(100);
 
         var option = new ParallelOptions { MaxDegreeOfParallelism = maxDegreeOfParallelism };
         Parallel.ForEach(TList, option, T =>
         {
+            var epc = ep.Clone() as ElastoplasticCharacteristicBase;
             var Sd = new TimeHistoryStep();
             var Sv = new TimeHistoryStep();
             var Sa = new TimeHistoryStep();
@@ -96,7 +94,7 @@ public class SDoFModel
 
             foreach (var h in hList)
             {
-                var targetStructure = FromT(T, h, ep);
+                var targetStructure = FromT(T, h, epc);
                 var resultSpectrum = targetStructure.Calc(wave, thaModel).GetSpectrumSet();
                 Sd[$"h={h:F4}"] = resultSpectrum.Sd;
                 Sv[$"h={h:F4}"] = resultSpectrum.Sv;
@@ -105,9 +103,12 @@ public class SDoFModel
                 progress.CurrentStep++;
             }
 
-            SdList.AppendStep(Sd);
-            SvList.AppendStep(Sv);
-            SaList.AppendStep(Sa);
+            lock (SdList)
+                SdList.AppendStep(Sd);
+            lock (SvList)
+                SvList.AppendStep(Sv);
+            lock (SaList)
+                SaList.AppendStep(Sa);
 
         });
 
@@ -116,7 +117,6 @@ public class SDoFModel
         SaList.OrderBy("T");
 
         progress.WriteDone();
-        Console.WriteLine("============================================");
 
         return new List<TimeHistory> { SdList, SvList, SaList };
     }
