@@ -75,7 +75,7 @@ public static partial class ChainableExtensions
 
 
         inputDir.Loop(inputDir, (inF, _) => inF.RenameFile(newFileNameWithoutExtension, replaceSets));
-     
+
 
         // post process
         UtilConfig.TryRestart_ConsoleOutput_Preprocess();
@@ -156,6 +156,19 @@ public static partial class ChainableExtensions
     {
         // sugar
         return new FileInfo(GetRenamedPath(inputFile.FullName, newFileNameWithoutExtension, replaceSets));
+    }
+
+    /// <summary>
+    /// rename a extension
+    /// </summary>
+    /// <param name="inputFile"></param>
+    /// <param name="newFileNameWithoutExtension">"*" will be replaced with old name</param>
+    /// <param name="replaceSets">replace strings in original file name</param>
+    /// <returns></returns>
+    public static FileInfo ChangeExtension(this FileInfo inputFile, string newExtension)
+    {
+        // sugar
+        return new FileInfo(GetExtensionChangedPath(inputFile.FullName, newExtension));
     }
 
 }

@@ -32,4 +32,25 @@ public static partial class ChainableExtensions
         return outputFilePath;
     }
 
+    /// <summary>
+    /// rename a file path
+    /// </summary>
+    /// <param name="inputPath"></param>
+    /// <param name="newFileNameWithoutExtension">"*" will be replaced with old name</param>
+    /// <param name="replaceSets">replace strings in original file name</param>
+    /// <returns></returns>
+    public static string GetExtensionChangedPath(this string inputPath, string newExtension)
+    {
+        // main
+        var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(inputPath);
+        newExtension = newExtension.Replace(".", "");
+
+        var outputFileName = $"{fileNameWithoutExtension}.{newExtension}";
+        var outputFilePath = Path.Combine(Path.GetDirectoryName(inputPath)!, outputFileName);
+
+
+        // post process
+        return outputFilePath;
+    }
+
 }

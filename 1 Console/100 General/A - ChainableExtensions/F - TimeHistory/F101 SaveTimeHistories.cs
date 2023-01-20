@@ -10,20 +10,32 @@ public static partial class ChainableExtensions
     /// <param name="outputFilePath"></param>
     public static FileInfo SaveToExcel(this IEnumerable<TimeHistory> timeHistoryList, FileInfo outputFile)
     {
-        var tempDir = new DirectoryInfo(Path.Combine(outputFile.DirectoryName!, ".__temp"));
-        if (!tempDir.Exists)
+        // preprocess
+        if (outputFile != null && !outputFile!.Name.EndsWith(".xlsx"))
+            throw new Exception("outputFile name must end with .xlsx");
+
+        var tempDir = new DirectoryInfo(Path.Combine(outputFile!.DirectoryName!, ".__temp"));
+        if (tempDir.Exists)
+            tempDir.Delete(true);
+
+        try
+        {
             tempDir.Create();
 
-        foreach (var timeHistory in timeHistoryList)
-        {
-            var timeHistoryName = string.IsNullOrEmpty(timeHistory.Name) ? timeHistoryList.ToList().IndexOf(timeHistory).ToString() : timeHistory.Name;
-            var outputCsvPath = Path.Combine(tempDir.FullName, $"{timeHistoryName}.csv");
-            var outputCsv = new FileInfo(outputCsvPath);
-            timeHistory.SaveToCsv(outputCsv);
-        }
+            foreach (var timeHistory in timeHistoryList)
+            {
+                var timeHistoryName = string.IsNullOrEmpty(timeHistory.Name) ? timeHistoryList.ToList().IndexOf(timeHistory).ToString() : timeHistory.Name;
+                var outputCsvPath = Path.Combine(tempDir.FullName, $"{timeHistoryName}.csv");
+                var outputCsv = new FileInfo(outputCsvPath);
+                timeHistory.SaveToCsv(outputCsv);
+            }
 
-        tempDir.Csvs2ExcelSheets(outputFile);
-        tempDir.Delete(true);
+            tempDir.Csvs2ExcelSheets(outputFile);
+        }
+        finally
+        {
+            tempDir.Delete(true);
+        }
 
         return outputFile!;
     }

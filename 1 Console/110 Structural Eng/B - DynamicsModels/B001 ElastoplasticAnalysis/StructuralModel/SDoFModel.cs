@@ -93,7 +93,7 @@ public class SDoFModel
 
             foreach (var h in hList)
             {
-                var targetStructure = SDoFModel.FromT(T, h, ep);
+                var targetStructure = FromT(T, h, ep);
                 var resultSpectrum = targetStructure.Calc(wave, thaModel).GetSpectrumSet();
                 Sd[$"h={h:F4}"] = resultSpectrum.Sd;
                 Sv[$"h={h:F4}"] = resultSpectrum.Sv;
