@@ -26,6 +26,11 @@ public static partial class ExampleExecuter
 
     public static void All()
     {
+        // TEST
+        {
+          
+        }
+
         // A - ChainableExtensions
         {
             var baseDir_A = $@"{BASE_DIR}\A - ChainableExtensions";
@@ -110,12 +115,15 @@ public static partial class ExampleExecuter
                     ////output.RenameFiles_Replace(("ABC", "abc"), ("XYZ", "xyz"));
                 }
 
-                // B007 Zip
+                // B007 Compression
                 {
-                    //var input = new DirectoryInfo($@"{baseDir_A_100}\B007 Zip\input");
-                    //input
-                    //    .Zip(null)
-                    //    .Unzip(null);
+                    var input = new DirectoryInfo($@"{baseDir_A_100}\B007 Compression\input");
+                    input
+                        .Zip(null)
+                        .Unzip(null);
+
+
+
                 }
 
                 // B008 Encrypt, Decrypt
