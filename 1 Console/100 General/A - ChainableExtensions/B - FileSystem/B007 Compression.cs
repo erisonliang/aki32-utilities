@@ -42,8 +42,8 @@ public static partial class ChainableExtensions
         // preprocess
         UtilPreprocessors.PreprocessOutFile(ref outputFile, inputDir.Parent!, "output.tar");
 
-
         // main
+        // TODO: migrate to defaul API https://learn.microsoft.com/ja-jp/dotnet/api/system.formats.tar.tarfile?view=net-7.0
         using var outputStream = new FileStream(outputFile!.FullName, FileMode.Create);
         using var tarArchive = TarArchive.CreateOutputTarArchive(outputStream);
         foreach (var file in inputDir.GetFiles("*", SearchOption.AllDirectories))
@@ -120,6 +120,7 @@ public static partial class ChainableExtensions
 
 
         // main
+        // TODO: migrate to defaul API https://learn.microsoft.com/ja-jp/dotnet/api/system.formats.tar.tarfile?view=net-7.0
         using var inputStream = new FileStream(inputFile.FullName, FileMode.Open);
         using var tarArchive = TarArchive.CreateInputTarArchive(inputStream, Encoding.UTF8);
         tarArchive.ExtractContents(outputDir!.FullName);
