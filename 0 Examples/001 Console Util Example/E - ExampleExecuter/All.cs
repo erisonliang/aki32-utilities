@@ -28,7 +28,7 @@ public static partial class ExampleExecuter
     {
         // TEST
         {
-          
+
         }
 
         // A - ChainableExtensions
@@ -117,12 +117,23 @@ public static partial class ExampleExecuter
 
                 // B007 Compression
                 {
-                    var input = new DirectoryInfo($@"{baseDir_A_100}\B007 Compression\input");
-                    input
-                        .Zip(null)
-                        .Unzip(null);
+                    //var input = new DirectoryInfo($@"{baseDir_A_100}\B007 Compression\input");
+                    //var input2 = new FileInfo($@"{baseDir_A_100}\B007 Compression\input2.docx");
 
+                    //input
+                    //    .Compress_Zip(null)
+                    //    .Decompress_Zip(null)
+                    //    ;
 
+                    //input
+                    //    .Compress_Tar(null)
+                    //    .Decompress_Tar(null)
+                    //    ;
+
+                    //input2
+                    //    .Compress_Gzip(null)
+                    //    .Decompress_Gzip(null)
+                    //    ;
 
                 }
 

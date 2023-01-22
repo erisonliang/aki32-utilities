@@ -32,6 +32,7 @@
     <PackageReference Include="LibGit2Sharp" Version="0.26.2" />
     <PackageReference Include="MathNet.Numerics" Version="5.0.0" />
     <PackageReference Include="OpenCvSharp4.Windows" Version="4.6.0.20220608" />
+    <PackageReference Include="SharpZipLib" Version="1.4.1" />
     <PackageReference Include="XPlot.Plotly" Version="4.0.6" />
   </ItemGroup>
 
