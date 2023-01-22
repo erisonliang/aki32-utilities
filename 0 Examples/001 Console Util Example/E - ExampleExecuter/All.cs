@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 using Aki32Utilities.ConsoleAppUtilities.General;
 using Aki32Utilities.ConsoleAppUtilities.Research;
+using Aki32Utilities.ConsoleAppUtilities.StructuralEngineering;
 using Aki32Utilities.ConsoleAppUtilities.UsefulClasses;
 
 using ClosedXML;
@@ -871,6 +872,23 @@ public static partial class ExampleExecuter
 
             }
 
+            // X003 KnetHelper
+            {
+                // KnetAccData
+                {
+                    //var input = new FileInfo(@"C:\Users\aki32\Dropbox\PC\Desktop\新しいフォルダー\TKY0022203162336\TKY0022203162336.EW");
+                    //var aaa = new KNetHelper.KNetAccData(input);
+
+
+
+
+
+
+
+
+                }
+
+            }
         }
 
         // 101 MachineLearning
