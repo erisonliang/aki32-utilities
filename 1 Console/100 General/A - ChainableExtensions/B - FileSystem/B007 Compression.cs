@@ -182,14 +182,40 @@ public static partial class ChainableExtensions
     // ★★★★★★★★★★★★★★★ loop sugar
 
     /// <summary>
-    /// Unzip_Loop
     /// </summary>
     /// <param name="inputDir"></param>
     /// <param name="outputDir">when null, automatically set</param>
     /// <returns></returns>
-    public static DirectoryInfo Unzip_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir)
+    public static DirectoryInfo Decompress_Zip_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir)
         => inputDir.Loop(outputDir, (inF, _) => inF.Decompress_Zip(null),
             searchRegexen: new string[] { @"^.*\.zip$" });
+
+    /// <summary>
+    /// </summary>
+    /// <param name="inputDir"></param>
+    /// <param name="outputDir">when null, automatically set</param>
+    /// <returns></returns>
+    public static DirectoryInfo Decompress_Tar_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir)
+        => inputDir.Loop(outputDir, (inF, _) => inF.Decompress_Tar(null),
+            searchRegexen: new string[] { @"^.*\.tar$" });
+
+    /// <summary>
+    /// </summary>
+    /// <param name="inputDir"></param>
+    /// <param name="outputDir">when null, automatically set</param>
+    /// <returns></returns>
+    public static DirectoryInfo Decompress_Gzip_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir)
+        => inputDir.Loop(outputDir, (inF, _) => inF.Decompress_Gzip(null),
+            searchRegexen: new string[] { @"^.*\.gz" });
+
+    /// <summary>
+    /// </summary>
+    /// <param name="inputDir"></param>
+    /// <param name="outputDir">when null, automatically set</param>
+    /// <returns></returns>
+    public static DirectoryInfo Decompress_TarGzip_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir)
+        => inputDir.Loop(outputDir, (inF, _) => inF.Decompress_TarGzip(null),
+            searchRegexen: new string[] { @"^.*\.tar.gz$" });
 
 
     // ★★★★★★★★★★★★★★★
