@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 
@@ -29,6 +30,9 @@ public static partial class ExampleExecuter
     {
         // TEST
         {
+            //var input = new DirectoryInfo(@);
+            //var input = new FileInfo(@);
+
 
         }
 
