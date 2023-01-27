@@ -366,7 +366,22 @@ public static partial class ExampleExecuter
                 // E102 SaveScreenShot
                 {
                     //var output = new DirectoryInfo($@"{baseDir_A_100}\E102 SaveScreenShot");
-                    //OwesomeExtensions.SaveScreenShot(output, new Point(0, 0), new Point(1000, 1000));
+                    // AwesomeExtensions.SaveScreenShot(output, new Point(0, 0), new Point(1000, 1000));
+                }
+
+                // F201 DivideTimeStep
+                {
+                    //var input = new TimeHistory()
+                    //{
+                    //    t = new double[] { 0, 1, 2, 3, 4, 5, 6 },
+                    //    a = new double[] { 1, 2, 0, 3, -1, 4, -2 },
+                    //};
+                    //input.WriteToConsole();
+
+                    //var output = input.GetTimeDividedHistory(10, "a");
+                    //output.WriteToConsole();
+
+                    //output.DrawGraph("a");
                 }
 
                 // G002 PDF2Images
