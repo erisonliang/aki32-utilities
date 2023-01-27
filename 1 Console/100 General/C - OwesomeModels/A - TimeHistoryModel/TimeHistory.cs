@@ -604,22 +604,18 @@ public class TimeHistory
 
     // ★★★★★★★★★★★★★★★ for specific use
 
-    private double __timeStep = 0;
     public double TimeStep
     {
         get
         {
-            if (__timeStep == 0)
+            try
             {
-                try
-                {
-                    __timeStep = t[1] - t[0];
-                }
-                catch (Exception)
-                {
-                }
+                return t[1] - t[0];
             }
-            return __timeStep;
+            catch (Exception)
+            {
+                return 0;
+            }
         }
     }
 
