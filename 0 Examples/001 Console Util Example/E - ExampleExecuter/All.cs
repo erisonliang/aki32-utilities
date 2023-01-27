@@ -32,7 +32,8 @@ public static partial class ExampleExecuter
         {
             //var input = new DirectoryInfo(@"C:\Users\aki32\Dropbox\Documents\02 東大関連\1 研究室\14 SNAP\修論モデル\03 地震波情報\K-NET, KiK-net\TKY022 全地震動\ダウンロードデータ");
 
-        
+
+
         }
 
         // A - ChainableExtensions
