@@ -19,8 +19,6 @@ using DocumentFormat.OpenXml.Wordprocessing;
 
 using Newtonsoft.Json;
 
-using Org.BouncyCastle.Asn1.X509.Qualified;
-
 namespace Aki32Utilities.UsageExamples.ConsoleAppUtilities;
 public static partial class ExampleExecuter
 {
@@ -398,7 +396,7 @@ public static partial class ExampleExecuter
 
                 // H101 DownloadFile
                 {
-                    //var source = new Uri("https://raw.githubusercontent.com/aki32/aki32-utilities/main/1%20Console%20App%20Utilities/%23%20TestModel/A%20-%20ChainableExtensions/B%20-%20General/E001%20CropImage/input.bmp");
+                    //var source = new Uri(@"https://raw.githubusercontent.com/aki32/aki32-utilities/main/1%20Console%20App%20Utilities/%23%20TestModel/A%20-%20ChainableExtensions/B%20-%20General/E001%20CropImage/input.bmp");
                     //var output = new FileInfo($@"{baseDir_A_100}\H101 DownloadFile\output.bmp");
                     //source.DownloadFileAsync(output).Wait();
 
@@ -406,7 +404,7 @@ public static partial class ExampleExecuter
 
                 // H201 CallAPI
                 {
-                    //var source = new Uri("https://weather.tsukumijima.net/api/forecast/city/400040");
+                    //var source = new Uri(@"https://weather.tsukumijima.net/api/forecast/city/400040");
                     //var result = source.CallAPIAsync_ForJsonData<dynamic>(HttpMethod.Get).Result;
 
                     //Console.WriteLine(result);
