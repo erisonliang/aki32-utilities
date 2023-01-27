@@ -97,7 +97,7 @@ public static partial class ExampleExecuter
 
                 // B004 CopyTo
                 {
-                    // directry-wise
+                    // directory-wise
                     //var input = new DirectoryInfo($@"{baseDir_A_100}\B004 CopyTo\input");
                     //var output = new DirectoryInfo($@"{baseDir_A_100}\B004 CopyTo\output");
                     //input.CopyTo(output);
@@ -251,17 +251,17 @@ public static partial class ExampleExecuter
                 // E001 CropImage
                 {
                     //var input = new FileInfo($@"{baseDir_A_100}\E001 CropImage\input.bmp");
-                    //var crops = new OwesomeExtensions.Thickness[]
+                    //var crops = new AwesomeExtensions.Thickness[]
                     //{
-                    //    new OwesomeExtensions.Thickness(0.13, 0.13, 0.13, 0.13),
-                    //    new OwesomeExtensions.Thickness(0, 0, 0.3, 0.3),
-                    //    new OwesomeExtensions.Thickness(0.3, 0, 0, 0.3),
-                    //    new OwesomeExtensions.Thickness(0.3, 0.3, 0, 0),
-                    //    new OwesomeExtensions.Thickness(0, 0.3, 0.3, 0),
+                    //    new AwesomeExtensions.Thickness(0.13, 0.13, 0.13, 0.13),
+                    //    new AwesomeExtensions.Thickness(0, 0, 0.3, 0.3),
+                    //    new AwesomeExtensions.Thickness(0.3, 0, 0, 0.3),
+                    //    new AwesomeExtensions.Thickness(0.3, 0.3, 0, 0),
+                    //    new AwesomeExtensions.Thickness(0, 0.3, 0.3, 0),
                     //};
 
                     //input.CropImageForMany(null, crops);
-                    ////input.CropImage(null, new OwesomeExtensions.Thickness(0.13, 0.13, 0.13, 0.13));
+                    ////input.CropImage(null, new AwesomeExtensions.Thickness(0.13, 0.13, 0.13, 0.13));
                 }
 
                 // E002 ConvertImageColor
@@ -422,9 +422,9 @@ public static partial class ExampleExecuter
 
             }
 
-            // 100C - OwesomeModels
+            // 100C - AwesomeModels
             {
-                var baseDir_A_100C = $@"{baseDir_A}\100C - OwesomeModels";
+                var baseDir_A_100C = $@"{baseDir_A}\100C - AwesomeModels";
 
                 // A - TimeHistoryModel
                 {
@@ -562,9 +562,9 @@ public static partial class ExampleExecuter
 
         }
 
-        // C - OwesomeModels
+        // C - AwesomeModels
         {
-            var baseDir_C = $@"{BASE_DIR}\C - OwesomeModels";
+            var baseDir_C = $@"{BASE_DIR}\C - AwesomeModels";
 
             // A - TimeHistoryModel
             {
@@ -628,7 +628,7 @@ public static partial class ExampleExecuter
                 //{
                 //    Credentials = new LibGit2Sharp.UsernamePasswordCredentials
                 //    {
-                //        // your credidential info (obtainable from https://github.com/settings/tokens)
+                //        // your credential info (obtainable from https://github.com/settings/tokens)
                 //        Username = "",
                 //        Password = "",
                 //    },
@@ -681,7 +681,7 @@ public static partial class ExampleExecuter
                     //prompt.WriteLine(@"ls");
                     //prompt.WriteLine(@"");
 
-                    //var outupt = prompt.ResponseList.ToArray();
+                    //var output = prompt.ResponseList.ToArray();
 
                 }
 
@@ -697,7 +697,7 @@ public static partial class ExampleExecuter
                     //   @"ls",
                     //   @""};
 
-                    //var outupt = CommandPromptController.Execute(
+                    //var output = CommandPromptController.Execute(
                     //    realTimeConsoleWriteLineOutput: true,
                     //    omitCurrentDirectoryDisplay: true,
                     //    outputReceivedAction: null,

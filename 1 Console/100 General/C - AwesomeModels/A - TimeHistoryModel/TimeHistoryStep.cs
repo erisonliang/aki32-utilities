@@ -17,7 +17,7 @@ public class TimeHistoryStep : TimeHistory
     {
         get
         {
-            if (ContentsTable.Keys.Contains(key))
+            if (ContentsTable.ContainsKey(key))
                 return ContentsTable[key][0];
 
             ContentsTable.Add(key, new double[] { 0 });
@@ -27,7 +27,7 @@ public class TimeHistoryStep : TimeHistory
         }
         set
         {
-            if (ContentsTable.Keys.Contains(key))
+            if (ContentsTable.ContainsKey(key))
                 ContentsTable[key][0] = value;
             else
                 ContentsTable.Add(key, new double[] { value });

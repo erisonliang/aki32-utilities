@@ -26,7 +26,7 @@ public class RainBranch
     /// <summary>
     /// Damage by this branch. (Di)
     /// Based on Miner's Law
-    /// ※ Devided by 2 since this brach is a half cycle. 
+    /// ※ Divided by 2 since this branch is a half cycle. 
     /// </summary>
     /// <param name="C"></param>
     /// <param name="beta"></param>
@@ -35,7 +35,7 @@ public class RainBranch
 
     /// <summary>
     /// Number of cycles to collapse. (Nf)
-    /// ※ Mu is devided by 2 since referred equation is based on a half amplitude 
+    /// ※ Mu is divided by 2 since referred equation is based on a half amplitude 
     /// </summary>
     /// <param name="C"></param>
     /// <param name="beta"></param>

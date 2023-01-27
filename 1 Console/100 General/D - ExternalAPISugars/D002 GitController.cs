@@ -16,7 +16,7 @@ public class GitController
     public UsernamePasswordCredentials? Credentials { private get; set; }
     public Repository Repo { get; set; }
 
-    // ★★★★★★★★★★★★★★★ inits
+    // ★★★★★★★★★★★★★★★ init
 
     public GitController(string remotePath, string localPath, string signatureName, string signatureEmail)
     {

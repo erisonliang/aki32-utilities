@@ -561,12 +561,12 @@ public class TimeHistory
     }
     public TimeHistory RenameColumn(string targetColumnName, string newColumnName)
     {
-        DeplicateColumn(targetColumnName, newColumnName);
+        DuplicateColumn(targetColumnName, newColumnName);
         DropColumn(targetColumnName);
 
         return this;
     }
-    public TimeHistory DeplicateColumn(string baseColumnName, string newColumnName)
+    public TimeHistory DuplicateColumn(string baseColumnName, string newColumnName)
     {
         this[newColumnName] = this[baseColumnName];
 
