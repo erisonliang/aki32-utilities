@@ -30,7 +30,7 @@ public class TimeHistory
     {
         get
         {
-            if (ContentsTable.Keys.Contains(key))
+            if (ContentsTable.ContainsKey(key))
                 return ContentsTable[key];
 
             ContentsTable.Add(key, new double[DataRowCount]);
@@ -40,7 +40,7 @@ public class TimeHistory
         }
         set
         {
-            if (ContentsTable.Keys.Contains(key))
+            if (ContentsTable.ContainsKey(key))
             {
                 ContentsTable[key] = value;
             }
