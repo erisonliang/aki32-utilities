@@ -1,4 +1,5 @@
 ﻿using Aki32Utilities.ConsoleAppUtilities.Research;
+
 using Aki32Utilities.UsageExamples.SampleNodeController.ViewModels;
 
 using System.Collections.ObjectModel;

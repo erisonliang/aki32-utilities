@@ -1,15 +1,14 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <RootNamespace>Aki32Utilities</RootNamespace>
     <OutputType>WinExe</OutputType>
     <TargetFramework>net6.0-windows</TargetFramework>
-    <Nullable>enable</Nullable>
+    <RootNamespace>Aki32Utilities</RootNamespace>
     <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
     <AssemblyName>ResearchArticlesNodeController</AssemblyName>
   </PropertyGroup>
-
 
   <ItemGroup>
     <PackageReference Include="LivetCask2" Version="4.0.2" />
