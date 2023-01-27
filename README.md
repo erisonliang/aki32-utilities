@@ -73,7 +73,7 @@ You can now handle files with beautiful method chain!!!
 
 <br>
 
-## 🌟 Owesome Models
+## 🌟 Awesome Models
 
 ### 🎇 TimeHistoryModel
 
