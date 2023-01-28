@@ -109,12 +109,12 @@ public static partial class ChainableExtensions
 
                     return (Image)outputBitmap.Clone();
                 }
-            case ResizeImageMode.Uniform_NotImpremented:
+            case ResizeImageMode.Uniform_Notimplemented:
                 {
                     throw new NotImplementedException();
 
                 }
-            case ResizeImageMode.UniformToFill_NotImpremented:
+            case ResizeImageMode.UniformToFill_Notimplemented:
                 {
                     throw new NotImplementedException();
 
@@ -132,8 +132,8 @@ public static partial class ChainableExtensions
     public enum ResizeImageMode
     {
         Stretch,
-        Uniform_NotImpremented,
-        UniformToFill_NotImpremented,
+        Uniform_Notimplemented,
+        UniformToFill_Notimplemented,
     }
 
 
