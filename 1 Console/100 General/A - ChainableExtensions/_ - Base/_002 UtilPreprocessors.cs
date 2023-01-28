@@ -81,11 +81,15 @@ public static class UtilPreprocessors
     /// <returns></returns>
     public static string GetNewOutputDirName(string MethodName)
     {
-        var randomGuid = Guid.NewGuid().ToString()[0..6].ToUpper();
         if (UtilConfig.IncludeGuidToNewOutputDirName)
-            return $"output_{MethodName}_{randomGuid}";
+        {
+            var randomGuid = Guid.NewGuid().ToString()[0..6].ToUpper();
+            return $"output_{MethodName.Shorten(0..UtilConfig.OutputPathMethodNameMaxLength)}_{randomGuid}";
+        }
         else
-            return $"output_{MethodName}";
+        {
+            return $"output_{MethodName.Shorten(0..UtilConfig.OutputPathMethodNameMaxLength)}";
+        }
     }
 
 }

@@ -10,6 +10,8 @@ public static class UtilConfig
     public static bool ConsoleOutput_Preprocess = true;
     public static Stack<bool> Queue_Stop_ConsoleOutput_Preprocess { get; set; } = new Stack<bool>();
 
+    public static int OutputPathMethodNameMaxLength = 10;
+
     public static void StopTemporary_ConsoleOutput_Preprocess()
     {
         Queue_Stop_ConsoleOutput_Preprocess.Push(ConsoleOutput_Preprocess);
