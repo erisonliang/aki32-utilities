@@ -40,7 +40,7 @@ public static partial class ChainableExtensions
 
     /// <summary>
     /// copy a file
-    /// ※ CopyTo(null) induce default CopyTo(string)... You can use CopyTo() here.
+    /// ※ CopyTo(null) induce default CopyTo(string)... Call CopyTo() instead of CopyTo(null).
     /// </summary>
     /// <param name="inputFile"></param>
     /// <param name="outputFile"></param>
@@ -74,6 +74,29 @@ public static partial class ChainableExtensions
         return inputFile.CopyTo(
             outputFile: null,
             overwriteExistingFile: overwriteExistingFile);
+    }
+
+    /// <summary>
+    /// move a file
+    /// </summary>
+    /// <param name="inputFile"></param>
+    /// <param name="outputDir">must not to be null</param>
+    /// <returns></returns>
+    public static FileInfo CopyTo(this FileInfo inputFile, DirectoryInfo outputDir,
+        bool overwriteExistingFile = true)
+    {
+        // preprocess
+        if (outputDir is null)
+            throw new ArgumentNullException(nameof(outputDir));
+
+
+        // main
+        var outputFile = new FileInfo(Path.Combine(outputDir.FullName, inputFile.Name));
+        inputFile.CopyTo(outputFile!.FullName, overwrite: overwriteExistingFile);
+
+        
+        // post process
+        return outputFile!;
     }
 
 }
