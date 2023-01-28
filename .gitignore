@@ -11,7 +11,8 @@ output/
 archive/
 
 # manually set to provate
-@Private*
+*@Private*
+*@Local*
 
 # set to C#
 * linguist-documentation
