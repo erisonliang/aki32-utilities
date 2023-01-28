@@ -1,4 +1,5 @@
 ﻿using Aki32Utilities.ConsoleAppUtilities.UsefulClasses;
+
 using Python.Runtime;
 
 namespace Aki32Utilities.ConsoleAppUtilities.General;
@@ -10,6 +11,7 @@ public static class PythonController
 {
     // ★★★★★★★★★★★★★★★ prop
 
+    public static bool Activated { get; set; } = false;
     private static string DllName { get; set; }
     private static string PythonPath { get; set; }
     private static List<string> AdditionalPath { get; set; }
@@ -25,6 +27,7 @@ public static class PythonController
         )
     {
         // ★ セット
+        Activated = true;
         DllName = dllName;
         PythonPath = pythonPath;
         AdditionalPath = additionalPath;
@@ -77,6 +80,8 @@ public static class PythonController
         catch (Exception)
         {
         }
+
+        Activated = false;
     }
 
 

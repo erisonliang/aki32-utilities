@@ -7,6 +7,7 @@ using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 
 using Aki32Utilities.ConsoleAppUtilities.General;
+using Aki32Utilities.ConsoleAppUtilities.MachineLearning;
 using Aki32Utilities.ConsoleAppUtilities.Research;
 using Aki32Utilities.ConsoleAppUtilities.StructuralEngineering;
 using Aki32Utilities.ConsoleAppUtilities.UsefulClasses;
@@ -461,7 +462,16 @@ public static partial class ExampleExecuter
             {
                 var baseDir_A_101 = $@"{baseDir_A}\101 - MachineLearning";
 
+                // BB ImageToImage ML_GetHigherResolutionImage_CodeFormer_Loop
+                {
+                    var input = new DirectoryInfo($@"{baseDir_A_101}\BB01 GenerateHigherResolutionImage\input");
 
+                    PythonController.Initialize();
+
+                    input.ML_GetHigherResolutionImage_Loop(null);
+
+                    PythonController.Shutdown();
+                }
 
             }
 

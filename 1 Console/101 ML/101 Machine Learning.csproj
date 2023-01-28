@@ -57,8 +57,4 @@
     <ProjectReference Include="..\100 General\100 General.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="A - ChainableExtensions\B - Image\" />
-  </ItemGroup>
-
 </Project>
