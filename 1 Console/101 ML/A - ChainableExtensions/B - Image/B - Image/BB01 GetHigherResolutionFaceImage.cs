@@ -1,17 +1,17 @@
-﻿using Aki32Utilities.ConsoleAppUtilities.General;
+﻿using System.Drawing;
+
+using Aki32Utilities.ConsoleAppUtilities.General;
 
 namespace Aki32Utilities.ConsoleAppUtilities.MachineLearning;
 public static partial class ChainableExtensions
 {
 
-    //public static Image CodeFormer()
-    //{
-    //}
-
-
     /// <summary>
-    /// 
+    ///  GetHigherResolutionImage by CodeFormer
     /// </summary>
+    /// <remarks>
+    ///参考： http://cedro3.com/ai/codeformer/
+    /// </remarks>
     /// <param name="inputDir"></param>
     /// <param name="outputDir">when null, automatically set</param>
     /// <returns></returns>
@@ -56,26 +56,13 @@ public static partial class ChainableExtensions
 
 # import
 import cv2
-import matplotlib.pyplot as plt
-from IPython.display import clear_output
 import os
-import glob
 import shutil
-
 
 def imread(img_path):
   img = cv2.imread(img_path)
   img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
   return img
- 
-# display result
-def display_result(input_folder, result_folder):
-  input_list = sorted(glob.glob(os.path.join(input_folder, '*')))
-  for input_path in input_list:
-    img_input = imread(input_path)
-    basename = os.path.splitext(os.path.basename(input_path))[0]
-    output_path = os.path.join(result_folder, basename+'.png')
-    img_output = imread(output_path) 
  
 def reset_folder(path):
     if os.path.isdir(path):
@@ -87,16 +74,49 @@ def reset_folder(path):
         var query = @$"python inference_codeformer.py";
         query += @$" --test_path ""{inputDir.FullName}""";
         query += @$" --w {weight}";
-        //query += @$" --bg_upsampler realesrgan";
+        query += @$" --bg_upsampler realesrgan";
         //query += @$" --face_upsample";
         //query += @$" --has_aligned"; // make it square
-        
+
         prompt.WriteLine(query);
-        prompt.WriteLine(@$"mv ""results/{Path.GetFileNameWithoutExtension(inputDir.Name)}_{weight}"" resultTemp");
-        prompt.WriteLine(@$"mv resultTemp ""{outputDir!.FullName}""");
-        prompt.WriteLine(@"");
+        prompt.WriteLine(@$"mv ""results/{Path.GetFileNameWithoutExtension(inputDir.Name)}_{weight}"" ""{outputDir!.Name}""");
+        prompt.WriteLine(@$"mv ""{outputDir!.Name}"" ""{outputDir!.Parent!.FullName}""");
+        prompt.Wait();
 
         return outputDir;
+    }
+
+    /// <summary>
+    ///  GetHigherResolutionImage by CodeFormer
+    /// </summary>
+    /// <remarks>
+    ///参考： http://cedro3.com/ai/codeformer/
+    /// </remarks>
+    /// <param name="inputDir"></param>
+    /// <param name="outputDir">when null, automatically set</param>
+    /// <returns></returns>
+    /// <exception cref="Exception"></exception>
+    public static FileInfo ML_GetHigherResolutionImage(this FileInfo inputFile, FileInfo? outputFile, double weight = 0.7, bool forceClone = false)
+    {
+        // preprocess
+        UtilPreprocessors.PreprocessOutFile(ref outputFile, inputFile.Directory!, inputFile.Name);
+        outputFile = outputFile!.ChangeExtension(".png");
+        UtilConfig.StopTemporary_ConsoleOutput_Preprocess();
+
+        var tempDir = new DirectoryInfo(Path.Combine(inputFile.Directory!.FullName, "_temp"));
+        tempDir.Create();
+        inputFile.CopyTo(tempDir);
+
+        // main
+        var tempOutputDir = tempDir.ML_GetHigherResolutionImage_Loop(null, weight, forceClone);
+        var tempOutputFile = new FileInfo(Path.Combine(tempOutputDir.FullName, "final_results", inputFile.Name)).ChangeExtension(".png");
+        tempOutputFile.MoveTo(outputFile!);
+
+
+        // post process
+        tempDir.Delete(true);
+        UtilConfig.TryRestart_ConsoleOutput_Preprocess();
+        return outputFile!;
     }
 
 }

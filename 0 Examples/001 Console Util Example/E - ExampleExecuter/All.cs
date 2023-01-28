@@ -462,13 +462,18 @@ public static partial class ExampleExecuter
             {
                 var baseDir_A_101 = $@"{baseDir_A}\101 - MachineLearning";
 
-                // BB ImageToImage ML_GetHigherResolutionImage_CodeFormer_Loop
+                // BB ImageToImage ML_GetHigherResolutionImage_Loop
                 {
-                    var input = new DirectoryInfo($@"{baseDir_A_101}\BB01 GenerateHigherResolutionImage\input");
-
                     PythonController.Initialize();
 
-                    input.ML_GetHigherResolutionImage_Loop(null);
+                    // single
+                    var input = new FileInfo($@"{baseDir_A_101}\BB01 GetHigherResolutionImage\input\00.jpg");
+                    input.ML_GetHigherResolutionImage(null);
+
+                    // loop
+                    //var input = new DirectoryInfo($@"{baseDir_A_101}\BB01 GetHigherResolutionImage\input");
+                    //input.ML_GetHigherResolutionImage_Loop(null);
+
 
                     PythonController.Shutdown();
                 }

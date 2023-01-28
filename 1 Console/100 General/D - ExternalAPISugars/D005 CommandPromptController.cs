@@ -86,6 +86,25 @@ public class CommandPromptController : IDisposable
         InputStream.WriteLine(command);
     }
 
+    public void Wait()
+    {
+        InputStream.WriteLine(@"echo wait flag");
+        while (true)
+        {
+            try
+            {
+                Thread.Sleep(10);
+                if (ResponseList[^1] == "wait flag")
+                    break;
+                if (ResponseList[^2] == "wait flag")
+                    break;
+            }
+            catch (Exception)
+            {
+            }
+        }
+    }
+
     public void Dispose()
     {
         InputStream.WriteLine("exit");
