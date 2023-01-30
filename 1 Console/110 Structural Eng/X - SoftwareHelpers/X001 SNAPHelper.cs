@@ -104,10 +104,10 @@ public static class SNAPHelper
         sr.WriteLine(@$"UNITID=""0""");
         sr.WriteLine(@$"AMAX=""{amax}""");
         sr.WriteLine(@$"VMAX=""{vmax}""");
-        sr.WriteLine(@$"TIME=""{dt * (accs.Length - 1)}""");
+        sr.WriteLine(@$"TIME=""{(dt * (accs.Length - 1)):F6}""");
         sr.WriteLine(@$"DATA");
         foreach (var acc in accs)
-            sr.WriteLine(acc);
+            sr.WriteLine($"{acc:F6}");
 
 
         // post process
