@@ -100,7 +100,7 @@ def reset_folder(path):
     {
         // preprocess
         UtilPreprocessors.PreprocessOutFile(ref outputFile, inputFile.Directory!, inputFile.Name);
-        outputFile = outputFile!.ChangeExtension(".png");
+        outputFile = outputFile!.GetExtensionChangedFileInfo(".png");
         UtilConfig.StopTemporary_ConsoleOutput_Preprocess();
 
         var tempDir = new DirectoryInfo(Path.Combine(inputFile.Directory!.FullName, "_temp"));
@@ -109,7 +109,7 @@ def reset_folder(path):
 
         // main
         var tempOutputDir = tempDir.ML_GetHigherResolutionImage_Loop(null, weight, forceClone);
-        var tempOutputFile = new FileInfo(Path.Combine(tempOutputDir.FullName, "final_results", inputFile.Name)).ChangeExtension(".png");
+        var tempOutputFile = new FileInfo(Path.Combine(tempOutputDir.FullName, "final_results", inputFile.Name)).GetExtensionChangedFileInfo(".png");
         tempOutputFile.MoveTo(outputFile!);
 
 
