@@ -27,7 +27,7 @@ public static partial class ChainableExtensions
             .ToArray();
 
         var maxRetryCount = 5;
-        var progress = new ProgressManager(inputFiles.Count());
+        using var progress = new ProgressManager(inputFiles.Count());
         progress.StartAutoWrite(100);
 
         using var sw = new StreamWriter(outputFile!.FullName, false, Encoding.GetEncoding("SHIFT_JIS"));

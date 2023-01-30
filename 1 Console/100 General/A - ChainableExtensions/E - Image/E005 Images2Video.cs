@@ -53,7 +53,7 @@ public static partial class ChainableExtensions
         Writer.Open(outputFile.FullName, FourCC.H264, videoFrameRate, videoSize);
 
         var maxCount = imageFiles.Length * videoFrameRate / imgFrameRate;
-        var progress = new ProgressManager(maxCount);
+        using var progress = new ProgressManager(maxCount);
         progress.StartAutoWrite(100);
 
         for (int i = 0; i < maxCount; i++)

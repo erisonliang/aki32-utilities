@@ -33,7 +33,7 @@ public static partial class ChainableExtensions
         PdfWriter.GetInstance(doc, new FileStream(outputFile.FullName, FileMode.Create));
 
         var maxCount = pngFIs.Length;
-        var progress = new ProgressManager(maxCount);
+        using var progress = new ProgressManager(maxCount);
         progress.StartAutoWrite();
 
         for (int i = 0; i < maxCount; i++)

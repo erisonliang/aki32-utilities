@@ -41,7 +41,7 @@ public partial class MiniApps
 
         Console.WriteLine("マウスカーソルを動かさないでください。");
 
-        var progress = new ProgressManager(PageCount);
+        using var progress = new ProgressManager(PageCount);
         for (int i = 0; i < PageCount; i++)
         {
             General.ChainableExtensions.SaveScreenShot(targetDirectory, UL, BR);

@@ -65,7 +65,7 @@ public static partial class ChainableExtensions
         var inputFiles = inputDir.GetFiles();
         var option = new ParallelOptions { MaxDegreeOfParallelism = maxDegreeOfParallelism };
 
-        var progress = new ProgressManager(inputFiles.Count());
+        using var progress = new ProgressManager(inputFiles.Count());
         progress.StartAutoWrite(100);
 
         Parallel.ForEach(inputFiles, option, inputFile =>
