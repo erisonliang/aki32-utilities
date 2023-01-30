@@ -25,6 +25,7 @@ public static class KNetHelper
 
         // ★★★★★ from data
 
+
         [CsvIgnore]
         public TimeHistory Accs { get; set; }
 
@@ -44,15 +45,17 @@ public static class KNetHelper
         public int SamplingFreq { get; set; }
         public int DurationTime { get; set; }
         public string SampleDirection { get; set; }
+        public string SampleDirection_FromExtension { get; set; }
         public int Scale_Gal { get; set; }
         public int Scale_Num { get; set; }
         public double MaxAcc { get; set; }
         public DateTime LastCorrection { get; set; }
 
 
-        // ★★★★★ generated/ calculated
+        // ★★★★★ generated / calculated
 
         public string WaveName => $@"{StationCode}{OriginTime:yyMMddHHmm}";
+        public string WaveName_Full => $@"{StationCode}-{OriginTime:yyMMddHHmm}-{SampleDirection_FromExtension}";
 
         public double MaxVel { get; set; }
 
@@ -84,6 +87,7 @@ public static class KNetHelper
             SamplingFreq = int.Parse(meta[10].Replace("Hz", ""));
             DurationTime = int.Parse(meta[11]);
             SampleDirection = meta[12];
+            SampleDirection_FromExtension = Path.GetExtension(inputFile.Name);
             var scale = meta[13].Split("(gal)/");
             Scale_Gal = int.Parse(scale[0]);
             Scale_Num = int.Parse(scale[1]);
