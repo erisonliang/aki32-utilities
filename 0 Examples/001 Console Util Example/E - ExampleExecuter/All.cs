@@ -464,18 +464,19 @@ public static partial class ExampleExecuter
 
                 // BB ImageToImage ML_GetHigherResolutionImage_Loop
                 {
-                    PythonController.Initialize();
 
-                    // single
-                    var input = new FileInfo($@"{baseDir_A_101}\BB01 GetHigherResolutionImage\input\00.jpg");
-                    input.ML_GetHigherResolutionImage(null);
+                    //PythonController.Initialize();
 
-                    // loop
-                    //var input = new DirectoryInfo($@"{baseDir_A_101}\BB01 GetHigherResolutionImage\input");
-                    //input.ML_GetHigherResolutionImage_Loop(null);
+                    //// single
+                    //var input = new FileInfo($@"{baseDir_A_101}\BB01 GetHigherResolutionImage\input\00.jpg");
+                    //input.ML_GetHigherResolutionImage(null);
 
+                    //// loop
+                    ////var input = new DirectoryInfo($@"{baseDir_A_101}\BB01 GetHigherResolutionImage\input");
+                    ////input.ML_GetHigherResolutionImage_Loop(null);
 
-                    PythonController.Shutdown();
+                    //PythonController.Shutdown();
+
                 }
 
             }
