@@ -294,8 +294,11 @@ public static partial class ExampleExecuter
 
                 // E005 Images2Video
                 {
-                    //var input = new DirectoryInfo($@"{baseDir_A_100}\E005 Images2Video");
-                    //input.Images2Video(null, 3);
+                    var input = new DirectoryInfo($@"{baseDir_A_100}\E005 Images2Video");
+                    input
+                        .Images2Video(null, 3)
+                        .Video2Images(null, capturingFrameRate:3);
+
                 }
 
                 // E006 ResizeImage
