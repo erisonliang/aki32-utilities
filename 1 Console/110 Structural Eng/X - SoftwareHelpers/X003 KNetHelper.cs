@@ -58,6 +58,7 @@ public static class KNetHelper
         public string WaveName_Full => $@"{StationCode}-{OriginTime:yyMMddHHmm}-{SampleDirection_FromExtension}";
 
         public double MaxVel { get; set; }
+        public string Memo { get; set; }
 
 
         // ★★★★★★★★★★★★★★★ inits
