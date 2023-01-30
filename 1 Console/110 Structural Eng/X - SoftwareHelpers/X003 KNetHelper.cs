@@ -87,7 +87,7 @@ public static class KNetHelper
             SamplingFreq = int.Parse(meta[10].Replace("Hz", ""));
             DurationTime = int.Parse(meta[11]);
             SampleDirection = meta[12];
-            SampleDirection_FromExtension = Path.GetExtension(inputFile.Name);
+            SampleDirection_FromExtension = Path.GetExtension(inputFile.Name).Replace(".", "");
             var scale = meta[13].Split("(gal)/");
             Scale_Gal = int.Parse(scale[0]);
             Scale_Num = int.Parse(scale[1]);
