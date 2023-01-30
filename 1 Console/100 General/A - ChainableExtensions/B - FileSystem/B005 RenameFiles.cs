@@ -165,7 +165,7 @@ public static partial class ChainableExtensions
     /// <param name="newFileNameWithoutExtension">"*" will be replaced with old name</param>
     /// <param name="replaceSets">replace strings in original file name</param>
     /// <returns></returns>
-    public static FileInfo ChangeExtension(this FileInfo inputFile, string newExtension)
+    public static FileInfo GetExtensionChangedFileInfo(this FileInfo inputFile, string newExtension)
     {
         // sugar
         return new FileInfo(GetExtensionChangedPath(inputFile.FullName, newExtension));
