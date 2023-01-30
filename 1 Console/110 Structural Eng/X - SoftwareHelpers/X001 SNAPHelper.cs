@@ -1,7 +1,10 @@
 ﻿using System.Diagnostics;
+using System.Reflection;
 
 using Aki32Utilities.ConsoleAppUtilities.General;
 using Aki32Utilities.ConsoleAppUtilities.UsefulClasses;
+
+using DocumentFormat.OpenXml.Wordprocessing;
 
 namespace Aki32Utilities.ConsoleAppUtilities.StructuralEngineering;
 public static class SNAPHelper
@@ -69,6 +72,63 @@ public static class SNAPHelper
 
         return false;
     }
+
+
+    // ★★★★★★★★★★★★★★★ CreateWaveFile
+
+    /// <summary>
+    /// with cm/s
+    /// </summary>
+    /// <param name="outputFile"></param>
+    /// <param name="accs"></param>
+    /// <param name="dt"></param>
+    /// <param name="name"></param>
+    /// <param name="amax"></param>
+    /// <param name="vmax"></param>
+    /// <returns></returns>
+    public static FileInfo CreateWaveFile(FileInfo outputFile, double[] accs, double dt, string name, double amax, double vmax)
+    {
+        // pre process
+        var now = DateTime.Now;
+        if (amax == 0)
+            amax = accs.Max(x => Math.Abs(x));
+
+
+        // main
+        using var sr = new StreamWriter(outputFile.OpenWrite());
+        sr.WriteLine(@$"VERSION=""{now:yyyy.MM.dd.0}""");
+        sr.WriteLine(@$"FILENAME=""{name}""");
+        sr.WriteLine(@$"HPTYPE=""0""");
+        sr.WriteLine(@$"DIRECTION=""0""");
+        sr.WriteLine(@$"DT=""{dt}""");
+        sr.WriteLine(@$"UNITID=""0""");
+        sr.WriteLine(@$"AMAX=""{amax}""");
+        sr.WriteLine(@$"VMAX=""{vmax}""");
+        sr.WriteLine(@$"TIME=""{dt * (accs.Length - 1)}""");
+        sr.WriteLine(@$"DATA");
+        foreach (var acc in accs)
+            sr.WriteLine(acc);
+
+
+        // post process
+        return outputFile;
+
+    }
+    public static FileInfo CreateWaveFile(FileInfo outputFile, TimeHistory inputWave, string name, double amax, double vmax)
+    {
+        return CreateWaveFile(outputFile, inputWave.a, inputWave.TimeStep, name, amax, vmax);
+    }
+    public static FileInfo CreateWaveFile(DirectoryInfo outputDir, double[] accs, double dt, string name, double amax, double vmax)
+    {
+        Thread.Sleep(50);
+        var outputFile = new FileInfo(Path.Combine(outputDir.FullName, @$"{DateTime.Now:yyyyMMddHHmmssff}.wv"));
+        return CreateWaveFile(outputFile, accs, dt, name, amax, vmax);
+    }
+    public static FileInfo CreateWaveFile(DirectoryInfo outputDir, TimeHistory inputWave, string name, double amax, double vmax)
+    {
+        return CreateWaveFile(outputDir, inputWave.a, inputWave.TimeStep, name, amax, vmax);
+    }
+
 
     // ★★★★★★★★★★★★★★★ 
 

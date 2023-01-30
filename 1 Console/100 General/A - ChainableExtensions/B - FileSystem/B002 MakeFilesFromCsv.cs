@@ -29,7 +29,7 @@ public static partial class ChainableExtensions
 
             try
             {
-                var targetPath = Path.Combine(outputDir.FullName, $"{targetName}{tempDataEx}");
+                var targetPath = Path.Combine(outputDir!.FullName, $"{targetName}{tempDataEx}");
                 templateFile.CopyTo(targetPath, true);
                 Console.WriteLine($"O: {targetPath}");
             }

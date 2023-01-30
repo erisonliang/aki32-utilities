@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Runtime.Intrinsics.X86;
 
 using Aki32Utilities.ConsoleAppUtilities.General;
 using Aki32Utilities.ConsoleAppUtilities.UsefulClasses;
@@ -19,7 +20,12 @@ public static class KNetHelper
     /// </summary>
     public class KNetAccData
     {
-        public int[] Acc { get; set; }
+
+        // ★★★★★★★★★★★★★★★ props
+
+        // ★★★★★ from data
+
+        public TimeHistory Accs { get; set; }
 
         public DateTime OriginTime { get; set; }
 
@@ -42,6 +48,15 @@ public static class KNetHelper
         public double MaxAcc { get; set; }
         public DateTime LastCorrection { get; set; }
 
+
+        // ★★★★★ generated/ calculated
+
+        public string WaveName => $@"{StationCode}{OriginTime:yyMMddHHmm}";
+
+        public double MaxVel { get; set; }
+
+
+        // ★★★★★★★★★★★★★★★ inits
 
         public KNetAccData(FileInfo inputFile)
         {
@@ -77,7 +92,7 @@ public static class KNetHelper
 
 
             // accs
-            var acc = new List<int>();
+            var accs = new List<int>();
             while (!sr.EndOfStream)
             {
                 var newAccs = sr
@@ -85,11 +100,28 @@ public static class KNetHelper
                     .Split(' ', StringSplitOptions.RemoveEmptyEntries)
                     .Select(a => int.Parse(a));
 
-                acc.AddRange(newAccs);
+                accs.AddRange(newAccs);
             }
-            Acc = acc.ToArray();
-        
+
+            var ave = accs.Average();
+            Accs = new TimeHistory(WaveName)
+            {
+                t = Enumerable.Range(0, accs.Count).Select(t => (double)t / SamplingFreq).ToArray(),
+                a = accs.Select(a => (a - ave) * Scale_Gal / Scale_Num).ToArray()
+            };
         }
+
+
+        // ★★★★★★★★★★★★★★★ methods
+
+        public void CalcMaxVel()
+        {
+            Accs.CalcIntegral_Simple("a", "v");
+            MaxVel = Accs.v.Max(v => Math.Abs(v));
+        }
+
+
+        // ★★★★★★★★★★★★★★★ 
 
     }
 
