@@ -25,6 +25,7 @@ public static class KNetHelper
 
         // ★★★★★ from data
 
+        [CsvIgnore]
         public TimeHistory Accs { get; set; }
 
         public DateTime OriginTime { get; set; }
