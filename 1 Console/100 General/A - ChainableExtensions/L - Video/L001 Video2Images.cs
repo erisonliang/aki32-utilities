@@ -8,17 +8,11 @@ public static partial class ChainableExtensions
     // ★★★★★★★★★★★★★★★ FileSystemInfo chain process
 
     /// <summary>
-    /// Merge all images in a folder to a video.
-    /// Ccurrently, (jpg, .png) to (.avi, .mp4) is only supported.
+    /// Save video frames as many images.
     /// </summary>
-    /// <remarks>
-    /// To use this methods, you need to put openh264-*.dll to executable folder!!!
-    /// It will be automatically downloaded!
-    /// </remarks>
-    /// <param name="inputDir"></param>
-    /// <param name="outputFile">when null, automatically set</param>
-    /// <param name="imgFrameRate"></param>
-    /// <param name="videoFrameRate"></param>
+    /// <param name="inputFile"></param>
+    /// <param name="outputDir">when null, automatically set</param>
+    /// <param name="capturingFrameRate">Capture only entered number of images per second.</param>
     /// <returns></returns>
     /// <exception cref="Exception"></exception>
     /// <exception cref="InvalidDataException"></exception>
@@ -32,23 +26,19 @@ public static partial class ChainableExtensions
         using var capture = new VideoCapture(inputFile.FullName);
         using var window = new Window("Video2Images Progress");
         using var image = new Mat();
+        var capturingFrameRate_i = capture.Fps / capturingFrameRate;
 
         using var progress = new ProgressManager(capture.FrameCount);
         progress.StartAutoWrite(100);
 
-        var i = 0;
-        var capturingFrameRate_i = capture.Fps / capturingFrameRate;
-        while (capture.IsOpened())
+        for (int i = 0; i < capture.FrameCount; i++)
         {
             capture.Read(image);
-            if (image.Empty())
-                break;
 
-            i++;
+            if (capturingFrameRate_i != null && (i % capturingFrameRate_i) != 0)
+                continue;
+
             var imgNumber = i.ToString().PadLeft(8, '0');
-
-            if (capturingFrameRate_i != null && i % capturingFrameRate_i != 0)
-                break;
 
             var frameImageFileName = $@"{outputDir!.FullName}\image{imgNumber}.png";
             Cv2.ImWrite(frameImageFileName, image);
