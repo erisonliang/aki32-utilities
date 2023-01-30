@@ -894,21 +894,6 @@ public static partial class ExampleExecuter
 
                 }
 
-                // CreateWaveFile
-                {
-                    //var input = new FileInfo(@"C:\Users\aki32\Dropbox\Documents\02 東大関連\1 研究室\14 SNAP\修論モデル\03 地震波情報\K-NET, KiK-net\TKY007 新宿 全地震動\EW\TKY0070004100630_TKY0070004100630.EW");
-                    //var knet = new KNetHelper.KNetAccData(input);
-
-                    //knet.CalcMaxVel();
-
-                    //var outputTemp = new FileInfo(@"C:\Users\aki32\Dropbox\PC\Desktop\a.csv");
-                    //knet.Accs.SaveToCsv(outputTemp);
-
-
-                    ////var output = new DirectoryInfo(@"C:\Users\aki32\Dropbox\PC\Desktop");
-                    ////SNAPHelper.CreateWaveFile(output, knet.Accs, "a", knet.MaxAcc, knet.MaxVel);
-
-                }
             }
 
             // X002 DynamicProHelper
