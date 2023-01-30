@@ -100,10 +100,10 @@ public static class SNAPHelper
         sr.WriteLine(@$"FILENAME=""{name}""");
         sr.WriteLine(@$"HPTYPE=""0""");
         sr.WriteLine(@$"DIRECTION=""0""");
-        sr.WriteLine(@$"DT=""{dt}""");
+        sr.WriteLine(@$"DT=""{dt:F6}""");
         sr.WriteLine(@$"UNITID=""0""");
-        sr.WriteLine(@$"AMAX=""{amax}""");
-        sr.WriteLine(@$"VMAX=""{vmax}""");
+        sr.WriteLine(@$"AMAX=""{amax:F3}""");
+        sr.WriteLine(@$"VMAX=""{vmax:F2}""");
         sr.WriteLine(@$"TIME=""{(dt * (accs.Length - 1)):F6}""");
         sr.WriteLine(@$"DATA");
         foreach (var acc in accs)
