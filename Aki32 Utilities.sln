@@ -21,7 +21,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "100 General", "1 Console\10
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "110 Structural Engineering", "1 Console\110 Structural Eng\110 Structural Engineering.csproj", "{1A8FA3C8-0045-4D07-AE9D-FB084F8DCD66}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "101 Machine Learning", "1 Console\101 ML\101 Machine Learning.csproj", "{2617BDC2-FDE5-4187-82F5-353A7BFF3F85}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "101 AI", "1 Console\101 AI\101 AI.csproj", "{2617BDC2-FDE5-4187-82F5-353A7BFF3F85}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "111 Research", "1 Console\111 Research\111 Research.csproj", "{35578693-A05F-45BA-B1CC-43C1145A8A7A}"
 EndProject

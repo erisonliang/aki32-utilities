@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 using Aki32Utilities.ConsoleAppUtilities.General;
 using Aki32Utilities.ConsoleAppUtilities.UsefulClasses;
 
-namespace Aki32Utilities.ConsoleAppUtilities.MachineLearning;
+namespace Aki32Utilities.ConsoleAppUtilities.AI;
 public static partial class ChainableExtensions
 {
 

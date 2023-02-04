@@ -85,9 +85,11 @@ Model for handling time history data set (such as time-displacement relationship
 
 <br>
 
-## 🌟 Machine Learning
+## 🌟 AI (Artificial Intelligence)
 
-Project for handling machine learning using ML.NET mainly.
+Project for handling AI.
+
+Mainly using ML.NET for Machine Learning.
 
 
 

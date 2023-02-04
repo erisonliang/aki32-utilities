@@ -2,7 +2,7 @@
 
 using Aki32Utilities.ConsoleAppUtilities.General;
 
-namespace Aki32Utilities.ConsoleAppUtilities.MachineLearning;
+namespace Aki32Utilities.ConsoleAppUtilities.AI;
 public static partial class ChainableExtensions
 {
 
@@ -16,7 +16,7 @@ public static partial class ChainableExtensions
     /// <param name="outputDir">when null, automatically set</param>
     /// <returns></returns>
     /// <exception cref="Exception"></exception>
-    public static DirectoryInfo ML_GetHigherResolutionImage_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir, double weight = 0.7, bool forceClone = false)
+    public static DirectoryInfo AI_GetHigherResolutionImage_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir, double weight = 0.7, bool forceClone = false)
     {
         // preprocess
         if (!PythonController.Activated)
@@ -96,7 +96,7 @@ def reset_folder(path):
     /// <param name="outputDir">when null, automatically set</param>
     /// <returns></returns>
     /// <exception cref="Exception"></exception>
-    public static FileInfo ML_GetHigherResolutionImage(this FileInfo inputFile, FileInfo? outputFile, double weight = 0.7, bool forceClone = false)
+    public static FileInfo AI_GetHigherResolutionImage(this FileInfo inputFile, FileInfo? outputFile, double weight = 0.7, bool forceClone = false)
     {
         // preprocess
         UtilPreprocessors.PreprocessOutFile(ref outputFile, inputFile.Directory!, inputFile.Name);
@@ -108,7 +108,7 @@ def reset_folder(path):
         inputFile.CopyTo(tempDir);
 
         // main
-        var tempOutputDir = tempDir.ML_GetHigherResolutionImage_Loop(null, weight, forceClone);
+        var tempOutputDir = tempDir.AI_GetHigherResolutionImage_Loop(null, weight, forceClone);
         var tempOutputFile = new FileInfo(Path.Combine(tempOutputDir.FullName, "final_results", inputFile.Name)).GetExtensionChangedFileInfo(".png");
         tempOutputFile.MoveTo(outputFile!);
 

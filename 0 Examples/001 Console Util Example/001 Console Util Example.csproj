@@ -29,7 +29,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="ClosedXML" Version="0.95.4" />
+    <PackageReference Include="ClosedXAI" Version="0.95.4" />
     <PackageReference Include="HomographySharp" Version="3.2.1" />
     <PackageReference Include="iTextSharp" Version="5.5.13.3" />
     <PackageReference Include="LibGit2Sharp" Version="0.26.2" />
@@ -40,7 +40,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\1 Console\100 General\100 General.csproj" />
-    <ProjectReference Include="..\..\1 Console\101 ML\101 Machine Learning.csproj" />
+    <ProjectReference Include="..\..\1 Console\101 AI\101 AI.csproj" />
     <ProjectReference Include="..\..\1 Console\110 Structural Eng\110 Structural Engineering.csproj" />
     <ProjectReference Include="..\..\1 Console\111 Research\111 Research.csproj" />
   </ItemGroup>
@@ -61,7 +61,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="# ExampleModel\101 MachineLearning\" />
+    <Folder Include="# ExampleModel\101 - AI\" />
     <Folder Include="# ExampleModel\111 - Research\A - ResearchManager\%40Private\" />
     <Folder Include="# ExampleModel\M - MiniApps\M001 Books2PDF\" />
   </ItemGroup>

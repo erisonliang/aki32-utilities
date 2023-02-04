@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 
 using Aki32Utilities.ConsoleAppUtilities.General;
-using Aki32Utilities.ConsoleAppUtilities.MachineLearning;
+using Aki32Utilities.ConsoleAppUtilities.AI;
 using Aki32Utilities.ConsoleAppUtilities.Research;
 using Aki32Utilities.ConsoleAppUtilities.StructuralEngineering;
 using Aki32Utilities.ConsoleAppUtilities.UsefulClasses;
@@ -29,7 +29,7 @@ public static partial class ExampleExecuter
     {
         // TEST
         {
-
+            
 
 
         }
@@ -460,24 +460,24 @@ public static partial class ExampleExecuter
 
             }
 
-            // 101 - MachineLearning
+            // 101 - AI
             {
-                var baseDir_A_101 = $@"{baseDir_A}\101 - MachineLearning";
+                var baseDir_A_101 = $@"{baseDir_A}\101 - AI";
 
                 // BB ImageToImage ML_GetHigherResolutionImage_Loop
                 {
 
-                    //PythonController.Initialize();
+                    PythonController.Initialize();
 
-                    //// single
-                    //var input = new FileInfo($@"{baseDir_A_101}\BB01 GetHigherResolutionImage\input\00.jpg");
-                    //input.ML_GetHigherResolutionImage(null);
+                    // single
+                    var input = new FileInfo($@"{baseDir_A_101}\BB01 GetHigherResolutionImage\input\00.jpg");
+                    input.AI_GetHigherResolutionImage(null);
 
-                    //// loop
-                    ////var input = new DirectoryInfo($@"{baseDir_A_101}\BB01 GetHigherResolutionImage\input");
-                    ////input.ML_GetHigherResolutionImage_Loop(null);
+                    // loop
+                    //var input = new DirectoryInfo($@"{baseDir_A_101}\BB01 GetHigherResolutionImage\input");
+                    //input.ML_GetHigherResolutionImage_Loop(null);
 
-                    //PythonController.Shutdown();
+                    PythonController.Shutdown();
 
                 }
 
@@ -926,9 +926,9 @@ public static partial class ExampleExecuter
             }
         }
 
-        // 101 - MachineLearning
+        // 101 - AI_GetHigherResolutionImage
         {
-            var baseDir_101 = $@"{BASE_DIR}\101 MachineLearning";
+            var baseDir_101 = $@"{BASE_DIR}\101 - AI";
 
 
 
