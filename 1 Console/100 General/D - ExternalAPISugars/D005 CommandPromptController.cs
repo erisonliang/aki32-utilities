@@ -86,7 +86,7 @@ public class CommandPromptController : IDisposable
         InputStream.WriteLine(command);
     }
 
-    public void Wait()
+    public void WaitAllProcessFinish()
     {
         InputStream.WriteLine(@"echo wait flag");
         while (true)

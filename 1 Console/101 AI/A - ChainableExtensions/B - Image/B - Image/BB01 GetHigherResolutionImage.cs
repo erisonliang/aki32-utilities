@@ -82,7 +82,7 @@ def reset_folder(path):
         prompt.WriteLine(query);
         prompt.WriteLine(@$"mv ""results/{Path.GetFileNameWithoutExtension(inputDir.Name)}_{weight}"" ""{outputDir!.Name}""");
         prompt.WriteLine(@$"mv ""{outputDir!.Name}"" ""{outputDir!.Parent!.FullName}""");
-        prompt.Wait();
+        prompt.WaitAllProcessFinish();
 
         return outputDir;
     }
