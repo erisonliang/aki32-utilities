@@ -37,19 +37,19 @@ public static partial class ChainableExtensions
             prompt.WriteLine(@"pwd");
             prompt.WriteLine(@$"mkdir {SUB_REPO_NAME}");
             prompt.WriteLine(@$"cd {SUB_REPO_NAME}");
-            prompt.WriteLine(@"git clone https://github.com/cedro3/CodeFormer.git");
-            prompt.WriteLine(@"cd CodeFormer");
-            prompt.WriteLine(@"pip install -r requirements.txt");
-            prompt.WriteLine(@"python basicsr/setup.py develop");
-            prompt.WriteLine(@"python scripts/download_pretrained_models.py facelib");
-            prompt.WriteLine(@"python scripts/download_pretrained_models.py CodeFormer");
-            prompt.WriteLine(@"");
+            prompt.WriteLine(@$"git clone https://github.com/cedro3/CodeFormer.git");
+            prompt.WriteLine(@$"cd CodeFormer");
+            prompt.WriteLine(@$"pip install -r requirements.txt");
+            prompt.WriteLine(@$"python basicsr/setup.py develop");
+            prompt.WriteLine(@$"python scripts/download_pretrained_models.py facelib");
+            prompt.WriteLine(@$"python scripts/download_pretrained_models.py CodeFormer");
+            prompt.WriteLine(@$"");
         }
         else
         {
             prompt.WriteLine(@$"cd {SUB_REPO_NAME}");
-            prompt.WriteLine(@"cd CodeFormer");
-            prompt.WriteLine(@"");
+            prompt.WriteLine(@$"cd CodeFormer");
+            prompt.WriteLine(@$"");
         }
 
         PythonController.RunSimpleString(@$"
@@ -71,7 +71,8 @@ def reset_folder(path):
 
 ");
 
-        var query = @$"python inference_codeformer.py";
+        var query = @$"";
+        query += @$"python inference_codeformer.py";
         query += @$" --test_path ""{inputDir.FullName}""";
         query += @$" --w {weight}";
         query += @$" --bg_upsampler realesrgan";
