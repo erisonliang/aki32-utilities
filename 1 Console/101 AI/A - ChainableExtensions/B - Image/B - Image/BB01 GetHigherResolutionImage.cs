@@ -16,7 +16,7 @@ public static partial class ChainableExtensions
     /// <param name="outputDir">when null, automatically set</param>
     /// <returns></returns>
     /// <exception cref="Exception"></exception>
-    public static DirectoryInfo AI_GetHigherResolutionImage_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir, double weight = 0.7, bool forceClone = false)
+    public static DirectoryInfo AI_GetHigherResolutionImage_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir, double weight = 0.7, bool reCloneRepo = false)
     {
         // preprocess
         if (!PythonController.Activated)
@@ -32,7 +32,9 @@ public static partial class ChainableExtensions
 
         // main
         // install CodeFormer
-        if (!Directory.Exists(SUB_REPO_NAME) || forceClone)
+        if (reCloneRepo && Directory.Exists(SUB_REPO_NAME))
+            Directory.Delete(SUB_REPO_NAME);
+        if (!Directory.Exists(SUB_REPO_NAME))
         {
             prompt.WriteLine(@"pwd");
             prompt.WriteLine(@$"mkdir {SUB_REPO_NAME}");
