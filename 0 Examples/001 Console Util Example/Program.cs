@@ -1,4 +1,4 @@
-﻿using Aki32Utilities.ConsoleAppUtilities.UsefulClasses;
+﻿using Aki32Utilities.ConsoleAppUtilities.General;
 
 namespace Aki32Utilities.UsageExamples.ConsoleAppUtilities;
 public partial class Program

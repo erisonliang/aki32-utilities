@@ -7,7 +7,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-using Aki32Utilities.ConsoleAppUtilities.UsefulClasses;
+using Aki32Utilities.ConsoleAppUtilities.General;
 
 namespace Aki32Utilities.ConsoleAppUtilities.General;
 public static partial class ChainableExtensions

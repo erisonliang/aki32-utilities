@@ -1,5 +1,5 @@
 ﻿using System.Runtime.CompilerServices;
-using Aki32Utilities.ConsoleAppUtilities.UsefulClasses;
+using Aki32Utilities.ConsoleAppUtilities.General;
 using System.Text;
 
 namespace Aki32Utilities.ConsoleAppUtilities.General;

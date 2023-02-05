@@ -10,7 +10,7 @@ using Aki32Utilities.ConsoleAppUtilities.General;
 using Aki32Utilities.ConsoleAppUtilities.AI;
 using Aki32Utilities.ConsoleAppUtilities.Research;
 using Aki32Utilities.ConsoleAppUtilities.StructuralEngineering;
-using Aki32Utilities.ConsoleAppUtilities.UsefulClasses;
+using Aki32Utilities.ConsoleAppUtilities.General;
 
 using ClosedXML;
 

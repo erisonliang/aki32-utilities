@@ -280,13 +280,9 @@ public static class ConsoleExtension
 
     public static void ConsolePressAnyKey()
     {
-        var defaultColor = Console.ForegroundColor;
-        Console.ForegroundColor = ConsoleColor.Green;
-        Console.WriteLine(" ");
-        Console.WriteLine("Press any key to finish.");
+        Console.WriteLine();
+        General.ConsoleExtension.WriteLineWithColor("Press any key to finish.");
         Console.ReadKey();
-
-        //General.ConsoleExtension.WriteLineWithColor(,);
     }
 
     public static void ConsoleWriteException(params string[] lines)

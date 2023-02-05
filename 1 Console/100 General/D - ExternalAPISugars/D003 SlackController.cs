@@ -2,7 +2,7 @@
 using System.Net;
 using System.Text;
 
-using Aki32Utilities.ConsoleAppUtilities.UsefulClasses;
+using Aki32Utilities.ConsoleAppUtilities.General;
 
 namespace Aki32Utilities.ConsoleAppUtilities.General;
 public class SlackController

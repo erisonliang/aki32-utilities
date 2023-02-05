@@ -1,6 +1,6 @@
 ﻿using System.Runtime.CompilerServices;
 
-using Aki32Utilities.ConsoleAppUtilities.UsefulClasses;
+using Aki32Utilities.ConsoleAppUtilities.General;
 
 namespace Aki32Utilities.ConsoleAppUtilities.General;
 public static partial class ChainableExtensions

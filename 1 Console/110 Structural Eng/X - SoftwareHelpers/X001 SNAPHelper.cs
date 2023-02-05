@@ -2,7 +2,7 @@
 using System.Reflection;
 
 using Aki32Utilities.ConsoleAppUtilities.General;
-using Aki32Utilities.ConsoleAppUtilities.UsefulClasses;
+using Aki32Utilities.ConsoleAppUtilities.General;
 
 using DocumentFormat.OpenXml.Wordprocessing;
 

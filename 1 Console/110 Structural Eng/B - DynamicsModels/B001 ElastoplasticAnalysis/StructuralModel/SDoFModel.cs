@@ -1,5 +1,5 @@
 ﻿using Aki32Utilities.ConsoleAppUtilities.StructuralEngineering;
-using Aki32Utilities.ConsoleAppUtilities.UsefulClasses;
+using Aki32Utilities.ConsoleAppUtilities.General;
 using Aki32Utilities.ConsoleAppUtilities.General;
 
 namespace Aki32Utilities.ConsoleAppUtilities.StructuralEngineering;
