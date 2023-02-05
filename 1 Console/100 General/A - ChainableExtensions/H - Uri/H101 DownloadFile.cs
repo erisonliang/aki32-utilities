@@ -1,8 +1,33 @@
-﻿using System.Net;
-
+﻿
 namespace Aki32Utilities.ConsoleAppUtilities.General;
 public static partial class ChainableExtensions
 {
+    /// <summary>
+    /// Download item from server to local
+    /// </summary>
+    /// <param name="url">where download a file from</param>
+    /// <param name="outputFile">not nullable</param>
+    /// <exception cref="HttpRequestException">
+    /// response was not OK
+    /// </exception>
+    public static FileInfo DownloadFile(this Uri url, FileInfo outputFile,
+        bool ignoreWhenExists = false
+        )
+    {
+        // preprocess
+        UtilPreprocessors.PreprocessBasic(true);
+        UtilConfig.StopTemporary_ConsoleOutput_Preprocess();
+
+
+        // main
+        url.DownloadFileAsync(outputFile, ignoreWhenExists).Wait();
+
+
+        // post process
+        UtilConfig.TryRestart_ConsoleOutput_Preprocess();
+        return outputFile!;
+
+    }
 
     /// <summary>
     /// Download item from server to local
@@ -17,7 +42,7 @@ public static partial class ChainableExtensions
         )
     {
         // preprocess
-        General.UtilPreprocessors.PreprocessBasic(true);
+        UtilPreprocessors.PreprocessBasic(true);
 
 
         // ignore
