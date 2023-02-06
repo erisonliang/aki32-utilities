@@ -4,7 +4,7 @@ using Microsoft.ML.Transforms;
 namespace Aki32Utilities.ConsoleAppUtilities.AI.CheatSheet;
 public partial class MLNetExampleSummary : MLNetHandler
 {
-    private void BuildPipeline(MLContext context)
+    private void BuildPipeline()
     {
         General.ConsoleExtension.WriteLineWithColor($"\r\n★★★★★★★★★★★★★★★ Cross Validation", ConsoleColor.Yellow);
 
@@ -13,20 +13,42 @@ public partial class MLNetExampleSummary : MLNetHandler
             // ★ for binary label, 1 feature
             case MLNetExampleScenario.A001_Sentiment_Analysis:
                 {
-                    ConnectNode(context.Transforms.Text.FeaturizeText("Features", nameof(SentimentInput.Text))); // string → word vector
-                    ConnectNode(context.BinaryClassification.Trainers.SdcaLogisticRegression());
+                    ConnectNode(Context.Transforms.Text.FeaturizeText("Features", nameof(A001_SentimentInput.Text))); // string → word vector
+                    ConnectNode(Context.BinaryClassification.Trainers.SdcaLogisticRegression());
+
                     break;
                 }
 
             // ★ for multiple label, 1 feature, using 1 vs All
             case MLNetExampleScenario.A002_Spam_Detection:
                 {
-                    ConnectNode(context.Transforms.Conversion.MapValueToKey("Label", "Number", keyOrdinality: ValueToKeyMappingEstimator.KeyOrdinality.ByValue));  // string key → int value
-                    ConnectNode(context.Transforms.Concatenate("Features", "FeatureList"));
-                    ConnectCheckPoint(context);
-                    ConnectNode(context.MulticlassClassification.Trainers.OneVersusAll(
-                           context.BinaryClassification.Trainers.AveragedPerceptron(numberOfIterations: 10)));
-                    ConnectNode(context.Transforms.Conversion.MapKeyToValue("PredictedLabel")); // int value → string key
+                    ConnectNode(Context.Transforms.Conversion.MapValueToKey("Label", "Label"));  // string key → int value
+
+                    var option1 = new Microsoft.ML.Transforms.Text.TextFeaturizingEstimator.Options
+                    {
+                        WordFeatureExtractor = new Microsoft.ML.Transforms.Text.WordBagEstimator.Options { NgramLength = 2, UseAllLengths = true },
+                        CharFeatureExtractor = new Microsoft.ML.Transforms.Text.WordBagEstimator.Options { NgramLength = 3, UseAllLengths = false },
+                        Norm = Microsoft.ML.Transforms.Text.TextFeaturizingEstimator.NormFunction.L2,
+                    };
+                    ConnectNode(Context.Transforms.Text.FeaturizeText("Features", option1, "Message"));
+                    ConnectCheckPoint(Context);
+
+                    ConnectNode(Context.MulticlassClassification.Trainers.OneVersusAll(
+                           Context.BinaryClassification.Trainers.AveragedPerceptron()));
+                    ConnectNode(Context.Transforms.Conversion.MapKeyToValue("PredictedLabel", "PredictedLabel")); // int value → string key
+
+                    break;
+                }
+
+            // ★ for 
+            case MLNetExampleScenario.A003_CreditCardFraudDetection:
+                {
+                    ConnectNode(Context.Transforms.Conversion.MapValueToKey("Label", "Number", keyOrdinality: ValueToKeyMappingEstimator.KeyOrdinality.ByValue));  // string key → int value
+                    ConnectNode(Context.Transforms.Concatenate("Features", "FeatureList"));
+                    ConnectCheckPoint(Context);
+                    ConnectNode(Context.MulticlassClassification.Trainers.OneVersusAll(
+                           Context.BinaryClassification.Trainers.AveragedPerceptron(numberOfIterations: 10)));
+                    ConnectNode(Context.Transforms.Conversion.MapKeyToValue("PredictedLabel")); // int value → string key
 
                     break;
                 }
@@ -34,18 +56,18 @@ public partial class MLNetExampleSummary : MLNetHandler
             // ★ for multiple label, many features (#B002 Iris Flowers Classification)
             case MLNetExampleScenario.B002_IrisFlowersClassification:
                 {
-                    ConnectNode(context.Transforms.Conversion.MapValueToKey("Label"));
-                    ConnectNode(context.Transforms.Concatenate("Features",
-                        nameof(IrisInput.SepalLength), nameof(IrisInput.SepalWidth), nameof(IrisInput.PetalLength), nameof(IrisInput.PetalWidth)));
-                    ConnectNode(context.MulticlassClassification.Trainers.SdcaMaximumEntropy());
-                    ConnectNode(context.Transforms.Conversion.MapKeyToValue("Label"));
-                    ConnectNode(context.Transforms.Conversion.MapKeyToValue("PredictedLabel"));
+                    ConnectNode(Context.Transforms.Conversion.MapValueToKey("Label"));
+                    ConnectNode(Context.Transforms.Concatenate("Features",
+                        nameof(B002_IrisInput.SepalLength), nameof(B002_IrisInput.SepalWidth), nameof(B002_IrisInput.PetalLength), nameof(B002_IrisInput.PetalWidth)));
+                    ConnectCheckPoint(Context);
+                    ConnectNode(Context.MulticlassClassification.Trainers.SdcaMaximumEntropy());
+                    ConnectNode(Context.Transforms.Conversion.MapKeyToValue("Label"));
+                    ConnectNode(Context.Transforms.Conversion.MapKeyToValue("PredictedLabel"));
 
                     break;
                 }
 
             // not implemented
-            case MLNetExampleScenario.A003_CreditCardFraudDetection:
             case MLNetExampleScenario.A004_HeartDiseasePrediction:
             case MLNetExampleScenario.A777_Auto:
             case MLNetExampleScenario.B001_IssuesClassification:
@@ -81,15 +103,16 @@ public partial class MLNetExampleSummary : MLNetHandler
             case MLNetExampleScenario.J009_ExportToONNX:
             case MLNetExampleScenario.K777_Auto:
             default:
-                Console.WriteLine("ignore");
-                throw new NotImplementedException();
+                {
+                    throw new NotImplementedException();
+                }
         }
 
 
         ////// ★ for binary label, 1 feature
-        //ConnectNode(context.Transforms.Text.FeaturizeText("Features", nameof(SentimentInput.Text))); // string → word vector
-        //ConnectNode(context.Transforms.Conversion.MapValueToKey("Label")); // string key → int value
-        //ConnectCheckPoint(context);
+        //ConnectNode(Context.Transforms.Text.FeaturizeText("Features", nameof(SentimentInput.Text))); // string → word vector
+        //ConnectNode(Context.Transforms.Conversion.MapValueToKey("Label")); // string key → int value
+        //ConnectCheckPoint(Context);
 
 
 
@@ -98,9 +121,9 @@ public partial class MLNetExampleSummary : MLNetHandler
         //    .Select(column => column.Name)
         //    .Where(name => name != "ExcludingColumn")
         //    .ToArray();
-        //ConnectNode(context.Transforms.Concatenate("Features", featureColumnNames));
-        //ConnectNode(context.Transforms.DropColumns(new string[] { "ExcludingColumn" }));
-        //ConnectNode(context.Transforms.NormalizeLpNorm("NormalizedFeatures", "Features"));
+        //ConnectNode(Context.Transforms.Concatenate("Features", featureColumnNames));
+        //ConnectNode(Context.Transforms.DropColumns(new string[] { "ExcludingColumn" }));
+        //ConnectNode(Context.Transforms.NormalizeLpNorm("NormalizedFeatures", "Features"));
 
 
 

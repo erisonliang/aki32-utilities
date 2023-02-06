@@ -490,11 +490,11 @@ public static partial class ExampleExecuter
 
                 // B001 RainflowCycleCounting
                 {
-                    new FileInfo(Path.Combine(baseDir_A_110, "B001 RainflowCycleCounting", @"input3.csv"))
-                        .Rainflow(null, 4, 1 / 3d, false);
+                    //new FileInfo(Path.Combine(baseDir_A_110, "B001 RainflowCycleCounting", @"input3.csv"))
+                    //    .Rainflow(null, 4, 1 / 3d, false);
 
-                    new DirectoryInfo(Path.Combine(baseDir_A_110, "B001 RainflowCycleCounting"))
-                        .Rainflow_Loop(null, 4, 1 / 3d, false);
+                    //new DirectoryInfo(Path.Combine(baseDir_A_110, "B001 RainflowCycleCounting"))
+                    //    .Rainflow_Loop(null, 4, 1 / 3d, false);
 
                 }
 
@@ -734,8 +734,9 @@ public static partial class ExampleExecuter
             {
                 var baseDir_101_XA001 = $@"{baseDir_101}\XA001 MLNetExampleSummary";
 
-                new MLNetExampleSummary(MLNetExampleScenario.A002_Spam_Detection, new DirectoryInfo(baseDir_101_XA001))
-                    .Run();
+                new MLNetExampleSummary(MLNetExampleScenario.B002_IrisFlowersClassification, new DirectoryInfo(baseDir_101_XA001))
+                    //.RunPrediction();
+                .RunAll();
 
             }
 

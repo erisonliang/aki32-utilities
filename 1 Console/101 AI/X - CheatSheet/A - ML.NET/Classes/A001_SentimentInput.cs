@@ -1,7 +1,7 @@
 ﻿using Microsoft.ML.Data;
 
 namespace Aki32Utilities.ConsoleAppUtilities.AI.CheatSheet;
-public class SentimentInput
+public class A001_SentimentInput
 {
     [LoadColumn(0)]
     public bool Label { get; set; }

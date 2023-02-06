@@ -9,25 +9,26 @@ public partial class MLNetExampleSummary : MLNetHandler
 
         switch (Scenario)
         {
+            // fit
             case MLNetExampleScenario.A001_Sentiment_Analysis:
             case MLNetExampleScenario.A002_Spam_Detection:
             case MLNetExampleScenario.A003_CreditCardFraudDetection:
             case MLNetExampleScenario.B002_IrisFlowersClassification:
             case MLNetExampleScenario.B003_MNIST:
+                {
+                    Console.WriteLine($"fitting...");
+                    Model = PipeLine.Fit(targetData ?? TrainData);
+                    Console.WriteLine($"fitted");
 
-                Console.WriteLine($"fitting...");
-                Model = PipeLine.Fit(targetData ?? TrainData);
-                Console.WriteLine($"fitted");
-
-                break;
-
-
-
+                    break;
+                }
 
                 // ignore
+                {
+                    Console.WriteLine("ignore");
 
-                Console.WriteLine("ignore");
-                break;
+                    break;
+                }
 
             // not implemented
             case MLNetExampleScenario.A004_HeartDiseasePrediction:
@@ -64,8 +65,9 @@ public partial class MLNetExampleSummary : MLNetHandler
             case MLNetExampleScenario.J009_ExportToONNX:
             case MLNetExampleScenario.K777_Auto:
             default:
-                Console.WriteLine("ignore");
-                throw new NotImplementedException();
+                {
+                    throw new NotImplementedException();
+                }
         }
 
     }

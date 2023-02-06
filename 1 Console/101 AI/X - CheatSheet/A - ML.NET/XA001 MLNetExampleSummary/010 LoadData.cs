@@ -5,7 +5,7 @@ using Microsoft.ML;
 namespace Aki32Utilities.ConsoleAppUtilities.AI.CheatSheet;
 public partial class MLNetExampleSummary : MLNetHandler
 {
-    private void LoadData(MLContext context)
+    private void LoadData()
     {
         General.ConsoleExtension.WriteLineWithColor($"\r\n★★★★★★★★★★★★★★★ Load Data", ConsoleColor.Yellow);
 
@@ -27,7 +27,7 @@ public partial class MLNetExampleSummary : MLNetHandler
 
         void SplitData()
         {
-            var split = context.Data.TrainTestSplit(AllData, testFraction: 0.2);
+            var split = Context.Data.TrainTestSplit(AllData, testFraction: 0.2);
             TrainData = split.TrainSet;
             TestData = split.TestSet;
         }
@@ -35,7 +35,7 @@ public partial class MLNetExampleSummary : MLNetHandler
         // ★ from class array
 
         // ★ many features, the same type
-        //var data = context.Data.CreateTextLoader(
+        //var data = Context.Data.CreateTextLoader(
         //           columns: new[]
         //           {
         //                    new TextLoader.Column("FeatureList", DataKind.Single, 0, 63), // 64 single values
@@ -55,21 +55,22 @@ public partial class MLNetExampleSummary : MLNetHandler
                     var uri = new Uri("https://github.com/dotnet/machinelearning-samples/blob/main/samples/csharp/getting-started/BinaryClassification_SentimentAnalysis/SentimentAnalysis/Data/wikiDetoxAnnotated40kRows.tsv?raw=true");
                     DownloadDataFile(uri);
 
-                    AllData = context.Data.LoadFromTextFile<SentimentInput>(DataFile.FullName, hasHeader: true, separatorChar: '\t');
+                    AllData = Context.Data.LoadFromTextFile<A001_SentimentInput>(DataFile.FullName, hasHeader: true, separatorChar: '\t');
                     SplitData();
 
                     break;
                 }
+
             case MLNetExampleScenario.A002_Spam_Detection:
                 {
                     DataFile = DataDir.GetChildFileInfo("Spam.tsv");
                     ModelFile = DataDir.GetChildFileInfo("Spam-Model.zip");
-                    var targetFileLocationAfterExtracted = DataDir.GetChildFileInfo("SMSSpamCollection");
+                    var targetFileLocationAfterExtracted = DataDir.GetChildDirectoryInfo("zip").GetChildFileInfo("SMSSpamCollection");
 
                     var uri = new Uri("https://archive.ics.uci.edu/ml/machine-learning-databases/00228/smsspamcollection.zip");
                     DownloadAndExtractZipDataFile(uri, targetFileLocationAfterExtracted);
 
-                    AllData = context.Data.LoadFromTextFile<SentimentInput>(DataFile.FullName, hasHeader: true, separatorChar: '\t');
+                    AllData = Context.Data.LoadFromTextFile<A002_SpamInput>(DataFile.FullName, hasHeader: false, separatorChar: '\t');
                     SplitData();
 
                     break;
@@ -79,7 +80,12 @@ public partial class MLNetExampleSummary : MLNetHandler
                 {
                     DataFile = DataDir.GetChildFileInfo("Iris.txt");
                     ModelFile = DataDir.GetChildFileInfo("Iris-Model.zip");
-                    AllData = context.Data.LoadFromTextFile<IrisInput>(DataFile.FullName, hasHeader: true, separatorChar: '\t');
+
+                    var uri = new Uri("https://raw.githubusercontent.com/dotnet/machinelearning-samples/main/samples/csharp/getting-started/MulticlassClassification_Iris/IrisClassification/Data/iris-full.txt");
+                    DownloadDataFile(uri);
+
+                    AllData = Context.Data.LoadFromTextFile<B002_IrisInput>(DataFile.FullName, hasHeader: true, separatorChar: '\t');
+                    SplitData();
 
                     break;
                 }
@@ -121,8 +127,9 @@ public partial class MLNetExampleSummary : MLNetHandler
             case MLNetExampleScenario.J009_ExportToONNX:
             case MLNetExampleScenario.K777_Auto:
             default:
-                Console.WriteLine("ignore");
-                throw new NotImplementedException();
+                {
+                    throw new NotImplementedException();
+                }
         }
     }
 }

@@ -1,26 +1,15 @@
-﻿using System.Diagnostics.CodeAnalysis;
-
-using Aki32Utilities.ConsoleAppUtilities.General;
-
-using DocumentFormat.OpenXml.InkML;
-using DocumentFormat.OpenXml.Spreadsheet;
+﻿using Aki32Utilities.ConsoleAppUtilities.General;
 
 using Microsoft.ML;
-using Microsoft.ML.Data;
-using Microsoft.ML.Transforms;
 
 namespace Aki32Utilities.ConsoleAppUtilities.AI.CheatSheet;
 /// <summary>
 /// 
 /// Big summary of https://github.com/dotnet/machinelearning-samples
-/// 
-/// </summary>
-/// <remarks>
-/// 
-/// Almost all the examples and data is form here https://github.com/dotnet/machinelearning-samples
+/// Almost all the examples and data is form above.
 /// Examples are tagged by me as found in enum MLNetExampleScenario 
 /// 
-/// </remarks>
+/// </summary>
 public partial class MLNetExampleSummary : MLNetHandler
 {
 
@@ -51,23 +40,38 @@ public partial class MLNetExampleSummary : MLNetHandler
 
     // ★★★★★★★★★★★★★★★ methods
 
-    public void Run()
+    public void RunPrediction()
     {
         General.ConsoleExtension.WriteLineWithColor($"\r\n★★★★★★★★★★★★★★★ Run Called", ConsoleColor.Yellow);
 
         // def
-        var context = new MLContext(seed: 1);
+        Context = new MLContext(seed: 1);
 
         // main
-        LoadData(context);
+        LoadData();
+        LoadModel();
+        PredictTestData();
+        PredictSamples();
+    }
 
-        BuildPipeline(context);
-        CrossValidate(context);
+    public void RunAll()
+    {
+        General.ConsoleExtension.WriteLineWithColor($"\r\n★★★★★★★★★★★★★★★ Run Called", ConsoleColor.Yellow);
+
+        // def
+        Context = new MLContext(seed: 1);
+
+        // main
+        LoadData();
+
+        BuildPipeline();
+        CrossValidate();
         FitModel();
-        SaveModel(context);
+        SaveModel();
 
-        LoadModel(context);
-        PredictTestData(context);
+        LoadModel();
+        PredictTestData();
+        PredictSamples();
 
     }
 

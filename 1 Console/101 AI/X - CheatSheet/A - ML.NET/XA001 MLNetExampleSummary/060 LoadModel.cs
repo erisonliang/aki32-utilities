@@ -3,12 +3,13 @@
 namespace Aki32Utilities.ConsoleAppUtilities.AI.CheatSheet;
 public partial class MLNetExampleSummary : MLNetHandler
 {
-    private void LoadModel(MLContext context)
+    private void LoadModel()
     {
         General.ConsoleExtension.WriteLineWithColor($"\r\n★★★★★★★★★★★★★★★ Load Model", ConsoleColor.Yellow);
 
         switch (Scenario)
         {
+            // load
             case MLNetExampleScenario.A001_Sentiment_Analysis:
             case MLNetExampleScenario.A002_Spam_Detection:
             case MLNetExampleScenario.A003_CreditCardFraudDetection:
@@ -16,19 +17,17 @@ public partial class MLNetExampleSummary : MLNetHandler
             case MLNetExampleScenario.B001_IssuesClassification:
             case MLNetExampleScenario.B002_IrisFlowersClassification:
             case MLNetExampleScenario.B003_MNIST:
+                {
+                    Model = Context.Model.Load(ModelFile.FullName, out var _);
 
-                Model = context.Model.Load(ModelFile.FullName, out var inputSchema);
-
-                break;
-
+                    break;
+                }
 
                 // ignore
-
-
-
-
-                Console.WriteLine("ignore");
-                break;
+                {
+                    Console.WriteLine("ignore");
+                    break;
+                }
 
             // not impleented
             case MLNetExampleScenario.A777_Auto:
@@ -63,8 +62,9 @@ public partial class MLNetExampleSummary : MLNetHandler
             case MLNetExampleScenario.J009_ExportToONNX:
             case MLNetExampleScenario.K777_Auto:
             default:
-                Console.WriteLine("ignore");
-                throw new NotImplementedException();
+                {
+                    throw new NotImplementedException();
+                }
         }
 
     }

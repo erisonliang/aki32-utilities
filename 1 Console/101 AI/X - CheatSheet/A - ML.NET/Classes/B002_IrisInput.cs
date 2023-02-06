@@ -1,7 +1,7 @@
 ﻿using Microsoft.ML.Data;
 
 namespace Aki32Utilities.ConsoleAppUtilities.AI.CheatSheet;
-public class IrisInput
+public class B002_IrisInput
 {
     [LoadColumn(0)]
     public float Label;

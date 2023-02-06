@@ -3,7 +3,7 @@
 namespace Aki32Utilities.ConsoleAppUtilities.AI.CheatSheet;
 public partial class MLNetExampleSummary : MLNetHandler
 {
-    private void PredictTestData(MLContext context)
+    private void PredictTestData()
     {
         General.ConsoleExtension.WriteLineWithColor($"\r\n★★★★★★★★★★★★★★★ Test Data Prediction", ConsoleColor.Yellow);
 
@@ -11,7 +11,6 @@ public partial class MLNetExampleSummary : MLNetHandler
         {
             // for BinaryClassification
             case MLNetExampleScenario.A001_Sentiment_Analysis:
-            case MLNetExampleScenario.A002_Spam_Detection:
             case MLNetExampleScenario.A003_CreditCardFraudDetection:
             case MLNetExampleScenario.A004_HeartDiseasePrediction:
             case MLNetExampleScenario.A777_Auto:
@@ -19,12 +18,14 @@ public partial class MLNetExampleSummary : MLNetHandler
                     var predictedTestData = Model.Transform(TestData);
 
                     predictedTestData.WriteToConsole();
-                    var metrics = context.BinaryClassification.Evaluate(predictedTestData);
+                    var metrics = Context.BinaryClassification.Evaluate(predictedTestData);
                     ConsoleExtension.PrintMetrics(metrics);
+
+                    break;
                 }
-                break;
 
             // for MulticlassClassification
+            case MLNetExampleScenario.A002_Spam_Detection:
             case MLNetExampleScenario.B001_IssuesClassification:
             case MLNetExampleScenario.B002_IrisFlowersClassification:
             case MLNetExampleScenario.B003_MNIST:
@@ -33,10 +34,11 @@ public partial class MLNetExampleSummary : MLNetHandler
                     var predictedTestData = Model.Transform(TestData);
 
                     predictedTestData.WriteToConsole();
-                    var metrics = context.MulticlassClassification.Evaluate(predictedTestData);
+                    var metrics = Context.MulticlassClassification.Evaluate(predictedTestData);
                     ConsoleExtension.PrintMetrics(metrics);
+
+                    break;
                 }
-                break;
 
             // ignore
             case MLNetExampleScenario.C001_ProductRecommendation:
@@ -68,12 +70,17 @@ public partial class MLNetExampleSummary : MLNetHandler
             case MLNetExampleScenario.J008_ModelExplainability:
             case MLNetExampleScenario.J009_ExportToONNX:
             case MLNetExampleScenario.K777_Auto:
-                Console.WriteLine("ignore");
-                break;
+                {
+                    Console.WriteLine("ignore");
 
+                    break;
+                }
+
+            // not implemented
             default:
-                Console.WriteLine("ignore");
-                throw new NotImplementedException();
+                {
+                    throw new NotImplementedException();
+                }
         }
 
 
