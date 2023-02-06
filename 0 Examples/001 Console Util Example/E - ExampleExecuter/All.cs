@@ -730,17 +730,12 @@ public static partial class ExampleExecuter
         {
             var baseDir_101 = $@"{BASE_DIR}\101 - AI";
 
-            // XA001 - CheatSheet - Classifiers
+            // XA001 - CheatSheet - MLNetExampleSummary
             {
-                var baseDir_101_XA001 = $@"{baseDir_101}\XA001 Classifiers";
+                var baseDir_101_XA001 = $@"{baseDir_101}\XA001 MLNetExampleSummary";
 
-                //var data = new FileInfo(Path.Combine(baseDir_101_XA001, "Sentiment.tsv"));
-                //var model = new FileInfo(Path.Combine(baseDir_101_XA001, "Sentiment-Model.zip"));
-
-                var data = new FileInfo(Path.Combine(baseDir_101_XA001, "Iris.txt"));
-                var model = new FileInfo(Path.Combine(baseDir_101_XA001, "Iris-Model.zip"));
-
-                Classifiers.Run_ManuallyDefinedShema(data, model);
+                new MLNetExampleSummary(MLNetExampleScenario.A002_Spam_Detection, new DirectoryInfo(baseDir_101_XA001))
+                    .Run();
 
             }
 
