@@ -29,7 +29,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="ClosedXAI" Version="0.95.4" />
     <PackageReference Include="HomographySharp" Version="3.2.1" />
     <PackageReference Include="iTextSharp" Version="5.5.13.3" />
     <PackageReference Include="LibGit2Sharp" Version="0.26.2" />

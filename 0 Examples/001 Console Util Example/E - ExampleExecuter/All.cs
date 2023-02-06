@@ -19,6 +19,7 @@ using DocumentFormat.OpenXml.Spreadsheet;
 using DocumentFormat.OpenXml.Wordprocessing;
 
 using Newtonsoft.Json;
+using Aki32Utilities.ConsoleAppUtilities.AI.CheatSheet;
 
 namespace Aki32Utilities.UsageExamples.ConsoleAppUtilities;
 public static partial class ExampleExecuter
@@ -29,7 +30,7 @@ public static partial class ExampleExecuter
     {
         // TEST
         {
-            
+
 
 
         }
@@ -467,17 +468,17 @@ public static partial class ExampleExecuter
                 // BB ImageToImage ML_GetHigherResolutionImage_Loop
                 {
 
-                    PythonController.Initialize();
+                    //PythonController.Initialize();
 
-                    // single
-                    var input = new FileInfo($@"{baseDir_A_101}\BB01 GetHigherResolutionImage\input\00.jpg");
-                    input.AI_GetHigherResolutionImage(null);
+                    //// single
+                    //var input = new FileInfo($@"{baseDir_A_101}\BB01 GetHigherResolutionImage\input\00.jpg");
+                    //input.AI_GetHigherResolutionImage(null);
 
-                    // loop
-                    //var input = new DirectoryInfo($@"{baseDir_A_101}\BB01 GetHigherResolutionImage\input");
-                    //input.ML_GetHigherResolutionImage_Loop(null);
+                    //// loop
+                    ////var input = new DirectoryInfo($@"{baseDir_A_101}\BB01 GetHigherResolutionImage\input");
+                    ////input.ML_GetHigherResolutionImage_Loop(null);
 
-                    PythonController.Shutdown();
+                    //PythonController.Shutdown();
 
                 }
 
@@ -725,6 +726,26 @@ public static partial class ExampleExecuter
 
         }
 
+        // 101 - AI
+        {
+            var baseDir_101 = $@"{BASE_DIR}\101 - AI";
+
+            // XA001 - CheatSheet - Classifiers
+            {
+                var baseDir_101_XA001 = $@"{baseDir_101}\XA001 Classifiers";
+
+                //var data = new FileInfo(Path.Combine(baseDir_101_XA001, "Sentiment.tsv"));
+                //var model = new FileInfo(Path.Combine(baseDir_101_XA001, "Sentiment-Model.zip"));
+
+                var data = new FileInfo(Path.Combine(baseDir_101_XA001, "Iris.txt"));
+                var model = new FileInfo(Path.Combine(baseDir_101_XA001, "Iris-Model.zip"));
+
+                Classifiers.Run_ManuallyDefinedShema(data, model);
+
+            }
+
+        }
+
         // 110 - StructuralEngineering
         {
             var baseDir_110 = $@"{BASE_DIR}\110 - StructuralEngineering";
@@ -924,14 +945,6 @@ public static partial class ExampleExecuter
                 }
 
             }
-        }
-
-        // 101 - AI_GetHigherResolutionImage
-        {
-            var baseDir_101 = $@"{BASE_DIR}\101 - AI";
-
-
-
         }
 
         // 111 - Research
