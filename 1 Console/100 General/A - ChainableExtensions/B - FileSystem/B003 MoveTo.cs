@@ -85,7 +85,7 @@ public static partial class ChainableExtensions
 
 
         // main
-        var outputFile = new FileInfo(Path.Combine(outputDir.FullName, inputFile.Name));
+        var outputFile = outputDir.GetChildFileInfo(inputFile.Name);
         inputFile.MoveTo(outputFile);
 
 

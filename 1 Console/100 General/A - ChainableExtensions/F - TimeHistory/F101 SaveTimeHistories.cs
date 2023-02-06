@@ -14,7 +14,7 @@ public static partial class ChainableExtensions
         if (outputFile != null && !outputFile!.Name.EndsWith(".xlsx"))
             throw new Exception("outputFile name must end with .xlsx");
 
-        var tempDir = new DirectoryInfo(Path.Combine(outputFile!.DirectoryName!, ".__temp"));
+        var tempDir = outputFile!.Directory!.GetChildDirectoryInfo(".__temp");
         if (tempDir.Exists)
             tempDir.Delete(true);
 
@@ -46,7 +46,7 @@ public static partial class ChainableExtensions
     /// <param name="outputFilePath"></param>
     public static FileInfo SaveToExcel(this IEnumerable<TimeHistory> timeHistoryList, DirectoryInfo outputDir)
     {
-        var outputFile = new FileInfo(Path.Combine(outputDir.FullName, "output.xlsx"));
+        var outputFile = outputDir.GetChildFileInfo("output.xlsx");
         return timeHistoryList.SaveToExcel(outputFile);
     }
 

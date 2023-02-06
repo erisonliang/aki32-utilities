@@ -46,7 +46,7 @@ public static partial class ChainableExtensions
         // main
         foreach (var crop in cropSizes)
         {
-            var outputFile = new FileInfo(Path.Combine(outputDir!.FullName, $"{Path.GetFileNameWithoutExtension(inputFile.Name)} - {crop.ToString()}.png"));
+            var outputFile = outputDir!.GetChildFileInfo($"{Path.GetFileNameWithoutExtension(inputFile.Name)} - {crop.ToString()}.png");
             inputFile.CropImage(outputFile, crop);
         }
 

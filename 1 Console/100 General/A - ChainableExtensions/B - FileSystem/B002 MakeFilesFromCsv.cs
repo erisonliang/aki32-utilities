@@ -67,7 +67,7 @@ public static partial class ChainableExtensions
 
             try
             {
-                var targetDirPath = Path.Combine(outputDir.FullName, targetName);
+                var targetDirPath = Path.Combine(outputDir!.FullName, targetName);
                 var targetDir = new DirectoryInfo(targetDirPath);
                 if (templateDir == null)
                     targetDir.Create();

@@ -117,7 +117,7 @@ public static class SNAPHelper
     public static FileInfo CreateWaveFile(FileInfo outputFile, TimeHistory inputWave, string name, double amax, double vmax)
         => CreateWaveFile(outputFile, inputWave.a, inputWave.TimeStep, name, amax, vmax);
     public static FileInfo CreateWaveFile(DirectoryInfo outputDir, double[] accs, double dt, string name, double amax, double vmax)
-        => CreateWaveFile(new FileInfo(Path.Combine(outputDir.FullName, @$"{name}.wv")), accs, dt, name, amax, vmax);
+        => CreateWaveFile(outputDir.GetChildFileInfo(@$"{name}.wv"), accs, dt, name, amax, vmax);
     public static FileInfo CreateWaveFile(DirectoryInfo outputDir, TimeHistory inputWave, string name, double amax, double vmax)
         => CreateWaveFile(outputDir, inputWave.a, inputWave.TimeStep, name, amax, vmax);
 

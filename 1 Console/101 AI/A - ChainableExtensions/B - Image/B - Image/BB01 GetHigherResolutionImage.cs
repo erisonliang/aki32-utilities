@@ -106,7 +106,7 @@ def reset_folder(path):
         outputFile = outputFile!.GetExtensionChangedFileInfo(".png");
         UtilConfig.StopTemporary_ConsoleOutput_Preprocess();
 
-        var tempDir = new DirectoryInfo(Path.Combine(inputFile.Directory!.FullName, "_temp"));
+        var tempDir = inputFile.Directory!.GetChildDirectoryInfo("_temp");
         tempDir.Create();
         inputFile.CopyTo(tempDir);
 

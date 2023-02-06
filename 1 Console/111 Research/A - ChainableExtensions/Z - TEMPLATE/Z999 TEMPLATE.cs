@@ -79,7 +79,7 @@ public static partial class ChainableExtensions
                 {
                     try
                     {
-                        var outputFile = new FileInfo(Path.Combine(outputDir!.FullName, inputFile.Name));
+                        var outputFile = outputDir!.GetChildFileInfo(inputFile.Name);
                         inputFile.TEMPLATE(outputFile);
                         break;
                     }

@@ -234,7 +234,7 @@ public class TimeHistory
     /// <param name="outputFilePath"></param>
     public FileInfo SaveToCsv(DirectoryInfo outputDir)
     {
-        var outputFile = new FileInfo(Path.Combine(outputDir.FullName, $"{Name}.csv"));
+        var outputFile = outputDir.GetChildFileInfo($"{Name}.csv");
         return SaveToCsv(outputFile);
     }
 

@@ -22,5 +22,4 @@ public static partial class ChainableExtensions
                 )
             ;
     }
-
 }

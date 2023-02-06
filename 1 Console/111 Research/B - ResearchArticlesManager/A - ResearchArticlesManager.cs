@@ -7,7 +7,7 @@ public partial class ResearchArticlesManager
     // ★★★★★★★★★★★★★★★ paths
 
     public DirectoryInfo LocalDirectory { get; set; }
-    private FileInfo ArticleDatabaseFileInfo => new(Path.Combine(LocalDirectory.FullName, "ResearchArticles.csv"));
+    private FileInfo ArticleDatabaseFileInfo => LocalDirectory.GetChildFileInfo("ResearchArticles.csv");
     private FileInfo ArticleDatabaseBackUpFileInfo => new(Path.Combine(LocalDirectory.FullName, "ResearchArticles.csv.bak", $"ResearchArticles_{DateTime.Now:s}-{DateTime.Now:ffff}.csv".Replace(':', '-')));
     public DirectoryInfo PDFsDirectory => new($@"{LocalDirectory.FullName}\PDFs");
 

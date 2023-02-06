@@ -19,10 +19,8 @@ public partial class MLNetExampleSummary : MLNetHandler
         {
             if (!DataFile.Exists)
             {
-                var zipDir = new DirectoryInfo(Path.Combine(DataDir.FullName, "zip"));
-                zipDir.Create();
-
-                uri.DownloadFile(new FileInfo(Path.Combine(zipDir.FullName, "downloaded.zip"))).Decompress_Zip(zipDir);
+                var zipDir = DataDir.GetChildDirectoryInfo("zip").CreateAndPipe();
+                uri.DownloadFile(zipDir.GetChildFileInfo("downloaded.zip")).Decompress_Zip(zipDir);
                 targetFileLocationAfterExtracted.MoveTo(DataFile);
             }
         }
@@ -51,8 +49,8 @@ public partial class MLNetExampleSummary : MLNetHandler
         {
             case MLNetExampleScenario.A001_Sentiment_Analysis:
                 {
-                    DataFile = new FileInfo(Path.Combine(DataDir.FullName, "Sentiment.tsv")); ;
-                    ModelFile = new FileInfo(Path.Combine(DataDir.FullName, "Sentiment-Model.zip"));
+                    DataFile = DataDir.GetChildFileInfo("Sentiment.tsv");
+                    ModelFile = DataDir.GetChildFileInfo("Sentiment-Model.zip");
 
                     var uri = new Uri("https://github.com/dotnet/machinelearning-samples/blob/main/samples/csharp/getting-started/BinaryClassification_SentimentAnalysis/SentimentAnalysis/Data/wikiDetoxAnnotated40kRows.tsv?raw=true");
                     DownloadDataFile(uri);
@@ -64,9 +62,9 @@ public partial class MLNetExampleSummary : MLNetHandler
                 }
             case MLNetExampleScenario.A002_Spam_Detection:
                 {
-                    DataFile = new FileInfo(Path.Combine(DataDir.FullName, "Spam.tsv"));
-                    ModelFile = new FileInfo(Path.Combine(DataDir.FullName, "Spam-Model.zip"));
-                    var targetFileLocationAfterExtracted = new FileInfo(Path.Combine(DataDir.FullName, "SMSSpamCollection"));
+                    DataFile = DataDir.GetChildFileInfo("Spam.tsv");
+                    ModelFile = DataDir.GetChildFileInfo("Spam-Model.zip");
+                    var targetFileLocationAfterExtracted = DataDir.GetChildFileInfo("SMSSpamCollection");
 
                     var uri = new Uri("https://archive.ics.uci.edu/ml/machine-learning-databases/00228/smsspamcollection.zip");
                     DownloadAndExtractZipDataFile(uri, targetFileLocationAfterExtracted);
@@ -79,9 +77,8 @@ public partial class MLNetExampleSummary : MLNetHandler
 
             case MLNetExampleScenario.B002_IrisFlowersClassification:
                 {
-
-                    DataFile = new FileInfo(Path.Combine(DataDir.FullName, "Iris.txt")); ;
-                    ModelFile = new FileInfo(Path.Combine(DataDir.FullName, "Iris-Model.zip"));
+                    DataFile = DataDir.GetChildFileInfo("Iris.txt");
+                    ModelFile = DataDir.GetChildFileInfo("Iris-Model.zip");
                     AllData = context.Data.LoadFromTextFile<IrisInput>(DataFile.FullName, hasHeader: true, separatorChar: '\t');
 
                     break;

@@ -50,7 +50,7 @@ public static partial class ChainableExtensions
         // main
         foreach (var (targetName, targetColor) in targetInfos)
         {
-            var outputFile = new FileInfo(Path.Combine(outputDir!.FullName, $"{targetName.Replace(".png", "")}.png"));
+            var outputFile = outputDir!.GetChildFileInfo($"{targetName.Replace(".png", "")}.png");
             inputFile.ConvertImageColor(outputFile, targetColor);
         }
 

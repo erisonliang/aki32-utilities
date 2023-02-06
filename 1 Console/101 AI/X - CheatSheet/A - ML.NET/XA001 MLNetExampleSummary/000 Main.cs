@@ -44,7 +44,7 @@ public partial class MLNetExampleSummary : MLNetHandler
     public MLNetExampleSummary(MLNetExampleScenario scenario, DirectoryInfo baseDir)
     {
         Scenario = scenario;
-        DataDir = new DirectoryInfo(Path.Combine(baseDir.FullName, scenario.ToString().Shorten(..4)));
+        DataDir = baseDir.GetChildDirectoryInfo(scenario.ToString().Shorten(..4));
         DataDir.Create();
     }
 

@@ -63,7 +63,7 @@ public static partial class ChainableExtensions
                 inF.Rainflow(outF, C, beta,
                     outputRainFlowResultHistory: outputRainFlowResultHistory,
                     outputRainBranches: outputRainBranches,
-                    outputFileForRainBranches: new FileInfo(Path.Combine(outputDirForRainBranches!.FullName, $"{Path.GetFileNameWithoutExtension(inF.Name)}_Branches.csv"))
+                    outputFileForRainBranches: outputDirForRainBranches!.GetChildFileInfo($"{Path.GetFileNameWithoutExtension(inF.Name)}_Branches.csv")
                     );
             }
             else

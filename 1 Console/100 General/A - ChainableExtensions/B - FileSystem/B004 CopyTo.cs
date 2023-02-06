@@ -28,7 +28,7 @@ public static partial class ChainableExtensions
 
         // copy directories
         foreach (var inner_inputDir in inputDir.GetDirectories())
-            inner_inputDir.CopyTo(new DirectoryInfo(Path.Combine(outputDir.FullName, inner_inputDir.Name)),
+            inner_inputDir.CopyTo(outputDir.GetChildDirectoryInfo(inner_inputDir.Name),
                 consoleOutput: false,
                 overwriteExistingFile: overwriteExistingFile
                 );
@@ -91,10 +91,10 @@ public static partial class ChainableExtensions
 
 
         // main
-        var outputFile = new FileInfo(Path.Combine(outputDir.FullName, inputFile.Name));
+        var outputFile = outputDir.GetChildFileInfo(inputFile.Name);
         inputFile.CopyTo(outputFile!.FullName, overwrite: overwriteExistingFile);
 
-        
+
         // post process
         return outputFile!;
     }

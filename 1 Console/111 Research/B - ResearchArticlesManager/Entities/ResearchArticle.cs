@@ -350,7 +350,7 @@ public class ResearchArticle : IComparable
             if (pdfStockDirectory == null)
                 throw new InvalidDataException("When tring to add PDF file, {pdfStockDirectory} must not be null");
 
-            var targetFile = new FileInfo(Path.Combine(pdfStockDirectory.FullName, $"{addingArticle.LocalPDFName}.pdf"));
+            var targetFile = pdfStockDirectory.GetChildFileInfo($"{addingArticle.LocalPDFName}.pdf");
 
             if (deleteOriginalPdfFile)
                 addingPdfFile.MoveTo(targetFile);
@@ -394,7 +394,7 @@ public class ResearchArticle : IComparable
             if (LocalPDFName == null)
                 throw new Exception("Local PDF Name cannot be implied.");
 
-            var outputFile = new FileInfo(Path.Combine(pdfStockDirectory.FullName, $"{LocalPDFName}.pdf"));
+            var outputFile = pdfStockDirectory.GetChildFileInfo($"{LocalPDFName}.pdf");
             new Uri(PDF_Link!).DownloadFileAsync(outputFile, true).Wait();
         }
         catch (Exception ex)

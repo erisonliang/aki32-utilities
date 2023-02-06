@@ -106,7 +106,7 @@ public static partial class ChainableExtensions
         // main
         foreach (var (name, initialColumn, targetColumn) in targets)
         {
-            var outputFile = new FileInfo(Path.Combine(outputDir.FullName, $"{name}.csv"));
+            var outputFile = outputDir.GetChildFileInfo($"{name}.csv");
             inputDir.CollectCsvColumns(outputFile, targetColumn, initialColumn, skipRowCount);
         }
 

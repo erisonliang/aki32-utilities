@@ -32,7 +32,7 @@ public static partial class ChainableExtensions
                     csvCells[r, c] = sheet.Cell(r + 1, c + 1).Value.ToString() ?? "";
 
 
-            var outputFile = new FileInfo(Path.Combine(outputDir!.FullName, $"{outputFileSuffix}{sheet.Name}.csv"));
+            var outputFile = outputDir!.GetChildFileInfo($"{outputFileSuffix}{sheet.Name}.csv");
 
             csvCells
                 .ConvertToJaggedArray()
