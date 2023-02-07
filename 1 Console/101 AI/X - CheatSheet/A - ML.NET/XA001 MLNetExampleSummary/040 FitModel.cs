@@ -13,6 +13,7 @@ public partial class MLNetExampleSummary : MLNetHandler
             case MLNetExampleScenario.A001_Sentiment_Analysis:
             case MLNetExampleScenario.A002_Spam_Detection:
             case MLNetExampleScenario.A003_CreditCardFraudDetection:
+            case MLNetExampleScenario.A004_HeartDiseasePrediction:
             case MLNetExampleScenario.B002_IrisFlowersClassification:
             case MLNetExampleScenario.B003_MNIST:
                 {
@@ -31,7 +32,6 @@ public partial class MLNetExampleSummary : MLNetHandler
                 }
 
             // not implemented
-            case MLNetExampleScenario.A004_HeartDiseasePrediction:
             case MLNetExampleScenario.A777_Auto:
             case MLNetExampleScenario.B001_IssuesClassification:
             case MLNetExampleScenario.B777_Auto:

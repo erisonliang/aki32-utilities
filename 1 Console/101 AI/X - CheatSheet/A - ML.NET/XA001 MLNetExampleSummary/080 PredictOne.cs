@@ -1,5 +1,7 @@
 ﻿using DocumentFormat.OpenXml.EMMA;
 
+using iTextSharp.text.pdf.codec.wmf;
+
 using Microsoft.ML;
 
 namespace Aki32Utilities.ConsoleAppUtilities.AI.CheatSheet;
@@ -43,8 +45,8 @@ public partial class MLNetExampleSummary : MLNetHandler
                     var samples = new A002_SpamInput[]
                     {
                         new A002_SpamInput { Message = "That's a great idea. It should work."},
-                        new A002_SpamInput { Message =  "free medicine winner! congratulations"               },
-                        new A002_SpamInput { Message =  "Yes we should meet over the weekend!"},
+                        new A002_SpamInput { Message = "free medicine winner! congratulations"},
+                        new A002_SpamInput { Message = "Yes we should meet over the weekend!"},
                         new A002_SpamInput { Message = "you win pills and free entry vouchers" },
                     };
 
@@ -55,6 +57,41 @@ public partial class MLNetExampleSummary : MLNetHandler
                         Console.WriteLine(@$"=======================================================");
                         Console.WriteLine(@$"Message: {sample.Message}");
                         Console.WriteLine(@$"Result: {result.PredictedLabel}");
+                        Console.WriteLine();
+                    }
+                    Console.WriteLine(@$"=======================================================");
+
+                    break;
+                }
+
+            case MLNetExampleScenario.A004_HeartDiseasePrediction:
+                {
+                    var predictor = Context.Model.CreatePredictionEngine<A004_HeartInput, A004_HeartOutput>(Model);
+
+                    var samples = A004_HeartSample.heartDataList;
+
+                    foreach (var sample in samples)
+                    {
+                        var result = predictor.Predict(sample);
+
+                        Console.WriteLine(@$"=======================================================");
+                        Console.WriteLine(@$"Age: {sample.Age} ");
+                        Console.WriteLine(@$"Sex: {sample.Sex} ");
+                        Console.WriteLine(@$"Cp: {sample.Cp} ");
+                        Console.WriteLine(@$"TrestBps: {sample.TrestBps} ");
+                        Console.WriteLine(@$"Chol: {sample.Chol} ");
+                        Console.WriteLine(@$"Fbs: {sample.Fbs} ");
+                        Console.WriteLine(@$"RestEcg: {sample.RestEcg} ");
+                        Console.WriteLine(@$"Thalac: {sample.Thalac} ");
+                        Console.WriteLine(@$"Exang: {sample.Exang} ");
+                        Console.WriteLine(@$"OldPeak: {sample.OldPeak} ");
+                        Console.WriteLine(@$"Slope: {sample.Slope} ");
+                        Console.WriteLine(@$"Ca: {sample.Ca} ");
+                        Console.WriteLine(@$"Thal: {sample.Thal} ");
+                        Console.WriteLine();
+                        Console.WriteLine(@$"Answer: ? "); // sample.Label には未入力。
+                        Console.WriteLine(@$"Prediction: {result.PredictedLabel}, {(result.PredictedLabel ? "A disease could be present" : "Not present disease")} ");
+                        Console.WriteLine(@$"Probability: {result.Probability} ");
                         Console.WriteLine();
                     }
                     Console.WriteLine(@$"=======================================================");
@@ -90,7 +127,7 @@ public partial class MLNetExampleSummary : MLNetHandler
                         Console.WriteLine($"Probabilities:");
                         for (int i = 0; i < result.Score.Length; i++)
                             Console.WriteLine($"  {IrisFlowers[i],10}: {result.Score[i],-10:F4}");
-
+                        
                         Console.WriteLine();
                     }
                     Console.WriteLine(@$"=======================================================");
@@ -100,14 +137,34 @@ public partial class MLNetExampleSummary : MLNetHandler
 
             case MLNetExampleScenario.B003_MNIST:
                 {
-                    var predictor = Context.Model.CreatePredictionEngine<MnistInput, MnistOutput>(Model);
+                    var predictor = Context.Model.CreatePredictionEngine<B003_MnistInput, B003_MnistOutput>(Model);
+
+                    var samples = new B003_MnistInput[]
+                    {
+                        B003_MnistSmaple.MNIST1,
+                        B003_MnistSmaple.MNIST2,
+                        B003_MnistSmaple.MNIST3,
+                    };
+
+                    foreach (var sample in samples)
+                    {
+                        var result = predictor.Predict(sample);
+
+                        Console.WriteLine(@$"=======================================================");
+                        Console.WriteLine(@$"Answer: {sample.Number}");
+                        Console.WriteLine(@$"Prediction: {result.PredictedLabel}");
+                        for (int i = 0; i < result.Score.Length; i++)
+                            Console.WriteLine(@$"  {i}: {result.Score[i]:F4}");
+
+                        Console.WriteLine();
+                    }
+                    Console.WriteLine(@$"=======================================================");
 
                     break;
                 }
 
             // ignore
             case MLNetExampleScenario.A003_CreditCardFraudDetection:
-            case MLNetExampleScenario.A004_HeartDiseasePrediction:
             case MLNetExampleScenario.A777_Auto:
             case MLNetExampleScenario.B001_IssuesClassification:
             case MLNetExampleScenario.B777_Auto:

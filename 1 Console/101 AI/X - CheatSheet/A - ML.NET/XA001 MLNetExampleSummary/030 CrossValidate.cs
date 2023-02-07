@@ -3,7 +3,7 @@
 namespace Aki32Utilities.ConsoleAppUtilities.AI.CheatSheet;
 public partial class MLNetExampleSummary : MLNetHandler
 {
-    private void CrossValidate()
+    private void CrossValidate(IDataView? targetData = null)
     {
         General.ConsoleExtension.WriteLineWithColor($"\r\n★★★★★★★★★★★★★★★ Cross Validation", ConsoleColor.Yellow);
 
@@ -11,7 +11,7 @@ public partial class MLNetExampleSummary : MLNetHandler
         {
             case MLNetExampleScenario.A002_Spam_Detection:
                 {
-                    var crossValMetrics = Context.MulticlassClassification.CrossValidate(data: AllData, estimator: PipeLine, numberOfFolds: 5);
+                    var crossValMetrics = Context.MulticlassClassification.CrossValidate(data: (targetData ?? AllData), estimator: PipeLine, numberOfFolds: 5);
                     ConsoleExtension.PrintMetrics(crossValMetrics);
 
                     break;

@@ -20,7 +20,6 @@ public partial class MLNetExampleSummary : MLNetHandler
     public ITransformer Model { get; set; }
 
     public DirectoryInfo DataDir { get; set; }
-    public FileInfo DataFile { get; set; }
     public FileInfo ModelFile { get; set; }
 
     public IDataView AllData { get; set; }

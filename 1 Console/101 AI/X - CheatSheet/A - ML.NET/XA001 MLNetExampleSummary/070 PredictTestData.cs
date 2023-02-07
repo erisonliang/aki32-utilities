@@ -26,7 +26,6 @@ public partial class MLNetExampleSummary : MLNetHandler
 
             // for MulticlassClassification
             case MLNetExampleScenario.A002_Spam_Detection:
-            case MLNetExampleScenario.B001_IssuesClassification:
             case MLNetExampleScenario.B002_IrisFlowersClassification:
             case MLNetExampleScenario.B003_MNIST:
             case MLNetExampleScenario.B777_Auto:
@@ -41,6 +40,7 @@ public partial class MLNetExampleSummary : MLNetHandler
                 }
 
             // ignore
+            case MLNetExampleScenario.B001_IssuesClassification:
             case MLNetExampleScenario.C001_ProductRecommendation:
             case MLNetExampleScenario.C002_MovieRecommender_MatrixFactorization:
             case MLNetExampleScenario.C003_MovieRecommender_FieldAwareFactorizationMachines:

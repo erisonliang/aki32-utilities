@@ -1,8 +1,8 @@
 ﻿using Microsoft.ML.Data;
 
 namespace Aki32Utilities.ConsoleAppUtilities.AI.CheatSheet;
-class MnistOutput
+class B003_MnistOutput
 {
-    [ColumnName("Score")]
+    public float PredictedLabel;
     public float[] Score;
 }

@@ -734,8 +734,8 @@ public static partial class ExampleExecuter
             {
                 var baseDir_101_XA001 = $@"{baseDir_101}\XA001 MLNetExampleSummary";
 
-                new MLNetExampleSummary(MLNetExampleScenario.B002_IrisFlowersClassification, new DirectoryInfo(baseDir_101_XA001))
-                    //.RunPrediction();
+                new MLNetExampleSummary(MLNetExampleScenario.A003_CreditCardFraudDetection, new DirectoryInfo(baseDir_101_XA001))
+                //.RunPrediction();
                 .RunAll();
 
             }

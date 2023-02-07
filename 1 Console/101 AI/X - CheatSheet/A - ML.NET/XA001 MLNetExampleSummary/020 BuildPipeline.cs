@@ -31,7 +31,7 @@ public partial class MLNetExampleSummary : MLNetHandler
                         Norm = Microsoft.ML.Transforms.Text.TextFeaturizingEstimator.NormFunction.L2,
                     };
                     ConnectNode(Context.Transforms.Text.FeaturizeText("Features", option1, "Message"));
-                    ConnectCheckPoint(Context);
+                    ConnectCheckPoint();
 
                     ConnectNode(Context.MulticlassClassification.Trainers.OneVersusAll(
                            Context.BinaryClassification.Trainers.AveragedPerceptron()));
@@ -40,26 +40,45 @@ public partial class MLNetExampleSummary : MLNetHandler
                     break;
                 }
 
-            // ★ for 
+            // ★ for binary label, many features, selecting with LINQ
             case MLNetExampleScenario.A003_CreditCardFraudDetection:
                 {
-                    ConnectNode(Context.Transforms.Conversion.MapValueToKey("Label", "Number", keyOrdinality: ValueToKeyMappingEstimator.KeyOrdinality.ByValue));  // string key → int value
-                    ConnectNode(Context.Transforms.Concatenate("Features", "FeatureList"));
-                    ConnectCheckPoint(Context);
-                    ConnectNode(Context.MulticlassClassification.Trainers.OneVersusAll(
-                           Context.BinaryClassification.Trainers.AveragedPerceptron(numberOfIterations: 10)));
-                    ConnectNode(Context.Transforms.Conversion.MapKeyToValue("PredictedLabel")); // int value → string key
+                    // ★ for multiple label, many features 
+                    var featureColumnNames = AllData.Schema.AsQueryable()
+                        .Select(column => column.Name)
+                        .Where(name => name != "ExcludingColumn")
+                        .Where(name => name != "IdPreservationColumn")
+                        .Where(name => name != "Label")
+                        .ToArray();
+                    ConnectNode(Context.Transforms.Concatenate("Features", featureColumnNames));
+                    ConnectNode(Context.Transforms.DropColumns(new string[] { "ExcludingColumn" }));
+                    ConnectNode(Context.Transforms.NormalizeMeanVariance("NormalizedFeatures", "Features"));
+
+                    ConnectNode(Context.BinaryClassification.Trainers.FastTree(
+                        featureColumnName: "NormalizedFeatures",
+                        numberOfLeaves: 20,
+                        numberOfTrees: 100,
+                        minimumExampleCountPerLeaf: 10,
+                        learningRate: 0.2));
 
                     break;
                 }
 
-            // ★ for multiple label, many features (#B002 Iris Flowers Classification)
+            // ★ for multiple label, many features, simple 
+            case MLNetExampleScenario.A004_HeartDiseasePrediction:
+                {
+                    ConnectNode(Context.Transforms.Concatenate("Features", "Age", "Sex", "Cp", "TrestBps", "Chol", "Fbs", "RestEcg", "Thalac", "Exang", "OldPeak", "Slope", "Ca", "Thal"));
+                    ConnectNode(Context.BinaryClassification.Trainers.FastTree());
+
+                    break;
+                }
+
+            // ★ for multiple label, many features 
             case MLNetExampleScenario.B002_IrisFlowersClassification:
                 {
                     ConnectNode(Context.Transforms.Conversion.MapValueToKey("Label"));
-                    ConnectNode(Context.Transforms.Concatenate("Features",
-                        nameof(B002_IrisInput.SepalLength), nameof(B002_IrisInput.SepalWidth), nameof(B002_IrisInput.PetalLength), nameof(B002_IrisInput.PetalWidth)));
-                    ConnectCheckPoint(Context);
+                    ConnectNode(Context.Transforms.Concatenate("Features", nameof(B002_IrisInput.SepalLength), nameof(B002_IrisInput.SepalWidth), nameof(B002_IrisInput.PetalLength), nameof(B002_IrisInput.PetalWidth)));
+                    ConnectCheckPoint();
                     ConnectNode(Context.MulticlassClassification.Trainers.SdcaMaximumEntropy());
                     ConnectNode(Context.Transforms.Conversion.MapKeyToValue("Label"));
                     ConnectNode(Context.Transforms.Conversion.MapKeyToValue("PredictedLabel"));
@@ -67,11 +86,22 @@ public partial class MLNetExampleSummary : MLNetHandler
                     break;
                 }
 
+            // ★ for multiple label
+            case MLNetExampleScenario.B003_MNIST:
+                {
+                    ConnectNode(Context.Transforms.Conversion.MapValueToKey("Label", "Number", keyOrdinality: ValueToKeyMappingEstimator.KeyOrdinality.ByValue));
+                    ConnectNode(Context.Transforms.Concatenate("Features", nameof(B003_MnistInput.PixelValues)));
+                    ConnectCheckPoint();
+                    ConnectNode(Context.MulticlassClassification.Trainers.SdcaMaximumEntropy());
+                    ConnectNode(Context.Transforms.Conversion.MapKeyToValue("Number", "Label"));
+                    ConnectNode(Context.Transforms.Conversion.MapKeyToValue("PredictedLabel"));
+
+                    break;
+                }
+
             // not implemented
-            case MLNetExampleScenario.A004_HeartDiseasePrediction:
             case MLNetExampleScenario.A777_Auto:
             case MLNetExampleScenario.B001_IssuesClassification:
-            case MLNetExampleScenario.B003_MNIST:
             case MLNetExampleScenario.B777_Auto:
             case MLNetExampleScenario.C001_ProductRecommendation:
             case MLNetExampleScenario.C002_MovieRecommender_MatrixFactorization:
@@ -108,22 +138,6 @@ public partial class MLNetExampleSummary : MLNetHandler
                 }
         }
 
-
-        ////// ★ for binary label, 1 feature
-        //ConnectNode(Context.Transforms.Text.FeaturizeText("Features", nameof(SentimentInput.Text))); // string → word vector
-        //ConnectNode(Context.Transforms.Conversion.MapValueToKey("Label")); // string key → int value
-        //ConnectCheckPoint(Context);
-
-
-
-        //// ★ for multiple label, many features 
-        //var featureColumnNames = AllData.Schema.AsQueryable()
-        //    .Select(column => column.Name)
-        //    .Where(name => name != "ExcludingColumn")
-        //    .ToArray();
-        //ConnectNode(Context.Transforms.Concatenate("Features", featureColumnNames));
-        //ConnectNode(Context.Transforms.DropColumns(new string[] { "ExcludingColumn" }));
-        //ConnectNode(Context.Transforms.NormalizeLpNorm("NormalizedFeatures", "Features"));
 
 
 
