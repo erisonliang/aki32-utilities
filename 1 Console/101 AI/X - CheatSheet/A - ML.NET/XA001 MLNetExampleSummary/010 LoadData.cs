@@ -189,10 +189,10 @@ public partial class MLNetExampleSummary : MLNetHandler
                     var modelUri = new Uri("https://github.com/dotnet/machinelearning-samples/blob/main/samples/csharp/getting-started/DeepLearning_ObjectDetection_Onnx/ObjectDetectionConsoleApp/assets/Model/TinyYolo2_model.onnx?raw=true");
                     DownloadDataFile(modelUri, ModelFile);
 
-                    I004_ImagesDir = DataDir.GetChildDirectoryInfo("Images");
+                    var imageDir = DataDir.GetChildDirectoryInfo("Images");
                     for (int i = 1; i <= 4; i++)
                     {
-                        var imageFile = I004_ImagesDir.GetChildFileInfo($"Image{i}.jpg");
+                        var imageFile = imageDir.GetChildFileInfo($"Image{i}.jpg");
                         var imageUri = new Uri($"https://github.com/dotnet/machinelearning-samples/raw/main/samples/csharp/getting-started/DeepLearning_ObjectDetection_Onnx/ObjectDetectionConsoleApp/assets/images/image{i}.jpg");
                         DownloadDataFile(imageUri, imageFile);
                     }

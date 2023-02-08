@@ -10,8 +10,6 @@ public class I004_YoloOutput
 
     public class Parser
     {
-        class CellDimensions : I004_DimensionsBase { }
-
         public const int ROW_COUNT = 13;
         public const int COL_COUNT = 13;
         public const int CHANNEL_COUNT = 125;
@@ -85,9 +83,9 @@ public class I004_YoloOutput
             return (channel * this.channelStride) + (y * COL_COUNT) + x;
         }
 
-        private BoundingBoxDimensions ExtractBoundingBoxDimensions(float[] modelOutput, int x, int y, int channel)
+        private RectangleF ExtractBoundingBoxDimensions(float[] modelOutput, int x, int y, int channel)
         {
-            return new BoundingBoxDimensions
+            return new RectangleF
             {
                 X = modelOutput[GetOffset(x, y, channel)],
                 Y = modelOutput[GetOffset(x, y, channel + 1)],
@@ -101,9 +99,9 @@ public class I004_YoloOutput
             return Sigmoid(modelOutput[GetOffset(x, y, channel + 4)]);
         }
 
-        private CellDimensions MapBoundingBoxToCell(int x, int y, int box, BoundingBoxDimensions boxDimensions)
+        private RectangleF MapBoundingBoxToCell(int x, int y, int box, RectangleF boxDimensions)
         {
-            return new CellDimensions
+            return new RectangleF
             {
                 X = (x + Sigmoid(boxDimensions.X)) * CELL_WIDTH,
                 Y = (y + Sigmoid(boxDimensions.Y)) * CELL_HEIGHT,
@@ -165,11 +163,11 @@ public class I004_YoloOutput
                     {
                         var channel = (box * (CLASS_COUNT + BOX_INFO_FEATURE_COUNT));
 
-                        BoundingBoxDimensions boundingBoxDimensions = ExtractBoundingBoxDimensions(yoloModelOutputs, row, column, channel);
+                        RectangleF boundingBoxDimensions = ExtractBoundingBoxDimensions(yoloModelOutputs, row, column, channel);
 
                         float confidence = GetConfidence(yoloModelOutputs, row, column, channel);
 
-                        CellDimensions mappedBoundingBox = MapBoundingBoxToCell(row, column, box, boundingBoxDimensions);
+                        RectangleF mappedBoundingBox = MapBoundingBoxToCell(row, column, box, boundingBoxDimensions);
 
                         if (confidence < threshold)
                             continue;
@@ -184,7 +182,7 @@ public class I004_YoloOutput
 
                         boxes.Add(new I004_YoloBoundingBox()
                         {
-                            Dimensions = new BoundingBoxDimensions
+                            Rect = new RectangleF
                             {
                                 X = (mappedBoundingBox.X - mappedBoundingBox.Width / 2),
                                 Y = (mappedBoundingBox.Y - mappedBoundingBox.Height / 2),

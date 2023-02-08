@@ -4,20 +4,13 @@ using System.Drawing.Drawing2D;
 using Aki32Utilities.ConsoleAppUtilities.General;
 
 namespace Aki32Utilities.ConsoleAppUtilities.AI.CheatSheet;
-public class BoundingBoxDimensions : I004_DimensionsBase { }
-
 public class I004_YoloBoundingBox
 {
-    public BoundingBoxDimensions Dimensions { get; set; }
-
     public string Label { get; set; }
-
     public float Confidence { get; set; }
 
-    public RectangleF Rect => new(Dimensions.X, Dimensions.Y, Dimensions.Width, Dimensions.Height);
-
+    public RectangleF Rect { get; set; }
     public Color BoxColor { get; set; }
-
 
     public static void DrawBoundingBoxToImage(DirectoryInfo inputImage, DirectoryInfo outputImage, string imageName, IList<I004_YoloBoundingBox> boxes)
     {
@@ -28,10 +21,10 @@ public class I004_YoloBoundingBox
         foreach (var box in boxes)
         {
             // Get Bounding Box Dimensions
-            var x = (uint)Math.Max(box.Dimensions.X, 0);
-            var y = (uint)Math.Max(box.Dimensions.Y, 0);
-            var width = (uint)Math.Min(oriW - x, box.Dimensions.Width);
-            var height = (uint)Math.Min(oriH - y, box.Dimensions.Height);
+            var x = (uint)Math.Max(box.Rect.X, 0);
+            var y = (uint)Math.Max(box.Rect.Y, 0);
+            var width = (uint)Math.Min(oriW - x, box.Rect.Width);
+            var height = (uint)Math.Min(oriH - y, box.Rect.Height);
 
             // Resize To Image
             x = (uint)oriW * x / I004_Config.ImageWidth;

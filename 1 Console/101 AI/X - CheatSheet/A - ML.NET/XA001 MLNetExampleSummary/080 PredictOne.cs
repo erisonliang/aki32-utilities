@@ -253,9 +253,10 @@ public partial class MLNetExampleSummary : MLNetHandler
                 {
                     var predictor = Context.Model.CreatePredictionEngine<I004_YoloInput, I004_YoloOutput>(Model);
                     var parser = new I004_YoloOutput.Parser();
-                    var outputImageDir = I004_ImagesDir.GetChildDirectoryInfo("Output");
+                    var imageDir = DataDir.GetChildDirectoryInfo("Images");
+                    var outputImageDir = imageDir.GetChildDirectoryInfo("Output");
 
-                    var samples = I004_ImagesDir
+                    var samples = imageDir
                         .GetFilesWithRegexen(General.ChainableExtensions.GetRegexen_ImageFiles())
                         .Select(f => new I004_YoloInput { ImagePath = f.FullName, FileName = f.Name });
 
@@ -267,7 +268,7 @@ public partial class MLNetExampleSummary : MLNetHandler
                         objectBoxes = parser.FilterBoundingBoxes(objectBoxes, 5, .5F);
 
                         // output as image
-                        I004_YoloBoundingBox.DrawBoundingBoxToImage(I004_ImagesDir, outputImageDir, sample.FileName, objectBoxes);
+                        I004_YoloBoundingBox.DrawBoundingBoxToImage(imageDir, outputImageDir, sample.FileName, objectBoxes);
 
                         // output to console
                         Console.WriteLine(@$"=======================================================");
