@@ -185,7 +185,6 @@ public partial class MLNetExampleSummary : MLNetHandler
             // image
             case MLNetExampleScenario.I004_ObjectDetection_ONNXModelScoring:
                 {
-                    // download
                     ModelFile = DataDir.GetChildDirectoryInfo("Model").GetChildFileInfo("TinyYolo2Model.onnx");
                     var modelUri = new Uri("https://github.com/dotnet/machinelearning-samples/blob/main/samples/csharp/getting-started/DeepLearning_ObjectDetection_Onnx/ObjectDetectionConsoleApp/assets/Model/TinyYolo2_model.onnx?raw=true");
                     DownloadDataFile(modelUri, ModelFile);
@@ -197,14 +196,6 @@ public partial class MLNetExampleSummary : MLNetHandler
                         var imageUri = new Uri($"https://github.com/dotnet/machinelearning-samples/raw/main/samples/csharp/getting-started/DeepLearning_ObjectDetection_Onnx/ObjectDetectionConsoleApp/assets/images/image{i}.jpg");
                         DownloadDataFile(imageUri, imageFile);
                     }
-
-
-                    // load 
-                    I004_Images = I004_ImagesDir
-                        .GetFiles()
-                        .Where(f => f.Extension != ".md")
-                        .Select(f => new I004_ImageNetInput { ImagePath = f.FullName, Label = f.Name });
-                    TestData = Context.Data.LoadFromEnumerable(I004_Images);
 
                     break;
                 }

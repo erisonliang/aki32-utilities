@@ -141,8 +141,20 @@ public partial class MLNetExampleSummary : MLNetHandler
                     break;
                 }
 
-            // ignore
+            // by ONNX
             case MLNetExampleScenario.I004_ObjectDetection_ONNXModelScoring:
+                {
+                    ConnectNode(Context.Transforms.CopyColumns("Label", "FileName"));
+                    ConnectNode(Context.Transforms.LoadImages("Image", "", "ImagePath"));
+                    ConnectNode(Context.Transforms.ResizeImages("Image", I004_Config.ImageWidth, I004_Config.ImageHeight, "Image"));
+                    ConnectNode(Context.Transforms.ExtractPixels("Image"));
+                    ConnectNode(Context.Transforms.CopyColumns("image", "Image"));
+                    ConnectNode(Context.Transforms.ApplyOnnxModel(new[] { "grid" }, new[] { "image" }, ModelFile.FullName));
+
+                    break;
+                }
+
+                // ignore
                 {
                     Console.WriteLine("ignore");
 

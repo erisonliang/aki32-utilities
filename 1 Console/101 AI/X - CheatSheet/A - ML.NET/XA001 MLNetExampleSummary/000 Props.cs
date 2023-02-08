@@ -30,7 +30,6 @@ public partial class MLNetExampleSummary : MLNetHandler
     // ★ specific usage
     
     public DirectoryInfo I004_ImagesDir { get; set; }
-    public IEnumerable<I004_ImageNetInput> I004_Images { get; set; }
 
 
 

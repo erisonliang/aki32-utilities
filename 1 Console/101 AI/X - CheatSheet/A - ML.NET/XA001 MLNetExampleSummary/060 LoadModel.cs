@@ -1,4 +1,4 @@
-﻿using Microsoft.ML;
+﻿
 
 namespace Aki32Utilities.ConsoleAppUtilities.AI.CheatSheet;
 public partial class MLNetExampleSummary : MLNetHandler
@@ -26,24 +26,16 @@ public partial class MLNetExampleSummary : MLNetHandler
                     break;
                 }
 
-            // from ONNX
+
+            // ignore
             case MLNetExampleScenario.I004_ObjectDetection_ONNXModelScoring:
-                {
-                    Console.WriteLine("ignore for now");
-
-                    break;
-                }
-
-
-
-                // ignore
                 {
                     Console.WriteLine("ignore");
 
                     break;
                 }
 
-            // not impleented
+            // not implemented
             case MLNetExampleScenario.A777_Auto:
             case MLNetExampleScenario.B777_Auto:
             case MLNetExampleScenario.C003_MovieRecommender_FieldAwareFactorizationMachines:

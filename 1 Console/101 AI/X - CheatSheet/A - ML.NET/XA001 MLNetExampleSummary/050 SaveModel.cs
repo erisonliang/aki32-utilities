@@ -1,4 +1,4 @@
-﻿using Microsoft.ML;
+﻿
 
 namespace Aki32Utilities.ConsoleAppUtilities.AI.CheatSheet;
 public partial class MLNetExampleSummary : MLNetHandler
@@ -9,7 +9,7 @@ public partial class MLNetExampleSummary : MLNetHandler
 
         switch (Scenario)
         {
-            // save
+            // save to zip (no need)
             case MLNetExampleScenario.A001_Sentiment_Analysis:
             case MLNetExampleScenario.A002_Spam_Detection:
             case MLNetExampleScenario.A003_CreditCardFraudDetection:
@@ -26,7 +26,7 @@ public partial class MLNetExampleSummary : MLNetHandler
                     break;
                 }
 
-                // ignore
+            // ignore
             case MLNetExampleScenario.I004_ObjectDetection_ONNXModelScoring:
                 {
                     Console.WriteLine("ignore");
@@ -34,7 +34,7 @@ public partial class MLNetExampleSummary : MLNetHandler
                     break;
                 }
 
-            // not impleented
+            // not implemented
             case MLNetExampleScenario.A777_Auto:
             case MLNetExampleScenario.B777_Auto:
             case MLNetExampleScenario.C003_MovieRecommender_FieldAwareFactorizationMachines:

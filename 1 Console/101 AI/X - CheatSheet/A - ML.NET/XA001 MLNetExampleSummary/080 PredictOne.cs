@@ -1,10 +1,4 @@
-﻿using System.Drawing.Drawing2D;
-using System.Drawing;
-
-using Aki32Utilities.ConsoleAppUtilities.General;
-
-using Microsoft.ML;
-using Microsoft.ML.Data;
+﻿using Aki32Utilities.ConsoleAppUtilities.General;
 
 namespace Aki32Utilities.ConsoleAppUtilities.AI.CheatSheet;
 public partial class MLNetExampleSummary : MLNetHandler
@@ -255,10 +249,41 @@ public partial class MLNetExampleSummary : MLNetHandler
                     break;
                 }
 
+            case MLNetExampleScenario.I004_ObjectDetection_ONNXModelScoring:
+                {
+                    var predictor = Context.Model.CreatePredictionEngine<I004_YoloInput, I004_YoloOutput>(Model);
+                    var parser = new I004_YoloOutput.Parser();
+                    var outputImageDir = I004_ImagesDir.GetChildDirectoryInfo("Output");
+
+                    var samples = I004_ImagesDir
+                        .GetFilesWithRegexen(General.ChainableExtensions.GetRegexen_ImageFiles())
+                        .Select(f => new I004_YoloInput { ImagePath = f.FullName, FileName = f.Name });
+
+                    foreach (var sample in samples)
+                    {
+                        var result = predictor.Predict(sample);
+
+                        var objectBoxes = parser.ParseOutputs(result.PredictedLabels);
+                        objectBoxes = parser.FilterBoundingBoxes(objectBoxes, 5, .5F);
+
+                        // output as image
+                        I004_YoloBoundingBox.DrawBoundingBoxToImage(I004_ImagesDir, outputImageDir, sample.FileName, objectBoxes);
+
+                        // output to console
+                        Console.WriteLine(@$"=======================================================");
+                        Console.WriteLine(@$"(!) Objects found in {sample.FileName}");
+                        foreach (var box in objectBoxes)
+                            Console.WriteLine($"{box.Confidence * 100:F0}%\t{box.Label}");
+
+                        Console.WriteLine();
+                    }
+                    Console.WriteLine(@$"=======================================================");
+
+                    break;
+                }
 
             // ignore
             case MLNetExampleScenario.A003_CreditCardFraudDetection:
-            case MLNetExampleScenario.I004_ObjectDetection_ONNXModelScoring:
                 {
                     Console.WriteLine("ignore");
 

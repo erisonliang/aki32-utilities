@@ -26,8 +26,18 @@ public partial class MLNetExampleSummary : MLNetHandler
                     break;
                 }
 
-            // ignore
+            // from ONNX, no ned for further fitting
             case MLNetExampleScenario.I004_ObjectDetection_ONNXModelScoring:
+                {
+                    Console.WriteLine($"fitting...");
+                    var emptyData = Context.Data.LoadFromEnumerable(new List<I004_YoloInput>());
+                    Model = PipeLine.Fit(emptyData);
+                    Console.WriteLine($"fitted");
+
+                    break;
+                }
+
+                // ignore
                 {
                     Console.WriteLine("ignore");
 

@@ -1,6 +1,4 @@
-﻿using Aki32Utilities.ConsoleAppUtilities.General;
-
-using Microsoft.ML;
+﻿
 
 namespace Aki32Utilities.ConsoleAppUtilities.AI.CheatSheet;
 public partial class MLNetExampleSummary : MLNetHandler
@@ -50,41 +48,9 @@ public partial class MLNetExampleSummary : MLNetHandler
                     break;
                 }
 
-            case MLNetExampleScenario.I004_ObjectDetection_ONNXModelScoring:
-                {
-
-
-                    var modelScorer = new OnnxModelScorer(I004_ImagesDir.FullName, ModelFile.FullName, Context);
-
-
-
-                    IEnumerable<float[]> probabilities = modelScorer.Score(TestData);
-
-
-
-                    var parser = new YoloOutputParser();
-                    var boundingBoxes = probabilities
-                        .Select(probability => parser.ParseOutputs(probability))
-                        .Select(boxes => parser.FilterBoundingBoxes(boxes, 5, .5F));
-
-
-                    // Draw bounding boxes for detected objects in each of the images
-                    for (var i = 0; i < I004_Images.Count(); i++)
-                    {
-                        string imageFileName = I004_Images.ElementAt(i).Label;
-                        IList<YoloBoundingBox> detectedObjects = boundingBoxes.ElementAt(i);
-
-                        var outputDir = I004_ImagesDir.GetChildDirectoryInfo("Output");
-                        I004_DrawBoundingBox(I004_ImagesDir.FullName, outputDir.FullName, imageFileName, detectedObjects);
-
-                        I004_LogDetectedObjects(imageFileName, detectedObjects);
-                    }
-
-                    break;
-                }
-
             // ignore
             case MLNetExampleScenario.C001_ProductRecommendation:
+            case MLNetExampleScenario.I004_ObjectDetection_ONNXModelScoring:
                 {
                     Console.WriteLine("ignore");
 

@@ -1,7 +1,7 @@
-﻿
+﻿using System.Drawing;
 
 namespace Aki32Utilities.ConsoleAppUtilities.AI.CheatSheet;
-public class DimensionsBase
+public class I004_DimensionsBase
 {
     public float X { get; set; }
     public float Y { get; set; }
