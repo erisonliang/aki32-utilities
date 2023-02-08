@@ -54,7 +54,7 @@ public static partial class ChainableExtensions
         var fullProps = typeof(T).GetProperties();
 
         var headerProps = csvGrid[0]
-            .Select(c => fullProps.FirstOrDefault(p => p.Name == c))
+            .Select(c => fullProps.FirstOrDefault(p => (p.Name == c) || (p.HasAttribute<CsvHeaderNameAttribute>() && p.GetAttributes<CsvHeaderNameAttribute>()[0].Name == c)))
             .ToArray();
 
         var propIndexPair = new List<(int index, PropertyInfo prop)>();
@@ -73,7 +73,7 @@ public static partial class ChainableExtensions
             propIndexPair.Add((i, p));
         }
 
-        csvGrid = csvGrid[1..^0];
+        csvGrid = csvGrid[1..];
 
         // contents
         foreach (var csvLine in csvGrid)
