@@ -27,7 +27,9 @@ public partial class MLNetExampleSummary : MLNetHandler
                 }
 
             // from ONNX, no ned for further fitting
-            case MLNetExampleScenario.I004_ObjectDetection_ONNXModelScoring:
+            case MLNetExampleScenario.I004_ObjectDetection_ONNXModelScoring_TinyYoloV2_08:
+            case MLNetExampleScenario.I004_ObjectDetection_ONNXModelScoring_YoloV2_09:
+            case MLNetExampleScenario.I004_ObjectDetection_ONNXModelScoring_YoloV3_10:
                 {
                     Console.WriteLine($"fitting...");
                     var emptyData = Context.Data.LoadFromEnumerable(new List<I004_YoloInput>());

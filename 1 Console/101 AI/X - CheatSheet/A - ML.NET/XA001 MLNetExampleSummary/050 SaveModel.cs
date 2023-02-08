@@ -9,7 +9,7 @@ public partial class MLNetExampleSummary : MLNetHandler
 
         switch (Scenario)
         {
-            // save to zip (no need)
+            // save to zip
             case MLNetExampleScenario.A001_Sentiment_Analysis:
             case MLNetExampleScenario.A002_Spam_Detection:
             case MLNetExampleScenario.A003_CreditCardFraudDetection:
@@ -27,7 +27,9 @@ public partial class MLNetExampleSummary : MLNetHandler
                 }
 
             // ignore
-            case MLNetExampleScenario.I004_ObjectDetection_ONNXModelScoring:
+            case MLNetExampleScenario.I004_ObjectDetection_ONNXModelScoring_TinyYoloV2_08:
+            case MLNetExampleScenario.I004_ObjectDetection_ONNXModelScoring_YoloV2_09:
+            case MLNetExampleScenario.I004_ObjectDetection_ONNXModelScoring_YoloV3_10:
                 {
                     Console.WriteLine("ignore");
 

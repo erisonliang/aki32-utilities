@@ -36,7 +36,6 @@ public partial class MLNetExampleSummary : MLNetHandler
             case MLNetExampleScenario.I001_ImageClassificationTraining_HighLevelAPI:
             case MLNetExampleScenario.I002_ImageClassificationPredictions_PretrainedTensorFlowModelScoring:
             case MLNetExampleScenario.I003_ImageClassificationTraining_TensorFlowFeaturizerEstimator:
-            case MLNetExampleScenario.I004_ObjectDetection_ONNXModelScoring:
             case MLNetExampleScenario.J001_ScalableModelOnWebAPI:
             case MLNetExampleScenario.J002_ScalableModelOnRazorWebApp:
             case MLNetExampleScenario.J003_ScalableModelOnAzureFunctions:

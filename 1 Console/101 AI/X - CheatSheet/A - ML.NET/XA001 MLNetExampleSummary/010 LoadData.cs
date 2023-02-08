@@ -182,12 +182,40 @@ public partial class MLNetExampleSummary : MLNetHandler
                     break;
                 }
 
-            // image
-            case MLNetExampleScenario.I004_ObjectDetection_ONNXModelScoring:
+            // ONNX
+            case MLNetExampleScenario.I004_ObjectDetection_ONNXModelScoring_TinyYoloV2_08:
+            case MLNetExampleScenario.I004_ObjectDetection_ONNXModelScoring_YoloV2_09:
+            case MLNetExampleScenario.I004_ObjectDetection_ONNXModelScoring_YoloV3_10:
                 {
-                    ModelFile = DataDir.GetChildDirectoryInfo("Model").GetChildFileInfo("TinyYolo2Model.onnx");
-                    var modelUri = new Uri("https://github.com/dotnet/machinelearning-samples/blob/main/samples/csharp/getting-started/DeepLearning_ObjectDetection_Onnx/ObjectDetectionConsoleApp/assets/Model/TinyYolo2_model.onnx?raw=true");
-                    DownloadDataFile(modelUri, ModelFile);
+                    // yolo model is available here https://github.com/onnx/models/tree/main/vision/object_detection_segmentation
+
+                    switch (Scenario)
+                    {
+                        // for tinyyolov2-8.onnx
+                        case MLNetExampleScenario.I004_ObjectDetection_ONNXModelScoring_TinyYoloV2_08:
+                            {
+                                ModelFile = DataDir.GetChildDirectoryInfo("Model").GetChildFileInfo("tinyyolov2-8.onnx");
+                                var modelUri = new Uri("https://github.com/onnx/models/raw/main/vision/object_detection_segmentation/tiny-yolov2/model/tinyyolov2-8.onnx");
+                                DownloadDataFile(modelUri, ModelFile);
+                            }
+                            break;
+                        // for yolov2-coco-9.onnx
+                        case MLNetExampleScenario.I004_ObjectDetection_ONNXModelScoring_YoloV2_09:
+                            {
+                                ModelFile = DataDir.GetChildDirectoryInfo("Model").GetChildFileInfo("yolov2-coco-9.onnx");
+                                var modelUri = new Uri("https://github.com/onnx/models/raw/main/vision/object_detection_segmentation/yolov2-coco/model/yolov2-coco-9.onnx");
+                                DownloadDataFile(modelUri, ModelFile);
+                            }
+                            break;
+                        // for yolov3-10.onnx
+                        case MLNetExampleScenario.I004_ObjectDetection_ONNXModelScoring_YoloV3_10:
+                            {
+                                ModelFile = DataDir.GetChildDirectoryInfo("Model").GetChildFileInfo("yolov3-10.onnx");
+                                var modelUri = new Uri("https://github.com/onnx/models/blob/main/vision/object_detection_segmentation/yolov3/model/yolov3-10.onnx");
+                                DownloadDataFile(modelUri, ModelFile);
+                            }
+                            break;
+                    }
 
                     var imageDir = DataDir.GetChildDirectoryInfo("Images");
                     for (int i = 1; i <= 4; i++)

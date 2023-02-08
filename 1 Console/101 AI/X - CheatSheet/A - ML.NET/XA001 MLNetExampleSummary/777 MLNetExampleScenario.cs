@@ -47,7 +47,9 @@ public enum MLNetExampleScenario
     I001_ImageClassificationTraining_HighLevelAPI,
     I002_ImageClassificationPredictions_PretrainedTensorFlowModelScoring,
     I003_ImageClassificationTraining_TensorFlowFeaturizerEstimator,
-    I004_ObjectDetection_ONNXModelScoring,
+    I004_ObjectDetection_ONNXModelScoring_TinyYoloV2_08,
+    I004_ObjectDetection_ONNXModelScoring_YoloV2_09,
+    I004_ObjectDetection_ONNXModelScoring_YoloV3_10,
 
     // J    Cross Cutting Scenarios
     J001_ScalableModelOnWebAPI,

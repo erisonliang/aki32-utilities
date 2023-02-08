@@ -50,7 +50,9 @@ public partial class MLNetExampleSummary : MLNetHandler
 
             // ignore
             case MLNetExampleScenario.C001_ProductRecommendation:
-            case MLNetExampleScenario.I004_ObjectDetection_ONNXModelScoring:
+            case MLNetExampleScenario.I004_ObjectDetection_ONNXModelScoring_TinyYoloV2_08:
+            case MLNetExampleScenario.I004_ObjectDetection_ONNXModelScoring_YoloV2_09:
+            case MLNetExampleScenario.I004_ObjectDetection_ONNXModelScoring_YoloV3_10:
                 {
                     Console.WriteLine("ignore");
 

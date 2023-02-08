@@ -1,4 +1,8 @@
-﻿using Aki32Utilities.ConsoleAppUtilities.General;
+﻿using System.Drawing;
+
+using Aki32Utilities.ConsoleAppUtilities.General;
+
+using Microsoft.ML;
 
 namespace Aki32Utilities.ConsoleAppUtilities.AI.CheatSheet;
 public partial class MLNetExampleSummary : MLNetHandler
@@ -249,12 +253,75 @@ public partial class MLNetExampleSummary : MLNetHandler
                     break;
                 }
 
-            case MLNetExampleScenario.I004_ObjectDetection_ONNXModelScoring:
+            case MLNetExampleScenario.I004_ObjectDetection_ONNXModelScoring_TinyYoloV2_08:
+            case MLNetExampleScenario.I004_ObjectDetection_ONNXModelScoring_YoloV2_09:
+            case MLNetExampleScenario.I004_ObjectDetection_ONNXModelScoring_YoloV3_10:
                 {
                     var predictor = Context.Model.CreatePredictionEngine<I004_YoloInput, I004_YoloOutput>(Model);
-                    var parser = new I004_YoloOutput.Parser();
                     var imageDir = DataDir.GetChildDirectoryInfo("Images");
                     var outputImageDir = imageDir.GetChildDirectoryInfo("Output");
+                    var parser = new I004_YoloOutput.Parser();
+
+                    switch (Scenario)
+                    {
+                        // for tinyyolov2-8.onnx
+                        case MLNetExampleScenario.I004_ObjectDetection_ONNXModelScoring_TinyYoloV2_08:
+                            {
+                                parser.RowCount = 13;
+                                parser.ColCount = 13;
+                                parser.ChannelCount = 125;
+                                parser.ClassCount = 20;
+
+                                parser.Anchors = new float[] { 1.08F, 1.19F, 3.42F, 4.41F, 6.63F, 11.38F, 9.42F, 5.11F, 16.62F, 10.52F };
+                                parser.Labels = new string[] { "aeroplane", "bicycle", "bird", "boat", "bottle", "bus", "car", "cat", "chair", "cow", "diningtable", "dog", "horse", "motorbike", "person", "pottedplant", "sheep", "sofa", "train", "tvmonitor" };
+                                parser.ClassColors = new Color[]
+                                {
+                                    Color.Khaki,
+                                    Color.Fuchsia,
+                                    Color.Silver,
+                                    Color.RoyalBlue,
+                                    Color.Green,
+                                    Color.DarkOrange,
+                                    Color.Purple,
+                                    Color.Gold,
+                                    Color.Red,
+                                    Color.Aquamarine,
+                                    Color.Lime,
+                                    Color.AliceBlue,
+                                    Color.Sienna,
+                                    Color.Orchid,
+                                    Color.Tan,
+                                    Color.LightPink,
+                                    Color.Yellow,
+                                    Color.HotPink,
+                                    Color.OliveDrab,
+                                    Color.SandyBrown,
+                                    Color.DarkTurquoise
+                                };
+
+                            }
+                            break;
+                        // for yolov2-coco-9.onnx
+                        case MLNetExampleScenario.I004_ObjectDetection_ONNXModelScoring_YoloV2_09:
+                            {
+                                parser.RowCount = 13;
+                                parser.ColCount = 13;
+                                parser.ChannelCount = 425;
+                                parser.ClassCount = 80;
+
+                                parser.Anchors = new float[] { 1.08F, 1.19F, 3.42F, 4.41F, 6.63F, 11.38F, 9.42F, 5.11F, 16.62F, 10.52F };
+                                parser.Labels = new string[] { "person", "bicycle", "car", "motorcycle", "airplane", "bus", "train", "truck", "boat", "traffic light", "fire hydrant", "stop sign", "parking meter", "bench", "bird", "cat", "dog", "horse", "sheep", "cow", "elephant", "bear", "zebra", "giraffe", "backpack", "umbrella", "handbag", "tie", "suitcase", "frisbee", "skis", "snowboard", "sports ball", "kite", "baseball bat", "baseball glove", "skateboard", "surfboard", "tennis racket", "bottle", "wine glass", "cup", "fork", "knife", "spoon", "bowl", "banana", "apple", "sandwich", "orange", "broccoli", "carrot", "hot dog", "pizza", "donut", "cake", "chair", "couch", "potted plant", "bed", "dining table", "toilet", "tv", "laptop", "mouse", "remote", "keyboard", "cell phone", "microwave", "oven", "toaster", "sink", "refrigerator", "book", "clock", "vase", "scissors", "teddy bear", "hair drier", "toothbrush" };
+                                parser.ClassColors = Enumerable.Range(0, parser.ClassCount).Select(x => Color.Red).ToArray();
+                            }
+                            break;
+                        // for yolov3-10.onnx
+                        case MLNetExampleScenario.I004_ObjectDetection_ONNXModelScoring_YoloV3_10:
+                            {
+                                // TODO
+                                throw new NotImplementedException();
+                            }
+                            break;
+                    }
 
                     var samples = imageDir
                         .GetFilesWithRegexen(General.ChainableExtensions.GetRegexen_ImageFiles())
@@ -265,7 +332,7 @@ public partial class MLNetExampleSummary : MLNetHandler
                         var result = predictor.Predict(sample);
 
                         var objectBoxes = parser.ParseOutputs(result.PredictedLabels);
-                        objectBoxes = parser.FilterBoundingBoxes(objectBoxes, 5, .5F);
+                        objectBoxes = parser.FilterBoundingBoxes(objectBoxes, 10, .6F);
 
                         // output as image
                         I004_YoloBoundingBox.DrawBoundingBoxToImage(imageDir, outputImageDir, sample.FileName, objectBoxes);

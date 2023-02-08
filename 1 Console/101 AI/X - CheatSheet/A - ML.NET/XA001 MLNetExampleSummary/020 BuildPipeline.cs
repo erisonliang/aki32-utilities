@@ -141,15 +141,44 @@ public partial class MLNetExampleSummary : MLNetHandler
                     break;
                 }
 
-            // by ONNX
-            case MLNetExampleScenario.I004_ObjectDetection_ONNXModelScoring:
+            // by ONNX (check input/output name on Netron)
+            case MLNetExampleScenario.I004_ObjectDetection_ONNXModelScoring_TinyYoloV2_08:
+            case MLNetExampleScenario.I004_ObjectDetection_ONNXModelScoring_YoloV2_09:
+            case MLNetExampleScenario.I004_ObjectDetection_ONNXModelScoring_YoloV3_10:
                 {
                     ConnectNode(Context.Transforms.CopyColumns("Label", "FileName"));
                     ConnectNode(Context.Transforms.LoadImages("Image", "", "ImagePath"));
                     ConnectNode(Context.Transforms.ResizeImages("Image", I004_Config.ImageWidth, I004_Config.ImageHeight, "Image"));
                     ConnectNode(Context.Transforms.ExtractPixels("Image"));
-                    ConnectNode(Context.Transforms.CopyColumns("image", "Image"));
-                    ConnectNode(Context.Transforms.ApplyOnnxModel(new[] { "grid" }, new[] { "image" }, ModelFile.FullName));
+
+                    switch (Scenario)
+                    {
+                        // for tinyyolov2-8.onnx
+                        case MLNetExampleScenario.I004_ObjectDetection_ONNXModelScoring_TinyYoloV2_08:
+                            {
+                                ConnectNode(Context.Transforms.CopyColumns("image", "Image"));
+                                ConnectNode(Context.Transforms.ApplyOnnxModel(new[] { "grid" }, new[] { "image" }, ModelFile.FullName));
+                                ConnectNode(Context.Transforms.CopyColumns("PredictedLabels", "grid"));
+                            }
+                            break;
+                        // for yolov2-coco-9.onnx
+                        case MLNetExampleScenario.I004_ObjectDetection_ONNXModelScoring_YoloV2_09:
+                            {
+                                ConnectNode(Context.Transforms.CopyColumns("input.1", "Image"));
+                                ConnectNode(Context.Transforms.ApplyOnnxModel(new[] { "218" }, new[] { "input.1" }, ModelFile.FullName));
+                                ConnectNode(Context.Transforms.CopyColumns("PredictedLabels", "218"));
+                            }
+                            break;
+                        // for yolov3-10.onnx
+                        case MLNetExampleScenario.I004_ObjectDetection_ONNXModelScoring_YoloV3_10:
+                            {
+
+                                // TODO
+                                throw new NotImplementedException();
+
+                            }
+                            break;
+                    }
 
                     break;
                 }
