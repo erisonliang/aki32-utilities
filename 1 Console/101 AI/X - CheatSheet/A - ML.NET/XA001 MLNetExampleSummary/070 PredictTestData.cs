@@ -1,4 +1,6 @@
-﻿using Microsoft.ML;
+﻿using Aki32Utilities.ConsoleAppUtilities.General;
+
+using Microsoft.ML;
 
 namespace Aki32Utilities.ConsoleAppUtilities.AI.CheatSheet;
 public partial class MLNetExampleSummary : MLNetHandler
@@ -16,7 +18,6 @@ public partial class MLNetExampleSummary : MLNetHandler
             case MLNetExampleScenario.A777_Auto:
                 {
                     var predictedTestData = Model.Transform(TestData);
-
                     predictedTestData.WriteToConsole();
                     var metrics = Context.BinaryClassification.Evaluate(predictedTestData);
                     ConsoleExtension.PrintMetrics(metrics);
@@ -31,7 +32,6 @@ public partial class MLNetExampleSummary : MLNetHandler
             case MLNetExampleScenario.B777_Auto:
                 {
                     var predictedTestData = Model.Transform(TestData);
-
                     predictedTestData.WriteToConsole();
                     var metrics = Context.MulticlassClassification.Evaluate(predictedTestData);
                     ConsoleExtension.PrintMetrics(metrics);
@@ -39,10 +39,60 @@ public partial class MLNetExampleSummary : MLNetHandler
                     break;
                 }
 
-            // ignore
-            case MLNetExampleScenario.B001_IssuesClassification:
-            case MLNetExampleScenario.C001_ProductRecommendation:
+            // for Regression
             case MLNetExampleScenario.C002_MovieRecommender_MatrixFactorization:
+                {
+                    var predictedTestData = Model.Transform(TestData);
+                    predictedTestData.WriteToConsole();
+                    var metrics = Context.Regression.Evaluate(predictedTestData);
+                    ConsoleExtension.PrintMetrics(metrics);
+
+                    break;
+                }
+
+            case MLNetExampleScenario.I004_ObjectDetection_ONNXModelScoring:
+                {
+
+
+                    var modelScorer = new OnnxModelScorer(I004_ImagesDir.FullName, ModelFile.FullName, Context);
+
+
+
+                    IEnumerable<float[]> probabilities = modelScorer.Score(TestData);
+
+
+
+                    var parser = new YoloOutputParser();
+                    var boundingBoxes = probabilities
+                        .Select(probability => parser.ParseOutputs(probability))
+                        .Select(boxes => parser.FilterBoundingBoxes(boxes, 5, .5F));
+
+
+                    // Draw bounding boxes for detected objects in each of the images
+                    for (var i = 0; i < I004_Images.Count(); i++)
+                    {
+                        string imageFileName = I004_Images.ElementAt(i).Label;
+                        IList<YoloBoundingBox> detectedObjects = boundingBoxes.ElementAt(i);
+
+                        var outputDir = I004_ImagesDir.GetChildDirectoryInfo("Output");
+                        I004_DrawBoundingBox(I004_ImagesDir.FullName, outputDir.FullName, imageFileName, detectedObjects);
+
+                        I004_LogDetectedObjects(imageFileName, detectedObjects);
+                    }
+
+                    break;
+                }
+
+            // ignore
+            case MLNetExampleScenario.C001_ProductRecommendation:
+                {
+                    Console.WriteLine("ignore");
+
+                    break;
+                }
+
+            // not implemented
+            case MLNetExampleScenario.B001_IssuesClassification:
             case MLNetExampleScenario.C003_MovieRecommender_FieldAwareFactorizationMachines:
             case MLNetExampleScenario.C777_Auto:
             case MLNetExampleScenario.D001_PricePrediction:
@@ -59,7 +109,6 @@ public partial class MLNetExampleSummary : MLNetHandler
             case MLNetExampleScenario.I001_ImageClassificationTraining_HighLevelAPI:
             case MLNetExampleScenario.I002_ImageClassificationPredictions_PretrainedTensorFlowModelScoring:
             case MLNetExampleScenario.I003_ImageClassificationTraining_TensorFlowFeaturizerEstimator:
-            case MLNetExampleScenario.I004_ObjectDetection_ONNXModelScoring:
             case MLNetExampleScenario.J001_ScalableModelOnWebAPI:
             case MLNetExampleScenario.J002_ScalableModelOnRazorWebApp:
             case MLNetExampleScenario.J003_ScalableModelOnAzureFunctions:
@@ -70,13 +119,6 @@ public partial class MLNetExampleSummary : MLNetHandler
             case MLNetExampleScenario.J008_ModelExplainability:
             case MLNetExampleScenario.J009_ExportToONNX:
             case MLNetExampleScenario.K777_Auto:
-                {
-                    Console.WriteLine("ignore");
-
-                    break;
-                }
-
-            // not implemented
             default:
                 {
                     throw new NotImplementedException();

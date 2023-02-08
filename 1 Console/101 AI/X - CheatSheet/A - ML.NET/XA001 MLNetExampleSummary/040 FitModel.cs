@@ -16,6 +16,8 @@ public partial class MLNetExampleSummary : MLNetHandler
             case MLNetExampleScenario.A004_HeartDiseasePrediction:
             case MLNetExampleScenario.B002_IrisFlowersClassification:
             case MLNetExampleScenario.B003_MNIST:
+            case MLNetExampleScenario.C001_ProductRecommendation:
+            case MLNetExampleScenario.C002_MovieRecommender_MatrixFactorization:
                 {
                     Console.WriteLine($"fitting...");
                     Model = PipeLine.Fit(targetData ?? TrainData);
@@ -24,7 +26,8 @@ public partial class MLNetExampleSummary : MLNetHandler
                     break;
                 }
 
-                // ignore
+            // ignore
+            case MLNetExampleScenario.I004_ObjectDetection_ONNXModelScoring:
                 {
                     Console.WriteLine("ignore");
 
@@ -35,8 +38,6 @@ public partial class MLNetExampleSummary : MLNetHandler
             case MLNetExampleScenario.A777_Auto:
             case MLNetExampleScenario.B001_IssuesClassification:
             case MLNetExampleScenario.B777_Auto:
-            case MLNetExampleScenario.C001_ProductRecommendation:
-            case MLNetExampleScenario.C002_MovieRecommender_MatrixFactorization:
             case MLNetExampleScenario.C003_MovieRecommender_FieldAwareFactorizationMachines:
             case MLNetExampleScenario.C777_Auto:
             case MLNetExampleScenario.D001_PricePrediction:
@@ -53,7 +54,6 @@ public partial class MLNetExampleSummary : MLNetHandler
             case MLNetExampleScenario.I001_ImageClassificationTraining_HighLevelAPI:
             case MLNetExampleScenario.I002_ImageClassificationPredictions_PretrainedTensorFlowModelScoring:
             case MLNetExampleScenario.I003_ImageClassificationTraining_TensorFlowFeaturizerEstimator:
-            case MLNetExampleScenario.I004_ObjectDetection_ONNXModelScoring:
             case MLNetExampleScenario.J001_ScalableModelOnWebAPI:
             case MLNetExampleScenario.J002_ScalableModelOnRazorWebApp:
             case MLNetExampleScenario.J003_ScalableModelOnAzureFunctions:

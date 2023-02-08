@@ -1,4 +1,5 @@
 ﻿using Microsoft.ML;
+using Microsoft.ML.Trainers;
 using Microsoft.ML.Transforms;
 
 namespace Aki32Utilities.ConsoleAppUtilities.AI.CheatSheet;
@@ -99,12 +100,59 @@ public partial class MLNetExampleSummary : MLNetHandler
                     break;
                 }
 
+            // ★
+            case MLNetExampleScenario.C001_ProductRecommendation:
+                {
+                    var options = new MatrixFactorizationTrainer.Options
+                    {
+                        MatrixColumnIndexColumnName = nameof(C001_ProductInput.ProductID),
+                        MatrixRowIndexColumnName = nameof(C001_ProductInput.CoPurchaseProductID),
+                        LabelColumnName = "Label",
+                        LossFunction = MatrixFactorizationTrainer.LossFunctionType.SquareLossOneClass,
+                        Alpha = 0.01,
+                        Lambda = 0.025,
+
+                        //// for better
+                        //NumberOfIterations = 100,
+                        //C = 0.00001,
+                    };
+
+                    ConnectNode(Context.Recommendation().Trainers.MatrixFactorization(options));
+
+                    break;
+                }
+
+            case MLNetExampleScenario.C002_MovieRecommender_MatrixFactorization:
+                {
+                    ConnectNode(Context.Transforms.Conversion.MapValueToKey("userIdEncoded", nameof(C002_MovieRateInput.userId)));
+                    ConnectNode(Context.Transforms.Conversion.MapValueToKey("movieIdEncoded", nameof(C002_MovieRateInput.movieId)));
+
+                    var options = new MatrixFactorizationTrainer.Options
+                    {
+                        MatrixColumnIndexColumnName = "userIdEncoded",
+                        MatrixRowIndexColumnName = "movieIdEncoded",
+                        LabelColumnName = "Label",
+                        NumberOfIterations = 20,
+                        ApproximationRank = 100
+                    };
+
+                    ConnectNode(Context.Recommendation().Trainers.MatrixFactorization(options));
+
+                    break;
+                }
+
+            // ignore
+            case MLNetExampleScenario.I004_ObjectDetection_ONNXModelScoring:
+                {
+                    Console.WriteLine("ignore");
+
+                    break;
+                }
+
             // not implemented
             case MLNetExampleScenario.A777_Auto:
             case MLNetExampleScenario.B001_IssuesClassification:
             case MLNetExampleScenario.B777_Auto:
-            case MLNetExampleScenario.C001_ProductRecommendation:
-            case MLNetExampleScenario.C002_MovieRecommender_MatrixFactorization:
             case MLNetExampleScenario.C003_MovieRecommender_FieldAwareFactorizationMachines:
             case MLNetExampleScenario.C777_Auto:
             case MLNetExampleScenario.D001_PricePrediction:
@@ -121,7 +169,6 @@ public partial class MLNetExampleSummary : MLNetHandler
             case MLNetExampleScenario.I001_ImageClassificationTraining_HighLevelAPI:
             case MLNetExampleScenario.I002_ImageClassificationPredictions_PretrainedTensorFlowModelScoring:
             case MLNetExampleScenario.I003_ImageClassificationTraining_TensorFlowFeaturizerEstimator:
-            case MLNetExampleScenario.I004_ObjectDetection_ONNXModelScoring:
             case MLNetExampleScenario.J001_ScalableModelOnWebAPI:
             case MLNetExampleScenario.J002_ScalableModelOnRazorWebApp:
             case MLNetExampleScenario.J003_ScalableModelOnAzureFunctions:
@@ -138,14 +185,12 @@ public partial class MLNetExampleSummary : MLNetHandler
                 }
         }
 
-
-
-
-        TrainData.WriteToConsole();
-
-
-
-
-
+        try
+        {
+            TrainData.WriteToConsole();
+        }
+        catch (Exception)
+        {
+        }
     }
 }

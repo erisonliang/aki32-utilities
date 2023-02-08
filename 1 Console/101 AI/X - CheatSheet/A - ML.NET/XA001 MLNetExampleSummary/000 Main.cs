@@ -12,21 +12,6 @@ namespace Aki32Utilities.ConsoleAppUtilities.AI.CheatSheet;
 /// </summary>
 public partial class MLNetExampleSummary : MLNetHandler
 {
-
-    // ★★★★★★★★★★★★★★★ props
-
-    public MLNetExampleScenario Scenario { get; set; }
-
-    public ITransformer Model { get; set; }
-
-    public DirectoryInfo DataDir { get; set; }
-    public FileInfo ModelFile { get; set; }
-
-    public IDataView AllData { get; set; }
-    public IDataView TestData { get; set; }
-    public IDataView TrainData { get; set; }
-
-
     // ★★★★★★★★★★★★★★★ init
 
     public MLNetExampleSummary(MLNetExampleScenario scenario, DirectoryInfo baseDir)
@@ -38,20 +23,6 @@ public partial class MLNetExampleSummary : MLNetHandler
 
 
     // ★★★★★★★★★★★★★★★ methods
-
-    public void RunPrediction()
-    {
-        General.ConsoleExtension.WriteLineWithColor($"\r\n★★★★★★★★★★★★★★★ Run Called", ConsoleColor.Yellow);
-
-        // def
-        Context = new MLContext(seed: 1);
-
-        // main
-        LoadData();
-        LoadModel();
-        PredictTestData();
-        PredictSamples();
-    }
 
     public void RunAll()
     {
@@ -74,6 +45,20 @@ public partial class MLNetExampleSummary : MLNetHandler
 
     }
 
+    public void RunPrediction()
+    {
+        General.ConsoleExtension.WriteLineWithColor($"\r\n★★★★★★★★★★★★★★★ Run Called", ConsoleColor.Yellow);
+
+        // def
+        Context = new MLContext(seed: 1);
+
+        // main
+        LoadData();
+        LoadModel();
+        PredictTestData();
+        PredictSamples();
+
+    }
 
     // ★★★★★★★★★★★★★★★
 

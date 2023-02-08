@@ -64,7 +64,9 @@ public static partial class ChainableExtensions
         {
             var csvLine = new List<string>();
             foreach (var prop in props)
-                csvLine.Add(prop.Name);
+                csvLine.Add(prop.HasAttribute<CsvHeaderNameAttribute>()
+                    ? prop.GetAttributes<CsvHeaderNameAttribute>()[0].Name
+                    : prop.Name);
 
             csvGrid.Add(csvLine.ToArray());
         }

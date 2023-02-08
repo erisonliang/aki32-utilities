@@ -155,7 +155,7 @@ public static class ConsoleExtension
 
     // ★★★★★★★★★★★★★★★ print data
 
-    public static void WriteToConsole(this IDataView dataView, int numberOfRows = 10, int cellWidth = 15)
+    public static void WriteToConsole(this IDataView dataView, int numberOfRows = 7, int cellWidth = 15)
     {
         General.ConsoleExtension.WriteLineWithColor($"\r\nShow data in DataView: Showing {numberOfRows} rows with the columns");
 

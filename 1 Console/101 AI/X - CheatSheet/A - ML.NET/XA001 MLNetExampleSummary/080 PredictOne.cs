@@ -1,8 +1,10 @@
-﻿using DocumentFormat.OpenXml.EMMA;
+﻿using System.Drawing.Drawing2D;
+using System.Drawing;
 
-using iTextSharp.text.pdf.codec.wmf;
+using Aki32Utilities.ConsoleAppUtilities.General;
 
 using Microsoft.ML;
+using Microsoft.ML.Data;
 
 namespace Aki32Utilities.ConsoleAppUtilities.AI.CheatSheet;
 public partial class MLNetExampleSummary : MLNetHandler
@@ -127,7 +129,7 @@ public partial class MLNetExampleSummary : MLNetHandler
                         Console.WriteLine($"Probabilities:");
                         for (int i = 0; i < result.Score.Length; i++)
                             Console.WriteLine($"  {IrisFlowers[i],10}: {result.Score[i],-10:F4}");
-                        
+
                         Console.WriteLine();
                     }
                     Console.WriteLine(@$"=======================================================");
@@ -163,13 +165,110 @@ public partial class MLNetExampleSummary : MLNetHandler
                     break;
                 }
 
+            case MLNetExampleScenario.C001_ProductRecommendation:
+                {
+                    var predictor = Context.Model.CreatePredictionEngine<C001_ProductInput, C001_ProductOutput>(Model);
+
+                    var samples = new C001_ProductInput[]
+                    {
+                        new C001_ProductInput()
+                        {
+                            ProductID = 3,
+                            CoPurchaseProductID = 57
+                        },
+                        new C001_ProductInput()
+                        {
+                            ProductID = 3,
+                            CoPurchaseProductID = 58
+                        },
+                        new C001_ProductInput()
+                        {
+                            ProductID = 3,
+                            CoPurchaseProductID = 59
+                        },
+                        new C001_ProductInput()
+                        {
+                            ProductID = 3,
+                            CoPurchaseProductID = 60
+                        },
+                        new C001_ProductInput()
+                        {
+                            ProductID = 3,
+                            CoPurchaseProductID = 61
+                        },
+                        new C001_ProductInput()
+                        {
+                            ProductID = 3,
+                            CoPurchaseProductID = 62
+                        },
+                        new C001_ProductInput()
+                        {
+                            ProductID = 3,
+                            CoPurchaseProductID = 63
+                        },
+                    };
+
+                    foreach (var sample in samples)
+                    {
+                        var result = predictor.Predict(sample);
+
+                        Console.WriteLine(@$"=======================================================");
+                        Console.WriteLine(@$"For ProductID = {sample.ProductID} and CoPurchaseProductID = {sample.CoPurchaseProductID}");
+                        Console.WriteLine(@$"The predicted score is {result.Score * 100:F0}%");
+
+                        Console.WriteLine();
+                    }
+                    Console.WriteLine(@$"=======================================================");
+
+                    break;
+                }
+
+            case MLNetExampleScenario.C002_MovieRecommender_MatrixFactorization:
+                {
+                    var predictor = Context.Model.CreatePredictionEngine<C002_MovieRateInput, C002_MovieRateOutput>(Model);
+
+                    var samples = new C002_MovieRateInput[]
+                    {
+                       new C002_MovieRateInput()
+                       {
+                           userId = 6,
+                           movieId = 10
+                       },
+                    };
+
+                    var movieDataFile = DataDir.GetChildFileInfo("Movie.csv");
+                    var movieData = movieDataFile.ReadObjectFromLocalCsv<C002_Movie>();
+
+                    foreach (var sample in samples)
+                    {
+                        var result = predictor.Predict(sample);
+
+                        var targetMovie = movieData.FirstOrDefault(m => m.movieId == sample.movieId);
+
+                        Console.WriteLine(@$"=======================================================");
+                        Console.WriteLine(@$"For userId:{sample.userId}, movie rating prediction (1 - 5 stars) for movie:{targetMovie?.movieTitle} is: {Math.Round(result.Score, 1)}");
+
+                        Console.WriteLine();
+                    }
+                    Console.WriteLine(@$"=======================================================");
+
+                    break;
+                }
+
+
             // ignore
             case MLNetExampleScenario.A003_CreditCardFraudDetection:
+            case MLNetExampleScenario.I004_ObjectDetection_ONNXModelScoring:
+                {
+                    Console.WriteLine("ignore");
+
+                    break;
+                }
+
+            // not implemented
             case MLNetExampleScenario.A777_Auto:
             case MLNetExampleScenario.B001_IssuesClassification:
             case MLNetExampleScenario.B777_Auto:
-            case MLNetExampleScenario.C001_ProductRecommendation:
-            case MLNetExampleScenario.C002_MovieRecommender_MatrixFactorization:
             case MLNetExampleScenario.C003_MovieRecommender_FieldAwareFactorizationMachines:
             case MLNetExampleScenario.C777_Auto:
             case MLNetExampleScenario.D001_PricePrediction:
@@ -186,7 +285,6 @@ public partial class MLNetExampleSummary : MLNetHandler
             case MLNetExampleScenario.I001_ImageClassificationTraining_HighLevelAPI:
             case MLNetExampleScenario.I002_ImageClassificationPredictions_PretrainedTensorFlowModelScoring:
             case MLNetExampleScenario.I003_ImageClassificationTraining_TensorFlowFeaturizerEstimator:
-            case MLNetExampleScenario.I004_ObjectDetection_ONNXModelScoring:
             case MLNetExampleScenario.J001_ScalableModelOnWebAPI:
             case MLNetExampleScenario.J002_ScalableModelOnRazorWebApp:
             case MLNetExampleScenario.J003_ScalableModelOnAzureFunctions:
@@ -197,17 +295,22 @@ public partial class MLNetExampleSummary : MLNetHandler
             case MLNetExampleScenario.J008_ModelExplainability:
             case MLNetExampleScenario.J009_ExportToONNX:
             case MLNetExampleScenario.K777_Auto:
-                {
-                    Console.WriteLine("ignore");
-
-                    break;
-                }
-
-            // not implemented
             default:
                 {
                     throw new NotImplementedException();
                 }
         }
     }
+
 }
+
+
+
+
+
+
+
+
+
+
+

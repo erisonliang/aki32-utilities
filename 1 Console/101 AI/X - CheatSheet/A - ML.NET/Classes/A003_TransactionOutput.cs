@@ -1,4 +1,5 @@
 ﻿
+
 namespace Aki32Utilities.ConsoleAppUtilities.AI.CheatSheet;
 public class A003_TransactionOutput
 {
