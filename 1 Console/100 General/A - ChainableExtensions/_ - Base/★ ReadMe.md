@@ -1,6 +1,6 @@
 ﻿
 
-★★★★★ Numbering Rule
+# 🌟 Numbering Rule
 
  - Prefix: Depends on their input.
 
@@ -16,7 +16,7 @@
 
 
 
-For example, "B102 ReadObjectFromLocal"
+### For example, "B102 ReadObjectFromLocal"
 
  - input is FileSystem → classified to "B - FileSystem" → "B---"
 
@@ -26,8 +26,7 @@ For example, "B102 ReadObjectFromLocal"
 
 
 
-★★★★★ Creating Rule
-
+# 🌟 Creating Rule
 
  - Template exists in Z999.
 
@@ -36,5 +35,7 @@ For example, "B102 ReadObjectFromLocal"
  - Second, accept and return as Image, Size or Point if possible.
 
 
-★★★★★
+# 🌟 memo
+
+- for playing sound in console, you can use Argus.Audio.NAudio
 
