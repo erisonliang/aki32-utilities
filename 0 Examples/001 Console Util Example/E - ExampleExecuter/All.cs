@@ -19,6 +19,8 @@ using DocumentFormat.OpenXml.Wordprocessing;
 
 using Newtonsoft.Json;
 using Aki32Utilities.ConsoleAppUtilities.AI.CheatSheet;
+using iTextSharp.text.pdf.codec.wmf;
+using MathNet.Numerics.LinearAlgebra;
 
 namespace Aki32Utilities.UsageExamples.ConsoleAppUtilities;
 public static partial class ExampleExecuter
@@ -45,30 +47,78 @@ public static partial class ExampleExecuter
 
                 // 2202 To2DArray, ToJaggedArray
                 {
-                    //var inputData = new int[][]
+                    //var x1 = new int[][]
                     //{
                     //    new int[]{1,2,3,4,5,6,7},
                     //    new int[]{1,2},
                     //    new int[]{1,2,3},
                     //    new int[]{1,2,3,4,5},
                     //};
-                    //Console.WriteLine("inputData:");
-                    //foreach (var line in inputData)
-                    //    Console.WriteLine(string.Join(", ", line.Select(x => $"{x,3}")));
+                    //Console.WriteLine("x1:");
+                    //x1.WriteToConsole();
 
-                    //var outputData1 = inputData.ConvertTo2DArray(999);
-                    //Console.WriteLine("outputData1:");
-                    //for (int i = 0; i < outputData1.GetLength(0); i++)
-                    //{
-                    //    for (int j = 0; j < outputData1.GetLength(1); j++)
-                    //        Console.Write($"{outputData1[i, j],3}, ");
-                    //    Console.WriteLine();
-                    //}
+                    //var x2 = x1.ConvertTo2DArray(999);
+                    //Console.WriteLine("x2:");
+                    //x2.WriteToConsole();
 
-                    //var outputData2 = outputData1.ConvertToJaggedArray();
-                    //Console.WriteLine("outputData2:");
-                    //foreach (var line in outputData2)
-                    //    Console.WriteLine(string.Join(", ", line.Select(x => $"{x,3}")));
+                    //var x3 = x2.ConvertToJaggedArray();
+                    //Console.WriteLine("x3:");
+                    //x3.WriteToConsole();
+
+                }
+
+                // 3201 ReShape, 3202 GetRangeSlice
+                {
+                    var i2d = Enumerable.Range(0, 25).ToArray();
+                    Console.WriteLine("i2d:");
+                    i2d.WriteToConsole();
+                    Console.WriteLine();
+
+                    var i2d_Reshaped = i2d.ReShape(5, 5);
+                    Console.WriteLine("i2d_Reshaped:");
+                    i2d_Reshaped.WriteToConsole();
+                    Console.WriteLine();
+
+                    var i2d_Reshaped_Reshaped = i2d_Reshaped.ReShape();
+                    Console.WriteLine("i2d_Reshaped_Reshaped:");
+                    i2d_Reshaped_Reshaped.WriteToConsole();
+                    Console.WriteLine();
+
+                    var i2d_Reshaped_Sliced = i2d_Reshaped.GetRangeSlice(1..^1, 1..^1);
+                    Console.WriteLine("i2d_Reshaped_Sliced:");
+                    i2d_Reshaped_Sliced.WriteToConsole();
+                    Console.WriteLine();
+
+                    var i2d_Reshaped_Shrunk = i2d_Reshaped.GetRangeSlice(1, 1..^1);
+                    Console.WriteLine("i2d_Reshaped_Shrunk:");
+                    i2d_Reshaped_Shrunk.WriteToConsole();
+                    Console.WriteLine();
+
+                    Console.WriteLine();
+                    Console.WriteLine();
+                    Console.WriteLine();
+                    Console.WriteLine();
+
+                    var i3d = Enumerable.Range(0, 27).ToArray();
+                    Console.WriteLine("i3d:");
+                    i3d.WriteToConsole();
+                    Console.WriteLine();
+
+                    var i3d_Reshaped = i3d.ReShape(3, 3, 3);
+                    Console.WriteLine("i3d_Reshaped:");
+                    i3d_Reshaped.WriteToConsole();
+                    Console.WriteLine();
+
+                    var i3d_Reshaped_Reshaped = i3d_Reshaped.ReShape();
+                    Console.WriteLine("i3d_Reshaped_Reshaped:");
+                    i3d_Reshaped_Reshaped.WriteToConsole();
+                    Console.WriteLine();
+
+                    var i3d_Reshaped_Sliced = i3d_Reshaped.GetRangeSlice(.., 0..^1, 1..^1);
+                    Console.WriteLine("i3d_Reshaped_Sliced:");
+                    i3d_Reshaped_Sliced.WriteToConsole();
+                    Console.WriteLine();
+
                 }
 
                 // B001 CollectFiles
