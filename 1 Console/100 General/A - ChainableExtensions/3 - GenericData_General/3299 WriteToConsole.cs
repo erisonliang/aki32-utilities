@@ -1,5 +1,7 @@
 ﻿
 
+using DocumentFormat.OpenXml.Office2010.Excel;
+
 namespace Aki32Utilities.ConsoleAppUtilities.General;
 public static partial class ChainableExtensions
 {
@@ -27,8 +29,8 @@ public static partial class ChainableExtensions
     public static void WriteToConsole<T>(this IEnumerable<IEnumerable<T>> inputData, int columnWidth = 3)
     {
         // main
-        foreach (var line in inputData)
-            Console.WriteLine(string.Join(",", line.Select(x => $"{x?.ToString()?.PadLeft(columnWidth)}")));
+        foreach (var lineItems in inputData)
+            lineItems.WriteToConsole(columnWidth);
     }
 
     /// <summary>

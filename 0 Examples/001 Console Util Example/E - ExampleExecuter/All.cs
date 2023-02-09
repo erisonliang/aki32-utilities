@@ -69,14 +69,18 @@ public static partial class ExampleExecuter
 
                 // 3201 ReShape, 3202 GetRangeSlice
                 {
-                    var i2d = Enumerable.Range(0, 25).ToArray();
+                    var i2d = Enumerable.Range(0, 36).ToArray();
                     Console.WriteLine("i2d:");
                     i2d.WriteToConsole();
                     Console.WriteLine();
+                    i2d.DrawHeatmapToConsole();
+                    Console.WriteLine();
 
-                    var i2d_Reshaped = i2d.ReShape(5, 5);
+                    var i2d_Reshaped = i2d.ReShape(6, 6);
                     Console.WriteLine("i2d_Reshaped:");
                     i2d_Reshaped.WriteToConsole();
+                    Console.WriteLine();
+                    i2d_Reshaped.DrawHeatmapToConsole();
                     Console.WriteLine();
 
                     var i2d_Reshaped_Reshaped = i2d_Reshaped.ReShape();
