@@ -29,9 +29,6 @@ public static partial class ExampleExecuter
     {
         // TEST
         {
-            new FileInfo(@"C:\Users\aki32\Dropbox\Job\X Medicine\あわべび\★ 資料\★ 泣き声音声\★ 提供された泣き声\00_全泣き声\S00014.mp4")
-                .PlayVideo_OnThread();
-
 
 
 
@@ -425,6 +422,26 @@ public static partial class ExampleExecuter
 
                 }
 
+                // L101 PlayVideo 
+                {
+                    //var input = new FileInfo($@"{baseDir_A_100}\L101 PlayVideo\input.mp4");
+                    //input.PlayVideo_OnThread();
+                    //input.PlayVideo_OnDefaultApp();
+
+                }
+
+                // M101 PlaySound 
+                {
+                    //var input = new FileInfo($@"{baseDir_A_100}\M101 PlaySound\input.mp3");
+
+                    ////input.PlaySound_OnDefaultApp();
+
+                    //input.PlaySound_OnConsole();
+
+                    ////var device = input.PlaySound_OnConsole(true);
+                    ////Thread.Sleep(3000);
+                    ////device.Stop();
+                }
             }
 
             // 100C - AwesomeModels

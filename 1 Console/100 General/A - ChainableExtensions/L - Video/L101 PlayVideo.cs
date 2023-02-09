@@ -12,6 +12,17 @@ public static partial class ChainableExtensions
     // ★★★★★★★★★★★★★★★ FileSystemInfo chain process
 
     /// <summary>
+    /// sugar
+    /// play video file on your default application
+    /// </summary>
+    /// <param name="inputFile"></param>
+    public static void PlayVideo_OnDefaultApp(this FileInfo inputFile, bool waitForExit = true)
+    {
+        // main
+        inputFile.OpenOnDefaultApp(waitForExit);
+    }
+
+    /// <summary>
     /// play video file frame by frame on this console application without any sound included
     /// </summary>
     /// <param name="inputFile"></param>
@@ -81,7 +92,7 @@ public static partial class ChainableExtensions
         }
     }
 
-    
+
     // ★★★★★★★★★★★★★★★ 
 
 }

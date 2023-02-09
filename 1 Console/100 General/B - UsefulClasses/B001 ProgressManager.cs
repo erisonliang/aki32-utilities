@@ -9,8 +9,8 @@ public class ProgressManager : IDisposable
     public DateTime StartTime { get; set; }
     public TimeSpan ElapsedTime => DateTime.Now - StartTime;
 
-    public int MaxStep { get; set; }
-    public int CurrentStep { get; set; }
+    public long MaxStep { get; set; }
+    public long CurrentStep { get; set; }
 
     public bool ConsoleOutput { get; set; } = true;
     public bool WritePercentage { get; set; } = true;
@@ -30,7 +30,7 @@ public class ProgressManager : IDisposable
 
     // ★★★★★★★★★★★★★★★ inits
 
-    public ProgressManager(int maxStep, bool? consoleOutput = null)
+    public ProgressManager(long maxStep, bool? consoleOutput = null)
     {
         StartTime = DateTime.Now;
         MaxStep = maxStep;
@@ -54,7 +54,7 @@ public class ProgressManager : IDisposable
 
     // ★★★★★★★★★★★★★★★ methods
 
-    public void WriteCurrentState(int? currentStep = null, bool useConsoleOverwrite = true)
+    public void WriteCurrentState(long? currentStep = null, bool useConsoleOverwrite = true)
     {
         if (currentStep != null)
             CurrentStep = currentStep.Value;
@@ -78,6 +78,7 @@ public class ProgressManager : IDisposable
     {
         CurrentStep = MaxStep;
         autoWriteTimer?.Stop();
+        autoWriteTimer?.Dispose();
 
         if (!ConsoleOutput)
             return;
@@ -107,10 +108,14 @@ public class ProgressManager : IDisposable
 
     public void AddErrorMessage(string errorMessage) => ErrorMessages.Add(errorMessage);
 
-    public void StartAutoWrite(int interval = 100, bool useConsoleOverwrite = true)
+    public void StartAutoWrite(int interval = 100, bool useConsoleOverwrite = true, Action? additionalAction = null)
     {
         autoWriteTimer = new System.Timers.Timer(interval);
-        autoWriteTimer.Elapsed += delegate { WriteCurrentState(useConsoleOverwrite: useConsoleOverwrite); };
+        autoWriteTimer.Elapsed += delegate
+        {
+            additionalAction?.Invoke();
+            WriteCurrentState(useConsoleOverwrite: useConsoleOverwrite);
+        };
         autoWriteTimer.Start();
     }
 
