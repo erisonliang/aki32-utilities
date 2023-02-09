@@ -1,5 +1,9 @@
 ﻿using OpenCvSharp;
 using Aki32Utilities.ConsoleAppUtilities.General;
+using System.Runtime.CompilerServices;
+using DocumentFormat.OpenXml.ExtendedProperties;
+using static System.Runtime.CompilerServices.RuntimeHelpers;
+using OpenCvSharp.XImgProc;
 
 namespace Aki32Utilities.ConsoleAppUtilities.General;
 public static partial class ChainableExtensions
@@ -24,7 +28,8 @@ public static partial class ChainableExtensions
 
         // main
         using var capture = new VideoCapture(inputFile.FullName);
-        using var window = new Window("Video2Images Progress");
+        var windowName = "Video2Images Progress (Do not close this window)";
+        var window = new Window(windowName);
         using var image = new Mat();
         var capturingFrameRate_i = capture.Fps / capturingFrameRate;
 
@@ -43,12 +48,21 @@ public static partial class ChainableExtensions
             var frameImageFileName = $@"{outputDir!.FullName}\image{imgNumber}.png";
             Cv2.ImWrite(frameImageFileName, image);
 
+            // closing window is not allowed
+            if (IsCv2WindowClosed(windowName))
+                window = new Window(windowName);
+
             window.ShowImage(image);
 
-            if (Cv2.WaitKey(1) == 113) // Q
-                break;
-
             progress.CurrentStep = i;
+        }
+
+        try
+        {
+            window.Dispose();
+        }
+        catch (Exception)
+        {
         }
 
         progress.WriteDone();

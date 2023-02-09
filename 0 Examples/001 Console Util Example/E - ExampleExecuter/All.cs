@@ -10,7 +10,6 @@ using Aki32Utilities.ConsoleAppUtilities.General;
 using Aki32Utilities.ConsoleAppUtilities.AI;
 using Aki32Utilities.ConsoleAppUtilities.Research;
 using Aki32Utilities.ConsoleAppUtilities.StructuralEngineering;
-using Aki32Utilities.ConsoleAppUtilities.General;
 
 using ClosedXML;
 
@@ -30,6 +29,10 @@ public static partial class ExampleExecuter
     {
         // TEST
         {
+            new FileInfo(@"C:\Users\aki32\Dropbox\Job\X Medicine\あわべび\★ 資料\★ 泣き声音声\★ 提供された泣き声\00_全泣き声\S00014.mp4")
+                .PlayVideo_OnThread();
+
+
 
 
 
@@ -732,11 +735,11 @@ public static partial class ExampleExecuter
 
             // XA001 - CheatSheet - MLNetExampleSummary
             {
-                var baseDir_101_XA001 = $@"{baseDir_101}\XA001 MLNetExampleSummary";
+                //var baseDir_101_XA001 = $@"{baseDir_101}\XA001 MLNetExampleSummary";
 
-                new MLNetExampleSummary(MLNetExampleScenario.I004_ObjectDetection_ONNXModelScoring_TinyYoloV2_08, new DirectoryInfo(baseDir_101_XA001))
-                //.RunPrediction();
-                .RunAll();
+                //new MLNetExampleSummary(MLNetExampleScenario.I004_ObjectDetection_ONNXModelScoring_TinyYoloV2_08, new DirectoryInfo(baseDir_101_XA001))
+                ////.RunPrediction();
+                //.RunAll();
 
             }
 
