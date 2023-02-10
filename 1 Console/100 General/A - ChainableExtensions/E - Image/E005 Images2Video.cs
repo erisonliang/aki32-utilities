@@ -47,7 +47,7 @@ public static partial class ChainableExtensions
 
         // find video size
         using var img0 = Mat.FromStream(imageFiles[0].OpenRead(), ImreadModes.Color);
-        var videoSize = new OpenCvSharp.Size(img0.Width, img0.Height);
+        var videoSize = new Size(img0.Width, img0.Height);
 
         using var Writer = new VideoWriter();
         Writer.Open(outputFile.FullName, FourCC.H264, videoFrameRate, videoSize);
@@ -63,7 +63,7 @@ public static partial class ChainableExtensions
                 var pngFile = imageFiles[i * imgFrameRate / videoFrameRate];
                 using var image = Mat.FromStream(pngFile.OpenRead(), ImreadModes.Color);
 
-                if (!videoSize.Equals(new OpenCvSharp.Size(image.Width, image.Height)))
+                if (!videoSize.Equals(new Size(image.Width, image.Height)))
                     throw new InvalidDataException("All images' size must be the same. Please use ResizeImage() first.");
 
                 Writer.Write(image);
