@@ -12,10 +12,10 @@ public static partial class ChainableExtensions
     /// <typeparam name="T"></typeparam>
     /// <param name="inputData"></param>
     /// <returns></returns>
-    public static T[,] ReShape<T>(this T[] inputData, int dim0, int dim1)
+    public static T[,] ReShape<T>(this IEnumerable<T> inputData, int dim0, int dim1)
     {
         // preprocess
-        if (inputData.Length != dim0 * dim1)
+        if (inputData.Count() != dim0 * dim1)
             throw new InvalidDataException("Check dimensions are correct");
 
 
@@ -25,7 +25,7 @@ public static partial class ChainableExtensions
 
         for (int d0 = 0; d0 < dim0; d0++)
             for (int d1 = 0; d1 < dim1; d1++)
-                result[d0, d1] = inputData[d0Strand * d0 + d1];
+                result[d0, d1] = inputData.ElementAt(d0Strand * d0 + d1);
 
 
         // post process
@@ -38,10 +38,10 @@ public static partial class ChainableExtensions
     /// <typeparam name="T"></typeparam>
     /// <param name="inputData"></param>
     /// <returns></returns>
-    public static T[,,] ReShape<T>(this T[] inputData, int dim0, int dim1, int dim2)
+    public static T[,,] ReShape<T>(this IEnumerable<T> inputData, int dim0, int dim1, int dim2)
     {
         // preprocess
-        if (inputData.Length != dim0 * dim1 * dim2)
+        if (inputData.Count() != dim0 * dim1 * dim2)
             throw new InvalidDataException("Check dimensions are correct");
 
 
@@ -53,7 +53,7 @@ public static partial class ChainableExtensions
         for (int d0 = 0; d0 < dim0; d0++)
             for (int d1 = 0; d1 < dim1; d1++)
                 for (int d2 = 0; d2 < dim2; d2++)
-                    result[d0, d1, d2] = inputData[d0Strand * d0 + d1Strand * d1 + d2];
+                    result[d0, d1, d2] = inputData.ElementAt(d0Strand * d0 + d1Strand * d1 + d2);
 
 
         // post process
