@@ -26,7 +26,7 @@ public static partial class ChainableExtensions
     /// play video file frame by frame on this console application without any sound included
     /// </summary>
     /// <param name="inputFile"></param>
-    public static void PlayVideo_OnThread(this FileInfo inputFile, bool closeAfterFinishingPlaying = false)
+    public static void PlayVideo_OnThread(this FileInfo inputFile, bool closeRightAfterFinishPlaying = false)
     {
         // main
         using var capture = new VideoCapture(inputFile.FullName);
@@ -50,7 +50,7 @@ public static partial class ChainableExtensions
             var loopStartTime = DateTime.Now;
 
             // exit after playing
-            if (closeAfterFinishingPlaying && capture.PosFrames >= capture.FrameCount)
+            if (closeRightAfterFinishPlaying && capture.PosFrames >= capture.FrameCount)
                 break;
 
             // press Q to exit
