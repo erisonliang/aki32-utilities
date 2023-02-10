@@ -2,6 +2,8 @@
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 
+using Org.BouncyCastle.Asn1.Cms;
+
 namespace Aki32Utilities.ConsoleAppUtilities.General;
 public static partial class ChainableExtensions
 {
@@ -95,8 +97,30 @@ public static partial class ChainableExtensions
         {
             case ResizeImageMode.Stretch:
                 {
-                    using var outputBitmap = new Bitmap(outputSize.Width, outputSize.Height);
+                    using var tempBitmap = new Bitmap(inputImage.Width + 1, inputImage.Height + 1);
+                    {
+                        var destination = new Rectangle(1, 1, inputImage.Width, inputImage.Height);
+                        using var g = Graphics.FromImage(tempBitmap);
+                        g.DrawImage(inputImage, destination, 0, 0, inputImage.Width, inputImage.Height, GraphicsUnit.Pixel);
+                    }
 
+                    using var outputBitmap = new Bitmap(outputSize.Width, outputSize.Height);
+                    {
+                        var offsetX = outputSize.Width / inputImage.Width;
+                        var offsetY = outputSize.Height / inputImage.Height;
+                        var destination = new Rectangle(-offsetX / 2, -offsetY / 2, outputBitmap.Width + offsetX, outputBitmap.Height + offsetY);
+
+                        using var g = Graphics.FromImage(outputBitmap);
+                        g.InterpolationMode = interpolationMode;
+                        g.DrawImage(tempBitmap, destination, 0, 0, tempBitmap.Width, tempBitmap.Height, GraphicsUnit.Pixel);
+                    }
+
+                    return (Image)outputBitmap.Clone();
+                }
+            case ResizeImageMode.Stretch_Faster:
+                {
+                    // 元々の方法。でも1セル目を拡大するときに半分のサイズになっておかしい。
+                    using var outputBitmap = new Bitmap(outputSize.Width, outputSize.Height);
                     {
                         var attributes = new ImageAttributes();
                         attributes.SetWrapMode(WrapMode.TileFlipXY);
@@ -132,6 +156,7 @@ public static partial class ChainableExtensions
     public enum ResizeImageMode
     {
         Stretch,
+        Stretch_Faster,
         Uniform_Notimplemented,
         UniformToFill_Notimplemented,
     }
