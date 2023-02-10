@@ -1,8 +1,4 @@
-﻿using System.Drawing;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
-
-using OpenCvSharp.Internal;
+﻿
 
 namespace Aki32Utilities.ConsoleAppUtilities.General;
 

@@ -1,8 +1,4 @@
-﻿
-
-using System.Drawing;
-
-using NAudio.Wave;
+﻿using System.Drawing;
 
 namespace Aki32Utilities.ConsoleAppUtilities.General;
 public static partial class ChainableExtensions
