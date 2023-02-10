@@ -177,17 +177,12 @@ public static partial class ChainableExtensions
 
         var dim0 = inputData.GetLength(0);
         var dim1 = inputData.GetLength(1);
-        var zoomFactor = targetImageWidth.HasValue
-            ? targetImageWidth.Value / dim0
-            : targetCellSize
-            ?? 300 / dim0;
 
-        using var bmp = new Bitmap(zoomFactor * dim0, zoomFactor * dim1);
+        using var bmp = new Bitmap(dim0, dim1);
         var fbmp = new FastBitmap(bmp);
-
         fbmp.BeginAccess();
-
         using var g = Graphics.FromImage(bmp);
+
 
         // main
         for (int d0 = 0; d0 < dim0; d0++)
@@ -200,16 +195,21 @@ public static partial class ChainableExtensions
                     weight = 255 - weight;
                 weight = MathExtension.Between(0, weight, 255);
                 var c = Color.FromArgb(weight, weight, weight);
-                for (int in0 = 0; in0 < zoomFactor; in0++)
-                    for (int in1 = 0; in1 < zoomFactor; in1++)
-                        fbmp.SetPixel(d0 * zoomFactor + in0, d1 * zoomFactor + in1, c);
-
+                fbmp.SetPixel(d0, d1, c);
             }
         }
 
         fbmp.EndAccess();
 
-        bmp.Save(outputFile!.FullName);
+
+        // resize image
+        var zoomFactor = targetImageWidth.HasValue
+            ? targetImageWidth.Value / dim0
+            : targetCellSize
+            ?? 300 / dim0;
+
+        using var bmp2 = bmp.ResizeImage(new Size(dim0 * zoomFactor, dim1 * zoomFactor));
+        bmp2.Save(outputFile!.FullName);
 
         return outputFile!;
     }
