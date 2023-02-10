@@ -67,61 +67,64 @@ public static partial class ExampleExecuter
 
                 }
 
-                // 3201 ReShape, 3202 GetRangeSlice
+                // 3201 ReShape, 3202 GetRangeSlice, J201 DrawHeatmap, E103 ShowImage
                 {
-                    var i2d = Enumerable.Range(0, 36).ToArray();
-                    Console.WriteLine("i2d:");
-                    i2d.WriteToConsole();
-                    Console.WriteLine();
-                    i2d.DrawHeatmapToConsole();
-                    Console.WriteLine();
+                    //var i2d = Enumerable.Range(0, 36).Select(x => (double)x).ToArray();
+                    //Console.WriteLine("i2d:");
+                    //i2d.WriteToConsole();
+                    //Console.WriteLine();
+                    //i2d.DrawHeatmapToConsole();
+                    //Console.WriteLine();
 
-                    var i2d_Reshaped = i2d.ReShape(6, 6);
-                    Console.WriteLine("i2d_Reshaped:");
-                    i2d_Reshaped.WriteToConsole();
-                    Console.WriteLine();
-                    i2d_Reshaped.DrawHeatmapToConsole();
-                    Console.WriteLine();
+                    //var i2d_Reshaped = i2d.ReShape(6, 6);
+                    //Console.WriteLine("i2d_Reshaped:");
+                    //i2d_Reshaped.WriteToConsole();
+                    //Console.WriteLine();
+                    //i2d_Reshaped.DrawHeatmapToConsole();
+                    //i2d_Reshaped
+                    //    .DrawHeatmapAsImage()
+                    //    .ShowImage_OnThread();
+                    //Console.WriteLine();
 
-                    var i2d_Reshaped_Reshaped = i2d_Reshaped.ReShape();
-                    Console.WriteLine("i2d_Reshaped_Reshaped:");
-                    i2d_Reshaped_Reshaped.WriteToConsole();
-                    Console.WriteLine();
+                    //var i2d_Reshaped_Reshaped = i2d_Reshaped.ReShape();
+                    //Console.WriteLine("i2d_Reshaped_Reshaped:");
+                    //i2d_Reshaped_Reshaped.WriteToConsole();
+                    //Console.WriteLine();
 
-                    var i2d_Reshaped_Sliced = i2d_Reshaped.GetRangeSlice(1..^1, 1..^1);
-                    Console.WriteLine("i2d_Reshaped_Sliced:");
-                    i2d_Reshaped_Sliced.WriteToConsole();
-                    Console.WriteLine();
+                    //var i2d_Reshaped_Sliced = i2d_Reshaped.GetRangeSlice(1..^1, 1..^1);
+                    //Console.WriteLine("i2d_Reshaped_Sliced:");
+                    //i2d_Reshaped_Sliced.WriteToConsole();
+                    //Console.WriteLine();
 
-                    var i2d_Reshaped_Shrunk = i2d_Reshaped.GetRangeSlice(1, 1..^1);
-                    Console.WriteLine("i2d_Reshaped_Shrunk:");
-                    i2d_Reshaped_Shrunk.WriteToConsole();
-                    Console.WriteLine();
+                    //var i2d_Reshaped_Shrunk = i2d_Reshaped.GetRangeSlice(1, 1..^1);
+                    //Console.WriteLine("i2d_Reshaped_Shrunk:");
+                    //i2d_Reshaped_Shrunk.WriteToConsole();
+                    //Console.WriteLine();
 
-                    Console.WriteLine();
-                    Console.WriteLine();
-                    Console.WriteLine();
-                    Console.WriteLine();
+                    //Console.WriteLine();
+                    //Console.WriteLine();
+                    //Console.WriteLine();
+                    //Console.WriteLine();
 
-                    var i3d = Enumerable.Range(0, 27).ToArray();
-                    Console.WriteLine("i3d:");
-                    i3d.WriteToConsole();
-                    Console.WriteLine();
+                    //var i3d = Enumerable.Range(0, 27).ToArray();
+                    //Console.WriteLine("i3d:");
+                    //i3d.WriteToConsole();
+                    //Console.WriteLine();
 
-                    var i3d_Reshaped = i3d.ReShape(3, 3, 3);
-                    Console.WriteLine("i3d_Reshaped:");
-                    i3d_Reshaped.WriteToConsole();
-                    Console.WriteLine();
+                    //var i3d_Reshaped = i3d.ReShape(3, 3, 3);
+                    //Console.WriteLine("i3d_Reshaped:");
+                    //i3d_Reshaped.WriteToConsole();
+                    //Console.WriteLine();
 
-                    var i3d_Reshaped_Reshaped = i3d_Reshaped.ReShape();
-                    Console.WriteLine("i3d_Reshaped_Reshaped:");
-                    i3d_Reshaped_Reshaped.WriteToConsole();
-                    Console.WriteLine();
+                    //var i3d_Reshaped_Reshaped = i3d_Reshaped.ReShape();
+                    //Console.WriteLine("i3d_Reshaped_Reshaped:");
+                    //i3d_Reshaped_Reshaped.WriteToConsole();
+                    //Console.WriteLine();
 
-                    var i3d_Reshaped_Sliced = i3d_Reshaped.GetRangeSlice(.., 0..^1, 1..^1);
-                    Console.WriteLine("i3d_Reshaped_Sliced:");
-                    i3d_Reshaped_Sliced.WriteToConsole();
-                    Console.WriteLine();
+                    //var i3d_Reshaped_Sliced = i3d_Reshaped.GetRangeSlice(.., 0..^1, 1..^1);
+                    //Console.WriteLine("i3d_Reshaped_Sliced:");
+                    //i3d_Reshaped_Sliced.WriteToConsole();
+                    //Console.WriteLine();
 
                 }
 
