@@ -1,9 +1,4 @@
 ﻿using OpenCvSharp;
-using Aki32Utilities.ConsoleAppUtilities.General;
-using System.Runtime.CompilerServices;
-using DocumentFormat.OpenXml.ExtendedProperties;
-using static System.Runtime.CompilerServices.RuntimeHelpers;
-using OpenCvSharp.XImgProc;
 
 namespace Aki32Utilities.ConsoleAppUtilities.General;
 public static partial class ChainableExtensions
@@ -26,22 +21,39 @@ public static partial class ChainableExtensions
     /// Show image on OpenCV2 window.
     /// </summary>
     /// <param name="inputFile"></param>
-    /// <param name="outputDir">when null, automatically set</param>
-    /// <param name="capturingFrameRate">Capture only entered number of images per second.</param>
-    /// <returns></returns>
+    /// <param name="waitForExit">wait until close window. "true" recommended</param>
+    /// <returns>return window object when waitForExit is false</returns>
     /// <exception cref="Exception"></exception>
     /// <exception cref="InvalidDataException"></exception>
-    public static void ShowImage_OnThread(this FileInfo inputFile, bool waitForExit = false)
+    public static Window ShowImage_OnThread(this FileInfo inputFile, bool waitForExit = true)
     {
         // main
         var windowName = inputFile.Name; //"ShowImage";
-        using var window = new Window(windowName);
-        using var image = new Mat(inputFile.FullName);
+        var window = new Window(windowName);
+        var image = new Mat(inputFile.FullName);
+        window.ShowImage(image);
 
-        if (waitForExit)
-            while (!IsCv2WindowClosed(windowName))
-                Task.Delay(200).Wait();
+        if (!waitForExit)
+        {
+            Cv2.WaitKey(1);
+            return window;
+        }
 
+        while (!IsCv2WindowClosed(windowName))
+        {
+            if (Cv2.WaitKey(1) == 113)
+                break;
+            Thread.Sleep(100);
+        }
+        try
+        {
+            window.Dispose();
+            image.Dispose();
+        }
+        catch (Exception)
+        {
+        }
+        return null;
     }
 
 
