@@ -195,7 +195,7 @@ public static partial class ChainableExtensions
                     weight = 255 - weight;
                 weight = MathExtension.Between(0, weight, 255);
                 var c = Color.FromArgb(weight, weight, weight);
-                fbmp.SetPixel(d0, d1, c);
+                fbmp.SetPixel(d1, d0, c);
             }
         }
 
