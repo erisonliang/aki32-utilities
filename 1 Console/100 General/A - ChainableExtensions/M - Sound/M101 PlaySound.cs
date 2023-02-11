@@ -39,7 +39,7 @@ public static partial class ChainableExtensions
         // playing background
         if (playBackground)
         {
-            ConsoleExtension.WriteWithColor($"Playing {inputFile.Name}.\r\n");
+            ConsoleExtension.WriteLineWithColor($"Playing {inputFile.Name}.\r\n");
             return outputDevice;
         }
 
@@ -65,8 +65,8 @@ public static partial class ChainableExtensions
 
         var bytesPerSeconds = (int)(afr.Length / afr.TotalTime.TotalSeconds);
 
-        ConsoleExtension.WriteWithColor($"Playing {inputFile.Name}.");
-        ConsoleExtension.WriteWithColor($"Press 'R' to restart, '←' or '→' to jump 5s, or any others to stop playing.\r\n");
+        ConsoleExtension.WriteLineWithColor($"Playing {inputFile.Name}.");
+        ConsoleExtension.WriteLineWithColor($"Press 'R' to restart, '←' or '→' to jump 5s, or any others to stop playing.\r\n");
         Console.WriteLine();
 
         do

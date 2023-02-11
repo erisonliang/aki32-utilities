@@ -27,7 +27,7 @@ public static partial class ChainableExtensions
         using var capture = new VideoCapture(inputFile.FullName);
         if (!capture.IsOpened() || capture.FrameCount < 0)
         {
-            ConsoleExtension.WriteWithColor("(!) 読み込みに失敗しました。正しい動画ファイルかどうか確認してください。\r\n", ConsoleColor.Red);
+            ConsoleExtension.WriteLineWithColor("(!) 読み込みに失敗しました。正しい動画ファイルかどうか確認してください。\r\n", ConsoleColor.Red);
             return;
         }
         var interval = (int)(1000 / capture.Fps);
