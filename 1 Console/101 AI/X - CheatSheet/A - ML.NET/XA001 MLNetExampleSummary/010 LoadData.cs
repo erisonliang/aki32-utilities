@@ -219,6 +219,21 @@ public partial class MLNetExampleSummary : MLNetHandler
                     break;
                 }
 
+            case MLNetExampleScenario.D001_Regression_PricePrediction:
+                {
+                    var allDataFile = DataDir.GetChildFileInfo("TaxiFare.csv");
+                    ModelFile = DataDir.GetChildFileInfo("TaxiFare-Model.zip");
+
+                    var uri = new Uri("https://github.com/dotnet/machinelearning-samples/blob/main/samples/csharp/getting-started/Regression_TaxiFarePrediction/TaxiFarePrediction/Data/taxi-fare-full.csv?raw=true");
+                    DownloadDataFile(uri, allDataFile);
+
+                    AllData = Context.Data.LoadFromTextFile<D001_TaxiFareInput>(allDataFile.FullName, hasHeader: true, separatorChar: ',');
+                    SplitData();
+                    TrainData = Context.Data.FilterRowsByColumn(TrainData, nameof(D001_TaxiFareInput.FareAmount), lowerBound: 1, upperBound: 150);
+
+                    break;
+                }
+
             // ONNX
             case MLNetExampleScenario.I004_ComputerVision_ObjectDetection_ImportONNXModel_TinyYoloV2_08:
             case MLNetExampleScenario.I004_ComputerVision_ObjectDetection_ImportONNXModel_YoloV2_09:
@@ -276,7 +291,6 @@ public partial class MLNetExampleSummary : MLNetHandler
             // not implemented
             case MLNetExampleScenario.C003_Recommendation_MovieRecommender_FieldAwareFactorizationMachines:
             case MLNetExampleScenario.C777_Auto_Recommendation:
-            case MLNetExampleScenario.D001_Regression_PricePrediction:
             case MLNetExampleScenario.D002_Regression_SalesForecasting:
             case MLNetExampleScenario.D003_Regression_DemandPrediction:
             case MLNetExampleScenario.D777_Regression_Auto_TaxiFarePrediction:
