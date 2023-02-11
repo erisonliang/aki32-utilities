@@ -11,7 +11,7 @@ public static partial class ChainableExtensions
     /// </summary>
     /// <param name="inputData"></param>
     /// <returns></returns>
-    public static void DrawHeatmapToConsole(this IEnumerable<int> inputData, int? minValue = null, int? maxValue = null, int repeat = 2, string StringSet = FadeStringSet4)
+    public static void DrawHeatmapToConsole(this IEnumerable<double> inputData, double? minValue = null, double? maxValue = null, int repeat = 2, string StringSet = FadeStringSet4)
     {
         // preprocess
         minValue ??= inputData.Min();
@@ -41,30 +41,16 @@ public static partial class ChainableExtensions
     /// </summary>
     /// <param name="inputData"></param>
     /// <returns></returns>
-    public static void DrawHeatmapToConsole(this IEnumerable<double> inputData, double? minValue = null, double? maxValue = null, int repeat = 2, string StringSet = FadeStringSet4)
-    {
-        // preprocess
-        minValue ??= inputData.Min();
-        maxValue ??= inputData.Max();
-        var range = maxValue - minValue;
-        var strand = range / StringSet.Length;
+    public static void DrawHeatmapToConsole(this IEnumerable<float> inputData, float? minValue = null, float? maxValue = null, int repeat = 2, string StringSet = FadeStringSet4)
+        => inputData.Select(v => (double)v).DrawHeatmapToConsole(minValue, maxValue, repeat, StringSet);
 
-        // main
-        var lineItems = inputData.Select(v =>
-        {
-            var c = StringSet.Last();
-            for (int i = 0; i < StringSet.Length; i++)
-                if (v < minValue + (i + 1) * strand)
-                {
-                    c = StringSet[i];
-                    break;
-                }
-            return Enumerable.Repeat(c, repeat).ToString_Extension();
-        });
-
-        Console.WriteLine(string.Join("", lineItems));
-
-    }
+    /// <summary>
+    /// Write 1D array heatmap to console
+    /// </summary>
+    /// <param name="inputData"></param>
+    /// <returns></returns>
+    public static void DrawHeatmapToConsole(this IEnumerable<int> inputData, int? minValue = null, int? maxValue = null, int repeat = 2, string StringSet = FadeStringSet4)
+        => inputData.Select(v => (double)v).DrawHeatmapToConsole(minValue, maxValue, repeat, StringSet);
 
     /// <summary>
     /// Write 2D array heatmap to console
@@ -72,6 +58,45 @@ public static partial class ChainableExtensions
     /// <param name="inputData"></param>
     /// <returns></returns>
     public static void DrawHeatmapToConsole(this int[,] inputData, int? minValue = null, int? maxValue = null, int repeat = 2, string StringSet = FadeStringSet4)
+    {
+        // preprocess
+        var reshaped = inputData.ReShape();
+        minValue ??= reshaped.Min();
+        maxValue ??= reshaped.Max();
+        var range = maxValue - minValue;
+        var strand = (double)range / StringSet.Length;
+
+        var dim0 = inputData.GetLength(0);
+        var dim1 = inputData.GetLength(1);
+
+        // main
+        for (int d0 = 0; d0 < dim0; d0++)
+        {
+            for (int d1 = 0; d1 < dim1; d1++)
+            {
+                var v = inputData[d0, d1];
+                var c = StringSet.Last();
+
+                for (int i = 0; i < StringSet.Length; i++)
+                    if (v < minValue + (i + 1) * strand)
+                    {
+                        c = StringSet[i];
+                        break;
+                    }
+
+                var item = Enumerable.Repeat(c, repeat).ToString_Extension();
+                Console.Write(item);
+            }
+            Console.WriteLine();
+        }
+    }
+
+    /// <summary>
+    /// Write 2D array heatmap to console
+    /// </summary>
+    /// <param name="inputData"></param>
+    /// <returns></returns>
+    public static void DrawHeatmapToConsole(this float[,] inputData, float? minValue = null, float? maxValue = null, int repeat = 2, string StringSet = FadeStringSet4)
     {
         // preprocess
         var reshaped = inputData.ReShape();
