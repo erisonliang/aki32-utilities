@@ -814,8 +814,8 @@ public static partial class ExampleExecuter
 
                 var runner = new MLNetExampleSummary(MLNetExampleScenario.H001_Ranking_RankSearchEngineResults, new DirectoryInfo(baseDir_101_XA001));
                 //runner.ExperimentTime_InSeconds = 60;
-                runner.RunPrediction();
-                //runner.RunAll();
+                //runner.RunPrediction();
+                runner.RunAll();
 
             }
 
