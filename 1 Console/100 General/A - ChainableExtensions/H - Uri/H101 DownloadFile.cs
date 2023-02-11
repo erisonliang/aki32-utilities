@@ -1,4 +1,7 @@
 ﻿
+
+using System.Net;
+
 namespace Aki32Utilities.ConsoleAppUtilities.General;
 public static partial class ChainableExtensions
 {
@@ -26,7 +29,6 @@ public static partial class ChainableExtensions
         // post process
         UtilConfig.TryRestart_ConsoleOutput_Preprocess();
         return outputFile!;
-
     }
 
     /// <summary>
@@ -53,7 +55,7 @@ public static partial class ChainableExtensions
         // access and save
         using var responseStream = await url.CallAPIAsync_ForResponseStream(HttpMethod.Get);
         using var localStream = new StreamWriter(outputFile.FullName, false).BaseStream;
-        responseStream.CopyTo(localStream);
+        await responseStream.CopyToAsync(localStream);
 
 
         // post process

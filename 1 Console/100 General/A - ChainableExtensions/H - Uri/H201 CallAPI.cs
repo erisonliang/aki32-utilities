@@ -22,7 +22,7 @@ public static partial class ChainableExtensions
         )
     {
         // preprocess
-        General.UtilPreprocessors.PreprocessBasic(true);
+        UtilPreprocessors.PreprocessBasic(true);
         using var client = new HttpClient();
 
 
@@ -41,10 +41,8 @@ public static partial class ChainableExtensions
 
 
         // access
-        var response = await client.SendAsync(req);
-        if (!response.IsSuccessStatusCode)
-            throw new HttpRequestException(response.ReasonPhrase);
-
+        var response = await client.SendAsync(req,HttpCompletionOption.ResponseHeadersRead);
+        response.EnsureSuccessStatusCode();
 
         // post process
         return await response.Content.ReadAsStreamAsync();
@@ -65,7 +63,7 @@ public static partial class ChainableExtensions
         )
     {
         // preprocess
-        General.UtilPreprocessors.PreprocessBasic(true);
+        UtilPreprocessors.PreprocessBasic(true);
 
 
         // access
@@ -102,7 +100,7 @@ public static partial class ChainableExtensions
         )
     {
         // preprocess
-        General.UtilPreprocessors.PreprocessBasic(true);
+        UtilPreprocessors.PreprocessBasic(true);
 
 
         // access
