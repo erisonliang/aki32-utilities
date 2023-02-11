@@ -1,4 +1,6 @@
-﻿using Aki32Utilities.ConsoleAppUtilities.General;
+﻿using System.Net;
+
+using Aki32Utilities.ConsoleAppUtilities.General;
 
 using Microsoft.ML;
 using Microsoft.ML.Data;
@@ -10,33 +12,11 @@ public partial class MLNetExampleSummary : MLNetHandler
     {
         General.ConsoleExtension.WriteLineWithColor($"\r\n★★★★★★★★★★★★★★★ Load Data", ConsoleColor.Yellow);
 
-        void DownloadDataFile(Uri uri, FileInfo targetDataFile)
-        {
-            if (!targetDataFile.Exists)
-                uri.DownloadFile(targetDataFile);
-        }
-
-        void DownloadAndExtractZipDataFile(Uri uri, FileInfo targetFileLocationAfterExtracted, FileInfo targetDataFile)
-        {
-            if (!targetDataFile.Exists)
-            {
-                var zipDir = DataDir.GetChildDirectoryInfo("zip").CreateAndPipe();
-                uri.DownloadFile(zipDir.GetChildFileInfo("downloaded.zip")).Decompress_Zip(zipDir);
-                targetFileLocationAfterExtracted.MoveTo(targetDataFile);
-            }
-        }
-
-        void SplitData(double testFraction = 0.2)
-        {
-            var split = Context.Data.TrainTestSplit(AllData, testFraction);
-            TrainData = split.TrainSet;
-            TestData = split.TestSet;
-        }
-
         switch (Scenario)
         {
             // normal download
             case MLNetExampleScenario.A001_BinaryClassification_SentimentAnalysis:
+            case MLNetExampleScenario.A777_BinaryClassification_Auto_SentimentAnalysis:
                 {
                     var allDataFile = DataDir.GetChildFileInfo("Sentiment.tsv");
                     ModelFile = DataDir.GetChildFileInfo("Sentiment-Model.zip");
@@ -97,27 +77,6 @@ public partial class MLNetExampleSummary : MLNetHandler
                     }
                     {
                         ModelFile = DataDir.GetChildFileInfo("Heart-Model.zip");
-                    }
-
-                    break;
-                }
-
-            case MLNetExampleScenario.A777_BinaryClassification_Auto_SentimentAnalysis:
-                {
-                    {
-                        var trainDataFile = DataDir.GetChildFileInfo("Sentiment-Train.tsv");
-                        var trainDataUri = new Uri("https://github.com/dotnet/machinelearning-samples/raw/main/datasets/wikipedia-detox-250-line-data.tsv");
-                        DownloadDataFile(trainDataUri, trainDataFile);
-                        TrainData = Context.Data.LoadFromTextFile<A777_AutoSentimentInput>(trainDataFile.FullName, hasHeader: true);
-                    }
-                    {
-                        var testDataFile = DataDir.GetChildFileInfo("Sentiment-Test.tsv");
-                        var testDataUri = new Uri("https://github.com/dotnet/machinelearning-samples/raw/main/datasets/wikipedia-detox-250-line-test.tsv");
-                        DownloadDataFile(testDataUri, testDataFile);
-                        TestData = Context.Data.LoadFromTextFile<A777_AutoSentimentInput>(testDataFile.FullName, hasHeader: true);
-                    }
-                    {
-                        ModelFile = DataDir.GetChildFileInfo("Sentiment-Model.zip");
                     }
 
                     break;
@@ -220,6 +179,7 @@ public partial class MLNetExampleSummary : MLNetHandler
                 }
 
             case MLNetExampleScenario.D001_Regression_PricePrediction:
+            case MLNetExampleScenario.D777_Regression_Auto_TaxiFarePrediction:
                 {
                     var allDataFile = DataDir.GetChildFileInfo("TaxiFare.csv");
                     ModelFile = DataDir.GetChildFileInfo("TaxiFare-Model.zip");
@@ -229,7 +189,38 @@ public partial class MLNetExampleSummary : MLNetHandler
 
                     AllData = Context.Data.LoadFromTextFile<D001_TaxiFareInput>(allDataFile.FullName, hasHeader: true, separatorChar: ',');
                     SplitData();
-                    TrainData = Context.Data.FilterRowsByColumn(TrainData, nameof(D001_TaxiFareInput.FareAmount), lowerBound: 1, upperBound: 150);
+                    TrainData = Context.Data.FilterRowsByColumn(TrainData, "Label", lowerBound: 1, upperBound: 150);
+
+                    break;
+                }
+
+            case MLNetExampleScenario.H001_Ranking_RankSearchEngineResults:
+                {
+                    {
+                        General.ConsoleExtension.WriteLineWithColor("This may take a few minutes.", ConsoleColor.Yellow);
+                        var trainDataFile = DataDir.GetChildFileInfo("SearchResult-Train.tsv");
+                        var trainDataUri = new Uri("https://aka.ms/mlnet-resources/benchmarks/MSLRWeb10KTrain720kRows.tsv");
+                        DownloadDataFile(trainDataUri, trainDataFile);
+                        TrainData = Context.Data.LoadFromTextFile<H001_SearchResultInput>(trainDataFile.FullName, hasHeader: true);
+                    }
+                    {
+                        General.ConsoleExtension.WriteLineWithColor("This may take a few minutes.", ConsoleColor.Yellow);
+                        var trainDataFile = DataDir.GetChildFileInfo("SearchResult-Train2.tsv");
+                        var trainDataUri = new Uri("https://aka.ms/mlnet-resources/benchmarks/MSLRWeb10KValidate240kRows.tsv");
+                        DownloadDataFile(trainDataUri, trainDataFile);
+                        var additionalTrainData = Context.Data.LoadFromTextFile<H001_SearchResultInput>(trainDataFile.FullName, hasHeader: false);
+                        TrainData = CombineData<H001_SearchResultInput>(TrainData, additionalTrainData);
+                    }
+                    {
+                        General.ConsoleExtension.WriteLineWithColor("This may take a few minutes.", ConsoleColor.Yellow);
+                        var testDataFile = DataDir.GetChildFileInfo("SearchResult-Test.tsv");
+                        var testDataUri = new Uri("https://aka.ms/mlnet-resources/benchmarks/MSLRWeb10KTest240kRows.tsv");
+                        DownloadDataFile(testDataUri, testDataFile);
+                        TestData = Context.Data.LoadFromTextFile<H001_SearchResultInput>(testDataFile.FullName, hasHeader: false);
+                    }
+                    {
+                        ModelFile = DataDir.GetChildFileInfo("SearchResult-Model.zip");
+                    }
 
                     break;
                 }
@@ -293,14 +284,12 @@ public partial class MLNetExampleSummary : MLNetHandler
             case MLNetExampleScenario.C777_Auto_Recommendation:
             case MLNetExampleScenario.D002_Regression_SalesForecasting:
             case MLNetExampleScenario.D003_Regression_DemandPrediction:
-            case MLNetExampleScenario.D777_Regression_Auto_TaxiFarePrediction:
             case MLNetExampleScenario.E001_TimeSeriesForecasting_SalesForecasting:
             case MLNetExampleScenario.F001_AnomalyDetection_SalesSpikeDetection:
             case MLNetExampleScenario.F002_AnomalyDetection_PowerAnomalyDetection:
             case MLNetExampleScenario.F003_AnomalyDetection_CreditCardFraudDetection:
             case MLNetExampleScenario.G001_Clustering_CustomerSegmentation:
             case MLNetExampleScenario.G002_Clustering_IrisFlowerClustering:
-            case MLNetExampleScenario.H001_Ranking_RankSearchEngineResults:
             case MLNetExampleScenario.I001_ComputerVision_ImageClassificationTraining_HighLevelAPI:
             case MLNetExampleScenario.I002_ComputerVision_ImageClassificationPredictions_PretrainedTensorFlowModelScoring:
             case MLNetExampleScenario.I003_ComputerVision_ImageClassificationTraining_TensorFlowFeaturizerEstimator:

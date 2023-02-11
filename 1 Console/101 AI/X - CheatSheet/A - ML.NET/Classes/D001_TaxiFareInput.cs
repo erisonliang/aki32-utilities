@@ -21,6 +21,7 @@ public class D001_TaxiFareInput
     [LoadColumn(5)]
     public string PaymentType;
 
+    [ColumnName("Label")]
     [LoadColumn(6)]
     public float FareAmount;
 }

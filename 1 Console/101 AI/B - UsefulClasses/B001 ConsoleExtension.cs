@@ -13,6 +13,10 @@ using System.Linq;
 namespace Aki32Utilities.ConsoleAppUtilities.AI;
 public static class ConsoleExtension
 {
+    // ★★★★★★★★★★★★★★★ props
+
+    public static int ConsoleMaxWidth { get; set; } = 250;
+
 
     // ★★★★★★★★★★★★★★★ print results
 
@@ -144,7 +148,14 @@ public static class ConsoleExtension
         }
         else if (metricsObject is RankingMetrics rankMetrics)
         {
-            Console.WriteLine($"!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1");
+            Console.WriteLine($"DCG : {string.Join(", ", rankMetrics.DiscountedCumulativeGains.Select((d, i) => $"@{i + 1}:{d:F4}").ToArray())}");
+            Console.WriteLine($"NDCG: {string.Join(", ", rankMetrics.NormalizedDiscountedCumulativeGains.Select((d, i) => $"@{i + 1}:{d:F4}").ToArray())}\n");
+
+            //var th = new TimeHistory();
+            //th["#"] = rankMetrics.DiscountedCumulativeGains.Select((d, i) => i + 1d).ToArray();
+            //th["DCG"] = rankMetrics.DiscountedCumulativeGains.ToArray();
+            //th["NDCG"] = rankMetrics.NormalizedDiscountedCumulativeGains.Select((d, i) => d).ToArray();
+            //th.WriteToConsole();
         }
         else
         {
@@ -179,7 +190,7 @@ public static class ConsoleExtension
             message = $"{"",-4} {"Trainer",-15} {"NDCG@1",9} {"NDCG@3",9} {"NDCG@10",9} {"DCG@10",9} {"Duration",9}";
         }
 
-        Console.WriteLine(message.Shorten(0..105));
+        Console.WriteLine(message.Shorten(..ConsoleMaxWidth));
     }
 
     public static void PrintMetricsInOneLine(int index, RunDetail runDetail)
@@ -214,7 +225,7 @@ public static class ConsoleExtension
             message = $"{index,-4} {trainerName,-15} {metrics?.NormalizedDiscountedCumulativeGains[0] ?? double.NaN,9:F4} {metrics?.NormalizedDiscountedCumulativeGains[2] ?? double.NaN,9:F4} {metrics?.NormalizedDiscountedCumulativeGains[9] ?? double.NaN,9:F4} {metrics?.DiscountedCumulativeGains[9] ?? double.NaN,9:F4} {runtimeInSeconds,9:F1}";
         }
 
-        Console.WriteLine(message.Shorten(0..105));
+        Console.WriteLine(message.Shorten(..ConsoleMaxWidth));
     }
 
     private static double CalculateStandardDeviation(IEnumerable<double> values)
@@ -234,11 +245,10 @@ public static class ConsoleExtension
 
     // ★★★★★★★★★★★★★★★ print data
 
-    public static void WriteToConsole(this IDataView dataView, int numberOfRows = 7, int cellWidth = 15)
+    public static void WriteToConsole(this IDataView dataView, int displayRows = 7, int cellWidth = 15)
     {
-        General.ConsoleExtension.WriteLineWithColor($"\r\nShow data in DataView: Showing {numberOfRows} rows with the columns");
-
-        var preViewTransformedData = dataView.Preview(maxRows: numberOfRows);
+        General.ConsoleExtension.WriteLineWithColor($"\r\nShowing dataView: {displayRows} rows");
+        var preViewTransformedData = dataView.Preview(maxRows: displayRows);
 
         // header
         {
@@ -246,7 +256,7 @@ public static class ConsoleExtension
             var line = "";
             foreach (KeyValuePair<string, object> column in ColumnCollection)
                 line += $"{column.Key.Shorten(..cellWidth).PadRight(cellWidth, ' ')}|";
-            Console.WriteLine(line);
+            Console.WriteLine(line.Shorten(..ConsoleMaxWidth));
         }
 
         // content
@@ -256,7 +266,7 @@ public static class ConsoleExtension
             string line = "";
             foreach (KeyValuePair<string, object> column in ColumnCollection)
                 line += $"{column.Value.ToString()?.Shorten(..cellWidth).PadRight(cellWidth, ' ')}|";
-            Console.WriteLine(line);
+            Console.WriteLine(line.Shorten(..ConsoleMaxWidth));
         }
 
         Console.WriteLine();

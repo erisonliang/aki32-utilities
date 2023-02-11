@@ -178,41 +178,13 @@ public partial class MLNetExampleSummary : MLNetHandler
 
                     var samples = new C001_ProductInput[]
                     {
-                        new C001_ProductInput()
-                        {
-                            ProductID = 3,
-                            CoPurchaseProductID = 57
-                        },
-                        new C001_ProductInput()
-                        {
-                            ProductID = 3,
-                            CoPurchaseProductID = 58
-                        },
-                        new C001_ProductInput()
-                        {
-                            ProductID = 3,
-                            CoPurchaseProductID = 59
-                        },
-                        new C001_ProductInput()
-                        {
-                            ProductID = 3,
-                            CoPurchaseProductID = 60
-                        },
-                        new C001_ProductInput()
-                        {
-                            ProductID = 3,
-                            CoPurchaseProductID = 61
-                        },
-                        new C001_ProductInput()
-                        {
-                            ProductID = 3,
-                            CoPurchaseProductID = 62
-                        },
-                        new C001_ProductInput()
-                        {
-                            ProductID = 3,
-                            CoPurchaseProductID = 63
-                        },
+                        new C001_ProductInput(){ProductID = 3, CoPurchaseProductID = 57},
+                        new C001_ProductInput(){ProductID = 3, CoPurchaseProductID = 58},
+                        new C001_ProductInput(){ProductID = 3, CoPurchaseProductID = 59},
+                        new C001_ProductInput(){ProductID = 3, CoPurchaseProductID = 60},
+                        new C001_ProductInput(){ProductID = 3, CoPurchaseProductID = 61},
+                        new C001_ProductInput(){ProductID = 3, CoPurchaseProductID = 62},
+                        new C001_ProductInput(){ProductID = 3, CoPurchaseProductID = 63},
                     };
 
                     foreach (var sample in samples)
@@ -254,6 +226,30 @@ public partial class MLNetExampleSummary : MLNetHandler
 
                         Console.WriteLine(@$"=======================================================");
                         Console.WriteLine(@$"For userId:{sample.userId}, movie rating prediction (1 - 5 stars) for movie:{targetMovie?.movieTitle} is: {Math.Round(result.Score, 1)}");
+
+                        Console.WriteLine();
+                    }
+                    Console.WriteLine(@$"=======================================================");
+
+                    break;
+                }
+
+            case MLNetExampleScenario.D001_Regression_PricePrediction:
+            case MLNetExampleScenario.D777_Regression_Auto_TaxiFarePrediction:
+                {
+                    var predictor = Context.Model.CreatePredictionEngine<D001_TaxiFareInput, D001_TaxiFareOutput>(Model);
+
+                    var samples = new D001_TaxiFareInput[]
+                    {
+                        SingleTaxiTripSample.Trip1,
+                    };
+
+                    foreach (var sample in samples)
+                    {
+                        var result = predictor.Predict(sample);
+
+                        Console.WriteLine(@$"=======================================================");
+                        Console.WriteLine($"Predicted fare: {result.FareAmount:F4}, Actual fare: {sample.FareAmount:F4}");
 
                         Console.WriteLine();
                     }
@@ -362,6 +358,7 @@ public partial class MLNetExampleSummary : MLNetHandler
             // ignore
             case MLNetExampleScenario.A003_BinaryClassification_CreditCardFraudDetection:
             case MLNetExampleScenario.A777_BinaryClassification_Auto_SentimentAnalysis:
+            case MLNetExampleScenario.H001_Ranking_RankSearchEngineResults:
             case MLNetExampleScenario.Z999_Ignore:
                 {
                     Console.WriteLine("ignore");
@@ -373,17 +370,14 @@ public partial class MLNetExampleSummary : MLNetHandler
             case MLNetExampleScenario.B001_MultiClassClassification_IssuesClassification:
             case MLNetExampleScenario.C003_Recommendation_MovieRecommender_FieldAwareFactorizationMachines:
             case MLNetExampleScenario.C777_Auto_Recommendation:
-            case MLNetExampleScenario.D001_Regression_PricePrediction:
             case MLNetExampleScenario.D002_Regression_SalesForecasting:
             case MLNetExampleScenario.D003_Regression_DemandPrediction:
-            case MLNetExampleScenario.D777_Regression_Auto_TaxiFarePrediction:
             case MLNetExampleScenario.E001_TimeSeriesForecasting_SalesForecasting:
             case MLNetExampleScenario.F001_AnomalyDetection_SalesSpikeDetection:
             case MLNetExampleScenario.F002_AnomalyDetection_PowerAnomalyDetection:
             case MLNetExampleScenario.F003_AnomalyDetection_CreditCardFraudDetection:
             case MLNetExampleScenario.G001_Clustering_CustomerSegmentation:
             case MLNetExampleScenario.G002_Clustering_IrisFlowerClustering:
-            case MLNetExampleScenario.H001_Ranking_RankSearchEngineResults:
             case MLNetExampleScenario.I001_ComputerVision_ImageClassificationTraining_HighLevelAPI:
             case MLNetExampleScenario.I002_ComputerVision_ImageClassificationPredictions_PretrainedTensorFlowModelScoring:
             case MLNetExampleScenario.I003_ComputerVision_ImageClassificationTraining_TensorFlowFeaturizerEstimator:

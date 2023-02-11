@@ -23,3 +23,14 @@ class BasicOutput_Multi
     public float[] Score;
 
 }
+
+class BasicOutput_Ranking
+{
+    public uint GroupId { get; set; }
+
+    public uint Label { get; set; }
+
+    public float Score { get; set; }
+
+    public float[] Features { get; set; }
+}

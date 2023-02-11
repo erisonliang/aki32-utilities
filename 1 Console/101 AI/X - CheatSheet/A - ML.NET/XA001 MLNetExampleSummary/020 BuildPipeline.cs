@@ -1,4 +1,6 @@
-﻿using Microsoft.ML;
+﻿using System.Data;
+
+using Microsoft.ML;
 using Microsoft.ML.Data;
 using Microsoft.ML.Trainers;
 using Microsoft.ML.Transforms;
@@ -144,51 +146,32 @@ public partial class MLNetExampleSummary : MLNetHandler
 
             case MLNetExampleScenario.D001_Regression_PricePrediction:
                 {
-                   
+                    ConnectNode(Context.Transforms.Categorical.OneHotEncoding(outputColumnName: "VendorIdEncoded", inputColumnName: nameof(D001_TaxiFareInput.VendorId)));
+                    ConnectNode(Context.Transforms.Categorical.OneHotEncoding(outputColumnName: "RateCodeEncoded", inputColumnName: nameof(D001_TaxiFareInput.RateCode)));
+                    ConnectNode(Context.Transforms.Categorical.OneHotEncoding(outputColumnName: "PaymentTypeEncoded", inputColumnName: nameof(D001_TaxiFareInput.PaymentType)));
+                    ConnectNode(Context.Transforms.NormalizeMeanVariance(outputColumnName: nameof(D001_TaxiFareInput.PassengerCount)));
+                    ConnectNode(Context.Transforms.NormalizeMeanVariance(outputColumnName: nameof(D001_TaxiFareInput.TripTime)));
+                    ConnectNode(Context.Transforms.NormalizeMeanVariance(outputColumnName: nameof(D001_TaxiFareInput.TripDistance)));
+                    ConnectNode(Context.Transforms.Concatenate("Features",
+                        "VendorIdEncoded", "RateCodeEncoded", "PaymentTypeEncoded", nameof(D001_TaxiFareInput.PassengerCount), nameof(D001_TaxiFareInput.TripTime), nameof(D001_TaxiFareInput.TripDistance))); ;
 
+                    ConnectNode(Context.Regression.Trainers.Sdca(labelColumnName: "Label", featureColumnName: "Features"));
 
+                    break;
+                }
 
-                    // STEP 2: Common data process configuration with pipeline data transformations
-                    //var dataProcessPipeline = mlContext.Transforms.CopyColumns(outputColumnName: "Label", inputColumnName: nameof(TaxiTrip.FareAmount))
-                    //                .Append(mlContext.Transforms.Categorical.OneHotEncoding(outputColumnName: "VendorIdEncoded", inputColumnName: nameof(TaxiTrip.VendorId)))
-                    //                .Append(mlContext.Transforms.Categorical.OneHotEncoding(outputColumnName: "RateCodeEncoded", inputColumnName: nameof(TaxiTrip.RateCode)))
-                    //                .Append(mlContext.Transforms.Categorical.OneHotEncoding(outputColumnName: "PaymentTypeEncoded", inputColumnName: nameof(TaxiTrip.PaymentType)))
-                    //                .Append(mlContext.Transforms.NormalizeMeanVariance(outputColumnName: nameof(TaxiTrip.PassengerCount)))
-                    //                .Append(mlContext.Transforms.NormalizeMeanVariance(outputColumnName: nameof(TaxiTrip.TripTime)))
-                    //                .Append(mlContext.Transforms.NormalizeMeanVariance(outputColumnName: nameof(TaxiTrip.TripDistance)))
-                    //                .Append(mlContext.Transforms.Concatenate("Features", "VendorIdEncoded", "RateCodeEncoded", "PaymentTypeEncoded", nameof(TaxiTrip.PassengerCount)
-                    //                , nameof(TaxiTrip.TripTime), nameof(TaxiTrip.TripDistance)));
+            case MLNetExampleScenario.H001_Ranking_RankSearchEngineResults:
+                {
+                    var featureCols = TrainData.Schema.AsQueryable()
+                        .Select(s => s.Name)
+                        .Where(c => c != nameof(H001_SearchResultInput.Label))
+                        .Where(c => c != nameof(H001_SearchResultInput.GroupId))
+                        .ToArray();
 
-                    //// (OPTIONAL) Peek data (such as 5 records) in training DataView after applying the ProcessPipeline's transformations into "Features" 
-                    //ConsoleHelper.PeekDataViewInConsole(mlContext, trainingDataView, dataProcessPipeline, 5);
-                    //ConsoleHelper.PeekVectorColumnDataInConsole(mlContext, "Features", trainingDataView, dataProcessPipeline, 5);
-
-                    //// STEP 3: Set the training algorithm, then create and config the modelBuilder - Selected Trainer (SDCA Regression algorithm)                            
-                    //var trainer = mlContext.Regression.Trainers.Sdca(labelColumnName: "Label", featureColumnName: "Features");
-                    //var trainingPipeline = dataProcessPipeline.Append(trainer);
-
-                    //// STEP 4: Train the model fitting to the DataSet
-                    ////The pipeline is trained on the dataset that has been loaded and transformed.
-                    //Console.WriteLine("=============== Training the model ===============");
-                    //var trainedModel = trainingPipeline.Fit(trainingDataView);
-
-                    //// STEP 5: Evaluate the model and show accuracy stats
-                    //Console.WriteLine("===== Evaluating Model's accuracy with Test data =====");
-
-                    //IDataView predictions = trainedModel.Transform(testDataView);
-                    //var metrics = mlContext.Regression.Evaluate(predictions, labelColumnName: "Label", scoreColumnName: "Score");
-
-                    //Common.ConsoleHelper.PrintRegressionMetrics(trainer.ToString(), metrics);
-
-                    //// STEP 6: Save/persist the trained model to a .ZIP file
-                    //mlContext.Model.Save(trainedModel, trainingDataView.Schema, ModelPath);
-
-                    //Console.WriteLine("The model is saved to {0}", ModelPath);
-
-                    //return trainedModel;
-
-
-
+                    ConnectNode(Context.Transforms.Concatenate("Features", featureCols));
+                    ConnectNode(Context.Transforms.Conversion.MapValueToKey(nameof(H001_SearchResultInput.Label)));
+                    ConnectNode(Context.Transforms.Conversion.Hash(nameof(H001_SearchResultInput.GroupId), nameof(H001_SearchResultInput.GroupId), numberOfBits: 20));
+                    ConnectNode(Context.Ranking.Trainers.LightGbm(rowGroupColumnName: nameof(H001_SearchResultInput.GroupId)));
 
                     break;
                 }
@@ -238,6 +221,7 @@ public partial class MLNetExampleSummary : MLNetHandler
             // ignore
             case MLNetExampleScenario.A777_BinaryClassification_Auto_SentimentAnalysis:
             case MLNetExampleScenario.B777_MultiClassClassification_Auto_MNIST:
+            case MLNetExampleScenario.D777_Regression_Auto_TaxiFarePrediction:
             case MLNetExampleScenario.Z999_Ignore:
                 {
                     Console.WriteLine("ignore");
@@ -245,20 +229,20 @@ public partial class MLNetExampleSummary : MLNetHandler
                     break;
                 }
 
+
+
             // not implemented
             case MLNetExampleScenario.B001_MultiClassClassification_IssuesClassification:
             case MLNetExampleScenario.C003_Recommendation_MovieRecommender_FieldAwareFactorizationMachines:
             case MLNetExampleScenario.C777_Auto_Recommendation:
             case MLNetExampleScenario.D002_Regression_SalesForecasting:
             case MLNetExampleScenario.D003_Regression_DemandPrediction:
-            case MLNetExampleScenario.D777_Regression_Auto_TaxiFarePrediction:
             case MLNetExampleScenario.E001_TimeSeriesForecasting_SalesForecasting:
             case MLNetExampleScenario.F001_AnomalyDetection_SalesSpikeDetection:
             case MLNetExampleScenario.F002_AnomalyDetection_PowerAnomalyDetection:
             case MLNetExampleScenario.F003_AnomalyDetection_CreditCardFraudDetection:
             case MLNetExampleScenario.G001_Clustering_CustomerSegmentation:
             case MLNetExampleScenario.G002_Clustering_IrisFlowerClustering:
-            case MLNetExampleScenario.H001_Ranking_RankSearchEngineResults:
             case MLNetExampleScenario.I001_ComputerVision_ImageClassificationTraining_HighLevelAPI:
             case MLNetExampleScenario.I002_ComputerVision_ImageClassificationPredictions_PretrainedTensorFlowModelScoring:
             case MLNetExampleScenario.I003_ComputerVision_ImageClassificationTraining_TensorFlowFeaturizerEstimator:

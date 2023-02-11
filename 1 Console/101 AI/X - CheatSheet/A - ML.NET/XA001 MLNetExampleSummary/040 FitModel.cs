@@ -20,6 +20,8 @@ public partial class MLNetExampleSummary : MLNetHandler
             case MLNetExampleScenario.B003_MultiClassClassification_MNIST:
             case MLNetExampleScenario.C001_Recommendation_ProductRecommender:
             case MLNetExampleScenario.C002_Recommendation_MovieRecommender_MatrixFactorization:
+            case MLNetExampleScenario.D001_Regression_PricePrediction:
+            case MLNetExampleScenario.H001_Ranking_RankSearchEngineResults:
                 {
                     Console.WriteLine($"fitting...");
                     Model = PipeLineHead.Fit(targetData ?? TrainData);
@@ -74,6 +76,22 @@ public partial class MLNetExampleSummary : MLNetHandler
                     break;
                 }
 
+            case MLNetExampleScenario.D777_Regression_Auto_TaxiFarePrediction:
+                {
+                    Console.WriteLine(@$"=======================================================");
+                    Console.WriteLine($"Running AutoML regression experiment for {ExperimentTime_InSeconds} seconds...");
+
+                    var handler = new MLNetExtension.ExperimentHandler();
+                    var result = Context.Auto().CreateRegressionExperiment(ExperimentTime_InSeconds).Execute(TrainData, progressHandler: handler);
+
+                    Console.WriteLine();
+                    handler.PrintTopModels(result);
+
+                    Model = result.BestRun.Model;
+
+                    break;
+                }
+
             // ignore
             case MLNetExampleScenario.Z999_Ignore:
                 {
@@ -82,21 +100,22 @@ public partial class MLNetExampleSummary : MLNetHandler
                     break;
                 }
 
+                //var result = Context.Auto().CreateRecommendationExperiment.Execute(TrainData, progressHandler: handler);
+                //var result = Context.Auto().CreateRankingExperiment.Execute(TrainData, progressHandler: handler);
+
+
             // not implemented
             case MLNetExampleScenario.B001_MultiClassClassification_IssuesClassification:
             case MLNetExampleScenario.C003_Recommendation_MovieRecommender_FieldAwareFactorizationMachines:
             case MLNetExampleScenario.C777_Auto_Recommendation:
-            case MLNetExampleScenario.D001_Regression_PricePrediction:
             case MLNetExampleScenario.D002_Regression_SalesForecasting:
             case MLNetExampleScenario.D003_Regression_DemandPrediction:
-            case MLNetExampleScenario.D777_Regression_Auto_TaxiFarePrediction:
             case MLNetExampleScenario.E001_TimeSeriesForecasting_SalesForecasting:
             case MLNetExampleScenario.F001_AnomalyDetection_SalesSpikeDetection:
             case MLNetExampleScenario.F002_AnomalyDetection_PowerAnomalyDetection:
             case MLNetExampleScenario.F003_AnomalyDetection_CreditCardFraudDetection:
             case MLNetExampleScenario.G001_Clustering_CustomerSegmentation:
             case MLNetExampleScenario.G002_Clustering_IrisFlowerClustering:
-            case MLNetExampleScenario.H001_Ranking_RankSearchEngineResults:
             case MLNetExampleScenario.I001_ComputerVision_ImageClassificationTraining_HighLevelAPI:
             case MLNetExampleScenario.I002_ComputerVision_ImageClassificationPredictions_PretrainedTensorFlowModelScoring:
             case MLNetExampleScenario.I003_ComputerVision_ImageClassificationTraining_TensorFlowFeaturizerEstimator:

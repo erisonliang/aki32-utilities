@@ -17,20 +17,7 @@ public partial class MLNetExampleSummary : MLNetHandler
 
     public MLNetExampleScenario Scenario { get; set; }
 
-    public ITransformer Model { get; set; }
-    public DataViewSchema ModelInputSchema { get; set; }
-
-    public DirectoryInfo DataDir { get; set; }
     public FileInfo ModelFile { get; set; }
-
-    public IDataView AllData { get; set; }
-    public IDataView TestData { get; set; }
-    public IDataView TrainData { get; set; }
-
-
-    // ★★★★★★★★★★★★★★★ specific
-
-    public uint ExperimentTime_InSeconds = 60;
 
 
     // ★★★★★★★★★★★★★★★ 

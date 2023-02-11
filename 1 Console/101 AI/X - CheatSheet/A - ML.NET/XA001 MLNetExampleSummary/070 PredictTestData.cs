@@ -1,5 +1,8 @@
 ﻿
 
+using Microsoft.ML.Data;
+using Microsoft.ML;
+
 namespace Aki32Utilities.ConsoleAppUtilities.AI.CheatSheet;
 public partial class MLNetExampleSummary : MLNetHandler
 {
@@ -39,10 +42,23 @@ public partial class MLNetExampleSummary : MLNetHandler
 
             // for Regression
             case MLNetExampleScenario.C002_Recommendation_MovieRecommender_MatrixFactorization:
+            case MLNetExampleScenario.D001_Regression_PricePrediction:
+            case MLNetExampleScenario.D777_Regression_Auto_TaxiFarePrediction:
                 {
                     var predictedTestData = Model.Transform(TestData);
                     predictedTestData.WriteToConsole();
                     var metrics = Context.Regression.Evaluate(predictedTestData);
+                    ConsoleExtension.PrintMetrics(metrics);
+
+                    break;
+                }
+
+            // for Ranking
+            case MLNetExampleScenario.H001_Ranking_RankSearchEngineResults:
+                {
+                    var predictedTestData = Model.Transform(TestData);
+                    predictedTestData.WriteToConsole();
+                    var metrics = Context.Ranking.Evaluate(predictedTestData);
                     ConsoleExtension.PrintMetrics(metrics);
 
                     break;
@@ -64,17 +80,14 @@ public partial class MLNetExampleSummary : MLNetHandler
             case MLNetExampleScenario.B001_MultiClassClassification_IssuesClassification:
             case MLNetExampleScenario.C003_Recommendation_MovieRecommender_FieldAwareFactorizationMachines:
             case MLNetExampleScenario.C777_Auto_Recommendation:
-            case MLNetExampleScenario.D001_Regression_PricePrediction:
             case MLNetExampleScenario.D002_Regression_SalesForecasting:
             case MLNetExampleScenario.D003_Regression_DemandPrediction:
-            case MLNetExampleScenario.D777_Regression_Auto_TaxiFarePrediction:
             case MLNetExampleScenario.E001_TimeSeriesForecasting_SalesForecasting:
             case MLNetExampleScenario.F001_AnomalyDetection_SalesSpikeDetection:
             case MLNetExampleScenario.F002_AnomalyDetection_PowerAnomalyDetection:
             case MLNetExampleScenario.F003_AnomalyDetection_CreditCardFraudDetection:
             case MLNetExampleScenario.G001_Clustering_CustomerSegmentation:
             case MLNetExampleScenario.G002_Clustering_IrisFlowerClustering:
-            case MLNetExampleScenario.H001_Ranking_RankSearchEngineResults:
             case MLNetExampleScenario.I001_ComputerVision_ImageClassificationTraining_HighLevelAPI:
             case MLNetExampleScenario.I002_ComputerVision_ImageClassificationPredictions_PretrainedTensorFlowModelScoring:
             case MLNetExampleScenario.I003_ComputerVision_ImageClassificationTraining_TensorFlowFeaturizerEstimator:

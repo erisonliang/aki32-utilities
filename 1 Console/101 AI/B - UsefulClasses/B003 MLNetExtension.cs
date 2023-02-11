@@ -22,7 +22,7 @@ public class MLNetExtension
 
             if (dRunDetail.Exception != null)
             {
-                General.ConsoleExtension.WriteWithColor($"Exception during AutoML iteration: {dRunDetail.Exception}", ConsoleColor.Red);
+                General.ConsoleExtension.WriteLineWithColor($"Exception during AutoML iteration: {dRunDetail.Exception}", ConsoleColor.Red);
             }
             else
             {
@@ -33,7 +33,6 @@ public class MLNetExtension
 
         public void PrintTopModels(ExperimentResult<BinaryClassificationMetrics> result)
         {
-            // Get top few runs ranked by accuracy
             var topRuns = result.RunDetails
                     .Where(r => r.ValidationMetrics != null && !double.IsNaN(r.ValidationMetrics.Accuracy))
                     .OrderByDescending(r => r.ValidationMetrics.Accuracy)
@@ -49,7 +48,6 @@ public class MLNetExtension
 
         public void PrintTopModels(ExperimentResult<MulticlassClassificationMetrics> result)
         {
-            // Get top few runs ranked by accuracy
             var topRuns = result.RunDetails
                     .Where(r => r.ValidationMetrics != null && !double.IsNaN(r.ValidationMetrics.MicroAccuracy))
                     .OrderByDescending(r => r.ValidationMetrics.MicroAccuracy)
@@ -63,6 +61,20 @@ public class MLNetExtension
             Console.WriteLine(@$"=======================================================");
         }
 
+        public void PrintTopModels(ExperimentResult<RegressionMetrics> result)
+        {
+            var topRuns = result.RunDetails
+                    .Where(r => r.ValidationMetrics != null && !double.IsNaN(r.ValidationMetrics.RSquared))
+                    .OrderByDescending(r => r.ValidationMetrics.RSquared)
+                    .Take(3);
+
+            Console.WriteLine(@$"=======================================================");
+            Console.WriteLine("Top models ranked by R-Squared");
+            for (var i = 0; i < topRuns.Count(); i++)
+                ConsoleExtension.PrintMetricsInOneLine(i + 1, topRuns.ElementAt(i));
+
+            Console.WriteLine(@$"=======================================================");
+        }
 
 
 
