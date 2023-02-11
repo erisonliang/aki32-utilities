@@ -8,5 +8,6 @@ class B003_MnistInput
     public float[] PixelValues;
 
     [LoadColumn(64)]
+    [ColumnName("Label")]
     public float Number;
 }

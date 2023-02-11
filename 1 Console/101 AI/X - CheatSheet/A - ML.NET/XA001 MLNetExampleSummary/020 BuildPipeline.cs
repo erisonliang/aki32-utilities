@@ -90,7 +90,7 @@ public partial class MLNetExampleSummary : MLNetHandler
             // ★ for multiple label
             case MLNetExampleScenario.B003_MultiClassClassification_MNIST:
                 {
-                    ConnectNode(Context.Transforms.Conversion.MapValueToKey("Label", "Number", keyOrdinality: ValueToKeyMappingEstimator.KeyOrdinality.ByValue));
+                    ConnectNode(Context.Transforms.Conversion.MapValueToKey("Label", "Label", keyOrdinality: ValueToKeyMappingEstimator.KeyOrdinality.ByValue));
                     ConnectNode(Context.Transforms.Concatenate("Features", nameof(B003_MnistInput.PixelValues)));
                     ConnectCheckPoint();
                     ConnectNode(Context.MulticlassClassification.Trainers.SdcaMaximumEntropy());
@@ -185,6 +185,7 @@ public partial class MLNetExampleSummary : MLNetHandler
 
             // ignore
             case MLNetExampleScenario.A777_BinaryClassification_Auto_SentimentAnalysis:
+            case MLNetExampleScenario.B777_MultiClassClassification_Auto_MNIST:
             case MLNetExampleScenario.Z999_Ignore:
                 {
                     Console.WriteLine("ignore");
@@ -194,7 +195,6 @@ public partial class MLNetExampleSummary : MLNetHandler
 
             // not implemented
             case MLNetExampleScenario.B001_MultiClassClassification_IssuesClassification:
-            case MLNetExampleScenario.B777_MultiClassClassification_Auto_MNIST:
             case MLNetExampleScenario.C003_Recommendation_MovieRecommender_FieldAwareFactorizationMachines:
             case MLNetExampleScenario.C777_Auto_Recommendation:
             case MLNetExampleScenario.D001_Regression_PricePrediction:

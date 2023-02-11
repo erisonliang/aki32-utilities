@@ -47,6 +47,22 @@ public class MLNetExtension
             Console.WriteLine(@$"=======================================================");
         }
 
+        public void PrintTopModels(ExperimentResult<MulticlassClassificationMetrics> result)
+        {
+            // Get top few runs ranked by accuracy
+            var topRuns = result.RunDetails
+                    .Where(r => r.ValidationMetrics != null && !double.IsNaN(r.ValidationMetrics.MicroAccuracy))
+                    .OrderByDescending(r => r.ValidationMetrics.MicroAccuracy)
+                    .Take(3);
+
+            Console.WriteLine(@$"=======================================================");
+            Console.WriteLine("Top models ranked by accuracy");
+            for (var i = 0; i < topRuns.Count(); i++)
+                ConsoleExtension.PrintMetricsInOneLine(i + 1, topRuns.ElementAt(i));
+
+            Console.WriteLine(@$"=======================================================");
+        }
+
 
 
 

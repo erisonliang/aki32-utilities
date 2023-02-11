@@ -45,11 +45,26 @@ public partial class MLNetExampleSummary : MLNetHandler
             case MLNetExampleScenario.A777_BinaryClassification_Auto_SentimentAnalysis:
                 {
                     Console.WriteLine(@$"=======================================================");
-                    Console.WriteLine(@$"Running AutoML binary classification experiment for {ExperimentTime} seconds...");
+                    Console.WriteLine(@$"Running AutoML binary classification experiment for {ExperimentTime_InSeconds} seconds...");
 
                     var handler = new MLNetExtension.ExperimentHandler();
-                    //var handler = new MLNetExtension.BinaryExperimentHandler();
-                    var result = Context.Auto().CreateBinaryClassificationExperiment(ExperimentTime).Execute(TrainData, progressHandler: handler);
+                    var result = Context.Auto().CreateBinaryClassificationExperiment(ExperimentTime_InSeconds).Execute(TrainData, progressHandler: handler);
+
+                    Console.WriteLine();
+                    handler.PrintTopModels(result);
+
+                    Model = result.BestRun.Model;
+
+                    break;
+                }
+
+            case MLNetExampleScenario.B777_MultiClassClassification_Auto_MNIST:
+                {
+                    Console.WriteLine(@$"=======================================================");
+                    Console.WriteLine($"Running AutoML multiclass classification experiment for {ExperimentTime_InSeconds} seconds...");
+
+                    var handler = new MLNetExtension.ExperimentHandler();
+                    var result = Context.Auto().CreateMulticlassClassificationExperiment(ExperimentTime_InSeconds).Execute(TrainData, progressHandler: handler);
 
                     Console.WriteLine();
                     handler.PrintTopModels(result);
@@ -69,7 +84,6 @@ public partial class MLNetExampleSummary : MLNetHandler
 
             // not implemented
             case MLNetExampleScenario.B001_MultiClassClassification_IssuesClassification:
-            case MLNetExampleScenario.B777_MultiClassClassification_Auto_MNIST:
             case MLNetExampleScenario.C003_Recommendation_MovieRecommender_FieldAwareFactorizationMachines:
             case MLNetExampleScenario.C777_Auto_Recommendation:
             case MLNetExampleScenario.D001_Regression_PricePrediction:

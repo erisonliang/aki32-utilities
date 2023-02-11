@@ -18,10 +18,12 @@ public partial class MLNetExampleSummary : MLNetHandler
             case MLNetExampleScenario.B001_MultiClassClassification_IssuesClassification:
             case MLNetExampleScenario.B002_MultiClassClassification_IrisFlowersClassification:
             case MLNetExampleScenario.B003_MultiClassClassification_MNIST:
+            case MLNetExampleScenario.B777_MultiClassClassification_Auto_MNIST:
             case MLNetExampleScenario.C001_Recommendation_ProductRecommender:
             case MLNetExampleScenario.C002_Recommendation_MovieRecommender_MatrixFactorization:
                 {
-                    Model = Context.Model.Load(ModelFile.FullName, out var _);
+                    Model = Context.Model.Load(ModelFile.FullName, out var inputSchema);
+                    ModelInputSchema = inputSchema;
                     Console.WriteLine("done");
 
                     break;
@@ -38,7 +40,6 @@ public partial class MLNetExampleSummary : MLNetHandler
                 }
 
             // not implemented
-            case MLNetExampleScenario.B777_MultiClassClassification_Auto_MNIST:
             case MLNetExampleScenario.C003_Recommendation_MovieRecommender_FieldAwareFactorizationMachines:
             case MLNetExampleScenario.C777_Auto_Recommendation:
             case MLNetExampleScenario.D001_Regression_PricePrediction:

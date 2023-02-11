@@ -83,34 +83,42 @@ public partial class MLNetExampleSummary : MLNetHandler
 
             case MLNetExampleScenario.A004_BinaryClassification_HeartDiseasePrediction:
                 {
-                    var trainDataFile = DataDir.GetChildFileInfo("Heart-Train.csv");
-                    var trainDataUri = new Uri("https://raw.githubusercontent.com/dotnet/machinelearning-samples/main/samples/csharp/getting-started/BinaryClassification_HeartDiseaseDetection/HeartDiseaseDetection/Data/HeartTraining.csv");
-                    DownloadDataFile(trainDataUri, trainDataFile);
-                    TrainData = Context.Data.LoadFromTextFile<A004_HeartInput>(trainDataFile.FullName, hasHeader: true, separatorChar: ';');
-
-                    var testDataFile = DataDir.GetChildFileInfo("Heart-Test.csv");
-                    var testDataUri = new Uri("https://raw.githubusercontent.com/dotnet/machinelearning-samples/main/samples/csharp/getting-started/BinaryClassification_HeartDiseaseDetection/HeartDiseaseDetection/Data/HeartTest.csv");
-                    DownloadDataFile(testDataUri, testDataFile);
-                    TestData = Context.Data.LoadFromTextFile<A004_HeartInput>(testDataFile.FullName, hasHeader: true, separatorChar: ';');
-
-                    ModelFile = DataDir.GetChildFileInfo("Heart-Model.zip");
+                    {
+                        var trainDataFile = DataDir.GetChildFileInfo("Heart-Train.csv");
+                        var trainDataUri = new Uri("https://raw.githubusercontent.com/dotnet/machinelearning-samples/main/samples/csharp/getting-started/BinaryClassification_HeartDiseaseDetection/HeartDiseaseDetection/Data/HeartTraining.csv");
+                        DownloadDataFile(trainDataUri, trainDataFile);
+                        TrainData = Context.Data.LoadFromTextFile<A004_HeartInput>(trainDataFile.FullName, hasHeader: true, separatorChar: ';');
+                    }
+                    {
+                        var testDataFile = DataDir.GetChildFileInfo("Heart-Test.csv");
+                        var testDataUri = new Uri("https://raw.githubusercontent.com/dotnet/machinelearning-samples/main/samples/csharp/getting-started/BinaryClassification_HeartDiseaseDetection/HeartDiseaseDetection/Data/HeartTest.csv");
+                        DownloadDataFile(testDataUri, testDataFile);
+                        TestData = Context.Data.LoadFromTextFile<A004_HeartInput>(testDataFile.FullName, hasHeader: true, separatorChar: ';');
+                    }
+                    {
+                        ModelFile = DataDir.GetChildFileInfo("Heart-Model.zip");
+                    }
 
                     break;
                 }
 
             case MLNetExampleScenario.A777_BinaryClassification_Auto_SentimentAnalysis:
                 {
-                    var trainDataFile = DataDir.GetChildFileInfo("Sentiment-Train.tsv");
-                    var trainDataUri = new Uri("https://github.com/dotnet/machinelearning-samples/raw/main/datasets/wikipedia-detox-250-line-data.tsv");
-                    DownloadDataFile(trainDataUri, trainDataFile);
-                    TrainData = Context.Data.LoadFromTextFile<A777_AutoSentimentInput>(trainDataFile.FullName, hasHeader: true);
-
-                    var testDataFile = DataDir.GetChildFileInfo("Sentiment-Test.tsv");
-                    var testDataUri = new Uri("https://github.com/dotnet/machinelearning-samples/raw/main/datasets/wikipedia-detox-250-line-test.tsv");
-                    DownloadDataFile(testDataUri, testDataFile);
-                    TestData = Context.Data.LoadFromTextFile<A777_AutoSentimentInput>(testDataFile.FullName, hasHeader: true);
-
-                    ModelFile = DataDir.GetChildFileInfo("Sentiment-Model.zip");
+                    {
+                        var trainDataFile = DataDir.GetChildFileInfo("Sentiment-Train.tsv");
+                        var trainDataUri = new Uri("https://github.com/dotnet/machinelearning-samples/raw/main/datasets/wikipedia-detox-250-line-data.tsv");
+                        DownloadDataFile(trainDataUri, trainDataFile);
+                        TrainData = Context.Data.LoadFromTextFile<A777_AutoSentimentInput>(trainDataFile.FullName, hasHeader: true);
+                    }
+                    {
+                        var testDataFile = DataDir.GetChildFileInfo("Sentiment-Test.tsv");
+                        var testDataUri = new Uri("https://github.com/dotnet/machinelearning-samples/raw/main/datasets/wikipedia-detox-250-line-test.tsv");
+                        DownloadDataFile(testDataUri, testDataFile);
+                        TestData = Context.Data.LoadFromTextFile<A777_AutoSentimentInput>(testDataFile.FullName, hasHeader: true);
+                    }
+                    {
+                        ModelFile = DataDir.GetChildFileInfo("Sentiment-Model.zip");
+                    }
 
                     break;
                 }
@@ -131,26 +139,33 @@ public partial class MLNetExampleSummary : MLNetHandler
 
             // many features, the same type ((!)Trying 2 types of reading way)
             case MLNetExampleScenario.B003_MultiClassClassification_MNIST:
+            case MLNetExampleScenario.B777_MultiClassClassification_Auto_MNIST:
                 {
-                    var trainDataFile = DataDir.GetChildFileInfo("MNIST-Train.csv");
-                    var trainDataUri = new Uri("https://raw.githubusercontent.com/dotnet/machinelearning-samples/main/samples/csharp/getting-started/MulticlassClassification_MNIST/MNIST/Data/optdigits-train.csv");
-                    DownloadDataFile(trainDataUri, trainDataFile);
-                    TrainData = Context.Data.LoadFromTextFile<B003_MnistInput>(trainDataFile.FullName, hasHeader: false, separatorChar: ',');
-
-                    var testDataFile = DataDir.GetChildFileInfo("MNIST-Test.csv");
-                    var testDataUri = new Uri("https://raw.githubusercontent.com/dotnet/machinelearning-samples/main/samples/csharp/getting-started/MulticlassClassification_MNIST/MNIST/Data/optdigits-val.csv");
-                    DownloadDataFile(testDataUri, testDataFile);
-                    TestData = Context.Data.LoadFromTextFile(testDataFile.FullName,
-                        columns: new[]
-                        {
-                            new TextLoader.Column(nameof(B003_MnistInput.PixelValues), DataKind.Single, 0, 63), // 64 single values
-                            new TextLoader.Column(nameof(B003_MnistInput.Number), DataKind.Single, 64) // 1 single value
-                        },
-                        hasHeader: false,
-                        separatorChar: ','
-                        );
-
-                    ModelFile = DataDir.GetChildFileInfo("MNIST-Model.zip");
+                    {
+                        var trainDataFile = DataDir.GetChildFileInfo("MNIST-Train.csv");
+                        var trainDataUri = new Uri("https://raw.githubusercontent.com/dotnet/machinelearning-samples/main/samples/csharp/getting-started/MulticlassClassification_MNIST/MNIST/Data/optdigits-train.csv");
+                        //var trainDataUri = new Uri("https://github.com/dotnet/machinelearning-samples/raw/main/datasets/optdigits-train.csv"); // same data set
+                        DownloadDataFile(trainDataUri, trainDataFile);
+                        TrainData = Context.Data.LoadFromTextFile<B003_MnistInput>(trainDataFile.FullName, hasHeader: false, separatorChar: ',');
+                    }
+                    {
+                        var testDataFile = DataDir.GetChildFileInfo("MNIST-Test.csv");
+                        var testDataUri = new Uri("https://raw.githubusercontent.com/dotnet/machinelearning-samples/main/samples/csharp/getting-started/MulticlassClassification_MNIST/MNIST/Data/optdigits-val.csv");
+                        //var testDataUri = new Uri("https://github.com/dotnet/machinelearning-samples/raw/main/datasets/optdigits-test.csv"); // same data set
+                        DownloadDataFile(testDataUri, testDataFile);
+                        TestData = Context.Data.LoadFromTextFile(testDataFile.FullName,
+                            columns: new[]
+                            {
+                                new TextLoader.Column("PixelValues", DataKind.Single, 0, 63), // 64 single values
+                                new TextLoader.Column("Label", DataKind.Single, 64) // 1 single value
+                            },
+                            hasHeader: false,
+                            separatorChar: ','
+                            );
+                    }
+                    {
+                        ModelFile = DataDir.GetChildFileInfo("MNIST-Model.zip");
+                    }
 
                     break;
                 }
@@ -180,21 +195,26 @@ public partial class MLNetExampleSummary : MLNetHandler
 
             case MLNetExampleScenario.C002_Recommendation_MovieRecommender_MatrixFactorization:
                 {
-                    var movieDataFile = DataDir.GetChildFileInfo("Movie.csv");
-                    var movieDataUri = new Uri("https://raw.githubusercontent.com/dotnet/machinelearning-samples/main/samples/csharp/getting-started/MatrixFactorization_MovieRecommendation/Data/recommendation-movies.csv");
-                    DownloadDataFile(movieDataUri, movieDataFile);
-
-                    var trainDataFile = DataDir.GetChildFileInfo("MovieRate-Train.csv");
-                    var trainDataUri = new Uri("https://raw.githubusercontent.com/dotnet/machinelearning-samples/main/samples/csharp/getting-started/MatrixFactorization_MovieRecommendation/Data/recommendation-ratings-train.csv");
-                    DownloadDataFile(trainDataUri, trainDataFile);
-                    TrainData = Context.Data.LoadFromTextFile<C002_MovieRateInput>(trainDataFile.FullName, hasHeader: true, separatorChar: ',');
-
-                    var testDataFile = DataDir.GetChildFileInfo("MovieRate-Test.csv");
-                    var testDataUri = new Uri("https://raw.githubusercontent.com/dotnet/machinelearning-samples/main/samples/csharp/getting-started/MatrixFactorization_MovieRecommendation/Data/recommendation-ratings-test.csv");
-                    DownloadDataFile(testDataUri, testDataFile);
-                    TestData = Context.Data.LoadFromTextFile<C002_MovieRateInput>(testDataFile.FullName, hasHeader: true, separatorChar: ',');
-
-                    ModelFile = DataDir.GetChildFileInfo("MovieRate-Model.zip");
+                    {
+                        var movieDataFile = DataDir.GetChildFileInfo("Movie.csv");
+                        var movieDataUri = new Uri("https://raw.githubusercontent.com/dotnet/machinelearning-samples/main/samples/csharp/getting-started/MatrixFactorization_MovieRecommendation/Data/recommendation-movies.csv");
+                        DownloadDataFile(movieDataUri, movieDataFile);
+                    }
+                    {
+                        var trainDataFile = DataDir.GetChildFileInfo("MovieRate-Train.csv");
+                        var trainDataUri = new Uri("https://raw.githubusercontent.com/dotnet/machinelearning-samples/main/samples/csharp/getting-started/MatrixFactorization_MovieRecommendation/Data/recommendation-ratings-train.csv");
+                        DownloadDataFile(trainDataUri, trainDataFile);
+                        TrainData = Context.Data.LoadFromTextFile<C002_MovieRateInput>(trainDataFile.FullName, hasHeader: true, separatorChar: ',');
+                    }
+                    {
+                        var testDataFile = DataDir.GetChildFileInfo("MovieRate-Test.csv");
+                        var testDataUri = new Uri("https://raw.githubusercontent.com/dotnet/machinelearning-samples/main/samples/csharp/getting-started/MatrixFactorization_MovieRecommendation/Data/recommendation-ratings-test.csv");
+                        DownloadDataFile(testDataUri, testDataFile);
+                        TestData = Context.Data.LoadFromTextFile<C002_MovieRateInput>(testDataFile.FullName, hasHeader: true, separatorChar: ',');
+                    }
+                    {
+                        ModelFile = DataDir.GetChildFileInfo("MovieRate-Model.zip");
+                    }
 
                     break;
                 }
@@ -254,7 +274,6 @@ public partial class MLNetExampleSummary : MLNetHandler
                 }
 
             // not implemented
-            case MLNetExampleScenario.B777_MultiClassClassification_Auto_MNIST:
             case MLNetExampleScenario.C003_Recommendation_MovieRecommender_FieldAwareFactorizationMachines:
             case MLNetExampleScenario.C777_Auto_Recommendation:
             case MLNetExampleScenario.D001_Regression_PricePrediction:

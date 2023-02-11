@@ -2,7 +2,12 @@
 
 using Aki32Utilities.ConsoleAppUtilities.General;
 
+using iTextSharp.text.pdf.codec.wmf;
+
 using Microsoft.ML;
+using Microsoft.ML.Data;
+
+using Org.BouncyCastle.Crypto.Engines;
 
 namespace Aki32Utilities.ConsoleAppUtilities.AI.CheatSheet;
 public partial class MLNetExampleSummary : MLNetHandler
@@ -103,6 +108,13 @@ public partial class MLNetExampleSummary : MLNetHandler
                 {
                     var predictor = Context.Model.CreatePredictionEngine<B002_IrisInput, B002_IrisOutput>(Model);
 
+                    Dictionary<float, string> KeyToIrisFlowers = new()
+                    {
+                        { 0, "setosa" },
+                        { 1, "versicolor" },
+                        { 2, "virginica" }
+                    };
+
                     var samples = new B002_IrisInput[]
                     {
                        B002_IrisSampe.Iris1,
@@ -110,23 +122,16 @@ public partial class MLNetExampleSummary : MLNetHandler
                        B002_IrisSampe.Iris3,
                     };
 
-                    Dictionary<float, string> IrisFlowers = new()
-                    {
-                        { 0, "setosa" },
-                        { 1, "versicolor" },
-                        { 2, "virginica" }
-                    };
-
                     foreach (var sample in samples)
                     {
                         var result = predictor.Predict(sample);
 
                         Console.WriteLine(@$"=======================================================");
-                        Console.WriteLine($"Answer: {IrisFlowers[(int)sample.Label]}");
-                        Console.WriteLine($"Prediction: {IrisFlowers[(int)result.PredictedLabel]}");
+                        Console.WriteLine($"Answer: {KeyToIrisFlowers[(int)sample.Label]}");
+                        Console.WriteLine($"Prediction: {KeyToIrisFlowers[(int)result.PredictedLabel]}");
                         Console.WriteLine($"Probabilities:");
                         for (int i = 0; i < result.Score.Length; i++)
-                            Console.WriteLine($"  {IrisFlowers[i],10}: {result.Score[i],-10:F4}");
+                            Console.WriteLine($"  {KeyToIrisFlowers[i],10}: {result.Score[i],-10:F4}");
 
                         Console.WriteLine();
                     }
@@ -136,8 +141,13 @@ public partial class MLNetExampleSummary : MLNetHandler
                 }
 
             case MLNetExampleScenario.B003_MultiClassClassification_MNIST:
+            case MLNetExampleScenario.B777_MultiClassClassification_Auto_MNIST:
                 {
                     var predictor = Context.Model.CreatePredictionEngine<B003_MnistInput, B003_MnistOutput>(Model);
+
+                    var keyValues = default(VBuffer<float>);
+                    Model.GetOutputSchema(ModelInputSchema)["Label"].GetKeyValues(ref keyValues);
+                    var NumbersToKey = keyValues.Items().ToDictionary(x => (int)x.Value, x => x.Key);
 
                     var samples = new B003_MnistInput[]
                     {
@@ -154,8 +164,7 @@ public partial class MLNetExampleSummary : MLNetHandler
                         Console.WriteLine(@$"Answer: {sample.Number}");
                         Console.WriteLine(@$"Prediction: {result.PredictedLabel}");
                         for (int i = 0; i < result.Score.Length; i++)
-                            Console.WriteLine(@$"  {i}: {result.Score[i]:F4}");
-
+                            Console.WriteLine(@$"  {i}: {result.Score[NumbersToKey[i]]:F4}");
                         Console.WriteLine();
                     }
                     Console.WriteLine(@$"=======================================================");
@@ -362,7 +371,6 @@ public partial class MLNetExampleSummary : MLNetHandler
 
             // not implemented
             case MLNetExampleScenario.B001_MultiClassClassification_IssuesClassification:
-            case MLNetExampleScenario.B777_MultiClassClassification_Auto_MNIST:
             case MLNetExampleScenario.C003_Recommendation_MovieRecommender_FieldAwareFactorizationMachines:
             case MLNetExampleScenario.C777_Auto_Recommendation:
             case MLNetExampleScenario.D001_Regression_PricePrediction:

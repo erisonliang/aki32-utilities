@@ -8,6 +8,7 @@ using Aki32Utilities.ConsoleAppUtilities.General;
 using static Microsoft.ML.TrainCatalogBase;
 using Microsoft.ML.AutoML;
 using DocumentFormat.OpenXml.Wordprocessing;
+using System.Linq;
 
 namespace Aki32Utilities.ConsoleAppUtilities.AI;
 public static class ConsoleExtension
@@ -184,7 +185,7 @@ public static class ConsoleExtension
     public static void PrintMetricsInOneLine(int index, RunDetail runDetail)
     {
         //var trainerName = runDetail.TrainerName;
-        var trainerName = runDetail.TrainerName.Split("=>").Last();
+        var trainerName = runDetail.TrainerName.Split("=>").Where(x => x != "Unknown").LastOrDefault();
         var runtimeInSeconds = runDetail.RuntimeInSeconds;
         var message = "";
 

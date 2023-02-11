@@ -812,9 +812,11 @@ public static partial class ExampleExecuter
             {
                 var baseDir_101_XA001 = $@"{baseDir_101}\XA001 MLNetExampleSummary";
 
-                new MLNetExampleSummary(MLNetExampleScenario.A777_BinaryClassification_Auto_SentimentAnalysis, new DirectoryInfo(baseDir_101_XA001))
-                //.RunPrediction();
-                .RunAll();
+                var runner = new MLNetExampleSummary(MLNetExampleScenario.B777_MultiClassClassification_Auto_MNIST, new DirectoryInfo(baseDir_101_XA001));
+                //runner.ExperimentTime_InSeconds = 60;
+                //runner.RunPrediction();
+                runner.RunAll();
+
 
             }
 
