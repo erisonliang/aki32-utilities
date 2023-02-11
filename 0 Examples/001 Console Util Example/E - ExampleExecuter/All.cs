@@ -810,11 +810,11 @@ public static partial class ExampleExecuter
 
             // XA001 - CheatSheet - MLNetExampleSummary
             {
-                //var baseDir_101_XA001 = $@"{baseDir_101}\XA001 MLNetExampleSummary";
+                var baseDir_101_XA001 = $@"{baseDir_101}\XA001 MLNetExampleSummary";
 
-                //new MLNetExampleSummary(MLNetExampleScenario.I004_ObjectDetection_ONNXModelScoring_TinyYoloV2_08, new DirectoryInfo(baseDir_101_XA001))
-                ////.RunPrediction();
-                //.RunAll();
+                new MLNetExampleSummary(MLNetExampleScenario.A777_BinaryClassification_Auto_SentimentAnalysis, new DirectoryInfo(baseDir_101_XA001))
+                //.RunPrediction();
+                .RunAll();
 
             }
 

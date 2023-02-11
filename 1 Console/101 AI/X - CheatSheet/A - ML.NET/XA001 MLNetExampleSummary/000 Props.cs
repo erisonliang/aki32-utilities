@@ -27,6 +27,11 @@ public partial class MLNetExampleSummary : MLNetHandler
     public IDataView TrainData { get; set; }
 
 
+    // ★★★★★★★★★★★★★★★ specific
+
+    public uint ExperimentTime = 60;
+
+
     // ★★★★★★★★★★★★★★★ 
 
 }

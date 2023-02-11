@@ -9,9 +9,9 @@ public partial class MLNetExampleSummary : MLNetHandler
 
         switch (Scenario)
         {
-            case MLNetExampleScenario.A002_Spam_Detection:
+            case MLNetExampleScenario.A002_BinaryClassification_SpamDetection:
                 {
-                    var crossValMetrics = Context.MulticlassClassification.CrossValidate(data: (targetData ?? AllData), estimator: PipeLine, numberOfFolds: 5);
+                    var crossValMetrics = Context.MulticlassClassification.CrossValidate(data: (targetData ?? AllData), estimator: PipeLineHead, numberOfFolds: 5);
                     ConsoleExtension.PrintMetrics(crossValMetrics);
 
                     break;

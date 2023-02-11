@@ -36,7 +36,7 @@ public partial class MLNetExampleSummary : MLNetHandler
         switch (Scenario)
         {
             // normal download
-            case MLNetExampleScenario.A001_Sentiment_Analysis:
+            case MLNetExampleScenario.A001_BinaryClassification_SentimentAnalysis:
                 {
                     var allDataFile = DataDir.GetChildFileInfo("Sentiment.tsv");
                     ModelFile = DataDir.GetChildFileInfo("Sentiment-Model.zip");
@@ -51,7 +51,7 @@ public partial class MLNetExampleSummary : MLNetHandler
                 }
 
             // zip
-            case MLNetExampleScenario.A002_Spam_Detection:
+            case MLNetExampleScenario.A002_BinaryClassification_SpamDetection:
                 {
                     var allDataFile = DataDir.GetChildFileInfo("Spam.tsv");
                     ModelFile = DataDir.GetChildFileInfo("Spam-Model.zip");
@@ -66,7 +66,7 @@ public partial class MLNetExampleSummary : MLNetHandler
                     break;
                 }
 
-            case MLNetExampleScenario.A003_CreditCardFraudDetection:
+            case MLNetExampleScenario.A003_BinaryClassification_CreditCardFraudDetection:
                 {
                     var allDataFile = DataDir.GetChildFileInfo("Transaction.csv");
                     ModelFile = DataDir.GetChildFileInfo("Transaction-Model.zip");
@@ -81,7 +81,7 @@ public partial class MLNetExampleSummary : MLNetHandler
                     break;
                 }
 
-            case MLNetExampleScenario.A004_HeartDiseasePrediction:
+            case MLNetExampleScenario.A004_BinaryClassification_HeartDiseasePrediction:
                 {
                     var trainDataFile = DataDir.GetChildFileInfo("Heart-Train.csv");
                     var trainDataUri = new Uri("https://raw.githubusercontent.com/dotnet/machinelearning-samples/main/samples/csharp/getting-started/BinaryClassification_HeartDiseaseDetection/HeartDiseaseDetection/Data/HeartTraining.csv");
@@ -98,7 +98,24 @@ public partial class MLNetExampleSummary : MLNetHandler
                     break;
                 }
 
-            case MLNetExampleScenario.B002_IrisFlowersClassification:
+            case MLNetExampleScenario.A777_BinaryClassification_Auto_SentimentAnalysis:
+                {
+                    var trainDataFile = DataDir.GetChildFileInfo("Sentiment-Train.tsv");
+                    var trainDataUri = new Uri("https://github.com/dotnet/machinelearning-samples/raw/main/datasets/wikipedia-detox-250-line-data.tsv");
+                    DownloadDataFile(trainDataUri, trainDataFile);
+                    TrainData = Context.Data.LoadFromTextFile<A777_AutoSentimentInput>(trainDataFile.FullName, hasHeader: true);
+
+                    var testDataFile = DataDir.GetChildFileInfo("Sentiment-Test.tsv");
+                    var testDataUri = new Uri("https://github.com/dotnet/machinelearning-samples/raw/main/datasets/wikipedia-detox-250-line-test.tsv");
+                    DownloadDataFile(testDataUri, testDataFile);
+                    TestData = Context.Data.LoadFromTextFile<A777_AutoSentimentInput>(testDataFile.FullName, hasHeader: true);
+
+                    ModelFile = DataDir.GetChildFileInfo("Sentiment-Model.zip");
+
+                    break;
+                }
+
+            case MLNetExampleScenario.B002_MultiClassClassification_IrisFlowersClassification:
                 {
                     var allDataFile = DataDir.GetChildFileInfo("Iris.txt");
                     ModelFile = DataDir.GetChildFileInfo("Iris-Model.zip");
@@ -113,7 +130,7 @@ public partial class MLNetExampleSummary : MLNetHandler
                 }
 
             // many features, the same type ((!)Trying 2 types of reading way)
-            case MLNetExampleScenario.B003_MNIST:
+            case MLNetExampleScenario.B003_MultiClassClassification_MNIST:
                 {
                     var trainDataFile = DataDir.GetChildFileInfo("MNIST-Train.csv");
                     var trainDataUri = new Uri("https://raw.githubusercontent.com/dotnet/machinelearning-samples/main/samples/csharp/getting-started/MulticlassClassification_MNIST/MNIST/Data/optdigits-train.csv");
@@ -138,7 +155,7 @@ public partial class MLNetExampleSummary : MLNetHandler
                     break;
                 }
 
-            case MLNetExampleScenario.C001_ProductRecommendation:
+            case MLNetExampleScenario.C001_Recommendation_ProductRecommender:
                 {
                     var allDataFile = DataDir.GetChildFileInfo("Product.txt");
                     ModelFile = DataDir.GetChildFileInfo("Product-Model.zip");
@@ -161,7 +178,7 @@ public partial class MLNetExampleSummary : MLNetHandler
                     break;
                 }
 
-            case MLNetExampleScenario.C002_MovieRecommender_MatrixFactorization:
+            case MLNetExampleScenario.C002_Recommendation_MovieRecommender_MatrixFactorization:
                 {
                     var movieDataFile = DataDir.GetChildFileInfo("Movie.csv");
                     var movieDataUri = new Uri("https://raw.githubusercontent.com/dotnet/machinelearning-samples/main/samples/csharp/getting-started/MatrixFactorization_MovieRecommendation/Data/recommendation-movies.csv");
@@ -183,16 +200,16 @@ public partial class MLNetExampleSummary : MLNetHandler
                 }
 
             // ONNX
-            case MLNetExampleScenario.I004_ObjectDetection_ONNXModelScoring_TinyYoloV2_08:
-            case MLNetExampleScenario.I004_ObjectDetection_ONNXModelScoring_YoloV2_09:
-            case MLNetExampleScenario.I004_ObjectDetection_ONNXModelScoring_YoloV3_10:
+            case MLNetExampleScenario.I004_ComputerVision_ObjectDetection_ImportONNXModel_TinyYoloV2_08:
+            case MLNetExampleScenario.I004_ComputerVision_ObjectDetection_ImportONNXModel_YoloV2_09:
+            case MLNetExampleScenario.I004_ComputerVision_ObjectDetection_ImportONNXModel_YoloV3_10:
                 {
                     // yolo model is available here https://github.com/onnx/models/tree/main/vision/object_detection_segmentation
 
                     switch (Scenario)
                     {
                         // for tinyyolov2-8.onnx
-                        case MLNetExampleScenario.I004_ObjectDetection_ONNXModelScoring_TinyYoloV2_08:
+                        case MLNetExampleScenario.I004_ComputerVision_ObjectDetection_ImportONNXModel_TinyYoloV2_08:
                             {
                                 ModelFile = DataDir.GetChildDirectoryInfo("Model").GetChildFileInfo("tinyyolov2-8.onnx");
                                 var modelUri = new Uri("https://github.com/onnx/models/raw/main/vision/object_detection_segmentation/tiny-yolov2/model/tinyyolov2-8.onnx");
@@ -200,7 +217,7 @@ public partial class MLNetExampleSummary : MLNetHandler
                             }
                             break;
                         // for yolov2-coco-9.onnx
-                        case MLNetExampleScenario.I004_ObjectDetection_ONNXModelScoring_YoloV2_09:
+                        case MLNetExampleScenario.I004_ComputerVision_ObjectDetection_ImportONNXModel_YoloV2_09:
                             {
                                 ModelFile = DataDir.GetChildDirectoryInfo("Model").GetChildFileInfo("yolov2-coco-9.onnx");
                                 var modelUri = new Uri("https://github.com/onnx/models/raw/main/vision/object_detection_segmentation/yolov2-coco/model/yolov2-coco-9.onnx");
@@ -208,7 +225,7 @@ public partial class MLNetExampleSummary : MLNetHandler
                             }
                             break;
                         // for yolov3-10.onnx
-                        case MLNetExampleScenario.I004_ObjectDetection_ONNXModelScoring_YoloV3_10:
+                        case MLNetExampleScenario.I004_ComputerVision_ObjectDetection_ImportONNXModel_YoloV3_10:
                             {
                                 ModelFile = DataDir.GetChildDirectoryInfo("Model").GetChildFileInfo("yolov3-10.onnx");
                                 var modelUri = new Uri("https://github.com/onnx/models/blob/main/vision/object_detection_segmentation/yolov3/model/yolov3-10.onnx");
@@ -228,7 +245,8 @@ public partial class MLNetExampleSummary : MLNetHandler
                     break;
                 }
 
-                // ignore
+            // ignore
+            case MLNetExampleScenario.Z999_Ignore:
                 {
                     Console.WriteLine("ignore");
 
@@ -236,33 +254,32 @@ public partial class MLNetExampleSummary : MLNetHandler
                 }
 
             // not implemented
-            case MLNetExampleScenario.A777_Auto:
-            case MLNetExampleScenario.B777_Auto:
-            case MLNetExampleScenario.C003_MovieRecommender_FieldAwareFactorizationMachines:
-            case MLNetExampleScenario.C777_Auto:
-            case MLNetExampleScenario.D001_PricePrediction:
-            case MLNetExampleScenario.D002_SalesForecasting_Regression:
-            case MLNetExampleScenario.D003_DemandPrediction:
-            case MLNetExampleScenario.D777_Auto:
-            case MLNetExampleScenario.E001_SalesForecasting_TimeSeries:
-            case MLNetExampleScenario.F001_SalesSpikeDetection:
-            case MLNetExampleScenario.F002_PowerAnomalyDetection:
-            case MLNetExampleScenario.F003_CreditCardFraudDetection:
-            case MLNetExampleScenario.G001_CustomerSegmentation:
-            case MLNetExampleScenario.G002_IrisFlowersClustering:
-            case MLNetExampleScenario.H001_RankSearchEngineResults:
-            case MLNetExampleScenario.I001_ImageClassificationTraining_HighLevelAPI:
-            case MLNetExampleScenario.I002_ImageClassificationPredictions_PretrainedTensorFlowModelScoring:
-            case MLNetExampleScenario.I003_ImageClassificationTraining_TensorFlowFeaturizerEstimator:
-            case MLNetExampleScenario.J001_ScalableModelOnWebAPI:
-            case MLNetExampleScenario.J002_ScalableModelOnRazorWebApp:
-            case MLNetExampleScenario.J003_ScalableModelOnAzureFunctions:
-            case MLNetExampleScenario.J004_ScalableModelOnBlazorWebApp:
-            case MLNetExampleScenario.J005_LargeDatasets:
-            case MLNetExampleScenario.J006_LoadingDataWithDatabaseLoader:
-            case MLNetExampleScenario.J007_LoadingDataWithLoadFromEnumerable:
-            case MLNetExampleScenario.J008_ModelExplainability:
-            case MLNetExampleScenario.J009_ExportToONNX:
+            case MLNetExampleScenario.B777_MultiClassClassification_Auto_MNIST:
+            case MLNetExampleScenario.C003_Recommendation_MovieRecommender_FieldAwareFactorizationMachines:
+            case MLNetExampleScenario.C777_Auto_Recommendation:
+            case MLNetExampleScenario.D001_Regression_PricePrediction:
+            case MLNetExampleScenario.D002_Regression_SalesForecasting:
+            case MLNetExampleScenario.D003_Regression_DemandPrediction:
+            case MLNetExampleScenario.D777_Regression_Auto_TaxiFarePrediction:
+            case MLNetExampleScenario.E001_TimeSeriesForecasting_SalesForecasting:
+            case MLNetExampleScenario.F001_AnomalyDetection_SalesSpikeDetection:
+            case MLNetExampleScenario.F002_AnomalyDetection_PowerAnomalyDetection:
+            case MLNetExampleScenario.F003_AnomalyDetection_CreditCardFraudDetection:
+            case MLNetExampleScenario.G001_Clustering_CustomerSegmentation:
+            case MLNetExampleScenario.G002_Clustering_IrisFlowerClustering:
+            case MLNetExampleScenario.H001_Ranking_RankSearchEngineResults:
+            case MLNetExampleScenario.I001_ComputerVision_ImageClassificationTraining_HighLevelAPI:
+            case MLNetExampleScenario.I002_ComputerVision_ImageClassificationPredictions_PretrainedTensorFlowModelScoring:
+            case MLNetExampleScenario.I003_ComputerVision_ImageClassificationTraining_TensorFlowFeaturizerEstimator:
+            case MLNetExampleScenario.J001_CrossCuttingScenarios_ScalableModelOnWebAPI:
+            case MLNetExampleScenario.J002_CrossCuttingScenarios_ScalableModelOnRazorWebApp:
+            case MLNetExampleScenario.J003_CrossCuttingScenarios_ScalableModelOnAzureFunctions:
+            case MLNetExampleScenario.J004_CrossCuttingScenarios_ScalableModelOnBlazorWebApp:
+            case MLNetExampleScenario.J005_CrossCuttingScenarios_LargeDatasets:
+            case MLNetExampleScenario.J006_CrossCuttingScenarios_LoadingDataWithDatabaseLoader:
+            case MLNetExampleScenario.J007_CrossCuttingScenarios_LoadingDataWithLoadFromEnumerable:
+            case MLNetExampleScenario.J008_CrossCuttingScenarios_ModelExplainability:
+            case MLNetExampleScenario.J009_CrossCuttingScenarios_ExportToONNX:
             case MLNetExampleScenario.K777_Auto:
             default:
                 {
@@ -270,7 +287,7 @@ public partial class MLNetExampleSummary : MLNetHandler
                 }
 
             // not going to implement
-            case MLNetExampleScenario.B001_IssuesClassification:
+            case MLNetExampleScenario.B001_MultiClassClassification_IssuesClassification:
                 {
                     throw new NotImplementedException();
                 }
