@@ -1,7 +1,4 @@
-﻿
-
-using Microsoft.ML.Data;
-using Microsoft.ML;
+﻿using Microsoft.ML.Data;
 
 namespace Aki32Utilities.ConsoleAppUtilities.AI.CheatSheet;
 public partial class MLNetExampleSummary : MLNetHandler
@@ -12,6 +9,8 @@ public partial class MLNetExampleSummary : MLNetHandler
 
         switch (Scenario)
         {
+            // ★★★★★ general
+
             // for BinaryClassification
             case MLNetExampleScenario.A001_BinaryClassification_SentimentAnalysis:
             case MLNetExampleScenario.A003_BinaryClassification_CreditCardFraudDetection:
@@ -48,6 +47,49 @@ public partial class MLNetExampleSummary : MLNetHandler
                     var predictedTestData = Model.Transform(TestData);
                     predictedTestData.WriteToConsole();
                     var metrics = Context.Regression.Evaluate(predictedTestData);
+                    ConsoleExtension.PrintMetrics(metrics);
+
+                    break;
+                }
+
+            // for AnomalyDetection (Specific)
+            case MLNetExampleScenario.F002_AnomalyDetection_PowerAnomalyDetection:
+                {
+                    var predictedTestData = Model.Transform(TestData);
+                    predictedTestData.WriteToConsole();
+
+                    // Getting the data of the newly created column as an IEnumerable
+                    var predictions = Context.Data.CreateEnumerable<F002_PowerMeterOutput>(predictedTestData, false);
+
+                    var colTime = TestData.GetColumn<DateTime>("time").ToArray();
+                    var colCDN = TestData.GetColumn<float>("Label").ToArray();
+
+                    // Output the input data and predictions
+                    Console.WriteLine("======Displaying anomalies in the Power meter data=========");
+                    Console.WriteLine("Date              \tReadingDiff\tAlert\tScore\tP-Value");
+
+                    int i = 0;
+                    foreach (var p in predictions)
+                    {
+                        var message = $"{colTime[i]}\t{colCDN[i]:0.0000}\t{p.Prediction[0]:0.00}\t{p.Prediction[1]:0.00}\t{p.Prediction[2]:0.00}";
+
+                        if (p.Prediction[0] == 1)
+                            General.ConsoleExtension.WriteLineWithColor(message, ConsoleColor.Black, ConsoleColor.Yellow);
+                        else
+                            Console.WriteLine(message, ConsoleColor.Black, ConsoleColor.Yellow);
+
+                        i++;
+                    }
+
+                    break;
+                }
+
+            // for AnomalyDetection
+            case MLNetExampleScenario.F003_AnomalyDetection_CreditCardFraudDetection:
+                {
+                    var predictedTestData = Model.Transform(TestData);
+                    predictedTestData.WriteToConsole();
+                    var metrics = Context.AnomalyDetection.Evaluate(predictedTestData);
                     ConsoleExtension.PrintMetrics(metrics);
 
                     break;
@@ -95,8 +137,6 @@ public partial class MLNetExampleSummary : MLNetHandler
             case MLNetExampleScenario.D003_Regression_DemandPrediction:
             case MLNetExampleScenario.E001_TimeSeriesForecasting_SalesForecasting:
             case MLNetExampleScenario.F001_AnomalyDetection_SalesSpikeDetection:
-            case MLNetExampleScenario.F002_AnomalyDetection_PowerAnomalyDetection:
-            case MLNetExampleScenario.F003_AnomalyDetection_CreditCardFraudDetection:
             case MLNetExampleScenario.G001_Clustering_CustomerSegmentation:
             case MLNetExampleScenario.I001_ComputerVision_ImageClassificationTraining_HighLevelAPI:
             case MLNetExampleScenario.I002_ComputerVision_ImageClassificationPredictions_PretrainedTensorFlowModelScoring:

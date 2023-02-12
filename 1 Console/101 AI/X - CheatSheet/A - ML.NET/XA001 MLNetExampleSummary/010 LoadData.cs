@@ -1,6 +1,4 @@
-﻿using System.Net;
-
-using Aki32Utilities.ConsoleAppUtilities.General;
+﻿using Aki32Utilities.ConsoleAppUtilities.General;
 
 using Microsoft.ML;
 using Microsoft.ML.Data;
@@ -47,6 +45,7 @@ public partial class MLNetExampleSummary : MLNetHandler
                 }
 
             case MLNetExampleScenario.A003_BinaryClassification_CreditCardFraudDetection:
+            case MLNetExampleScenario.F003_AnomalyDetection_CreditCardFraudDetection:
                 {
                     var allDataFile = DataDir.GetChildFileInfo("Transaction.csv");
                     ModelFile = DataDir.GetChildFileInfo("Transaction-Model.zip");
@@ -55,7 +54,18 @@ public partial class MLNetExampleSummary : MLNetHandler
                     var uri = new Uri("https://github.com/dotnet/machinelearning-samples/blob/main/samples/csharp/getting-started/BinaryClassification_CreditCardFraudDetection/CCFraudDetection.Trainer/assets/input/creditcardfraud-dataset.zip?raw=true");
                     DownloadAndExtractZipDataFile(uri, targetFileLocationAfterExtracted, allDataFile);
 
-                    AllData = Context.Data.LoadFromTextFile<A003_TransactionInput>(allDataFile.FullName, hasHeader: true, separatorChar: ',');
+                    switch (Scenario)
+                    {
+                        case MLNetExampleScenario.A003_BinaryClassification_CreditCardFraudDetection:
+                            AllData = Context.Data.LoadFromTextFile<A003_TransactionInput>(allDataFile.FullName, hasHeader: true, separatorChar: ',');
+                            break;
+                        case MLNetExampleScenario.F003_AnomalyDetection_CreditCardFraudDetection:
+                            AllData = Context.Data.LoadFromTextFile<F003_TransactionInput>(allDataFile.FullName, hasHeader: true, separatorChar: ',');
+                            break;
+                        default:
+                            break;
+                    }
+
                     SplitData();
 
                     break;
@@ -195,6 +205,21 @@ public partial class MLNetExampleSummary : MLNetHandler
                     break;
                 }
 
+            case MLNetExampleScenario.F002_AnomalyDetection_PowerAnomalyDetection:
+                {
+                    var allDataFile = DataDir.GetChildFileInfo("PowerMeter.csv");
+                    ModelFile = DataDir.GetChildFileInfo("PowerMeter-Model.zip");
+
+                    var uri = new Uri("https://github.com/dotnet/machinelearning-samples/raw/main/samples/csharp/getting-started/AnomalyDetection_PowerMeterReadings/PowerAnomalyDetection/Data/power-export_min.csv");
+                    DownloadDataFile(uri, allDataFile);
+
+                    AllData = Context.Data.LoadFromTextFile<F002_PowerMeterInput>(allDataFile.FullName, hasHeader: true, separatorChar: ',');
+                    TestData = AllData;
+                    TrainData = AllData;
+
+                    break;
+                }
+
             case MLNetExampleScenario.H001_Ranking_RankSearchEngineResults:
                 {
                     {
@@ -287,8 +312,6 @@ public partial class MLNetExampleSummary : MLNetHandler
             case MLNetExampleScenario.D003_Regression_DemandPrediction:
             case MLNetExampleScenario.E001_TimeSeriesForecasting_SalesForecasting:
             case MLNetExampleScenario.F001_AnomalyDetection_SalesSpikeDetection:
-            case MLNetExampleScenario.F002_AnomalyDetection_PowerAnomalyDetection:
-            case MLNetExampleScenario.F003_AnomalyDetection_CreditCardFraudDetection:
             case MLNetExampleScenario.G001_Clustering_CustomerSegmentation:
             case MLNetExampleScenario.I001_ComputerVision_ImageClassificationTraining_HighLevelAPI:
             case MLNetExampleScenario.I002_ComputerVision_ImageClassificationPredictions_PretrainedTensorFlowModelScoring:

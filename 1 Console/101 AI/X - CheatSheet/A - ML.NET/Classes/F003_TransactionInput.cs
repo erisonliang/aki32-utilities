@@ -1,7 +1,7 @@
 ﻿using Microsoft.ML.Data;
 
 namespace Aki32Utilities.ConsoleAppUtilities.AI.CheatSheet;
-public class A003_TransactionInput
+public class F003_TransactionInput
 {
     // Note we're not loading the 'Time' column, since que don't need it as a feature
     [LoadColumn(0), ColumnName("ExcludingColumn")]
@@ -95,7 +95,7 @@ public class A003_TransactionInput
     public float Amount;
 
     [LoadColumn(30)]
-    public bool Label;
+    public float Label;
 
     public void PrintToConsole()
     {

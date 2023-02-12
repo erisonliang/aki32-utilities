@@ -396,6 +396,8 @@ public partial class MLNetExampleSummary : MLNetHandler
             // ignore
             case MLNetExampleScenario.A003_BinaryClassification_CreditCardFraudDetection:
             case MLNetExampleScenario.A777_BinaryClassification_Auto_SentimentAnalysis:
+            case MLNetExampleScenario.F002_AnomalyDetection_PowerAnomalyDetection:
+            case MLNetExampleScenario.F003_AnomalyDetection_CreditCardFraudDetection:
             case MLNetExampleScenario.H001_Ranking_RankSearchEngineResults:
             case MLNetExampleScenario.Z999_Ignore:
                 {
@@ -412,8 +414,6 @@ public partial class MLNetExampleSummary : MLNetHandler
             case MLNetExampleScenario.D003_Regression_DemandPrediction:
             case MLNetExampleScenario.E001_TimeSeriesForecasting_SalesForecasting:
             case MLNetExampleScenario.F001_AnomalyDetection_SalesSpikeDetection:
-            case MLNetExampleScenario.F002_AnomalyDetection_PowerAnomalyDetection:
-            case MLNetExampleScenario.F003_AnomalyDetection_CreditCardFraudDetection:
             case MLNetExampleScenario.G001_Clustering_CustomerSegmentation:
             case MLNetExampleScenario.I001_ComputerVision_ImageClassificationTraining_HighLevelAPI:
             case MLNetExampleScenario.I002_ComputerVision_ImageClassificationPredictions_PretrainedTensorFlowModelScoring:

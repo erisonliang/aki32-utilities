@@ -159,6 +159,49 @@ public partial class MLNetExampleSummary : MLNetHandler
                     break;
                 }
 
+            case MLNetExampleScenario.F002_AnomalyDetection_PowerAnomalyDetection:
+                {
+                    ConnectNode(Context.Transforms.DetectSpikeBySsa(
+                        outputColumnName: nameof(F002_PowerMeterOutput.Prediction),
+                        inputColumnName: "Label",
+                        confidence: 98d,
+                        pvalueHistoryLength: 30,
+                        trainingWindowSize: 90,
+                        seasonalityWindowSize: 30));
+
+                    break;
+                }
+
+            case MLNetExampleScenario.F003_AnomalyDetection_CreditCardFraudDetection:
+                {
+                    // ★ for multiple label, many features 
+                    var featureColumnNames = AllData.Schema.AsQueryable()
+                        .Select(column => column.Name)
+                        .Where(name => name != "ExcludingColumn")
+                        .Where(name => name != "IdPreservationColumn")
+                        .Where(name => name != "Label")
+                        .ToArray();
+                    ConnectNode(Context.Transforms.Concatenate("Features", featureColumnNames));
+                    ConnectNode(Context.Transforms.DropColumns(new string[] { "ExcludingColumn" }));
+                    ConnectNode(Context.Transforms.NormalizeMeanVariance("NormalizedFeatures", "Features"));
+
+                    var options = new RandomizedPcaTrainer.Options
+                    {
+                        FeatureColumnName = "NormalizedFeatures",   // The name of the feature column. The column data must be a known-sized vector of Single.
+                        ExampleWeightColumnName = null,             // The name of the example weight column (optional). To use the weight column, the column data must be of type Single.
+                        Rank = 28,                                  // The number of components in the PCA.
+                        Oversampling = 20,                          // Oversampling parameter for randomized PCA training.
+                        EnsureZeroMean = true,                      // If enabled, data is centered to be zero mean.
+                        Seed = 1                                    // The seed for random number generation.
+                    };
+
+                    ConnectNode(Context.AnomalyDetection.Trainers.RandomizedPca(options: options));
+
+                    TrainData = Context.Data.FilterRowsByColumn(TrainData, nameof(A003_TransactionInput.Label), lowerBound: 0, upperBound: 1);
+
+                    break;
+                }
+
             case MLNetExampleScenario.G002_Clustering_IrisFlowerClustering:
                 {
                     ConnectNode(Context.Transforms.Conversion.MapValueToKey("Label"));
@@ -246,8 +289,6 @@ public partial class MLNetExampleSummary : MLNetHandler
             case MLNetExampleScenario.D003_Regression_DemandPrediction:
             case MLNetExampleScenario.E001_TimeSeriesForecasting_SalesForecasting:
             case MLNetExampleScenario.F001_AnomalyDetection_SalesSpikeDetection:
-            case MLNetExampleScenario.F002_AnomalyDetection_PowerAnomalyDetection:
-            case MLNetExampleScenario.F003_AnomalyDetection_CreditCardFraudDetection:
             case MLNetExampleScenario.G001_Clustering_CustomerSegmentation:
             case MLNetExampleScenario.I001_ComputerVision_ImageClassificationTraining_HighLevelAPI:
             case MLNetExampleScenario.I002_ComputerVision_ImageClassificationPredictions_PretrainedTensorFlowModelScoring:
