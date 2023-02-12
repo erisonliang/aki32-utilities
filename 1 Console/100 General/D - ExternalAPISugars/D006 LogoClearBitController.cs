@@ -1,8 +1,4 @@
-﻿using System.Collections.Specialized;
-using System.Net;
-using System.Text;
-
-using Aki32Utilities.ConsoleAppUtilities.General;
+﻿
 
 namespace Aki32Utilities.ConsoleAppUtilities.General;
 public class LogoClearBitController
@@ -18,12 +14,12 @@ public class LogoClearBitController
     /// <summary>
     /// download logo file from https://logo.clearbit.com
     /// </summary>
-    public static async Task<bool> DownloadWebSiteLogoAsync(Uri targetSite, FileInfo outputFile)
+    public static async Task<bool> DownloadWebSiteLogoAsync(string targetSiteString, FileInfo outputFile)
     {
         try
         {
             // request
-            await TargetUri(targetSite.ToString())
+            await TargetUri(targetSiteString)
                 .DownloadFileAsync(outputFile);
         }
         catch (Exception)
