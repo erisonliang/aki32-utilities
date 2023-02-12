@@ -140,6 +140,7 @@ public partial class MLNetExampleSummary : MLNetHandler
                     break;
                 }
 
+            // retain values from keys
             case MLNetExampleScenario.B003_MultiClassClassification_MNIST:
             case MLNetExampleScenario.B777_MultiClassClassification_Auto_MNIST:
                 {
@@ -355,6 +356,43 @@ public partial class MLNetExampleSummary : MLNetHandler
                     break;
                 }
 
+            // for cluster
+            case MLNetExampleScenario.G002_Clustering_IrisFlowerClustering:
+                {
+                    var predictor = Context.Model.CreatePredictionEngine<B002_IrisInput, G002_IrisOutput>(Model);
+
+                    Dictionary<float, string> KeyToIrisFlowers = new()
+                    {
+                        { 0, "setosa" },
+                        { 1, "versicolor" },
+                        { 2, "virginica" }
+                    };
+
+                    var samples = new B002_IrisInput[]
+                    {
+                       B002_IrisSampe.Iris1,
+                       B002_IrisSampe.Iris2,
+                       B002_IrisSampe.Iris3,
+                    };
+
+                    foreach (var sample in samples)
+                    {
+                        var result = predictor.Predict(sample);
+
+                        Console.WriteLine(@$"=======================================================");
+                        Console.WriteLine($"Answer: {KeyToIrisFlowers[(int)sample.Label]}");
+                        Console.WriteLine($"Predicted Cluster Id: {result.PredictedLabel}");
+                        Console.WriteLine($"Distances:");
+                        for (int i = 0; i < result.Score.Length; i++)
+                            Console.WriteLine($"  {i + 1,10}: {result.Score[i],-10:F4}");
+
+                        Console.WriteLine();
+                    }
+                    Console.WriteLine(@$"=======================================================");
+
+                    break;
+                }
+
             // ignore
             case MLNetExampleScenario.A003_BinaryClassification_CreditCardFraudDetection:
             case MLNetExampleScenario.A777_BinaryClassification_Auto_SentimentAnalysis:
@@ -377,7 +415,6 @@ public partial class MLNetExampleSummary : MLNetHandler
             case MLNetExampleScenario.F002_AnomalyDetection_PowerAnomalyDetection:
             case MLNetExampleScenario.F003_AnomalyDetection_CreditCardFraudDetection:
             case MLNetExampleScenario.G001_Clustering_CustomerSegmentation:
-            case MLNetExampleScenario.G002_Clustering_IrisFlowerClustering:
             case MLNetExampleScenario.I001_ComputerVision_ImageClassificationTraining_HighLevelAPI:
             case MLNetExampleScenario.I002_ComputerVision_ImageClassificationPredictions_PretrainedTensorFlowModelScoring:
             case MLNetExampleScenario.I003_ComputerVision_ImageClassificationTraining_TensorFlowFeaturizerEstimator:

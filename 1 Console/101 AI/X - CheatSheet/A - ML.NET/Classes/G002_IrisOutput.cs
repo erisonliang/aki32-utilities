@@ -1,8 +1,8 @@
 ﻿
 
 namespace Aki32Utilities.ConsoleAppUtilities.AI.CheatSheet;
-public class B002_IrisOutput
+public class G002_IrisOutput
 {
-    public float PredictedLabel;
+    public uint PredictedLabel;
     public float[] Score;
 }

@@ -53,6 +53,17 @@ public partial class MLNetExampleSummary : MLNetHandler
                     break;
                 }
 
+            // for Clustering
+            case MLNetExampleScenario.G002_Clustering_IrisFlowerClustering:
+                {
+                    var predictedTestData = Model.Transform(TestData);
+                    predictedTestData.WriteToConsole();
+                    var metrics = Context.Clustering.Evaluate(predictedTestData);
+                    ConsoleExtension.PrintMetrics(metrics);
+
+                    break;
+                }
+
             // for Ranking
             case MLNetExampleScenario.H001_Ranking_RankSearchEngineResults:
                 {
@@ -87,7 +98,6 @@ public partial class MLNetExampleSummary : MLNetHandler
             case MLNetExampleScenario.F002_AnomalyDetection_PowerAnomalyDetection:
             case MLNetExampleScenario.F003_AnomalyDetection_CreditCardFraudDetection:
             case MLNetExampleScenario.G001_Clustering_CustomerSegmentation:
-            case MLNetExampleScenario.G002_Clustering_IrisFlowerClustering:
             case MLNetExampleScenario.I001_ComputerVision_ImageClassificationTraining_HighLevelAPI:
             case MLNetExampleScenario.I002_ComputerVision_ImageClassificationPredictions_PretrainedTensorFlowModelScoring:
             case MLNetExampleScenario.I003_ComputerVision_ImageClassificationTraining_TensorFlowFeaturizerEstimator:

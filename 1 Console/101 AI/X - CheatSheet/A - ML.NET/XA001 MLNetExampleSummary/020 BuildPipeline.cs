@@ -84,7 +84,6 @@ public partial class MLNetExampleSummary : MLNetHandler
                     ConnectNode(Context.Transforms.Concatenate("Features", nameof(B002_IrisInput.SepalLength), nameof(B002_IrisInput.SepalWidth), nameof(B002_IrisInput.PetalLength), nameof(B002_IrisInput.PetalWidth)));
                     ConnectCheckPoint();
                     ConnectNode(Context.MulticlassClassification.Trainers.SdcaMaximumEntropy());
-                    ConnectNode(Context.Transforms.Conversion.MapKeyToValue("Label"));
                     ConnectNode(Context.Transforms.Conversion.MapKeyToValue("PredictedLabel"));
 
                     break;
@@ -160,6 +159,16 @@ public partial class MLNetExampleSummary : MLNetHandler
                     break;
                 }
 
+            case MLNetExampleScenario.G002_Clustering_IrisFlowerClustering:
+                {
+                    ConnectNode(Context.Transforms.Conversion.MapValueToKey("Label"));
+                    ConnectNode(Context.Transforms.Concatenate("Features", nameof(B002_IrisInput.SepalLength), nameof(B002_IrisInput.SepalWidth), nameof(B002_IrisInput.PetalLength), nameof(B002_IrisInput.PetalWidth)));
+                    ConnectNode(Context.Clustering.Trainers.KMeans(numberOfClusters: 3));
+                    //ConnectNode(Context.Transforms.Conversion.MapKeyToValue("PredictedLabel"));
+
+                    break;
+                }
+
             case MLNetExampleScenario.H001_Ranking_RankSearchEngineResults:
                 {
                     var featureCols = TrainData.Schema.AsQueryable()
@@ -229,8 +238,6 @@ public partial class MLNetExampleSummary : MLNetHandler
                     break;
                 }
 
-
-
             // not implemented
             case MLNetExampleScenario.B001_MultiClassClassification_IssuesClassification:
             case MLNetExampleScenario.C003_Recommendation_MovieRecommender_FieldAwareFactorizationMachines:
@@ -242,7 +249,6 @@ public partial class MLNetExampleSummary : MLNetHandler
             case MLNetExampleScenario.F002_AnomalyDetection_PowerAnomalyDetection:
             case MLNetExampleScenario.F003_AnomalyDetection_CreditCardFraudDetection:
             case MLNetExampleScenario.G001_Clustering_CustomerSegmentation:
-            case MLNetExampleScenario.G002_Clustering_IrisFlowerClustering:
             case MLNetExampleScenario.I001_ComputerVision_ImageClassificationTraining_HighLevelAPI:
             case MLNetExampleScenario.I002_ComputerVision_ImageClassificationPredictions_PretrainedTensorFlowModelScoring:
             case MLNetExampleScenario.I003_ComputerVision_ImageClassificationTraining_TensorFlowFeaturizerEstimator:

@@ -21,6 +21,7 @@ public partial class MLNetExampleSummary : MLNetHandler
             case MLNetExampleScenario.C001_Recommendation_ProductRecommender:
             case MLNetExampleScenario.C002_Recommendation_MovieRecommender_MatrixFactorization:
             case MLNetExampleScenario.D001_Regression_PricePrediction:
+            case MLNetExampleScenario.G002_Clustering_IrisFlowerClustering:
             case MLNetExampleScenario.H001_Ranking_RankSearchEngineResults:
                 {
                     Console.WriteLine($"fitting...");
@@ -115,7 +116,6 @@ public partial class MLNetExampleSummary : MLNetHandler
             case MLNetExampleScenario.F002_AnomalyDetection_PowerAnomalyDetection:
             case MLNetExampleScenario.F003_AnomalyDetection_CreditCardFraudDetection:
             case MLNetExampleScenario.G001_Clustering_CustomerSegmentation:
-            case MLNetExampleScenario.G002_Clustering_IrisFlowerClustering:
             case MLNetExampleScenario.I001_ComputerVision_ImageClassificationTraining_HighLevelAPI:
             case MLNetExampleScenario.I002_ComputerVision_ImageClassificationPredictions_PretrainedTensorFlowModelScoring:
             case MLNetExampleScenario.I003_ComputerVision_ImageClassificationTraining_TensorFlowFeaturizerEstimator:

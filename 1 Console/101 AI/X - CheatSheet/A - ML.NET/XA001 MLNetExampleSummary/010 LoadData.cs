@@ -83,6 +83,7 @@ public partial class MLNetExampleSummary : MLNetHandler
                 }
 
             case MLNetExampleScenario.B002_MultiClassClassification_IrisFlowersClassification:
+            case MLNetExampleScenario.G002_Clustering_IrisFlowerClustering:
                 {
                     var allDataFile = DataDir.GetChildFileInfo("Iris.txt");
                     ModelFile = DataDir.GetChildFileInfo("Iris-Model.zip");
@@ -289,7 +290,6 @@ public partial class MLNetExampleSummary : MLNetHandler
             case MLNetExampleScenario.F002_AnomalyDetection_PowerAnomalyDetection:
             case MLNetExampleScenario.F003_AnomalyDetection_CreditCardFraudDetection:
             case MLNetExampleScenario.G001_Clustering_CustomerSegmentation:
-            case MLNetExampleScenario.G002_Clustering_IrisFlowerClustering:
             case MLNetExampleScenario.I001_ComputerVision_ImageClassificationTraining_HighLevelAPI:
             case MLNetExampleScenario.I002_ComputerVision_ImageClassificationPredictions_PretrainedTensorFlowModelScoring:
             case MLNetExampleScenario.I003_ComputerVision_ImageClassificationTraining_TensorFlowFeaturizerEstimator:
