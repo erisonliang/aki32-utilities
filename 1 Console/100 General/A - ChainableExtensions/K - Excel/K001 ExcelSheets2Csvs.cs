@@ -53,7 +53,7 @@ public static partial class ChainableExtensions
     /// <returns></returns>
     public static DirectoryInfo ExcelSheets2Csvs_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir)
         => inputDir.Loop(outputDir, (inF, outF) => inF.ExcelSheets2Csvs(outF.Directory!, includeExcelFileName: true),
-            searchRegexen: GetRegexen_XmlExcelFiles()
+            searchRegexen: GetRegexen_XmlTypedExcelFiles()
             );
 
 }

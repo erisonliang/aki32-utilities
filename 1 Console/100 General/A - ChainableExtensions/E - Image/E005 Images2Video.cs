@@ -41,7 +41,7 @@ public static partial class ChainableExtensions
 
         // main
         var imageFiles = inputDir
-            .GetFilesWithRegexen(SearchOption.TopDirectoryOnly, GetRegexen_ImageFiles())
+            .GetFiles_Images()
             .Sort()
             .ToArray();
 

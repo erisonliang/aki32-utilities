@@ -114,7 +114,7 @@ public static partial class ChainableExtensions
         return regexen.ToArray();
     }
 
-    public static string[] GetRegexen_XmlExcelFiles(
+    public static string[] GetRegexen_XmlTypedExcelFiles(
         bool xlsx = true,
         bool xlsm = true,
         bool xltx = true,

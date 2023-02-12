@@ -95,7 +95,7 @@ public static partial class ChainableExtensions
 
 
         // main
-        var firstImageFile = inputDir.GetFilesWithRegexen(SearchOption.TopDirectoryOnly, GetRegexen_ImageFiles()).FirstOrDefault();
+        var firstImageFile = inputDir.GetFiles_Images().FirstOrDefault();
         if (firstImageFile == null)
             return outputDir!;
 
@@ -134,7 +134,7 @@ public static partial class ChainableExtensions
 
         // main
         var inputImageFiles = inputDir
-            .GetFilesWithRegexen(SearchOption.TopDirectoryOnly, GetRegexen_ImageFiles())
+            .GetFiles_Images()
             .Sort();
 
         if (!inputImageFiles.Any())
