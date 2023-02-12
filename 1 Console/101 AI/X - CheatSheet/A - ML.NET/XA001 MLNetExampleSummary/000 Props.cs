@@ -20,6 +20,11 @@ public partial class MLNetExampleSummary : MLNetHandler
     public FileInfo ModelFile { get; set; }
 
 
+    // ★★★★★★★★★★★★★★★ specific
+
+    public int SpikeDitectionSize = 36;
+
+
     // ★★★★★★★★★★★★★★★ 
 
 }

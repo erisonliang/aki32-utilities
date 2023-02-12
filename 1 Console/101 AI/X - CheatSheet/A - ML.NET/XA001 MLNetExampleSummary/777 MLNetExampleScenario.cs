@@ -23,7 +23,7 @@ public enum MLNetExampleScenario
     C777_Auto_Recommendation,
 
     // D    Regression
-    D001_Regression_PricePrediction,
+    D001_Regression_TaxiFarePrediction,
     D002_Regression_SalesForecasting,
     D003_Regression_DemandPrediction,
     D777_Regression_Auto_TaxiFarePrediction,
@@ -32,7 +32,8 @@ public enum MLNetExampleScenario
     E001_TimeSeriesForecasting_SalesForecasting,
 
     // F    Anomaly Detection
-    F001_AnomalyDetection_SalesSpikeDetection,
+    F001_AnomalyDetection_SalesSpikeDetection_DetectIidSpike,
+    F001_AnomalyDetection_SalesSpikeDetection_DetectIidChangePoint,
     F002_AnomalyDetection_PowerAnomalyDetection,
     F003_AnomalyDetection_CreditCardFraudDetection,
 

@@ -812,7 +812,7 @@ public static partial class ExampleExecuter
             {
                 var baseDir_101_XA001 = $@"{baseDir_101}\XA001 MLNetExampleSummary";
 
-                var runner = new MLNetExampleSummary(MLNetExampleScenario.F002_AnomalyDetection_PowerAnomalyDetection, new DirectoryInfo(baseDir_101_XA001));
+                var runner = new MLNetExampleSummary(MLNetExampleScenario.F001_AnomalyDetection_SalesSpikeDetection_DetectIidChangePoint, new DirectoryInfo(baseDir_101_XA001));
                 //runner.ExperimentTime_InSeconds = 60;
                 //runner.RunPrediction();
                 runner.RunAll();

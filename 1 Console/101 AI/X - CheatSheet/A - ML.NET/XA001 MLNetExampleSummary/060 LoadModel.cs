@@ -21,8 +21,10 @@ public partial class MLNetExampleSummary : MLNetHandler
             case MLNetExampleScenario.B777_MultiClassClassification_Auto_MNIST:
             case MLNetExampleScenario.C001_Recommendation_ProductRecommender:
             case MLNetExampleScenario.C002_Recommendation_MovieRecommender_MatrixFactorization:
-            case MLNetExampleScenario.D001_Regression_PricePrediction:
+            case MLNetExampleScenario.D001_Regression_TaxiFarePrediction:
             case MLNetExampleScenario.D777_Regression_Auto_TaxiFarePrediction:
+            case MLNetExampleScenario.F001_AnomalyDetection_SalesSpikeDetection_DetectIidSpike:
+            case MLNetExampleScenario.F001_AnomalyDetection_SalesSpikeDetection_DetectIidChangePoint:
             case MLNetExampleScenario.F002_AnomalyDetection_PowerAnomalyDetection:
             case MLNetExampleScenario.F003_AnomalyDetection_CreditCardFraudDetection:
             case MLNetExampleScenario.G002_Clustering_IrisFlowerClustering:
@@ -51,7 +53,6 @@ public partial class MLNetExampleSummary : MLNetHandler
             case MLNetExampleScenario.D002_Regression_SalesForecasting:
             case MLNetExampleScenario.D003_Regression_DemandPrediction:
             case MLNetExampleScenario.E001_TimeSeriesForecasting_SalesForecasting:
-            case MLNetExampleScenario.F001_AnomalyDetection_SalesSpikeDetection:
             case MLNetExampleScenario.G001_Clustering_CustomerSegmentation:
             case MLNetExampleScenario.I001_ComputerVision_ImageClassificationTraining_HighLevelAPI:
             case MLNetExampleScenario.I002_ComputerVision_ImageClassificationPredictions_PretrainedTensorFlowModelScoring:

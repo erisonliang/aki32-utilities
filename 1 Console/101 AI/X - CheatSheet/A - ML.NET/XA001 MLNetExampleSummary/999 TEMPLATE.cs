@@ -22,12 +22,12 @@ public partial class MLNetExampleSummary : MLNetHandler
             case MLNetExampleScenario.C002_Recommendation_MovieRecommender_MatrixFactorization:
             case MLNetExampleScenario.C003_Recommendation_MovieRecommender_FieldAwareFactorizationMachines:
             case MLNetExampleScenario.C777_Auto_Recommendation:
-            case MLNetExampleScenario.D001_Regression_PricePrediction:
+            case MLNetExampleScenario.D001_Regression_TaxiFarePrediction:
             case MLNetExampleScenario.D002_Regression_SalesForecasting:
             case MLNetExampleScenario.D003_Regression_DemandPrediction:
             case MLNetExampleScenario.D777_Regression_Auto_TaxiFarePrediction:
             case MLNetExampleScenario.E001_TimeSeriesForecasting_SalesForecasting:
-            case MLNetExampleScenario.F001_AnomalyDetection_SalesSpikeDetection:
+            case MLNetExampleScenario.F001_AnomalyDetection_SalesSpikeDetection_DetectIidSpike:
             case MLNetExampleScenario.F002_AnomalyDetection_PowerAnomalyDetection:
             case MLNetExampleScenario.F003_AnomalyDetection_CreditCardFraudDetection:
             case MLNetExampleScenario.G001_Clustering_CustomerSegmentation:

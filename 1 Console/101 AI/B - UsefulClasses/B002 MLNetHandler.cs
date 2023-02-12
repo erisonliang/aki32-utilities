@@ -51,17 +51,15 @@ public class MLNetHandler
         }
     }
 
-    public void SplitData(double testFraction = 0.2)
-    {
-        var split = Context.Data.TrainTestSplit(AllData, testFraction);
-        TrainData = split.TrainSet;
-        TestData = split.TestSet;
-    }
-
-    public (IDataView, IDataView) SplitData(IDataView splittingData, double testFraction = 0.2)
+    public (IDataView trainSet, IDataView testSet) SplitData(IDataView splittingData, double testFraction = 0.2)
     {
         var split = Context.Data.TrainTestSplit(splittingData, testFraction);
         return (split.TrainSet, split.TestSet);
+    }
+
+    public void SplitData(double testFraction = 0.3)
+    {
+        (TrainData, TestData) = SplitData(AllData, testFraction);
     }
 
     public IDataView CombineData<T>(params IDataView[] dataViews) where T : class, new()

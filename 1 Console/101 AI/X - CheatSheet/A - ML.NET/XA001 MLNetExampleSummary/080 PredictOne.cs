@@ -235,7 +235,7 @@ public partial class MLNetExampleSummary : MLNetHandler
                     break;
                 }
 
-            case MLNetExampleScenario.D001_Regression_PricePrediction:
+            case MLNetExampleScenario.D001_Regression_TaxiFarePrediction:
             case MLNetExampleScenario.D777_Regression_Auto_TaxiFarePrediction:
                 {
                     var predictor = Context.Model.CreatePredictionEngine<D001_TaxiFareInput, D001_TaxiFareOutput>(Model);
@@ -255,6 +255,134 @@ public partial class MLNetExampleSummary : MLNetHandler
                         Console.WriteLine();
                     }
                     Console.WriteLine(@$"=======================================================");
+
+                    break;
+                }
+
+            // for AnomalyDetection (Specific)
+            case MLNetExampleScenario.F001_AnomalyDetection_SalesSpikeDetection_DetectIidSpike:
+                {
+                    var predictedTestData = Model.Transform(TestData);
+                    predictedTestData.WriteToConsole();
+
+                    // Getting the data of the newly created column as an IEnumerable
+                    var predictions = Context.Data.CreateEnumerable<F001_ProductSalesOutput>(predictedTestData, false);
+
+                    Console.WriteLine(@$"=======================================================");
+                    Console.WriteLine("Alert\tScore\tP-Value");
+                    int i = 0;
+                    foreach (var p in predictions)
+                    {
+                        var message = $"{p.Prediction[0]}\t{p.Prediction[1]:0.00}\t{p.Prediction[2]:0.00}";
+
+                        if (p.Prediction[0] == 1)
+                            General.ConsoleExtension.WriteLineWithColor($"{message} <-- alert is on", ConsoleColor.Black, ConsoleColor.Yellow);
+                        else
+                            Console.WriteLine(message, ConsoleColor.Black, ConsoleColor.Yellow);
+
+                        i++;
+                    }
+
+                    break;
+                }
+
+            // for AnomalyDetection (Specific)
+            case MLNetExampleScenario.F001_AnomalyDetection_SalesSpikeDetection_DetectIidChangePoint:
+                {
+                    var predictedTestData = Model.Transform(TestData);
+                    predictedTestData.WriteToConsole();
+
+                    // Getting the data of the newly created column as an IEnumerable
+                    var predictions = Context.Data.CreateEnumerable<F001_ProductSalesOutput>(predictedTestData, false);
+
+                    Console.WriteLine(@$"=======================================================");
+                    Console.WriteLine($"{nameof(F001_ProductSalesOutput.Prediction)} column obtained post-transformation.");
+                    Console.WriteLine("Alert\tScore\tP-Value\tMartingale value");
+                    int i = 0;
+                    foreach (var p in predictions)
+                    {
+                        var message = $"{p.Prediction[0]}\t{p.Prediction[1]:0.00}\t{p.Prediction[2]:0.00}\t{p.Prediction[3]:0.00}";
+
+                        if (p.Prediction[0] == 1)
+                            General.ConsoleExtension.WriteLineWithColor($"{message} <-- alert is on, predicted changepoint", ConsoleColor.Black, ConsoleColor.Yellow);
+                        else
+                            Console.WriteLine(message, ConsoleColor.Black, ConsoleColor.Yellow);
+
+                        i++;
+                    }
+                    break;
+                }
+
+            // for AnomalyDetection (Specific)
+            case MLNetExampleScenario.F002_AnomalyDetection_PowerAnomalyDetection:
+                {
+                    var predictedTestData = Model.Transform(TestData);
+                    predictedTestData.WriteToConsole();
+
+                    // Getting the data of the newly created column as an IEnumerable
+                    var predictions = Context.Data.CreateEnumerable<F002_PowerMeterOutput>(predictedTestData, false);
+
+                    var data_Time = TestData.GetColumn<DateTime>("time").ToArray();
+                    var data_CDN = TestData.GetColumn<float>("Label").ToArray();
+
+                    // Output the input data and predictions
+                    Console.WriteLine(@$"=======================================================");
+                    Console.WriteLine("Displaying anomalies in the Power meter data");
+                    Console.WriteLine("Date              \tReadingDiff\tAlert\tScore\tP-Value");
+
+                    int i = 0;
+                    foreach (var p in predictions)
+                    {
+                        var message = $"{data_Time[i]}\t{data_CDN[i]:0.0000}\t{p.Prediction[0]:0.00}\t{p.Prediction[1]:0.00}\t{p.Prediction[2]:0.00}";
+
+                        if (p.Prediction[0] == 1)
+                            General.ConsoleExtension.WriteLineWithColor($"{message} <-- alert is on", ConsoleColor.Black, ConsoleColor.Yellow);
+                        else
+                            Console.WriteLine(message, ConsoleColor.Black, ConsoleColor.Yellow);
+
+                        i++;
+                    }
+
+                    break;
+                }
+
+            // for AnomalyDetection (Specific)
+            case MLNetExampleScenario.F003_AnomalyDetection_CreditCardFraudDetection:
+                {
+                    var displayingCount = 10;
+
+                    var predictor = Context.Model.CreatePredictionEngine<F003_TransactionInput, A003_TransactionOutput>(Model);
+
+                    Console.WriteLine($"Test {displayingCount} transactions, from the test data source, that should be predicted as fraud (true):");
+                    Context.Data.CreateEnumerable<F003_TransactionInput>(TestData, reuseRowObject: false)
+                                .Where(x => x.Label >= 0.5f)
+                                .Take(displayingCount)
+                                .ForEach(testData =>
+                                {
+                                    Console.WriteLine($"-------------------");
+                                    //testData.PrintToConsole();
+                                    predictor.Predict(testData).PrintToConsole();
+                                });
+
+                    Console.WriteLine($"-------------------");
+                    Console.WriteLine();
+                    Console.WriteLine();
+
+                    Console.WriteLine($"Test {displayingCount} transactions, from the test data source, that should NOT be predicted as fraud (false):");
+
+                    Context.Data.CreateEnumerable<F003_TransactionInput>(TestData, reuseRowObject: false)
+                               .Where(x => x.Label <= 0.5f)
+                               .Take(displayingCount)
+                               .ForEach(testData =>
+                               {
+                                   Console.WriteLine($"-------------------");
+                                   //testData.PrintToConsole();
+                                   predictor.Predict(testData).PrintToConsole();
+                               });
+
+                    Console.WriteLine($"-------------------");
+                    Console.WriteLine();
+                    Console.WriteLine();
 
                     break;
                 }
@@ -396,8 +524,6 @@ public partial class MLNetExampleSummary : MLNetHandler
             // ignore
             case MLNetExampleScenario.A003_BinaryClassification_CreditCardFraudDetection:
             case MLNetExampleScenario.A777_BinaryClassification_Auto_SentimentAnalysis:
-            case MLNetExampleScenario.F002_AnomalyDetection_PowerAnomalyDetection:
-            case MLNetExampleScenario.F003_AnomalyDetection_CreditCardFraudDetection:
             case MLNetExampleScenario.H001_Ranking_RankSearchEngineResults:
             case MLNetExampleScenario.Z999_Ignore:
                 {
@@ -413,7 +539,6 @@ public partial class MLNetExampleSummary : MLNetHandler
             case MLNetExampleScenario.D002_Regression_SalesForecasting:
             case MLNetExampleScenario.D003_Regression_DemandPrediction:
             case MLNetExampleScenario.E001_TimeSeriesForecasting_SalesForecasting:
-            case MLNetExampleScenario.F001_AnomalyDetection_SalesSpikeDetection:
             case MLNetExampleScenario.G001_Clustering_CustomerSegmentation:
             case MLNetExampleScenario.I001_ComputerVision_ImageClassificationTraining_HighLevelAPI:
             case MLNetExampleScenario.I002_ComputerVision_ImageClassificationPredictions_PretrainedTensorFlowModelScoring:

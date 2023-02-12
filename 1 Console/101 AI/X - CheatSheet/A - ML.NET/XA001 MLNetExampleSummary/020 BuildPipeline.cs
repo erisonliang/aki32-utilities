@@ -143,7 +143,7 @@ public partial class MLNetExampleSummary : MLNetHandler
                     break;
                 }
 
-            case MLNetExampleScenario.D001_Regression_PricePrediction:
+            case MLNetExampleScenario.D001_Regression_TaxiFarePrediction:
                 {
                     ConnectNode(Context.Transforms.Categorical.OneHotEncoding(outputColumnName: "VendorIdEncoded", inputColumnName: nameof(D001_TaxiFareInput.VendorId)));
                     ConnectNode(Context.Transforms.Categorical.OneHotEncoding(outputColumnName: "RateCodeEncoded", inputColumnName: nameof(D001_TaxiFareInput.RateCode)));
@@ -155,6 +155,28 @@ public partial class MLNetExampleSummary : MLNetHandler
                         "VendorIdEncoded", "RateCodeEncoded", "PaymentTypeEncoded", nameof(D001_TaxiFareInput.PassengerCount), nameof(D001_TaxiFareInput.TripTime), nameof(D001_TaxiFareInput.TripDistance))); ;
 
                     ConnectNode(Context.Regression.Trainers.Sdca(labelColumnName: "Label", featureColumnName: "Features"));
+
+                    break;
+                }
+
+            case MLNetExampleScenario.F001_AnomalyDetection_SalesSpikeDetection_DetectIidSpike:
+                {
+                    ConnectNode(Context.Transforms.DetectIidSpike(
+                        outputColumnName: nameof(F001_ProductSalesOutput.Prediction),
+                        inputColumnName: nameof(F001_ProductSalesInput.numSales),
+                        confidence: 95d,
+                        pvalueHistoryLength: SpikeDitectionSize / 4));
+
+                    break;
+                }
+
+            case MLNetExampleScenario.F001_AnomalyDetection_SalesSpikeDetection_DetectIidChangePoint:
+                {
+                    ConnectNode(Context.Transforms.DetectIidChangePoint(
+                        outputColumnName: nameof(F001_ProductSalesOutput.Prediction),
+                        inputColumnName: nameof(F001_ProductSalesInput.numSales),
+                        confidence: 95d,
+                        changeHistoryLength: SpikeDitectionSize / 4));
 
                     break;
                 }
@@ -189,15 +211,15 @@ public partial class MLNetExampleSummary : MLNetHandler
                     {
                         FeatureColumnName = "NormalizedFeatures",   // The name of the feature column. The column data must be a known-sized vector of Single.
                         ExampleWeightColumnName = null,             // The name of the example weight column (optional). To use the weight column, the column data must be of type Single.
-                        Rank = 28,                                  // The number of components in the PCA.
-                        Oversampling = 20,                          // Oversampling parameter for randomized PCA training.
+                        Rank = 22,                                  // The number of components in the PCA.
+                        Oversampling = 10,                          // Oversampling parameter for randomized PCA training.
                         EnsureZeroMean = true,                      // If enabled, data is centered to be zero mean.
                         Seed = 1                                    // The seed for random number generation.
                     };
 
                     ConnectNode(Context.AnomalyDetection.Trainers.RandomizedPca(options: options));
 
-                    TrainData = Context.Data.FilterRowsByColumn(TrainData, nameof(A003_TransactionInput.Label), lowerBound: 0, upperBound: 1);
+                    //TrainData = Context.Data.FilterRowsByColumn(TrainData, "Label", lowerBound: 0, upperBound: 1 + double.Epsilon);
 
                     break;
                 }
@@ -288,7 +310,6 @@ public partial class MLNetExampleSummary : MLNetHandler
             case MLNetExampleScenario.D002_Regression_SalesForecasting:
             case MLNetExampleScenario.D003_Regression_DemandPrediction:
             case MLNetExampleScenario.E001_TimeSeriesForecasting_SalesForecasting:
-            case MLNetExampleScenario.F001_AnomalyDetection_SalesSpikeDetection:
             case MLNetExampleScenario.G001_Clustering_CustomerSegmentation:
             case MLNetExampleScenario.I001_ComputerVision_ImageClassificationTraining_HighLevelAPI:
             case MLNetExampleScenario.I002_ComputerVision_ImageClassificationPredictions_PretrainedTensorFlowModelScoring:

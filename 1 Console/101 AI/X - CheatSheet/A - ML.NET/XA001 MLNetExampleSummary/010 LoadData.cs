@@ -189,7 +189,7 @@ public partial class MLNetExampleSummary : MLNetHandler
                     break;
                 }
 
-            case MLNetExampleScenario.D001_Regression_PricePrediction:
+            case MLNetExampleScenario.D001_Regression_TaxiFarePrediction:
             case MLNetExampleScenario.D777_Regression_Auto_TaxiFarePrediction:
                 {
                     var allDataFile = DataDir.GetChildFileInfo("TaxiFare.csv");
@@ -201,6 +201,22 @@ public partial class MLNetExampleSummary : MLNetHandler
                     AllData = Context.Data.LoadFromTextFile<D001_TaxiFareInput>(allDataFile.FullName, hasHeader: true, separatorChar: ',');
                     SplitData();
                     TrainData = Context.Data.FilterRowsByColumn(TrainData, "Label", lowerBound: 1, upperBound: 150);
+
+                    break;
+                }
+
+            case MLNetExampleScenario.F001_AnomalyDetection_SalesSpikeDetection_DetectIidSpike:
+            case MLNetExampleScenario.F001_AnomalyDetection_SalesSpikeDetection_DetectIidChangePoint:
+                {
+                    var allDataFile = DataDir.GetChildFileInfo("ProductSales.csv");
+                    ModelFile = DataDir.GetChildFileInfo("ProductSales-Model.zip");
+
+                    var uri = new Uri("https://github.com/dotnet/machinelearning-samples/raw/main/samples/csharp/getting-started/AnomalyDetection_Sales/SpikeDetection/Data/product-sales.csv");
+                    DownloadDataFile(uri, allDataFile);
+
+                    AllData = Context.Data.LoadFromTextFile<F001_ProductSalesInput>(allDataFile.FullName, hasHeader: true, separatorChar: ',');
+                    TestData = AllData;
+                    TrainData = AllData;
 
                     break;
                 }
@@ -311,7 +327,6 @@ public partial class MLNetExampleSummary : MLNetHandler
             case MLNetExampleScenario.D002_Regression_SalesForecasting:
             case MLNetExampleScenario.D003_Regression_DemandPrediction:
             case MLNetExampleScenario.E001_TimeSeriesForecasting_SalesForecasting:
-            case MLNetExampleScenario.F001_AnomalyDetection_SalesSpikeDetection:
             case MLNetExampleScenario.G001_Clustering_CustomerSegmentation:
             case MLNetExampleScenario.I001_ComputerVision_ImageClassificationTraining_HighLevelAPI:
             case MLNetExampleScenario.I002_ComputerVision_ImageClassificationPredictions_PretrainedTensorFlowModelScoring:

@@ -11,7 +11,7 @@ public partial class MLNetExampleSummary : MLNetHandler
 
         switch (Scenario)
         {
-            // fit
+            // simple fit
             case MLNetExampleScenario.A001_BinaryClassification_SentimentAnalysis:
             case MLNetExampleScenario.A002_BinaryClassification_SpamDetection:
             case MLNetExampleScenario.A003_BinaryClassification_CreditCardFraudDetection:
@@ -20,7 +20,8 @@ public partial class MLNetExampleSummary : MLNetHandler
             case MLNetExampleScenario.B003_MultiClassClassification_MNIST:
             case MLNetExampleScenario.C001_Recommendation_ProductRecommender:
             case MLNetExampleScenario.C002_Recommendation_MovieRecommender_MatrixFactorization:
-            case MLNetExampleScenario.D001_Regression_PricePrediction:
+            case MLNetExampleScenario.D001_Regression_TaxiFarePrediction:
+            case MLNetExampleScenario.F001_AnomalyDetection_SalesSpikeDetection_DetectIidSpike:
             case MLNetExampleScenario.F002_AnomalyDetection_PowerAnomalyDetection:
             case MLNetExampleScenario.F003_AnomalyDetection_CreditCardFraudDetection:
             case MLNetExampleScenario.G002_Clustering_IrisFlowerClustering:
@@ -28,19 +29,6 @@ public partial class MLNetExampleSummary : MLNetHandler
                 {
                     Console.WriteLine($"fitting...");
                     Model = PipeLineHead.Fit(targetData ?? TrainData);
-                    Console.WriteLine($"fitted");
-
-                    break;
-                }
-
-            // from ONNX, no ned for further fitting
-            case MLNetExampleScenario.I004_ComputerVision_ObjectDetection_ImportONNXModel_TinyYoloV2_08:
-            case MLNetExampleScenario.I004_ComputerVision_ObjectDetection_ImportONNXModel_YoloV2_09:
-            case MLNetExampleScenario.I004_ComputerVision_ObjectDetection_ImportONNXModel_YoloV3_10:
-                {
-                    Console.WriteLine($"fitting...");
-                    var emptyData = Context.Data.LoadFromEnumerable(new List<I004_YoloInput>());
-                    Model = PipeLineHead.Fit(emptyData);
                     Console.WriteLine($"fitted");
 
                     break;
@@ -63,6 +51,7 @@ public partial class MLNetExampleSummary : MLNetHandler
                     break;
                 }
 
+            // ★ Auto MultiClassClassification
             case MLNetExampleScenario.B777_MultiClassClassification_Auto_MNIST:
                 {
                     Console.WriteLine(@$"=======================================================");
@@ -79,6 +68,7 @@ public partial class MLNetExampleSummary : MLNetHandler
                     break;
                 }
 
+            // ★ Auto Regression
             case MLNetExampleScenario.D777_Regression_Auto_TaxiFarePrediction:
                 {
                     Console.WriteLine(@$"=======================================================");
@@ -95,6 +85,30 @@ public partial class MLNetExampleSummary : MLNetHandler
                     break;
                 }
 
+            // empty
+            case MLNetExampleScenario.F001_AnomalyDetection_SalesSpikeDetection_DetectIidChangePoint:
+                {
+                    Console.WriteLine($"fitting...");
+                    var emptyData = Context.Data.LoadFromEnumerable(new List<F001_ProductSalesInput>());
+                    Model = PipeLineHead.Fit(emptyData);
+                    Console.WriteLine($"fitted");
+
+                    break;
+                }
+
+            // from ONNX, no need for further fitting
+            case MLNetExampleScenario.I004_ComputerVision_ObjectDetection_ImportONNXModel_TinyYoloV2_08:
+            case MLNetExampleScenario.I004_ComputerVision_ObjectDetection_ImportONNXModel_YoloV2_09:
+            case MLNetExampleScenario.I004_ComputerVision_ObjectDetection_ImportONNXModel_YoloV3_10:
+                {
+                    Console.WriteLine($"fitting...");
+                    var emptyData = Context.Data.LoadFromEnumerable(new List<I004_YoloInput>());
+                    Model = PipeLineHead.Fit(emptyData);
+                    Console.WriteLine($"fitted");
+
+                    break;
+                }
+
             // ignore
             case MLNetExampleScenario.Z999_Ignore:
                 {
@@ -103,8 +117,8 @@ public partial class MLNetExampleSummary : MLNetHandler
                     break;
                 }
 
-                //var result = Context.Auto().CreateRecommendationExperiment.Execute(TrainData, progressHandler: handler);
-                //var result = Context.Auto().CreateRankingExperiment.Execute(TrainData, progressHandler: handler);
+            //var result = Context.Auto().CreateRecommendationExperiment.Execute(TrainData, progressHandler: handler);
+            //var result = Context.Auto().CreateRankingExperiment.Execute(TrainData, progressHandler: handler);
 
 
             // not implemented
@@ -114,7 +128,6 @@ public partial class MLNetExampleSummary : MLNetHandler
             case MLNetExampleScenario.D002_Regression_SalesForecasting:
             case MLNetExampleScenario.D003_Regression_DemandPrediction:
             case MLNetExampleScenario.E001_TimeSeriesForecasting_SalesForecasting:
-            case MLNetExampleScenario.F001_AnomalyDetection_SalesSpikeDetection:
             case MLNetExampleScenario.G001_Clustering_CustomerSegmentation:
             case MLNetExampleScenario.I001_ComputerVision_ImageClassificationTraining_HighLevelAPI:
             case MLNetExampleScenario.I002_ComputerVision_ImageClassificationPredictions_PretrainedTensorFlowModelScoring:

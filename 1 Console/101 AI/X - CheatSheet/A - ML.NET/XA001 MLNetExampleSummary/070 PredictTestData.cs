@@ -1,4 +1,8 @@
-﻿using Microsoft.ML.Data;
+﻿using Microsoft.ML.AutoML;
+using Microsoft.ML;
+using Microsoft.ML.Data;
+using System.Data;
+using Aki32Utilities.ConsoleAppUtilities.General;
 
 namespace Aki32Utilities.ConsoleAppUtilities.AI.CheatSheet;
 public partial class MLNetExampleSummary : MLNetHandler
@@ -41,45 +45,13 @@ public partial class MLNetExampleSummary : MLNetHandler
 
             // for Regression
             case MLNetExampleScenario.C002_Recommendation_MovieRecommender_MatrixFactorization:
-            case MLNetExampleScenario.D001_Regression_PricePrediction:
+            case MLNetExampleScenario.D001_Regression_TaxiFarePrediction:
             case MLNetExampleScenario.D777_Regression_Auto_TaxiFarePrediction:
                 {
                     var predictedTestData = Model.Transform(TestData);
                     predictedTestData.WriteToConsole();
                     var metrics = Context.Regression.Evaluate(predictedTestData);
                     ConsoleExtension.PrintMetrics(metrics);
-
-                    break;
-                }
-
-            // for AnomalyDetection (Specific)
-            case MLNetExampleScenario.F002_AnomalyDetection_PowerAnomalyDetection:
-                {
-                    var predictedTestData = Model.Transform(TestData);
-                    predictedTestData.WriteToConsole();
-
-                    // Getting the data of the newly created column as an IEnumerable
-                    var predictions = Context.Data.CreateEnumerable<F002_PowerMeterOutput>(predictedTestData, false);
-
-                    var colTime = TestData.GetColumn<DateTime>("time").ToArray();
-                    var colCDN = TestData.GetColumn<float>("Label").ToArray();
-
-                    // Output the input data and predictions
-                    Console.WriteLine("======Displaying anomalies in the Power meter data=========");
-                    Console.WriteLine("Date              \tReadingDiff\tAlert\tScore\tP-Value");
-
-                    int i = 0;
-                    foreach (var p in predictions)
-                    {
-                        var message = $"{colTime[i]}\t{colCDN[i]:0.0000}\t{p.Prediction[0]:0.00}\t{p.Prediction[1]:0.00}\t{p.Prediction[2]:0.00}";
-
-                        if (p.Prediction[0] == 1)
-                            General.ConsoleExtension.WriteLineWithColor(message, ConsoleColor.Black, ConsoleColor.Yellow);
-                        else
-                            Console.WriteLine(message, ConsoleColor.Black, ConsoleColor.Yellow);
-
-                        i++;
-                    }
 
                     break;
                 }
@@ -119,6 +91,9 @@ public partial class MLNetExampleSummary : MLNetHandler
 
             // ignore
             case MLNetExampleScenario.C001_Recommendation_ProductRecommender:
+            case MLNetExampleScenario.F001_AnomalyDetection_SalesSpikeDetection_DetectIidSpike:
+            case MLNetExampleScenario.F001_AnomalyDetection_SalesSpikeDetection_DetectIidChangePoint:
+            case MLNetExampleScenario.F002_AnomalyDetection_PowerAnomalyDetection:
             case MLNetExampleScenario.I004_ComputerVision_ObjectDetection_ImportONNXModel_TinyYoloV2_08:
             case MLNetExampleScenario.I004_ComputerVision_ObjectDetection_ImportONNXModel_YoloV2_09:
             case MLNetExampleScenario.I004_ComputerVision_ObjectDetection_ImportONNXModel_YoloV3_10:
@@ -136,7 +111,6 @@ public partial class MLNetExampleSummary : MLNetHandler
             case MLNetExampleScenario.D002_Regression_SalesForecasting:
             case MLNetExampleScenario.D003_Regression_DemandPrediction:
             case MLNetExampleScenario.E001_TimeSeriesForecasting_SalesForecasting:
-            case MLNetExampleScenario.F001_AnomalyDetection_SalesSpikeDetection:
             case MLNetExampleScenario.G001_Clustering_CustomerSegmentation:
             case MLNetExampleScenario.I001_ComputerVision_ImageClassificationTraining_HighLevelAPI:
             case MLNetExampleScenario.I002_ComputerVision_ImageClassificationPredictions_PretrainedTensorFlowModelScoring:
