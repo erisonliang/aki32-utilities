@@ -37,7 +37,8 @@ public class ConsoleExtension
     /// <param name="backgroud"></param>
     public static void WriteLineWithColor(object value, ConsoleColor foreground = ConsoleColor.Green, ConsoleColor backgroud = ConsoleColor.Black)
     {
-        WriteWithColor($"{value}\r\n", foreground, backgroud);
+        WriteWithColor($"{value}", foreground, backgroud);
+        Console.WriteLine();
     }
 
 }
