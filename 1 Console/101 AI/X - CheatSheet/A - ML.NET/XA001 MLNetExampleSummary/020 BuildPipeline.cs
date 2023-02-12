@@ -1,9 +1,9 @@
 ﻿using System.Data;
 
 using Microsoft.ML;
-using Microsoft.ML.Data;
 using Microsoft.ML.Trainers;
 using Microsoft.ML.Transforms;
+using Microsoft.ML.Vision;
 
 namespace Aki32Utilities.ConsoleAppUtilities.AI.CheatSheet;
 public partial class MLNetExampleSummary : MLNetHandler
@@ -250,6 +250,38 @@ public partial class MLNetExampleSummary : MLNetHandler
                     break;
                 }
 
+            case MLNetExampleScenario.I001_ComputerVision_ImageClassificationTraining_HighLevelAPI:
+                {
+                    //ConnectNode(Context.Transforms.Conversion.MapValueToKey("LabelAsKey", "Label", keyOrdinality: KeyOrdinality.ByValue));
+
+                    var options = new ImageClassificationTrainer.Options()
+                    {
+                        FeatureColumnName = "Image",
+                        LabelColumnName = "LabelAsKey",
+
+                        // Just by changing/selecting InceptionV3/MobilenetV2/ResnetV250
+                        // you can try a different DNN architecture (TensorFlow pre-trained model). 
+                        Arch = ImageClassificationTrainer.Architecture.ResnetV250,
+                        Epoch = 50,       //100
+                        BatchSize = 10,
+                        LearningRate = 0.01f,
+                        MetricsCallback = (metrics) => Console.WriteLine(metrics),
+                        ValidationSet = TestData
+                    };
+
+                    ConnectNode(Context.MulticlassClassification.Trainers.ImageClassification(options));
+
+                    // or simplly
+                    {
+                        //ConnectNode(Context.MulticlassClassification.Trainers.ImageClassification(
+                        //    featureColumnName: "Image", labelColumnName: "LabelAsKey", validationSet: TestData));
+                    }
+
+                    ConnectNode(Context.Transforms.Conversion.MapKeyToValue(outputColumnName: "PredictedLabel", inputColumnName: "PredictedLabel"));
+
+                    break;
+                }
+
             // by ONNX (check input/output name on Netron)
             case MLNetExampleScenario.I004_ComputerVision_ObjectDetection_ImportONNXModel_TinyYoloV2_08:
             case MLNetExampleScenario.I004_ComputerVision_ObjectDetection_ImportONNXModel_YoloV2_09:
@@ -311,7 +343,6 @@ public partial class MLNetExampleSummary : MLNetHandler
             case MLNetExampleScenario.D003_Regression_DemandPrediction:
             case MLNetExampleScenario.E001_TimeSeriesForecasting_SalesForecasting:
             case MLNetExampleScenario.G001_Clustering_CustomerSegmentation:
-            case MLNetExampleScenario.I001_ComputerVision_ImageClassificationTraining_HighLevelAPI:
             case MLNetExampleScenario.I002_ComputerVision_ImageClassificationPredictions_PretrainedTensorFlowModelScoring:
             case MLNetExampleScenario.I003_ComputerVision_ImageClassificationTraining_TensorFlowFeaturizerEstimator:
             case MLNetExampleScenario.J001_CrossCuttingScenarios_ScalableModelOnWebAPI:

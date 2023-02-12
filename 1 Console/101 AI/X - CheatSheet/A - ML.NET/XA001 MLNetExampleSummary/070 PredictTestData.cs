@@ -3,6 +3,7 @@ using Microsoft.ML;
 using Microsoft.ML.Data;
 using System.Data;
 using Aki32Utilities.ConsoleAppUtilities.General;
+using System.Diagnostics;
 
 namespace Aki32Utilities.ConsoleAppUtilities.AI.CheatSheet;
 public partial class MLNetExampleSummary : MLNetHandler
@@ -89,6 +90,22 @@ public partial class MLNetExampleSummary : MLNetHandler
                     break;
                 }
 
+            case MLNetExampleScenario.I001_ComputerVision_ImageClassificationTraining_HighLevelAPI:
+                {
+                    // Measuring time
+                    var watch = Stopwatch.StartNew();
+
+                    var predictedTestData = Model.Transform(TestData);
+                    predictedTestData.WriteToConsole();
+                    var metrics = Context.MulticlassClassification.Evaluate(predictedTestData, labelColumnName: "LabelAsKey", predictedLabelColumnName: "PredictedLabel");
+                    ConsoleExtension.PrintMetrics(metrics);
+
+                    watch.Stop();
+                    Console.WriteLine($"(took {watch.ElapsedMilliseconds / 1000} seconds)");
+
+                    break;
+                }
+
             // ignore
             case MLNetExampleScenario.C001_Recommendation_ProductRecommender:
             case MLNetExampleScenario.F001_AnomalyDetection_SalesSpikeDetection_DetectIidSpike:
@@ -112,7 +129,6 @@ public partial class MLNetExampleSummary : MLNetHandler
             case MLNetExampleScenario.D003_Regression_DemandPrediction:
             case MLNetExampleScenario.E001_TimeSeriesForecasting_SalesForecasting:
             case MLNetExampleScenario.G001_Clustering_CustomerSegmentation:
-            case MLNetExampleScenario.I001_ComputerVision_ImageClassificationTraining_HighLevelAPI:
             case MLNetExampleScenario.I002_ComputerVision_ImageClassificationPredictions_PretrainedTensorFlowModelScoring:
             case MLNetExampleScenario.I003_ComputerVision_ImageClassificationTraining_TensorFlowFeaturizerEstimator:
             case MLNetExampleScenario.J001_CrossCuttingScenarios_ScalableModelOnWebAPI:

@@ -30,6 +30,7 @@ public partial class MLNetExampleSummary : MLNetHandler
 
         // def
         Context = new MLContext(seed: 1);
+        Context.Log += FilterMLContextLog;
 
         // main
         LoadData();
@@ -51,6 +52,7 @@ public partial class MLNetExampleSummary : MLNetHandler
 
         // def
         Context = new MLContext(seed: 1);
+        Context.Log += FilterMLContextLog;
 
         // main
         LoadData();

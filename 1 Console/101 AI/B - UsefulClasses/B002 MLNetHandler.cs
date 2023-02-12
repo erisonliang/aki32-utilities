@@ -41,13 +41,22 @@ public class MLNetHandler
             uri.DownloadFile(targetDataFile);
     }
 
-    public void DownloadAndExtractZipDataFile(Uri uri, FileInfo targetFileLocationAfterExtracted, FileInfo targetDataFile)
+    public void DownloadAndExtractZipDataFile(Uri uri, FileInfo targetDataFile, FileInfo? targetFileLocationAfterExtracted = null)
     {
         if (!targetDataFile.Exists)
         {
             var zipDir = DataDir.GetChildDirectoryInfo("zip").CreateAndPipe();
             uri.DownloadFile(zipDir.GetChildFileInfo("downloaded.zip")).Decompress_Zip(zipDir);
-            targetFileLocationAfterExtracted.MoveTo(targetDataFile);
+            targetFileLocationAfterExtracted?.MoveTo(targetDataFile);
+        }
+    }
+    public void DownloadAndExtractZipDataFile(Uri uri, DirectoryInfo targetDataDir, DirectoryInfo? targetDirLocationAfterExtracted = null)
+    {
+        if (!targetDataDir.Exists)
+        {
+            targetDataDir.Create();
+            uri.DownloadFile(targetDataDir.GetChildFileInfo("downloaded.zip")).Decompress_Zip(targetDataDir);
+            targetDirLocationAfterExtracted?.MoveTo(targetDataDir, false);
         }
     }
 

@@ -387,6 +387,29 @@ public partial class MLNetExampleSummary : MLNetHandler
                     break;
                 }
 
+            case MLNetExampleScenario.I001_ComputerVision_ImageClassificationTraining_HighLevelAPI:
+                {
+                    var predictor = Context.Model.CreatePredictionEngine<I001_ImageInput, I001_ImageOutput>(Model);
+
+                    var dataDir = DataDir.GetChildDirectoryInfo("Images-Test");
+                    var samples = I001_ImageInput.LoadInMemoryImagesFromDirectory(dataDir, false);
+
+                    foreach (var sample in samples)
+                    {
+                        var result = predictor.Predict(sample);
+
+                        Console.WriteLine(@$"=======================================================");
+                        Console.WriteLine($"Image Filename : {sample.ImageFileName}");
+                        Console.WriteLine($"Scores : [{string.Join(", ", result.Score)}]");
+                        Console.WriteLine($"Predicted Label : {result.PredictedLabel}");
+
+                        Console.WriteLine();
+                    }
+                    Console.WriteLine(@$"=======================================================");
+
+                    break;
+                }
+
             case MLNetExampleScenario.I004_ComputerVision_ObjectDetection_ImportONNXModel_TinyYoloV2_08:
             case MLNetExampleScenario.I004_ComputerVision_ObjectDetection_ImportONNXModel_YoloV2_09:
             case MLNetExampleScenario.I004_ComputerVision_ObjectDetection_ImportONNXModel_YoloV3_10:
@@ -458,7 +481,7 @@ public partial class MLNetExampleSummary : MLNetHandler
                     }
 
                     var samples = imageDir
-                        .GetFilesWithRegexen(General.ChainableExtensions.GetRegexen_ImageFiles())
+                        .GetFiles_Images()
                         .Select(f => new I004_YoloInput { ImagePath = f.FullName, FileName = f.Name });
 
                     foreach (var sample in samples)
@@ -540,7 +563,6 @@ public partial class MLNetExampleSummary : MLNetHandler
             case MLNetExampleScenario.D003_Regression_DemandPrediction:
             case MLNetExampleScenario.E001_TimeSeriesForecasting_SalesForecasting:
             case MLNetExampleScenario.G001_Clustering_CustomerSegmentation:
-            case MLNetExampleScenario.I001_ComputerVision_ImageClassificationTraining_HighLevelAPI:
             case MLNetExampleScenario.I002_ComputerVision_ImageClassificationPredictions_PretrainedTensorFlowModelScoring:
             case MLNetExampleScenario.I003_ComputerVision_ImageClassificationTraining_TensorFlowFeaturizerEstimator:
             case MLNetExampleScenario.J001_CrossCuttingScenarios_ScalableModelOnWebAPI:
@@ -561,14 +583,3 @@ public partial class MLNetExampleSummary : MLNetHandler
     }
 
 }
-
-
-
-
-
-
-
-
-
-
-

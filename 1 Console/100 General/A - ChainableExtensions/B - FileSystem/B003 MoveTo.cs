@@ -15,7 +15,7 @@ public static partial class ChainableExtensions
         // preprocess
         if (outputDir is null)
             throw new ArgumentNullException(nameof(outputDir));
-        var outputParentDir = outputDir!.Parent; // abnormal, only for dir.MoveTo(dir) 
+        var outputParentDir = outputDir!.Parent; // outputDir will be created later 
         UtilPreprocessors.PreprocessOutDir(ref outputParentDir, null!);
 
 
@@ -23,9 +23,37 @@ public static partial class ChainableExtensions
         if (inputDir.FullName[0..3] == outputDir.FullName[0..3])
         {
             // use default MoveTo().
-            if (overwriteExistingDir && outputDir.Exists)
-                outputDir.Delete(true);
-            inputDir.MoveTo(outputDir.FullName);
+            if (!outputDir.Exists)
+            {
+                inputDir.MoveTo(outputDir.FullName);
+            }
+            else if (overwriteExistingDir)
+            {
+                if (outputDir.Exists)
+                    outputDir.Delete(true);
+                inputDir.MoveTo(outputDir.FullName);
+            }
+            else
+            {
+                // move inside files one by one to integrate
+                //foreach (var inputFile in inputDir.GetFiles("*", SearchOption.AllDirectories))
+                //{
+                //    var outputFile = new FileInfo(inputFile.FullName.Replace(inputDir.FullName, outputDir.FullName));
+                //    outputFile.Directory!.Create();
+                //    inputFile.MoveTo(outputFile);
+                //}
+
+                Loop(inputDir, outputDir, (inF, _) =>
+                {
+                    var outputFile = new FileInfo(inF.FullName.Replace(inputDir.FullName, outputDir.FullName));
+                    outputFile.Directory!.Create();
+                    inF.MoveTo(outputFile);
+                },
+                targetFilesOption: SearchOption.AllDirectories
+                );
+
+                inputDir.Delete(true);
+            }
         }
         else
         {

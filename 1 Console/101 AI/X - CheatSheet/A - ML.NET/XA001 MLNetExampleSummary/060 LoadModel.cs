@@ -29,6 +29,7 @@ public partial class MLNetExampleSummary : MLNetHandler
             case MLNetExampleScenario.F003_AnomalyDetection_CreditCardFraudDetection:
             case MLNetExampleScenario.G002_Clustering_IrisFlowerClustering:
             case MLNetExampleScenario.H001_Ranking_RankSearchEngineResults:
+            case MLNetExampleScenario.I001_ComputerVision_ImageClassificationTraining_HighLevelAPI:
                 {
                     Model = Context.Model.Load(ModelFile.FullName, out var inputSchema);
                     ModelInputSchema = inputSchema;
@@ -54,7 +55,6 @@ public partial class MLNetExampleSummary : MLNetHandler
             case MLNetExampleScenario.D003_Regression_DemandPrediction:
             case MLNetExampleScenario.E001_TimeSeriesForecasting_SalesForecasting:
             case MLNetExampleScenario.G001_Clustering_CustomerSegmentation:
-            case MLNetExampleScenario.I001_ComputerVision_ImageClassificationTraining_HighLevelAPI:
             case MLNetExampleScenario.I002_ComputerVision_ImageClassificationPredictions_PretrainedTensorFlowModelScoring:
             case MLNetExampleScenario.I003_ComputerVision_ImageClassificationTraining_TensorFlowFeaturizerEstimator:
             case MLNetExampleScenario.J001_CrossCuttingScenarios_ScalableModelOnWebAPI:

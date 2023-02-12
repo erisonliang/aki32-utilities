@@ -1,4 +1,6 @@
-﻿using Microsoft.ML;
+﻿using System.Diagnostics;
+
+using Microsoft.ML;
 using Microsoft.ML.AutoML;
 using Microsoft.ML.Data;
 
@@ -28,9 +30,10 @@ public partial class MLNetExampleSummary : MLNetHandler
             case MLNetExampleScenario.H001_Ranking_RankSearchEngineResults:
                 {
                     Console.WriteLine($"fitting...");
+                    var watch = Stopwatch.StartNew();
                     Model = PipeLineHead.Fit(targetData ?? TrainData);
-                    Console.WriteLine($"fitted");
-
+                    watch.Stop();
+                    Console.WriteLine($"fitted (took {watch.ElapsedMilliseconds / 1000} seconds)");
                     break;
                 }
 
@@ -96,6 +99,22 @@ public partial class MLNetExampleSummary : MLNetHandler
                     break;
                 }
 
+            // fit with watch
+            case MLNetExampleScenario.I001_ComputerVision_ImageClassificationTraining_HighLevelAPI:
+                {
+                    Console.WriteLine($"fitting...");
+                    Context.Log += FilterMLContextLog;
+                    var watch = Stopwatch.StartNew();
+                    Model = PipeLineHead.Fit(targetData ?? TrainData);
+                    watch.Stop();
+                    Console.WriteLine();
+                    Console.WriteLine($"Training with transfer learning took: {watch.ElapsedMilliseconds / 1000} seconds");
+                    Console.WriteLine();
+                    Console.WriteLine($"fitted");
+
+                    break;
+                }
+
             // from ONNX, no need for further fitting
             case MLNetExampleScenario.I004_ComputerVision_ObjectDetection_ImportONNXModel_TinyYoloV2_08:
             case MLNetExampleScenario.I004_ComputerVision_ObjectDetection_ImportONNXModel_YoloV2_09:
@@ -129,7 +148,6 @@ public partial class MLNetExampleSummary : MLNetHandler
             case MLNetExampleScenario.D003_Regression_DemandPrediction:
             case MLNetExampleScenario.E001_TimeSeriesForecasting_SalesForecasting:
             case MLNetExampleScenario.G001_Clustering_CustomerSegmentation:
-            case MLNetExampleScenario.I001_ComputerVision_ImageClassificationTraining_HighLevelAPI:
             case MLNetExampleScenario.I002_ComputerVision_ImageClassificationPredictions_PretrainedTensorFlowModelScoring:
             case MLNetExampleScenario.I003_ComputerVision_ImageClassificationTraining_TensorFlowFeaturizerEstimator:
             case MLNetExampleScenario.J001_CrossCuttingScenarios_ScalableModelOnWebAPI:

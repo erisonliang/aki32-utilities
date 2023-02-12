@@ -1,7 +1,11 @@
 ﻿using Aki32Utilities.ConsoleAppUtilities.General;
 
+using DocumentFormat.OpenXml.Vml;
+
 using Microsoft.ML;
 using Microsoft.ML.Data;
+
+using static Microsoft.ML.Transforms.ValueToKeyMappingEstimator;
 
 namespace Aki32Utilities.ConsoleAppUtilities.AI.CheatSheet;
 public partial class MLNetExampleSummary : MLNetHandler
@@ -32,11 +36,11 @@ public partial class MLNetExampleSummary : MLNetHandler
             case MLNetExampleScenario.A002_BinaryClassification_SpamDetection:
                 {
                     var allDataFile = DataDir.GetChildFileInfo("Spam.tsv");
-                    ModelFile = DataDir.GetChildFileInfo("Spam-Model.zip");
                     var targetFileLocationAfterExtracted = DataDir.GetChildDirectoryInfo("zip").GetChildFileInfo("SMSSpamCollection");
+                    ModelFile = DataDir.GetChildFileInfo("Spam-Model.zip");
 
                     var uri = new Uri("https://archive.ics.uci.edu/ml/machine-learning-databases/00228/smsspamcollection.zip");
-                    DownloadAndExtractZipDataFile(uri, targetFileLocationAfterExtracted, allDataFile);
+                    DownloadAndExtractZipDataFile(uri, allDataFile, targetFileLocationAfterExtracted);
 
                     AllData = Context.Data.LoadFromTextFile<A002_SpamInput>(allDataFile.FullName, hasHeader: false, separatorChar: '\t');
                     SplitData();
@@ -52,7 +56,7 @@ public partial class MLNetExampleSummary : MLNetHandler
                     var targetFileLocationAfterExtracted = DataDir.GetChildDirectoryInfo("zip").GetChildFileInfo("creditcard.csv");
 
                     var uri = new Uri("https://github.com/dotnet/machinelearning-samples/blob/main/samples/csharp/getting-started/BinaryClassification_CreditCardFraudDetection/CCFraudDetection.Trainer/assets/input/creditcardfraud-dataset.zip?raw=true");
-                    DownloadAndExtractZipDataFile(uri, targetFileLocationAfterExtracted, allDataFile);
+                    DownloadAndExtractZipDataFile(uri, allDataFile, targetFileLocationAfterExtracted);
 
                     switch (Scenario)
                     {
@@ -267,6 +271,61 @@ public partial class MLNetExampleSummary : MLNetHandler
                     break;
                 }
 
+            case MLNetExampleScenario.I001_ComputerVision_ImageClassificationTraining_HighLevelAPI:
+                {
+                    {
+                        var dataDir = DataDir.GetChildDirectoryInfo("Images");
+                        var targetFileLocationAfterExtracted = dataDir.GetChildDirectoryInfo("flower_photos_small_set");
+                        var dataUri = new Uri("https://github.com/dotnet/machinelearning-samples/blob/main/samples/csharp/getting-started/DeepLearning_ImageClassification_Training/ImageClassification.Train/assets/inputs/images/flower_photos_small_set.zip?raw=true");
+                        DownloadAndExtractZipDataFile(dataUri, dataDir, targetFileLocationAfterExtracted);
+
+                        //SINGLE FULL FLOWERS IMAGESET (3,600 files)
+                        //string url = $"http://download.tensorflow.org/example_images/flower_photos.tgz";
+                        //Compress.ExtractTGZ(Path.Join(imagesDownloadFolder, fileName), imagesDownloadFolder);
+
+
+                        var images = I001_ImageInput.LoadInMemoryImagesFromDirectory(dataDir, useFolderNameAsLabel: true);
+                        AllData = Context.Data.LoadFromEnumerable(images);
+                        AllData = Context.Data.ShuffleRows(AllData);
+                        //var a = AllData.Preview(int.MaxValue).RowView.Count();
+
+                        AllData = Context.Transforms.Conversion.MapValueToKey("LabelAsKey", "Label", keyOrdinality: KeyOrdinality.ByValue)
+                            .Fit(AllData)
+                            .Transform(AllData);
+                        //var b = AllData.Preview(int.MaxValue).RowView.Count();
+
+                        //AllData =
+                        //    Context.Transforms.Conversion.MapValueToKey("LabelAsKey", "Label", keyOrdinality: KeyOrdinality.ByValue)
+                        //    .Append(Context.Transforms.LoadRawImageBytes("Image", dataDir.FullName, "ImageFileName"))
+                        //    .Fit(AllData)
+                        //    .Transform(AllData);
+                        //var c = AllData.Preview(int.MaxValue).RowView.Count();
+
+                        SplitData();
+                    }
+                    {
+                        var dataDir = DataDir.GetChildDirectoryInfo("Images-Test").CreateAndPipe();
+
+                        {
+                            //var testDataFile = testDataDir.GetChildFileInfo("test1.png");
+                            var dataFile = dataDir.GetChildFileInfo("RareThreeSpiraledRose.png");
+                            var dataUri = new Uri("https://github.com/dotnet/machinelearning-samples/raw/main/samples/csharp/getting-started/DeepLearning_ImageClassification_Training/ImageClassification.Train/assets/inputs/test-images/RareThreeSpiralledRose.png");
+                            DownloadDataFile(dataUri, dataFile);
+                        }
+                        {
+                            //var testDataFile = testDataDir.GetChildFileInfo("test2.png");
+                            var dataFile = dataDir.GetChildFileInfo("StrangeBlackRose.png");
+                            var dataUri = new Uri("https://github.com/dotnet/machinelearning-samples/raw/main/samples/csharp/getting-started/DeepLearning_ImageClassification_Training/ImageClassification.Train/assets/inputs/test-images/StrangeBlackRose.png");
+                            DownloadDataFile(dataUri, dataFile);
+                        }
+                    }
+                    {
+                        ModelFile = DataDir.GetChildFileInfo("Spam-Model.zip");
+                    }
+
+                    break;
+                }
+
             // ONNX
             case MLNetExampleScenario.I004_ComputerVision_ObjectDetection_ImportONNXModel_TinyYoloV2_08:
             case MLNetExampleScenario.I004_ComputerVision_ObjectDetection_ImportONNXModel_YoloV2_09:
@@ -328,7 +387,6 @@ public partial class MLNetExampleSummary : MLNetHandler
             case MLNetExampleScenario.D003_Regression_DemandPrediction:
             case MLNetExampleScenario.E001_TimeSeriesForecasting_SalesForecasting:
             case MLNetExampleScenario.G001_Clustering_CustomerSegmentation:
-            case MLNetExampleScenario.I001_ComputerVision_ImageClassificationTraining_HighLevelAPI:
             case MLNetExampleScenario.I002_ComputerVision_ImageClassificationPredictions_PretrainedTensorFlowModelScoring:
             case MLNetExampleScenario.I003_ComputerVision_ImageClassificationTraining_TensorFlowFeaturizerEstimator:
             case MLNetExampleScenario.J001_CrossCuttingScenarios_ScalableModelOnWebAPI:

@@ -155,7 +155,7 @@ public static partial class ChainableExtensions
     }
 
     /// <summary>
-    /// decompress .tar.gz
+    /// decompress .tgz (.tar.gz)
     /// </summary>
     /// <param name="inputFile"></param>
     /// <param name="outputDir">when null, automatically set</param>
@@ -163,7 +163,7 @@ public static partial class ChainableExtensions
     public static DirectoryInfo Decompress_TarGzip(this FileInfo inputFile, DirectoryInfo? outputDir)
     {
         // preprocess
-        outputDir ??= new DirectoryInfo(inputFile.FullName.Replace(".tar", "").Replace(".gz", ""));
+        outputDir ??= new DirectoryInfo(inputFile.FullName.Replace(".tar", "").Replace(".gz", "").Replace(".tgz", ""));
         UtilPreprocessors.PreprocessOutDir(ref outputDir, inputFile.Directory!);
 
 
