@@ -4,6 +4,8 @@ namespace Aki32Utilities.ConsoleAppUtilities.General;
 public static partial class ChainableExtensions
 {
 
+    // ★★★★★★★★★★★★★★★ sugar
+
     /// <summary>
     /// Immediately executes the given action on each element in the source sequence.
     /// </summary>
@@ -44,5 +46,8 @@ public static partial class ChainableExtensions
         foreach (var element in source)
             action(element, index++);
     }
+
+
+    // ★★★★★★★★★★★★★★★ 
 
 }
