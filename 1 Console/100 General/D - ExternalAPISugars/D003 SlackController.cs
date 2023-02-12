@@ -37,16 +37,14 @@ public class SlackController
     // ★★★★★★★★★★★★★★★ methods
 
     /// <summary>
-    /// send message to LINE
+    /// send message to Slack
     /// </summary>
     public async Task<bool> SendMessageAsync(string message, string channelName, bool sendAsAUser = true)
     {
         try
         {
-            await Task.Run(async () =>
-            {
-                // content
-                var data = new Dictionary<string, string>
+            // content
+            var data = new Dictionary<string, string>
                 {
                     { "token", SlackAccessToken },
                     { "channel", channelName },
@@ -54,32 +52,11 @@ public class SlackController
                     { "text", message },
                     //{ "attachments", "[{\"fallback\":\"dummy\", \"text\":\"this is an attachment\"}]" },
                 };
-                var content = new FormUrlEncodedContent(data);
+            var content = new FormUrlEncodedContent(data);
 
-                // request
-                await TargetUri.CallAPIAsync_ForJsonData<object>(HttpMethod.Post,
-                    httpContent: new FormUrlEncodedContent(data)
-                );
+            // request
+            await TargetUri.CallAPIAsync_ForJsonData<object>(HttpMethod.Post, httpContent: new FormUrlEncodedContent(data));
 
-                return true;
-
-                // 元々
-                {
-                    //var data = new NameValueCollection();
-                    //data["token"] = slack_token;
-                    //data["channel"] = channel_name;
-                    //data["as_user"] = "true"; // to send this message as the user who owns the token, false by default
-                    //data["text"] = message;
-                    ////data["attachments"] = "[{\"fallback\":\"dummy\", \"text\":\"this is an attachment\"}]";
-
-                    //using (var client = new WebClient())
-                    //{
-                    //    var response = client.UploadValues("https://slack.com/api/chat.postMessage", "POST", data);
-                    //    string responseInString = Encoding.UTF8.GetString(response);
-                    //}
-                }
-
-            });
         }
         catch (Exception)
         {
