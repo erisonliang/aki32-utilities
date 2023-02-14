@@ -22,7 +22,7 @@ public static partial class ChainableExtensions
     /// turn byte[] into short list
     /// </summary>
     /// <returns></returns>
-    public static short[] GetShortListFromBytes(this byte[] byteData, int skipBytes = 0)
+    public static short[] ToShortArray(this byte[] byteData, int skipBytes = 0)
     {
         var convertedList = new List<short>();
         for (int i = skipBytes; i < byteData.Length; i += 2)
@@ -34,7 +34,7 @@ public static partial class ChainableExtensions
     /// turn byte[] into int list
     /// </summary>
     /// <returns></returns>
-    public static int[] GetIntListFromBytes(this byte[] byteData, int skipBytes = 0)
+    public static int[] ToIntArray(this byte[] byteData, int skipBytes = 0)
     {
         var convertedList = new List<int>();
         for (int i = skipBytes; i < byteData.Length; i += 4)
@@ -46,7 +46,7 @@ public static partial class ChainableExtensions
     /// turn byte[] into float list
     /// </summary>
     /// <returns></returns>
-    public static float[] GetFloatListFromBytes(this byte[] byteData, int skipBytes = 0)
+    public static float[] ToFloatArray(this byte[] byteData, int skipBytes = 0)
     {
         var convertedList = new List<float>();
         for (int i = skipBytes; i < byteData.Length; i += 4)
@@ -58,7 +58,7 @@ public static partial class ChainableExtensions
     /// turn byte[] into double list
     /// </summary>
     /// <returns></returns>
-    public static double[] GetDoubleListFromBytes(this byte[] byteData, int skipBytes = 0)
+    public static double[] ToDoubleArray(this byte[] byteData, int skipBytes = 0)
     {
         var convertedList = new List<double>();
         for (int i = skipBytes; i < byteData.Length; i += 8)
