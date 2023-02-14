@@ -46,42 +46,80 @@ public static class ConsoleExtension
         }
         else if (metricsObject is BinaryClassificationMetrics binMetrics)
         {
-            Console.WriteLine($"*       Accuracy: {binMetrics.Accuracy:P2}");
-            Console.WriteLine($"*       Area Under Curve:      {binMetrics.AreaUnderRocCurve:P2}");
-            Console.WriteLine($"*       Area under Precision recall Curve:  {binMetrics.AreaUnderPrecisionRecallCurve:P2}");
-            Console.WriteLine($"*       F1Score:  {binMetrics.F1Score:P2}");
-            Console.WriteLine($"*       PositivePrecision:  {binMetrics.PositivePrecision:#.##}");
-            Console.WriteLine($"*       PositiveRecall:  {binMetrics.PositiveRecall:#.##}");
-            Console.WriteLine($"*       NegativePrecision:  {binMetrics.NegativePrecision:#.##}");
-            Console.WriteLine($"*       NegativeRecall:  {binMetrics.NegativeRecall:P2}");
+            Console.WriteLine($"Accuracy: {binMetrics.Accuracy:P2}");
+            Console.WriteLine($"Area Under Curve:      {binMetrics.AreaUnderRocCurve:P2}");
+            Console.WriteLine($"Area under Precision recall Curve:  {binMetrics.AreaUnderPrecisionRecallCurve:P2}");
+            Console.WriteLine($"F1Score:  {binMetrics.F1Score:P2}");
+            Console.WriteLine($"PositivePrecision:  {binMetrics.PositivePrecision:#.##}");
+            Console.WriteLine($"PositiveRecall:  {binMetrics.PositiveRecall:#.##}");
+            Console.WriteLine($"NegativePrecision:  {binMetrics.NegativePrecision:#.##}");
+            Console.WriteLine($"NegativeRecall:  {binMetrics.NegativeRecall:P2}");
+
+            Console.WriteLine("Confusion Matrix:");
+            Console.WriteLine(binMetrics.ConfusionMatrix.GetFormattedConfusionTable());
         }
         else if (metricsObject is CalibratedBinaryClassificationMetrics caliBinMetrics)
         {
-            Console.WriteLine($"*       Accuracy: {caliBinMetrics.Accuracy:P2}");
-            Console.WriteLine($"*       Area Under Curve:      {caliBinMetrics.AreaUnderRocCurve:P2}");
-            Console.WriteLine($"*       Area under Precision recall Curve:  {caliBinMetrics.AreaUnderPrecisionRecallCurve:P2}");
-            Console.WriteLine($"*       F1Score:  {caliBinMetrics.F1Score:P2}");
-            Console.WriteLine($"*       LogLoss:  {caliBinMetrics.LogLoss:#.##}");
-            Console.WriteLine($"*       LogLossReduction:  {caliBinMetrics.LogLossReduction:#.##}");
-            Console.WriteLine($"*       PositivePrecision:  {caliBinMetrics.PositivePrecision:#.##}");
-            Console.WriteLine($"*       PositiveRecall:  {caliBinMetrics.PositiveRecall:#.##}");
-            Console.WriteLine($"*       NegativePrecision:  {caliBinMetrics.NegativePrecision:#.##}");
-            Console.WriteLine($"*       NegativeRecall:  {caliBinMetrics.NegativeRecall:P2}");
+            Console.WriteLine($"Accuracy: {caliBinMetrics.Accuracy:P2}");
+            Console.WriteLine($"Area Under Curve:      {caliBinMetrics.AreaUnderRocCurve:P2}");
+            Console.WriteLine($"Area under Precision recall Curve:  {caliBinMetrics.AreaUnderPrecisionRecallCurve:P2}");
+            Console.WriteLine($"F1Score:  {caliBinMetrics.F1Score:P2}");
+            Console.WriteLine($"LogLoss:  {caliBinMetrics.LogLoss:#.##}");
+            Console.WriteLine($"LogLossReduction:  {caliBinMetrics.LogLossReduction:#.##}");
+            Console.WriteLine($"PositivePrecision:  {caliBinMetrics.PositivePrecision:#.##}");
+            Console.WriteLine($"PositiveRecall:  {caliBinMetrics.PositiveRecall:#.##}");
+            Console.WriteLine($"NegativePrecision:  {caliBinMetrics.NegativePrecision:#.##}");
+            Console.WriteLine($"NegativeRecall:  {caliBinMetrics.NegativeRecall:P2}");
+            Console.WriteLine("Confusion Matrix:");
+            Console.WriteLine(caliBinMetrics.ConfusionMatrix.GetFormattedConfusionTable());
+
         }
         else if (metricsObject is MulticlassClassificationMetrics multiMetrics)
         {
-            Console.WriteLine($"    AccuracyMacro = {multiMetrics.MacroAccuracy:0.####}, a value between 0 and 1, the closer to 1, the better");
-            Console.WriteLine($"    AccuracyMicro = {multiMetrics.MicroAccuracy:0.####}, a value between 0 and 1, the closer to 1, the better");
-            Console.WriteLine($"    LogLoss = {multiMetrics.LogLoss:0.####}, the closer to 0, the better");
+            Console.WriteLine($"AccuracyMacro = {multiMetrics.MacroAccuracy:0.####}, a value between 0 and 1, the closer to 1, the better");
+            Console.WriteLine($"AccuracyMicro = {multiMetrics.MicroAccuracy:0.####}, a value between 0 and 1, the closer to 1, the better");
+            Console.WriteLine($"LogLoss = {multiMetrics.LogLoss:0.####}, the closer to 0, the better");
             try
             {
-                Console.WriteLine($"    LogLoss for class 1 = {multiMetrics.PerClassLogLoss[0]:0.####}, the closer to 0, the better");
-                Console.WriteLine($"    LogLoss for class 2 = {multiMetrics.PerClassLogLoss[1]:0.####}, the closer to 0, the better");
-                Console.WriteLine($"    LogLoss for class 3 = {multiMetrics.PerClassLogLoss[2]:0.####}, the closer to 0, the better");
+                Console.WriteLine($" LogLoss for class 1 = {multiMetrics.PerClassLogLoss[0]:0.####}, the closer to 0, the better");
+                Console.WriteLine($" LogLoss for class 2 = {multiMetrics.PerClassLogLoss[1]:0.####}, the closer to 0, the better");
+                Console.WriteLine($" LogLoss for class 3 = {multiMetrics.PerClassLogLoss[2]:0.####}, the closer to 0, the better");
             }
             catch (Exception)
             {
             }
+
+            Console.WriteLine("Confusion Matrix:");
+            Console.WriteLine(multiMetrics.ConfusionMatrix.GetFormattedConfusionTable());
+        }
+        else if (metricsObject is RegressionMetrics regressionMetrics)
+        {
+            Console.WriteLine($"*       LossFn:        {regressionMetrics.LossFunction:0.##}");
+            Console.WriteLine($"*       R2 Score:      {regressionMetrics.RSquared:0.##}");
+            Console.WriteLine($"*       Absolute loss: {regressionMetrics.MeanAbsoluteError:#.##}");
+            Console.WriteLine($"*       Squared loss:  {regressionMetrics.MeanSquaredError:#.##}");
+            Console.WriteLine($"*       RMS loss:      {regressionMetrics.RootMeanSquaredError:#.##}");
+        }
+        else if (metricsObject is AnomalyDetectionMetrics anomalyMetrics)
+        {
+            Console.WriteLine($"*       Area Under ROC Curve:                       {anomalyMetrics.AreaUnderRocCurve:P2}");
+            Console.WriteLine($"*       Detection rate at false positive count: {anomalyMetrics.DetectionRateAtFalsePositiveCount}");
+        }
+        else if (metricsObject is ClusteringMetrics clusteringMetrics)
+        {
+            Console.WriteLine($"*       Average Distance: {clusteringMetrics.AverageDistance}");
+            Console.WriteLine($"*       Davies Bouldin Index is: {clusteringMetrics.DaviesBouldinIndex}");
+        }
+        else if (metricsObject is RankingMetrics rankMetrics)
+        {
+            Console.WriteLine($"DCG : {string.Join(", ", rankMetrics.DiscountedCumulativeGains.Select((d, i) => $"@{i + 1}:{d:F4}").ToArray())}");
+            Console.WriteLine($"NDCG: {string.Join(", ", rankMetrics.NormalizedDiscountedCumulativeGains.Select((d, i) => $"@{i + 1}:{d:F4}").ToArray())}\n");
+
+            //var th = new TimeHistory();
+            //th["#"] = rankMetrics.DiscountedCumulativeGains.Select((d, i) => i + 1d).ToArray();
+            //th["DCG"] = rankMetrics.DiscountedCumulativeGains.ToArray();
+            //th["NDCG"] = rankMetrics.NormalizedDiscountedCumulativeGains.Select((d, i) => d).ToArray();
+            //th.WriteToConsole();
         }
         else if (metricsObject is IReadOnlyList<CrossValidationResult<MulticlassClassificationMetrics>> crossValResults)
         {
@@ -113,14 +151,6 @@ public static class ConsoleExtension
             Console.WriteLine($"*       Average LogLossReduction: {logLossReductionAverage:#.###}  - Standard deviation: ({logLossReductionStdDeviation:#.###})  - Confidence Interval 95%: ({logLossReductionConfidenceInterval95:#.###})");
 
         }
-        else if (metricsObject is RegressionMetrics regressionMetrics)
-        {
-            Console.WriteLine($"*       LossFn:        {regressionMetrics.LossFunction:0.##}");
-            Console.WriteLine($"*       R2 Score:      {regressionMetrics.RSquared:0.##}");
-            Console.WriteLine($"*       Absolute loss: {regressionMetrics.MeanAbsoluteError:#.##}");
-            Console.WriteLine($"*       Squared loss:  {regressionMetrics.MeanSquaredError:#.##}");
-            Console.WriteLine($"*       RMS loss:      {regressionMetrics.RootMeanSquaredError:#.##}");
-        }
         else if (metricsObject is IReadOnlyList<CrossValidationResult<RegressionMetrics>> crossValidationResults)
         {
             var L1 = crossValidationResults.Select(r => r.Metrics.MeanAbsoluteError);
@@ -135,27 +165,6 @@ public static class ConsoleExtension
             Console.WriteLine($"*       Average RMS:          {RMS.Average():0.###}  ");
             Console.WriteLine($"*       Average Loss Function: {lossFunction.Average():0.###}  ");
             Console.WriteLine($"*       Average R-squared: {R2.Average():0.###}  ");
-        }
-        else if (metricsObject is AnomalyDetectionMetrics anomalyMetrics)
-        {
-            Console.WriteLine($"*       Area Under ROC Curve:                       {anomalyMetrics.AreaUnderRocCurve:P2}");
-            Console.WriteLine($"*       Detection rate at false positive count: {anomalyMetrics.DetectionRateAtFalsePositiveCount}");
-        }
-        else if (metricsObject is ClusteringMetrics clusteringMetrics)
-        {
-            Console.WriteLine($"*       Average Distance: {clusteringMetrics.AverageDistance}");
-            Console.WriteLine($"*       Davies Bouldin Index is: {clusteringMetrics.DaviesBouldinIndex}");
-        }
-        else if (metricsObject is RankingMetrics rankMetrics)
-        {
-            Console.WriteLine($"DCG : {string.Join(", ", rankMetrics.DiscountedCumulativeGains.Select((d, i) => $"@{i + 1}:{d:F4}").ToArray())}");
-            Console.WriteLine($"NDCG: {string.Join(", ", rankMetrics.NormalizedDiscountedCumulativeGains.Select((d, i) => $"@{i + 1}:{d:F4}").ToArray())}\n");
-
-            //var th = new TimeHistory();
-            //th["#"] = rankMetrics.DiscountedCumulativeGains.Select((d, i) => i + 1d).ToArray();
-            //th["DCG"] = rankMetrics.DiscountedCumulativeGains.ToArray();
-            //th["NDCG"] = rankMetrics.NormalizedDiscountedCumulativeGains.Select((d, i) => d).ToArray();
-            //th.WriteToConsole();
         }
         else
         {
