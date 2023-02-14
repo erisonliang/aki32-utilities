@@ -103,7 +103,6 @@ public partial class MLNetExampleSummary : MLNetHandler
             case MLNetExampleScenario.I001_ComputerVision_ImageClassificationTraining_HighLevelAPI:
                 {
                     Console.WriteLine($"fitting...");
-                    Context.Log += FilterMLContextLog;
                     var watch = Stopwatch.StartNew();
                     Model = PipeLineHead.Fit(targetData ?? TrainData);
                     watch.Stop();

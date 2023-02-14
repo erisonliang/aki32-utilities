@@ -1,9 +1,4 @@
-﻿using Microsoft.ML.AutoML;
-using Microsoft.ML;
-using Microsoft.ML.Data;
-using System.Data;
-using Aki32Utilities.ConsoleAppUtilities.General;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 
 namespace Aki32Utilities.ConsoleAppUtilities.AI.CheatSheet;
 public partial class MLNetExampleSummary : MLNetHandler
