@@ -215,7 +215,7 @@ public static partial class ChainableExtensions
     /// <returns></returns>
     public static DirectoryInfo Decompress_TarGzip_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir)
         => inputDir.Loop(outputDir, (inF, _) => inF.Decompress_TarGzip(null),
-            searchRegexen: new string[] { @"^.*\.tar.gz$" });
+            searchRegexen: new string[] { @"^.*\.tar.gz$",@"^.*\.tgz$" });
 
 
     // ★★★★★★★★★★★★★★★
