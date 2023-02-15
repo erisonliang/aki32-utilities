@@ -12,7 +12,7 @@ public static class KNetHelper
     // ★★★★★★★★★★★★★★★ AccData
 
     /// <summary>
-    /// Row data is from 
+    /// Raw data available in 
     /// <br/>
     /// - https://www.kyoshin.bosai.go.jp/kyoshin/search/
     /// <br/>
