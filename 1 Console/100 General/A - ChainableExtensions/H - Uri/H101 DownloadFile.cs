@@ -18,6 +18,7 @@ public static partial class ChainableExtensions
         )
     {
         // preprocess
+        outputFile.Directory!.Create();
         UtilPreprocessors.PreprocessBasic(true);
         UtilConfig.StopTemporary_ConsoleOutput_Preprocess();
 

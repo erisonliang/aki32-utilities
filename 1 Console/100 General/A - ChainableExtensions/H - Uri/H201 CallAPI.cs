@@ -18,7 +18,8 @@ public static partial class ChainableExtensions
     public static async Task<Stream> CallAPIAsync_ForResponseStream(this Uri url, HttpMethod method,
         string authBearerToken = "",
         string jsonStringContent = null,
-        HttpContent httpContent = null
+        HttpContent httpContent = null,
+        List<KeyValuePair<string, string>>? additionalHeaders = null
         )
     {
         // preprocess
@@ -26,9 +27,13 @@ public static partial class ChainableExtensions
         using var client = new HttpClient();
 
 
-        // auth
+        // header
         if (!string.IsNullOrEmpty(authBearerToken))
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", authBearerToken);
+
+        if (additionalHeaders != null)
+            foreach (var additionalHeader in additionalHeaders)
+                client.DefaultRequestHeaders.Add(additionalHeader.Key, additionalHeader.Value);
 
 
         // content
@@ -41,7 +46,7 @@ public static partial class ChainableExtensions
 
 
         // access
-        var response = await client.SendAsync(req,HttpCompletionOption.ResponseHeadersRead);
+        var response = await client.SendAsync(req, HttpCompletionOption.ResponseHeadersRead);
         response.EnsureSuccessStatusCode();
 
         // post process
@@ -59,7 +64,8 @@ public static partial class ChainableExtensions
     public static async Task<T> CallAPIAsync_ForXmlData<T>(this Uri url, HttpMethod method,
         string authBearerToken = "",
         string jsonStringContent = null,
-        HttpContent httpContent = null
+        HttpContent httpContent = null,
+        List<KeyValuePair<string, string>>? additionalHeaders = null
         )
     {
         // preprocess
@@ -70,7 +76,8 @@ public static partial class ChainableExtensions
         using var responseStream = await url.CallAPIAsync_ForResponseStream(method,
             authBearerToken: authBearerToken,
             jsonStringContent: jsonStringContent,
-            httpContent: httpContent
+            httpContent: httpContent,
+            additionalHeaders: additionalHeaders
             );
 
 
@@ -96,7 +103,8 @@ public static partial class ChainableExtensions
     public static async Task<T> CallAPIAsync_ForJsonData<T>(this Uri url, HttpMethod method,
         string authBearerToken = "",
         string jsonStringContent = null,
-        HttpContent httpContent = null
+        HttpContent httpContent = null,
+        List<KeyValuePair<string, string>>? additionalHeaders = null
         )
     {
         // preprocess
@@ -107,7 +115,8 @@ public static partial class ChainableExtensions
         using var responseStream = await url.CallAPIAsync_ForResponseStream(method,
            authBearerToken: authBearerToken,
           jsonStringContent: jsonStringContent,
-          httpContent: httpContent
+          httpContent: httpContent,
+          additionalHeaders: additionalHeaders
           );
 
 

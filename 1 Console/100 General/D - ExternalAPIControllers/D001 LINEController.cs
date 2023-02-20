@@ -9,7 +9,7 @@ public class LINEController
     /// <summary>
     /// Obtain from https://notify-bot.line.me/my/
     /// </summary>
-    public string LineAccessToken { get; set; } = "";
+    public string LineAccessToken { private get; set; } = "";
 
     private static readonly Uri TargetUri = new("https://notify-api.line.me/api/notify");
 

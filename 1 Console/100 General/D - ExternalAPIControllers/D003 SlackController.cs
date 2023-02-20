@@ -13,7 +13,7 @@ public class SlackController
     /// <summary>
     /// Obtain from https://risaki-masa.com/how-to-get-api-token-in-slack/
     /// </summary>
-    public string SlackAccessToken { get; set; } = "";
+    public string SlackAccessToken { private get; set; } = "";
 
     private static readonly Uri TargetUri = new("https://slack.com/api/chat.postMessage");
 

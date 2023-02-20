@@ -800,16 +800,33 @@ public static partial class ExampleExecuter
 
             }
 
-            // D - ExternalAPISugars
+            // D - ExternalAPIControllers
             {
-                var baseDir_101_D = baseDir_101.GetChildDirectoryInfo($@"D - ExternalAPISugars");
+                var baseDir_101_D = baseDir_101.GetChildDirectoryInfo($@"D - ExternalAPIControllers");
 
-                // D001 ExternalAPIControllers
+                // D001 OpenAIController
                 {
+                    var baseDir_101_D_D001 = baseDir_101_D.GetChildDirectoryInfo($@"D001 OpenAIController");
+                    var output = baseDir_101_D.GetChildDirectoryInfo($@"output");
 
+                    //var apiSecretKey = ""; // API SecretKey
+                    //var openAI = new OpenAIController(apiSecretKey);
 
+                    //// get models
+                    //var models = openAI.GetModelsAsync().Result;
+                    //Console.WriteLine(models);
 
+                    //// edit text
+                    //dynamic result = openAI.EditTextAsync("Fix the spelling mistakes", "What day of the wek is it?").Result;
+                    //Console.WriteLine(result);
 
+                    //// generate image
+                    //var result = openAI.GenerateImageAsync("beautiful cat with blue eye and white ear", n: 2).Result;
+                    //for (int i = 0; i < result!.Length; i++)
+                    //{
+                    //    var GeneratedImageFile = baseDir_101_D_D001.GetChildFileInfo($"GeneratedImage{i}.png");
+                    //    result[i].DownloadFile(GeneratedImageFile);
+                    //}
 
                 }
 
