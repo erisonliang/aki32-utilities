@@ -16,7 +16,7 @@ public class EPTester
         this.ep = ep;
     }
 
-    internal TimeHistory Calc(TestWave waveType)
+    public TimeHistory Calc(TestWave waveType)
     {
         TimeHistory wave = waveType switch
         {

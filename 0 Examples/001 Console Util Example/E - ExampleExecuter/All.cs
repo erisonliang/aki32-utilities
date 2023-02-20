@@ -13,7 +13,6 @@ using Aki32Utilities.ConsoleAppUtilities.StructuralEngineering;
 
 using ClosedXML;
 
-using DocumentFormat.OpenXml.Office2010.CustomUI;
 using DocumentFormat.OpenXml.Spreadsheet;
 using DocumentFormat.OpenXml.Wordprocessing;
 
@@ -21,11 +20,16 @@ using Newtonsoft.Json;
 using Aki32Utilities.ConsoleAppUtilities.AI.CheatSheet;
 using iTextSharp.text.pdf.codec.wmf;
 using MathNet.Numerics.LinearAlgebra;
+using ICSharpCode.SharpZipLib.Zip;
+
+using Thickness = Aki32Utilities.ConsoleAppUtilities.General.ChainableExtensions.Thickness;
+using Color = System.Drawing.Color;
+using Point = System.Drawing.Point;
 
 namespace Aki32Utilities.UsageExamples.ConsoleAppUtilities;
 public static partial class ExampleExecuter
 {
-    const string BASE_DIR = $@"..\..\..\# ExampleModel\";
+    static readonly DirectoryInfo BASE_DIR = new($@"..\..\..\# ExampleModel\");
 
     public static void All()
     {
@@ -45,11 +49,11 @@ public static partial class ExampleExecuter
 
         // 100 - General
         {
-            var baseDir_100 = $@"{BASE_DIR}\100 - General";
+            var baseDir_100 = BASE_DIR.GetChildDirectoryInfo($@"100 - General");
 
             // A - ChainableExtensions
             {
-                var baseDir_100_A = $@"{baseDir_100}\A - ChainableExtensions";
+                var baseDir_100_A = baseDir_100.GetChildDirectoryInfo($@"A - ChainableExtensions");
 
                 // 2202 To2DArray, ToJaggedArray
                 {
@@ -136,7 +140,7 @@ public static partial class ExampleExecuter
 
                 // B001 CollectFiles
                 {
-                    //var input = new DirectoryInfo($@"{baseDir_100_A}\B001 CollectFiles\input");
+                    //var input = baseDir_100_A.GetChildDirectoryInfo($@"B001 CollectFiles\input");
                     //input.CollectFiles(null, @"^.*a\.txt$", @"^.*3.*$");
                     //input.CollectFiles(null, @"^.*a\.txt$");
                     //input.CollectFiles(null, @"^.*[0-9]*\\a\.txt$");
@@ -144,35 +148,35 @@ public static partial class ExampleExecuter
 
                 // B002 MakeFilesFromCsv
                 {
-                    //var inputList = new FileInfo($@"{baseDir_100_A}\B002 MakeFilesFromCsv\list.csv");
-                    //var inputTemp = new FileInfo($@"{baseDir_100_A}\B002 MakeFilesFromCsv\template.docx");
+                    //var inputList = baseDir_100_A.GetChildFileInfo($@"B002 MakeFilesFromCsv\list.csv");
+                    //var inputTemp = baseDir_100_A.GetChildFileInfo($@"B002 MakeFilesFromCsv\template.docx");
                     //inputList.MakeFilesFromCsv(null, inputTemp);
                 }
 
                 // B003 MoveTo
                 {
-                    //var input = new DirectoryInfo($@"{baseDir_100_A}\B003 MoveTo\input");
-                    //var keep = new DirectoryInfo($@"{baseDir_100_A}\B003 MoveTo\keep");
-                    //var output = new DirectoryInfo($@"{baseDir_100_A}\B003 MoveTo\output");
+                    //var input = baseDir_100_A.GetChildDirectoryInfo($@"B003 MoveTo\input");
+                    //var keep = baseDir_100_A.GetChildDirectoryInfo($@"B003 MoveTo\keep");
+                    //var output = baseDir_100_A.GetChildDirectoryInfo($@"B003 MoveTo\output");
                     //input.MoveTo(output);
                 }
 
                 // B004 CopyTo
                 {
                     // directory-wise
-                    //var input = new DirectoryInfo($@"{baseDir_100_A}\B004 CopyTo\input");
-                    //var output = new DirectoryInfo($@"{baseDir_100_A}\B004 CopyTo\output");
+                    //var input = baseDir_100_A.GetChildDirectoryInfo($@"B004 CopyTo\input");
+                    //var output = baseDir_100_A.GetChildDirectoryInfo($@"B004 CopyTo\output");
                     //input.CopyTo(output);
 
                     // file
-                    //var input = new FileInfo($@"{baseDir_100_A}\B004 CopyTo\a.txt");
+                    //var input = baseDir_100_A.GetChildFileInfo($@"B004 CopyTo\a.txt");
                     //input.CopyTo();
                 }
 
                 // B005 RenameFiles
                 {
-                    //var input = new DirectoryInfo($@"{baseDir_100_A}\B005 RenameFiles\input");
-                    //var output = new DirectoryInfo($@"{baseDir_100_A}\B005 RenameFiles\output");
+                    //var input = baseDir_100_A.GetChildDirectoryInfo($@"B005 RenameFiles\input");
+                    //var output = baseDir_100_A.GetChildDirectoryInfo($@"B005 RenameFiles\output");
                     //input.CopyTo(output);
                     //// auto
                     //output.RenameFiles();
@@ -184,8 +188,8 @@ public static partial class ExampleExecuter
 
                 // B007 Compression
                 {
-                    //var input = new DirectoryInfo($@"{baseDir_100_A}\B007 Compression\input");
-                    //var input2 = new FileInfo($@"{baseDir_100_A}\B007 Compression\input2.docx");
+                    //var input = baseDir_100_A.GetChildDirectoryInfo($@"B007 Compression\input");
+                    //var input2 = baseDir_100_A.GetChildFileInfo($@"B007 Compression\input2.docx");
 
                     //input
                     //    .Compress_Zip(null)
@@ -206,8 +210,8 @@ public static partial class ExampleExecuter
 
                 // B008 Encrypt, Decrypt
                 {
-                    //var input = new FileInfo($@"{baseDir_100_A}\B008 Crypt\input.txt");
-                    //input
+                    //baseDir_100
+                    //    .GetChildFileInfo($@"B008 Crypt\input.txt")
                     //    .Encrypt(null, "aiueo")
                     //    .Decrypt(null, "aiueo")
                     //    ;
@@ -215,15 +219,15 @@ public static partial class ExampleExecuter
 
                 // B009 DrawGraph
                 {
-                    //new FileInfo($@"{baseDir_100_A}\B009 DrawGraph\input1.csv")
+                    //baseDir_100.GetChildFileInfo($@"B009 DrawGraph\input1.csv")
                     //    .DrawGraph("t", "v", TimeHistory.ChartType.Line);
 
 
-                    //new FileInfo($@"{baseDir_100_A}\B009 DrawGraph\input1.csv")
+                    //baseDir_100.GetChildFileInfo($@"B009 DrawGraph\input1.csv")
                     //    .DrawGraph(0, 1, TimeHistory.ChartType.Line);
 
 
-                    //new FileInfo($@"{baseDir_100_A}\B009 DrawGraph\input2.csv")
+                    //baseDir_100.GetChildFileInfo($@"B009 DrawGraph\input2.csv")
                     //    .DrawGraph_ForAll(TimeHistory.ChartType.Line);
 
                 }
@@ -248,7 +252,7 @@ public static partial class ExampleExecuter
 
                     //// json
                     //{
-                    //    var outputFile = new FileInfo($@"{baseDir_100_A}\B102 ReadObjectToLocal\output.json");
+                    //    var outputFile = baseDir_100.GetChildFileInfo($@"B102 ReadObjectToLocal\output.json");
 
                     //    testClassToWrite.SaveAsJson(outputFile, true);
 
@@ -258,7 +262,7 @@ public static partial class ExampleExecuter
 
                     //// xml
                     //{
-                    //    var outputFile = new FileInfo($@"{baseDir_100_A}\B102 ReadObjectToLocal\output.xml");
+                    //    var outputFile = baseDir_100.GetChildFileInfo($@"B102 ReadObjectToLocal\output.xml");
 
                     //    testClassToWrite.SaveAsXml(outputFile);
 
@@ -268,7 +272,7 @@ public static partial class ExampleExecuter
 
                     //// csv
                     //{
-                    //    var outputFile = new FileInfo($@"{baseDir_100_A}\B102 ReadObjectToLocal\output.csv");
+                    //    var outputFile = baseDir_100.GetChildFileInfo($@"B102 ReadObjectToLocal\output.csv");
 
                     //    var testClassListToWrite = new List<UtilTestClass1> { testClassToWrite };
                     //    testClassListToWrite.SaveAsCsv(outputFile);
@@ -281,37 +285,43 @@ public static partial class ExampleExecuter
 
                 // C004 ExtractCsvColumns
                 {
-                    //new FileInfo($@"{baseDir_100_A}\C004 ExtractCsvColumns\input.csv")
+                    //baseDir_100
+                    //    .GetChildFileInfo($@"C004 ExtractCsvColumns\input.csv")
                     //    .ExtractCsvColumns(null, new int[] { 0, 3 }, 0, "t,x");
 
-                    //new DirectoryInfo($@"{baseDir_100_A}\C004 ExtractCsvColumns")
+                    //baseDir_100
+                    //    .GetChildDirectoryInfo($@"C004 ExtractCsvColumns")
                     //    .ExtractCsvColumnsForMany_Loop(null, 0, ("a", new int[] { 0, 3 }, "t,x"), ("b", new int[] { 0, 4 }, "t,y"));
                 }
 
                 // C005 CollectCsvColumns
                 {
-                    //var input = new DirectoryInfo($@"{baseDir_100_A}\C005 CollectCsvColumns\input");
-                    //input.CollectCsvColumns(null, 3);
+                    //baseDir_100
+                    //    .GetChildDirectoryInfo($@"C005 CollectCsvColumns\input")
+                    //    .CollectCsvColumns(null, 3);
+
                 }
 
                 // C006 Csvs2ExcelSheets
                 {
-                    //new DirectoryInfo($@"{baseDir_100_A}\C006 Csvs2ExcelSheets\input")
+                    //baseDir_100
+                    //    .GetChildDirectoryInfo($@"C006 Csvs2ExcelSheets\input")
                     //    .Csvs2ExcelSheets(null);
 
-                    //new FileInfo($@"{baseDir_100_A}\C006 Csvs2ExcelSheets\input\data1.csv")
+                    //baseDir_100
+                    //    .GetChildFileInfo($@"C006 Csvs2ExcelSheets\input\data1.csv")
                     //    .Csv2ExcelSheet(null);
 
                 }
 
                 // C101 ReadCsv, 2201 Transpose2DArray, 2103 SaveCsv
                 {
-                    //var innerbaseDir_100_A = $@"{baseDir_100_A}\C101 ReadCsv, SaveCsv";
-                    //var input = new FileInfo($@"{innerbaseDir_100_A}\input.csv");
-                    //var output1 = new FileInfo($@"{innerbaseDir_100_A}\output1.csv");
-                    //var output2 = new FileInfo($@"{innerbaseDir_100_A}\output2.csv");
-                    //var output3 = new FileInfo($@"{innerbaseDir_100_A}\output3.csv");
-                    //var output4 = new FileInfo($@"{innerbaseDir_100_A}\output4.csv");
+                    //var innerbaseDir_100_A = baseDir_100_A.GetChildDirectoryInfo($@"C101 ReadCsv, SaveCsv");
+                    //var input = innerbaseDir_100_A.GetChildFileInfo($@"input.csv");
+                    //var output1 = innerbaseDir_100_A.GetChildFileInfo($@"output1.csv");
+                    //var output2 = innerbaseDir_100_A.GetChildFileInfo($@"output2.csv");
+                    //var output3 = innerbaseDir_100_A.GetChildFileInfo($@"output3.csv");
+                    //var output4 = innerbaseDir_100_A.GetChildFileInfo($@"output4.csv");
 
                     //input.ReadCsv_Rows().SaveCsv_Rows(output1);
                     //input.ReadCsv_Rows().SaveCsv_Columns(output2);
@@ -321,29 +331,31 @@ public static partial class ExampleExecuter
 
                 // D001 MergeAllLines
                 {
-                    //var input = new DirectoryInfo($@"{baseDir_100_A}\D001 MergeAllLines\input");
-                    //input.MergeAllLines(null);
+                    //baseDir_100
+                    //    .GetChildDirectoryInfo($@"D001 MergeAllLines\input")
+                    //    .MergeAllLines(null);
                 }
 
                 // E001 CropImage
                 {
-                    //var input = new FileInfo($@"{baseDir_100_A}\E001 CropImage\input.bmp");
-                    //var crops = new AwesomeExtensions.Thickness[]
+                    //var input = baseDir_100.GetChildFileInfo($@"E001 CropImage\input.bmp");
+
+                    //var crops = new Thickness[]
                     //{
-                    //    new AwesomeExtensions.Thickness(0.13, 0.13, 0.13, 0.13),
-                    //    new AwesomeExtensions.Thickness(0, 0, 0.3, 0.3),
-                    //    new AwesomeExtensions.Thickness(0.3, 0, 0, 0.3),
-                    //    new AwesomeExtensions.Thickness(0.3, 0.3, 0, 0),
-                    //    new AwesomeExtensions.Thickness(0, 0.3, 0.3, 0),
+                    //    new Thickness(0.13, 0.13, 0.13, 0.13),
+                    //    new Thickness(0, 0, 0.3, 0.3),
+                    //    new Thickness(0.3, 0, 0, 0.3),
+                    //    new Thickness(0.3, 0.3, 0, 0),
+                    //    new Thickness(0, 0.3, 0.3, 0),
                     //};
 
                     //input.CropImageForMany(null, crops);
-                    ////input.CropImage(null, new AwesomeExtensions.Thickness(0.13, 0.13, 0.13, 0.13));
+                    //input.CropImage(null, new AwesomeExtensions.Thickness(0.13, 0.13, 0.13, 0.13));
                 }
 
                 // E002 ConvertImageColor
                 {
-                    //var input = new FileInfo($@"{baseDir_100_A}\E002 ConvertImageColor\input.png");
+                    //var input = baseDir_100.GetChildFileInfo($@"E002 ConvertImageColor\input.png");
 
                     //var targetInfos = new (string, Color)[]
                     //{
@@ -360,20 +372,21 @@ public static partial class ExampleExecuter
                     //};
 
                     //input.ConvertImageColor(null, Color.White);
-                    //input.ConvertImageColor_Loop(null, targetInfos);
-                    //input.ConvertImageColor_Loop(null, targetColors);
+                    //input.ConvertImageColorForMany(null, targetInfos);
+                    //input.ConvertImageColorForMany(null, targetColors);
                 }
 
                 // E004 Images2PDF
                 {
-                    //var input = new DirectoryInfo($@"{baseDir_100_A}\E004 Images2PDF");
-                    //input.Images2PDF(null);
+                    //baseDir_100
+                    //    .GetChildDirectoryInfo($@"E004 Images2PDF")
+                    //    .Images2PDF(null);
                 }
 
                 // E005 Images2Video, L001 Video2Images
                 {
-                    //var input = new DirectoryInfo($@"{baseDir_100_A}\E005 Images2Video");
-                    //input
+                    //baseDir_100
+                    //    .GetChildDirectoryInfo($@"E005 Images2Video")
                     //    .Images2Video(null, 3)
                     //    .Video2Images(null, 3);
 
@@ -381,21 +394,22 @@ public static partial class ExampleExecuter
 
                 // E006 ResizeImage
                 {
-                    //var input = new DirectoryInfo($@"{baseDir_100_A}\E006 ResizeImage");
-                    //input.ResizeImage_Loop(null, new Size(100, 100));
+                    //baseDir_100
+                    //    .GetChildDirectoryInfo($@"E006 ResizeImage")
+                    //    .ResizeImage_Loop(null, new Size(100, 100));
                 }
 
                 // E007 DistortImage
                 {
-                    //var input5 = new FileInfo($@"{baseDir_100_A}\E007 DistortImage\5.png");
-                    //var output510 = new FileInfo($@"{baseDir_100_A}\E007 DistortImage\5-1-0.png");
-                    //var output520 = new FileInfo($@"{baseDir_100_A}\E007 DistortImage\5-2-0.png");
-                    //var output521 = new FileInfo($@"{baseDir_100_A}\E007 DistortImage\5-2-1.png");
-                    //var output530 = new FileInfo($@"{baseDir_100_A}\E007 DistortImage\5-3-0.png");
-                    //var output531 = new FileInfo($@"{baseDir_100_A}\E007 DistortImage\5-3-1.png");
-                    //var output540 = new FileInfo($@"{baseDir_100_A}\E007 DistortImage\5-4-0.png");
-                    //var output541 = new FileInfo($@"{baseDir_100_A}\E007 DistortImage\5-4-1.png");
-                    //var output542 = new FileInfo($@"{baseDir_100_A}\E007 DistortImage\5-4-2.png");
+                    //var input5 = baseDir_100.GetChildFileInfo($@"E007 DistortImage\5.png");
+                    //var output510 = baseDir_100.GetChildFileInfo($@"E007 DistortImage\5-1-0.png");
+                    //var output520 = baseDir_100.GetChildFileInfo($@"E007 DistortImage\5-2-0.png");
+                    //var output521 = baseDir_100.GetChildFileInfo($@"E007 DistortImage\5-2-1.png");
+                    //var output530 = baseDir_100.GetChildFileInfo($@"E007 DistortImage\5-3-0.png");
+                    //var output531 = baseDir_100.GetChildFileInfo($@"E007 DistortImage\5-3-1.png");
+                    //var output540 = baseDir_100.GetChildFileInfo($@"E007 DistortImage\5-4-0.png");
+                    //var output541 = baseDir_100.GetChildFileInfo($@"E007 DistortImage\5-4-1.png");
+                    //var output542 = baseDir_100.GetChildFileInfo($@"E007 DistortImage\5-4-2.png");
 
                     ////★ 1 point → move
                     //input5.DistortImage(output510, Color.Orange,
@@ -438,15 +452,16 @@ public static partial class ExampleExecuter
 
                 // E008 AddTextToImage
                 {
-                    //var input = new DirectoryInfo($@"{baseDir_100_A}\E008 AddTextToImage");
-                    //input.AddTextToImageProportionally_Loop(null, "%FN", new PointF(0.9f, 0.8f),
+                    //baseDir_100
+                    //    .GetChildDirectoryInfo($@"E008 AddTextToImage")
+                    //    .AddTextToImageProportionally_Loop(null, "%FN", new PointF(0.9f, 0.8f),
                     //    fontSizeRatio: 0.1, alignRight: true);
                 }
 
                 // E102 SaveScreenShot
                 {
-                    //var output = new DirectoryInfo($@"{baseDir_100_A}\E102 SaveScreenShot");
-                    // AwesomeExtensions.SaveScreenShot(output, new Point(0, 0), new Point(1000, 1000));
+                    //var output = baseDir_100.GetChildDirectoryInfo($@"E102 SaveScreenShot");
+                    //Aki32Utilities.ConsoleAppUtilities.General.ChainableExtensions.SaveScreenShot(output, new Point(0, 0), new Point(1000, 1000));
                 }
 
                 // F201 DivideTimeStep
@@ -466,20 +481,22 @@ public static partial class ExampleExecuter
 
                 // G002 PDF2Images
                 {
-                    //var input = new FileInfo($@"{baseDir_100_A}\G002 PDF2Images\input.pdf");
-                    //input.PDF2Images(null);
+                    //baseDir_100
+                    //    .GetChildFileInfo($@"G002 PDF2Images\input.pdf")
+                    //    .PDF2Images(null);
                 }
 
                 // G101 PDFPageCount
                 {
-                    //var input = new DirectoryInfo($@"{baseDir_100_A}\G101 PDFPageCount\input");
-                    //input.PDFPageCount();
+                    //baseDir_100
+                    //    .GetChildDirectoryInfo($@"G101 PDFPageCount\input")
+                    //    .PDFPageCount();
                 }
 
                 // H101 DownloadFile
                 {
                     //var source = new Uri(@"https://raw.githubusercontent.com/aki32/aki32-utilities/main/1%20Console%20App%20Utilities/%23%20TestModel/A%20-%20ChainableExtensions/B%20-%20General/E001%20CropImage/input.bmp");
-                    //var output = new FileInfo($@"{baseDir_100_A}\H101 DownloadFile\output.bmp");
+                    //var output = baseDir_100.GetChildFileInfo($@"H101 DownloadFile\output.bmp");
                     //source.DownloadFileAsync(output).Wait();
 
                 }
@@ -495,14 +512,15 @@ public static partial class ExampleExecuter
 
                 // K001 ExcelSheets2Csvs
                 {
-                    //new FileInfo($@"{baseDir_100_A}\K001 ExcelSheets2Csvs\input.xlsx")
+                    //baseDir_100
+                    //    .GetChildFileInfo($@"K001 ExcelSheets2Csvs\input.xlsx")
                     //    .ExcelSheets2Csvs(null);
 
                 }
 
                 // L101 PlayVideo 
                 {
-                    //var input = new FileInfo($@"{baseDir_100_A}\L101 PlayVideo\input.mp4");
+                    //var input = baseDir_100.GetChildFileInfo($@"L101 PlayVideo\input.mp4");
                     //input.PlayVideo_OnThread();
                     //input.PlayVideo_OnDefaultApp();
 
@@ -510,7 +528,7 @@ public static partial class ExampleExecuter
 
                 // M101 PlaySound 
                 {
-                    //var input = new FileInfo($@"{baseDir_100_A}\M101 PlaySound\input.mp3");
+                    //var input = baseDir_100.GetChildFileInfo($@"M101 PlaySound\input.mp3");
 
                     ////input.PlaySound_OnDefaultApp();
 
@@ -525,7 +543,7 @@ public static partial class ExampleExecuter
 
             // B - UsefulClasses
             {
-                var baseDir_100_B = $@"{baseDir_100}\B - UsefulClasses";
+                var baseDir_100_B = baseDir_100.GetChildDirectoryInfo($@"B - UsefulClasses");
 
                 // B004 ConsoleExtension
                 {
@@ -587,11 +605,11 @@ public static partial class ExampleExecuter
 
             // C - AwesomeModels
             {
-                var baseDir_100_C = $@"{baseDir_100}\C - AwesomeModels";
+                var baseDir_100_C = baseDir_100.GetChildDirectoryInfo($@"C - AwesomeModels");
 
                 // A - TimeHistoryModel
                 {
-                    var baseDir_C_A = $@"{baseDir_100_C}\A - TimeHistoryModel";
+                    var baseDir_C_A = baseDir_100_C.GetChildDirectoryInfo($@"A - TimeHistoryModel");
 
                     // ★ TimeHistory
                     {
@@ -630,7 +648,7 @@ public static partial class ExampleExecuter
 
             // D - ExternalAPIControllers
             {
-                var baseDir_100_D = $@"{baseDir_100}\D - ExternalAPIControllers";
+                var baseDir_100_D = baseDir_100.GetChildDirectoryInfo($@"D - ExternalAPIControllers");
 
                 // D001 LINEController
                 {
@@ -736,25 +754,27 @@ public static partial class ExampleExecuter
 
         // 101 - AI
         {
-            var baseDir_101 = $@"{BASE_DIR}\101 - AI";
+            var baseDir_101 = BASE_DIR.GetChildDirectoryInfo($@"101 - AI");
 
             // A - ChainableExtensions
             {
-                var baseDir_101_A = $@"{baseDir_101}\A - ChainableExtensions";
+                var baseDir_101_A = baseDir_101.GetChildDirectoryInfo($@"A - ChainableExtensions");
 
                 // BB ImageToImage
                 {
-                    // BB01 ML_GetHigherResolutionImage_Loop
+                    // BB01 AI_GetHigherResolutionImage
                     {
                         //PythonController.Initialize();
 
                         //// single
-                        //var input = new FileInfo($@"{baseDir_101_A}\BB01 GetHigherResolutionImage\input\00.jpg");
-                        //input.AI_GetHigherResolutionImage(null);
+                        //baseDir_101_A
+                        //    .GetChildFileInfo($@"BB01 GetHigherResolutionImage\input\00.jpg")
+                        //    .AI_GetHigherResolutionImage(null);
 
-                        //// loop
-                        ////var input = new DirectoryInfo($@"{baseDir_101_A}\BB01 GetHigherResolutionImage\input");
-                        ////input.ML_GetHigherResolutionImage_Loop(null);
+                        ////// loop
+                        ////baseDir_101_A
+                        ////    .GetChildDirectoryInfo($@"BB01 GetHigherResolutionImage\input")
+                        ////    .AI_GetHigherResolutionImage_Loop(null);
 
                         //PythonController.Shutdown();
 
@@ -764,13 +784,13 @@ public static partial class ExampleExecuter
 
             // X - CheatSheet
             {
-                var baseDir_101_X = $@"{baseDir_101}\X - CheatSheet";
+                var baseDir_101_X = baseDir_101.GetChildDirectoryInfo($@"X - CheatSheet");
 
                 // A001 - CheatSheet - MLNetExampleSummary
                 {
-                    //var baseDir_101_X_A001 = $@"{baseDir_101_X}\A001 MLNetExampleSummary";
+                    //var baseDir_101_X_A001 = baseDir_101_X.GetChildDirectoryInfo($@"A001 MLNetExampleSummary");
 
-                    //var runner = new MLNetExampleSummary(MLNetExampleScenario.C777_Recommendation_Auto_MovieRecommender, new DirectoryInfo(baseDir_101_X_A001));
+                    //var runner = new MLNetExampleSummary(MLNetExampleScenario.C777_Recommendation_Auto_MovieRecommender, baseDir_101_X_A001);
                     ////runner.ExperimentTime_InSeconds = 60;
                     ////runner.RunPrediction();
                     //runner.RunAll();
@@ -782,40 +802,45 @@ public static partial class ExampleExecuter
 
         // 110 - StructuralEngineering
         {
-            var baseDir_110 = $@"{BASE_DIR}\110 - StructuralEngineering";
+            var baseDir_110 = BASE_DIR.GetChildDirectoryInfo($@"110 - StructuralEngineering");
 
             // A - ChainableExtensions
             {
-                var baseDir_110_A = $@"{baseDir_110}\A - ChainableExtensions";
+                var baseDir_110_A = baseDir_110.GetChildDirectoryInfo($@"A - ChainableExtensions");
 
                 // B001 RainflowCycleCounting
                 {
-                    //new FileInfo(Path.Combine(baseDir_110_A, "B001 RainflowCycleCounting", @"input3.csv"))
+                    //baseDir_110_A
+                    //    .GetChildFileInfo($@"B001 RainflowCycleCounting\input3.csv")
                     //    .Rainflow(null, 4, 1 / 3d, false);
 
-                    //new DirectoryInfo(Path.Combine(baseDir_110_A, "B001 RainflowCycleCounting"))
+                    //baseDir_110_A
+                    //    .GetChildDirectoryInfo("B001 RainflowCycleCounting")
                     //    .Rainflow_Loop(null, 4, 1 / 3d, false);
 
                 }
 
                 // B002 RDTechnique
                 {
-                    //new FileInfo(Path.Combine(baseDir_110_A, "B002 RDTechnique", @"input.csv"))
-                    //    .CalcRD(null, 200)
+                    //baseDir_110_A
+                    //    .GetChildFileInfo(@$"B002 RDTechnique\input.csv")
+                    //    .CalcRandomDecrement(null, 200)
                     //    ;
 
                 }
 
                 // B003 CreateAccFromCsv
                 {
-                    //new FileInfo(Path.Combine(baseDir_110_A, "B003 CreateAccFromCsv", @"kobe L1.csv"))
+                    //baseDir_110_A
+                    //    .GetChildFileInfo(@$"B003 CreateAccFromCsv\kobe L1.csv")
                     //    .CreateAccFromCsv_For_DynamicPro(null);
 
                 }
 
                 // F203 FFT
                 {
-                    //new FileInfo($@"{baseDir_110_A}\F203 FFT\input.csv")
+                    //baseDir_110_A
+                    //    .GetChildFileInfo($@"F203 FFT\input.csv")
                     //    .GetTimeHistoryFromFile(new string[] { "t", "x" })
                     //    .FFT("x").Result
                     //    .SaveToCsv();
@@ -826,24 +851,24 @@ public static partial class ExampleExecuter
 
             // C - AwesomeModels
             {
-                var baseDir_110_C = @$"{baseDir_110}\C - AwesomeModels";
+                var baseDir_110_C = baseDir_110.GetChildDirectoryInfo(@$"C - AwesomeModels");
 
                 // B001 ElastoplasticAnalysis
                 {
-                    var baseDir_110_B001 = @$"{baseDir_110_C}\B001 EPAnalysis";
+                    var baseDir_110_B001 = baseDir_110_C.GetChildDirectoryInfo(@$"B001 EPAnalysis");
 
                     // newmark beta
                     {
                         //var model = SDoFModel.FromT(1, 0.03);
 
-                        //var waveCsv = new FileInfo(@$"{baseDir_110_B001}\Hachinohe-NS.csv");
+                        //var waveCsv = baseDir_110_B001.GetChildFileInfo(@$"Hachinohe-NS.csv");
                         //var wave = TimeHistory.FromCsv(waveCsv, new string[] { "t", "ytt" });
 
                         //var waveAnalysisModel = new NewmarkBetaModel(0.25);
                         //var result = model.Calc(wave, waveAnalysisModel);
 
                         //result.SaveToCsv();
-                        //result.DrawLineGraph("x", "t");
+                        //result.DrawGraph("x", "t");
                     }
 
                     // nigam jennings
@@ -857,7 +882,7 @@ public static partial class ExampleExecuter
                         //var result = model.Calc(wave, waveAnalysisModel);
 
                         //result.SaveToCsv();
-                        //result.DrawLineGraph("x", "t");
+                        //result.DrawGraph("x", "t");
                     }
 
                     // ep test
@@ -884,9 +909,9 @@ public static partial class ExampleExecuter
                         //    var tester = new EPTester(ep);
                         //    var result = tester.Calc(EPTester.TestWave.TestWave1);
 
-                        //    var saveDir = new DirectoryInfo(@$"{baseDir_110_B001}\output");
+                        //    var saveDir = baseDir_110_B001.GetChildDirectoryInfo(@$"output");
                         //    result.SaveToCsv(saveDir);
-                        //    result.DrawLineGraph("f", "x");
+                        //    result.DrawGraph("f", "x");
                         //}
 
                         // combined
@@ -898,7 +923,7 @@ public static partial class ExampleExecuter
                             //    //new NigamJenningsModel(),
                             //};
 
-                            //var waveCsv = new FileInfo(@$"{baseDir_110_B001}\Hachinohe-NS.csv");
+                            //var waveCsv = baseDir_110_B001.GetChildFileInfo(@$"Hachinohe-NS.csv");
                             //var wave = TimeHistory.FromCsv(waveCsv, new string[] { "t", "ytt" });
 
                             //foreach (var waveAnalysisModel in waveAnalysisModelList)
@@ -940,7 +965,7 @@ public static partial class ExampleExecuter
                             //var TList = Enumerable.Range(100, 400).Select(x => x / 100d).ToArray();
                             //var hList = new double[] { 0.00, 0.03, 0.05, 0.10 };
 
-                            //var waveCsv = new FileInfo(@$"{baseDir_110_B001}\Hachinohe-NS.csv");
+                            //var waveCsv = baseDir_110_B001.GetChildFileInfo(@$"Hachinohe-NS.csv");
                             //var wave = TimeHistory.FromCsv(waveCsv, new string[] { "t", "ytt" });
 
                             ////var waveAnalysisModel = new NewmarkBetaModel(0.25);
@@ -956,7 +981,7 @@ public static partial class ExampleExecuter
 
                 // B002 RainflowCycleCounting
                 {
-                    //var inputCsv = new FileInfo($@"{baseDir_110_C}\B002 RainflowCycleCounting\input3.csv");
+                    //var inputCsv = baseDir_110_C.GetChildFileInfo($@"B002 RainflowCycleCounting\input3.csv");
                     ////var inputCsv = new FileInfo(@"C:\Users\aki32\Desktop\anaAll_beam.csv");
 
                     //var rainflow = RainflowCalculator.FromCsv(inputCsv);
@@ -968,15 +993,15 @@ public static partial class ExampleExecuter
                 // B003 RDTechnique
                 {
                     //// Define IO paths
-                    //var input = new FileInfo($@"{baseDir_110_C}\B003 RDTechnique\input.csv");
+                    //var input = baseDir_110_C.GetChildFileInfo($@"B003 RDTechnique\input.csv");
 
                     //// Read input csv
                     //var rd = RDTechniqueCalculator.FromCsv(input);
 
                     //// Calc and show
                     //rd.Calc(200);
-                    //rd.InputHistory.DrawLineGraph("v");
-                    //rd.ResultHistory.DrawLineGraph("v");
+                    //rd.InputHistory.DrawGraph("v");
+                    //rd.ResultHistory.DrawGraph("v");
 
                     //// Calc AttenuationConstant and show
                     //var att = rd.CalcAttenuationConstant(4, true);
@@ -988,7 +1013,7 @@ public static partial class ExampleExecuter
 
             // X - SoftwareHelpers
             {
-                var baseDir_110_X = @$"{baseDir_110}\X - SoftwareHelpers";
+                var baseDir_110_X = baseDir_110.GetChildDirectoryInfo(@$"X - SoftwareHelpers");
 
                 // X001 SNAPHelper
                 {
@@ -1004,8 +1029,8 @@ public static partial class ExampleExecuter
                 {
                     // CreateAccFromCsv
                     {
-                        //var input = new FileInfo($@"{baseDir_110_X}\X002 DynamicProHelper\kobe L1.csv");
-                        //var output = new FileInfo($@"{baseDir_110_X}\X002 DynamicProHelper\kobe L1.acc");
+                        //var input = baseDir_110_X.GetChildFileInfo($@"X002 DynamicProHelper\kobe L1.csv");
+                        //var output = baseDir_110_X.GetChildFileInfo($@"X002 DynamicProHelper\kobe L1.acc");
                         //DynamicProHelper.CreateAccFromCsv(input, output);
                     }
 
@@ -1034,7 +1059,7 @@ public static partial class ExampleExecuter
 
         // 111 - Research
         {
-            var baseDir_101 = $@"{BASE_DIR}\111 - Research";
+            var baseDir_101 = BASE_DIR.GetChildDirectoryInfo($@"111 - Research");
 
             // A - ResearchManager
             {
@@ -1114,11 +1139,11 @@ public static partial class ExampleExecuter
 
         // M - MiniApps
         {
-            var baseDir_M = $@"{BASE_DIR}\M - MiniApps";
+            var baseDir_M = BASE_DIR.GetChildDirectoryInfo($@"M - MiniApps");
 
             // M001 Books2PDF
             {
-                //var outputDir = new DirectoryInfo($@"{baseDir_M}\M001 Books2PDF");
+                //var outputDir = baseDir_M.GetChildDirectoryInfo($@"M001 Books2PDF");
                 //MiniApps.Books2PDF(outputDir, 10);
 
             }
