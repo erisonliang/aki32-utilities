@@ -20,7 +20,7 @@ public enum MLNetExampleScenario
     C001_Recommendation_ProductRecommender,
     C002_Recommendation_MovieRecommender_MatrixFactorization,
     C003_Recommendation_MovieRecommender_FieldAwareFactorizationMachines,
-    C777_Auto_Recommendation,
+    C777_Recommendation_Auto_MovieRecommender,
 
     // D    Regression
     D001_Regression_TaxiFarePrediction,

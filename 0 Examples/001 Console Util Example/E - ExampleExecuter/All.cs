@@ -818,7 +818,7 @@ public static partial class ExampleExecuter
             {
                 var baseDir_101_XA001 = $@"{baseDir_101}\XA001 MLNetExampleSummary";
 
-                var runner = new MLNetExampleSummary(MLNetExampleScenario.H777_Ranking_Auto_RankSearchEngineResults, new DirectoryInfo(baseDir_101_XA001));
+                var runner = new MLNetExampleSummary(MLNetExampleScenario.C777_Recommendation_Auto_MovieRecommender, new DirectoryInfo(baseDir_101_XA001));
                 //runner.ExperimentTime_InSeconds = 60;
                 //runner.RunPrediction();
                 runner.RunAll();

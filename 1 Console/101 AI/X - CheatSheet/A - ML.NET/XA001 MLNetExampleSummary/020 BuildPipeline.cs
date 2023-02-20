@@ -327,6 +327,7 @@ public partial class MLNetExampleSummary : MLNetHandler
             // ignore
             case MLNetExampleScenario.A777_BinaryClassification_Auto_SentimentAnalysis:
             case MLNetExampleScenario.B777_MultiClassClassification_Auto_MNIST:
+            case MLNetExampleScenario.C777_Recommendation_Auto_MovieRecommender:
             case MLNetExampleScenario.D777_Regression_Auto_TaxiFarePrediction:
             case MLNetExampleScenario.H777_Ranking_Auto_RankSearchEngineResults:
             case MLNetExampleScenario.Z999_Ignore:
@@ -339,7 +340,6 @@ public partial class MLNetExampleSummary : MLNetHandler
             // not implemented
             case MLNetExampleScenario.B001_MultiClassClassification_IssuesClassification:
             case MLNetExampleScenario.C003_Recommendation_MovieRecommender_FieldAwareFactorizationMachines:
-            case MLNetExampleScenario.C777_Auto_Recommendation:
             case MLNetExampleScenario.D002_Regression_SalesForecasting:
             case MLNetExampleScenario.D003_Regression_DemandPrediction:
             case MLNetExampleScenario.E001_TimeSeriesForecasting_SalesForecasting:

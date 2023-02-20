@@ -168,6 +168,7 @@ public partial class MLNetExampleSummary : MLNetHandler
                 }
 
             case MLNetExampleScenario.C002_Recommendation_MovieRecommender_MatrixFactorization:
+            case MLNetExampleScenario.C777_Recommendation_Auto_MovieRecommender:
                 {
                     {
                         var movieDataFile = DataDir.GetChildFileInfo("Movie.csv");
@@ -416,7 +417,6 @@ public partial class MLNetExampleSummary : MLNetHandler
 
             // not implemented
             case MLNetExampleScenario.C003_Recommendation_MovieRecommender_FieldAwareFactorizationMachines:
-            case MLNetExampleScenario.C777_Auto_Recommendation:
             case MLNetExampleScenario.D002_Regression_SalesForecasting:
             case MLNetExampleScenario.D003_Regression_DemandPrediction:
             case MLNetExampleScenario.E001_TimeSeriesForecasting_SalesForecasting:

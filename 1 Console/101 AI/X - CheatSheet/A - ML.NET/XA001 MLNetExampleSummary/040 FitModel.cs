@@ -4,6 +4,8 @@ using Microsoft.ML;
 using Microsoft.ML.AutoML;
 using Microsoft.ML.Data;
 
+using OpenCvSharp.ML;
+
 namespace Aki32Utilities.ConsoleAppUtilities.AI.CheatSheet;
 public partial class MLNetExampleSummary : MLNetHandler
 {
@@ -67,6 +69,35 @@ public partial class MLNetExampleSummary : MLNetHandler
 
                     var handler = new ExperimentHandler();
                     var result = Context.Auto().CreateMulticlassClassificationExperiment(ExperimentTime_InSeconds).Execute(TrainData, progressHandler: handler);
+
+                    Console.WriteLine();
+                    handler.PrintTopModels(result);
+
+                    Model = result.BestRun.Model;
+
+                    break;
+                }
+
+            // ★ Auto Recommendation
+            case MLNetExampleScenario.C777_Recommendation_Auto_MovieRecommender:
+                {
+                    throw new NotImplementedException("We need to deal with ArgumentOutOfRangeException thrown here");
+
+                    ExperimentTime_InSeconds = 60;
+
+                    Console.WriteLine(@$"=======================================================");
+                    Console.WriteLine($"Running AutoML recommendation experiment for {ExperimentTime_InSeconds} seconds...");
+
+                    TrainData.WriteToConsole(20);
+
+                    var handler = new ExperimentHandler();
+                    var experimentSettings = new RecommendationExperimentSettings
+                    {
+                        MaxExperimentTimeInSeconds = ExperimentTime_InSeconds,
+                        OptimizingMetric = RegressionMetric.RSquared,
+                    };
+
+                    var result = Context.Auto().CreateRecommendationExperiment(experimentSettings).Execute(TrainData, progressHandler: handler);
 
                     Console.WriteLine();
                     handler.PrintTopModels(result);
@@ -161,7 +192,6 @@ public partial class MLNetExampleSummary : MLNetHandler
             // not implemented
             case MLNetExampleScenario.B001_MultiClassClassification_IssuesClassification:
             case MLNetExampleScenario.C003_Recommendation_MovieRecommender_FieldAwareFactorizationMachines:
-            case MLNetExampleScenario.C777_Auto_Recommendation:
             case MLNetExampleScenario.D002_Regression_SalesForecasting:
             case MLNetExampleScenario.D003_Regression_DemandPrediction:
             case MLNetExampleScenario.E001_TimeSeriesForecasting_SalesForecasting:

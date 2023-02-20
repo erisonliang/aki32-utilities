@@ -21,6 +21,7 @@ public partial class MLNetExampleSummary : MLNetHandler
             case MLNetExampleScenario.B777_MultiClassClassification_Auto_MNIST:
             case MLNetExampleScenario.C001_Recommendation_ProductRecommender:
             case MLNetExampleScenario.C002_Recommendation_MovieRecommender_MatrixFactorization:
+            case MLNetExampleScenario.C777_Recommendation_Auto_MovieRecommender:
             case MLNetExampleScenario.D001_Regression_TaxiFarePrediction:
             case MLNetExampleScenario.D777_Regression_Auto_TaxiFarePrediction:
             case MLNetExampleScenario.F001_AnomalyDetection_SalesSpikeDetection_DetectIidSpike:
@@ -51,7 +52,6 @@ public partial class MLNetExampleSummary : MLNetHandler
 
             // not implemented
             case MLNetExampleScenario.C003_Recommendation_MovieRecommender_FieldAwareFactorizationMachines:
-            case MLNetExampleScenario.C777_Auto_Recommendation:
             case MLNetExampleScenario.D002_Regression_SalesForecasting:
             case MLNetExampleScenario.D003_Regression_DemandPrediction:
             case MLNetExampleScenario.E001_TimeSeriesForecasting_SalesForecasting:

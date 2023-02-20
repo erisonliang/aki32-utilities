@@ -109,7 +109,7 @@ public class MLNetHandler
 
             if (dRunDetail.Exception != null)
             {
-                General.ConsoleExtension.WriteLineWithColor($"Exception during AutoML iteration: {dRunDetail.Exception}", ConsoleColor.Red);
+                General.ConsoleExtension.WriteLineWithColor($"Exception during AutoML iteration:\r\n{dRunDetail.Exception}", ConsoleColor.Red);
             }
             else
             {

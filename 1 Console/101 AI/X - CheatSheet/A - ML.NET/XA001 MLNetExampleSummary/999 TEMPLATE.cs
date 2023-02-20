@@ -21,7 +21,7 @@ public partial class MLNetExampleSummary : MLNetHandler
             case MLNetExampleScenario.C001_Recommendation_ProductRecommender:
             case MLNetExampleScenario.C002_Recommendation_MovieRecommender_MatrixFactorization:
             case MLNetExampleScenario.C003_Recommendation_MovieRecommender_FieldAwareFactorizationMachines:
-            case MLNetExampleScenario.C777_Auto_Recommendation:
+            case MLNetExampleScenario.C777_Recommendation_Auto_MovieRecommender:
             case MLNetExampleScenario.D001_Regression_TaxiFarePrediction:
             case MLNetExampleScenario.D002_Regression_SalesForecasting:
             case MLNetExampleScenario.D003_Regression_DemandPrediction:
