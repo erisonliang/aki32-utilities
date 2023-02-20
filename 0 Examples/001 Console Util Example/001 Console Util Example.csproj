@@ -60,7 +60,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="# ExampleModel\101 - AI\" />
     <Folder Include="# ExampleModel\111 - Research\A - ResearchManager\%40Private\" />
     <Folder Include="# ExampleModel\M - MiniApps\M001 Books2PDF\" />
   </ItemGroup>
