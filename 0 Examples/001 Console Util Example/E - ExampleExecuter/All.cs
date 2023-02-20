@@ -36,6 +36,11 @@ public static partial class ExampleExecuter
 
 
 
+
+
+
+
+
         }
 
         // A - ChainableExtensions
@@ -813,10 +818,10 @@ public static partial class ExampleExecuter
             {
                 var baseDir_101_XA001 = $@"{baseDir_101}\XA001 MLNetExampleSummary";
 
-                var runner = new MLNetExampleSummary(MLNetExampleScenario.I001_ComputerVision_ImageClassificationTraining_HighLevelAPI, new DirectoryInfo(baseDir_101_XA001));
+                var runner = new MLNetExampleSummary(MLNetExampleScenario.H777_Ranking_Auto_RankSearchEngineResults, new DirectoryInfo(baseDir_101_XA001));
                 //runner.ExperimentTime_InSeconds = 60;
                 //runner.RunPrediction();
-                //runner.RunAll();
+                runner.RunAll();
 
             }
 

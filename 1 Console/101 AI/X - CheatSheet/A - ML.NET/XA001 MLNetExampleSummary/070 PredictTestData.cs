@@ -1,5 +1,8 @@
 ﻿using System.Diagnostics;
 
+using Microsoft.ML.AutoML;
+using Microsoft.ML.Data;
+
 namespace Aki32Utilities.ConsoleAppUtilities.AI.CheatSheet;
 public partial class MLNetExampleSummary : MLNetHandler
 {
@@ -76,10 +79,17 @@ public partial class MLNetExampleSummary : MLNetHandler
 
             // for Ranking
             case MLNetExampleScenario.H001_Ranking_RankSearchEngineResults:
+            case MLNetExampleScenario.H777_Ranking_Auto_RankSearchEngineResults:
                 {
                     var predictedTestData = Model.Transform(TestData);
                     predictedTestData.WriteToConsole();
-                    var metrics = Context.Ranking.Evaluate(predictedTestData);
+
+                    var rankingEvaluatorOptions = new RankingEvaluatorOptions
+                    {
+                        DcgTruncationLevel = Math.Min(10, (int)Ranking_OptimizationMetricTruncationLevel * 2)
+                    };
+
+                    var metrics = Context.Ranking.Evaluate(predictedTestData, rankingEvaluatorOptions);
                     ConsoleExtension.PrintMetrics(metrics);
 
                     break;

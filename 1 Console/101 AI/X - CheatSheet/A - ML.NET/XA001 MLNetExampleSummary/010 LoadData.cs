@@ -243,26 +243,64 @@ public partial class MLNetExampleSummary : MLNetHandler
             case MLNetExampleScenario.H001_Ranking_RankSearchEngineResults:
                 {
                     {
-                        General.ConsoleExtension.WriteLineWithColor("This may take a few minutes.", ConsoleColor.Yellow);
                         var trainDataFile = DataDir.GetChildFileInfo("SearchResult-Train.tsv");
                         var trainDataUri = new Uri("https://aka.ms/mlnet-resources/benchmarks/MSLRWeb10KTrain720kRows.tsv");
-                        DownloadDataFile(trainDataUri, trainDataFile);
+                        DownloadDataFile(trainDataUri, trainDataFile, true);
                         TrainData = Context.Data.LoadFromTextFile<H001_SearchResultInput>(trainDataFile.FullName, hasHeader: true);
                     }
                     {
-                        General.ConsoleExtension.WriteLineWithColor("This may take a few minutes.", ConsoleColor.Yellow);
                         var trainDataFile = DataDir.GetChildFileInfo("SearchResult-Train2.tsv");
                         var trainDataUri = new Uri("https://aka.ms/mlnet-resources/benchmarks/MSLRWeb10KValidate240kRows.tsv");
-                        DownloadDataFile(trainDataUri, trainDataFile);
+                        DownloadDataFile(trainDataUri, trainDataFile, true);
                         var additionalTrainData = Context.Data.LoadFromTextFile<H001_SearchResultInput>(trainDataFile.FullName, hasHeader: false);
                         TrainData = CombineData<H001_SearchResultInput>(TrainData, additionalTrainData);
                     }
                     {
-                        General.ConsoleExtension.WriteLineWithColor("This may take a few minutes.", ConsoleColor.Yellow);
                         var testDataFile = DataDir.GetChildFileInfo("SearchResult-Test.tsv");
                         var testDataUri = new Uri("https://aka.ms/mlnet-resources/benchmarks/MSLRWeb10KTest240kRows.tsv");
-                        DownloadDataFile(testDataUri, testDataFile);
+                        DownloadDataFile(testDataUri, testDataFile, true);
                         TestData = Context.Data.LoadFromTextFile<H001_SearchResultInput>(testDataFile.FullName, hasHeader: false);
+                    }
+                    {
+                        ModelFile = DataDir.GetChildFileInfo("SearchResult-Model.zip");
+                    }
+
+                    break;
+                }
+
+            case MLNetExampleScenario.H777_Ranking_Auto_RankSearchEngineResults:
+                {
+                    var textLoaderOptions = new TextLoader.Options
+                    {
+                        Separators = new[] { '\t' },
+                        HasHeader = true,
+                        Columns = new[]
+                        {
+                            new TextLoader.Column("Label", DataKind.Single, 0),
+                            new TextLoader.Column("GroupId", DataKind.Int32, 1),
+                            new TextLoader.Column("Features", DataKind.Single, 2, 133),
+                        }
+                    };
+                    var textLoader = Context.Data.CreateTextLoader(textLoaderOptions);
+
+                    {
+                        var trainDataFile = DataDir.GetChildFileInfo("SearchResult-Train.tsv");
+                        var trainDataUri = new Uri("https://aka.ms/mlnet-resources/benchmarks/MSLRWeb10KTrain720kRows.tsv");
+                        DownloadDataFile(trainDataUri, trainDataFile, true);
+                        TrainData = textLoader.Load(trainDataFile.FullName);
+                    }
+                    {
+                        var trainDataFile = DataDir.GetChildFileInfo("SearchResult-Train2.tsv");
+                        var trainDataUri = new Uri("https://aka.ms/mlnet-resources/benchmarks/MSLRWeb10KValidate240kRows.tsv");
+                        DownloadDataFile(trainDataUri, trainDataFile, true);
+                        var additionalTrainData = textLoader.Load(trainDataFile.FullName);
+                        TrainData = CombineData<H777_SearchResultInput>(TrainData, additionalTrainData);
+                    }
+                    {
+                        var testDataFile = DataDir.GetChildFileInfo("SearchResult-Test.tsv");
+                        var testDataUri = new Uri("https://aka.ms/mlnet-resources/benchmarks/MSLRWeb10KTest240kRows.tsv");
+                        DownloadDataFile(testDataUri, testDataFile, true);
+                        TestData = textLoader.Load(testDataFile.FullName);
                     }
                     {
                         ModelFile = DataDir.GetChildFileInfo("SearchResult-Model.zip");
@@ -296,7 +334,7 @@ public partial class MLNetExampleSummary : MLNetHandler
                         //    .Append(Context.Transforms.LoadRawImageBytes("Image", dataDir.FullName, "ImageFileName"))
                         //    .Fit(AllData)
                         //    .Transform(AllData);
-                        
+
                         SplitData();
                     }
                     {

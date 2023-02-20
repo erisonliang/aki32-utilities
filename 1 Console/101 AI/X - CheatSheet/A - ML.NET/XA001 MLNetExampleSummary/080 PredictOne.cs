@@ -548,6 +548,7 @@ public partial class MLNetExampleSummary : MLNetHandler
             case MLNetExampleScenario.A003_BinaryClassification_CreditCardFraudDetection:
             case MLNetExampleScenario.A777_BinaryClassification_Auto_SentimentAnalysis:
             case MLNetExampleScenario.H001_Ranking_RankSearchEngineResults:
+            case MLNetExampleScenario.H777_Ranking_Auto_RankSearchEngineResults:
             case MLNetExampleScenario.Z999_Ignore:
                 {
                     Console.WriteLine("ignore");

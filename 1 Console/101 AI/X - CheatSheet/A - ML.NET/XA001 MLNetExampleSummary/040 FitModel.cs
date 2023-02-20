@@ -28,6 +28,7 @@ public partial class MLNetExampleSummary : MLNetHandler
             case MLNetExampleScenario.F003_AnomalyDetection_CreditCardFraudDetection:
             case MLNetExampleScenario.G002_Clustering_IrisFlowerClustering:
             case MLNetExampleScenario.H001_Ranking_RankSearchEngineResults:
+            case MLNetExampleScenario.I001_ComputerVision_ImageClassificationTraining_HighLevelAPI:
                 {
                     Console.WriteLine($"fitting...");
                     var watch = Stopwatch.StartNew();
@@ -40,10 +41,12 @@ public partial class MLNetExampleSummary : MLNetHandler
             // ★ Auto BinaryClassification
             case MLNetExampleScenario.A777_BinaryClassification_Auto_SentimentAnalysis:
                 {
+                    ExperimentTime_InSeconds = 60;
+
                     Console.WriteLine(@$"=======================================================");
                     Console.WriteLine(@$"Running AutoML binary classification experiment for {ExperimentTime_InSeconds} seconds...");
 
-                    var handler = new MLNetExtension.ExperimentHandler();
+                    var handler = new ExperimentHandler();
                     var result = Context.Auto().CreateBinaryClassificationExperiment(ExperimentTime_InSeconds).Execute(TrainData, progressHandler: handler);
 
                     Console.WriteLine();
@@ -57,10 +60,12 @@ public partial class MLNetExampleSummary : MLNetHandler
             // ★ Auto MultiClassClassification
             case MLNetExampleScenario.B777_MultiClassClassification_Auto_MNIST:
                 {
+                    ExperimentTime_InSeconds = 60;
+
                     Console.WriteLine(@$"=======================================================");
                     Console.WriteLine($"Running AutoML multiclass classification experiment for {ExperimentTime_InSeconds} seconds...");
 
-                    var handler = new MLNetExtension.ExperimentHandler();
+                    var handler = new ExperimentHandler();
                     var result = Context.Auto().CreateMulticlassClassificationExperiment(ExperimentTime_InSeconds).Execute(TrainData, progressHandler: handler);
 
                     Console.WriteLine();
@@ -74,14 +79,43 @@ public partial class MLNetExampleSummary : MLNetHandler
             // ★ Auto Regression
             case MLNetExampleScenario.D777_Regression_Auto_TaxiFarePrediction:
                 {
+                    ExperimentTime_InSeconds = 60;
+
                     Console.WriteLine(@$"=======================================================");
                     Console.WriteLine($"Running AutoML regression experiment for {ExperimentTime_InSeconds} seconds...");
 
-                    var handler = new MLNetExtension.ExperimentHandler();
+                    var handler = new ExperimentHandler();
                     var result = Context.Auto().CreateRegressionExperiment(ExperimentTime_InSeconds).Execute(TrainData, progressHandler: handler);
 
                     Console.WriteLine();
                     handler.PrintTopModels(result);
+
+                    Model = result.BestRun.Model;
+
+                    break;
+                }
+
+            // ★ Auto Ranking
+            case MLNetExampleScenario.H777_Ranking_Auto_RankSearchEngineResults:
+                {
+                    ExperimentTime_InSeconds = 600;
+                    Ranking_OptimizationMetricTruncationLevel = 10;
+
+                    Console.WriteLine(@$"=======================================================");
+                    Console.WriteLine($"Running AutoML ranking experiment for {ExperimentTime_InSeconds} seconds...");
+
+                    var handler = new ExperimentHandler();
+                    var experimentSettings = new RankingExperimentSettings
+                    {
+                        MaxExperimentTimeInSeconds = ExperimentTime_InSeconds,
+                        OptimizingMetric = RankingMetric.Ndcg,
+                        OptimizationMetricTruncationLevel = Ranking_OptimizationMetricTruncationLevel,
+                    };
+
+                    var result = Context.Auto().CreateRankingExperiment(experimentSettings!).Execute(TrainData, progressHandler: handler);
+
+                    Console.WriteLine();
+                    handler.PrintTopModels(result, (int)Ranking_OptimizationMetricTruncationLevel);
 
                     Model = result.BestRun.Model;
 
@@ -94,21 +128,6 @@ public partial class MLNetExampleSummary : MLNetHandler
                     Console.WriteLine($"fitting...");
                     var emptyData = Context.Data.LoadFromEnumerable(new List<F001_ProductSalesInput>());
                     Model = PipeLineHead.Fit(emptyData);
-                    Console.WriteLine($"fitted");
-
-                    break;
-                }
-
-            // fit with watch
-            case MLNetExampleScenario.I001_ComputerVision_ImageClassificationTraining_HighLevelAPI:
-                {
-                    Console.WriteLine($"fitting...");
-                    var watch = Stopwatch.StartNew();
-                    Model = PipeLineHead.Fit(targetData ?? TrainData);
-                    watch.Stop();
-                    Console.WriteLine();
-                    Console.WriteLine($"Training with transfer learning took: {watch.ElapsedMilliseconds / 1000} seconds");
-                    Console.WriteLine();
                     Console.WriteLine($"fitted");
 
                     break;

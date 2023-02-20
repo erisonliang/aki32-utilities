@@ -43,6 +43,7 @@ public enum MLNetExampleScenario
 
     // H    Ranking
     H001_Ranking_RankSearchEngineResults,
+    H777_Ranking_Auto_RankSearchEngineResults,
 
     // I    Computer Vision
     I001_ComputerVision_ImageClassificationTraining_HighLevelAPI,

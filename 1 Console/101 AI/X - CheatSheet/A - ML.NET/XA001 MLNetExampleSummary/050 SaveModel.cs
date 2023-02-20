@@ -29,6 +29,7 @@ public partial class MLNetExampleSummary : MLNetHandler
             case MLNetExampleScenario.F003_AnomalyDetection_CreditCardFraudDetection:
             case MLNetExampleScenario.G002_Clustering_IrisFlowerClustering:
             case MLNetExampleScenario.H001_Ranking_RankSearchEngineResults:
+            case MLNetExampleScenario.H777_Ranking_Auto_RankSearchEngineResults:
             case MLNetExampleScenario.I001_ComputerVision_ImageClassificationTraining_HighLevelAPI:
                 {
                     Context.Model.Save(Model, TrainData.Schema, ModelFile.FullName);

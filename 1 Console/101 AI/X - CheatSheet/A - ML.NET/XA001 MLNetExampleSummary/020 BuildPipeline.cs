@@ -328,6 +328,7 @@ public partial class MLNetExampleSummary : MLNetHandler
             case MLNetExampleScenario.A777_BinaryClassification_Auto_SentimentAnalysis:
             case MLNetExampleScenario.B777_MultiClassClassification_Auto_MNIST:
             case MLNetExampleScenario.D777_Regression_Auto_TaxiFarePrediction:
+            case MLNetExampleScenario.H777_Ranking_Auto_RankSearchEngineResults:
             case MLNetExampleScenario.Z999_Ignore:
                 {
                     Console.WriteLine("ignore");
