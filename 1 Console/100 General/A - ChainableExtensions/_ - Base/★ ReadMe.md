@@ -6,9 +6,9 @@
 
  - Num: 100 * α + β
    
-   - α: Depends on input and output
-     = 0 (both are FileSystemInfo)
-     = 1 (either)
+   - α: Depends on input and output<br/>
+     = 0 (both are FileSystemInfo)<br/>
+     = 1 (either)<br/>
      = 2 (neither)
 
    - β: Incremental num
@@ -37,5 +37,6 @@
 
 # 🌟 memo
 
-- for playing sound in console, you can use Argus.Audio.NAudio
+- for playing sound in console, you can use Argus.Audio.NAudio NuGet
 
+- for handling spectrogram, you can use Spectrogram NuGet

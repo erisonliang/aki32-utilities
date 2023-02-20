@@ -43,14 +43,19 @@ public static partial class ChainableExtensions
         return false;
     }
 
+    public static bool ContainsJapanese(this string text)
+    {
+        return text.IsMatch(@"[\p{IsHiragana}\p{IsKatakana}\p{IsCJKUnifiedIdeographs}]+");
+    }
+
 
     // ★★★★★★★★★★★★★★★ sub
 
     public static string[] GetRegexen_ImageFiles(
-        bool jpg = true,
-        bool png = true,
-        bool bmp = true,
-        bool heic = true)
+            bool jpg = true,
+            bool png = true,
+            bool bmp = true,
+            bool heic = true)
     {
         var regexen = new List<string>();
 

@@ -19,6 +19,8 @@ public static partial class ChainableExtensions
     public static DirectoryInfo AI_GetHigherResolutionImage_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir, double weight = 0.7, bool reCloneRepo = false)
     {
         // preprocess
+        if (inputDir.FullName.ContainsJapanese())
+            throw new FormatException("try not include Japanese characters in path");
         if (!PythonController.Activated)
             throw new Exception("Required to call PythonController.Initialize() first");
         UtilPreprocessors.PreprocessOutDir(ref outputDir, inputDir!);
@@ -54,35 +56,35 @@ public static partial class ChainableExtensions
             prompt.WriteLine(@$"");
         }
 
-        PythonController.RunSimpleString(@$"
+        //        PythonController.RunSimpleString(@$"
 
-# import
-import cv2
-import os
-import shutil
+        //# import
+        //import cv2
+        //import os
+        //import shutil
 
-def imread(img_path):
-  img = cv2.imread(img_path)
-  img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-  return img
- 
-def reset_folder(path):
-    if os.path.isdir(path):
-      shutil.rmtree(path)
-    os.makedirs(path,exist_ok=True)
+        //def imread(img_path):
+        //  img = cv2.imread(img_path)
+        //  img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+        //  return img
 
-");
+        //def reset_folder(path):
+        //    if os.path.isdir(path):
+        //      shutil.rmtree(path)
+        //    os.makedirs(path,exist_ok=True)
+
+        //");
 
         var query = @$"";
         query += @$"python inference_codeformer.py";
         query += @$" --test_path ""{inputDir.FullName}""";
-        query += @$" --w {weight}";
+        query += @$" --w {weight:F1}";
         query += @$" --bg_upsampler realesrgan";
         //query += @$" --face_upsample";
         //query += @$" --has_aligned"; // make it square
 
         prompt.WriteLine(query);
-        prompt.WriteLine(@$"mv ""results/{Path.GetFileNameWithoutExtension(inputDir.Name)}_{weight}"" ""{outputDir!.Name}""");
+        prompt.WriteLine(@$"mv ""results/{Path.GetFileNameWithoutExtension(inputDir.Name)}_{weight:F1}"" ""{outputDir!.Name}""");
         prompt.WriteLine(@$"mv ""{outputDir!.Name}"" ""{outputDir!.Parent!.FullName}""");
         prompt.WaitForAllProcessFinished();
 
@@ -102,6 +104,8 @@ def reset_folder(path):
     public static FileInfo AI_GetHigherResolutionImage(this FileInfo inputFile, FileInfo? outputFile, double weight = 0.7, bool forceClone = false)
     {
         // preprocess
+        if (inputFile.FullName.ContainsJapanese())
+            throw new FormatException("try not include Japanese characters in path");
         UtilPreprocessors.PreprocessOutFile(ref outputFile, inputFile.Directory!, inputFile.Name);
         outputFile = outputFile!.GetExtensionChangedFileInfo(".png");
         UtilConfig.StopTemporary_ConsoleOutput_Preprocess();

@@ -35,6 +35,7 @@ public static partial class ExampleExecuter
 
 
 
+
         }
 
         // A - ChainableExtensions
@@ -814,7 +815,7 @@ public static partial class ExampleExecuter
 
                 var runner = new MLNetExampleSummary(MLNetExampleScenario.I001_ComputerVision_ImageClassificationTraining_HighLevelAPI, new DirectoryInfo(baseDir_101_XA001));
                 //runner.ExperimentTime_InSeconds = 60;
-                runner.RunPrediction();
+                //runner.RunPrediction();
                 //runner.RunAll();
 
             }

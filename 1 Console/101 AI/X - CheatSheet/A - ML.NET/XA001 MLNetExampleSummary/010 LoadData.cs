@@ -287,20 +287,16 @@ public partial class MLNetExampleSummary : MLNetHandler
                         var images = I001_ImageInput.LoadInMemoryImagesFromDirectory(dataDir, useFolderNameAsLabel: true);
                         AllData = Context.Data.LoadFromEnumerable(images);
                         AllData = Context.Data.ShuffleRows(AllData);
-                        //var a = AllData.Preview(int.MaxValue).RowView.Count();
-
                         AllData = Context.Transforms.Conversion.MapValueToKey("LabelAsKey", "Label", keyOrdinality: KeyOrdinality.ByValue)
                             .Fit(AllData)
                             .Transform(AllData);
-                        //var b = AllData.Preview(int.MaxValue).RowView.Count();
 
                         //AllData =
                         //    Context.Transforms.Conversion.MapValueToKey("LabelAsKey", "Label", keyOrdinality: KeyOrdinality.ByValue)
                         //    .Append(Context.Transforms.LoadRawImageBytes("Image", dataDir.FullName, "ImageFileName"))
                         //    .Fit(AllData)
                         //    .Transform(AllData);
-                        //var c = AllData.Preview(int.MaxValue).RowView.Count();
-
+                        
                         SplitData();
                     }
                     {
