@@ -41,7 +41,7 @@ public static partial class ChainableExtensions
     /// </summary>
     /// <param name="inputData"></param>
     /// <returns></returns>
-    public static void DrawHeatmapToConsole(this IEnumerable<float> inputData, float? minValue = null, float? maxValue = null, int repeat = 2, string StringSet = FadeStringSet4)
+    public static void DrawHeatmapToConsole(this IEnumerable<float> inputData, float? minValue = null, float? maxValue = null, int repeat = 2, string StringSet = FadeStringSet5)
         => inputData.Select(v => (double)v).DrawHeatmapToConsole(minValue, maxValue, repeat, StringSet);
 
     /// <summary>
@@ -49,7 +49,7 @@ public static partial class ChainableExtensions
     /// </summary>
     /// <param name="inputData"></param>
     /// <returns></returns>
-    public static void DrawHeatmapToConsole(this IEnumerable<int> inputData, int? minValue = null, int? maxValue = null, int repeat = 2, string StringSet = FadeStringSet4)
+    public static void DrawHeatmapToConsole(this IEnumerable<int> inputData, int? minValue = null, int? maxValue = null, int repeat = 2, string StringSet = FadeStringSet5)
         => inputData.Select(v => (double)v).DrawHeatmapToConsole(minValue, maxValue, repeat, StringSet);
 
     /// <summary>
@@ -57,7 +57,7 @@ public static partial class ChainableExtensions
     /// </summary>
     /// <param name="inputData"></param>
     /// <returns></returns>
-    public static void DrawHeatmapToConsole(this int[,] inputData, int? minValue = null, int? maxValue = null, int repeat = 2, string StringSet = FadeStringSet4)
+    public static void DrawHeatmapToConsole(this int[,] inputData, int? minValue = null, int? maxValue = null, int repeat = 2, string StringSet = FadeStringSet5)
     {
         // preprocess
         var reshaped = inputData.ReShape();
@@ -96,7 +96,7 @@ public static partial class ChainableExtensions
     /// </summary>
     /// <param name="inputData"></param>
     /// <returns></returns>
-    public static void DrawHeatmapToConsole(this float[,] inputData, float? minValue = null, float? maxValue = null, int repeat = 2, string StringSet = FadeStringSet4)
+    public static void DrawHeatmapToConsole(this float[,] inputData, float? minValue = null, float? maxValue = null, int repeat = 2, string StringSet = FadeStringSet5)
     {
         // preprocess
         var reshaped = inputData.ReShape();
@@ -135,7 +135,7 @@ public static partial class ChainableExtensions
     /// </summary>
     /// <param name="inputData"></param>
     /// <returns></returns>
-    public static void DrawHeatmapToConsole(this double[,] inputData, double? minValue = null, double? maxValue = null, int repeat = 2, string StringSet = FadeStringSet4)
+    public static void DrawHeatmapToConsole(this double[,] inputData, double? minValue = null, double? maxValue = null, int repeat = 2, string StringSet = FadeStringSet5)
     {
         // preprocess
         var reshaped = inputData.ReShape();
@@ -246,6 +246,7 @@ public static partial class ChainableExtensions
     internal const string FadeStringSet2 = " ▁▂▃▄▅▆▇█";
     internal const string FadeStringSet3 = " .'`^\",:;Il!i><~+_-?][}{1)(|\\/tfjrxnuvczXYUJCLQ0OZmwqpdbkhao*#MW&8%B@$";
     internal const string FadeStringSet4 = " .:-=+*#%@";
+    internal const string FadeStringSet5 = " .,-~:;=!*#$@";
 
     // ★★★★★★★★★★★★★★★ 
 
