@@ -4,8 +4,6 @@ using Microsoft.ML;
 using Microsoft.ML.AutoML;
 using Microsoft.ML.Data;
 
-using OpenCvSharp.ML;
-
 namespace Aki32Utilities.ConsoleAppUtilities.AI;
 public class MLNetHandler
 {

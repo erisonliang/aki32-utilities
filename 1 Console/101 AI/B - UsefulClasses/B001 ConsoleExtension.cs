@@ -7,8 +7,6 @@ using Aki32Utilities.ConsoleAppUtilities.General;
 
 using static Microsoft.ML.TrainCatalogBase;
 using Microsoft.ML.AutoML;
-using DocumentFormat.OpenXml.Wordprocessing;
-using System.Linq;
 
 namespace Aki32Utilities.ConsoleAppUtilities.AI;
 public static class ConsoleExtension
@@ -40,7 +38,7 @@ public static class ConsoleExtension
         Console.WriteLine(@$"=======================================================");
         Console.WriteLine(@$"{metricsObject.GetType()}");
         Console.WriteLine($@"-------------------------------------------------------");
-
+        
         if (false)
         {
         }

@@ -782,6 +782,39 @@ public static partial class ExampleExecuter
                 }
             }
 
+            // B - UsefulClasses
+            {
+                var baseDir_101_B = baseDir_101.GetChildDirectoryInfo($@"B - UsefulClasses");
+
+
+
+            }
+
+            // C - AwesomeModels
+            {
+                var baseDir_101_C = baseDir_101.GetChildDirectoryInfo($@"C - AwesomeModels");
+
+                //
+                {
+                }
+
+            }
+
+            // D - ExternalAPISugars
+            {
+                var baseDir_101_D = baseDir_101.GetChildDirectoryInfo($@"D - ExternalAPISugars");
+
+                // D001 ExternalAPIControllers
+                {
+
+
+
+
+
+                }
+
+            }
+
             // X - CheatSheet
             {
                 var baseDir_101_X = baseDir_101.GetChildDirectoryInfo($@"X - CheatSheet");
