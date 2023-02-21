@@ -1,6 +1,5 @@
 ﻿using System.Drawing;
 using Aki32Utilities.ConsoleAppUtilities.General;
-using Aki32Utilities.ConsoleAppUtilities.General;
 using General = Aki32Utilities.ConsoleAppUtilities.General;
 
 namespace Aki32Utilities.UsageExamples.ConsoleAppUtilities;
