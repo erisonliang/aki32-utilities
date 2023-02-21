@@ -1,5 +1,7 @@
 ﻿using System.Text;
 
+using Newtonsoft.Json.Linq;
+
 namespace Aki32Utilities.ConsoleAppUtilities.General;
 public static class UtilConfig
 {
@@ -20,6 +22,33 @@ public static class UtilConfig
     public static void TryRestart_ConsoleOutput_Preprocess()
     {
         ConsoleOutput_Preprocess = Queue_Stop_ConsoleOutput_Preprocess.TryPop(out var dequeued) ? dequeued : true;
+    }
+
+    /// <summary>
+    /// Read json file as environment variables. Json format is as follows
+    /// <code>
+    /// [
+    ///    {"key" : "1", "value" : "Tanaka"},
+    ///    {"key" : "2", "value" : "Nakata"},
+    ///    {"key" : "3", "value" : "Katana"}  
+    /// ]
+    /// </code>
+    /// </summary>
+    public static void ReadEnvConfig(FileInfo input)
+    {
+        try
+        {
+            if (!input.Exists)
+                return;
+
+            var envs = input.ReadObjectFromLocalJson<JArray>();
+            foreach (var env in envs)
+                Environment.SetEnvironmentVariable(env["key"]!.ToString(), env["value"]!.ToString(), EnvironmentVariableTarget.Process);
+
+        }
+        catch (Exception)
+        {
+        }
     }
 
 }

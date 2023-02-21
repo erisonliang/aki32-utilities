@@ -45,6 +45,7 @@ public static partial class ExampleExecuter
 
 
 
+
         }
 
         // 100 - General
@@ -652,7 +653,8 @@ public static partial class ExampleExecuter
 
                 // D001 LINEController
                 {
-                    //var accessToken = ""; // LINE Notify
+                    ////var accessToken = ""; // LINE Notify
+                    //var accessToken = Environment.GetEnvironmentVariable("LINE_AccessToken__General")!; // LINE Notify
                     //var line = new LINEController(accessToken);
                     //var result = line.SendMessageAsync(@"Hello LINE from C#. 日本語").Result;
 
@@ -669,9 +671,12 @@ public static partial class ExampleExecuter
                     //{
                     //    Credentials = new LibGit2Sharp.UsernamePasswordCredentials
                     //    {
-                    //        // your credential info (obtainable from https://github.com/settings/tokens)
-                    //        Username = "",
-                    //        Password = "",
+                    //        //// your credential info (obtainable from https://github.com/settings/tokens)
+                    //        //Username = "",
+                    //        //Password = "",
+
+                    //        Username = Environment.GetEnvironmentVariable("GetHub_Username")!,
+                    //        Password = Environment.GetEnvironmentVariable("GetHub_Password")!,
                     //    },
                     //};
 
@@ -809,7 +814,8 @@ public static partial class ExampleExecuter
                     var baseDir_101_D_D001 = baseDir_101_D.GetChildDirectoryInfo($@"D001 OpenAIController");
                     var output = baseDir_101_D.GetChildDirectoryInfo($@"output");
 
-                    //var apiSecretKey = ""; // API SecretKey
+                    ////var apiSecretKey = ""; // API SecretKey
+                    //var apiSecretKey = Environment.GetEnvironmentVariable("OpenAI_SecretKey")!; // API SecretKey
                     //var openAI = new OpenAIController(apiSecretKey);
 
                     //// get models
