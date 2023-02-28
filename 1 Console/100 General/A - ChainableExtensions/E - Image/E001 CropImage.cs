@@ -1,4 +1,5 @@
 ﻿using System.Drawing;
+using System.Drawing.Imaging;
 
 namespace Aki32Utilities.ConsoleAppUtilities.General;
 public static partial class ChainableExtensions
@@ -13,16 +14,19 @@ public static partial class ChainableExtensions
     /// <param name="outputFile">when null, automatically set</param>
     /// <param name="cropSize"></param>a
     /// <returns></returns>
-    public static FileInfo CropImage(this FileInfo inputFile, FileInfo? outputFile, Thickness cropSize)
+    public static FileInfo CropImage(this FileInfo inputFile, FileInfo? outputFile, Thickness cropSize,
+        ImageFormat? imageFormat = null)
     {
         // preprocess
-        UtilPreprocessors.PreprocessOutFile(ref outputFile, inputFile.Directory!, $"{Path.GetFileNameWithoutExtension(inputFile.Name)} - {cropSize.ToString()}.png");
+        imageFormat = imageFormat.DecideImageFormatIfNull(inputFile);
+        var extension = imageFormat.GetExtension();
+        UtilPreprocessors.PreprocessOutFile(ref outputFile, inputFile.Directory!, $"{Path.GetFileNameWithoutExtension(inputFile.Name)} - {cropSize.ToString()}{extension}");
 
 
         // main
         using var inputImage = inputFile.GetImageFromFile();
         var outputImage = CropImage(inputImage, cropSize);
-        outputImage.Save(outputFile!.FullName);
+        outputImage.Save(outputFile!.FullName, imageFormat);
 
 
         // post process
@@ -36,7 +40,8 @@ public static partial class ChainableExtensions
     /// <param name="outputDir">when null, automatically set</param>
     /// <param name="cropSizes"></param>
     /// <returns></returns>
-    public static DirectoryInfo CropImageForMany(this FileInfo inputFile, DirectoryInfo? outputDir, Thickness[] cropSizes)
+    public static DirectoryInfo CropImageForMany(this FileInfo inputFile, DirectoryInfo? outputDir, Thickness[] cropSizes,
+        ImageFormat? imageFormat = null)
     {
         // preprocess
         UtilPreprocessors.PreprocessOutDir(ref outputDir, inputFile.Directory!);
@@ -47,7 +52,7 @@ public static partial class ChainableExtensions
         foreach (var crop in cropSizes)
         {
             var outputFile = outputDir!.GetChildFileInfo($"{Path.GetFileNameWithoutExtension(inputFile.Name)} - {crop.ToString()}.png");
-            inputFile.CropImage(outputFile, crop);
+            inputFile.CropImage(outputFile, crop, imageFormat);
         }
 
 
@@ -66,8 +71,9 @@ public static partial class ChainableExtensions
     /// <param name="outputDir">when null, automatically set</param>
     /// <param name="cropSize"></param>
     /// <returns></returns>
-    public static DirectoryInfo CropImage_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir, Thickness cropSize)
-        => inputDir.Loop(outputDir, (inF, outF) => inF.CropImage(outF, cropSize));
+    public static DirectoryInfo CropImage_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir, Thickness cropSize,
+        ImageFormat? imageFormat = null)
+        => inputDir.Loop(outputDir, (inF, outF) => inF.CropImage(outF, cropSize, imageFormat));
 
     /// <summary>
     /// 
@@ -76,8 +82,9 @@ public static partial class ChainableExtensions
     /// <param name="outputDir">when null, automatically set </param>
     /// <param name="crop"></param>
     /// <returns></returns>
-    public static DirectoryInfo CropImageForMany_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir, Thickness[] crorpSizes)
-        => inputDir.Loop(outputDir, (inF, outF) => inF.CropImageForMany(outputDir, crorpSizes));
+    public static DirectoryInfo CropImageForMany_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir, Thickness[] crorpSizes,
+        ImageFormat? imageFormat = null)
+        => inputDir.Loop(outputDir, (inF, outF) => inF.CropImageForMany(outputDir, crorpSizes, imageFormat));
 
 
     // ★★★★★★★★★★★★★★★ image process

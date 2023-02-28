@@ -2,8 +2,6 @@
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 
-using Org.BouncyCastle.Asn1.Cms;
-
 namespace Aki32Utilities.ConsoleAppUtilities.General;
 public static partial class ChainableExtensions
 {
@@ -18,16 +16,19 @@ public static partial class ChainableExtensions
     /// <param name="outputSize"></param>
     /// <returns></returns>
     public static FileInfo ResizeImage(this FileInfo inputFile, FileInfo? outputFile, Size outputSize,
-        ResizeImageMode mode = ResizeImageMode.Stretch)
+        ResizeImageMode mode = ResizeImageMode.Stretch,
+        ImageFormat? imageFormat = null)
     {
         // preprocess
-        UtilPreprocessors.PreprocessOutFile(ref outputFile, inputFile.Directory!, $"output.png");
+        imageFormat = imageFormat.DecideImageFormatIfNull(inputFile);
+        var extension = imageFormat.GetExtension();
+        UtilPreprocessors.PreprocessOutFile(ref outputFile, inputFile.Directory!, $"output{extension}");
 
 
         // main
         using var inputImage = inputFile.GetImageFromFile();
         var img = ResizeImage(inputImage, outputSize, mode);
-        img.Save(outputFile!.FullName);
+        img.Save(outputFile!.FullName, imageFormat);
 
 
         // post process
@@ -42,7 +43,8 @@ public static partial class ChainableExtensions
     /// <param name="outputSizeRatio">1 for the same size. More than 0. </param>
     /// <returns></returns>
     public static FileInfo ResizeImageProportionally(this FileInfo inputFile, FileInfo? outputFile, SizeF outputSizeRatio,
-        ResizeImageMode mode = ResizeImageMode.Stretch)
+        ResizeImageMode mode = ResizeImageMode.Stretch,
+        ImageFormat? imageFormat = null)
     {
         // sugar
         using var inputImage = inputFile.GetImageFromFile();
@@ -50,7 +52,7 @@ public static partial class ChainableExtensions
             (int)(inputImage.Width * outputSizeRatio.Width),
             (int)(inputImage.Height * outputSizeRatio.Height));
 
-        return inputFile.ResizeImage(outputFile, outputSize, mode);
+        return inputFile.ResizeImage(outputFile, outputSize, mode, imageFormat);
 
     }
 
@@ -65,8 +67,9 @@ public static partial class ChainableExtensions
     /// <param name="outputSize"></param>
     /// <returns></returns>
     public static DirectoryInfo ResizeImage_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir, Size outputSize,
-        ResizeImageMode mode = ResizeImageMode.Stretch)
-        => inputDir.Loop(outputDir, (inF, outF) => inF.ResizeImage(outF, outputSize, mode));
+        ResizeImageMode mode = ResizeImageMode.Stretch,
+        ImageFormat? imageFormat = null)
+        => inputDir.Loop(outputDir, (inF, outF) => inF.ResizeImage(outF, outputSize, mode, imageFormat));
 
     /// <summary>
     /// ResizeImage Proportionally
@@ -76,8 +79,9 @@ public static partial class ChainableExtensions
     /// <param name="outputSizeRatio">1 for the same size. More than 0. </param>
     /// <returns></returns>
     public static DirectoryInfo ResizeImageProportionally_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir, SizeF outputSizeRatio,
-        ResizeImageMode mode = ResizeImageMode.Stretch)
-           => inputDir.Loop(outputDir, (inF, outF) => inF.ResizeImageProportionally(outF, outputSizeRatio, mode));
+        ResizeImageMode mode = ResizeImageMode.Stretch,
+        ImageFormat? imageFormat = null)
+           => inputDir.Loop(outputDir, (inF, outF) => inF.ResizeImageProportionally(outF, outputSizeRatio, mode, imageFormat));
 
 
     // ★★★★★★★★★★★★★★★ Image process
@@ -98,6 +102,9 @@ public static partial class ChainableExtensions
             case ResizeImageMode.Stretch:
                 {
                     using var outputBitmap = new Bitmap(outputSize.Width, outputSize.Height);
+
+                    foreach (var prop in inputImage.PropertyItems)
+                        outputBitmap.SetPropertyItem(prop);
 
                     if (outputSize.Width <= inputImage.Width && outputSize.Height <= inputImage.Height)
                     {
@@ -135,12 +142,12 @@ public static partial class ChainableExtensions
 
                     return (Image)outputBitmap.Clone();
                 }
-            case ResizeImageMode.Uniform_Notimplemented:
+            case ResizeImageMode.Uniform_NotImplemented:
                 {
                     throw new NotImplementedException();
 
                 }
-            case ResizeImageMode.UniformToFill_Notimplemented:
+            case ResizeImageMode.UniformToFill_NotImplemented:
                 {
                     throw new NotImplementedException();
 
@@ -158,8 +165,8 @@ public static partial class ChainableExtensions
     public enum ResizeImageMode
     {
         Stretch,
-        Uniform_Notimplemented,
-        UniformToFill_Notimplemented,
+        Uniform_NotImplemented,
+        UniformToFill_NotImplemented,
     }
 
 

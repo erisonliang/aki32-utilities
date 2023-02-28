@@ -1,6 +1,4 @@
-﻿using Aki32Utilities.ConsoleAppUtilities.General;
-
-using iTextSharp.text;
+﻿using iTextSharp.text;
 using iTextSharp.text.pdf;
 
 namespace Aki32Utilities.ConsoleAppUtilities.General;

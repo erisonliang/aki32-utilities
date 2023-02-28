@@ -1,13 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
+﻿using System.Drawing;
 using System.Drawing.Imaging;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using System.Runtime.InteropServices;
 
 namespace Aki32Utilities.ConsoleAppUtilities.General;
 public static partial class ChainableExtensions
@@ -20,15 +12,18 @@ public static partial class ChainableExtensions
     /// </summary>
     /// <param name="outputFile">when null, automatically set</param>
     /// <returns></returns>
-    public static FileInfo SaveScreenShot(this FileInfo outputFile, Point upperLeftCoordinate, Point bottomRightCoordinate)
+    public static FileInfo SaveScreenShot(this FileInfo outputFile, Point upperLeftCoordinate, Point bottomRightCoordinate,
+        ImageFormat? imageFormat = null)
     {
         // preprocess
-        UtilPreprocessors.PreprocessOutFile(ref outputFile!, null!, "output.png");
+        imageFormat ??= ImageFormat.Png;
+        var extension = imageFormat.GetExtension();
+        UtilPreprocessors.PreprocessOutFile(ref outputFile!, null!, $"output{extension}");
 
 
         // main
         var outputImage = TakeScreenShot(upperLeftCoordinate, bottomRightCoordinate);
-        outputImage.Save(outputFile!.FullName, ImageFormat.Png);
+        outputImage.Save(outputFile!.FullName, imageFormat);
 
 
         // post process
@@ -40,10 +35,13 @@ public static partial class ChainableExtensions
     /// </summary>
     /// <param name="outputFile">when null, automatically set</param>
     /// <returns></returns>
-    public static FileInfo SaveScreenShot(this DirectoryInfo outputDir, Point upperLeftCoordinate, Point bottomRightCoordinate)
+    public static FileInfo SaveScreenShot(this DirectoryInfo outputDir, Point upperLeftCoordinate, Point bottomRightCoordinate,
+        ImageFormat? imageFormat = null)
     {
         // pre process
-        var outputFile = new FileInfo($@"{outputDir.FullName}\{DateTime.Now.ToString("s").Replace(":", "-")}.png");
+        imageFormat ??= ImageFormat.Png;
+        var extension = imageFormat.GetExtension();
+        var outputFile = new FileInfo($@"{outputDir.FullName}\{DateTime.Now.ToString("s").Replace(":", "-")}{extension}");
 
 
         // main

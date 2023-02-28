@@ -1,8 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Drawing;
 
-using Aki32Utilities.ConsoleAppUtilities.General;
-
 using HomographySharp;
 
 using MathNet.Numerics.LinearAlgebra;

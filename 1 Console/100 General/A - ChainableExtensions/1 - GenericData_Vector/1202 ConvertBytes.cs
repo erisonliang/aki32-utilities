@@ -1,13 +1,17 @@
 ﻿
 
+using System.Text;
+
+using DocumentFormat.OpenXml.Bibliography;
+
 namespace Aki32Utilities.ConsoleAppUtilities.General;
 public static partial class ChainableExtensions
 {
 
-    // ★★★★★★★★★★★★★★★ main
+    // ★★★★★★★★★★★★★★★ From Bytes
 
     /// <summary>
-    /// turn byte[] into char list
+    /// turn byte array into char array
     /// </summary>
     /// <returns></returns>
     public static char[] ToCharArray(this byte[] byteData, int skipBytes = 0)
@@ -19,7 +23,7 @@ public static partial class ChainableExtensions
     }
 
     /// <summary>
-    /// turn byte[] into short list
+    /// turn byte array into short array
     /// </summary>
     /// <returns></returns>
     public static short[] ToShortArray(this byte[] byteData, int skipBytes = 0)
@@ -31,7 +35,7 @@ public static partial class ChainableExtensions
     }
 
     /// <summary>
-    /// turn byte[] into int list
+    /// turn byte array into int array
     /// </summary>
     /// <returns></returns>
     public static int[] ToIntArray(this byte[] byteData, int skipBytes = 0)
@@ -43,7 +47,7 @@ public static partial class ChainableExtensions
     }
 
     /// <summary>
-    /// turn byte[] into float list
+    /// turn byte array into float array
     /// </summary>
     /// <returns></returns>
     public static float[] ToFloatArray(this byte[] byteData, int skipBytes = 0)
@@ -55,7 +59,7 @@ public static partial class ChainableExtensions
     }
 
     /// <summary>
-    /// turn byte[] into double list
+    /// turn byte array into double array
     /// </summary>
     /// <returns></returns>
     public static double[] ToDoubleArray(this byte[] byteData, int skipBytes = 0)
@@ -65,6 +69,23 @@ public static partial class ChainableExtensions
             convertedList.Add(BitConverter.ToDouble(byteData, i));
         return convertedList.ToArray();
     }
+
+
+    // ★★★★★★★★★★★★★★★ To Bytes (sugar)
+
+    public static byte[] ToBytes(this short input) => BitConverter.GetBytes(input);
+    public static byte[] ToBytes(this int input) => BitConverter.GetBytes(input);
+    public static byte[] ToBytes(this long input) => BitConverter.GetBytes(input);
+
+    public static byte[] ToBytes(this ushort input) => BitConverter.GetBytes(input);
+    public static byte[] ToBytes(this uint input) => BitConverter.GetBytes(input);
+    public static byte[] ToBytes(this ulong input) => BitConverter.GetBytes(input);
+
+    public static byte[] ToBytes(this float input) => BitConverter.GetBytes(input);
+    public static byte[] ToBytes(this double input) => BitConverter.GetBytes(input);
+
+    public static byte[] ToBytes(this string input) => Encoding.ASCII.GetBytes(input);
+    public static byte[] ToBytes(this IEnumerable<char> input) => Encoding.ASCII.GetBytes(input.ToArray());
 
 
     // ★★★★★★★★★★★★★★★ 
