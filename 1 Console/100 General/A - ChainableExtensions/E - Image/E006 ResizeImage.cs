@@ -41,7 +41,7 @@ public static partial class ChainableExtensions
     /// <param name="outputFile">when null, automatically set</param>
     /// <param name="outputSizeRatio">1 for the same size. More than 0. </param>
     /// <returns></returns>
-    public static FileInfo ResizeImagePropotionally(this FileInfo inputFile, FileInfo? outputFile, SizeF outputSizeRatio,
+    public static FileInfo ResizeImageProportionally(this FileInfo inputFile, FileInfo? outputFile, SizeF outputSizeRatio,
         ResizeImageMode mode = ResizeImageMode.Stretch)
     {
         // sugar
@@ -75,9 +75,9 @@ public static partial class ChainableExtensions
     /// <param name="outputDir">when null, automatically set</param>
     /// <param name="outputSizeRatio">1 for the same size. More than 0. </param>
     /// <returns></returns>
-    public static DirectoryInfo ResizeImagePropotionally_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir, SizeF outputSizeRatio,
+    public static DirectoryInfo ResizeImageProportionally_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir, SizeF outputSizeRatio,
         ResizeImageMode mode = ResizeImageMode.Stretch)
-           => inputDir.Loop(outputDir, (inF, outF) => inF.ResizeImagePropotionally(outF, outputSizeRatio, mode));
+           => inputDir.Loop(outputDir, (inF, outF) => inF.ResizeImageProportionally(outF, outputSizeRatio, mode));
 
 
     // ★★★★★★★★★★★★★★★ Image process
