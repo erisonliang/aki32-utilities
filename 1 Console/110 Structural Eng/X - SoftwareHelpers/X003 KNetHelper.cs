@@ -1,8 +1,4 @@
-﻿using System;
-using System.Diagnostics;
-using System.Runtime.Intrinsics.X86;
-
-using Aki32Utilities.ConsoleAppUtilities.General;
+﻿using Aki32Utilities.ConsoleAppUtilities.General;
 
 namespace Aki32Utilities.ConsoleAppUtilities.StructuralEngineering;
 public static class KNetHelper

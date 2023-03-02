@@ -1,6 +1,12 @@
 ﻿using System.Text;
 using System.Xml.Linq;
 
+using MathNet.Numerics;
+
+using OpenCvSharp;
+
+using Org.BouncyCastle.Asn1.Gnu;
+
 using XPlot.Plotly;
 
 namespace Aki32Utilities.ConsoleAppUtilities.General;
@@ -211,8 +217,7 @@ public class TimeHistory
         }
         catch (Exception ex)
         {
-            if (UtilConfig.ConsoleOutput_Contents)
-                ConsoleExtension.WriteLineWithColor($"Failed to draw graph: {ex.Message}", ConsoleColor.Red);
+            ConsoleExtension.WriteLineWithColor($"Failed to draw graph: {ex.Message}", ConsoleColor.Red);
         }
 
         return this;
@@ -223,42 +228,47 @@ public class TimeHistory
     /// </summary>
     /// <param name="yName">Vertical Axis</param>
     /// <param name="xName">Horizontal Axis</param>
-    public FileInfo DrawGraph_OnPyplot(FileInfo outputFile, string yName, string xName = "", ChartType type = ChartType.Line)
+    public FileInfo DrawGraph_OnPyplot(FileInfo outputFile, string yName, string xName = "",
+        ChartType type = ChartType.Line,
+        string chartTitle = ""
+        )
     {
         try
         {
-            throw new NotImplementedException();
+            var y = this[yName];
+            var x =
+                string.IsNullOrEmpty(xName) ?
+                Enumerable.Range(0, y.Length).Select(i => (double)i).ToArray() :
+                this[xName];
 
-
-
-            //var vertical = this[yName];
-
-            //var layout = new Layout.Layout
-            //{
-            //    title = Name,
-            //    xaxis = new Xaxis { title = xName },
-            //    yaxis = new Yaxis { title = yName }
-            //};
-
-            //var horizontal =
-            //    string.IsNullOrEmpty(xName) ?
-            //    Enumerable.Range(0, vertical.Length).Select(i => (double)i) :
-            //    this[xName];
-            //var points = Enumerable.Zip(horizontal, vertical).Select(x => new Tuple<double, double>(x.First, x.Second));
-            //PlotlyChart chart = type switch
-            //{
-            //    ChartType.Scatter => Chart.Scatter(points),
-            //    ChartType.Line => Chart.Line(points),
-            //    _ => throw new NotImplementedException(),
-            //};
-            //chart.WithLayout(layout);
-            //chart.Show();
-
+            switch (type)
+            {
+                case ChartType.Scatter:
+                    new PythonController.PyplotController
+                    {
+                        XLabel = xName,
+                        YLabel = yName,
+                        Title = chartTitle,
+                        IsTightLayout = true,
+                    }.ScatterPlot(outputFile, y, x);
+                    break;
+                case ChartType.Line:
+                    new PythonController.PyplotController
+                    {
+                        XLabel = xName,
+                        YLabel = yName,
+                        Title = chartTitle,
+                        IsTightLayout = true,
+                    }.LinePlot(outputFile, y, x);
+                    break;
+                default:
+                    break;
+            }
 
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Failed to draw graph: {ex.Message}");
+            ConsoleExtension.WriteLineWithColor($"Failed to draw graph: {ex.Message}", ConsoleColor.Red);
         }
 
         return outputFile;
