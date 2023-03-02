@@ -111,7 +111,7 @@ public static class KNetHelper
             Accs = new TimeHistory(WaveName)
             {
                 t = Enumerable.Range(0, accs.Count).Select(t => (double)t / SamplingFreq).ToArray(),
-                a = accs.Select(a => (a - ave) * Scale_Gal / Scale_Num).ToArray()
+                ytt = accs.Select(a => (a - ave) * Scale_Gal / Scale_Num).ToArray()
             };
         }
 
@@ -120,8 +120,8 @@ public static class KNetHelper
 
         public void CalcMaxVel()
         {
-            Accs.CalcIntegral_Simple("a", "v");
-            MaxVel = Accs.v.Max(v => Math.Abs(v));
+            Accs.CalcIntegral_Simple("ytt", "yt");
+            MaxVel = Accs.yt.Max(v => Math.Abs(v));
         }
 
 
@@ -131,6 +131,5 @@ public static class KNetHelper
 
 
     // ★★★★★★★★★★★★★★★ 
-
 }
 

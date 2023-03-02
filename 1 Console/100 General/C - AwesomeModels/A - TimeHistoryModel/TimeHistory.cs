@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using System.Xml.Linq;
 
 using XPlot.Plotly;
 
@@ -166,11 +167,20 @@ public class TimeHistory
     // ★★★★★★★★★★★★★★★ output
 
     /// <summary>
-    /// Draw Line Graph
+    /// Draw Line Graph on Ploty
+    /// x axis will be index
+    /// </summary>
+    /// <param name="yName">Vertical Axis</param>
+    /// <param name="type"></param>
+    /// <returns></returns>
+    public TimeHistory DrawGraph_OnPlotly(string yName, ChartType type = ChartType.Line) => DrawGraph_OnPlotly("", yName, type);
+
+    /// <summary>
+    /// Draw Line Graph on Ploty
     /// </summary>
     /// <param name="yName">Vertical Axis</param>
     /// <param name="xName">Horizontal Axis</param>
-    public TimeHistory DrawGraph(string yName, string xName = "", ChartType type = ChartType.Line)
+    public TimeHistory DrawGraph_OnPlotly(string xName, string yName, ChartType type = ChartType.Line)
     {
         try
         {
@@ -183,10 +193,9 @@ public class TimeHistory
                 yaxis = new Yaxis { title = yName }
             };
 
-            var horizontal =
-                string.IsNullOrEmpty(xName) ?
-                Enumerable.Range(0, vertical.Length).Select(i => (double)i) :
-                this[xName];
+            var horizontal = string.IsNullOrEmpty(xName)
+                ? Enumerable.Range(0, vertical.Length).Select(i => (double)i)
+                : this[xName];
             var points = Enumerable.Zip(horizontal, vertical).Select(x => new Tuple<double, double>(x.First, x.Second));
             PlotlyChart chart = type switch
             {
@@ -197,15 +206,64 @@ public class TimeHistory
             chart.WithLayout(layout);
             chart.Show();
 
-            Console.WriteLine("Graph has been drawn and opened in the default browser");
+            if (UtilConfig.ConsoleOutput_Contents)
+                Console.WriteLine("Graph has been drawn and opened in the default browser");
+        }
+        catch (Exception ex)
+        {
+            if (UtilConfig.ConsoleOutput_Contents)
+                ConsoleExtension.WriteLineWithColor($"Failed to draw graph: {ex.Message}", ConsoleColor.Red);
+        }
+
+        return this;
+    }
+
+    /// <summary>
+    /// Draw Line Graph on Python and return Image File
+    /// </summary>
+    /// <param name="yName">Vertical Axis</param>
+    /// <param name="xName">Horizontal Axis</param>
+    public FileInfo DrawGraph_OnPyplot(FileInfo outputFile, string yName, string xName = "", ChartType type = ChartType.Line)
+    {
+        try
+        {
+            throw new NotImplementedException();
+
+
+
+            //var vertical = this[yName];
+
+            //var layout = new Layout.Layout
+            //{
+            //    title = Name,
+            //    xaxis = new Xaxis { title = xName },
+            //    yaxis = new Yaxis { title = yName }
+            //};
+
+            //var horizontal =
+            //    string.IsNullOrEmpty(xName) ?
+            //    Enumerable.Range(0, vertical.Length).Select(i => (double)i) :
+            //    this[xName];
+            //var points = Enumerable.Zip(horizontal, vertical).Select(x => new Tuple<double, double>(x.First, x.Second));
+            //PlotlyChart chart = type switch
+            //{
+            //    ChartType.Scatter => Chart.Scatter(points),
+            //    ChartType.Line => Chart.Line(points),
+            //    _ => throw new NotImplementedException(),
+            //};
+            //chart.WithLayout(layout);
+            //chart.Show();
+
+
         }
         catch (Exception ex)
         {
             Console.WriteLine($"Failed to draw graph: {ex.Message}");
         }
 
-        return this;
+        return outputFile;
     }
+
 
     /// <summary>
     /// Output TimeHistory to csv
@@ -332,6 +390,28 @@ public class TimeHistory
         set
         {
             this["xtt"] = value;
+        }
+    }
+    public double[] y
+    {
+        get
+        {
+            return this["y"];
+        }
+        set
+        {
+            this["y"] = value;
+        }
+    }
+    public double[] yt
+    {
+        get
+        {
+            return this["yt"];
+        }
+        set
+        {
+            this["yt"] = value;
         }
     }
     public double[] ytt

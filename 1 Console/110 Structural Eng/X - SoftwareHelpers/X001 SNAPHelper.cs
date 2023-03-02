@@ -1,9 +1,17 @@
 ﻿using System.Diagnostics;
+using System.Linq;
 using System.Reflection;
 
 using Aki32Utilities.ConsoleAppUtilities.General;
 
+using DocumentFormat.OpenXml.Spreadsheet;
 using DocumentFormat.OpenXml.Wordprocessing;
+
+using Microsoft.FSharp.Core;
+
+using NAudio.Wave;
+
+using OpenCvSharp.Dnn;
 
 namespace Aki32Utilities.ConsoleAppUtilities.StructuralEngineering;
 public static class SNAPHelper
@@ -73,52 +81,213 @@ public static class SNAPHelper
     }
 
 
-    // ★★★★★★★★★★★★★★★ CreateWaveFile
+    // ★★★★★★★★★★★★★★★ SNAPWaveData
 
-    /// <summary>
-    /// with cm/s
-    /// </summary>
-    /// <param name="outputFile"></param>
-    /// <param name="accs"></param>
-    /// <param name="dt"></param>
-    /// <param name="name"></param>
-    /// <param name="amax"></param>
-    /// <param name="vmax"></param>
-    /// <returns></returns>
-    public static FileInfo CreateWaveFile(FileInfo outputFile, double[] accs, double dt, string name, double amax, double vmax)
+    public class SNAPWaveData
     {
-        // pre process
-        var now = DateTime.Now;
-        if (amax == 0)
-            amax = accs.Max(x => Math.Abs(x));
+
+        // ★★★★★★★★★★★★★★★ props
+
+        // ★★★★★ from data
+
+        [CsvIgnore]
+        public TimeHistory Accs { get; set; }
+
+        public string? VERSION { get; set; } = null;
+        public string FILENAME { get; set; } = "";
+        public int HPTYPE { get; set; } = 0;
+        public int DIRECTION { get; set; } = 0;
+        public int UNITID { get; set; } = 0;
 
 
-        // main
-        using var sr = new StreamWriter(outputFile.OpenWrite());
-        sr.WriteLine(@$"VERSION=""{now:yyyy.MM.dd.0}""");
-        sr.WriteLine(@$"FILENAME=""{name}""");
-        sr.WriteLine(@$"HPTYPE=""0""");
-        sr.WriteLine(@$"DIRECTION=""0""");
-        sr.WriteLine(@$"DT=""{dt:F6}""");
-        sr.WriteLine(@$"UNITID=""0""");
-        sr.WriteLine(@$"AMAX=""{amax:F3}""");
-        sr.WriteLine(@$"VMAX=""{vmax:F2}""");
-        sr.WriteLine(@$"TIME=""{(dt * (accs.Length - 1)):F6}""");
-        sr.WriteLine(@$"DATA");
-        foreach (var acc in accs)
-            sr.WriteLine($"{acc:F6}");
+        // ★★★★★ generated / calculated
+
+        public double DT => Accs.TimeStep;
+        public int TIME => (int)Accs.t.Last();
+
+        private double __maxAcc = 0;
+        public double MaxAcc
+        {
+            get
+            {
+                if (__maxAcc == 0)
+                {
+                    __maxAcc = Accs.ytt.Max(x => Math.Abs(x));
+                }
+                return __maxAcc;
+            }
+            set
+            {
+                __maxAcc = value;
+            }
+        }
+        private double __maxVal = 0;
+        public double MaxVel
+        {
+            get
+            {
+                if (__maxVal == 0)
+                {
+                    Accs.CalcIntegral_Simple("ytt", "yt");
+                    __maxVal = Accs.yt.Max(v => Math.Abs(v));
+                }
+                return __maxVal;
+            }
+            set
+            {
+                __maxVal = value;
+            }
+        }
 
 
-        // post process
-        return outputFile;
+        // ★★★★★★★★★★★★★★★ inits
+
+        public SNAPWaveData()
+        {
+            Accs = new TimeHistory();
+        }
+        public SNAPWaveData(TimeHistory accs)
+        {
+            // accs
+            Accs = accs;
+        }
+        public SNAPWaveData(double[] accs, double dt)
+        {
+            // accs
+            Accs = new TimeHistory(FILENAME)
+            {
+                t = Enumerable.Range(0, accs.Length).Select(t => t * dt).ToArray(),
+                ytt = accs.ToArray()
+            };
+        }
+        public SNAPWaveData(FileInfo originalWaveFile)
+        {
+            using var sr = new StreamReader(originalWaveFile.FullName);
+
+            var meta = new List<string>();
+            for (int i = 0; i < 10; i++)
+                meta.Add(sr.ReadLine()!);
+
+            // metas
+            VERSION = meta[0][9..^1];
+            FILENAME = meta[1][10..^1];
+            HPTYPE = int.Parse(meta[2][8..^1]);
+            DIRECTION = int.Parse(meta[3][11..^1]);
+            var dt = double.Parse(meta[4][4..^1]);
+            UNITID = int.Parse(meta[5][8..^1]);
+            MaxAcc = double.Parse(meta[6][6..^1]);
+            MaxVel = double.Parse(meta[7][6..^1]);
+
+
+            // accs
+            var accs = new List<double>();
+            while (!sr.EndOfStream)
+                accs.Add(double.Parse(sr.ReadLine()!));
+
+            Accs = new TimeHistory(FILENAME)
+            {
+                t = Enumerable.Range(0, accs.Count).Select(t => t * dt).ToArray(),
+                ytt = accs.ToArray()
+            };
+        }
+
+
+        // ★★★★★★★★★★★★★★★ dynamic methods
+
+        /// <summary>
+        /// with cm/s
+        /// </summary>
+        /// <param name="outputFile"></param>
+        /// <returns></returns>
+        public FileInfo CreateWaveFile(FileInfo outputFile, bool useCurrentDateTimeAsVersionString = true)
+        {
+            // main
+            using var sr = new StreamWriter(outputFile.OpenWrite());
+            if (useCurrentDateTimeAsVersionString)
+                sr.WriteLine(@$"VERSION=""{DateTime.Now:yyyy.MM.dd.0}""");
+            else
+                sr.WriteLine(@$"VERSION=""{VERSION}""");
+            sr.WriteLine(@$"FILENAME=""{FILENAME}""");
+            sr.WriteLine(@$"HPTYPE=""{HPTYPE}""");
+            sr.WriteLine(@$"DIRECTION=""0""");
+            sr.WriteLine(@$"DT=""{DT:F6}""");
+            sr.WriteLine(@$"UNITID=""{UNITID}""");
+            sr.WriteLine(@$"AMAX=""{MaxAcc:F3}""");
+            sr.WriteLine(@$"VMAX=""{MaxVel:F2}""");
+            sr.WriteLine(@$"TIME=""{TIME:F6}""");
+            sr.WriteLine(@$"DATA");
+            foreach (var acc in Accs.ytt)
+                sr.WriteLine($"{acc:F6}");
+
+
+            // post process
+            return outputFile;
+
+        }
+
+
+        // ★★★★★★★★★★★★★★★ static methods
+
+        /// <summary>
+        /// with cm/s
+        /// </summary>
+        /// <param name="outputFile"></param>
+        /// <param name="accs"></param>
+        /// <param name="dt"></param>
+        /// <param name="name"></param>
+        /// <param name="amax"></param>
+        /// <param name="vmax"></param>
+        /// <returns></returns>
+        public static FileInfo CreateWaveFile(FileInfo outputFile, TimeHistory inputWave, string name, double amax, double vmax)
+        {
+            // main
+            new SNAPWaveData(inputWave)
+            {
+                FILENAME = name,
+                MaxAcc = amax,
+                MaxVel = vmax,
+            }
+            .CreateWaveFile(outputFile);
+
+
+            // post process
+            return outputFile;
+        }
+        public static FileInfo CreateWaveFile(DirectoryInfo outputDir, TimeHistory inputWave, string name, double amax, double vmax)
+          => CreateWaveFile(outputDir.GetChildFileInfo(@$"{name}.wv"), inputWave, name, amax, vmax);
+
+        /// <summary>
+        /// with cm/s
+        /// </summary>
+        /// <param name="outputFile"></param>
+        /// <param name="accs"></param>
+        /// <param name="dt"></param>
+        /// <param name="name"></param>
+        /// <param name="amax"></param>
+        /// <param name="vmax"></param>
+        /// <returns></returns>
+        public static FileInfo CreateWaveFile(FileInfo outputFile, double[] accs, double dt, string name, double amax, double vmax)
+        {
+            // main
+            new SNAPWaveData(accs, dt)
+            {
+                FILENAME = name,
+                MaxAcc = amax,
+                MaxVel = vmax,
+            }
+            .CreateWaveFile(outputFile);
+
+
+            // post process
+            return outputFile;
+        }
+        public static FileInfo CreateWaveFile(DirectoryInfo outputDir, double[] accs, double dt, string name, double amax, double vmax)
+            => CreateWaveFile(outputDir.GetChildFileInfo(@$"{name}.wv"), accs, dt, name, amax, vmax);
+
+
+        // ★★★★★★★★★★★★★★★ 
 
     }
-    public static FileInfo CreateWaveFile(FileInfo outputFile, TimeHistory inputWave, string name, double amax, double vmax)
-        => CreateWaveFile(outputFile, inputWave.a, inputWave.TimeStep, name, amax, vmax);
-    public static FileInfo CreateWaveFile(DirectoryInfo outputDir, double[] accs, double dt, string name, double amax, double vmax)
-        => CreateWaveFile(outputDir.GetChildFileInfo(@$"{name}.wv"), accs, dt, name, amax, vmax);
-    public static FileInfo CreateWaveFile(DirectoryInfo outputDir, TimeHistory inputWave, string name, double amax, double vmax)
-        => CreateWaveFile(outputDir, inputWave.a, inputWave.TimeStep, name, amax, vmax);
 
 
     // ★★★★★★★★★★★★★★★ 

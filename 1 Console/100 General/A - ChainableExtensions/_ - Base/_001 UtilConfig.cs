@@ -11,6 +11,7 @@ public static class UtilConfig
     public static bool ConsoleOutput_Contents = true;
     public static bool ConsoleOutput_Preprocess = true;
     public static Stack<bool> Queue_Stop_ConsoleOutput_Preprocess { get; set; } = new Stack<bool>();
+    public static Stack<bool> Queue_Stop_ConsoleOutput_Contents { get; set; } = new Stack<bool>();
 
     public static int OutputPathMethodNameMaxLength = 10;
 
@@ -22,6 +23,16 @@ public static class UtilConfig
     public static void TryRestart_ConsoleOutput_Preprocess()
     {
         ConsoleOutput_Preprocess = Queue_Stop_ConsoleOutput_Preprocess.TryPop(out var dequeued) ? dequeued : true;
+    }
+
+    public static void StopTemporary_ConsoleOutput_Contents()
+    {
+        Queue_Stop_ConsoleOutput_Contents.Push(ConsoleOutput_Contents);
+        ConsoleOutput_Contents = false;
+    }
+    public static void TryRestart_ConsoleOutput_Contents()
+    {
+        ConsoleOutput_Contents = Queue_Stop_ConsoleOutput_Contents.TryPop(out var dequeued) ? dequeued : true;
     }
 
     /// <summary>

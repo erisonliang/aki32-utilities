@@ -11,11 +11,11 @@ public static partial class ChainableExtensions
     /// </summary>
     /// <param name="inputFile"></param>
     /// <returns>pipe inputFile</returns>
-    public static FileInfo DrawGraph(this FileInfo inputFile, int hAxisIndex, int vAxisIndex, TimeHistory.ChartType type = TimeHistory.ChartType.Line)
+    public static FileInfo DrawGraph_OnPlotly(this FileInfo inputFile, int hAxisIndex, int vAxisIndex, TimeHistory.ChartType type = TimeHistory.ChartType.Line)
     {
         var th = inputFile.GetTimeHistoryFromFile();
 
-        th.DrawGraph(th.Columns[vAxisIndex], th.Columns[hAxisIndex], type);
+        th.DrawGraph_OnPlotly(th.Columns[hAxisIndex], th.Columns[vAxisIndex], type);
 
         return inputFile;
     }
@@ -28,11 +28,11 @@ public static partial class ChainableExtensions
     /// </summary>
     /// <param name="inputFile"></param>
     /// <returns>pipe inputFile</returns>
-    public static FileInfo DrawGraph(this FileInfo inputFile, string hAxisName, string vAxisName, TimeHistory.ChartType type = TimeHistory.ChartType.Line)
+    public static FileInfo DrawGraph_OnPlotly(this FileInfo inputFile, string hAxisName, string vAxisName, TimeHistory.ChartType type = TimeHistory.ChartType.Line)
     {
         inputFile
             .GetTimeHistoryFromFile()
-            .DrawGraph(vAxisName, hAxisName, type);
+            .DrawGraph_OnPlotly(hAxisName, vAxisName, type);
 
         return inputFile;
     }
@@ -45,13 +45,13 @@ public static partial class ChainableExtensions
     /// </summary>
     /// <param name="inputFile"></param>
     /// <returns>pipe inputFile</returns>
-    public static FileInfo DrawGraph_ForAll(this FileInfo inputFile, TimeHistory.ChartType type = TimeHistory.ChartType.Line)
+    public static FileInfo DrawGraph_OnPlotly_ForAll(this FileInfo inputFile, TimeHistory.ChartType type = TimeHistory.ChartType.Line)
     {
         var th = inputFile.GetTimeHistoryFromFile();
 
         for (int i = 0; i < th.Columns.Length; i++)
             for (int j = i + 1; j < th.Columns.Length; j++)
-                th.DrawGraph(th.Columns[j], th.Columns[i], type);
+                th.DrawGraph_OnPlotly(th.Columns[i], th.Columns[j], type);
 
         return inputFile;
     }

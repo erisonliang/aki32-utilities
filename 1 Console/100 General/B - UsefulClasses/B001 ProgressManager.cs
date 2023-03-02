@@ -35,8 +35,11 @@ public class ProgressManager : IDisposable
         StartTime = DateTime.Now;
         MaxStep = maxStep;
 
+        consoleOutput ??= true;
+        ConsoleOutput = consoleOutput.Value && UtilConfig.ConsoleOutput_Contents;
+        
         UtilConfig.StopTemporary_ConsoleOutput_Preprocess();
-        ConsoleOutput = consoleOutput == null ? UtilConfig.ConsoleOutput_Contents : consoleOutput.Value;
+        UtilConfig.StopTemporary_ConsoleOutput_Contents();
 
         if (!ConsoleOutput)
             return;
@@ -48,6 +51,7 @@ public class ProgressManager : IDisposable
     public void Dispose()
     {
         UtilConfig.TryRestart_ConsoleOutput_Preprocess();
+        UtilConfig.TryRestart_ConsoleOutput_Contents();
         GC.SuppressFinalize(this);
     }
 
