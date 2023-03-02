@@ -1,15 +1,5 @@
 ﻿
 
-using DocumentFormat.OpenXml.Drawing;
-using DocumentFormat.OpenXml.Drawing.Charts;
-using DocumentFormat.OpenXml.Office2010.Word;
-
-using LibGit2Sharp;
-
-using MathNet.Numerics.Providers.LinearAlgebra;
-
-using XPlot.Plotly;
-
 namespace Aki32Utilities.ConsoleAppUtilities.General;
 public static partial class PythonController
 {
