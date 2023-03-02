@@ -228,7 +228,17 @@ public class TimeHistory
     /// </summary>
     /// <param name="yName">Vertical Axis</param>
     /// <param name="xName">Horizontal Axis</param>
-    public FileInfo DrawGraph_OnPyplot(FileInfo outputFile, string yName, string xName = "",
+    public FileInfo DrawGraph_OnPyplot(FileInfo outputFile, string yName,
+        ChartType type = ChartType.Line,
+        string chartTitle = ""
+        ) => DrawGraph_OnPyplot(outputFile, "", yName, type, chartTitle);
+
+    /// <summary>
+    /// Draw Line Graph on Python and return Image File
+    /// </summary>
+    /// <param name="yName">Vertical Axis</param>
+    /// <param name="xName">Horizontal Axis</param>
+    public FileInfo DrawGraph_OnPyplot(FileInfo outputFile, string xName, string yName,
         ChartType type = ChartType.Line,
         string chartTitle = ""
         )
@@ -244,22 +254,57 @@ public class TimeHistory
             switch (type)
             {
                 case ChartType.Scatter:
-                    new PythonController.PyplotController
+
+                    new PythonController.PyPlotController
                     {
-                        XLabel = xName,
-                        YLabel = yName,
-                        Title = chartTitle,
                         IsTightLayout = true,
-                    }.ScatterPlot(outputFile, y, x);
+                        SubPlots = new List<PythonController.SubPlot>()
+                        {
+                            new PythonController.SubPlot()
+                            {
+                                XLabel = xName,
+                                YLabel = yName,
+                                Title = chartTitle,
+                                Plots=new List<PythonController.IPlot>
+                                {
+                                    new PythonController.ScatterPlot()
+                                    {
+                                        X = x,
+                                        Y = y,
+                                    }
+                                }
+                            }
+                        }
+
+                    }.Run(outputFile);
+
                     break;
+
                 case ChartType.Line:
-                    new PythonController.PyplotController
+
+                    new PythonController.PyPlotController
                     {
-                        XLabel = xName,
-                        YLabel = yName,
-                        Title = chartTitle,
                         IsTightLayout = true,
-                    }.LinePlot(outputFile, y, x);
+                        SubPlots = new List<PythonController.SubPlot>()
+                        {
+                            new PythonController.SubPlot()
+                            {
+                                XLabel = xName,
+                                YLabel = yName,
+                                Title = chartTitle,
+                                Plots=new List<PythonController.IPlot>
+                                {
+                                    new PythonController.LinePlot()
+                                    {
+                                        X = x,
+                                        Y = y,
+                                    }
+                                }
+                            }
+                        }
+
+                    }.Run(outputFile);
+
                     break;
                 default:
                     break;
