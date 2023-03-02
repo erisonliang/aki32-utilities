@@ -814,17 +814,17 @@ public static partial class ExampleExecuter
                     var baseDir_101_D_D001 = baseDir_101_D.GetChildDirectoryInfo($@"D001 OpenAIController");
                     var output = baseDir_101_D.GetChildDirectoryInfo($@"output");
 
-                    ////var apiSecretKey = ""; // API SecretKey
-                    //var apiSecretKey = Environment.GetEnvironmentVariable("OpenAI_SecretKey")!; // API SecretKey
-                    //var openAI = new OpenAIController(apiSecretKey);
+                    //var apiSecretKey = ""; // API SecretKey
+                    var apiSecretKey = Environment.GetEnvironmentVariable("OpenAI_SecretKey")!; // API SecretKey
+                    var openAI = new OpenAIController(apiSecretKey);
 
                     //// get models
                     //var models = openAI.GetModelsAsync().Result;
                     //Console.WriteLine(models);
 
-                    //// edit text
-                    //dynamic result = openAI.EditTextAsync("Fix the spelling mistakes", "What day of the wek is it?").Result;
-                    //Console.WriteLine(result);
+                    // edit text
+                    dynamic result = openAI.EditTextAsync("Fix the spelling mistakes", "What day of the wek is it?").Result;
+                    Console.WriteLine(result);
 
                     //// generate image
                     //var result = openAI.GenerateImageAsync("beautiful cat with blue eye and white ear", n: 2).Result;

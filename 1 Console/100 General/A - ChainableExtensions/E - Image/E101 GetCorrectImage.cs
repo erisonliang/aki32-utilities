@@ -1,19 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Drawing;
-using System.Drawing.Drawing2D;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-
-using DocumentFormat.OpenXml.Math;
-using DocumentFormat.OpenXml.Wordprocessing;
-
-using LibGit2Sharp;
-
-using MathNet.Numerics.LinearAlgebra;
+﻿using System.Drawing;
 
 namespace Aki32Utilities.ConsoleAppUtilities.General;
 public static partial class ChainableExtensions

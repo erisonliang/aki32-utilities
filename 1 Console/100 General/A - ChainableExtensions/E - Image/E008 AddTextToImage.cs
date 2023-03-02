@@ -1,4 +1,5 @@
 ﻿using System.Drawing;
+using System.Drawing.Imaging;
 
 namespace Aki32Utilities.ConsoleAppUtilities.General;
 public static partial class ChainableExtensions
@@ -21,10 +22,13 @@ public static partial class ChainableExtensions
     public static FileInfo AddTextToImage(this FileInfo inputFile, FileInfo? outputFile, string addingText, Point textUpperLeftPoint,
         int fontSize = 20,
         Brush? brush = null,
-        bool alignRight = false)
+        bool alignRight = false,
+        ImageFormat? imageFormat = null)
     {
         // preprocess
-        UtilPreprocessors.PreprocessOutFile(ref outputFile, inputFile.Directory!, $"output.png");
+        imageFormat = imageFormat.DecideImageFormatIfNull(inputFile);
+        var extension = imageFormat.GetExtension();
+        UtilPreprocessors.PreprocessOutFile(ref outputFile, inputFile.Directory!, $"output{extension}");
         addingText = addingText
             .Replace("%FN", inputFile.Name)
             .Replace("%CT", inputFile.CreationTime.ToString("s"))
@@ -39,7 +43,7 @@ public static partial class ChainableExtensions
             brush: brush,
             alignRight: alignRight
             );
-        img.Save(outputFile!.FullName);
+        img.Save(outputFile!.FullName, imageFormat);
 
 
         // post process
@@ -63,7 +67,8 @@ public static partial class ChainableExtensions
     public static FileInfo AddTextToImageProportionally(this FileInfo inputFile, FileInfo? outputFile, string addingText, PointF textUpperLeftPointRatio,
         double fontSizeRatio = 0.1,
         Brush? brush = null,
-        bool alignRight = false)
+        bool alignRight = false,
+        ImageFormat? imageFormat = null)
     {
         // sugar
         using var inputImage = inputFile.GetImageFromFile();
@@ -75,7 +80,8 @@ public static partial class ChainableExtensions
         return inputFile.AddTextToImage(outputFile, addingText, textUpperLeftPoint,
             fontSize: fontSize,
             brush: brush,
-            alignRight: alignRight
+            alignRight: alignRight,
+            imageFormat: imageFormat
             );
     }
 
@@ -97,8 +103,9 @@ public static partial class ChainableExtensions
     public static DirectoryInfo AddTextToImage_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir, string addingText, Point textUpperLeftPoint,
         int fontSize = 20,
         Brush? brush = null,
-        bool alignRight = false)
-        => inputDir.Loop(outputDir, (inF, outF) => inF.AddTextToImage(outF, addingText, textUpperLeftPoint, fontSize: fontSize, brush: brush, alignRight: alignRight), maxDegreeOfParallelism: 1);
+        bool alignRight = false,
+        ImageFormat? imageFormat = null)
+        => inputDir.Loop(outputDir, (inF, outF) => inF.AddTextToImage(outF, addingText, textUpperLeftPoint, fontSize, brush, alignRight, imageFormat), maxDegreeOfParallelism: 1);
 
     /// <summary>
     /// AddTextToImage
@@ -115,8 +122,9 @@ public static partial class ChainableExtensions
     public static DirectoryInfo AddTextToImageProportionally_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir, string addingText, PointF textUpperLeftPointRatio,
         double fontSizeRatio = 0.1,
         Brush? brush = null,
-        bool alignRight = false)
-        => inputDir.Loop(outputDir, (inF, outF) => inF.AddTextToImageProportionally(outF, addingText, textUpperLeftPointRatio, fontSizeRatio: fontSizeRatio, brush: brush, alignRight: alignRight), maxDegreeOfParallelism: 1);
+        bool alignRight = false,
+        ImageFormat? imageFormat = null)
+        => inputDir.Loop(outputDir, (inF, outF) => inF.AddTextToImageProportionally(outF, addingText, textUpperLeftPointRatio, fontSizeRatio, brush, alignRight, imageFormat), maxDegreeOfParallelism: 1);
 
 
     // ★★★★★★★★★★★★★★★ Image process
