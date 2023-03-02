@@ -1,13 +1,4 @@
-﻿using Aki32Utilities.ConsoleAppUtilities.General;
-
-using DocumentFormat.OpenXml.Drawing.Charts;
-using DocumentFormat.OpenXml.Spreadsheet;
-
-using LibGit2Sharp;
-
-using Python.Runtime;
-
-using static Aki32Utilities.ConsoleAppUtilities.General.TimeHistory;
+﻿using Python.Runtime;
 
 namespace Aki32Utilities.ConsoleAppUtilities.General;
 /// <summary>
