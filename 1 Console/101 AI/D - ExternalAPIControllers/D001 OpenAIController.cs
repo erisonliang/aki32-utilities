@@ -32,7 +32,7 @@ public class OpenAIController
     public OpenAIController(string apiSecretKey)
     {
         APISecretKey = apiSecretKey;
-
+       
         Console.WriteLine("OpenAIController Instance Created.");
         Console.WriteLine("Data Powered by OpenAI (https://platform.openai.com/docs/api-reference)");
         Console.WriteLine();

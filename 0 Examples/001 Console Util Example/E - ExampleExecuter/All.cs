@@ -15,6 +15,7 @@ using ClosedXML;
 
 using DocumentFormat.OpenXml.Spreadsheet;
 using DocumentFormat.OpenXml.Wordprocessing;
+using NumSharp;
 
 using Newtonsoft.Json;
 using Aki32Utilities.ConsoleAppUtilities.AI.CheatSheet;
@@ -28,9 +29,9 @@ using Point = System.Drawing.Point;
 using DocumentFormat.OpenXml.Bibliography;
 using System.Xml.Linq;
 using XPlot.Plotly;
-using NumSharp;
 using DocumentFormat.OpenXml.Drawing;
 using Org.BouncyCastle.Crypto.Macs;
+
 
 namespace Aki32Utilities.UsageExamples.ConsoleAppUtilities;
 public static partial class ExampleExecuter
@@ -720,44 +721,59 @@ public static partial class ExampleExecuter
                         PythonController.Initialize();
 
                         var pi = Math.PI;
-                        var n = 256;
 
                         {
-                            var z = EnumerableExtension.Range(-3 * pi, 3 * pi, n).ToArray();
-                            var x = z.Select(z => Math.Cos(z)).ToArray();
-                            var y = z.Select(z => Math.Sin(z)).ToArray();
+                            //var n = 256;
 
-                            new PythonController.PyPlot.Figure
-                            {
-                                IsTightLayout = true,
-                                SubPlots = new List<PythonController.PyPlot.SubPlot>()
-                            {
-                                new PythonController.PyPlot.SubPlot()
-                                {
-                                    XLabel = "x",
-                                    YLabel = "y",
-                                    ZLabel = "z",
-                                    Title = "helix",
-                                    Plots = new List<PythonController.PyPlot.IPlot>
-                                    {
-                                        new PythonController.PyPlot.LinePlot(x,y,z),
-                                    }
-                                }
-                            }
+                            //var z = EnumerableExtension.Range_WithCount(-3 * pi, 3 * pi, n).ToArray();
+                            //var x = z.Select(z => Math.Cos(z)).ToArray();
+                            //var y = z.Select(z => Math.Sin(z)).ToArray();
 
-                            }.Run(output.GetChildFileInfo("helix.png"), true);
+                            //new PythonController.PyPlot.Figure
+                            //{
+                            //    IsTightLayout = true,
+                            //    SubPlots = new List<PythonController.PyPlot.SubPlot>()
+                            //{
+                            //    new PythonController.PyPlot.SubPlot()
+                            //    {
+                            //        XLabel = "x",
+                            //        YLabel = "y",
+                            //        ZLabel = "z",
+                            //        Title = "helix",
+                            //        Plots = new List<PythonController.PyPlot.IPlot>
+                            //        {
+                            //            new PythonController.PyPlot.LinePlot(x,y,z),
+                            //        }
+                            //    }
+                            //}
+
+                            //}.Run(output.GetChildFileInfo("helix.png"), true);
 
                         }
 
-
                         {
-                            var x = np.linspace(-3 * pi, 3 * pi, 256);
-                            var y = np.linspace(-3 * pi, 3 * pi, 256);
-                            (var X, var Y) = np.meshgrid(x, y);
-                            var Z = np.cos(X / pi) * np.sin(Y / pi);
+                            var n = 32;
 
-                            ax.plot_surface(X, Y, Z, cmap = "summer");
-                            ax.contour(X, Y, Z, colors = "black", offset = -1);
+                            var x = np.linspace(-3 * pi, 3 * pi, n);
+                            var y = np.linspace(-3 * pi, 3 * pi, n);
+                            (x, y) = np.meshgrid(x, y);
+
+                            // I could not remove NumSharp.Lite... So let's code in C#
+                            var X = x.ToArray<double>();
+                            var Y = y.ToArray<double>();
+                            var Z = Enumerable.Zip(X, Y).Select(xy => (double)(np.sin(xy.First / pi) * np.cos(xy.Second / pi))).ToList();
+
+                            var XX = X.ReShape(n, n);
+                            var YY = Y.ReShape(n, n);
+                            var ZZ = Z.ReShape(n, n);
+
+                            //var x = np.linspace(-5, 5, n);
+                            //var y = np.linspace(-5, 5, n);
+                            //(var X, var Y) = np.meshgrid(x, y);
+                            //var Z = np.sin(X) * np.cos(Y);
+
+                            //ax.plot_surface(X, Y, Z, cmap = "summer");
+                            //ax.contour(X, Y, Z, colors = "black", offset = -1);
 
                             new PythonController.PyPlot.Figure
                             {
@@ -772,7 +788,8 @@ public static partial class ExampleExecuter
                                         Title = "surface",
                                         Plots = new List<PythonController.PyPlot.IPlot>
                                         {
-                                            new PythonController.PyPlot.LinePlot(X,Y,Z),
+                                            new PythonController.PyPlot.SurfacePlot(XX,YY,ZZ),
+                                            //new PythonController.PyPlot.WireFramePlot(XX,YY,ZZ),
                                         }
                                     }
                                 }

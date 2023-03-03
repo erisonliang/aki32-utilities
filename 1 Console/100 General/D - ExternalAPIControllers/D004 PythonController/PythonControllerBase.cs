@@ -1,4 +1,5 @@
 ﻿using Python.Runtime;
+using XPlot.Plotly;
 
 namespace Aki32Utilities.ConsoleAppUtilities.General;
 /// <summary>
@@ -87,6 +88,28 @@ public static partial class PythonController
 
     public static dynamic Import(string name) => Py.Import(name);
     public static dynamic RunSimpleString(string code) => PythonEngine.RunSimpleString(code);
+
+
+    // ★★★★★★★★★★★★★★★ methods
+
+    private static dynamic ToCorrect2DNDArray<T>(dynamic X)
+    {
+        dynamic np = Import("numpy");
+
+        if (X is T[][] X1)
+        {
+            return np.array(X1);
+        }
+        else if (X is T[,] X2)
+        {
+            return np.array(X2);
+        }
+        else
+        {
+            var X3 = X.ToJaggedArray<T>();
+            return np.array(X3);
+        }
+    }
 
 
     // ★★★★★★★★★★★★★★★ samples

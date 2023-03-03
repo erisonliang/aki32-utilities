@@ -16,45 +16,48 @@ public static partial class PythonController
             public bool Is3D { get; set; } = true;
             public string LegendLabel { get; set; } = "";
 
-            public double[] X { get; set; }
-            public double[] Y { get; set; }
+            public dynamic X { get; set; }
+            public dynamic Y { get; set; }
             /// <summary>
             /// (3d option)
             /// </summary>
-            public double[] Z { get; set; }
+            public dynamic Z { get; set; }
 
-            /// <summary>
-            /// When this is null, all plot size is the same. <br/>
-            /// When not, express this in size.
-            /// </summary>
-            public double[]? Z_Size { get; set; }
+            public int LineWidth { get; set; } = 0;
 
-            /// <summary>
-            /// When this is null, all plot color is monotonic. <br/>
-            /// When not, express this in color.
-            /// </summary>
-            public double[]? Z_Color { get; set; }
+            public string Color { get; set; } = "black";
+            public string ColorMap { get; set; } = "coolwarm"; //Blues
 
-            public string Marker { get; set; } = "o"; // . , o v ^ < > ...
-            public int MarkerSize { get; set; } = 20;
-            public double Alpha { get; set; } = 1;
-            public string LineWidths { get; set; } = "2";
+            public bool AntiAliased { get; set; } = true;
 
-            public string MarkerColor { get; set; } = "green";
-            public string EdgeColors { get; set; } = "black";
-            public string ColorMap { get; set; } = "Blues";
             //public double Normalize { get; set; }
-            public double UpperThreshold { get; set; }
-            public double LowerThreshold { get; set; }
+            //public double UpperThreshold { get; set; }
+            //public double LowerThreshold { get; set; }
 
 
             // ★★★★★★★★★★★★★★★ inits
 
-            public SurfacePlot(double[]? x, double[] y, double[] z)
+            /// <summary>
+            /// 
+            /// </summary>
+            /// <param name="x">T[][], T[,] or NDArray. T = float or double</param>
+            /// <param name="y">same as x format</param>
+            /// <param name="z">same as x format</param>
+            public SurfacePlot(dynamic x, dynamic y, dynamic z)
             {
-                X = x ?? Enumerable.Range(0, y.Length).Select(i => (double)i).ToArray();
-                Y = y;
-                Z = z;
+                try
+                {
+                    X = ToCorrect2DNDArray<float>(x);
+                    Y = ToCorrect2DNDArray<float>(y);
+                    Z = ToCorrect2DNDArray<float>(z);
+                }
+                catch (Exception)
+                {
+                    X = ToCorrect2DNDArray<double>(x);
+                    Y = ToCorrect2DNDArray<double>(y);
+                    Z = ToCorrect2DNDArray<double>(z);
+                }
+
                 Is3D = true;
             }
 
@@ -63,109 +66,18 @@ public static partial class PythonController
 
             public void Run(dynamic ax)
             {
-                // plot_surface
-
-
                 // プロット
-                if (Is3D)
-                {
-                    if (Z_Size is not null)
-                    {
-                        ax.scatter(X, Y, Z,
-                            label: LegendLabel,
+                var surf = ax.plot_surface(X, Y, Z,
+                    label: LegendLabel,
 
-                            s: Z_Size,
-                            c: MarkerColor,
-                            marker: Marker,
-                            alpha: Alpha,
-                            linewidths: LineWidths,
-                            edgecolors: EdgeColors
-                        );
-                    }
-                    else if (Z_Color is not null)
-                    {
-                        ax.scatter(X, Y, Z,
-                            label: LegendLabel,
+                    linewidth: LineWidth,
+                    cmap: ColorMap,
+                    color: Color,
 
-                            s: MarkerSize,
-                            c: Z_Color,
-                            marker: Marker,
-                            alpha: Alpha,
-                            linewidths: LineWidths,
-                            edgecolors: EdgeColors,
-
-                            cmap: ColorMap,
-                            //norm : Normalize,
-                            vmin: LowerThreshold,
-                            vmax: UpperThreshold
-                        );
-                    }
-                    else
-                    {
-                        ax.scatter(X, Y, Z,
-                            label: LegendLabel,
-
-                            s: MarkerSize,
-                            c: MarkerColor,
-                            marker: Marker,
-                            alpha: Alpha,
-                            linewidths: LineWidths,
-                            edgecolors: EdgeColors
-                        );
-
-                    }
-                }
-                else
-                {
-                    if (Z_Size is not null)
-                    {
-                        ax.scatter(X, Y,
-                            label: LegendLabel,
-
-                            s: Z_Size,
-                            c: MarkerColor,
-                            marker: Marker,
-                            alpha: Alpha,
-                            linewidths: LineWidths,
-                            edgecolors: EdgeColors
-                        );
-                    }
-                    else if (Z_Color is not null)
-                    {
-                        ax.scatter(X, Y,
-                            label: LegendLabel,
-
-                            s: MarkerSize,
-                            c: Z_Color,
-                            marker: Marker,
-                            alpha: Alpha,
-                            linewidths: LineWidths,
-                            edgecolors: EdgeColors,
-
-                            cmap: ColorMap,
-                            //norm : Normalize,
-                            vmin: LowerThreshold,
-                            vmax: UpperThreshold
-                        );
-                    }
-                    else
-                    {
-                        ax.scatter(X, Y,
-                            label: LegendLabel,
-
-                            s: MarkerSize,
-                            c: MarkerColor,
-                            marker: Marker,
-                            alpha: Alpha,
-                            linewidths: LineWidths,
-                            edgecolors: EdgeColors
-                        );
-
-                    }
-                }
+                    antialiased: AntiAliased
+                    );
 
             }
-
 
             // ★★★★★★★★★★★★★★★ 
 
