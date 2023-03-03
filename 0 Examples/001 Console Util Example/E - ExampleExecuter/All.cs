@@ -756,581 +756,607 @@ public static partial class ExampleExecuter
                         // surface
                         {
 
-                            //    var n = 50;
-
-                            //    // ★★★★★ 1
-                            //    var XX = EnumerableExtension.Range_WithCount(-3 * pi, 3 * pi, n).ToArray();
-                            //    var YY = EnumerableExtension.Range_WithCount(-3 * pi, 3 * pi, n).ToArray();
-                            //    var ZZ = Enumerable
-                            //        .SelectMany(XX, x => YY, (x, y) => (double)(np.sin(x / pi) * np.cos(y / pi)))
-                            //        .ToArray().ReShape(n, n);
-
-
-                            //    //// ★★★★★ 2 
-                            //    //// I could not remove NumSharp.Lite... So let's code in C#
-                            //    //var x = np.linspace(-3 * pi, 3 * pi, n);
-                            //    //var y = np.linspace(-3 * pi, 3 * pi, n);
-                            //    //(x, y) = np.meshgrid(x, y);
-
-                            //    //var X = x.ToArray<double>();
-                            //    //var Y = y.ToArray<double>();
-                            //    //var Z = Enumerable.Zip(X, Y).Select(xy => (double)(np.sin(xy.First / pi) * np.cos(xy.Second / pi))).ToList();
-
-                            //    //var XX = X.ReShape(n, n);
-                            //    //var YY = Y.ReShape(n, n);
-                            //    //var ZZ = Z.ReShape(n, n);
-
-
-                            //    // ★★★★★ 3
-                            //    //var x = np.linspace(-5, 5, n);
-                            //    //var y = np.linspace(-5, 5, n);
-                            //    //(var X, var Y) = np.meshgrid(x, y);
-                            //    //var Z = np.sin(X) * np.cos(Y);
-
-                            //    //ax.plot_surface(X, Y, Z, cmap = "summer");
-                            //    //ax.contour(X, Y, Z, colors = "black", offset = -1);
-
-
-                            //    // ★★★★★ 
-
-                            //    new PythonController.PyPlot.Figure(true)
-                            //    {
-                            //        IsTightLayout = true,
-                            //        SubPlots = new List<PythonController.PyPlot.SubPlot>()
-                            //        {
-                            //            new PythonController.PyPlot.SubPlot(true)
-                            //            {
-                            //                ZLim=(-1,1),
-                            //                XLabel = "X",
-                            //                YLabel = "Y",
-                            //                ZLabel = "Z",
-                            //                Title = "surface",
-                            //                Plots = new List<PythonController.PyPlot.IPlot>
-                            //                {
-                            //                    new PythonController.PyPlot.ContourPlot(XX,YY,ZZ, false, 20){Colors="green", ZOffset=-1, ContourLabelFontSize__2D=20},
+                            var n = 50;
 
-                            //                    //new PythonController.PyPlot.WireFramePlot(XX,YY,ZZ){Color="black", LineWidth=3},
-                            //                    //new PythonController.PyPlot.SurfacePlot(XX,YY,ZZ){ ColorMap="summer"},
+                            // ★★★★★ 1
+                            //var XX = EnumerableExtension.Range_WithCount(-3 * pi, 3 * pi, n).ToArray();
+                            //var YY = EnumerableExtension.Range_WithCount(-3 * pi, 3 * pi, n).ToArray();
+                            //var ZZ = Enumerable
+                            //    .SelectMany(XX, x => YY, (x, y) => (double)(np.sin(x / pi) * np.cos(y / pi)))
+                            //    .ToArray().ReShape(n, n);
 
-                            //                    //new PythonController.PyPlot.ScatterPlot(XX,YY,ZZ){ ColorMap="green", MarkerSize=100},
-                            //                }
-                            //            }
-                            //        }
 
-                            //    }.Run(output.GetChildFileInfo("surface.png"), true);
-                            //}
+                            // ★★★★★ 2
+                            var XX = EnumerableExtension.Range_WithCount(-4, 4, n).ToArray();
+                            var YY = EnumerableExtension.Range_WithCount(-4, 4, n).ToArray();
+                            var ZZ = Enumerable
+                                .SelectMany(XX, x => YY, (x, y) =>
+                                {
+                                    var Z1 = Math.Exp(-Math.Pow(x, 2) - Math.Pow(y, 2));
+                                    var Z2 = Math.Exp(-Math.Pow(x - 1.2, 2) - Math.Pow(y - 0.7, 2));
+                                    var Z3 = Math.Exp(-Math.Pow(x + 0.5, 2) - Math.Pow(y + 1.4, 2));
+                                    return (Z1 - Z2 - Z3) * 2;
+                                    //return (double)(np.sin(x / pi) * np.cos(y / pi));
+                                })
+                                .ToArray().ReShape(n, n);
 
 
-                        }
-                    }
+                            //Z1 = np.exp(-X * *2 - Y * *2)
+                            //Z2 = np.exp(-(X - 1.2) * *2 - (Y - 0.7) * *2)
+                            //Z3 = np.exp(-(X + 0.5) * *2 - (Y + 1.4) * *2)
+                            //Z = (Z1 - Z2 - Z3) * 2
 
-                    // D005 CommandPrompt
-                    {
 
-                        // objective
-                        {
-                            //using var prompt = new CommandPromptController()
-                            //{
-                            //    RealTimeConsoleWriteLineOutput = true,
-                            //    OmitCurrentDirectoryDisplay = false,
-                            //};
 
-                            //prompt.WriteLine(@"");
-                            //prompt.WriteLine(@"cd ..\..\..\# TestModel\A - Extensions\E007 DistortImage");
-                            //prompt.WriteLine(@"");
-                            //prompt.WriteLine(@"lnn");
-                            //prompt.WriteLine(@"");
-                            //prompt.WriteLine(@"ls");
-                            //prompt.WriteLine(@"");
 
-                            //var output = prompt.ResponseList.ToArray();
+                            //// ★★★★★ 3
+                            //// I could not remove NumSharp.Lite... So this is useless
+                            //var x = np.linspace(-3 * pi, 3 * pi, n);
+                            //var y = np.linspace(-3 * pi, 3 * pi, n);
+                            //(x, y) = np.meshgrid(x, y);
 
-                        }
+                            //var X = x.ToArray<double>();
+                            //var Y = y.ToArray<double>();
+                            //var Z = Enumerable.Zip(X, Y).Select(xy => (double)(np.sin(xy.First / pi) * np.cos(xy.Second / pi))).ToList();
 
-                        // static
-                        {
-
-                            //var commands = new string[] {
-                            //   @"",
-                            //   @"cd ..\..\..\# TestModel\A - Extensions\E007 DistortImage",
-                            //   @"",
-                            //   @"lnn",
-                            //   @"",
-                            //   @"ls",
-                            //   @""};
+                            //var XX = X.ReShape(n, n);
+                            //var YY = Y.ReShape(n, n);
+                            //var ZZ = Z.ReShape(n, n);
 
-                            //var output = CommandPromptController.Execute(
-                            //    realTimeConsoleWriteLineOutput: true,
-                            //    omitCurrentDirectoryDisplay: true,
-                            //    outputReceivedAction: null,
-                            //    commands: commands);
 
-                        }
+                            // ★★★★★ 4
+                            //var x = np.linspace(-5, 5, n);
+                            //var y = np.linspace(-5, 5, n);
+                            //(var X, var Y) = np.meshgrid(x, y);
+                            //var Z = np.sin(X) * np.cos(Y);
 
-                    }
+                            //ax.plot_surface(X, Y, Z, cmap = "summer");
+                            //ax.contour(X, Y, Z, colors = "black", offset = -1);
 
-                }
 
-            }
+                            // ★★★★★ 
 
-            // 101 - AI
-            {
-                var baseDir_101 = BASE_DIR.GetChildDirectoryInfo($@"101 - AI");
-
-                // A - ChainableExtensions
-                {
-                    var baseDir_101_A = baseDir_101.GetChildDirectoryInfo($@"A - ChainableExtensions");
-
-                    // BB ImageToImage
-                    {
-                        // BB01 AI_GetHigherResolutionImage
-                        {
-                            //PythonController.Initialize();
-
-                            //// single
-                            //baseDir_101_A
-                            //    .GetChildFileInfo($@"BB01 GetHigherResolutionImage\input\00.jpg")
-                            //    .AI_GetHigherResolutionImage(null);
-
-                            ////// loop
-                            ////baseDir_101_A
-                            ////    .GetChildDirectoryInfo($@"BB01 GetHigherResolutionImage\input")
-                            ////    .AI_GetHigherResolutionImage_Loop(null);
-
-                            //PythonController.Shutdown();
-
-                        }
-                    }
-                }
-
-                // B - UsefulClasses
-                {
-                    var baseDir_101_B = baseDir_101.GetChildDirectoryInfo($@"B - UsefulClasses");
-
-
-
-                }
-
-                // C - AwesomeModels
-                {
-                    var baseDir_101_C = baseDir_101.GetChildDirectoryInfo($@"C - AwesomeModels");
-
-                    //
-                    {
-                    }
-
-                }
-
-                // D - ExternalAPIControllers
-                {
-                    var baseDir_101_D = baseDir_101.GetChildDirectoryInfo($@"D - ExternalAPIControllers");
-
-                    // D001 OpenAIController
-                    {
-                        var baseDir_101_D_D001 = baseDir_101_D.GetChildDirectoryInfo($@"D001 OpenAIController");
-                        var output = baseDir_101_D.GetChildDirectoryInfo($@"output");
-
-                        ////var apiSecretKey = ""; // API SecretKey
-                        //var apiSecretKey = Environment.GetEnvironmentVariable("OpenAI_SecretKey")!; // API SecretKey
-                        //var openAI = new OpenAIController(apiSecretKey);
-
-                        ////// get models
-                        ////var models = openAI.GetModelsAsync().Result;
-                        ////Console.WriteLine(models);
-
-                        //// edit text
-                        //dynamic result = openAI.EditTextAsync("Fix the spelling mistakes", "What day of the wek is it?").Result;
-                        //Console.WriteLine(result);
-
-                        //// generate image
-                        //var result = openAI.GenerateImageAsync("beautiful cat with blue eye and white ear", n: 2).Result;
-                        //for (int i = 0; i < result!.Length; i++)
-                        //{
-                        //    var GeneratedImageFile = baseDir_101_D_D001.GetChildFileInfo($"GeneratedImage{i}.png");
-                        //    result[i].DownloadFile(GeneratedImageFile);
-                        //}
-
-                    }
-
-                }
-
-                // X - CheatSheet
-                {
-                    var baseDir_101_X = baseDir_101.GetChildDirectoryInfo($@"X - CheatSheet");
-
-                    // A001 - CheatSheet - MLNetExampleSummary
-                    {
-                        //var baseDir_101_X_A001 = baseDir_101_X.GetChildDirectoryInfo($@"A001 MLNetExampleSummary");
-
-                        //var runner = new MLNetExampleSummary(MLNetExampleScenario.C777_Recommendation_Auto_MovieRecommender, baseDir_101_X_A001);
-                        ////runner.ExperimentTime_InSeconds = 60;
-                        ////runner.RunPrediction();
-                        //runner.RunAll();
-
-                    }
-                }
-
-            }
-
-            // 110 - StructuralEngineering
-            {
-                var baseDir_110 = BASE_DIR.GetChildDirectoryInfo($@"110 - StructuralEngineering");
-
-                // A - ChainableExtensions
-                {
-                    var baseDir_110_A = baseDir_110.GetChildDirectoryInfo($@"A - ChainableExtensions");
-
-                    // B001 RainflowCycleCounting
-                    {
-                        //baseDir_110_A
-                        //    .GetChildFileInfo($@"B001 RainflowCycleCounting\input3.csv")
-                        //    .Rainflow(null, 4, 1 / 3d, false);
-
-                        //baseDir_110_A
-                        //    .GetChildDirectoryInfo("B001 RainflowCycleCounting")
-                        //    .Rainflow_Loop(null, 4, 1 / 3d, false);
-
-                    }
-
-                    // B002 RDTechnique
-                    {
-                        //baseDir_110_A
-                        //    .GetChildFileInfo(@$"B002 RDTechnique\input.csv")
-                        //    .CalcRandomDecrement(null, 200)
-                        //    ;
-
-                    }
-
-                    // B003 CreateAccFromCsv
-                    {
-                        //baseDir_110_A
-                        //    .GetChildFileInfo(@$"B003 CreateAccFromCsv\kobe L1.csv")
-                        //    .CreateAccFromCsv_For_DynamicPro(null);
-
-                    }
-
-                    // F203 FFT
-                    {
-                        //baseDir_110_A
-                        //    .GetChildFileInfo($@"F203 FFT\input.csv")
-                        //    .GetTimeHistoryFromFile(new string[] { "t", "x" })
-                        //    .FFT("x").Result
-                        //    .SaveToCsv();
-
-                    }
-
-                }
-
-                // C - AwesomeModels
-                {
-                    var baseDir_110_C = baseDir_110.GetChildDirectoryInfo(@$"C - AwesomeModels");
-
-                    // B001 ElastoplasticAnalysis
-                    {
-                        var baseDir_110_B001 = baseDir_110_C.GetChildDirectoryInfo(@$"B001 EPAnalysis");
-
-                        // newmark beta
-                        {
-                            //var model = SDoFModel.FromT(1, 0.03);
-
-                            //var waveCsv = baseDir_110_B001.GetChildFileInfo(@$"Hachinohe-NS.csv");
-                            //var wave = TimeHistory.FromCsv(waveCsv, new string[] { "t", "ytt" });
-
-                            //var waveAnalysisModel = new NewmarkBetaModel(0.25);
-                            //var result = model.Calc(wave, waveAnalysisModel);
-
-                            //result.SaveToCsv();
-                            //result.DrawGraph("x", "t");
-                        }
-
-                        // nigam jennings
-                        {
-                            //var model = SDoFModel.FromT(1, 0.03);
-
-                            //var waveCsv = new FileInfo(@$"{baseDir_110_B001}\Hachinohe-NS.csv");
-                            //var wave = TimeHistory.FromCsv(waveCsv, new string[] { "t", "ytt" });
-
-                            //var waveAnalysisModel = new NigamJenningsModel();
-                            //var result = model.Calc(wave, waveAnalysisModel);
-
-                            //result.SaveToCsv();
-                            //result.DrawGraph("x", "t");
-                        }
-
-                        // ep test
-                        {
-                            //var epList = new List<ElastoplasticCharacteristicBase>
-                            //{
-                            //    //new ElasticModel(2),
-
-                            //    //new ElasticBilinearModel(2, 0.1, 80),
-                            //    //new BilinearModel(2, 0.1, 80),
-                            //    //new CloughModel(2, 0.1, 80),
-                            //    //new DegradingCloughModel(2, 0.1, 80, 0.4),
-                            //    //new PerfectElastoPlasticModel(2,80),
-
-                            //    //new ElasticTrilinearModel(2, 0.5, 80, 0.1, 100),
-                            //    new TrilinearModel(2, 0.5, 80, 0.1, 100),
-                            //    //new TrilinearModel_Obsolete(2, 0.5, 80, 0.1, 100),
-
-                            //    //new ElasticTetralinearModel(2, 0.5, 80, 0.25, 90, 0.1, 110),
-                            //};
-
-                            //foreach (var ep in epList)
-                            //{
-                            //    var tester = new EPTester(ep);
-                            //    var result = tester.Calc(EPTester.TestWave.TestWave1);
-
-                            //    var saveDir = baseDir_110_B001.GetChildDirectoryInfo(@$"output");
-                            //    result.SaveToCsv(saveDir);
-                            //    result.DrawGraph("f", "x");
-                            //}
-
-                            // combined
+                            new PythonController.PyPlot.Figure(true)
                             {
-                                //var waveAnalysisModelList = new List<ITimeHistoryAnalysisModel>
-                                //{
-                                //    new NewmarkBetaModel(0.25),
-                                //    //new WilsonTheta(1.4,0.25),
-                                //    //new NigamJenningsModel(),
-                                //};
+                                IsTightLayout = true,
+                                SubPlots = new List<PythonController.PyPlot.SubPlot>()
+                                    {
+                                        new PythonController.PyPlot.SubPlot(true)
+                                        {
+                                            //ZLim=(-1,1),
+                                            XLabel = "X",
+                                            YLabel = "Y",
+                                            ZLabel = "Z",
+                                            Title = "surface",
+                                            Plots = new List<PythonController.PyPlot.IPlot>
+                                            {
+                                                new PythonController.PyPlot.ContourPlot(XX,YY,ZZ, false, 20){Colors="green", ZOffset=XX.Min(), TargetHeightDirection__For3D="x"},
+                                                new PythonController.PyPlot.ContourPlot(XX,YY,ZZ, false, 20){Colors="green", ZOffset=YY.Max(), TargetHeightDirection__For3D="y" },
+                                                new PythonController.PyPlot.ContourPlot(XX,YY,ZZ, false, 20){Colors="green", ZOffset=ZZ.Min(),  TargetHeightDirection__For3D="z"},
+                                                //new PythonController.PyPlot.ContourPlot(XX,YY,ZZ, false, 20){Colors="green", ZOffset=ZZ.Min(), ContourLabelFontSize__2D=20},
+                                               
+                                                //new PythonController.PyPlot.WireFramePlot(XX,YY,ZZ){Color="black", LineWidth=3},
+                                                new PythonController.PyPlot.SurfacePlot(XX,YY,ZZ){ ColorMap="summer", Alpha=0.3},
 
-                                //var waveCsv = baseDir_110_B001.GetChildFileInfo(@$"Hachinohe-NS.csv");
-                                //var wave = TimeHistory.FromCsv(waveCsv, new string[] { "t", "ytt" });
+                                                //new PythonController.PyPlot.ScatterPlot(XX,YY,ZZ){ ColorMap="green", MarkerSize=100},
+                                            }
+                                        }
+                                    }
 
-                                //foreach (var waveAnalysisModel in waveAnalysisModelList)
-                                //{
-                                //    var epList = new List<ElastoplasticCharacteristicBase>
-                                //    {
-                                //        //new ElasticModel(2),
-                                //        //new BilinearModel(2, 0.1, 8),
-                                //        new TrilinearModel(2, 0.5, 5, 0.1, 7),
-                                //        //new CloughModel(2, 0.1, 8),
-                                //        //new DegradingCloughModel(2, 0.1, 8, 0.4),
-                                //    };
-
-                                //    foreach (var ep in epList)
-                                //    {
-                                //        try
-                                //        {
-                                //            var model = SDoFModel.FromT(1, 0.03, ep);
-                                //            var result = model.Calc(wave, waveAnalysisModel);
-                                //            result.DrawLineGraph("x", "t");
-                                //            result.DrawLineGraph("f", "x");
-                                //            result.SaveToCsv();
-                                //            Console.WriteLine("[O]");
-                                //        }
-                                //        catch (Exception ex)
-                                //        {
-                                //            Console.WriteLine($"[X]: {ex.Message}");
-                                //            throw;
-                                //        }
-                                //    }
-                                //}
-                            }
-
-                            // spectrum analysis
-                            {
-                                //var ep = new ElasticModel(2);
-                                ////var ep = new DegradingCloughModel(2, 0.1, 8, 0.4);
-
-                                //var TList = Enumerable.Range(100, 400).Select(x => x / 100d).ToArray();
-                                //var hList = new double[] { 0.00, 0.03, 0.05, 0.10 };
-
-                                //var waveCsv = baseDir_110_B001.GetChildFileInfo(@$"Hachinohe-NS.csv");
-                                //var wave = TimeHistory.FromCsv(waveCsv, new string[] { "t", "ytt" });
-
-                                ////var waveAnalysisModel = new NewmarkBetaModel(0.25);
-                                //var waveAnalysisModel = new NigamJenningsModel();
-
-                                //var resultSet = SDoFModel.CalcResponseSpectrum(TList, hList, wave, waveAnalysisModel, ep);
-                                //resultSet.SaveToExcel(waveCsv.Directory);
-                            }
-
+                            }.Run(output.GetChildFileInfo("surface.png"), true);
                         }
 
-                    }
-
-                    // B002 RainflowCycleCounting
-                    {
-                        //var inputCsv = baseDir_110_C.GetChildFileInfo($@"B002 RainflowCycleCounting\input3.csv");
-                        ////var inputCsv = new FileInfo(@"C:\Users\aki32\Desktop\anaAll_beam.csv");
-
-                        //var rainflow = RainflowCalculator.FromCsv(inputCsv);
-                        //rainflow.CalcRainflow(4, 1 / 3d, false);
-                        //rainflow.SaveResultHistoryToCsv();
-                        //rainflow.SaveRainBranchesToCsv();
-                    }
-
-                    // B003 RDTechnique
-                    {
-                        //// Define IO paths
-                        //var input = baseDir_110_C.GetChildFileInfo($@"B003 RDTechnique\input.csv");
-
-                        //// Read input csv
-                        //var rd = RDTechniqueCalculator.FromCsv(input);
-
-                        //// Calc and show
-                        //rd.Calc(200);
-                        //rd.InputHistory.DrawGraph("v");
-                        //rd.ResultHistory.DrawGraph("v");
-
-                        //// Calc AttenuationConstant and show
-                        //var att = rd.CalcAttenuationConstant(4, true);
-                        //Console.WriteLine();
-                        //Console.WriteLine($"result h = {att}");
 
                     }
                 }
 
-                // X - SoftwareHelpers
+                // D005 CommandPrompt
                 {
-                    var baseDir_110_X = baseDir_110.GetChildDirectoryInfo(@$"X - SoftwareHelpers");
 
-                    // X001 SNAPHelper
+                    // objective
                     {
-                        // KeepClosingExcel
-                        {
-                            //SNAPHelper.KeepClosingExcel(5000);
-
-                        }
-
-                    }
-
-                    // X002 DynamicProHelper
-                    {
-                        // CreateAccFromCsv
-                        {
-                            //var input = baseDir_110_X.GetChildFileInfo($@"X002 DynamicProHelper\kobe L1.csv");
-                            //var output = baseDir_110_X.GetChildFileInfo($@"X002 DynamicProHelper\kobe L1.acc");
-                            //DynamicProHelper.CreateAccFromCsv(input, output);
-                        }
-
-                    }
-
-                    // X003 KnetHelper
-                    {
-                        // KnetAccData
-                        {
-                            //var input = new FileInfo(@"C:\Users\aki32\Dropbox\PC\Desktop\新しいフォルダー\TKY0022203162336\TKY0022203162336.EW");
-                            //var aaa = new KNetHelper.KNetAccData(input);
-
-
-
-
-
-
-
-
-                        }
-
-                    }
-                }
-
-            }
-
-            // 111 - Research
-            {
-                var baseDir_101 = BASE_DIR.GetChildDirectoryInfo($@"111 - Research");
-
-                // A - ResearchManager
-                {
-                    //var localDir = new DirectoryInfo($@"{Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory)}\ResearchArticleDB");
-
-                    //var research = new ResearchArticlesManager(localDir);
-                    //research.OpenDatabase();
-
-
-                    ////articles from j - stage
-                    {
-                        //var accessor = new JStageArticleAPIAccessor()
+                        //using var prompt = new CommandPromptController()
                         //{
-                        //    PublishedFrom = 2022,
-                        //    ISSN = ISSN.Architecture_Structure,
-                        //    RecordCount = 3,
-                        //    //Start = 1,
+                        //    RealTimeConsoleWriteLineOutput = true,
+                        //    OmitCurrentDirectoryDisplay = false,
                         //};
-                        //research.PullArticleInfo(accessor);
+
+                        //prompt.WriteLine(@"");
+                        //prompt.WriteLine(@"cd ..\..\..\# TestModel\A - Extensions\E007 DistortImage");
+                        //prompt.WriteLine(@"");
+                        //prompt.WriteLine(@"lnn");
+                        //prompt.WriteLine(@"");
+                        //prompt.WriteLine(@"ls");
+                        //prompt.WriteLine(@"");
+
+                        //var output = prompt.ResponseList.ToArray();
 
                     }
 
-                    ////articles from cinii
+                    // static
                     {
-                        //var accessor = new CiNiiArticleAPIAccessor()
-                        //{
-                        //    RecordCount = 5,
-                        //    ISSN = ISSN.Architecture_Structure,
-                        //    SearchFreeWord = "小振幅"
-                        //};
-                        //research.PullArticleInfo(accessor);
+
+                        //var commands = new string[] {
+                        //   @"",
+                        //   @"cd ..\..\..\# TestModel\A - Extensions\E007 DistortImage",
+                        //   @"",
+                        //   @"lnn",
+                        //   @"",
+                        //   @"ls",
+                        //   @""};
+
+                        //var output = CommandPromptController.Execute(
+                        //    realTimeConsoleWriteLineOutput: true,
+                        //    omitCurrentDirectoryDisplay: true,
+                        //    outputReceivedAction: null,
+                        //    commands: commands);
 
                     }
-
-                    ////article from crossref
-                    {
-                        //var accessor = new CrossRefAPIAccessor()
-                        //{
-                        //    DOI = "10.3130/aijs.87.822"
-                        //};
-                        //research.PullArticleInfo(accessor);
-
-                    }
-
-                    // articles from ndl search
-                    {
-                        //var accessor = new NDLSearchAPIAccessor()
-                        //{
-                        //    RecordCount = 5,
-                        //    SearchFreeWord = "空間情報を表現するグラフ構造",
-                        //};
-                        //research.PullArticleInfo(accessor);
-
-                    }
-
-
-                    // display
-                    {
-                        //research.SaveDatabase(true, true);
-
-                        //Console.WriteLine();
-                        //Console.WriteLine();
-                        //Console.WriteLine($"★ {research.ArticleDatabase.Count} found in total");
-                        //Console.WriteLine();
-                        ////foreach (var article in research.ArticleDatabase)
-                        ////    Console.WriteLine($" + {article.Title_Japanese}");
-                        ////Console.WriteLine();
-                        //Console.WriteLine();
-
-                        ////research.ArticleDatabase.First(x => x.DOI == "10.3130/aijs.87.822").TryOpenPDF(research.PDFsDirectory);
-
-                    }
-
-                }
-
-            }
-
-            // M - MiniApps
-            {
-                var baseDir_M = BASE_DIR.GetChildDirectoryInfo($@"M - MiniApps");
-
-                // M001 Books2PDF
-                {
-                    //var outputDir = baseDir_M.GetChildDirectoryInfo($@"M001 Books2PDF");
-                    //MiniApps.Books2PDF(outputDir, 10);
-
-                }
-
-                //
-                {
-
-                }
-
-                //
-                {
 
                 }
 
             }
 
         }
+
+        // 101 - AI
+        {
+            var baseDir_101 = BASE_DIR.GetChildDirectoryInfo($@"101 - AI");
+
+            // A - ChainableExtensions
+            {
+                var baseDir_101_A = baseDir_101.GetChildDirectoryInfo($@"A - ChainableExtensions");
+
+                // BB ImageToImage
+                {
+                    // BB01 AI_GetHigherResolutionImage
+                    {
+                        //PythonController.Initialize();
+
+                        //// single
+                        //baseDir_101_A
+                        //    .GetChildFileInfo($@"BB01 GetHigherResolutionImage\input\00.jpg")
+                        //    .AI_GetHigherResolutionImage(null);
+
+                        ////// loop
+                        ////baseDir_101_A
+                        ////    .GetChildDirectoryInfo($@"BB01 GetHigherResolutionImage\input")
+                        ////    .AI_GetHigherResolutionImage_Loop(null);
+
+                        //PythonController.Shutdown();
+
+                    }
+                }
+            }
+
+            // B - UsefulClasses
+            {
+                var baseDir_101_B = baseDir_101.GetChildDirectoryInfo($@"B - UsefulClasses");
+
+
+
+            }
+
+            // C - AwesomeModels
+            {
+                var baseDir_101_C = baseDir_101.GetChildDirectoryInfo($@"C - AwesomeModels");
+
+                //
+                {
+                }
+
+            }
+
+            // D - ExternalAPIControllers
+            {
+                var baseDir_101_D = baseDir_101.GetChildDirectoryInfo($@"D - ExternalAPIControllers");
+
+                // D001 OpenAIController
+                {
+                    var baseDir_101_D_D001 = baseDir_101_D.GetChildDirectoryInfo($@"D001 OpenAIController");
+                    var output = baseDir_101_D.GetChildDirectoryInfo($@"output");
+
+                    ////var apiSecretKey = ""; // API SecretKey
+                    //var apiSecretKey = Environment.GetEnvironmentVariable("OpenAI_SecretKey")!; // API SecretKey
+                    //var openAI = new OpenAIController(apiSecretKey);
+
+                    ////// get models
+                    ////var models = openAI.GetModelsAsync().Result;
+                    ////Console.WriteLine(models);
+
+                    //// edit text
+                    //dynamic result = openAI.EditTextAsync("Fix the spelling mistakes", "What day of the wek is it?").Result;
+                    //Console.WriteLine(result);
+
+                    //// generate image
+                    //var result = openAI.GenerateImageAsync("beautiful cat with blue eye and white ear", n: 2).Result;
+                    //for (int i = 0; i < result!.Length; i++)
+                    //{
+                    //    var GeneratedImageFile = baseDir_101_D_D001.GetChildFileInfo($"GeneratedImage{i}.png");
+                    //    result[i].DownloadFile(GeneratedImageFile);
+                    //}
+
+                }
+
+            }
+
+            // X - CheatSheet
+            {
+                var baseDir_101_X = baseDir_101.GetChildDirectoryInfo($@"X - CheatSheet");
+
+                // A001 - CheatSheet - MLNetExampleSummary
+                {
+                    //var baseDir_101_X_A001 = baseDir_101_X.GetChildDirectoryInfo($@"A001 MLNetExampleSummary");
+
+                    //var runner = new MLNetExampleSummary(MLNetExampleScenario.C777_Recommendation_Auto_MovieRecommender, baseDir_101_X_A001);
+                    ////runner.ExperimentTime_InSeconds = 60;
+                    ////runner.RunPrediction();
+                    //runner.RunAll();
+
+                }
+            }
+
+        }
+
+        // 110 - StructuralEngineering
+        {
+            var baseDir_110 = BASE_DIR.GetChildDirectoryInfo($@"110 - StructuralEngineering");
+
+            // A - ChainableExtensions
+            {
+                var baseDir_110_A = baseDir_110.GetChildDirectoryInfo($@"A - ChainableExtensions");
+
+                // B001 RainflowCycleCounting
+                {
+                    //baseDir_110_A
+                    //    .GetChildFileInfo($@"B001 RainflowCycleCounting\input3.csv")
+                    //    .Rainflow(null, 4, 1 / 3d, false);
+
+                    //baseDir_110_A
+                    //    .GetChildDirectoryInfo("B001 RainflowCycleCounting")
+                    //    .Rainflow_Loop(null, 4, 1 / 3d, false);
+
+                }
+
+                // B002 RDTechnique
+                {
+                    //baseDir_110_A
+                    //    .GetChildFileInfo(@$"B002 RDTechnique\input.csv")
+                    //    .CalcRandomDecrement(null, 200)
+                    //    ;
+
+                }
+
+                // B003 CreateAccFromCsv
+                {
+                    //baseDir_110_A
+                    //    .GetChildFileInfo(@$"B003 CreateAccFromCsv\kobe L1.csv")
+                    //    .CreateAccFromCsv_For_DynamicPro(null);
+
+                }
+
+                // F203 FFT
+                {
+                    //baseDir_110_A
+                    //    .GetChildFileInfo($@"F203 FFT\input.csv")
+                    //    .GetTimeHistoryFromFile(new string[] { "t", "x" })
+                    //    .FFT("x").Result
+                    //    .SaveToCsv();
+
+                }
+
+            }
+
+            // C - AwesomeModels
+            {
+                var baseDir_110_C = baseDir_110.GetChildDirectoryInfo(@$"C - AwesomeModels");
+
+                // B001 ElastoplasticAnalysis
+                {
+                    var baseDir_110_B001 = baseDir_110_C.GetChildDirectoryInfo(@$"B001 EPAnalysis");
+
+                    // newmark beta
+                    {
+                        //var model = SDoFModel.FromT(1, 0.03);
+
+                        //var waveCsv = baseDir_110_B001.GetChildFileInfo(@$"Hachinohe-NS.csv");
+                        //var wave = TimeHistory.FromCsv(waveCsv, new string[] { "t", "ytt" });
+
+                        //var waveAnalysisModel = new NewmarkBetaModel(0.25);
+                        //var result = model.Calc(wave, waveAnalysisModel);
+
+                        //result.SaveToCsv();
+                        //result.DrawGraph("x", "t");
+                    }
+
+                    // nigam jennings
+                    {
+                        //var model = SDoFModel.FromT(1, 0.03);
+
+                        //var waveCsv = new FileInfo(@$"{baseDir_110_B001}\Hachinohe-NS.csv");
+                        //var wave = TimeHistory.FromCsv(waveCsv, new string[] { "t", "ytt" });
+
+                        //var waveAnalysisModel = new NigamJenningsModel();
+                        //var result = model.Calc(wave, waveAnalysisModel);
+
+                        //result.SaveToCsv();
+                        //result.DrawGraph("x", "t");
+                    }
+
+                    // ep test
+                    {
+                        //var epList = new List<ElastoplasticCharacteristicBase>
+                        //{
+                        //    //new ElasticModel(2),
+
+                        //    //new ElasticBilinearModel(2, 0.1, 80),
+                        //    //new BilinearModel(2, 0.1, 80),
+                        //    //new CloughModel(2, 0.1, 80),
+                        //    //new DegradingCloughModel(2, 0.1, 80, 0.4),
+                        //    //new PerfectElastoPlasticModel(2,80),
+
+                        //    //new ElasticTrilinearModel(2, 0.5, 80, 0.1, 100),
+                        //    new TrilinearModel(2, 0.5, 80, 0.1, 100),
+                        //    //new TrilinearModel_Obsolete(2, 0.5, 80, 0.1, 100),
+
+                        //    //new ElasticTetralinearModel(2, 0.5, 80, 0.25, 90, 0.1, 110),
+                        //};
+
+                        //foreach (var ep in epList)
+                        //{
+                        //    var tester = new EPTester(ep);
+                        //    var result = tester.Calc(EPTester.TestWave.TestWave1);
+
+                        //    var saveDir = baseDir_110_B001.GetChildDirectoryInfo(@$"output");
+                        //    result.SaveToCsv(saveDir);
+                        //    result.DrawGraph("f", "x");
+                        //}
+
+                        // combined
+                        {
+                            //var waveAnalysisModelList = new List<ITimeHistoryAnalysisModel>
+                            //{
+                            //    new NewmarkBetaModel(0.25),
+                            //    //new WilsonTheta(1.4,0.25),
+                            //    //new NigamJenningsModel(),
+                            //};
+
+                            //var waveCsv = baseDir_110_B001.GetChildFileInfo(@$"Hachinohe-NS.csv");
+                            //var wave = TimeHistory.FromCsv(waveCsv, new string[] { "t", "ytt" });
+
+                            //foreach (var waveAnalysisModel in waveAnalysisModelList)
+                            //{
+                            //    var epList = new List<ElastoplasticCharacteristicBase>
+                            //    {
+                            //        //new ElasticModel(2),
+                            //        //new BilinearModel(2, 0.1, 8),
+                            //        new TrilinearModel(2, 0.5, 5, 0.1, 7),
+                            //        //new CloughModel(2, 0.1, 8),
+                            //        //new DegradingCloughModel(2, 0.1, 8, 0.4),
+                            //    };
+
+                            //    foreach (var ep in epList)
+                            //    {
+                            //        try
+                            //        {
+                            //            var model = SDoFModel.FromT(1, 0.03, ep);
+                            //            var result = model.Calc(wave, waveAnalysisModel);
+                            //            result.DrawLineGraph("x", "t");
+                            //            result.DrawLineGraph("f", "x");
+                            //            result.SaveToCsv();
+                            //            Console.WriteLine("[O]");
+                            //        }
+                            //        catch (Exception ex)
+                            //        {
+                            //            Console.WriteLine($"[X]: {ex.Message}");
+                            //            throw;
+                            //        }
+                            //    }
+                            //}
+                        }
+
+                        // spectrum analysis
+                        {
+                            //var ep = new ElasticModel(2);
+                            ////var ep = new DegradingCloughModel(2, 0.1, 8, 0.4);
+
+                            //var TList = Enumerable.Range(100, 400).Select(x => x / 100d).ToArray();
+                            //var hList = new double[] { 0.00, 0.03, 0.05, 0.10 };
+
+                            //var waveCsv = baseDir_110_B001.GetChildFileInfo(@$"Hachinohe-NS.csv");
+                            //var wave = TimeHistory.FromCsv(waveCsv, new string[] { "t", "ytt" });
+
+                            ////var waveAnalysisModel = new NewmarkBetaModel(0.25);
+                            //var waveAnalysisModel = new NigamJenningsModel();
+
+                            //var resultSet = SDoFModel.CalcResponseSpectrum(TList, hList, wave, waveAnalysisModel, ep);
+                            //resultSet.SaveToExcel(waveCsv.Directory);
+                        }
+
+                    }
+
+                }
+
+                // B002 RainflowCycleCounting
+                {
+                    //var inputCsv = baseDir_110_C.GetChildFileInfo($@"B002 RainflowCycleCounting\input3.csv");
+                    ////var inputCsv = new FileInfo(@"C:\Users\aki32\Desktop\anaAll_beam.csv");
+
+                    //var rainflow = RainflowCalculator.FromCsv(inputCsv);
+                    //rainflow.CalcRainflow(4, 1 / 3d, false);
+                    //rainflow.SaveResultHistoryToCsv();
+                    //rainflow.SaveRainBranchesToCsv();
+                }
+
+                // B003 RDTechnique
+                {
+                    //// Define IO paths
+                    //var input = baseDir_110_C.GetChildFileInfo($@"B003 RDTechnique\input.csv");
+
+                    //// Read input csv
+                    //var rd = RDTechniqueCalculator.FromCsv(input);
+
+                    //// Calc and show
+                    //rd.Calc(200);
+                    //rd.InputHistory.DrawGraph("v");
+                    //rd.ResultHistory.DrawGraph("v");
+
+                    //// Calc AttenuationConstant and show
+                    //var att = rd.CalcAttenuationConstant(4, true);
+                    //Console.WriteLine();
+                    //Console.WriteLine($"result h = {att}");
+
+                }
+            }
+
+            // X - SoftwareHelpers
+            {
+                var baseDir_110_X = baseDir_110.GetChildDirectoryInfo(@$"X - SoftwareHelpers");
+
+                // X001 SNAPHelper
+                {
+                    // KeepClosingExcel
+                    {
+                        //SNAPHelper.KeepClosingExcel(5000);
+
+                    }
+
+                }
+
+                // X002 DynamicProHelper
+                {
+                    // CreateAccFromCsv
+                    {
+                        //var input = baseDir_110_X.GetChildFileInfo($@"X002 DynamicProHelper\kobe L1.csv");
+                        //var output = baseDir_110_X.GetChildFileInfo($@"X002 DynamicProHelper\kobe L1.acc");
+                        //DynamicProHelper.CreateAccFromCsv(input, output);
+                    }
+
+                }
+
+                // X003 KnetHelper
+                {
+                    // KnetAccData
+                    {
+                        //var input = new FileInfo(@"C:\Users\aki32\Dropbox\PC\Desktop\新しいフォルダー\TKY0022203162336\TKY0022203162336.EW");
+                        //var aaa = new KNetHelper.KNetAccData(input);
+
+
+
+
+
+
+
+
+                    }
+
+                }
+            }
+
+        }
+
+        // 111 - Research
+        {
+            var baseDir_101 = BASE_DIR.GetChildDirectoryInfo($@"111 - Research");
+
+            // A - ResearchManager
+            {
+                //var localDir = new DirectoryInfo($@"{Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory)}\ResearchArticleDB");
+
+                //var research = new ResearchArticlesManager(localDir);
+                //research.OpenDatabase();
+
+
+                ////articles from j - stage
+                {
+                    //var accessor = new JStageArticleAPIAccessor()
+                    //{
+                    //    PublishedFrom = 2022,
+                    //    ISSN = ISSN.Architecture_Structure,
+                    //    RecordCount = 3,
+                    //    //Start = 1,
+                    //};
+                    //research.PullArticleInfo(accessor);
+
+                }
+
+                ////articles from cinii
+                {
+                    //var accessor = new CiNiiArticleAPIAccessor()
+                    //{
+                    //    RecordCount = 5,
+                    //    ISSN = ISSN.Architecture_Structure,
+                    //    SearchFreeWord = "小振幅"
+                    //};
+                    //research.PullArticleInfo(accessor);
+
+                }
+
+                ////article from crossref
+                {
+                    //var accessor = new CrossRefAPIAccessor()
+                    //{
+                    //    DOI = "10.3130/aijs.87.822"
+                    //};
+                    //research.PullArticleInfo(accessor);
+
+                }
+
+                // articles from ndl search
+                {
+                    //var accessor = new NDLSearchAPIAccessor()
+                    //{
+                    //    RecordCount = 5,
+                    //    SearchFreeWord = "空間情報を表現するグラフ構造",
+                    //};
+                    //research.PullArticleInfo(accessor);
+
+                }
+
+
+                // display
+                {
+                    //research.SaveDatabase(true, true);
+
+                    //Console.WriteLine();
+                    //Console.WriteLine();
+                    //Console.WriteLine($"★ {research.ArticleDatabase.Count} found in total");
+                    //Console.WriteLine();
+                    ////foreach (var article in research.ArticleDatabase)
+                    ////    Console.WriteLine($" + {article.Title_Japanese}");
+                    ////Console.WriteLine();
+                    //Console.WriteLine();
+
+                    ////research.ArticleDatabase.First(x => x.DOI == "10.3130/aijs.87.822").TryOpenPDF(research.PDFsDirectory);
+
+                }
+
+            }
+
+        }
+
+        // M - MiniApps
+        {
+            var baseDir_M = BASE_DIR.GetChildDirectoryInfo($@"M - MiniApps");
+
+            // M001 Books2PDF
+            {
+                //var outputDir = baseDir_M.GetChildDirectoryInfo($@"M001 Books2PDF");
+                //MiniApps.Books2PDF(outputDir, 10);
+
+            }
+
+            //
+            {
+
+            }
+
+            //
+            {
+
+            }
+
+        }
+
     }
+}

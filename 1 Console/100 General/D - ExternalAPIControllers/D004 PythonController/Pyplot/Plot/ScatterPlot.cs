@@ -15,6 +15,7 @@ public static partial class PythonController
 
             public bool Is3D { get; set; } = false;
             public string LegendLabel { get; set; } = "";
+            public double Alpha { get; set; } = 1;
 
             public double[] X { get; set; }
             public double[] Y { get; set; }
@@ -37,7 +38,6 @@ public static partial class PythonController
 
             public string Marker { get; set; } = "o"; // . , o v ^ < > ...
             public int MarkerSize { get; set; } = 20;
-            public double Alpha { get; set; } = 1;
             //public string LineWidths { get; set; } = "2";
             public int LineWidth { get; set; } = 0;
 
@@ -100,11 +100,11 @@ public static partial class PythonController
                     {
                         ax.scatter(X, Y, Z,
                             label: LegendLabel,
+                            alpha: Alpha,
 
                             s: MarkerSize,
                             c: Z_Color,
                             marker: Marker,
-                            alpha: Alpha,
                             linewidth: LineWidth,
                             edgecolors: EdgeColors,
 
@@ -118,11 +118,11 @@ public static partial class PythonController
                     {
                         ax.scatter(X, Y, Z,
                             label: LegendLabel,
+                            alpha: Alpha,
 
                             s: MarkerSize,
                             c: MarkerColor,
                             marker: Marker,
-                            alpha: Alpha,
                             linewidth: LineWidth,
                             edgecolors: EdgeColors
                         );
@@ -134,11 +134,11 @@ public static partial class PythonController
                     {
                         ax.scatter(X, Y,
                             label: LegendLabel,
+                            alpha: Alpha,
 
                             s: Z_Size,
                             c: MarkerColor,
                             marker: Marker,
-                            alpha: Alpha,
                             linewidth: LineWidth,
                             edgecolors: EdgeColors
                         );
@@ -147,11 +147,11 @@ public static partial class PythonController
                     {
                         ax.scatter(X, Y,
                             label: LegendLabel,
+                            alpha: Alpha,
 
                             s: MarkerSize,
                             c: Z_Color,
                             marker: Marker,
-                            alpha: Alpha,
                             linewidth: LineWidth,
                             edgecolors: EdgeColors,
 
@@ -165,11 +165,11 @@ public static partial class PythonController
                     {
                         ax.scatter(X, Y,
                             label: LegendLabel,
+                            alpha: Alpha,
 
                             s: MarkerSize,
                             c: MarkerColor,
                             marker: Marker,
-                            alpha: Alpha,
                             linewidth: LineWidth,
                             edgecolors: EdgeColors
                         );

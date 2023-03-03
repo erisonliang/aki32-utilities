@@ -25,6 +25,7 @@ public static partial class PythonController
 
             public bool Is3D { get; set; } = true;
             public string LegendLabel { get; set; } = "";
+            public double Alpha { get; set; } = 1;
 
             public dynamic X { get; set; }
             public dynamic Y { get; set; }
@@ -33,7 +34,7 @@ public static partial class PythonController
             /// </summary>
             public dynamic Z { get; set; }
 
-            public int ZOffset { get; set; } = 0;
+            public double ZOffset { get; set; } = 0;
             public int Levels { get; set; } = 50;
 
             public string Colors { get; set; } = "black";
@@ -50,7 +51,10 @@ public static partial class PythonController
             /// (3d option)
             /// </summary>
             public string TargetHeightDirection__For3D { get; set; } = "z";
-
+            /// <summary>
+            /// (3d option)
+            /// </summary>
+            public bool UseFilledContour__For3D { get; set; } = false;
 
             // ★★★★★★★★★★★★★★★ inits
 
@@ -119,24 +123,60 @@ public static partial class PythonController
             public void Run(dynamic ax)
             {
                 // プロット
-                var cset = ax.contour(X, Y, Z,
-                    levels: Levels,
-                    extend3d: Is3D,
-                    colors: Colors,
-                    stride: Stride__For3D,
-                    zdir: TargetHeightDirection__For3D,
-                    offset: ZOffset
-                    );
+                if (Is3D)
+                {
+                    if (UseFilledContour__For3D)
+                    {
+                        ax.contourf(X, Y, Z,
+                            label: LegendLabel,
+                            alpha: Alpha,
 
-                if (ContourLabelFontSize__2D > 0)
-                    ax.clabel(cset, fontsize: ContourLabelFontSize__2D, inline: 1);
+                            levels: Levels,
+                            extend3d: Is3D,
+                            colors: Colors,
+                            stride: Stride__For3D,
+                            zdir: TargetHeightDirection__For3D,
+                            offset: ZOffset
+                            );
 
+                    }
+                    else
+                    {
+                        ax.contour(X, Y, Z,
+                            label: LegendLabel,
+                            alpha: Alpha,
+
+                            levels: Levels,
+                            extend3d: Is3D,
+                            colors: Colors,
+                            stride: Stride__For3D,
+                            zdir: TargetHeightDirection__For3D,
+                            offset: ZOffset
+                            );
+
+                    }
+                }
+                else
+                {
+                    var cset = ax.contour(X, Y, Z,
+                        label: LegendLabel,
+                        alpha: Alpha,
+
+                        levels: Levels,
+                        extend3d: Is3D,
+                        colors: Colors,
+                        stride: Stride__For3D,
+                        zdir: TargetHeightDirection__For3D,
+                        offset: ZOffset
+                        );
+
+                    if (ContourLabelFontSize__2D > 0)
+                        ax.clabel(cset, fontsize: ContourLabelFontSize__2D, inline: 1);
+                }
 
                 // data:
                 //indexable object, optional
                 //If given, all parameters also accept a string s, which is interpreted as data[s] (unless this raises an exception).
-
-                // levels: int or array-like, optional
 
             }
 

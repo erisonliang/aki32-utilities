@@ -1,7 +1,5 @@
 ﻿
 
-using Python.Runtime;
-
 namespace Aki32Utilities.ConsoleAppUtilities.General;
 public static partial class PythonController
 {

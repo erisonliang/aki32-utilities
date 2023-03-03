@@ -7,7 +7,13 @@ public static partial class PythonController
     {
         /// <summary>
         /// All plot types can be found here
-        /// https://www.c-sharpcorner.com/article/a-complete-python-matplotlib-tutorial/
+        /// 
+        /// axis grid: https://matplotlib.org/stable/tutorials/toolkits/axes_grid.html
+        /// artists: https://matplotlib.org/stable/tutorials/toolkits/axisartist.html
+        ///
+        /// 2D plots: https://www.c-sharpcorner.com/article/a-complete-python-matplotlib-tutorial/
+        /// 3D plots: https://matplotlib.org/stable/tutorials/toolkits/mplot3d.html
+        /// 
         /// </summary>
         public interface IPlot
         {
