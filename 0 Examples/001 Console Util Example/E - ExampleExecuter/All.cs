@@ -25,6 +25,12 @@ using ICSharpCode.SharpZipLib.Zip;
 using Thickness = Aki32Utilities.ConsoleAppUtilities.General.ChainableExtensions.Thickness;
 using Color = System.Drawing.Color;
 using Point = System.Drawing.Point;
+using DocumentFormat.OpenXml.Bibliography;
+using System.Xml.Linq;
+using XPlot.Plotly;
+using NumSharp;
+using DocumentFormat.OpenXml.Drawing;
+using Org.BouncyCastle.Crypto.Macs;
 
 namespace Aki32Utilities.UsageExamples.ConsoleAppUtilities;
 public static partial class ExampleExecuter
@@ -685,6 +691,8 @@ public static partial class ExampleExecuter
 
                 // D004 Python
                 {
+                    var baseDir_100_D004 = baseDir_100_D.GetChildDirectoryInfo($@"D004 Python");
+                    var output = baseDir_100_D004.GetChildDirectoryInfo($@"output");
 
                     //PythonController.Initialize(
                     //    pythonPath: @"C:\Python310",
@@ -706,6 +714,73 @@ public static partial class ExampleExecuter
 
                     //PythonController.Shutdown();
 
+
+                    // PyPlot
+                    {
+                        PythonController.Initialize();
+
+                        var pi = Math.PI;
+                        var n = 256;
+
+                        {
+                            var z = EnumerableExtension.Range(-3 * pi, 3 * pi, n).ToArray();
+                            var x = z.Select(z => Math.Cos(z)).ToArray();
+                            var y = z.Select(z => Math.Sin(z)).ToArray();
+
+                            new PythonController.PyPlot.Figure
+                            {
+                                IsTightLayout = true,
+                                SubPlots = new List<PythonController.PyPlot.SubPlot>()
+                            {
+                                new PythonController.PyPlot.SubPlot()
+                                {
+                                    XLabel = "x",
+                                    YLabel = "y",
+                                    ZLabel = "z",
+                                    Title = "helix",
+                                    Plots = new List<PythonController.PyPlot.IPlot>
+                                    {
+                                        new PythonController.PyPlot.LinePlot(x,y,z),
+                                    }
+                                }
+                            }
+
+                            }.Run(output.GetChildFileInfo("helix.png"), true);
+
+                        }
+
+
+                        {
+                            var x = np.linspace(-3 * pi, 3 * pi, 256);
+                            var y = np.linspace(-3 * pi, 3 * pi, 256);
+                            (var X, var Y) = np.meshgrid(x, y);
+                            var Z = np.cos(X / pi) * np.sin(Y / pi);
+
+                            ax.plot_surface(X, Y, Z, cmap = "summer");
+                            ax.contour(X, Y, Z, colors = "black", offset = -1);
+
+                            new PythonController.PyPlot.Figure
+                            {
+                                IsTightLayout = true,
+                                SubPlots = new List<PythonController.PyPlot.SubPlot>()
+                                {
+                                    new PythonController.PyPlot.SubPlot()
+                                    {
+                                        XLabel = "X",
+                                        YLabel = "Y",
+                                        ZLabel = "Z",
+                                        Title = "surface",
+                                        Plots = new List<PythonController.PyPlot.IPlot>
+                                        {
+                                            new PythonController.PyPlot.LinePlot(X,Y,Z),
+                                        }
+                                    }
+                                }
+
+                            }.Run(output.GetChildFileInfo("surface.png"), true);
+                        }
+
+                    }
                 }
 
                 // D005 CommandPrompt
@@ -814,17 +889,17 @@ public static partial class ExampleExecuter
                     var baseDir_101_D_D001 = baseDir_101_D.GetChildDirectoryInfo($@"D001 OpenAIController");
                     var output = baseDir_101_D.GetChildDirectoryInfo($@"output");
 
-                    //var apiSecretKey = ""; // API SecretKey
-                    var apiSecretKey = Environment.GetEnvironmentVariable("OpenAI_SecretKey")!; // API SecretKey
-                    var openAI = new OpenAIController(apiSecretKey);
+                    ////var apiSecretKey = ""; // API SecretKey
+                    //var apiSecretKey = Environment.GetEnvironmentVariable("OpenAI_SecretKey")!; // API SecretKey
+                    //var openAI = new OpenAIController(apiSecretKey);
 
-                    //// get models
-                    //var models = openAI.GetModelsAsync().Result;
-                    //Console.WriteLine(models);
+                    ////// get models
+                    ////var models = openAI.GetModelsAsync().Result;
+                    ////Console.WriteLine(models);
 
-                    // edit text
-                    dynamic result = openAI.EditTextAsync("Fix the spelling mistakes", "What day of the wek is it?").Result;
-                    Console.WriteLine(result);
+                    //// edit text
+                    //dynamic result = openAI.EditTextAsync("Fix the spelling mistakes", "What day of the wek is it?").Result;
+                    //Console.WriteLine(result);
 
                     //// generate image
                     //var result = openAI.GenerateImageAsync("beautiful cat with blue eye and white ear", n: 2).Result;
