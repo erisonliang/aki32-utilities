@@ -5,7 +5,7 @@ namespace Aki32Utilities.ConsoleAppUtilities.General;
 /// Mainly Sugar for pythonnet (Python.Runtime.dll).
 /// ※ You need to include reference to Python.Runtime.dll (can be found in Project > Properties > Assets) in your project 
 /// </summary>
-public static partial class PythonController
+public static class PythonController
 {
     // ★★★★★★★★★★★★★★★ prop
 
