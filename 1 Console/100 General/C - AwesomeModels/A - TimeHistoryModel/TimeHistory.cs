@@ -190,7 +190,7 @@ public class TimeHistory
     {
         try
         {
-            var vertical = this[yName];
+            var y = this[yName];
 
             var layout = new Layout.Layout
             {
@@ -199,10 +199,10 @@ public class TimeHistory
                 yaxis = new Yaxis { title = yName }
             };
 
-            var horizontal = string.IsNullOrEmpty(xName)
-                ? Enumerable.Range(0, vertical.Length).Select(i => (double)i)
+            var x = string.IsNullOrEmpty(xName)
+                ? Enumerable.Range(0, y.Length).Select(i => (double)i)
                 : this[xName];
-            var points = Enumerable.Zip(horizontal, vertical).Select(x => new Tuple<double, double>(x.First, x.Second));
+            var points = Enumerable.Zip(x, y).Select(x => new Tuple<double, double>(x.First, x.Second));
             PlotlyChart chart = type switch
             {
                 ChartType.Scatter => Chart.Scatter(points),
@@ -230,8 +230,9 @@ public class TimeHistory
     /// <param name="xName">Horizontal Axis</param>
     public FileInfo DrawGraph_OnPyplot(FileInfo outputFile, string yName,
         ChartType type = ChartType.Line,
-        string chartTitle = ""
-        ) => DrawGraph_OnPyplot(outputFile, "", yName, type, chartTitle);
+        string chartTitle = "",
+         bool preview = false
+        ) => DrawGraph_OnPyplot(outputFile, "", yName, type, chartTitle, preview);
 
     /// <summary>
     /// Draw Line Graph on Python and return Image File
@@ -240,38 +241,32 @@ public class TimeHistory
     /// <param name="xName">Horizontal Axis</param>
     public FileInfo DrawGraph_OnPyplot(FileInfo outputFile, string xName, string yName,
         ChartType type = ChartType.Line,
-        string chartTitle = ""
+        string chartTitle = "",
+        bool preview = false
         )
     {
         try
         {
+            var x = string.IsNullOrEmpty(xName) ? null : this[xName];
             var y = this[yName];
-            var x =
-                string.IsNullOrEmpty(xName) ?
-                Enumerable.Range(0, y.Length).Select(i => (double)i).ToArray() :
-                this[xName];
 
             switch (type)
             {
                 case ChartType.Scatter:
 
-                    new PythonController.PyPlotController
+                    new PythonController.PyPlot.Figure
                     {
                         IsTightLayout = true,
-                        SubPlots = new List<PythonController.SubPlot>()
+                        SubPlots = new List<PythonController.PyPlot.SubPlot>()
                         {
-                            new PythonController.SubPlot()
+                            new PythonController.PyPlot.SubPlot()
                             {
                                 XLabel = xName,
                                 YLabel = yName,
                                 Title = chartTitle,
-                                Plots=new List<PythonController.IPlot>
+                                Plots = new List<PythonController.PyPlot.IPlot>
                                 {
-                                    new PythonController.ScatterPlot()
-                                    {
-                                        X = x,
-                                        Y = y,
-                                    }
+                                    new PythonController.PyPlot.ScatterPlot(x, y),
                                 }
                             }
                         }
@@ -282,23 +277,19 @@ public class TimeHistory
 
                 case ChartType.Line:
 
-                    new PythonController.PyPlotController
+                    new PythonController.PyPlot.Figure
                     {
                         IsTightLayout = true,
-                        SubPlots = new List<PythonController.SubPlot>()
+                        SubPlots = new List<PythonController.PyPlot.SubPlot>()
                         {
-                            new PythonController.SubPlot()
+                            new PythonController.PyPlot.SubPlot()
                             {
                                 XLabel = xName,
                                 YLabel = yName,
                                 Title = chartTitle,
-                                Plots=new List<PythonController.IPlot>
+                                Plots = new List<PythonController.PyPlot.IPlot>
                                 {
-                                    new PythonController.LinePlot()
-                                    {
-                                        X = x,
-                                        Y = y,
-                                    }
+                                    new PythonController.PyPlot.LinePlot(x, y),
                                 }
                             }
                         }
@@ -310,6 +301,10 @@ public class TimeHistory
                     break;
             }
 
+            if (preview)
+            {
+                outputFile.ShowImage_OnDefaultApp(false);
+            }
         }
         catch (Exception ex)
         {
