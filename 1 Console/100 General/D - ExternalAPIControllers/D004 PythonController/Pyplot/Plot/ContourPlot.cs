@@ -1,15 +1,5 @@
 ﻿
 
-using DocumentFormat.OpenXml.Drawing.Charts;
-using DocumentFormat.OpenXml.Drawing;
-using DocumentFormat.OpenXml.Spreadsheet;
-
-using XPlot.Plotly;
-using DocumentFormat.OpenXml.Math;
-using System;
-using DocumentFormat.OpenXml.Drawing.Wordprocessing;
-using DocumentFormat.OpenXml.Wordprocessing;
-
 namespace Aki32Utilities.ConsoleAppUtilities.General;
 public static partial class PythonController
 {
@@ -37,7 +27,12 @@ public static partial class PythonController
             public double ZOffset { get; set; } = 0;
             public int Levels { get; set; } = 50;
 
-            public string Colors { get; set; } = "black";
+            public string Color { get; set; } = null;
+            public string ColorMap { get; set; } = null;
+
+            public double? LineWidth { get; set; } = null;
+
+            public string TargetHeightDirection { get; set; } = "z";
 
             /// <summary>
             /// (2d option)
@@ -50,11 +45,8 @@ public static partial class PythonController
             /// <summary>
             /// (3d option)
             /// </summary>
-            public string TargetHeightDirection__For3D { get; set; } = "z";
-            /// <summary>
-            /// (3d option)
-            /// </summary>
             public bool UseFilledContour__For3D { get; set; } = false;
+
 
             // ★★★★★★★★★★★★★★★ inits
 
@@ -123,50 +115,34 @@ public static partial class PythonController
             public void Run(dynamic ax)
             {
                 // プロット
-                if (Is3D)
+                dynamic cset;
+
+                if (Is3D && UseFilledContour__For3D)
                 {
-                    if (UseFilledContour__For3D)
-                    {
-                        ax.contourf(X, Y, Z,
-                            label: LegendLabel,
-                            alpha: Alpha,
-
-                            levels: Levels,
-                            extend3d: Is3D,
-                            colors: Colors,
-                            stride: Stride__For3D,
-                            zdir: TargetHeightDirection__For3D,
-                            offset: ZOffset
-                            );
-
-                    }
-                    else
-                    {
-                        ax.contour(X, Y, Z,
-                            label: LegendLabel,
-                            alpha: Alpha,
-
-                            levels: Levels,
-                            extend3d: Is3D,
-                            colors: Colors,
-                            stride: Stride__For3D,
-                            zdir: TargetHeightDirection__For3D,
-                            offset: ZOffset
-                            );
-
-                    }
-                }
-                else
-                {
-                    var cset = ax.contour(X, Y, Z,
-                        label: LegendLabel,
+                    cset = ax.contourf(X, Y, Z,
                         alpha: Alpha,
 
                         levels: Levels,
                         extend3d: Is3D,
-                        colors: Colors,
+                        colors: Color,
+                        cmap: ColorMap,
                         stride: Stride__For3D,
-                        zdir: TargetHeightDirection__For3D,
+                        zdir: TargetHeightDirection,
+                        offset: ZOffset
+                        );
+                }
+                else
+                {
+                    cset = ax.contour(X, Y, Z,
+                        alpha: Alpha,
+
+                        linewidths: LineWidth,
+
+                        levels: Levels,
+                        extend3d: Is3D,
+                        colors: Color,
+                        cmap: ColorMap,
+                        zdir: TargetHeightDirection,
                         offset: ZOffset
                         );
 

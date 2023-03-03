@@ -31,7 +31,7 @@ using System.Xml.Linq;
 using XPlot.Plotly;
 using DocumentFormat.OpenXml.Drawing;
 using Org.BouncyCastle.Crypto.Macs;
-
+using NumSharp.Utilities;
 
 namespace Aki32Utilities.UsageExamples.ConsoleAppUtilities;
 public static partial class ExampleExecuter
@@ -725,127 +725,126 @@ public static partial class ExampleExecuter
 
                         // line
                         {
-                            var n = 256;
+                            //var n = 256;
 
-                            var z = EnumerableExtension.Range_WithCount(-3 * pi, 3 * pi, n).ToArray();
-                            var x = z.Select(z => Math.Cos(z)).ToArray();
-                            var y = z.Select(z => Math.Sin(z)).ToArray();
+                            //var z = EnumerableExtension.Range_WithCount(-3 * pi, 3 * pi, n).ToArray();
+                            //var x = z.Select(z => Math.Cos(z)).ToArray();
+                            //var y = z.Select(z => Math.Sin(z)).ToArray();
 
-                            new PythonController.PyPlot.Figure
-                            {
-                                IsTightLayout = true,
-                                SubPlots = new List<PythonController.PyPlot.SubPlot>()
-                            {
-                                new PythonController.PyPlot.SubPlot()
-                                {
-                                    XLabel = "x",
-                                    YLabel = "y",
-                                    ZLabel = "z",
-                                    Title = "helix",
-                                    Plots = new List<PythonController.PyPlot.IPlot>
-                                    {
-                                        //new PythonController.PyPlot.LinePlot(x,y),
-                                        new PythonController.PyPlot.LinePlot(x,y,z){ Alpha=0.6 },
-                                    }
-                                }
-                            }
+                            //new PythonController.PyPlot.Figure
+                            //{
+                            //    IsTightLayout = true,
+                            //    SubPlots = new List<PythonController.PyPlot.SubPlot>()
+                            //{
+                            //    new PythonController.PyPlot.SubPlot()
+                            //    {
+                            //        XLabel = "x",
+                            //        YLabel = "y",
+                            //        ZLabel = "z",
+                            //        Title = "helix",
+                            //        Plots = new List<PythonController.PyPlot.IPlot>
+                            //        {
+                            //            //new PythonController.PyPlot.LinePlot(x,y),
+                            //            new PythonController.PyPlot.LinePlot(x,y,z){ Alpha=0.6 },
+                            //        }
+                            //    }
+                            //}
 
-                            }.Run(output.GetChildFileInfo("helix.png"), true);
+                            //}.Run(output.GetChildFileInfo("helix.png"), true);
 
                         }
 
                         // surface
                         {
 
-                            //    var n = 50;
+                        //    var n = 50;
 
-                            //    // ★★★★★ 1
-                            //    //var XX = EnumerableExtension.Range_WithCount(-3 * pi, 3 * pi, n).ToArray();
-                            //    //var YY = EnumerableExtension.Range_WithCount(-3 * pi, 3 * pi, n).ToArray();
-                            //    //var ZZ = Enumerable
-                            //    //    .SelectMany(XX, x => YY, (x, y) => (double)(np.sin(x / pi) * np.cos(y / pi)))
-                            //    //    .ToArray().ReShape(n, n);
-
-
-                            //    // ★★★★★ 2
-                            //    var XX = EnumerableExtension.Range_WithCount(-4, 4, n).ToArray();
-                            //    var YY = EnumerableExtension.Range_WithCount(-4, 4, n).ToArray();
-                            //    var ZZ = Enumerable
-                            //        .SelectMany(XX, x => YY, (x, y) =>
-                            //        {
-                            //            var Z1 = Math.Exp(-Math.Pow(x, 2) - Math.Pow(y, 2));
-                            //            var Z2 = Math.Exp(-Math.Pow(x - 1.2, 2) - Math.Pow(y - 0.7, 2));
-                            //            var Z3 = Math.Exp(-Math.Pow(x + 0.5, 2) - Math.Pow(y + 1.4, 2));
-                            //            return (Z1 - Z2 - Z3) * 2;
-                            //            //return (double)(np.sin(x / pi) * np.cos(y / pi));
-                            //        })
-                            //        .ToArray().ReShape(n, n);
+                        //    // ★★★★★ 1
+                        //    //var XX = EnumerableExtension.Range_WithCount(-3 * pi, 3 * pi, n).ToArray();
+                        //    //var YY = EnumerableExtension.Range_WithCount(-3 * pi, 3 * pi, n).ToArray();
+                        //    //var ZZ = Enumerable
+                        //    //    .SelectMany(XX, x => YY, (x, y) => (double)(np.sin(x / pi) * np.cos(y / pi)))
+                        //    //    .ToArray().ReShape(n, n);
 
 
-                            //    //Z1 = np.exp(-X * *2 - Y * *2)
-                            //    //Z2 = np.exp(-(X - 1.2) * *2 - (Y - 0.7) * *2)
-                            //    //Z3 = np.exp(-(X + 0.5) * *2 - (Y + 1.4) * *2)
-                            //    //Z = (Z1 - Z2 - Z3) * 2
+                        //    // ★★★★★ 2
+                        //    var XX = EnumerableExtension.Range_WithCount(-4, 4, n).ToArray();
+                        //    var YY = EnumerableExtension.Range_WithCount(-4, 4, n).ToArray();
+                        //    var ZZ = Enumerable
+                        //        .SelectMany(XX, x => YY, (x, y) =>
+                        //        {
+                        //            var Z1 = Math.Exp(-Math.Pow(x, 2) - Math.Pow(y, 2));
+                        //            var Z2 = Math.Exp(-Math.Pow(x - 1.2, 2) - Math.Pow(y - 0.7, 2));
+                        //            var Z3 = Math.Exp(-Math.Pow(x + 0.5, 2) - Math.Pow(y + 1.4, 2));
+                        //            return (Z1 - Z2 - Z3) * 2;
+                        //            //return (double)(np.sin(x / pi) * np.cos(y / pi));
+                        //        })
+                        //        .ToArray().ReShape(n, n);
+
+
+                        //    //Z1 = np.exp(-X * *2 - Y * *2)
+                        //    //Z2 = np.exp(-(X - 1.2) * *2 - (Y - 0.7) * *2)
+                        //    //Z3 = np.exp(-(X + 0.5) * *2 - (Y + 1.4) * *2)
+                        //    //Z = (Z1 - Z2 - Z3) * 2
 
 
 
 
-                            //    //// ★★★★★ 3
-                            //    //// I could not remove NumSharp.Lite... So this is useless
-                            //    //var x = np.linspace(-3 * pi, 3 * pi, n);
-                            //    //var y = np.linspace(-3 * pi, 3 * pi, n);
-                            //    //(x, y) = np.meshgrid(x, y);
+                        //    //// ★★★★★ 3
+                        //    //// I could not remove NumSharp.Lite... So this is useless
+                        //    //var x = np.linspace(-3 * pi, 3 * pi, n);
+                        //    //var y = np.linspace(-3 * pi, 3 * pi, n);
+                        //    //(x, y) = np.meshgrid(x, y);
 
-                            //    //var X = x.ToArray<double>();
-                            //    //var Y = y.ToArray<double>();
-                            //    //var Z = Enumerable.Zip(X, Y).Select(xy => (double)(np.sin(xy.First / pi) * np.cos(xy.Second / pi))).ToList();
+                        //    //var X = x.ToArray<double>();
+                        //    //var Y = y.ToArray<double>();
+                        //    //var Z = Enumerable.Zip(X, Y).Select(xy => (double)(np.sin(xy.First / pi) * np.cos(xy.Second / pi))).ToList();
 
-                            //    //var XX = X.ReShape(n, n);
-                            //    //var YY = Y.ReShape(n, n);
-                            //    //var ZZ = Z.ReShape(n, n);
-
-
-                            //    // ★★★★★ 4
-                            //    //var x = np.linspace(-5, 5, n);
-                            //    //var y = np.linspace(-5, 5, n);
-                            //    //(var X, var Y) = np.meshgrid(x, y);
-                            //    //var Z = np.sin(X) * np.cos(Y);
-
-                            //    //ax.plot_surface(X, Y, Z, cmap = "summer");
-                            //    //ax.contour(X, Y, Z, colors = "black", offset = -1);
+                        //    //var XX = X.ReShape(n, n);
+                        //    //var YY = Y.ReShape(n, n);
+                        //    //var ZZ = Z.ReShape(n, n);
 
 
-                            //    // ★★★★★ 
+                        //    // ★★★★★ 4
+                        //    //var x = np.linspace(-5, 5, n);
+                        //    //var y = np.linspace(-5, 5, n);
+                        //    //(var X, var Y) = np.meshgrid(x, y);
+                        //    //var Z = np.sin(X) * np.cos(Y);
 
-                            //    new PythonController.PyPlot.Figure(true)
-                            //    {
-                            //        IsTightLayout = true,
-                            //        SubPlots = new List<PythonController.PyPlot.SubPlot>()
-                            //            {
-                            //                new PythonController.PyPlot.SubPlot(true)
-                            //                {
-                            //                    //ZLim=(-1,1),
-                            //                    XLabel = "X",
-                            //                    YLabel = "Y",
-                            //                    ZLabel = "Z",
-                            //                    Title = "surface",
-                            //                    Plots = new List<PythonController.PyPlot.IPlot>
-                            //                    {
-                            //                        new PythonController.PyPlot.ContourPlot(XX,YY,ZZ, false, 20){Colors="green", ZOffset=XX.Min(), TargetHeightDirection__For3D="x"},
-                            //                        new PythonController.PyPlot.ContourPlot(XX,YY,ZZ, false, 20){Colors="green", ZOffset=YY.Max(), TargetHeightDirection__For3D="y" },
-                            //                        new PythonController.PyPlot.ContourPlot(XX,YY,ZZ, false, 20){Colors="green", ZOffset=ZZ.Min(),  TargetHeightDirection__For3D="z"},
-                            //                        //new PythonController.PyPlot.ContourPlot(XX,YY,ZZ, false, 20){Colors="green", ZOffset=ZZ.Min(), ContourLabelFontSize__2D=20},
+                        //    //ax.plot_surface(X, Y, Z, cmap = "summer");
+                        //    //ax.contour(X, Y, Z, colors = "black", offset = -1);
 
-                            //                        //new PythonController.PyPlot.WireFramePlot(XX,YY,ZZ){Color="black", LineWidth=3},
-                            //                        new PythonController.PyPlot.SurfacePlot(XX,YY,ZZ){ ColorMap="summer", Alpha=0.3},
 
-                            //                        //new PythonController.PyPlot.ScatterPlot(XX,YY,ZZ){ ColorMap="green", MarkerSize=100},
-                            //                    }
-                            //                }
-                            //            }
+                        //    // ★★★★★ 
+                        //    new PythonController.PyPlot.Figure(true)
+                        //    {
+                        //        IsTightLayout = true,
+                        //        SubPlots = new List<PythonController.PyPlot.SubPlot>()
+                        //                {
+                        //                    new PythonController.PyPlot.SubPlot(true)
+                        //                    {
+                        //                        //ZLim=(-1,1),
+                        //                        XLabel = "X",
+                        //                        YLabel = "Y",
+                        //                        ZLabel = "Z",
+                        //                        Title = "surface",
+                        //                        Plots = new List<PythonController.PyPlot.IPlot>
+                        //                        {
+                        //                            new PythonController.PyPlot.ContourPlot(XX,YY,ZZ, false, 20){ColorMap="cividis", ZOffset=XX.Min(), TargetHeightDirection="x", LineWidth=4},
+                        //                            new PythonController.PyPlot.ContourPlot(XX,YY,ZZ, false, 20){ColorMap="cividis", ZOffset=YY.Max(), TargetHeightDirection="y", LineWidth=4},
+                        //                            new PythonController.PyPlot.ContourPlot(XX,YY,ZZ, false, 20){ColorMap="cividis", ZOffset=ZZ.Min(), TargetHeightDirection="z", LineWidth = 4},
+                        //                            //new PythonController.PyPlot.ContourPlot(XX,YY,ZZ, false, 20){Colors="green", ZOffset=ZZ.Min(), ContourLabelFontSize__2D=20},
 
-                            //    }.Run(output.GetChildFileInfo("surface.png"), true);
-                        }
+                        //                            //new PythonController.PyPlot.WireFramePlot(XX,YY,ZZ){Color="black", LineWidth=3},
+                        //                            new PythonController.PyPlot.SurfacePlot(XX,YY,ZZ){ ColorMap="cividis", Alpha=0.5},
+
+                        //                            //new PythonController.PyPlot.ScatterPlot(XX,YY,ZZ){ ColorMap="green", MarkerSize=100},
+                        //                        }
+                        //                    }
+                        //                }
+
+                        //    }.Run(output.GetChildFileInfo("surface.png"), true);
+                        //}
 
 
                     }
