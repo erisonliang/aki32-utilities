@@ -14,6 +14,7 @@ public static partial class PythonController
 
             public bool Is3D { get; set; } = true;
             public string LegendLabel { get; set; } = "";
+            public double Alpha { get; set; } = 1;
 
 
             // ★★★★★★★★★★★★★★★ inits

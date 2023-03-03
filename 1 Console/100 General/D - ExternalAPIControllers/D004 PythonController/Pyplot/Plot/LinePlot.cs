@@ -14,8 +14,8 @@ public static partial class PythonController
             // ★★★★★★★★★★★★★★★ props
 
             public bool Is3D { get; set; } = false;
-
             public string LegendLabel { get; set; } = "";
+            public double Alpha { get; set; } = 1;
 
             public double[] X { get; set; }
             public double[] Y { get; set; }
@@ -65,23 +65,25 @@ public static partial class PythonController
                 if (Is3D)
                 {
                     ax.plot(X, Y, Z,
-                       label: LegendLabel,
+                        label: LegendLabel,
+                        alpha: Alpha,
 
-                       linewidth: LineWidth,
-                       linestyle: LineStyle,
-                       color: LineColor,
+                        linewidth: LineWidth,
+                        linestyle: LineStyle,
+                        color: LineColor,
 
-                       marker: Marker,
-                       markersize: MarkerSize,
-                       markeredgewidth: MarkerEdgeWidth,
-                       markerfacecolor: MarkerFaceColor,
-                       markeredgecolor: MarkerEdgeColor
-                       );
+                        marker: Marker,
+                        markersize: MarkerSize,
+                        markeredgewidth: MarkerEdgeWidth,
+                        markerfacecolor: MarkerFaceColor,
+                        markeredgecolor: MarkerEdgeColor
+                        );
                 }
                 else
                 {
                     ax.plot(X, Y,
                         label: LegendLabel,
+                        alpha: Alpha,
 
                         linewidth: LineWidth,
                         linestyle: LineStyle,

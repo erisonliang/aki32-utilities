@@ -15,6 +15,7 @@ public static partial class PythonController
 
             public bool Is3D { get; set; } = true;
             public string LegendLabel { get; set; } = "";
+            public double Alpha { get; set; } = 1;
 
             public dynamic X { get; set; }
             public dynamic Y { get; set; }
@@ -100,6 +101,7 @@ public static partial class PythonController
                 // プロット
                 var surf = ax.plot_wireframe(X, Y, Z,
                     label: LegendLabel,
+                    alpha: Alpha,
 
                     linewidth: LineWidth,
                     color: Color,
