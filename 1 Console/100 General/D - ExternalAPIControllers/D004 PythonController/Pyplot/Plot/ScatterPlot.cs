@@ -38,7 +38,8 @@ public static partial class PythonController
             public string Marker { get; set; } = "o"; // . , o v ^ < > ...
             public int MarkerSize { get; set; } = 20;
             public double Alpha { get; set; } = 1;
-            public string LineWidths { get; set; } = "2";
+            //public string LineWidths { get; set; } = "2";
+            public int LineWidth { get; set; } = 0;
 
             public string MarkerColor { get; set; } = "green";
             public string EdgeColors { get; set; } = "black";
@@ -61,11 +62,16 @@ public static partial class PythonController
                 Is3D = false;
             }
 
-            public ScatterPlot(double[]? x, double[] y, double[] z)
+            /// <summary>
+            /// </summary>
+            /// <param name="x"></param>
+            /// <param name="y"></param>
+            /// <param name="z">/param>
+            public ScatterPlot(double[] x, double[] y, double[,] z)
             {
-                X = x ?? Enumerable.Range(0, y.Length).Select(i => (double)i).ToArray();
-                Y = y;
-                Z = z;
+                Z = z.ReShape();
+                X = x.SelectMany(x => y, (x, y) => y).ToArray();
+                Y = x.SelectMany(x => y, (x, y) => x).ToArray();
                 Is3D = true;
             }
 
@@ -86,7 +92,7 @@ public static partial class PythonController
                             c: MarkerColor,
                             marker: Marker,
                             alpha: Alpha,
-                            linewidths: LineWidths,
+                            linewidth: LineWidth,
                             edgecolors: EdgeColors
                         );
                     }
@@ -99,7 +105,7 @@ public static partial class PythonController
                             c: Z_Color,
                             marker: Marker,
                             alpha: Alpha,
-                            linewidths: LineWidths,
+                            linewidth: LineWidth,
                             edgecolors: EdgeColors,
 
                             cmap: ColorMap,
@@ -117,10 +123,9 @@ public static partial class PythonController
                             c: MarkerColor,
                             marker: Marker,
                             alpha: Alpha,
-                            linewidths: LineWidths,
+                            linewidth: LineWidth,
                             edgecolors: EdgeColors
                         );
-
                     }
                 }
                 else
@@ -134,7 +139,7 @@ public static partial class PythonController
                             c: MarkerColor,
                             marker: Marker,
                             alpha: Alpha,
-                            linewidths: LineWidths,
+                            linewidth: LineWidth,
                             edgecolors: EdgeColors
                         );
                     }
@@ -147,7 +152,7 @@ public static partial class PythonController
                             c: Z_Color,
                             marker: Marker,
                             alpha: Alpha,
-                            linewidths: LineWidths,
+                            linewidth: LineWidth,
                             edgecolors: EdgeColors,
 
                             cmap: ColorMap,
@@ -165,7 +170,7 @@ public static partial class PythonController
                             c: MarkerColor,
                             marker: Marker,
                             alpha: Alpha,
-                            linewidths: LineWidths,
+                            linewidth: LineWidth,
                             edgecolors: EdgeColors
                         );
 

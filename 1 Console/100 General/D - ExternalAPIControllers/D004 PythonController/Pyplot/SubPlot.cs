@@ -28,19 +28,38 @@ public static partial class PythonController
             /// </summary>
             public int ZLabelSize { get; set; } = 30;
 
-            public int XYZLabelTickSize { get; set; } = 20;
-
-            public Range? XLim { get; set; }
-            public Range? YLim { get; set; }
+            public int XLabelPadding { get; set; } = 0;
+            public int YLabelPadding { get; set; } = 0;
             /// <summary>
             /// (3d option)
             /// </summary>
-            public Range? ZLim { get; set; }
+            public int ZLabelPadding { get; set; } = 0;
+
+            public int XYZLabelTickSize { get; set; } = 20;
+
+            public (int min, int max)? XLim { get; set; }
+            public (int min, int max)? YLim { get; set; }
+            /// <summary>
+            /// (3d option)
+            /// </summary>
+            public (int min, int max)? ZLim { get; set; }
 
             public double? GraphMargins { get; set; } = null;
             public bool HasGrid { get; set; } = true;
 
             public List<IPlot> Plots { get; set; }
+
+            // ★★★★★★★★★★★★★★★ init
+
+            public SubPlot(bool InitFor3D = false)
+            {
+                if (InitFor3D)
+                {
+                    XLabelPadding = 20;
+                    YLabelPadding = 20;
+                    ZLabelPadding = 20;
+                }
+            }
 
 
             // ★★★★★★★★★★★★★★★ methods
@@ -62,27 +81,27 @@ public static partial class PythonController
 
                 // 軸ラベル
                 if (!string.IsNullOrEmpty(XLabel))
-                    ax.set_xlabel(XLabel, size: XLabelSize, fontname: FontName);
+                    ax.set_xlabel(XLabel, size: XLabelSize, fontname: FontName, labelpad: XLabelPadding);
                 if (!string.IsNullOrEmpty(YLabel))
-                    ax.set_ylabel(YLabel, size: YLabelSize, fontname: FontName);
+                    ax.set_ylabel(YLabel, size: YLabelSize, fontname: FontName, labelpad: YLabelPadding);
                 if (is3d)
                 {
                     if (!string.IsNullOrEmpty(ZLabel))
-                        ax.set_zlabel(ZLabel, size: ZLabelSize, fontname: FontName);
+                        ax.set_zlabel(ZLabel, size: ZLabelSize, fontname: FontName, labelpad: ZLabelPadding);
                 }
 
                 // 軸目盛
                 ax.tick_params(axis: 'x', labelsize: XYZLabelTickSize);
                 if (XLim.HasValue)
-                    ax.set_xlim(XLim.Value.Start.Value, XLim.Value.End.Value);
+                    ax.set_xlim(XLim.Value.min, XLim.Value.max);
                 ax.tick_params(axis: 'y', labelsize: XYZLabelTickSize);
                 if (YLim.HasValue)
-                    ax.set_ylim(YLim.Value.Start.Value, YLim.Value.End.Value);
+                    ax.set_ylim(YLim.Value.min, YLim.Value.max);
                 if (is3d)
                 {
                     ax.tick_params(axis: 'z', labelsize: XYZLabelTickSize);
                     if (ZLim.HasValue)
-                        ax.set_ylim(ZLim.Value.Start.Value, ZLim.Value.End.Value);
+                        ax.set_zlim(ZLim.Value.min, ZLim.Value.max);
                 }
 
                 // グラフから枠線までの距離

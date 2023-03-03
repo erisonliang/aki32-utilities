@@ -60,6 +60,38 @@ public static partial class PythonController
                 Is3D = true;
             }
 
+            /// <summary>
+            /// </summary>
+            /// <param name="x"></param>
+            /// <param name="y"></param>
+            /// <param name="z">/param>
+            public WireFramePlot(double[] x, double[] y, double[,] z)
+            {
+                Z = ToCorrect2DNDArray<double>(z);
+                dynamic np = Import("numpy");
+                dynamic mesh = np.meshgrid(np.array(x), np.array(y));
+                X = mesh[0];
+                Y = mesh[1];
+
+                Is3D = true;
+            }
+
+            /// <summary>
+            /// </summary>
+            /// <param name="x"></param>
+            /// <param name="y"></param>
+            /// <param name="z">/param>
+            public WireFramePlot(float[] x, float[] y, float[,] z)
+            {
+                Z = ToCorrect2DNDArray<float>(z);
+                dynamic np = Import("numpy");
+                dynamic mesh = np.meshgrid(np.array(x), np.array(y));
+                X = mesh[0];
+                Y = mesh[1];
+
+                Is3D = true;
+            }
+
 
             // ★★★★★★★★★★★★★★★ methods
 

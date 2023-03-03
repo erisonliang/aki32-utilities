@@ -1,5 +1,7 @@
 ﻿
 
+using XPlot.Plotly;
+
 namespace Aki32Utilities.ConsoleAppUtilities.General;
 public static partial class PythonController
 {
@@ -57,6 +59,38 @@ public static partial class PythonController
                     Y = ToCorrect2DNDArray<double>(y);
                     Z = ToCorrect2DNDArray<double>(z);
                 }
+
+                Is3D = true;
+            }
+
+            /// <summary>
+            /// </summary>
+            /// <param name="x"></param>
+            /// <param name="y"></param>
+            /// <param name="z">/param>
+            public SurfacePlot(double[] x, double[] y, double[,] z)
+            {
+                Z = ToCorrect2DNDArray<double>(z);
+                dynamic np = Import("numpy");
+                dynamic mesh = np.meshgrid(np.array(x), np.array(y));
+                X = mesh[0];
+                Y = mesh[1];
+
+                Is3D = true;
+            }
+
+            /// <summary>
+            /// </summary>
+            /// <param name="x"></param>
+            /// <param name="y"></param>
+            /// <param name="z">/param>
+            public SurfacePlot(float[] x, float[] y, float[,] z)
+            {
+                Z = ToCorrect2DNDArray<float>(z);
+                dynamic np = Import("numpy");
+                dynamic mesh = np.meshgrid(np.array(x), np.array(y));
+                X = mesh[0];
+                Y = mesh[1];
 
                 Is3D = true;
             }

@@ -1,5 +1,7 @@
 ﻿
 
+using Python.Runtime;
+
 namespace Aki32Utilities.ConsoleAppUtilities.General;
 public static partial class PythonController
 {
@@ -23,6 +25,18 @@ public static partial class PythonController
             public List<SubPlot> SubPlots { get; set; }
 
 
+            // ★★★★★★★★★★★★★★★ init
+
+            public Figure(bool InitFor3D = false)
+            {
+                if (InitFor3D)
+                {
+                    FigHeight = 15;
+                    FigWidth = 15;
+                }
+            }
+
+
             // ★★★★★★★★★★★★★★★ methods
 
             public FileInfo Run(FileInfo outputFile, bool preview = false)
@@ -38,13 +52,14 @@ public static partial class PythonController
 
                 // ★★★★★ 全体
 
-                dynamic plt = PythonController.Import("matplotlib.pyplot");
+                dynamic plt = Import("matplotlib.pyplot");
 
                 plt.subplots_adjust(wspace: PlotWSpace, hspace: PlotHSpace);
 
                 dynamic fig = plt.figure(figsize: new double[] { FigWidth, FigHeight });
 
-                // ★★★★★ サブプロット，外側
+
+                // ★★★★★ サブプロット
                 foreach (var SubPlot in SubPlots)
                     SubPlot.Run(fig, FontName);
 
