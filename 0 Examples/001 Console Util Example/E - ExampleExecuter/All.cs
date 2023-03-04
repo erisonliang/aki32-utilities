@@ -757,146 +757,147 @@ public static partial class ExampleExecuter
                         // surface
                         {
 
-                        //    var n = 50;
+                            //    var n = 50;
 
-                        //    // ★★★★★ 1
-                        //    //var XX = EnumerableExtension.Range_WithCount(-3 * pi, 3 * pi, n).ToArray();
-                        //    //var YY = EnumerableExtension.Range_WithCount(-3 * pi, 3 * pi, n).ToArray();
-                        //    //var ZZ = Enumerable
-                        //    //    .SelectMany(XX, x => YY, (x, y) => (double)(np.sin(x / pi) * np.cos(y / pi)))
-                        //    //    .ToArray().ReShape(n, n);
-
-
-                        //    // ★★★★★ 2
-                        //    var XX = EnumerableExtension.Range_WithCount(-4, 4, n).ToArray();
-                        //    var YY = EnumerableExtension.Range_WithCount(-4, 4, n).ToArray();
-                        //    var ZZ = Enumerable
-                        //        .SelectMany(XX, x => YY, (x, y) =>
-                        //        {
-                        //            var Z1 = Math.Exp(-Math.Pow(x, 2) - Math.Pow(y, 2));
-                        //            var Z2 = Math.Exp(-Math.Pow(x - 1.2, 2) - Math.Pow(y - 0.7, 2));
-                        //            var Z3 = Math.Exp(-Math.Pow(x + 0.5, 2) - Math.Pow(y + 1.4, 2));
-                        //            return (Z1 - Z2 - Z3) * 2;
-                        //            //return (double)(np.sin(x / pi) * np.cos(y / pi));
-                        //        })
-                        //        .ToArray().ReShape(n, n);
+                            //    // ★★★★★ 1
+                            //    //var XX = EnumerableExtension.Range_WithCount(-3 * pi, 3 * pi, n).ToArray();
+                            //    //var YY = EnumerableExtension.Range_WithCount(-3 * pi, 3 * pi, n).ToArray();
+                            //    //var ZZ = Enumerable
+                            //    //    .SelectMany(XX, x => YY, (x, y) => (double)(np.sin(x / pi) * np.cos(y / pi)))
+                            //    //    .ToArray().ReShape(n, n);
 
 
-                        //    //Z1 = np.exp(-X * *2 - Y * *2)
-                        //    //Z2 = np.exp(-(X - 1.2) * *2 - (Y - 0.7) * *2)
-                        //    //Z3 = np.exp(-(X + 0.5) * *2 - (Y + 1.4) * *2)
-                        //    //Z = (Z1 - Z2 - Z3) * 2
+                            //    // ★★★★★ 2
+                            //    var XX = EnumerableExtension.Range_WithCount(-4, 4, n).ToArray();
+                            //    var YY = EnumerableExtension.Range_WithCount(-4, 4, n).ToArray();
+                            //    var ZZ = Enumerable
+                            //        .SelectMany(XX, x => YY, (x, y) =>
+                            //        {
+                            //            var Z1 = Math.Exp(-Math.Pow(x, 2) - Math.Pow(y, 2));
+                            //            var Z2 = Math.Exp(-Math.Pow(x - 1.2, 2) - Math.Pow(y - 0.7, 2));
+                            //            var Z3 = Math.Exp(-Math.Pow(x + 0.5, 2) - Math.Pow(y + 1.4, 2));
+                            //            return (Z1 - Z2 - Z3) * 2;
+                            //            //return (double)(np.sin(x / pi) * np.cos(y / pi));
+                            //        })
+                            //        .ToArray().ReShape(n, n);
+
+
+                            //    //Z1 = np.exp(-X * *2 - Y * *2)
+                            //    //Z2 = np.exp(-(X - 1.2) * *2 - (Y - 0.7) * *2)
+                            //    //Z3 = np.exp(-(X + 0.5) * *2 - (Y + 1.4) * *2)
+                            //    //Z = (Z1 - Z2 - Z3) * 2
 
 
 
 
-                        //    //// ★★★★★ 3
-                        //    //// I could not remove NumSharp.Lite... So this is useless
-                        //    //var x = np.linspace(-3 * pi, 3 * pi, n);
-                        //    //var y = np.linspace(-3 * pi, 3 * pi, n);
-                        //    //(x, y) = np.meshgrid(x, y);
+                            //    //// ★★★★★ 3
+                            //    //// I could not remove NumSharp.Lite... So this is useless
+                            //    //var x = np.linspace(-3 * pi, 3 * pi, n);
+                            //    //var y = np.linspace(-3 * pi, 3 * pi, n);
+                            //    //(x, y) = np.meshgrid(x, y);
 
-                        //    //var X = x.ToArray<double>();
-                        //    //var Y = y.ToArray<double>();
-                        //    //var Z = Enumerable.Zip(X, Y).Select(xy => (double)(np.sin(xy.First / pi) * np.cos(xy.Second / pi))).ToList();
+                            //    //var X = x.ToArray<double>();
+                            //    //var Y = y.ToArray<double>();
+                            //    //var Z = Enumerable.Zip(X, Y).Select(xy => (double)(np.sin(xy.First / pi) * np.cos(xy.Second / pi))).ToList();
 
-                        //    //var XX = X.ReShape(n, n);
-                        //    //var YY = Y.ReShape(n, n);
-                        //    //var ZZ = Z.ReShape(n, n);
-
-
-                        //    // ★★★★★ 4
-                        //    //var x = np.linspace(-5, 5, n);
-                        //    //var y = np.linspace(-5, 5, n);
-                        //    //(var X, var Y) = np.meshgrid(x, y);
-                        //    //var Z = np.sin(X) * np.cos(Y);
-
-                        //    //ax.plot_surface(X, Y, Z, cmap = "summer");
-                        //    //ax.contour(X, Y, Z, colors = "black", offset = -1);
+                            //    //var XX = X.ReShape(n, n);
+                            //    //var YY = Y.ReShape(n, n);
+                            //    //var ZZ = Z.ReShape(n, n);
 
 
-                        //    // ★★★★★ 
-                        //    new PythonController.PyPlot.Figure(true)
-                        //    {
-                        //        IsTightLayout = true,
-                        //        SubPlots = new List<PythonController.PyPlot.SubPlot>()
-                        //                {
-                        //                    new PythonController.PyPlot.SubPlot(true)
-                        //                    {
-                        //                        //ZLim=(-1,1),
-                        //                        XLabel = "X",
-                        //                        YLabel = "Y",
-                        //                        ZLabel = "Z",
-                        //                        Title = "surface",
-                        //                        Plots = new List<PythonController.PyPlot.IPlot>
-                        //                        {
-                        //                            new PythonController.PyPlot.ContourPlot(XX,YY,ZZ, false, 20){ColorMap="cividis", ZOffset=XX.Min(), TargetHeightDirection="x", LineWidth=4},
-                        //                            new PythonController.PyPlot.ContourPlot(XX,YY,ZZ, false, 20){ColorMap="cividis", ZOffset=YY.Max(), TargetHeightDirection="y", LineWidth=4},
-                        //                            new PythonController.PyPlot.ContourPlot(XX,YY,ZZ, false, 20){ColorMap="cividis", ZOffset=ZZ.Min(), TargetHeightDirection="z", LineWidth = 4},
-                        //                            //new PythonController.PyPlot.ContourPlot(XX,YY,ZZ, false, 20){Colors="green", ZOffset=ZZ.Min(), ContourLabelFontSize__2D=20},
+                            //    // ★★★★★ 4
+                            //    //var x = np.linspace(-5, 5, n);
+                            //    //var y = np.linspace(-5, 5, n);
+                            //    //(var X, var Y) = np.meshgrid(x, y);
+                            //    //var Z = np.sin(X) * np.cos(Y);
 
-                        //                            //new PythonController.PyPlot.WireFramePlot(XX,YY,ZZ){Color="black", LineWidth=3},
-                        //                            new PythonController.PyPlot.SurfacePlot(XX,YY,ZZ){ ColorMap="cividis", Alpha=0.5},
-
-                        //                            //new PythonController.PyPlot.ScatterPlot(XX,YY,ZZ){ ColorMap="green", MarkerSize=100},
-                        //                        }
-                        //                    }
-                        //                }
-
-                        //    }.Run(output.GetChildFileInfo("surface.png"), true);
-                        //}
+                            //    //ax.plot_surface(X, Y, Z, cmap = "summer");
+                            //    //ax.contour(X, Y, Z, colors = "black", offset = -1);
 
 
-                    }
-                }
+                            //    // ★★★★★ 
+                            //    new PythonController.PyPlot.Figure(true)
+                            //    {
+                            //        IsTightLayout = true,
+                            //        SubPlots = new List<PythonController.PyPlot.SubPlot>()
+                            //                {
+                            //                    new PythonController.PyPlot.SubPlot(true)
+                            //                    {
+                            //                        //ZLim=(-1,1),
+                            //                        XLabel = "X",
+                            //                        YLabel = "Y",
+                            //                        ZLabel = "Z",
+                            //                        Title = "surface",
+                            //                        Plots = new List<PythonController.PyPlot.IPlot>
+                            //                        {
+                            //                            new PythonController.PyPlot.ContourPlot(XX,YY,ZZ, false, 20){ColorMap="cividis", ZOffset=XX.Min(), TargetHeightDirection="x", LineWidth=4},
+                            //                            new PythonController.PyPlot.ContourPlot(XX,YY,ZZ, false, 20){ColorMap="cividis", ZOffset=YY.Max(), TargetHeightDirection="y", LineWidth=4},
+                            //                            new PythonController.PyPlot.ContourPlot(XX,YY,ZZ, false, 20){ColorMap="cividis", ZOffset=ZZ.Min(), TargetHeightDirection="z", LineWidth = 4},
+                            //                            //new PythonController.PyPlot.ContourPlot(XX,YY,ZZ, false, 20){Colors="green", ZOffset=ZZ.Min(), ContourLabelFontSize__2D=20},
 
-                // D005 CommandPrompt
-                {
+                            //                            //new PythonController.PyPlot.WireFramePlot(XX,YY,ZZ){Color="black", LineWidth=3},
+                            //                            new PythonController.PyPlot.SurfacePlot(XX,YY,ZZ){ ColorMap="cividis", Alpha=0.5},
 
-                    // objective
-                    {
-                        //using var prompt = new CommandPromptController()
-                        //{
-                        //    RealTimeConsoleWriteLineOutput = true,
-                        //    OmitCurrentDirectoryDisplay = false,
-                        //};
+                            //                            //new PythonController.PyPlot.ScatterPlot(XX,YY,ZZ){ ColorMap="green", MarkerSize=100},
+                            //                        }
+                            //                    }
+                            //                }
 
-                        //prompt.WriteLine(@"");
-                        //prompt.WriteLine(@"cd ..\..\..\# TestModel\A - Extensions\E007 DistortImage");
-                        //prompt.WriteLine(@"");
-                        //prompt.WriteLine(@"lnn");
-                        //prompt.WriteLine(@"");
-                        //prompt.WriteLine(@"ls");
-                        //prompt.WriteLine(@"");
+                            //    }.Run(output.GetChildFileInfo("surface.png"), true);
+                            //}
 
-                        //var output = prompt.ResponseList.ToArray();
 
+                        }
                     }
 
-                    // static
+                    // D005 CommandPrompt
                     {
 
-                        //var commands = new string[] {
-                        //   @"",
-                        //   @"cd ..\..\..\# TestModel\A - Extensions\E007 DistortImage",
-                        //   @"",
-                        //   @"lnn",
-                        //   @"",
-                        //   @"ls",
-                        //   @""};
+                        // objective
+                        {
+                            //using var prompt = new CommandPromptController()
+                            //{
+                            //    RealTimeConsoleWriteLineOutput = true,
+                            //    OmitCurrentDirectoryDisplay = false,
+                            //};
 
-                        //var output = CommandPromptController.Execute(
-                        //    realTimeConsoleWriteLineOutput: true,
-                        //    omitCurrentDirectoryDisplay: true,
-                        //    outputReceivedAction: null,
-                        //    commands: commands);
+                            //prompt.WriteLine(@"");
+                            //prompt.WriteLine(@"cd ..\..\..\# TestModel\A - Extensions\E007 DistortImage");
+                            //prompt.WriteLine(@"");
+                            //prompt.WriteLine(@"lnn");
+                            //prompt.WriteLine(@"");
+                            //prompt.WriteLine(@"ls");
+                            //prompt.WriteLine(@"");
+
+                            //var output = prompt.ResponseList.ToArray();
+
+                        }
+
+                        // static
+                        {
+
+                            //var commands = new string[] {
+                            //   @"",
+                            //   @"cd ..\..\..\# TestModel\A - Extensions\E007 DistortImage",
+                            //   @"",
+                            //   @"lnn",
+                            //   @"",
+                            //   @"ls",
+                            //   @""};
+
+                            //var output = CommandPromptController.Execute(
+                            //    realTimeConsoleWriteLineOutput: true,
+                            //    omitCurrentDirectoryDisplay: true,
+                            //    outputReceivedAction: null,
+                            //    commands: commands);
+
+                        }
 
                     }
 
                 }
 
             }
-
         }
 
         // 101 - AI
@@ -956,25 +957,40 @@ public static partial class ExampleExecuter
                     var baseDir_101_D_D001 = baseDir_101_D.GetChildDirectoryInfo($@"D001 OpenAIController");
                     var output = baseDir_101_D.GetChildDirectoryInfo($@"output");
 
-                    ////var apiSecretKey = ""; // API SecretKey
-                    //var apiSecretKey = Environment.GetEnvironmentVariable("OpenAI_SecretKey")!; // API SecretKey
-                    //var openAI = new OpenAIController(apiSecretKey);
+                    //var apiSecretKey = ""; // API SecretKey
+                    var apiSecretKey = Environment.GetEnvironmentVariable("OpenAI_SecretKey")!; // API SecretKey
+                    var openAI = new OpenAIController(apiSecretKey);
 
-                    ////// get models
-                    ////var models = openAI.GetModelsAsync().Result;
-                    ////Console.WriteLine(models);
+                    //// ★ get models
+                    //var models = openAI.GetModelsAsync().Result;
+                    //Console.WriteLine(models);
 
-                    //// edit text
-                    //dynamic result = openAI.EditTextAsync("Fix the spelling mistakes", "What day of the wek is it?").Result;
-                    //Console.WriteLine(result);
+                    //// ★ edit text
+                    //var result = openAI.CallEditTextAsync("Fix the spelling mistakes", "What day of the wek is it?").Result;
+                    //foreach (var item in result)
+                    //    Console.WriteLine(item);
 
-                    //// generate image
-                    //var result = openAI.GenerateImageAsync("beautiful cat with blue eye and white ear", n: 2).Result;
+                    //// ★ generate image
+                    //var result = openAI.CallGenerateImageAsync("beautiful cat with blue eye and white ear", n: 2).Result;
                     //for (int i = 0; i < result!.Length; i++)
                     //{
                     //    var GeneratedImageFile = baseDir_101_D_D001.GetChildFileInfo($"GeneratedImage{i}.png");
                     //    result[i].DownloadFile(GeneratedImageFile);
                     //}
+
+
+                    //// ★ whisper
+                    //var input = new FileInfo("");
+                    //var result = openAI.CallWhisperAsync(input).Result;
+                    //Console.WriteLine(result);
+
+
+                    //// ★ chat gpt
+                    //Console.Write("ChatGPTに送信：");
+                    //var input = Console.ReadLine();
+                    //var result = openAI.CallChatGPTAsync(input!).Result;
+                    //Console.WriteLine(result[0]);
+
 
                 }
 

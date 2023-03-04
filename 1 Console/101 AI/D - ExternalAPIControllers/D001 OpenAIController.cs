@@ -32,7 +32,7 @@ public class OpenAIController
     public OpenAIController(string apiSecretKey)
     {
         APISecretKey = apiSecretKey;
-       
+
         Console.WriteLine("OpenAIController Instance Created.");
         Console.WriteLine("Data Powered by OpenAI (https://platform.openai.com/docs/api-reference)");
         Console.WriteLine();
@@ -74,12 +74,12 @@ public class OpenAIController
     /// <param name="input">The input text to use as a starting point for the edit.</param>
     /// <param name="model">ID of the model to use. You can use the text-davinci-edit-001 or code-davinci-edit-001. model with this endpoint.</param>
     /// <returns></returns>
-    public async Task<object> EditTextAsync(string instruction, string input = "", string model = "text-davinci-edit-001")
+    public async Task<string[]> CallEditTextAsync(string instruction, string input = "", string model = "text-davinci-edit-001")
     {
         // content
         var data = new Dictionary<string, object>
         {
-            { "model", "text-davinci-edit-001"},
+            { "model", model},
             { "input", input},
             { "instruction", instruction },
             //{ "n", "1" },
@@ -88,14 +88,49 @@ public class OpenAIController
 
         // request
         var targetUri = new Uri($"{BaseUriString}/edits");
-        object response = await targetUri.CallAPIAsync_ForJsonData<object>(HttpMethod.Post,
+        JObject response = await targetUri.CallAPIAsync_ForJsonData<JObject>(HttpMethod.Post,
              authBearerToken: APISecretKey,
              additionalHeaders: Header,
              jsonStringContent: jsonContent
              );
 
-        return response;
+        return response["choices"]!.Select(x => x!["text"]!.ToString()).ToArray();
+        //return response["choices"]![0]!["text"]!.ToString();
     }
+
+    /// <summary>
+    /// chat gpt
+    /// </summary>
+    /// <param name="input">The input text to use as a starting point for the edit.</param>
+    /// <param name="model">ID of the model to use. You can use the "gpt-3.5-turbo" or "gpt-3.5-turbo-0301". model with this endpoint.</param>
+    /// <returns></returns>
+    public async Task<string[]> CallChatGPTAsync((string role, string message)[] input, string model = "gpt-3.5-turbo", int n = 1)
+    {
+        // content
+
+        var messages = input.Select(x => new Dictionary<string, string> { { "role", x.role }, { "content", x.message }, });
+
+        var data = new Dictionary<string, object>
+        {
+            { "model", model},
+            { "messages", messages},
+            { "n", n },
+            { "user", "aki32 utils"},
+        };
+        var jsonContent = JsonConvert.SerializeObject(data);
+
+        // request
+        var targetUri = new Uri($"{BaseUriString}/chat/completions");
+        JObject response = await targetUri.CallAPIAsync_ForJsonData<JObject>(HttpMethod.Post,
+             authBearerToken: APISecretKey,
+             additionalHeaders: Header,
+             jsonStringContent: jsonContent
+             );
+
+        return response["choices"]!.Select(x => x!["message"]!["content"]!.ToString()).ToArray();
+    }
+
+    public async Task<string[]> CallChatGPTAsync(string input, string model = "gpt-3.5-turbo") => await CallChatGPTAsync(new[] { ("user", input) }, model);
 
     /// <summary>
     /// generate image
@@ -103,7 +138,7 @@ public class OpenAIController
     /// <param name="prompt">for example, "a white Siamese cat"</param>
     /// <param name="size">256x256, 512x512, or 1024x1024</param>
     /// <returns></returns>
-    public async Task<Uri[]> GenerateImageAsync(string prompt, string size = "1024x1024", int n = 1)
+    public async Task<Uri[]> CallGenerateImageAsync(string prompt, string size = "1024x1024", int n = 1)
     {
         // content
         var data = new Dictionary<string, object>
@@ -123,6 +158,36 @@ public class OpenAIController
              );
 
         return (response["data"] as JArray)?.Select(x => new Uri(x["url"]?.ToString()!))?.ToArray()!;
+    }
+
+
+    /// <summary>
+    /// whisper
+    /// </summary>
+    /// <param name="inputAudioFile">The audio file to translate, in one of these formats: mp3, mp4, mpeg, mpga, m4a, wav, or webm.</param>
+    /// <param name="model">ID of the model to use. Only whisper-1 is currently available.</param>
+    /// <returns></returns>
+    public async Task<string> CallWhisperAsync(FileInfo inputAudioFile, string model = "whisper-1", int n = 1)
+    {
+        throw new NotImplementedException();
+
+        // content
+        var data = new Dictionary<string, object>
+        {
+            { "model", model},
+            { "file", inputAudioFile.FullName},
+        };
+        var jsonContent = JsonConvert.SerializeObject(data);
+
+        // request
+        var targetUri = new Uri($"{BaseUriString}/audio/translations");
+        JObject response = await targetUri.CallAPIAsync_ForJsonData<JObject>(HttpMethod.Post,
+             authBearerToken: APISecretKey,
+             additionalHeaders: Header,
+             jsonStringContent: jsonContent
+             );
+
+        return response["text"]!.ToString();
     }
 
 
