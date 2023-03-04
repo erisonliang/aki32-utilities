@@ -271,7 +271,7 @@ public class TimeHistory
                             }
                         }
 
-                    }.Run(outputFile);
+                    }.Run(outputFile, preview);
 
                     break;
 
@@ -294,16 +294,11 @@ public class TimeHistory
                             }
                         }
 
-                    }.Run(outputFile);
+                    }.Run(outputFile, preview);
 
                     break;
                 default:
                     break;
-            }
-
-            if (preview)
-            {
-                outputFile.ShowImage_OnDefaultApp(false);
             }
         }
         catch (Exception ex)
