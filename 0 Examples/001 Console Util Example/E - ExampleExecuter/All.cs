@@ -945,43 +945,43 @@ public static partial class ExampleExecuter
 
                 // D001 OpenAIController
                 {
-                    var baseDir_101_D_D001 = baseDir_101_D.GetChildDirectoryInfo($@"D001 OpenAIController");
-                    var output = baseDir_101_D.GetChildDirectoryInfo($@"output");
 
-                    //var apiSecretKey = ""; // API SecretKey
-                    var apiSecretKey = Environment.GetEnvironmentVariable("OpenAI_SecretKey")!; // API SecretKey
-                    var openAI = new OpenAIController(apiSecretKey);
+                    //var baseDir_101_D_D001 = baseDir_101_D.GetChildDirectoryInfo($@"D001 OpenAIController");
+                    //var output = baseDir_101_D.GetChildDirectoryInfo($@"output");
 
-                    //// ★ get models
-                    //var models = openAI.GetModelsAsync().Result;
-                    //Console.WriteLine(models);
+                    ////var apiSecretKey = ""; // API SecretKey
+                    //var apiSecretKey = Environment.GetEnvironmentVariable("OpenAI_SecretKey")!; // API SecretKey
+                    //var openAI = new OpenAIController(apiSecretKey);
 
-                    //// ★ edit text
-                    //var result = openAI.CallEditTextAsync("Fix the spelling mistakes", "What day of the wek is it?").Result;
-                    //foreach (var item in result)
-                    //    Console.WriteLine(item);
+                    ////// ★ get models
+                    ////var models = openAI.CallGetModelsAsync().Result;
+                    ////Console.WriteLine(models);
 
-                    //// ★ generate image
-                    //var result = openAI.CallGenerateImageAsync("beautiful cat with blue eye and white ear", n: 2).Result;
-                    //for (int i = 0; i < result!.Length; i++)
-                    //{
-                    //    var GeneratedImageFile = baseDir_101_D_D001.GetChildFileInfo($"GeneratedImage{i}.png");
-                    //    result[i].DownloadFile(GeneratedImageFile);
-                    //}
+                    ////// ★ edit text
+                    ////var result = openAI.CallEditTextAsync("Fix the spelling mistakes", "What day of the wek is it?").Result;
+                    ////foreach (var item in result)
+                    ////    Console.WriteLine(item);
+
+                    ////// ★ generate image
+                    ////var result = openAI.CallGenerateImageAsync("beautiful cat with blue eye and white ear", n: 2).Result;
+                    ////for (int i = 0; i < result!.Length; i++)
+                    ////{
+                    ////    var GeneratedImageFile = baseDir_101_D_D001.GetChildFileInfo($"GeneratedImage{i}.png");
+                    ////    result[i].DownloadFile(GeneratedImageFile);
+                    ////}
 
 
-                    // ★ whisper
-                    //var input = new FileInfo("");
-                    //var result = openAI.CallWhisperAsync(input).Result;
+                    //// ★ whisper
+                    //var input = baseDir_101_D_D001.GetChildFileInfo("input voice.m4a");
+                    //var result = openAI.CallAudioTranscriptionsAsync(input).Result;
                     //Console.WriteLine(result);
 
 
-                    //// ★ chat gpt
-                    //Console.Write("ChatGPTに送信：");
-                    //var input = Console.ReadLine();
-                    //var result = openAI.CallChatGPTAsync(input!).Result;
-                    //Console.WriteLine(result[0]);
-
+                    ////// ★ chat gpt
+                    ////Console.Write("ChatGPTに送信：");s
+                    ////var input = Console.ReadLine();
+                    ////var result = openAI.CallChatAsync(input!).Result;
+                    ////Console.WriteLine(result[0]);
 
                 }
 
