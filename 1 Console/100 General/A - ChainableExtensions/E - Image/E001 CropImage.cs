@@ -84,7 +84,7 @@ public static partial class ChainableExtensions
     /// <returns></returns>
     public static DirectoryInfo CropImageForMany_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir, Thickness[] crorpSizes,
         ImageFormat? imageFormat = null)
-        => inputDir.Loop(outputDir, (inF, outF) => inF.CropImageForMany(outputDir, crorpSizes, imageFormat));
+        => inputDir.Loop(outputDir, (inF, outF) => inF.CropImageForMany(outF.Directory, crorpSizes, imageFormat));
 
 
     // ★★★★★★★★★★★★★★★ image process

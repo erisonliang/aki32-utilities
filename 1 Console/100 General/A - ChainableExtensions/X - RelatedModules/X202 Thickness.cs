@@ -15,6 +15,7 @@ public static partial class ChainableExtensions
         public double T { get; set; }
         public double R { get; set; }
         public double B { get; set; }
+        public string? Name { get; set; } = null;
 
         public Thickness(double l, double t, double r, double b)
         {
@@ -37,8 +38,10 @@ public static partial class ChainableExtensions
             return new Rectangle(cx, cy, cw, ch);
         }
 
-        public new string ToString() => $"{L:F2},{T:F2},{R:F2},{B:F2}";
-
+        public new string ToString()
+        {
+            return Name ?? $"{L:F2},{T:F2},{R:F2},{B:F2}";
+        }
     }
 
 }

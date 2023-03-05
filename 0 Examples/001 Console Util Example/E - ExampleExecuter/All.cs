@@ -32,6 +32,7 @@ using XPlot.Plotly;
 using DocumentFormat.OpenXml.Drawing;
 using Org.BouncyCastle.Crypto.Macs;
 using NumSharp.Utilities;
+using DocumentFormat.OpenXml.Office2013.Excel;
 
 namespace Aki32Utilities.UsageExamples.ConsoleAppUtilities;
 public static partial class ExampleExecuter
@@ -42,16 +43,6 @@ public static partial class ExampleExecuter
     {
         // TEST
         {
-
-
-
-
-
-
-
-
-
-
 
         }
 
@@ -979,7 +970,7 @@ public static partial class ExampleExecuter
                     //}
 
 
-                    //// ★ whisper
+                    // ★ whisper
                     //var input = new FileInfo("");
                     //var result = openAI.CallWhisperAsync(input).Result;
                     //Console.WriteLine(result);
@@ -1362,9 +1353,13 @@ public static partial class ExampleExecuter
 
             }
 
-            //
+            // M002 CropBookPDF
             {
+                //var input = new FileInfo(@"C:\Users\aki32\Dropbox\Documents\13 読み物\0 アーカイブ\01 建築\04 構造\11 S\『日本材料学会編・疲労設計便覧1995』.pdf");
+                //MiniApps.CropBookPDF(input, DPI: 200);
 
+                ////var input = new DirectoryInfo(@"C:\Users\aki32\Dropbox\Documents\13 読み物\0 アーカイブ\01 建築\04 構造\11 S\output_PDF2Images_35A4F9\output_CropImageF_FA4F33");
+                //// input.Images2PDF(null);
             }
 
             //
