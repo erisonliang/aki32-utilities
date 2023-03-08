@@ -1,6 +1,5 @@
 ﻿using Aki32Utilities.ConsoleAppUtilities.StructuralEngineering;
 using Aki32Utilities.ConsoleAppUtilities.General;
-using Aki32Utilities.ConsoleAppUtilities.General;
 
 namespace Aki32Utilities.ConsoleAppUtilities.StructuralEngineering;
 public class SDoFModel
@@ -73,9 +72,9 @@ public class SDoFModel
     {
         ep ??= new ElasticModel(1);
 
-        var SdList = new TimeHistory("1 Sd");
-        var SvList = new TimeHistory("2 Sv");
-        var SaList = new TimeHistory("3 Sa");
+        var SdList = new TimeHistory("Sd");
+        var SvList = new TimeHistory("Sv");
+        var SaList = new TimeHistory("Sa");
 
         using var progress = new ProgressManager(TList.Length * hList.Length);
         progress.StartAutoWrite(100);
