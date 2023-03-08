@@ -1,5 +1,8 @@
-﻿using System.Text;
+﻿using System.Linq;
+using System.Text;
 using System.Xml.Linq;
+
+using DocumentFormat.OpenXml.Wordprocessing;
 
 using MathNet.Numerics;
 
@@ -231,8 +234,18 @@ public class TimeHistory
     public FileInfo DrawGraph_OnPyplot(FileInfo outputFile, string yName,
         ChartType type = ChartType.Line,
         string chartTitle = "",
-         bool preview = false
-        ) => DrawGraph_OnPyplot(outputFile, "", yName, type, chartTitle, preview);
+        string? xLabel = null,
+        string? yLabel = null,
+        bool preview = false
+        )
+    {
+        return DrawGraph_OnPyplot(outputFile, "", yName: yName,
+            type: type,
+            chartTitle: chartTitle,
+            xLabel: xLabel,
+            yLabel: yLabel,
+            preview: preview);
+    }
 
     /// <summary>
     /// Draw Line Graph on Python and return Image File
@@ -242,61 +255,104 @@ public class TimeHistory
     public FileInfo DrawGraph_OnPyplot(FileInfo outputFile, string xName, string yName,
         ChartType type = ChartType.Line,
         string chartTitle = "",
+        string? xLabel = null,
+        string? yLabel = null,
+        bool preview = false
+        )
+    {
+        return DrawGraph_OnPyplot(outputFile, xName, new string[] { yName },
+            type: type,
+            chartTitle: chartTitle,
+            xLabel: xLabel,
+            yLabel: yLabel,
+            preview: preview);
+    }
+
+    /// <summary>
+    /// Draw Line Graph on Python and return Image File
+    /// </summary>
+    /// <param name="yName">Vertical Axis</param>
+    /// <param name="xName">Horizontal Axis</param>
+    public FileInfo DrawGraph_OnPyplot(FileInfo outputFile, string xName, string[] yName,
+        ChartType type = ChartType.Line,
+        string chartTitle = "",
+        string? xLabel = null,
+        string? yLabel = null,
         bool preview = false
         )
     {
         try
         {
             var x = string.IsNullOrEmpty(xName) ? null : this[xName];
-            var y = this[yName];
+            var plots = new List<PythonController.PyPlot.IPlot>();
+            xLabel ??= xName;
+            yLabel ??= yName.Length == 1 ? yName[0] : "";
 
             switch (type)
             {
                 case ChartType.Scatter:
-
-                    new PythonController.PyPlot.Figure
                     {
-                        IsTightLayout = true,
-                        SubPlots = new List<PythonController.PyPlot.SubPlot>()
+                        if (yName.Length == 1)
+                            plots.Add(new PythonController.PyPlot.ScatterPlot(x, this[yName[0]]));
+                        else
                         {
-                            new PythonController.PyPlot.SubPlot()
-                            {
-                                XLabel = xName,
-                                YLabel = yName,
-                                Title = chartTitle,
-                                Plots = new List<PythonController.PyPlot.IPlot>
+                            foreach (var name in yName)
+                                plots.Add(new PythonController.PyPlot.ScatterPlot(x, this[name])
                                 {
-                                    new PythonController.PyPlot.ScatterPlot(x, y),
-                                }
-                            }
+                                    LegendLabel = name,
+                                });
                         }
 
-                    }.Run(outputFile, preview);
+                        new PythonController.PyPlot.Figure
+                        {
+                            IsTightLayout = true,
+                            SubPlots = new List<PythonController.PyPlot.SubPlot>()
+                            {
+                                new PythonController.PyPlot.SubPlot()
+                                {
+                                    XLabel = xLabel,
+                                    YLabel = yLabel,
+                                    Title = chartTitle,
+                                    Plots = plots,
+                                }
+                            }
 
+                        }.Run(outputFile, preview);
+                    }
                     break;
 
                 case ChartType.Line:
-
-                    new PythonController.PyPlot.Figure
                     {
-                        IsTightLayout = true,
-                        SubPlots = new List<PythonController.PyPlot.SubPlot>()
+                        if (yName.Length == 1)
+                            plots.Add(new PythonController.PyPlot.LinePlot(x, this[yName[0]]));
+                        else
                         {
-                            new PythonController.PyPlot.SubPlot()
-                            {
-                                XLabel = xName,
-                                YLabel = yName,
-                                Title = chartTitle,
-                                Plots = new List<PythonController.PyPlot.IPlot>
+                            foreach (var name in yName)
+                                plots.Add(new PythonController.PyPlot.LinePlot(x, this[name])
                                 {
-                                    new PythonController.PyPlot.LinePlot(x, y),
-                                }
-                            }
+                                    LegendLabel = name,
+                                    LineColor = null
+                                });
                         }
 
-                    }.Run(outputFile, preview);
+                        new PythonController.PyPlot.Figure
+                        {
+                            IsTightLayout = true,
+                            SubPlots = new List<PythonController.PyPlot.SubPlot>()
+                            {
+                                new PythonController.PyPlot.SubPlot()
+                                {
+                                    XLabel = xLabel,
+                                    YLabel = yLabel,
+                                    Title = chartTitle,
+                                    Plots = plots,
+                                }
+                            }
 
+                        }.Run(outputFile, preview);
+                    }
                     break;
+
                 default:
                     break;
             }
