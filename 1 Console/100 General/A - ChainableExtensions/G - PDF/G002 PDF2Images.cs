@@ -1,30 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Drawing.Imaging;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-
-using iTextSharp.text;
-using iTextSharp.text.pdf;
-using iTextSharp.text.pdf.parser;
-
-using Newtonsoft.Json.Serialization;
+﻿using IronPdf;
 
 namespace Aki32Utilities.ConsoleAppUtilities.General;
 public static partial class ChainableExtensions
 {
 
     /// <summary>
-    /// Images2PDF (currently, png to pdf only)
+    /// PDF2Images<br/>
+    /// sugar of https://ironpdf.com/examples/rasterize-a-pdf-to-images/
     /// </summary>
     /// <param name="inputDir"></param>
     /// <param name="outputFile">when null, automatically set</param>
     /// <returns></returns>
-    public static DirectoryInfo PDF2Images(this FileInfo inputFile, DirectoryInfo? outputDir)
+    public static DirectoryInfo PDF2Images(this FileInfo inputFile, DirectoryInfo? outputDir,
+        string outputExtension = ".jpg",
+        int DPI = 300
+
+        )
     {
         // preprocess
         UtilPreprocessors.PreprocessOutDir(ref outputDir, inputFile.Directory!, takesTimeFlag: true);
@@ -33,7 +24,8 @@ public static partial class ChainableExtensions
 
 
         // main
-        throw new NotImplementedException();
+        var pdf = PdfDocument.FromFile(inputFile.FullName);
+        pdf.RasterizeToImageFiles(outputDir!.GetChildFileInfo(@$"*{outputExtension}").FullName, DPI: DPI);
 
 
         // post process
