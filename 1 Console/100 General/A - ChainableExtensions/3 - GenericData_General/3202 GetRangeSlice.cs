@@ -90,7 +90,7 @@ public static partial class ChainableExtensions
         {
             var result = new T[d0Len];
 
-            for (int d0 = 0; d0 < d1Len; d0++)
+            for (int d0 = 0; d0 < d0Len; d0++)
                 result[d0] = inputData[d0, 0];
 
             return result;
