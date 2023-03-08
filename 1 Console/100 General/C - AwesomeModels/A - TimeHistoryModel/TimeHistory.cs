@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Xml.Linq;
 
@@ -101,52 +102,84 @@ public class TimeHistory
     /// <exception cref="Exception"></exception>
     public static TimeHistory FromCsv(FileInfo inputCsv, params string[]? overwriteHeaders)
     {
-        var history = new TimeHistory()
-        {
-            Name = Path.GetFileNameWithoutExtension(inputCsv.Name),
-            inputDir = inputCsv.Directory!,
-        };
-
         try
         {
-            var input = File.ReadLines(inputCsv.FullName, Encoding.UTF8).ToArray();
+            var input = inputCsv.ReadCsv_Rows();
+            var name = Path.GetFileNameWithoutExtension(inputCsv.Name);
+            var originalDir = inputCsv.Directory!;
 
-            // Get Data
-            var headers = input
-                     .Take(1)
-                     .Select(x => x.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries))
-                     .First();
-
-            if (overwriteHeaders != null && overwriteHeaders.Length > 0)
-                headers = overwriteHeaders;
-
-            var data = input
-                .Skip(1)
-                .Select(x => x.Split(new string[] { "," }, StringSplitOptions.None))
-                .ToArray();
-
-            for (int i = 0; i < headers.Length; i++)
-            {
-                var column = data
-                    .Select(x =>
-                    {
-                        try
-                        {
-                            return double.Parse(x[i]);
-                        }
-                        catch (Exception)
-                        {
-                            return 0;
-                        }
-                    })
-                    .ToArray();
-                history.ContentsTable[headers[i]] = column;
-            }
-
+            var history = FromArray(input, name, originalDir, overwriteHeaders);
+            return history;
         }
         catch (Exception e)
         {
             throw new Exception($"Failed to read input csv : {e}");
+        }
+    }
+
+    /// <summary>
+    /// Construct from excel.
+    /// </summary>
+    /// <param name="inputCsv">first row must be a header</param>
+    /// <param name="overwriteHeaders"></param>
+    /// <returns></returns>
+    /// <exception cref="Exception"></exception>
+    public static TimeHistory FromExcel(FileInfo inputExcel, string SheetName, params string[]? overwriteHeaders)
+    {
+        try
+        {
+            var name = Path.GetFileNameWithoutExtension(inputExcel.Name);
+            var input = inputExcel.GetExcelSheet(SheetName).ConvertToJaggedArray();
+            var originalDir = inputExcel.Directory!;
+
+            var history = FromArray(input, name, originalDir, overwriteHeaders);
+            return history;
+        }
+        catch (Exception e)
+        {
+            throw new Exception($"Failed to read input excel : {e}");
+        }
+    }
+
+    /// <summary>
+    /// Construct from excel.
+    /// </summary>
+    /// <param name="inputCsv">first row must be a header</param>
+    /// <param name="overwriteHeaders"></param>
+    /// <returns></returns>
+    /// <exception cref="Exception"></exception>
+    private static TimeHistory FromArray(string[][] input, string name, DirectoryInfo? originalDir, params string[]? overwriteHeaders)
+    {
+        var history = new TimeHistory()
+        {
+            Name = Path.GetFileNameWithoutExtension(name),
+            inputDir = originalDir,
+        };
+
+        // Get Data
+        var headers = input.First().Where(x => !string.IsNullOrEmpty(x)).ToArray();
+
+        if (overwriteHeaders != null && overwriteHeaders.Length > 0)
+            headers = overwriteHeaders;
+
+        var data = input.Skip(1).ToArray();
+
+        for (int i = 0; i < headers.Length; i++)
+        {
+            var column = data
+                .Select(x =>
+                {
+                    try
+                    {
+                        return double.Parse(x[i]);
+                    }
+                    catch (Exception)
+                    {
+                        return 0;
+                    }
+                })
+                .ToArray();
+            history.ContentsTable[headers[i]] = column;
         }
 
         return history;
@@ -231,7 +264,7 @@ public class TimeHistory
     /// </summary>
     /// <param name="yName">Vertical Axis</param>
     /// <param name="xName">Horizontal Axis</param>
-    public FileInfo DrawGraph_OnPyplot(FileInfo outputFile, string yName,
+    public FileInfo DrawGraph_OnPyPlot(FileInfo outputFile, string yName,
         ChartType type = ChartType.Line,
         string chartTitle = "",
         string? xLabel = null,
@@ -239,7 +272,7 @@ public class TimeHistory
         bool preview = false
         )
     {
-        return DrawGraph_OnPyplot(outputFile, "", yName: yName,
+        return DrawGraph_OnPyPlot(outputFile, "", yName: yName,
             type: type,
             chartTitle: chartTitle,
             xLabel: xLabel,
@@ -252,7 +285,7 @@ public class TimeHistory
     /// </summary>
     /// <param name="yName">Vertical Axis</param>
     /// <param name="xName">Horizontal Axis</param>
-    public FileInfo DrawGraph_OnPyplot(FileInfo outputFile, string xName, string yName,
+    public FileInfo DrawGraph_OnPyPlot(FileInfo outputFile, string xName, string yName,
         ChartType type = ChartType.Line,
         string chartTitle = "",
         string? xLabel = null,
