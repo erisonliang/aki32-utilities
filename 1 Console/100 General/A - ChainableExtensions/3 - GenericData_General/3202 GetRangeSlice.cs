@@ -262,6 +262,73 @@ public static partial class ChainableExtensions
     }
 
 
+    // ★★★★★★★★★★★★★★★ get slice and shrink expansion
+
+    /// <summary>
+    /// get sliced and shrunk array
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="inputData"></param>
+    /// <returns></returns>
+    public static T[] GetRangeSliceAndShrink<T>(this T[,] inputData, Index i0, Range r1) => inputData.GetRangeSlice(i0, r1).ShrinkDimension(0);
+
+    /// <summary>
+    /// get sliced and shrunk array
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="inputData"></param>
+    /// <returns></returns>
+    public static T[] GetRangeSliceAndShrink<T>(this T[,] inputData, Range r0, Index i1) => inputData.GetRangeSlice(r0, i1).ShrinkDimension(1);
+
+    /// <summary>
+    /// get sliced and shrunk array
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="inputData"></param>
+    /// <returns></returns>
+    public static T[,] GetRangeSliceAndShrink<T>(this T[,,] inputData, Index i0, Range r1, Range r2) => inputData.GetRangeSlice(i0, r1, r2).ShrinkDimension(0);
+
+    /// <summary>
+    /// get sliced and shrunk array
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="inputData"></param>
+    /// <returns></returns>
+    public static T[,] GetRangeSliceAndShrink<T>(this T[,,] inputData, Range r0, Index i1, Range r2) => inputData.GetRangeSlice(r0, i1, r2).ShrinkDimension(1);
+
+    /// <summary>
+    /// get sliced and shrunk array
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="inputData"></param>
+    /// <returns></returns>
+    public static T[,] GetRangeSliceAndShrink<T>(this T[,,] inputData, Range r0, Range r1, Index i2) => inputData.GetRangeSlice(r0, r1, i2).ShrinkDimension(2);
+
+    /// <summary>
+    /// get sliced and shrunk array
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="inputData"></param>
+    /// <returns></returns>
+    public static T[] GetRangeSliceAndShrink<T>(this T[,,] inputData, Index i0, Index i1, Range r2) => inputData.GetRangeSlice(i0, i1, r2).ShrinkDimension(1).ShrinkDimension(0);
+
+    /// <summary>
+    /// get sliced and shrunk array
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="inputData"></param>
+    /// <returns></returns>
+    public static T[] GetRangeSliceAndShrink<T>(this T[,,] inputData, Range r0, Index i1, Index i2) => inputData.GetRangeSlice(r0, i1, i2).ShrinkDimension(2).ShrinkDimension(1);
+
+    /// <summary>
+    /// get sliced and shrunk array
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="inputData"></param>
+    /// <returns></returns>
+    public static T[] GetRangeSliceAndShrink<T>(this T[,,] inputData, Index i0, Range r1, Index i2) => inputData.GetRangeSlice(i0, r1, i2).ShrinkDimension(2).ShrinkDimension(0);
+
+
     // ★★★★★★★★★★★★★★★ helper
 
     private static Range ConvertToSingleRange(this Index index, int arrayLength)
