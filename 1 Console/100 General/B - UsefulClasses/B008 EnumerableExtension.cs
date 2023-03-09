@@ -33,6 +33,19 @@ public class EnumerableExtension
         return Range_WithCount(from, to, count);
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="from"></param>
+    /// <param name="to"></param>
+    /// <param name="count"></param>
+    /// <returns></returns>
+    public static IEnumerable<double> Range_WithStepAndCount(double from, double step, int count)
+    {
+        var to = from + step * (count - 1);
+        return Range_WithCount(from, to, count);
+    }
+
 
     // ★★★★★★★★★★★★★★★ 
 
