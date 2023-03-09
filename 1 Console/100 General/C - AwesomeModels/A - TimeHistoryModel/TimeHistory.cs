@@ -3,6 +3,8 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Xml.Linq;
 
+using DocumentFormat.OpenXml.Office2013.PowerPoint.Roaming;
+using DocumentFormat.OpenXml.Spreadsheet;
 using DocumentFormat.OpenXml.Wordprocessing;
 
 using MathNet.Numerics;
@@ -31,7 +33,7 @@ public class TimeHistory
     public string Name { get; set; }
     /// <summary>
     /// </summary>
-    protected Dictionary<string, double[]> ContentsTable = new Dictionary<string, double[]>();
+    protected Dictionary<string, double[]> ContentsTable = new();
     /// <summary>
     /// indexer
     /// </summary>
@@ -43,25 +45,16 @@ public class TimeHistory
         {
             if (ContentsTable.ContainsKey(key))
                 return ContentsTable[key];
-
             ContentsTable.Add(key, new double[DataRowCount]);
-            //Console.WriteLine($"ERROR : {key} は定義されていません。空集合を作成しました。");
-            //throw new KeyNotFoundException($"{key} は定義されていません。");
             return ContentsTable[key];
         }
         set
         {
             if (ContentsTable.ContainsKey(key))
-            {
                 ContentsTable[key] = value;
-            }
             else
-            {
-                var newData = new double[Math.Max(DataRowCount, value.Length)];
-                for (int i = 0; i < value.Length; i++)
-                    newData[i] = value[i];
-                ContentsTable.Add(key, newData);
-            }
+                ContentsTable.Add(key, value);
+            CheckAllColumnsLength();
         }
     }
     /// <summary>
@@ -326,7 +319,12 @@ public class TimeHistory
                 case ChartType.Scatter:
                     {
                         if (yName.Length == 1)
-                            plots.Add(new PythonController.PyPlot.ScatterPlot(x, this[yName[0]]));
+                        {
+                            plots.Add(new PythonController.PyPlot.ScatterPlot(x, this[yName[0]])
+                            {
+                                MarkerColor = "blue",
+                            });
+                        }
                         else
                         {
                             foreach (var name in yName)
@@ -357,7 +355,12 @@ public class TimeHistory
                 case ChartType.Line:
                     {
                         if (yName.Length == 1)
-                            plots.Add(new PythonController.PyPlot.LinePlot(x, this[yName[0]]));
+                        {
+                            plots.Add(new PythonController.PyPlot.LinePlot(x, this[yName[0]])
+                            {
+                                LineColor = "blue",
+                            });
+                        }
                         else
                         {
                             foreach (var name in yName)
@@ -671,7 +674,7 @@ public class TimeHistory
             if (ContentsTable.Keys.Count == 0)
                 return 0;
             else
-                return ContentsTable[ContentsTable.Keys.First()].Length;
+                return ContentsTable.Values.Max(v => v.Length);
         }
     }
     public string[] Columns
@@ -681,6 +684,43 @@ public class TimeHistory
             return ContentsTable.Keys.ToArray();
         }
     }
+
+    /// <summary>
+    /// Check if all the column length is the same; Append 0 if invalid.<br/>
+    /// If "t" is shorter, enlengthen column at current TimeStep or designated "overwriteTimeStep".
+    /// </summary>
+    private void CheckAllColumnsLength(int requiredLength = 0, double? overwriteTimeStep = null)
+    {
+        var targetDataRowCount = Math.Max(DataRowCount, requiredLength);
+
+        if (ContentsTable.ContainsKey("t"))
+        {
+            if (t.Length < targetDataRowCount)
+            {
+                overwriteTimeStep ??= TimeStep;
+                ContentsTable["t"] = EnumerableExtension.Range_WithStepAndCount(t[0], overwriteTimeStep.Value, targetDataRowCount).ToArray();
+            }
+        }
+        else
+        {
+            if (overwriteTimeStep is not null)
+                ContentsTable["t"] = EnumerableExtension.Range_WithStepAndCount(0, overwriteTimeStep.Value, targetDataRowCount).ToArray();
+        }
+
+        foreach (var column in Columns)
+        {
+            var value = ContentsTable[column].AsEnumerable();
+            var addingCount = targetDataRowCount - value.Count();
+            if (addingCount == 0)
+                continue;
+
+            for (int i = 0; i < addingCount; i++)
+                value = value.Append(0);
+
+            ContentsTable[column] = value.ToArray();
+        }
+    }
+
 
     // ★★★★★★★★★★★★★★★ methods
 
@@ -705,8 +745,7 @@ public class TimeHistory
     {
         if (DataRowCount <= i)
         {
-            while (DataRowCount < i)
-                AppendStep(new TimeHistoryStep());
+            CheckAllColumnsLength(i);
             AppendStep(step);
         }
         else
@@ -720,24 +759,17 @@ public class TimeHistory
     public TimeHistory AppendStep(TimeHistoryStep step)
     {
         var addingIndex = DataRowCount;
-
-        var keys = step.ContentsTable.Keys.ToArray();
-        for (int i = 0; i < keys.Length; i++)
+        if (addingIndex == 0)
         {
-            var key = keys[i];
-
-            if (addingIndex >= this[key].Length)
-            {
-                var targetList = this[key];
-                while (targetList.Length < addingIndex)
-                    targetList = targetList.Append(0).ToArray();
-                targetList = targetList.Append(step[key]).ToArray();
-                this[key] = targetList;
-            }
-            else
-            {
+            // 実質 init
+            foreach (var key in step.ContentsTable.Keys)
+                this[key] = new double[] { step[key] };
+        }
+        else
+        {
+            CheckAllColumnsLength(requiredLength: addingIndex + 1);
+            foreach (var key in step.ContentsTable.Keys)
                 this[key][addingIndex] = step[key];
-            }
         }
 
         return this;
@@ -747,8 +779,8 @@ public class TimeHistory
         foreach (var key in ContentsTable.Keys)
         {
             var dataColumnList = ContentsTable[key].ToList();
-            foreach (var droppingStep in droppingSteps)
-                dataColumnList.RemoveAt(droppingStep);
+            for (int i = droppingSteps.Length - 1; i >= 0; i--)
+                dataColumnList.RemoveAt(droppingSteps[i]);
             ContentsTable[key] = dataColumnList.ToArray();
         }
 
