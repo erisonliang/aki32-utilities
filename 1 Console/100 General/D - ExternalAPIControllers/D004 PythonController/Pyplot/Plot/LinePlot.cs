@@ -26,13 +26,13 @@ public static partial class PythonController
 
             public int LineWidth { get; set; } = 4;
             public string LineStyle { get; set; } = "solid"; // solid, dashed, dashdot, dotted, --, -, :
-            public string LineColor { get; set; } = "green";
+            public string LineColor { get; set; } = null; //green
 
-            public string Marker { get; set; } = "."; // . , o v ^ < > ...
+            public string Marker { get; set; } = null; // . , o v ^ < > ...
             public int MarkerSize { get; set; } = 1;
             public int MarkerEdgeWidth { get; set; } = 0;
-            public string MarkerFaceColor { get; set; } = "green";
-            public string MarkerEdgeColor { get; set; } = "green";
+            public string MarkerFaceColor { get; set; } = null; //green
+            public string MarkerEdgeColor { get; set; } = null;
 
 
             // ★★★★★★★★★★★★★★★ inits
