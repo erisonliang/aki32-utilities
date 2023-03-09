@@ -12,15 +12,17 @@ public static partial class PythonController
 
             public int FigIndex { get; set; } = 111;
 
-            public string Title { get; set; } = "";
+            public LegendLocation LegendLocation { get; set; } = LegendLocation.upper_right;
+
+            public string Title { get; set; } = null;
             public int TitleSize { get; set; } = 40;
 
-            public string XLabel { get; set; } = "";
-            public string YLabel { get; set; } = "";
+            public string XLabel { get; set; } = null;
+            public string YLabel { get; set; } = null;
             /// <summary>
             /// (3d option)
             /// </summary>
-            public string ZLabel { get; set; } = "";
+            public string ZLabel { get; set; } = null;
             public int XLabelSize { get; set; } = 30;
             public int YLabelSize { get; set; } = 30;
             /// <summary>
@@ -123,7 +125,13 @@ public static partial class PythonController
 
                 // 凡例
                 if (Plots.Any(p => !string.IsNullOrEmpty(p.LegendLabel)))
-                    ax.legend(prop: new Dictionary<string, string> { { "family", FontName } });
+                    ax.legend(
+                        loc: LegendLocation.ToString().Replace("_"," "),
+                        prop: new Dictionary<string, string>
+                        {
+                            { "family", FontName },
+                        }
+                        );
 
 
                 // ★★★★★ 
@@ -133,6 +141,21 @@ public static partial class PythonController
 
             // ★★★★★★★★★★★★★★★ 
 
+        }
+
+        public enum LegendLocation
+        {
+            best,
+            upper_right,
+            upper_left,
+            lower_left,
+            lower_right,
+            right,
+            center_left,
+            center_right,
+            lower_center,
+            upper_center,
+            center,
         }
     }
 }

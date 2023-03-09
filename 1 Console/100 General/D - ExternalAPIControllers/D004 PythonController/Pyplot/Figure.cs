@@ -39,21 +39,17 @@ public static partial class PythonController
 
             public FileInfo Run(FileInfo outputFile, bool preview = false)
             {
-                // preprocess
+                // ★★★★★ preprocess
                 if (!Activated)
                     throw new Exception("Required to call PythonController.Initialize() first");
                 if (SubPlots is null)
-                {
                     throw new Exception("Required to SubPlots");
-                }
                 outputFile.Directory!.Create();
 
+
                 // ★★★★★ 全体
-
                 dynamic plt = Import("matplotlib.pyplot");
-
                 plt.subplots_adjust(wspace: PlotWSpace, hspace: PlotHSpace);
-
                 dynamic fig = plt.figure(figsize: new double[] { FigWidth, FigHeight });
 
 
