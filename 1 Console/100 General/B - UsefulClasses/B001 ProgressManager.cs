@@ -6,11 +6,26 @@ public class ProgressManager : IDisposable
 
     // ★★★★★★★★★★★★★★★ props
 
-    public DateTime StartTime { get; set; }
-    public TimeSpan ElapsedTime => DateTime.Now - StartTime;
+    public DateTime StartTime { get; set; } = DateTime.Now;
+    public TimeSpan ElapsedTimeFromStart => DateTime.Now - StartTime;
+
+    public DateTime LastCountUpTime { get; set; } = DateTime.Now;
+    public TimeSpan ElapsedTimeFromLastCountUp => DateTime.Now - LastCountUpTime;
 
     public long MaxStep { get; set; }
-    public long CurrentStep { get; set; }
+    private long currentStep;
+    public long CurrentStep
+    {
+        get
+        {
+            return currentStep;
+        }
+        set
+        {
+            LastCountUpTime = DateTime.Now;
+            currentStep = value;
+        }
+    }
 
     public bool ConsoleOutput { get; set; } = true;
     public bool WritePercentage { get; set; } = true;
@@ -33,11 +48,12 @@ public class ProgressManager : IDisposable
     public ProgressManager(long maxStep, bool? consoleOutput = null)
     {
         StartTime = DateTime.Now;
+        LastCountUpTime = DateTime.Now;
         MaxStep = maxStep;
 
         consoleOutput ??= true;
         ConsoleOutput = consoleOutput.Value && UtilConfig.ConsoleOutput_Contents;
-        
+
         UtilConfig.StopTemporary_ConsoleOutput_Preprocess();
         UtilConfig.StopTemporary_ConsoleOutput_Contents();
 
@@ -144,19 +160,21 @@ public class ProgressManager : IDisposable
 
         if (WriteElapsedTime)
         {
-            if (ElapsedTime.TotalMinutes > 1.0)
-                s += $"{ElapsedTime.TotalMinutes:F1} mins elapsed, ";
+            if (ElapsedTimeFromStart.TotalMinutes > 1.0)
+                s += $"{ElapsedTimeFromStart.TotalMinutes:F1} mins elapsed, ";
             else
-                s += $"{ElapsedTime.TotalSeconds:F1} secs elapsed, ";
+                s += $"{ElapsedTimeFromStart.TotalSeconds:F1} secs elapsed, ";
         }
 
         if (WriteEstimateTime)
         {
             if (percentage > 0)
             {
-                var estimated = ElapsedTime * ((100 - percentage) / percentage);
+                var estimated = (ElapsedTimeFromStart - ElapsedTimeFromLastCountUp) * ((100 - percentage) / percentage) - ElapsedTimeFromLastCountUp;
                 if (estimated.TotalMinutes > 1.0)
                     s += $"{estimated.TotalMinutes:F1} mins left, ";
+                else if (estimated.TotalSeconds < 0.0)
+                    s += $"{0:F1} secs left, ";
                 else
                     s += $"{estimated.TotalSeconds:F1} secs left, ";
             }
