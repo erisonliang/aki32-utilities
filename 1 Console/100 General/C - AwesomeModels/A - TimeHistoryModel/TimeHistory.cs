@@ -149,12 +149,19 @@ public class TimeHistory
             inputDir = originalDir,
         };
 
-        // Get Data
-        var headers = input.First().Where(x => !string.IsNullOrEmpty(x)).ToArray();
-
+        // Get Headers
+        var headers = input.First().ToArray();
         if (overwriteHeaders != null && overwriteHeaders.Length > 0)
             headers = overwriteHeaders;
+        if (string.IsNullOrEmpty(headers.LastOrDefault()))
+            headers = headers[0..^1];
+        var tempCount = 0;
+        for (int i = 0; i < headers.Length; i++)
+            if (string.IsNullOrEmpty(headers[i]))
+                headers[i] = $"Unnamed: {tempCount++}";
 
+
+        // Get Data
         var data = input.Skip(1).ToArray();
 
         for (int i = 0; i < headers.Length; i++)
