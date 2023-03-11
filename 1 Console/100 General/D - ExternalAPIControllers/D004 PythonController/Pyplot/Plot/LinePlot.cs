@@ -10,7 +10,6 @@ public static partial class PythonController
         /// </summary>
         public class LinePlot : IPlot
         {
-
             // ★★★★★★★★★★★★★★★ props
 
             public bool Is3D { get; set; } = false;
