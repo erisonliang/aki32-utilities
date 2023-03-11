@@ -199,7 +199,7 @@ public static class SNAPHelper
         /// </summary>
         /// <param name="outputFile"></param>
         /// <returns></returns>
-        public FileInfo CreateWaveFile(FileInfo outputFile, bool useCurrentDateTimeAsVersionString = true)
+        public FileInfo CreateSNAPWaveFile(FileInfo outputFile, bool useCurrentDateTimeAsVersionString = true)
         {
             // main
             using var sr = new StreamWriter(outputFile.OpenWrite());
@@ -238,7 +238,7 @@ public static class SNAPHelper
         /// <param name="amax"></param>
         /// <param name="vmax"></param>
         /// <returns></returns>
-        public static FileInfo CreateWaveFile(FileInfo outputFile, TimeHistory inputWave, string name, double amax, double vmax)
+        public static FileInfo CreateSNAPWaveFile(FileInfo outputFile, TimeHistory inputWave, string name, double amax, double vmax)
         {
             // main
             new SNAPWaveData(inputWave)
@@ -247,14 +247,14 @@ public static class SNAPHelper
                 MaxAcc = amax,
                 MaxVel = vmax,
             }
-            .CreateWaveFile(outputFile);
+            .CreateSNAPWaveFile(outputFile);
 
 
             // post process
             return outputFile;
         }
-        public static FileInfo CreateWaveFile(DirectoryInfo outputDir, TimeHistory inputWave, string name, double amax, double vmax)
-          => CreateWaveFile(outputDir.GetChildFileInfo(@$"{name}.wv"), inputWave, name, amax, vmax);
+        public static FileInfo CreateSNAPWaveFile(DirectoryInfo outputDir, TimeHistory inputWave, string name, double amax, double vmax)
+          => CreateSNAPWaveFile(outputDir.GetChildFileInfo(@$"{name}.wv"), inputWave, name, amax, vmax);
 
         /// <summary>
         /// with cm/s
@@ -266,7 +266,7 @@ public static class SNAPHelper
         /// <param name="amax"></param>
         /// <param name="vmax"></param>
         /// <returns></returns>
-        public static FileInfo CreateWaveFile(FileInfo outputFile, double[] accs, double dt, string name, double amax, double vmax)
+        public static FileInfo CreateSNAPWaveFile(FileInfo outputFile, double[] accs, double dt, string name, double amax, double vmax)
         {
             // main
             new SNAPWaveData(accs, dt)
@@ -275,14 +275,14 @@ public static class SNAPHelper
                 MaxAcc = amax,
                 MaxVel = vmax,
             }
-            .CreateWaveFile(outputFile);
+            .CreateSNAPWaveFile(outputFile);
 
 
             // post process
             return outputFile;
         }
-        public static FileInfo CreateWaveFile(DirectoryInfo outputDir, double[] accs, double dt, string name, double amax, double vmax)
-            => CreateWaveFile(outputDir.GetChildFileInfo(@$"{name}.wv"), accs, dt, name, amax, vmax);
+        public static FileInfo CreateSNAPWaveFile(DirectoryInfo outputDir, double[] accs, double dt, string name, double amax, double vmax)
+            => CreateSNAPWaveFile(outputDir.GetChildFileInfo(@$"{name}.wv"), accs, dt, name, amax, vmax);
 
 
         // ★★★★★★★★★★★★★★★ 
