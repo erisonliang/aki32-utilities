@@ -37,18 +37,29 @@ public static partial class PythonController
             /// </summary>
             public int ZLabelPadding { get; set; } = 0;
 
+            public string? XScale { get; set; } = null;
+            public string? YScale { get; set; } = null;
+            public string? ZScale { get; set; } = null;
+
+            public int? XScale_Base { get; set; } = 10;
+            public int? YScale_Base { get; set; } = 10;
+            public int? ZScale_Base { get; set; } = 10;
+
             public int XYZLabelTickSize { get; set; } = 20;
 
-            public (int min, int max)? XLim { get; set; }
-            public (int min, int max)? YLim { get; set; }
+            public (double min, double max)? XLim { get; set; }
+            public (double min, double max)? YLim { get; set; }
             /// <summary>
             /// (3d option)
             /// </summary>
-            public (int min, int max)? ZLim { get; set; }
+            public (double min, double max)? ZLim { get; set; }
 
             public double? GraphMargins { get; set; } = null;
-            public bool HasGrid { get; set; } = true;
 
+            public bool HasGrid { get; set; } = true;
+            public string Grid_Which { get; set; } = "major";
+
+            public IPlot Plot { get; set; }
             public List<IPlot> Plots { get; set; }
 
             // ★★★★★★★★★★★★★★★ init
@@ -68,9 +79,15 @@ public static partial class PythonController
 
             public void Run(dynamic fig, string FontName)
             {
+                if (Plot is not null)
+                    Plots = new List<IPlot> { Plot };
+                if (Plots is null)
+                    throw new Exception("Required to set either Plot or Plots");
+
                 dynamic ax;
 
                 var is3d = Plots.Any(p => p.Is3D);
+
 
                 if (is3d)
                     ax = fig.add_subplot(FigIndex, projection: "3d");
@@ -96,14 +113,22 @@ public static partial class PythonController
                 ax.tick_params(axis: 'x', labelsize: XYZLabelTickSize);
                 if (XLim.HasValue)
                     ax.set_xlim(XLim.Value.min, XLim.Value.max);
+                if (!string.IsNullOrEmpty(XScale))
+                    ax.set_xscale(XScale, @base: XScale_Base);
+
                 ax.tick_params(axis: 'y', labelsize: XYZLabelTickSize);
                 if (YLim.HasValue)
                     ax.set_ylim(YLim.Value.min, YLim.Value.max);
+                if (!string.IsNullOrEmpty(YScale))
+                    ax.set_yscale(YScale, @base: YScale_Base);
+
                 if (is3d)
                 {
                     ax.tick_params(axis: 'z', labelsize: XYZLabelTickSize);
                     if (ZLim.HasValue)
                         ax.set_zlim(ZLim.Value.min, ZLim.Value.max);
+                    if (!string.IsNullOrEmpty(ZScale))
+                        ax.set_zscale(ZScale, @base: ZScale_Base);
                 }
 
                 // グラフから枠線までの距離
@@ -111,7 +136,7 @@ public static partial class PythonController
                     ax.margins(GraphMargins!);
 
                 // grid
-                ax.grid(HasGrid);
+                ax.grid(HasGrid, which: Grid_Which);
 
 
                 // ★★★★★ サブプロット，内側
@@ -126,7 +151,7 @@ public static partial class PythonController
                 // 凡例
                 if (Plots.Any(p => !string.IsNullOrEmpty(p.LegendLabel)))
                     ax.legend(
-                        loc: LegendLocation.ToString().Replace("_"," "),
+                        loc: LegendLocation.ToString().Replace("_", " "),
                         prop: new Dictionary<string, string>
                         {
                             { "family", FontName },

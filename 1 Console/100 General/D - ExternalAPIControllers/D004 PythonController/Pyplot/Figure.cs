@@ -20,6 +20,7 @@ public static partial class PythonController
 
             public bool IsTightLayout { get; set; } = false;
 
+            public SubPlot SubPlot { get; set; }
             public List<SubPlot> SubPlots { get; set; }
 
 
@@ -42,8 +43,11 @@ public static partial class PythonController
                 // ★★★★★ preprocess
                 if (!Activated)
                     throw new Exception("Required to call PythonController.Initialize() first");
+
+                if (SubPlot is not null)
+                    SubPlots = new List<SubPlot> { SubPlot };
                 if (SubPlots is null)
-                    throw new Exception("Required to SubPlots");
+                    throw new Exception("Required to set either SubPlot or SubPlots");
                 outputFile.Directory!.Create();
 
 
