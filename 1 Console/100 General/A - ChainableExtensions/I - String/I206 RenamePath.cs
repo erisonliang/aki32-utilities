@@ -4,11 +4,11 @@ public static partial class ChainableExtensions
 {
 
     /// <summary>
-    /// rename a file path
+    /// rename a file path.
     /// </summary>
     /// <param name="inputPath"></param>
-    /// <param name="newFileNameWithoutExtension">"*" will be replaced with old name</param>
-    /// <param name="replaceSets">replace strings in original file name</param>
+    /// <param name="newFileNameWithoutExtension">First, define base file name. "*" represent old name</param>
+    /// <param name="replaceSets">Second, replace strings in original file name</param>
     /// <returns></returns>
     public static string GetRenamedPath(this string inputPath, string newFileNameWithoutExtension, params (string from, string to)[] replaceSets)
     {
@@ -31,6 +31,14 @@ public static partial class ChainableExtensions
         // post process
         return outputFilePath;
     }
+
+    /// <summary>
+    /// rename a file path.
+    /// </summary>
+    /// <param name="inputPath"></param>
+    /// <param name="replaceSets">Replace strings in original file name</param>
+    /// <returns></returns>
+    public static string GetRenamedPath(this string inputPath, params (string from, string to)[] replaceSets) => GetRenamedPath(inputPath, "*", replaceSets);
 
     /// <summary>
     /// rename a file path

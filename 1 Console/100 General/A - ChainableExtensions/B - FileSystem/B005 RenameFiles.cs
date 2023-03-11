@@ -18,11 +18,8 @@ public static partial class ChainableExtensions
     /// rename all file names in targetDir
     /// </summary>
     /// <param name="inputDir"></param>
-    /// <param name="newFileNameWithoutExtension">with "abc*def", "123" will be "abc123def". must include "*".</param>
-    /// <param name="replaceSets">
-    /// replace designated strings in filenames
-    /// If 0-length array was given, replaceSet will be automatically decided.
-    /// </param>
+    /// <param name="newFileNameWithoutExtension">First, define base file name. "*" represent old name. Must include "*".</param>
+    /// <param name="replaceSets">Second, replace designated strings in filenames<br/>If nothing was given, replaceSet will be automatically decided.</param>
     /// <returns></returns>
     public static DirectoryInfo RenameFiles_AppendAndReplace(this DirectoryInfo inputDir, string newFileNameWithoutExtension, params (string from, string to)[] replaceSets)
     {
@@ -67,8 +64,10 @@ public static partial class ChainableExtensions
             }
 
             var replaceSetList = new List<(string from, string to)>();
-            if (matchF != "") { replaceSetList.Add((matchF, "")); }
-            if (matchB != "") { replaceSetList.Add((matchB, "")); }
+            if (matchF != "")
+            { replaceSetList.Add((matchF, "")); }
+            if (matchB != "")
+            { replaceSetList.Add((matchB, "")); }
             replaceSets = replaceSetList.ToArray();
         }
 
@@ -85,7 +84,7 @@ public static partial class ChainableExtensions
     /// rename all file names in targetDir
     /// </summary>
     /// <param name="targetDir"></param>
-    /// <param name="newFileNameWithoutExtension">with "abc*def", "123" will be "abc123def". must include "*".</param>
+    /// <param name="newFileNameWithoutExtension">First, define base file name. "*" represent old name. Must include "*".</param>
     /// <param name="deletingStringSet">delete designated strings from filenames</param>
     /// <returns></returns>
     public static DirectoryInfo RenameFiles_AppendAndReplace(this DirectoryInfo targetDir, string newFileNameWithoutExtension, params string[] deletingStringSet)
@@ -130,13 +129,13 @@ public static partial class ChainableExtensions
     /// rename a file
     /// </summary>
     /// <param name="inputFile"></param>
-    /// <param name="newNameWithoutExtension">"*" will be replaced with old name</param>
-    /// <param name="replaceSets">replace strings in original file name</param>
+    /// <param name="newFileNameWithoutExtension">First, define base file name. "*" represent old name</param>
+    /// <param name="replaceSets">Second, replace strings in original file name</param>
     /// <returns></returns>
-    public static FileInfo RenameFile(this FileInfo inputFile, string newNameWithoutExtension, params (string from, string to)[] replaceSets)
+    public static FileInfo RenameFile(this FileInfo inputFile, string newFileNameWithoutExtension, params (string from, string to)[] replaceSets)
     {
         // main
-        var outputFile = inputFile.GetRenamedFileInfo(newNameWithoutExtension, replaceSets);
+        var outputFile = inputFile.GetRenamedFileInfo(newFileNameWithoutExtension, replaceSets);
         inputFile.MoveTo(outputFile);
 
 
@@ -145,17 +144,32 @@ public static partial class ChainableExtensions
     }
 
     /// <summary>
-    /// rename a file
+    /// rename a file (sugar)
     /// </summary>
     /// <param name="inputFile"></param>
-    /// <param name="newFileNameWithoutExtension">"*" will be replaced with old name</param>
-    /// <param name="replaceSets">replace strings in original file name</param>
+    /// <param name="replaceSets">Replace strings in original file name</param>
+    /// <returns></returns>
+    public static FileInfo RenameFile(this FileInfo inputFile, params (string from, string to)[] replaceSets)
+        => RenameFile(inputFile, "*", replaceSets);
+
+    /// <summary>
+    /// rename a file (sugar)
+    /// </summary>
+    /// <param name="inputFile"></param>
+    /// <param name="newFileNameWithoutExtension">First, define base file name. "*" represent old name</param>
+    /// <param name="replaceSets">Second, replace strings in original file name</param>
     /// <returns></returns>
     public static FileInfo GetRenamedFileInfo(this FileInfo inputFile, string newFileNameWithoutExtension, params (string from, string to)[] replaceSets)
-    {
-        // sugar
-        return new FileInfo(GetRenamedPath(inputFile.FullName, newFileNameWithoutExtension, replaceSets));
-    }
+        => new(GetRenamedPath(inputFile.FullName, newFileNameWithoutExtension, replaceSets));
+
+    /// <summary>
+    /// rename a file (sugar)
+    /// </summary>
+    /// <param name="inputFile"></param>
+    /// <param name="replaceSets">Replace strings in original file name</param>
+    /// <returns></returns>
+    public static FileInfo GetRenamedFileInfo(this FileInfo inputFile, params (string from, string to)[] replaceSets)
+        => GetRenamedFileInfo(inputFile, "*", replaceSets);
 
     /// <summary>
     /// rename a extension
