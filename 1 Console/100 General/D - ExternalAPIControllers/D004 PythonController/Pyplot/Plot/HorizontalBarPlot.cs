@@ -1,9 +1,5 @@
 ﻿
 
-using DocumentFormat.OpenXml.Drawing.Charts;
-
-using XPlot.Plotly;
-
 namespace Aki32Utilities.ConsoleAppUtilities.General;
 public static partial class PythonController
 {
@@ -20,21 +16,21 @@ public static partial class PythonController
             public string LegendLabel { get; set; } = "";
             public double Alpha { get; set; } = 1;
 
-            public double[] X { get; set; }
+            public double[] Width { get; set; }
             public object[] Y { get; set; }
 
             public double[]? Lefts { get; set; } = null;
-            public double? Height { get; set; } = null;
+            public double? Height { get; set; } = 0.8;
             public double? LineWidth { get; set; } = null;
 
             public string Alignment { get; set; } = "center";
 
             // ★★★★★★★★★★★★★★★ inits
 
-            public HorizontalBarPlot(T_YLabel[]? y, double[] x)
+            public HorizontalBarPlot(T_YLabel[]? y, double[] width)
             {
-                X = x;
                 Y = y?.Select(o => (object)o!)!.ToArray()!;
+                Width = width;
                 Is3D = false;
             }
 
@@ -44,7 +40,7 @@ public static partial class PythonController
             public void Run(dynamic ax)
             {
                 // プロット
-                ax.barh(Y, X,
+                ax.barh(Y, Width, 
                       label: LegendLabel,
                       alpha: Alpha,
 
