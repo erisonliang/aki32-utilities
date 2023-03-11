@@ -16,6 +16,8 @@ public static partial class PythonController
 
             public string Title { get; set; } = null;
             public int TitleSize { get; set; } = 40;
+            public string TitleLocation { get; set; } = "center";
+            public double TitlePadding { get; set; } = 20;
 
             public string XLabel { get; set; } = null;
             public string YLabel { get; set; } = null;
@@ -30,12 +32,12 @@ public static partial class PythonController
             /// </summary>
             public int ZLabelSize { get; set; } = 30;
 
-            public int XLabelPadding { get; set; } = 0;
-            public int YLabelPadding { get; set; } = 0;
+            public int XLabelPadding { get; set; } = 20;
+            public int YLabelPadding { get; set; } = 20;
             /// <summary>
             /// (3d option)
             /// </summary>
-            public int ZLabelPadding { get; set; } = 0;
+            public int ZLabelPadding { get; set; } = 20;
 
             public string? XScale { get; set; } = null;
             public string? YScale { get; set; } = null;
@@ -58,6 +60,7 @@ public static partial class PythonController
 
             public bool HasGrid { get; set; } = true;
             public string Grid_Which { get; set; } = "major";
+            public string Grid_Axis { get; set; } = "both"; // x, y
 
             public IPlot Plot { get; set; }
             public List<IPlot> Plots { get; set; }
@@ -68,9 +71,11 @@ public static partial class PythonController
             {
                 if (InitFor3D)
                 {
-                    XLabelPadding = 20;
-                    YLabelPadding = 20;
-                    ZLabelPadding = 20;
+                    // 
+                }
+                else
+                {
+                    //
                 }
             }
 
@@ -96,7 +101,7 @@ public static partial class PythonController
 
                 // タイトル
                 if (!string.IsNullOrEmpty(Title))
-                    ax.set_title(Title, fontname: FontName, size: TitleSize);
+                    ax.set_title(Title, fontname: FontName, size: TitleSize, loc: TitleLocation, pad: TitlePadding);
 
                 // 軸ラベル
                 if (!string.IsNullOrEmpty(XLabel))
@@ -136,7 +141,7 @@ public static partial class PythonController
                     ax.margins(GraphMargins!);
 
                 // grid
-                ax.grid(HasGrid, which: Grid_Which);
+                ax.grid(HasGrid, which: Grid_Which, axis: Grid_Axis);
 
 
                 // ★★★★★ サブプロット，内側
