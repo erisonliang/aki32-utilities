@@ -793,65 +793,65 @@ public static partial class ExampleExecuter
 
                         // grid heatmap
                         {
-                            // ★★★★★
-                            var n = 10;
-                            var XX = EnumerableExtension.Range_WithCount(0, 9, n).ToArray();
-                            var YY = EnumerableExtension.Range_WithCount(0, 9, n).ToArray();
-                            var ZZ = Enumerable
-                                .SelectMany(XX, x => YY, (x, y) =>
-                                {
-                                    return (x * y);
-                                })
-                                .ToArray().ReShape(n, n);
+                            //// ★★★★★
+                            //var n = 10;
+                            //var XX = EnumerableExtension.Range_WithStep(0, n-1, 1).ToArray();
+                            //var YY = EnumerableExtension.Range_WithStep(0, n-1, 1).ToArray();
+                            //var ZZ = Enumerable
+                            //    .SelectMany(XX, x => YY, (x, y) =>
+                            //    {
+                            //        return (x * y);
+                            //    })
+                            //    .ToArray().ReShape(n, n);
 
-                            // ★★★★★ heatmap
-                            new PythonController.PyPlot.Figure()
-                            {
-                                IsTightLayout = true,
-                                SubPlot = new PythonController.PyPlot.SubPlot()
-                                {
-                                    XLabel = "X",
-                                    YLabel = "Y",
-                                    Title = "heatmap",
-                                    HasGrid = false,
-                                    Plot = new PythonController.PyPlot.GridHeatMapPlot(XX, YY, ZZ)
-                                    {
-                                        ColorMap = "cividis",
-                                    },
-                                }
-                            }.Run(output.GetChildFileInfo("heatmap.png"), true);
+                            //// ★★★★★ 
+                            //new PythonController.PyPlot.Figure()
+                            //{
+                            //    IsTightLayout = true,
+                            //    SubPlot = new PythonController.PyPlot.SubPlot()
+                            //    {
+                            //        XLabel = "X",
+                            //        YLabel = "Y",
+                            //        Title = "grid heatmap",
+                            //        HasGrid = false,
+                            //        Plot = new PythonController.PyPlot.GridHeatMapPlot(XX, YY, ZZ)
+                            //        {
+                            //            ColorMap = "cividis",
+                            //        },
+                            //    }
+                            //}.Run(output.GetChildFileInfo("grid heatmap.png"), true);
 
                         }
 
                         // precise heatmap
                         {
-                            // ★★★★★
-                            var n = 10;
-                            var XX = EnumerableExtension.Range_WithCount(0, 9, n).ToArray();
-                            var YY = EnumerableExtension.Range_WithCount(0, 9, n).ToArray();
-                            var ZZ = Enumerable
-                                .SelectMany(XX, x => YY, (x, y) =>
-                                {
-                                    return (x * y);
-                                })
-                                .ToArray().ReShape(n, n);
+                            //// ★★★★★
+                            //var n = 333;
+                            //var XX = EnumerableExtension.Range_WithCount(0, 5, n).ToArray();
+                            //var YY = EnumerableExtension.Range_WithCount(0, 5, n).ToArray();
+                            //var ZZ = Enumerable
+                            //    .SelectMany(XX, x => YY, (x, y) =>
+                            //    {
+                            //        return (x * y);
+                            //    })
+                            //    .ToArray().ReShape(n, n);
 
-                            // ★★★★★ heatmap
-                            new PythonController.PyPlot.Figure()
-                            {
-                                IsTightLayout = true,
-                                SubPlot = new PythonController.PyPlot.SubPlot()
-                                {
-                                    XLabel = "X",
-                                    YLabel = "Y",
-                                    Title = "heatmap",
-                                    HasGrid = false,
-                                    Plot = new PythonController.PyPlot.GridHeatMapPlot(XX, YY, ZZ)
-                                    {
-                                        ColorMap = "cividis",
-                                    },
-                                }
-                            }.Run(output.GetChildFileInfo("heatmap.png"), true);
+                            //// ★★★★★ 
+                            //new PythonController.PyPlot.Figure()
+                            //{
+                            //    IsTightLayout = true,
+                            //    SubPlot = new PythonController.PyPlot.SubPlot()
+                            //    {
+                            //        XLabel = "X",
+                            //        YLabel = "Y",
+                            //        Title = "continuous heatmap",
+                            //        HasGrid = false,
+                            //        Plot = new PythonController.PyPlot.ContinuousHeatMapPlot(XX, YY, ZZ)
+                            //        {
+                            //            ColorMap = "cividis",
+                            //        },
+                            //    }
+                            //}.Run(output.GetChildFileInfo("continuous heatmap.png"), true);
 
                         }
 

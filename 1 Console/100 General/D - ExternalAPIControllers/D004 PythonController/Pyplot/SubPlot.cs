@@ -67,9 +67,9 @@ public static partial class PythonController
             /// </summary>
             public int ZLabelTickSize { get; set; } = 20;
 
-            public bool InvertXAxis { get; set; } = false;
-            public bool InvertYAxis { get; set; } = false;
-            public bool InvertZAxis { get; set; } = false;
+            public bool XAxisInvert { get; set; } = false;
+            public bool YAxisInvert { get; set; } = false;
+            public bool ZAxisInvert { get; set; } = false;
             public bool XAxisTickTop { get; set; } = false;
             public bool YAxisTickRight { get; set; } = false;
 
@@ -145,7 +145,7 @@ public static partial class PythonController
                     ax.set_xlim(XLim.Value.min, XLim.Value.max);
                 if (!string.IsNullOrEmpty(XScale))
                     ax.set_xscale(XScale, @base: XScale_Base);
-                if (InvertXAxis)
+                if (XAxisInvert)
                     ax.invert_xaxis();
                 if (XAxisTickTop)
                     ax.xaxis.tick_top();
@@ -155,7 +155,7 @@ public static partial class PythonController
                     ax.set_ylim(YLim.Value.min, YLim.Value.max);
                 if (!string.IsNullOrEmpty(YScale))
                     ax.set_yscale(YScale, @base: YScale_Base);
-                if (InvertYAxis)
+                if (YAxisInvert)
                     ax.invert_yaxis();
                 if (YAxisTickRight)
                     ax.yaxis.tick_right();
@@ -167,7 +167,7 @@ public static partial class PythonController
                         ax.set_zlim(ZLim.Value.min, ZLim.Value.max);
                     if (!string.IsNullOrEmpty(ZScale))
                         ax.set_zscale(ZScale, @base: ZScale_Base);
-                    if (InvertZAxis)
+                    if (ZAxisInvert)
                         ax.invert_zaxis();
                 }
 
