@@ -30,8 +30,8 @@ public static partial class PythonController
             public string ColorMap { get; set; } = "coolwarm"; //Blues
             public (double? min, double? max) ColorLim { get; set; } = (null, null);
 
-            public bool OverwriteInvertYAxis { get; set; } = false;
             public bool OverwriteXAxisTickTop { get; set; } = false;
+            public bool OverwriteYAxisInvert { get; set; } = false;
 
             public bool UseColorBar { get; set; } = true;
             public string ColorBarOrientation { get; set; } = "vertical";
@@ -100,7 +100,7 @@ public static partial class PythonController
             public void Run(dynamic fig, dynamic ax, string FontName)
             {
                 // 前準備
-                if (OverwriteInvertYAxis)
+                if (OverwriteYAxisInvert)
                     ax.invert_yaxis();
                 if (OverwriteXAxisTickTop)
                     ax.xaxis.tick_top();
