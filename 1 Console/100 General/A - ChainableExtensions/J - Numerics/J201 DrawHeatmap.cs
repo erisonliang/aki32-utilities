@@ -182,7 +182,7 @@ public static partial class ChainableExtensions
     /// <param name="targetImageWidth">set desired image width to this. 300 by default</param>
     /// <param name="targetCellSize">number of cell pixels for one data</param>
     /// <returns></returns>
-    public static FileInfo DrawHeatmapAsImage(this double[,] inputData,
+    public static FileInfo DrawHeatmapAsSimpleImage(this double[,] inputData,
         FileInfo? outputFile = null,
         double? minValue = null,
         double? maxValue = null,
@@ -239,6 +239,59 @@ public static partial class ChainableExtensions
         return outputFile!;
     }
 
+    /// <summary>
+    /// Write 2D array heatmap as an image
+    /// </summary>
+    /// <param name="inputData"></param>
+    /// <param name="outputFile">when null, automatically set to temporary file</param>
+    /// <param name="minValue"></param>
+    /// <param name="maxValue"></param>
+    /// <param name="targetImageWidth">set desired image width to this. 300 by default</param>
+    /// <param name="targetCellSize">number of cell pixels for one data</param>
+    /// <returns></returns>
+    public static FileInfo DrawHeatmapAsPyPlotImage(this double[,] inputData,
+        FileInfo? outputFile = null,
+        double? minValue = null,
+        double? maxValue = null,
+        bool preview = false
+        )
+    {
+        // preprocess
+        outputFile ??= new FileInfo(Path.GetTempFileName().GetExtensionChangedPath(".png"));
+        UtilPreprocessors.PreprocessOutFile(ref outputFile!, null!, "heatmap.png");
+
+        var reshaped = inputData.ReShape();
+        minValue ??= reshaped.Min();
+        maxValue ??= reshaped.Max();
+
+        var dim0 = inputData.GetLength(0);
+        var dim1 = inputData.GetLength(1);
+
+        var XX = EnumerableExtension.Range_WithStep(0, dim0 - 1, 1).ToArray();
+        var YY = EnumerableExtension.Range_WithStep(0, dim1 - 1, 1).ToArray();
+
+        // main
+        new PythonController.PyPlot.Figure()
+        {
+            IsTightLayout = true,
+            SubPlot = new PythonController.PyPlot.SubPlot()
+            {
+                XLabel = "dim = 0",
+                YLabel = "dim = 1",
+                HasGrid = false,
+                Plot = new PythonController.PyPlot.ContinuousHeatMapPlot(XX, YY, inputData)
+                {
+                    ColorMap = "gray",
+                    ColorLim = (minValue, maxValue),
+                    OverwriteXAxisTickTop = true,
+                    OverwriteYAxisInvert = true,
+                },
+            }
+        }.Run(outputFile, preview);
+
+        return outputFile!;
+    }
+
 
     // ★★★★★★★★★★★★★★★ sub
 
@@ -247,6 +300,7 @@ public static partial class ChainableExtensions
     internal const string FadeStringSet3 = " .'`^\",:;Il!i><~+_-?][}{1)(|\\/tfjrxnuvczXYUJCLQ0OZmwqpdbkhao*#MW&8%B@$";
     internal const string FadeStringSet4 = " .:-=+*#%@";
     internal const string FadeStringSet5 = " .,-~:;=!*#$@";
+
 
     // ★★★★★★★★★★★★★★★ 
 

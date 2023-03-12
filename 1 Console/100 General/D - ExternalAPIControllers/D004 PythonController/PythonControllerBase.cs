@@ -26,6 +26,10 @@ public static partial class PythonController
         List<string> additionalPath = null
         )
     {
+        // ★
+        if (Activated)
+            return; // already activated
+
         // ★ セット
         Activated = true;
         DllName = dllName;

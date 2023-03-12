@@ -79,6 +79,7 @@ public static partial class ExampleExecuter
 
                 // 3201 ReShape, 3202 GetRangeSlice, J201 DrawHeatmap, E103 ShowImage
                 {
+
                     //var i2d = Enumerable.Range(0, 36).Select(x => (double)x).ToArray();
                     //Console.WriteLine("i2d:");
                     //i2d.WriteToConsole();
@@ -91,9 +92,9 @@ public static partial class ExampleExecuter
                     //i2d_Reshaped.WriteToConsole();
                     //Console.WriteLine();
                     //i2d_Reshaped.DrawHeatmapToConsole();
-                    //i2d_Reshaped
-                    //    .DrawHeatmapAsImage()
-                    //    .ShowImage_OnThread();
+                    //i2d_Reshaped.DrawHeatmapAsSimpleImage().ShowImage_OnThread(false);
+                    //PythonController.Initialize();
+                    //i2d_Reshaped.DrawHeatmapAsPyPlotImage(preview: true);
                     //Console.WriteLine();
 
                     //var i2d_Reshaped_Reshaped = i2d_Reshaped.ReShape();
