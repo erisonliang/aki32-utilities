@@ -29,7 +29,7 @@ public class EnumerableExtension
     /// <returns></returns>
     public static IEnumerable<double> Range_WithStep(double from, double to, double step)
     {
-        var count = (int)((to - from) / step);
+        var count = (int)((to + 1 - from) / step);
         return Range_WithCount(from, to, count);
     }
 
