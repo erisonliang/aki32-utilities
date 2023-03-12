@@ -1,5 +1,9 @@
 ﻿
 
+using MathNet.Numerics.Interpolation;
+
+using OpenCvSharp;
+
 namespace Aki32Utilities.ConsoleAppUtilities.General;
 public static partial class PythonController
 {
@@ -47,7 +51,27 @@ public static partial class PythonController
             public int? YScale_Base { get; set; } = 10;
             public int? ZScale_Base { get; set; } = 10;
 
-            public int XYZLabelTickSize { get; set; } = 20;
+            public int XYZLabelTickSize
+            {
+                set
+                {
+                    XLabelTickSize = value;
+                    YLabelTickSize = value;
+                    ZLabelTickSize = value;
+                }
+            }
+            public int XLabelTickSize { get; set; } = 20;
+            public int YLabelTickSize { get; set; } = 20;
+            /// <summary>
+            /// (3d option)
+            /// </summary>
+            public int ZLabelTickSize { get; set; } = 20;
+
+            public bool InvertXAxis { get; set; } = false;
+            public bool InvertYAxis { get; set; } = false;
+            public bool InvertZAxis { get; set; } = false;
+            public bool XAxisTickTop { get; set; } = false;
+            public bool YAxisTickRight { get; set; } = false;
 
             public (double min, double max)? XLim { get; set; }
             public (double min, double max)? YLim { get; set; }
@@ -99,11 +123,11 @@ public static partial class PythonController
                 else
                     ax = fig.add_subplot(FigIndex);
 
-                // タイトル
+                // ★ タイトル
                 if (!string.IsNullOrEmpty(Title))
                     ax.set_title(Title, fontname: FontName, size: TitleSize, loc: TitleLocation, pad: TitlePadding);
 
-                // 軸ラベル
+                // ★ 軸ラベル
                 if (!string.IsNullOrEmpty(XLabel))
                     ax.set_xlabel(XLabel, size: XLabelSize, fontname: FontName, labelpad: XLabelPadding);
                 if (!string.IsNullOrEmpty(YLabel))
@@ -114,46 +138,60 @@ public static partial class PythonController
                         ax.set_zlabel(ZLabel, size: ZLabelSize, fontname: FontName, labelpad: ZLabelPadding);
                 }
 
-                // 軸目盛
-                ax.tick_params(axis: 'x', labelsize: XYZLabelTickSize);
+
+                // ★ 軸目盛
+                ax.tick_params(axis: 'x', labelsize: XLabelTickSize);
                 if (XLim.HasValue)
                     ax.set_xlim(XLim.Value.min, XLim.Value.max);
                 if (!string.IsNullOrEmpty(XScale))
                     ax.set_xscale(XScale, @base: XScale_Base);
+                if (InvertXAxis)
+                    ax.invert_xaxis();
+                if (XAxisTickTop)
+                    ax.xaxis.tick_top();
 
-                ax.tick_params(axis: 'y', labelsize: XYZLabelTickSize);
+                ax.tick_params(axis: 'y', labelsize: YLabelTickSize);
                 if (YLim.HasValue)
                     ax.set_ylim(YLim.Value.min, YLim.Value.max);
                 if (!string.IsNullOrEmpty(YScale))
                     ax.set_yscale(YScale, @base: YScale_Base);
+                if (InvertYAxis)
+                    ax.invert_yaxis();
+                if (YAxisTickRight)
+                    ax.yaxis.tick_right();
 
                 if (is3d)
                 {
-                    ax.tick_params(axis: 'z', labelsize: XYZLabelTickSize);
+                    ax.tick_params(axis: 'z', labelsize: ZLabelTickSize);
                     if (ZLim.HasValue)
                         ax.set_zlim(ZLim.Value.min, ZLim.Value.max);
                     if (!string.IsNullOrEmpty(ZScale))
                         ax.set_zscale(ZScale, @base: ZScale_Base);
+                    if (InvertZAxis)
+                        ax.invert_zaxis();
                 }
 
-                // グラフから枠線までの距離
+
+                // ★ グラフから枠線までの距離
                 if (GraphMargins.HasValue)
                     ax.margins(GraphMargins!);
 
-                // grid
+                // ★ grid
                 ax.grid(HasGrid, which: Grid_Which, axis: Grid_Axis);
+
 
 
                 // ★★★★★ サブプロット，内側
 
-                // プロット
+                // ★ プロット
                 foreach (var Plot in Plots)
-                    Plot.Run(ax);
+                    Plot.Run(fig, ax, FontName);
+
 
 
                 // ★★★★★ 最後に呼ぶべきもの
 
-                // 凡例
+                // ★ 凡例
                 if (Plots.Any(p => !string.IsNullOrEmpty(p.LegendLabel)))
                     ax.legend(
                         loc: LegendLocation.ToString().Replace("_", " "),

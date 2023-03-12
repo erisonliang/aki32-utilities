@@ -1,4 +1,5 @@
 ﻿using Python.Runtime;
+
 using XPlot.Plotly;
 
 namespace Aki32Utilities.ConsoleAppUtilities.General;
@@ -91,6 +92,12 @@ public static partial class PythonController
 
 
     // ★★★★★★★★★★★★★★★ methods
+
+    private static dynamic ToCorrect1DNDArray<T>(dynamic X)
+    {
+        dynamic np = Import("numpy");
+        return np.array(X);
+    }
 
     private static dynamic ToCorrect2DNDArray<T>(dynamic X)
     {

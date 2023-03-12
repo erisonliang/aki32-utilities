@@ -100,7 +100,7 @@ public static partial class PythonController
 
             // ★★★★★★★★★★★★★★★ methods
 
-            public void Run(dynamic ax)
+            public void Run(dynamic fig, dynamic ax, string FontName)
             {
                 // プロット
                 var surf = ax.plot_surface(X, Y, Z,

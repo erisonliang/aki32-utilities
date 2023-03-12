@@ -16,15 +16,18 @@ public static partial class PythonController
             public string LegendLabel { get; set; } = "";
             public double Alpha { get; set; } = 1;
 
-            public double X { get; set; }
-            public double Y { get; set; }
-            /// <summary>
-            /// (3d option)
-            /// </summary>
             public string Text { get; set; }
 
-            public string? Color { get; set; } = null;
-            public int? FontSize { get; set; } = null;
+            public double X { get; set; }
+            public double Y { get; set; }
+            public double Rotation { get; set; }
+
+            public string? OverwriteFontName { get; set; } = null;
+            public string? FontColor { get; set; } = null;
+            public int? FontSize { get; set; } = 20;
+
+            public string HorizontalAlignment { get; set; } = "left";
+            public string VerticalAlignment { get; set; } = "bottom";
 
 
             // ★★★★★★★★★★★★★★★ inits
@@ -40,12 +43,25 @@ public static partial class PythonController
 
             // ★★★★★★★★★★★★★★★ methods
 
-            public void Run(dynamic ax)
+            public void Run(dynamic fig, dynamic ax, string FontName)
             {
+                if (!string.IsNullOrEmpty(OverwriteFontName))
+                    FontName = OverwriteFontName;
+
                 // プロット
                 ax.text(X, Y, Text,
-                    color: Color,
-                    size: FontSize
+
+                    //transform: ax.transAxes // Relative to ax grid 0-1
+
+                    fontname: FontName,
+                    size: FontSize,
+                    color: FontColor,
+
+                    horizontalalignment: HorizontalAlignment,
+                    verticalalignment: VerticalAlignment,
+
+                    rotation: Rotation
+
                     );
             }
 

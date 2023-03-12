@@ -1,0 +1,125 @@
+﻿
+
+using MathNet.Numerics.Interpolation;
+
+using OpenCvSharp;
+
+using XPlot.Plotly;
+
+namespace Aki32Utilities.ConsoleAppUtilities.General;
+public static partial class PythonController
+{
+    public partial class PyPlot
+    {
+        /// <summary>
+        /// 2D
+        /// </summary>
+        public class GridHeatMapPlot : IPlot
+        {
+
+            // ★★★★★★★★★★★★★★★ props
+
+            public bool Is3D { get; set; } = true;
+            public string LegendLabel { get; set; } = "";
+            public double Alpha { get; set; } = 1;
+
+            public string[] X { get; set; }
+            public string[] Y { get; set; }
+            public dynamic Z { get; set; }
+
+            public string Interpolation { get; set; } = "nearest";
+            public string ColorMap { get; set; } = "coolwarm"; //Blues
+
+            public bool OverwriteInvertYAxis { get; set; } = false;
+            public bool OverwriteXAxisTickTop { get; set; } = true;
+
+            public bool UseColorBar { get; set; } = true;
+            public string ColorBarOrientation { get; set; } = "vertical";
+
+            // ★★★★★★★★★★★★★★★ inits
+
+            /// <summary>
+            /// </summary>
+            /// <param name="x"></param>
+            /// <param name="y"></param>
+            /// <param name="z">/param>
+            public GridHeatMapPlot(double[] x, double[] y, double[,] z)
+            {
+                X = x.Select(s => s.ToString()).ToArray();
+                Y = y.Select(s => s.ToString()).ToArray();
+                Z = ToCorrect2DNDArray<double>(z);
+
+                Is3D = false;
+            }
+
+            /// <summary>
+            /// </summary>
+            /// <param name="x"></param>
+            /// <param name="y"></param>
+            /// <param name="z">/param>
+            public GridHeatMapPlot(int[] x, int[] y, double[,] z)
+            {
+                X = x.Select(s => s.ToString()).ToArray();
+                Y = y.Select(s => s.ToString()).ToArray();
+                Z = ToCorrect2DNDArray<double>(z);
+
+                Is3D = false;
+            }
+
+            /// <summary>
+            /// </summary>
+            /// <param name="x"></param>
+            /// <param name="y"></param>
+            /// <param name="z">/param>
+            public GridHeatMapPlot(string[] x, string[] y, float[,] z)
+            {
+                X = x;
+                Y = y;
+                Z = ToCorrect2DNDArray<float>(z);
+
+                Is3D = false;
+            }
+
+
+            // ★★★★★★★★★★★★★★★ methods
+
+            public void Run(dynamic fig, dynamic ax, string FontName)
+            {
+                // プロット
+                var heatmap = ax.imshow(Z,
+                     label: LegendLabel,
+                     alpha: Alpha,
+
+                     interpolation: Interpolation,
+                     cmap: ColorMap
+                     );
+
+                if (UseColorBar)
+                    fig.colorbar(heatmap,
+                        ax: ax,
+                        orientation: ColorBarOrientation
+                        );
+
+                ax.set_xticks(Enumerable.Range(0, X.Length).ToArray());
+                if (X is not null)
+                    ax.set_xticklabels(X, minor: true);
+
+                ax.set_yticks(Enumerable.Range(0, Y.Length).ToArray());
+                if (Y is not null)
+                    ax.set_yticklabels(Y, minor: true);
+
+
+                //plt.imshow( vmin = 0, vmax = 1, cmap = 'jet');
+
+                if (OverwriteInvertYAxis)
+                    ax.invert_yaxis();
+                if (OverwriteXAxisTickTop)
+                    ax.xaxis.tick_top();
+
+            }
+
+            // ★★★★★★★★★★★★★★★ 
+
+        }
+    }
+}

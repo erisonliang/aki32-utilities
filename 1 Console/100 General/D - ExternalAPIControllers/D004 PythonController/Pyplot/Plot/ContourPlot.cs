@@ -112,7 +112,7 @@ public static partial class PythonController
 
             // ★★★★★★★★★★★★★★★ methods
 
-            public void Run(dynamic ax)
+            public void Run(dynamic fig, dynamic ax, string FontName)
             {
                 // プロット
                 dynamic cset;

@@ -741,16 +741,14 @@ public static partial class ExampleExecuter
 
                         // surface
                         {
-
-                            //var n = 50;
+                            var n = 50;
 
                             //// ★★★★★ 1
-                            ////var XX = EnumerableExtension.Range_WithCount(-3 * pi, 3 * pi, n).ToArray();
-                            ////var YY = EnumerableExtension.Range_WithCount(-3 * pi, 3 * pi, n).ToArray();
-                            ////var ZZ = Enumerable
-                            ////    .SelectMany(XX, x => YY, (x, y) => (double)(np.sin(x / pi) * np.cos(y / pi)))
-                            ////    .ToArray().ReShape(n, n);
-
+                            //var XX = EnumerableExtension.Range_WithCount(-3 * pi, 3 * pi, n).ToArray();
+                            //var YY = EnumerableExtension.Range_WithCount(-3 * pi, 3 * pi, n).ToArray();
+                            //var ZZ = Enumerable
+                            //    .SelectMany(XX, x => YY, (x, y) => (double)(np.sin(x / pi) * np.cos(y / pi)))
+                            //    .ToArray().ReShape(n, n);
 
                             //// ★★★★★ 2
                             //var XX = EnumerableExtension.Range_WithCount(-4, 4, n).ToArray();
@@ -765,8 +763,7 @@ public static partial class ExampleExecuter
                             //    })
                             //    .ToArray().ReShape(n, n);
 
-
-                            //// ★★★★★ 
+                            //// ★★★★★ surface
                             //new PythonController.PyPlot.Figure(true)
                             //{
                             //    IsTightLayout = true,
@@ -792,6 +789,69 @@ public static partial class ExampleExecuter
                             //    }
                             //}.Run(output.GetChildFileInfo("surface.png"), true);
 
+                        }
+
+                        // grid heatmap
+                        {
+                            // ★★★★★
+                            var n = 10;
+                            var XX = EnumerableExtension.Range_WithCount(0, 9, n).ToArray();
+                            var YY = EnumerableExtension.Range_WithCount(0, 9, n).ToArray();
+                            var ZZ = Enumerable
+                                .SelectMany(XX, x => YY, (x, y) =>
+                                {
+                                    return (x * y);
+                                })
+                                .ToArray().ReShape(n, n);
+
+                            // ★★★★★ heatmap
+                            new PythonController.PyPlot.Figure()
+                            {
+                                IsTightLayout = true,
+                                SubPlot = new PythonController.PyPlot.SubPlot()
+                                {
+                                    XLabel = "X",
+                                    YLabel = "Y",
+                                    Title = "heatmap",
+                                    HasGrid = false,
+                                    Plot = new PythonController.PyPlot.GridHeatMapPlot(XX, YY, ZZ)
+                                    {
+                                        ColorMap = "cividis",
+                                    },
+                                }
+                            }.Run(output.GetChildFileInfo("heatmap.png"), true);
+
+                        }
+
+                        // precise heatmap
+                        {
+                            // ★★★★★
+                            var n = 10;
+                            var XX = EnumerableExtension.Range_WithCount(0, 9, n).ToArray();
+                            var YY = EnumerableExtension.Range_WithCount(0, 9, n).ToArray();
+                            var ZZ = Enumerable
+                                .SelectMany(XX, x => YY, (x, y) =>
+                                {
+                                    return (x * y);
+                                })
+                                .ToArray().ReShape(n, n);
+
+                            // ★★★★★ heatmap
+                            new PythonController.PyPlot.Figure()
+                            {
+                                IsTightLayout = true,
+                                SubPlot = new PythonController.PyPlot.SubPlot()
+                                {
+                                    XLabel = "X",
+                                    YLabel = "Y",
+                                    Title = "heatmap",
+                                    HasGrid = false,
+                                    Plot = new PythonController.PyPlot.GridHeatMapPlot(XX, YY, ZZ)
+                                    {
+                                        ColorMap = "cividis",
+                                    },
+                                }
+                            }.Run(output.GetChildFileInfo("heatmap.png"), true);
 
                         }
 
@@ -837,23 +897,27 @@ public static partial class ExampleExecuter
 
                         // Text
                         {
+
                             //new PythonController.PyPlot.Figure
                             //{
                             //    IsTightLayout = true,
                             //    SubPlot = new PythonController.PyPlot.SubPlot()
                             //    {
-                            //        XLim = (-8, 8),
-                            //        YLim = (-8, 8),
                             //        HasGrid = true,
                             //        XLabel = "x",
                             //        YLabel = "y",
                             //        ZLabel = "z",
-                            //        Plot = new PythonController.PyPlot.TextPlot(3, 3, "aiueo")
+                            //        Plot = new PythonController.PyPlot.TextPlot(0.5, 0.5, "aiueoあいうえお")
                             //        {
                             //        },
                             //    }
 
                             //}.Run(output.GetChildFileInfo("text.png"), true);
+
+                        }
+
+                        {
+
                         }
 
 

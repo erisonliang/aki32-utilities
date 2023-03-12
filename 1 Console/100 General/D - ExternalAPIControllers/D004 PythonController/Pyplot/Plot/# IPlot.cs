@@ -21,7 +21,7 @@ public static partial class PythonController
             public string LegendLabel { get; set; }
             public double Alpha { get; set; }
 
-            public void Run(dynamic ax);
+            public void Run(dynamic fig, dynamic ax, string FontName);
         }
     }
 }
