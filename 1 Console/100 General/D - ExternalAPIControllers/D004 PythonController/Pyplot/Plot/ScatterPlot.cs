@@ -45,8 +45,7 @@ public static partial class PythonController
             public string EdgeColors { get; set; } = "black";
             public string ColorMap { get; set; } = "Blues";
             //public double Normalize { get; set; }
-            public double UpperThreshold { get; set; }
-            public double LowerThreshold { get; set; }
+            public (double? min, double? max) ColorLim { get; set; } = (null, null);
 
 
             // ★★★★★★★★★★★★★★★ inits
@@ -110,8 +109,8 @@ public static partial class PythonController
 
                             cmap: ColorMap,
                             //norm : Normalize,
-                            vmin: LowerThreshold,
-                            vmax: UpperThreshold
+                            vmin: ColorLim.min,
+                            vmax: ColorLim.max
                         );
                     }
                     else
@@ -157,8 +156,8 @@ public static partial class PythonController
 
                             cmap: ColorMap,
                             //norm : Normalize,
-                            vmin: LowerThreshold,
-                            vmax: UpperThreshold
+                            vmin: ColorLim.min,
+                            vmax: ColorLim.max
                         );
                     }
                     else
