@@ -80,6 +80,14 @@ public static partial class PythonController
             /// </summary>
             public (double min, double max)? ZLim { get; set; }
 
+            /// <summary>
+            /// https://matplotlib.org/stable/api/_as_gen/mpl_toolkits.mplot3d.axes3d.Axes3D.view_init.html
+            /// </summary>
+            public double? CameraElevationAngle { get; set; } = null;
+            public double? CameraAzimuthalAngle { get; set; } = null;
+            public double? CameraRollAngle { get; set; } = null;
+            public string CameraVerticalAxis { get; set; } = "z";
+
             public double? GraphMargins { get; set; } = null;
 
             public bool HasGrid { get; set; } = true;
@@ -175,6 +183,12 @@ public static partial class PythonController
                 // ★ グラフから枠線までの距離
                 if (GraphMargins.HasValue)
                     ax.margins(GraphMargins!);
+
+
+                // ★ カメラ位置
+                if (is3d)
+                    ax.view_init(elev: CameraElevationAngle, azim: CameraAzimuthalAngle, roll: CameraRollAngle, vertical_axis: CameraVerticalAxis);
+
 
                 // ★ grid
                 ax.grid(HasGrid, which: Grid_Which, axis: Grid_Axis);

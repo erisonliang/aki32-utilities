@@ -56,7 +56,7 @@ public static partial class PythonController
             /// <param name="x">T[][], T[,] or NDArray. T = float or double</param>
             /// <param name="y">same as x format</param>
             /// <param name="z">same as x format</param>
-            public ContourPlot(dynamic x, dynamic y, dynamic z, bool is3D, int level)
+            public ContourPlot(dynamic x, dynamic y, dynamic z, bool is3D)
             {
                 try
                 {
@@ -72,7 +72,6 @@ public static partial class PythonController
                 }
 
                 Is3D = is3D;
-                Levels = level;
             }
 
             /// <summary>
@@ -80,33 +79,12 @@ public static partial class PythonController
             /// <param name="x"></param>
             /// <param name="y"></param>
             /// <param name="z">/param>
-            public ContourPlot(double[] x, double[] y, double[,] z, bool is3D, int level)
+            public ContourPlot(double[] x, double[] y, double[,] z, bool is3D)
             {
+                (X, Y) = GetMeshGrid(x, y);
                 Z = ToCorrect2DNDArray<double>(z);
-                dynamic np = Import("numpy");
-                dynamic mesh = np.meshgrid(np.array(x), np.array(y));
-                X = mesh[0];
-                Y = mesh[1];
 
                 Is3D = is3D;
-                Levels = level;
-            }
-
-            /// <summary>
-            /// </summary>
-            /// <param name="x"></param>
-            /// <param name="y"></param>
-            /// <param name="z">/param>
-            public ContourPlot(float[] x, float[] y, float[,] z, bool is3D, int level)
-            {
-                Z = ToCorrect2DNDArray<float>(z);
-                dynamic np = Import("numpy");
-                dynamic mesh = np.meshgrid(np.array(x), np.array(y));
-                X = mesh[0];
-                Y = mesh[1];
-
-                Is3D = is3D;
-                Levels = level;
             }
 
 

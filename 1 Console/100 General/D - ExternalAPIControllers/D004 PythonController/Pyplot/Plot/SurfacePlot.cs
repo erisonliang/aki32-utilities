@@ -72,27 +72,8 @@ public static partial class PythonController
             /// <param name="z">/param>
             public SurfacePlot(double[] x, double[] y, double[,] z)
             {
+                (X, Y) = GetMeshGrid(x, y);
                 Z = ToCorrect2DNDArray<double>(z);
-                dynamic np = Import("numpy");
-                dynamic mesh = np.meshgrid(np.array(x), np.array(y));
-                X = mesh[0];
-                Y = mesh[1];
-
-                Is3D = true;
-            }
-
-            /// <summary>
-            /// </summary>
-            /// <param name="x"></param>
-            /// <param name="y"></param>
-            /// <param name="z">/param>
-            public SurfacePlot(float[] x, float[] y, float[,] z)
-            {
-                Z = ToCorrect2DNDArray<float>(z);
-                dynamic np = Import("numpy");
-                dynamic mesh = np.meshgrid(np.array(x), np.array(y));
-                X = mesh[0];
-                Y = mesh[1];
 
                 Is3D = true;
             }
@@ -103,7 +84,7 @@ public static partial class PythonController
             public void Run(dynamic fig, dynamic ax, string FontName)
             {
                 // プロット
-                var surf = ax.plot_surface(X, Y, Z,
+                ax.plot_surface(X, Y, Z,
                     label: LegendLabel,
                     alpha: Alpha,
 

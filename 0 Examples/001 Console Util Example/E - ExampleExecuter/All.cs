@@ -740,16 +740,44 @@ public static partial class ExampleExecuter
 
                         }
 
+                        // 3d bar
+                        {
+                            //var n = 5;
+
+                            //// ★★★★★
+                            //var XX = EnumerableExtension.Range_WithStep(0, n - 1, 1).ToArray();
+                            //var YY = EnumerableExtension.Range_WithStep(0, n - 1, 1).ToArray();
+                            //var ZZ = Enumerable.SelectMany(XX, x => YY, (x, y) => (x + 1) * y).ToArray().ReShape(n, n);
+
+                            //// ★★★★★ bar3d
+                            //new PythonController.PyPlot.Figure(true)
+                            //{
+                            //    IsTightLayout = true,
+                            //    SubPlot = new PythonController.PyPlot.SubPlot(true)
+                            //    {
+                            //        XLabel = "X",
+                            //        YLabel = "Y",
+                            //        ZLabel = "Z",
+                            //        Title = "bar3d",
+                            //        Plot = new PythonController.PyPlot.Bar3DPlot(XX, YY, 0.8, 0.8, ZZ, true)
+                            //        {
+                            //            Alpha = 0.5,
+                            //        }
+                            //    }
+                            //}.Run(output.GetChildFileInfo("bar3d.png"), true);
+
+                        }
+
                         // surface
                         {
-                            var n = 50;
+                            //var n = 50;
 
                             //// ★★★★★ 1
-                            //var XX = EnumerableExtension.Range_WithCount(-3 * pi, 3 * pi, n).ToArray();
-                            //var YY = EnumerableExtension.Range_WithCount(-3 * pi, 3 * pi, n).ToArray();
-                            //var ZZ = Enumerable
-                            //    .SelectMany(XX, x => YY, (x, y) => (double)(np.sin(x / pi) * np.cos(y / pi)))
-                            //    .ToArray().ReShape(n, n);
+                            ////var XX = EnumerableExtension.Range_WithCount(-3 * pi, 3 * pi, n).ToArray();
+                            ////var YY = EnumerableExtension.Range_WithCount(-3 * pi, 3 * pi, n).ToArray();
+                            ////var ZZ = Enumerable
+                            ////    .SelectMany(XX, x => YY, (x, y) => (double)(np.sin(x / pi) * np.cos(y / pi)))
+                            ////    .ToArray().ReShape(n, n);
 
                             //// ★★★★★ 2
                             //var XX = EnumerableExtension.Range_WithCount(-4, 4, n).ToArray();
@@ -762,7 +790,7 @@ public static partial class ExampleExecuter
                             //        var Z3 = Math.Exp(-Math.Pow(x + 0.5, 2) - Math.Pow(y + 1.4, 2));
                             //        return (Z1 - Z2 - Z3) * 2;
                             //    })
-                            //    .ToArray().ReShape(n, n);
+                            //    .ReShape(n, n);
 
                             //// ★★★★★ surface
                             //new PythonController.PyPlot.Figure(true)
@@ -777,10 +805,10 @@ public static partial class ExampleExecuter
                             //        Title = "surface",
                             //        Plots = new List<PythonController.PyPlot.IPlot>
                             //        {
-                            //            new PythonController.PyPlot.ContourPlot(XX,YY,ZZ, false, 20){ColorMap="cividis", ZOffset=XX.Min(), TargetHeightDirection="x", LineWidth=4},
-                            //            new PythonController.PyPlot.ContourPlot(XX,YY,ZZ, false, 20){ColorMap="cividis", ZOffset=YY.Max(), TargetHeightDirection="y", LineWidth=4},
-                            //            new PythonController.PyPlot.ContourPlot(XX,YY,ZZ, false, 20){ColorMap="cividis", ZOffset=ZZ.Min(), TargetHeightDirection="z", LineWidth = 4},
-                            //            //new PythonController.PyPlot.ContourPlot(XX,YY,ZZ, false, 20){Colors="green", ZOffset=ZZ.Min(), ContourLabelFontSize__2D=20},
+                            //            new PythonController.PyPlot.ContourPlot(XX,YY,ZZ, false){Levels=20,ColorMap="cividis", ZOffset=XX.Min(), TargetHeightDirection="x", LineWidth=4},
+                            //            new PythonController.PyPlot.ContourPlot(XX,YY,ZZ, false){Levels=20,ColorMap="cividis", ZOffset=YY.Max(), TargetHeightDirection="y", LineWidth=4},
+                            //            new PythonController.PyPlot.ContourPlot(XX,YY,ZZ, false){Levels=20,ColorMap="cividis", ZOffset=ZZ.Min(), TargetHeightDirection="z", LineWidth=4},
+                            //            //new PythonController.PyPlot.ContourPlot(XX,YY,ZZ, false){Levels=20,Colors="green", ZOffset=ZZ.Min(), ContourLabelFontSize__2D=20},
 
                             //            //new PythonController.PyPlot.WireFramePlot(XX,YY,ZZ){Color="black", LineWidth=3},
                             //            new PythonController.PyPlot.SurfacePlot(XX,YY,ZZ){ ColorMap="cividis", Alpha=0.5},
@@ -916,11 +944,6 @@ public static partial class ExampleExecuter
                             //}.Run(output.GetChildFileInfo("text.png"), true);
 
                         }
-
-                        {
-
-                        }
-
 
                     }
 

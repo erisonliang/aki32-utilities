@@ -122,6 +122,14 @@ public static partial class PythonController
         }
     }
 
+    private static (double[,] XGrid, double[,] YGrid) GetMeshGrid(double[] X, double[] Y)
+    {
+        var XYGrid = X.SelectMany(x => Y, (x, y) => (x, y));
+        var XGrid = XYGrid.Select(xy => xy.x).ToArray().ReShape(X.Length, Y.Length);
+        var YGrid = XYGrid.Select(xy => xy.y).ToArray().ReShape(X.Length, Y.Length);
+        return (XGrid, YGrid);
+    }
+
 
     // ★★★★★★★★★★★★★★★ samples
 
