@@ -9,45 +9,58 @@ public static partial class PythonController
 {
     // ★★★★★★★★★★★★★★★ prop
 
-    public static bool Activated { get; set; } = false;
-    private static string DllName { get; set; }
-    private static string PythonPath { get; set; }
-    private static List<string> AdditionalPath { get; set; }
-    private static Py.GILState GIL;
+    public static bool Activated { get; private set; } = false;
+    public static string DllName { get; set; } = "python310.dll";
+    public static string PythonPath { get; set; }
+    public static List<string> AdditionalPath { get; set; } = new List<string>();
+    public static Py.GILState GIL;
 
 
     // ★★★★★★★★★★★★★★★ main
 
-    public static void Initialize(
-        string dllName = @"python310.dll",
-        string pythonPath = null,
-        List<string> additionalPath = null
-        )
+    public static void Initialize(bool reInit = false)
     {
         // ★
-        if (Activated)
-            return; // already activated
+        if (Activated) // already activated
+        {
+            if (reInit)
+                Shutdown();
+            else
+                return;
+        }
 
         // ★ セット
         Activated = true;
-        DllName = dllName;
-        PythonPath = pythonPath;
-        AdditionalPath = additionalPath;
 
         // ★ Dllの名前を明示
-        Runtime.PythonDLL = DllName;
+        try
+        {
+            Runtime.PythonDLL = DllName;
+        }
+        catch (Exception ex)
+        {
+            throw new Exception($"Required to set correct python-dll-name to PythonController.DllName first. {ex.Message}");
+        }
 
         // ★ pythonnetがpython本体のDLLおよび依存DLLを見つけられるようにする。
         //    使用しようとしているPythonをPATHに登録してない場合に呼ぶことを想定。
-        if (!string.IsNullOrEmpty(PythonPath))
+        try
         {
-            var pythonPathEnvVar = Environment.ExpandEnvironmentVariables(PythonPath);
-            SystemExtension.AddEnvPath("PATH", new string[]
+            if (!string.IsNullOrEmpty(PythonPath))
             {
+                var pythonPathEnvVar = Environment.ExpandEnvironmentVariables(PythonPath);
+                SystemExtension.AddEnvPath("PATH", new string[]
+                {
                 pythonPathEnvVar,
                 Path.Combine(pythonPathEnvVar, @"DLLs"),
-            });
+                });
+            }
         }
+        catch (Exception ex)
+        {
+            throw new Exception($"Required to set correct python-executable-path to PythonController.PythonPath first. {ex.Message}");
+        }
+
 
         // ★ 初期化 (明示的に呼ばなくても内部で自動実行されるようだが、一応呼ぶ)
         PythonEngine.Initialize();
