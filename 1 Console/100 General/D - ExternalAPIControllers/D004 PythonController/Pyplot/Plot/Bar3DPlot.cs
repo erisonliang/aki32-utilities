@@ -8,7 +8,7 @@ public static partial class PythonController
     public partial class PyPlot
     {
         /// <summary>
-        /// 2D
+        /// 3D
         /// </summary>
         public class Bar3DPlot : IPlot
         {
@@ -34,11 +34,30 @@ public static partial class PythonController
 
             // ★★★★★★★★★★★★★★★ inits
 
+            /// <summary>
+            /// init with mesh grid
+            /// </summary>
+            /// <param name="x"></param>
+            /// <param name="y"></param>
+            /// <param name="dx"></param>
+            /// <param name="dy"></param>
+            /// <param name="dz"></param>
+            /// <param name="isCentered"></param>
             public Bar3DPlot(double[] x, double[] y, double dx, double dy, double[,] dz, bool isCentered)
                 : this(x, y, null, Enumerable.Repeat(dx, x.Length).ToArray(), Enumerable.Repeat(dy, y.Length).ToArray(), dz, isCentered)
             {
             }
 
+            /// <summary>
+            /// init with mesh grid
+            /// </summary>
+            /// <param name="x"></param>
+            /// <param name="y"></param>
+            /// <param name="z"></param>
+            /// <param name="dx"></param>
+            /// <param name="dy"></param>
+            /// <param name="dz"></param>
+            /// <param name="isCentered"></param>
             public Bar3DPlot(double[] x, double[] y, double[,]? z, double[] dx, double[] dy, double[,] dz, bool isCentered)
             {
                 if (isCentered)
@@ -58,6 +77,51 @@ public static partial class PythonController
                 dX = dXGrid.ReShape();
                 dY = dYGrid.ReShape();
                 dZ = dz.ReShape();
+
+                Is3D = true;
+            }
+
+            /// <summary>
+            /// init 
+            /// </summary>
+            /// <param name="x"></param>
+            /// <param name="y"></param>
+            /// <param name="dx"></param>
+            /// <param name="dy"></param>
+            /// <param name="dz"></param>
+            /// <param name="isCentered"></param>
+            public Bar3DPlot(double[] x, double[] y, double dx, double dy, double[] dz, bool isCentered)
+                : this(x, y, null, Enumerable.Repeat(dx, x.Length).ToArray(), Enumerable.Repeat(dy, y.Length).ToArray(), dz, isCentered)
+            {
+            }
+
+            /// <summary>
+            /// init 
+            /// </summary>
+            /// <param name="x"></param>
+            /// <param name="y"></param>
+            /// <param name="z"></param>
+            /// <param name="dx"></param>
+            /// <param name="dy"></param>
+            /// <param name="dz"></param>
+            /// <param name="isCentered"></param>
+            public Bar3DPlot(double[] x, double[] y, double[]? z, double[] dx, double[] dy, double[] dz, bool isCentered)
+            {
+                if (isCentered)
+                {
+                    for (int i = 0; i < x.Length; i++)
+                        x[i] -= dx[i] / 2;
+                    for (int i = 0; i < y.Length; i++)
+                        y[i] -= dy[i] / 2;
+                }
+
+                X = x;
+                Y = y;
+                Z = z ?? EnumerableExtension.Range_WithCount(0, 0, dz.Length).ToArray();
+
+                dX = dx;
+                dY = dy;
+                dZ = dz;
 
                 Is3D = true;
             }
