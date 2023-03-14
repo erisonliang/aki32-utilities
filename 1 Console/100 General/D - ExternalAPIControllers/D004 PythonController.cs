@@ -1,7 +1,5 @@
 ﻿using Python.Runtime;
 
-using XPlot.Plotly;
-
 namespace Aki32Utilities.ConsoleAppUtilities.General;
 /// <summary>
 /// Mainly Sugar for pythonnet (Python.Runtime.dll).
@@ -57,7 +55,7 @@ public static partial class PythonController
         // ★ Global Interpreter Lockを取得
         GIL = Py.GIL();
 
-        // ★ 追加のパスを通す。
+        // ★ 追加のパスを通す。自作のコードを呼ぶときなど。
         if (AdditionalPath != null && AdditionalPath.Count > 0)
         {
             dynamic sys = Py.Import("sys");
@@ -91,44 +89,25 @@ public static partial class PythonController
 
     // ★★★★★★★★★★★★★★★ sugar
 
-    public static dynamic Import(string name) => Py.Import(name);
-    public static dynamic RunSimpleString(string code) => PythonEngine.RunSimpleString(code);
+    public static dynamic Import(string name)
+    {
+        if (!Activated)
+            throw new Exception("Required to call PythonController.Initialize() first");
+        return Py.Import(name);
+    }
+    public static int RunSimpleString(string code)
+    {
+        if (!Activated)
+            throw new Exception("Required to call PythonController.Initialize() first");
+        return PythonEngine.RunSimpleString(code);
+    }
 
 
     // ★★★★★★★★★★★★★★★ methods
 
-    private static dynamic ToCorrect1DNDArray<T>(dynamic X)
-    {
-        dynamic np = Import("numpy");
-        return np.array(X);
-    }
+    #region Basic Methods
 
-    private static dynamic ToCorrect2DNDArray<T>(dynamic X)
-    {
-        dynamic np = Import("numpy");
-
-        if (X is T[][] X1)
-        {
-            return np.array(X1);
-        }
-        else if (X is T[,] X2)
-        {
-            return np.array(X2);
-        }
-        else
-        {
-            var X3 = X.ToJaggedArray<T>();
-            return np.array(X3);
-        }
-    }
-
-    private static (double[,] XGrid, double[,] YGrid) GetMeshGrid(double[] X, double[] Y)
-    {
-        var XYGrid = X.SelectMany(x => Y, (x, y) => (x, y));
-        var XGrid = XYGrid.Select(xy => xy.x).ToArray().ReShape(X.Length, Y.Length);
-        var YGrid = XYGrid.Select(xy => xy.y).ToArray().ReShape(X.Length, Y.Length);
-        return (XGrid, YGrid);
-    }
+    #endregion
 
 
     // ★★★★★★★★★★★★★★★ samples
@@ -162,6 +141,7 @@ print(f'np.cos(np.pi/4) = {np.cos(np.pi/4)}')
         Console.WriteLine("PythonExample_WithDynamicInvoke");
         Console.WriteLine();
 
+        //dynamic myMath = Py.Import("my_awesome_lib.my_math"); // ← "from my_awesome_lib import my_math"
         dynamic np = Import("numpy");
         Console.WriteLine($"np.cos(np.pi/4) = {np.cos(np.pi / 4)}");
 
@@ -183,39 +163,6 @@ print(f'np.cos(np.pi/4) = {np.cos(np.pi/4)}')
 
     }
 
-    /// <summary>
-    /// 自作コード叩く。
-    /// </summary>
-    /// <remarks>
-    /// 
-    /// 他のパッケージが入ってるところ（C:\Python310\Lib\site-packages\）にフォルダ作って，中に（__init__.py）を追加でいけた！
-    /// なんか他の手段ないかな…。
-    /// 
-    /// もしくは，環境変数の初期化のところに自作コードの場所の指定とかすればいける？？
-    /// 
-    /// </remarks>
-    /// <param name="paths"></param>
-    public static void PythonExample_WithOwnLibraryInvoke()
-    {
-        Console.WriteLine("=======================================");
-        Console.WriteLine("PythonExample_WithOwnLibraryInvoke");
-        Console.WriteLine();
-
-        dynamic snap = Import("SNAPVisualizer");
-        dynamic a = snap.SNAPBeamVisualizer;
-
-        //dynamic myMath = Py.Import("my_awesome_lib.my_math"); // "from my_awesome_lib import my_math"
-        //dynamic calculator = myMath.Calculator(5, 7); // クラスのインスタンスを生成
-        //Console.WriteLine($"5 + 7 = {calculator.add()}"); // クラスのメソッド呼び出し
-        //Console.WriteLine($"sum(1,2,3,4,5) = {myMath.Calculator.sum(new[] { 1, 2, 3, 4, 5 })}"); //staticメソッドも当然呼べる
-        //dynamic dict = myMath.GetDict(); // 辞書型を返す関数呼び出し
-        //Console.WriteLine(dict[3]); // 辞書からキーを指定して読み取り
-        //Console.ReadKey();
-
-        Console.WriteLine("=======================================");
-        Console.WriteLine();
-
-    }
 
     // ★★★★★★★★★★★★★★★ 
 

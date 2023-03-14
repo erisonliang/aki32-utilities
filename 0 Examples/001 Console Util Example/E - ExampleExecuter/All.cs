@@ -709,244 +709,6 @@ public static partial class ExampleExecuter
                     //PythonController.Shutdown();
 
 
-                    // PyPlot
-                    {
-                        PythonController.Initialize();
-
-                        var pi = Math.PI;
-
-
-                        // line
-                        {
-                            //var n = 256;
-
-                            //var z = EnumerableExtension.Range_WithCount(-3 * pi, 3 * pi, n).ToArray();
-                            //var x = z.Select(z => Math.Cos(z)).ToArray();
-                            //var y = z.Select(z => Math.Sin(z)).ToArray();
-
-                            //new PythonController.PyPlot.Figure
-                            //{
-                            //    IsTightLayout = true,
-                            //    SubPlot = new PythonController.PyPlot.SubPlot()
-                            //    {
-                            //        XLabel = "x",
-                            //        YLabel = "y",
-                            //        ZLabel = "z",
-                            //        Title = "helix",
-                            //        Plot = new PythonController.PyPlot.LinePlot(x, y, z) { Alpha = 0.6 },
-                            //    }
-
-                            //}.Run(output.GetChildFileInfo("helix.png"), true);
-
-                        }
-
-                        // 3d bar
-                        {
-                            //var n = 5;
-
-                            //// ★★★★★
-                            //var XX = EnumerableExtension.Range_WithStep(0, n - 1, 1).ToArray();
-                            //var YY = EnumerableExtension.Range_WithStep(0, n - 1, 1).ToArray();
-                            //var ZZ = Enumerable.SelectMany(XX, x => YY, (x, y) => (x + 1) * y).ToArray().ReShape(n, n);
-
-                            //// ★★★★★ bar3d
-                            //new PythonController.PyPlot.Figure(true)
-                            //{
-                            //    IsTightLayout = true,
-                            //    SubPlot = new PythonController.PyPlot.SubPlot(true)
-                            //    {
-                            //        XLabel = "X",
-                            //        YLabel = "Y",
-                            //        ZLabel = "Z",
-                            //        Title = "bar3d",
-                            //        Plot = new PythonController.PyPlot.Bar3DPlot(XX, YY, 0.8, 0.8, ZZ, true)
-                            //        {
-                            //            Alpha = 0.5,
-                            //        }
-                            //    }
-                            //}.Run(output.GetChildFileInfo("bar3d.png"), true);
-
-                        }
-
-                        // surface
-                        {
-                            //var n = 50;
-
-                            //// ★★★★★ 1
-                            ////var XX = EnumerableExtension.Range_WithCount(-3 * pi, 3 * pi, n).ToArray();
-                            ////var YY = EnumerableExtension.Range_WithCount(-3 * pi, 3 * pi, n).ToArray();
-                            ////var ZZ = Enumerable
-                            ////    .SelectMany(XX, x => YY, (x, y) => (double)(np.sin(x / pi) * np.cos(y / pi)))
-                            ////    .ToArray().ReShape(n, n);
-
-                            //// ★★★★★ 2
-                            //var XX = EnumerableExtension.Range_WithCount(-4, 4, n).ToArray();
-                            //var YY = EnumerableExtension.Range_WithCount(-4, 4, n).ToArray();
-                            //var ZZ = Enumerable
-                            //    .SelectMany(XX, x => YY, (x, y) =>
-                            //    {
-                            //        var Z1 = Math.Exp(-Math.Pow(x, 2) - Math.Pow(y, 2));
-                            //        var Z2 = Math.Exp(-Math.Pow(x - 1.2, 2) - Math.Pow(y - 0.7, 2));
-                            //        var Z3 = Math.Exp(-Math.Pow(x + 0.5, 2) - Math.Pow(y + 1.4, 2));
-                            //        return (Z1 - Z2 - Z3) * 2;
-                            //    })
-                            //    .ReShape(n, n);
-
-                            //// ★★★★★ surface
-                            //new PythonController.PyPlot.Figure(true)
-                            //{
-                            //    IsTightLayout = true,
-                            //    SubPlot = new PythonController.PyPlot.SubPlot(true)
-                            //    {
-                            //        //ZLim=(-1,1),
-                            //        XLabel = "X",
-                            //        YLabel = "Y",
-                            //        ZLabel = "Z",
-                            //        Title = "surface",
-                            //        Plots = new List<PythonController.PyPlot.IPlot>
-                            //        {
-                            //            new PythonController.PyPlot.ContourPlot(XX,YY,ZZ, false){Levels=20,ColorMap="cividis", ZOffset=XX.Min(), TargetHeightDirection="x", LineWidth=4},
-                            //            new PythonController.PyPlot.ContourPlot(XX,YY,ZZ, false){Levels=20,ColorMap="cividis", ZOffset=YY.Max(), TargetHeightDirection="y", LineWidth=4},
-                            //            new PythonController.PyPlot.ContourPlot(XX,YY,ZZ, false){Levels=20,ColorMap="cividis", ZOffset=ZZ.Min(), TargetHeightDirection="z", LineWidth=4},
-                            //            //new PythonController.PyPlot.ContourPlot(XX,YY,ZZ, false){Levels=20,Colors="green", ZOffset=ZZ.Min(), ContourLabelFontSize__2D=20},
-
-                            //            //new PythonController.PyPlot.WireFramePlot(XX,YY,ZZ){Color="black", LineWidth=3},
-                            //            new PythonController.PyPlot.SurfacePlot(XX,YY,ZZ){ ColorMap="cividis", Alpha=0.5},
-
-                            //            //new PythonController.PyPlot.ScatterPlot(XX,YY,ZZ){ ColorMap="green", MarkerSize=100},
-                            //        }
-                            //    }
-                            //}.Run(output.GetChildFileInfo("surface.png"), true);
-
-                        }
-
-                        // grid heatmap
-                        {
-                            //// ★★★★★
-                            //var n = 10;
-                            //var XX = EnumerableExtension.Range_WithStep(0, n-1, 1).ToArray();
-                            //var YY = EnumerableExtension.Range_WithStep(0, n-1, 1).ToArray();
-                            //var ZZ = Enumerable
-                            //    .SelectMany(XX, x => YY, (x, y) =>
-                            //    {
-                            //        return (x * y);
-                            //    })
-                            //    .ToArray().ReShape(n, n);
-
-                            //// ★★★★★ 
-                            //new PythonController.PyPlot.Figure()
-                            //{
-                            //    IsTightLayout = true,
-                            //    SubPlot = new PythonController.PyPlot.SubPlot()
-                            //    {
-                            //        XLabel = "X",
-                            //        YLabel = "Y",
-                            //        Title = "grid heatmap",
-                            //        HasGrid = false,
-                            //        Plot = new PythonController.PyPlot.GridHeatMapPlot(XX, YY, ZZ)
-                            //        {
-                            //            ColorMap = "cividis",
-                            //        },
-                            //    }
-                            //}.Run(output.GetChildFileInfo("grid heatmap.png"), true);
-
-                        }
-
-                        // precise heatmap
-                        {
-                            //// ★★★★★
-                            //var n = 333;
-                            //var XX = EnumerableExtension.Range_WithCount(0, 5, n).ToArray();
-                            //var YY = EnumerableExtension.Range_WithCount(0, 5, n).ToArray();
-                            //var ZZ = Enumerable
-                            //    .SelectMany(XX, x => YY, (x, y) =>
-                            //    {
-                            //        return (x * y);
-                            //    })
-                            //    .ToArray().ReShape(n, n);
-
-                            //// ★★★★★ 
-                            //new PythonController.PyPlot.Figure()
-                            //{
-                            //    IsTightLayout = true,
-                            //    SubPlot = new PythonController.PyPlot.SubPlot()
-                            //    {
-                            //        XLabel = "X",
-                            //        YLabel = "Y",
-                            //        Title = "continuous heatmap",
-                            //        HasGrid = false,
-                            //        Plot = new PythonController.PyPlot.ContinuousHeatMapPlot(XX, YY, ZZ)
-                            //        {
-                            //            ColorMap = "cividis",
-                            //        },
-                            //    }
-                            //}.Run(output.GetChildFileInfo("continuous heatmap.png"), true);
-
-                        }
-
-                        // quiver 
-                        {
-                            //var n = 10;
-
-                            //var X = EnumerableExtension.Range_WithCount(-5, 5, n).ToArray();
-                            //var Y = EnumerableExtension.Range_WithCount(-5, 5, n).ToArray();
-
-                            //var XYGrid = Enumerable.SelectMany(X, x => Y, (x, y) => (x, y));
-                            //var XGrid = XYGrid.Select(xy => xy.x).ToArray().ReShape(n, n);
-                            //var YGrid = XYGrid.Select(xy => xy.y).ToArray().ReShape(n, n);
-
-                            //var U = X.Select(x => 2 * x);
-                            //var V = Y.Select(y => 3 * y);
-
-                            //var UVGrid = Enumerable.SelectMany(U, u => V, (u, v) => (u, v));
-                            //var UGrid = UVGrid.Select(uv => uv.u).ToArray().ReShape(n, n);
-                            //var VGrid = UVGrid.Select(uv => uv.v).ToArray().ReShape(n, n);
-
-                            //new PythonController.PyPlot.Figure
-                            //{
-                            //    IsTightLayout = true,
-                            //    SubPlot = new PythonController.PyPlot.SubPlot()
-                            //    {
-                            //        XLim = (-8, 8),
-                            //        YLim = (-8, 8),
-                            //        HasGrid = true,
-                            //        XLabel = "x",
-                            //        YLabel = "y",
-                            //        ZLabel = "z",
-                            //        Title = "quiver",
-                            //        Plot = new PythonController.PyPlot.QuiverPlot(XGrid, YGrid, UGrid, VGrid)
-                            //        {
-                            //            Scale = 10,
-                            //        },
-                            //    }
-
-                            //}.Run(output.GetChildFileInfo("quiver.png"), true);
-
-                        }
-
-                        // Text
-                        {
-
-                            //new PythonController.PyPlot.Figure
-                            //{
-                            //    IsTightLayout = true,
-                            //    SubPlot = new PythonController.PyPlot.SubPlot()
-                            //    {
-                            //        HasGrid = true,
-                            //        XLabel = "x",
-                            //        YLabel = "y",
-                            //        ZLabel = "z",
-                            //        Plot = new PythonController.PyPlot.TextPlot(0.5, 0.5, "aiueoあいうえお")
-                            //        {
-                            //        },
-                            //    }
-
-                            //}.Run(output.GetChildFileInfo("text.png"), true);
-
-                        }
-
-                    }
-
                 }
 
                 // D005 CommandPrompt
@@ -995,6 +757,267 @@ public static partial class ExampleExecuter
                 }
 
             }
+
+            // E - Wrappers
+            {
+                var baseDir_100_E = baseDir_100.GetChildDirectoryInfo($@"E - Wrappers");
+
+
+                // E001 NumpyWrapper
+                {
+                    var baseDir_100_E001 = baseDir_100_E.GetChildDirectoryInfo($@"E001 NumpyWrapper");
+                    var output = baseDir_100_E001.GetChildDirectoryInfo($@"output");
+
+
+                }
+
+                // E001 PyPlotWrapper
+                {
+                    var baseDir_100_E002 = baseDir_100_E.GetChildDirectoryInfo($@"E002 PyPlotWrapper");
+                    var output = baseDir_100_E002.GetChildDirectoryInfo($@"output");
+
+                    PythonController.Initialize();
+                    var pi = Math.PI;
+
+
+                    // line
+                    {
+                        //var n = 256;
+
+                        //var z = EnumerableExtension.Range_WithCount(-3 * pi, 3 * pi, n).ToArray();
+                        //var x = z.Select(z => Math.Cos(z)).ToArray();
+                        //var y = z.Select(z => Math.Sin(z)).ToArray();
+
+                        //new PyPlotWrapper.Figure
+                        //{
+                        //    IsTightLayout = true,
+                        //    SubPlot = new PyPlotWrapper.SubPlot()
+                        //    {
+                        //        XLabel = "x",
+                        //        YLabel = "y",
+                        //        ZLabel = "z",
+                        //        Title = "helix",
+                        //        Plot = new PyPlotWrapper.LinePlot(x, y, z) { Alpha = 0.6 },
+                        //    }
+
+                        //}.Run(output.GetChildFileInfo("helix.png"), true);
+
+                    }
+
+                    // 3d bar
+                    {
+                        //var n = 5;
+
+                        //// ★★★★★
+                        //var XX = EnumerableExtension.Range_WithStep(0, n - 1, 1).ToArray();
+                        //var YY = EnumerableExtension.Range_WithStep(0, n - 1, 1).ToArray();
+                        //var ZZ = Enumerable.SelectMany(XX, x => YY, (x, y) => (x + 1) * y).ToArray().ReShape(n, n);
+
+                        //// ★★★★★ bar3d
+                        //new PyPlotWrapper.Figure(true)
+                        //{
+                        //    IsTightLayout = true,
+                        //    SubPlot = new PyPlotWrapper.SubPlot(true)
+                        //    {
+                        //        XLabel = "X",
+                        //        YLabel = "Y",
+                        //        ZLabel = "Z",
+                        //        Title = "bar3d",
+                        //        Plot = new PyPlotWrapper.Bar3DPlot(XX, YY, 0.8, 0.8, ZZ, true)
+                        //        {
+                        //            Alpha = 0.5,
+                        //        }
+                        //    }
+                        //}.Run(output.GetChildFileInfo("bar3d.png"), true);
+
+                    }
+
+                    // surface
+                    {
+                        //var n = 50;
+
+                        //// ★★★★★ 1
+                        ////var XX = EnumerableExtension.Range_WithCount(-3 * pi, 3 * pi, n).ToArray();
+                        ////var YY = EnumerableExtension.Range_WithCount(-3 * pi, 3 * pi, n).ToArray();
+                        ////var ZZ = Enumerable
+                        ////    .SelectMany(XX, x => YY, (x, y) => (double)(np.sin(x / pi) * np.cos(y / pi)))
+                        ////    .ToArray().ReShape(n, n);
+
+                        //// ★★★★★ 2
+                        //var XX = EnumerableExtension.Range_WithCount(-4, 4, n).ToArray();
+                        //var YY = EnumerableExtension.Range_WithCount(-4, 4, n).ToArray();
+                        //var ZZ = Enumerable
+                        //    .SelectMany(XX, x => YY, (x, y) =>
+                        //    {
+                        //        var Z1 = Math.Exp(-Math.Pow(x, 2) - Math.Pow(y, 2));
+                        //        var Z2 = Math.Exp(-Math.Pow(x - 1.2, 2) - Math.Pow(y - 0.7, 2));
+                        //        var Z3 = Math.Exp(-Math.Pow(x + 0.5, 2) - Math.Pow(y + 1.4, 2));
+                        //        return (Z1 - Z2 - Z3) * 2;
+                        //    })
+                        //    .ReShape(n, n);
+
+                        //// ★★★★★ surface
+                        //new PyPlotWrapper.Figure(true)
+                        //{
+                        //    IsTightLayout = true,
+                        //    SubPlot = new PyPlotWrapper.SubPlot(true)
+                        //    {
+                        //        //ZLim=(-1,1),
+                        //        XLabel = "X",
+                        //        YLabel = "Y",
+                        //        ZLabel = "Z",
+                        //        Title = "surface",
+                        //        Plots = new List<PyPlotWrapper.IPlot>
+                        //        {
+                        //            new PyPlotWrapper.ContourPlot(XX,YY,ZZ, false){Levels=20,ColorMap="cividis", ZOffset=XX.Min(), TargetHeightDirection="x", LineWidth=4},
+                        //            new PyPlotWrapper.ContourPlot(XX,YY,ZZ, false){Levels=20,ColorMap="cividis", ZOffset=YY.Max(), TargetHeightDirection="y", LineWidth=4},
+                        //            new PyPlotWrapper.ContourPlot(XX,YY,ZZ, false){Levels=20,ColorMap="cividis", ZOffset=ZZ.Min(), TargetHeightDirection="z", LineWidth=4},
+                        //            //new PyPlotWrapper.ContourPlot(XX,YY,ZZ, false){Levels=20,Colors="green", ZOffset=ZZ.Min(), ContourLabelFontSize__2D=20},
+
+                        //            //new PyPlotWrapper.WireFramePlot(XX,YY,ZZ){Color="black", LineWidth=3},
+                        //            new PyPlotWrapper.SurfacePlot(XX,YY,ZZ){ ColorMap="cividis", Alpha=0.5},
+
+                        //            //new PyPlotWrapper.ScatterPlot(XX,YY,ZZ){ ColorMap="green", MarkerSize=100},
+                        //        }
+                        //    }
+                        //}.Run(output.GetChildFileInfo("surface.png"), true);
+
+                    }
+
+                    // grid heatmap
+                    {
+                        //// ★★★★★
+                        //var n = 10;
+                        //var XX = EnumerableExtension.Range_WithStep(0, n-1, 1).ToArray();
+                        //var YY = EnumerableExtension.Range_WithStep(0, n-1, 1).ToArray();
+                        //var ZZ = Enumerable
+                        //    .SelectMany(XX, x => YY, (x, y) =>
+                        //    {
+                        //        return (x * y);
+                        //    })
+                        //    .ToArray().ReShape(n, n);
+
+                        //// ★★★★★ 
+                        //new PyPlotWrapper.Figure()
+                        //{
+                        //    IsTightLayout = true,
+                        //    SubPlot = new PyPlotWrapper.SubPlot()
+                        //    {
+                        //        XLabel = "X",
+                        //        YLabel = "Y",
+                        //        Title = "grid heatmap",
+                        //        HasGrid = false,
+                        //        Plot = new PyPlotWrapper.GridHeatMapPlot(XX, YY, ZZ)
+                        //        {
+                        //            ColorMap = "cividis",
+                        //        },
+                        //    }
+                        //}.Run(output.GetChildFileInfo("grid heatmap.png"), true);
+
+                    }
+
+                    // precise heatmap
+                    {
+                        //// ★★★★★
+                        //var n = 333;
+                        //var XX = EnumerableExtension.Range_WithCount(0, 5, n).ToArray();
+                        //var YY = EnumerableExtension.Range_WithCount(0, 5, n).ToArray();
+                        //var ZZ = Enumerable
+                        //    .SelectMany(XX, x => YY, (x, y) =>
+                        //    {
+                        //        return (x * y);
+                        //    })
+                        //    .ToArray().ReShape(n, n);
+
+                        //// ★★★★★ 
+                        //new PyPlotWrapper.Figure()
+                        //{
+                        //    IsTightLayout = true,
+                        //    SubPlot = new PyPlotWrapper.SubPlot()
+                        //    {
+                        //        XLabel = "X",
+                        //        YLabel = "Y",
+                        //        Title = "continuous heatmap",
+                        //        HasGrid = false,
+                        //        Plot = new PyPlotWrapper.ContinuousHeatMapPlot(XX, YY, ZZ)
+                        //        {
+                        //            ColorMap = "cividis",
+                        //        },
+                        //    }
+                        //}.Run(output.GetChildFileInfo("continuous heatmap.png"), true);
+
+                    }
+
+                    // quiver 
+                    {
+                        //var n = 10;
+
+                        //var X = EnumerableExtension.Range_WithCount(-5, 5, n).ToArray();
+                        //var Y = EnumerableExtension.Range_WithCount(-5, 5, n).ToArray();
+
+                        //var XYGrid = Enumerable.SelectMany(X, x => Y, (x, y) => (x, y));
+                        //var XGrid = XYGrid.Select(xy => xy.x).ToArray().ReShape(n, n);
+                        //var YGrid = XYGrid.Select(xy => xy.y).ToArray().ReShape(n, n);
+
+                        //var U = X.Select(x => 2 * x);
+                        //var V = Y.Select(y => 3 * y);
+
+                        //var UVGrid = Enumerable.SelectMany(U, u => V, (u, v) => (u, v));
+                        //var UGrid = UVGrid.Select(uv => uv.u).ToArray().ReShape(n, n);
+                        //var VGrid = UVGrid.Select(uv => uv.v).ToArray().ReShape(n, n);
+
+                        //new PyPlotWrapper.Figure
+                        //{
+                        //    IsTightLayout = true,
+                        //    SubPlot = new PyPlotWrapper.SubPlot()
+                        //    {
+                        //        XLim = (-8, 8),
+                        //        YLim = (-8, 8),
+                        //        HasGrid = true,
+                        //        XLabel = "x",
+                        //        YLabel = "y",
+                        //        ZLabel = "z",
+                        //        Title = "quiver",
+                        //        Plot = new PyPlotWrapper.QuiverPlot(XGrid, YGrid, UGrid, VGrid)
+                        //        {
+                        //            Scale = 10,
+                        //        },
+                        //    }
+
+                        //}.Run(output.GetChildFileInfo("quiver.png"), true);
+
+                    }
+
+                    // Text
+                    {
+
+                        //new PyPlotWrapper.Figure
+                        //{
+                        //    IsTightLayout = true,
+                        //    SubPlot = new PyPlotWrapper.SubPlot()
+                        //    {
+                        //        HasGrid = true,
+                        //        XLabel = "x",
+                        //        YLabel = "y",
+                        //        ZLabel = "z",
+                        //        Plot = new PyPlotWrapper.TextPlot(0.5, 0.5, "aiueoあいうえお")
+                        //        {
+                        //        },
+                        //    }
+
+                        //}.Run(output.GetChildFileInfo("text.png"), true);
+
+                    }
+
+                }
+
+
+
+
+
+
+            }
+
         }
 
         // 101 - AI

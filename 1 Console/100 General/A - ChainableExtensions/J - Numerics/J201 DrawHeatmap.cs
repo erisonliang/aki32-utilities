@@ -271,15 +271,15 @@ public static partial class ChainableExtensions
         var YY = EnumerableExtension.Range_WithStep(0, dim1 - 1, 1).ToArray();
 
         // main
-        new PythonController.PyPlot.Figure()
+        new PyPlotWrapper.Figure()
         {
             IsTightLayout = true,
-            SubPlot = new PythonController.PyPlot.SubPlot()
+            SubPlot = new PyPlotWrapper.SubPlot()
             {
                 XLabel = "dim = 0",
                 YLabel = "dim = 1",
                 HasGrid = false,
-                Plot = new PythonController.PyPlot.ContinuousHeatMapPlot(XX, YY, inputData)
+                Plot = new PyPlotWrapper.ContinuousHeatMapPlot(XX, YY, inputData)
                 {
                     ColorMap = "gray",
                     ColorLim = (minValue, maxValue),

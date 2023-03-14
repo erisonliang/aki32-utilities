@@ -317,7 +317,7 @@ public class TimeHistory
         try
         {
             var x = string.IsNullOrEmpty(xName) ? null : this[xName];
-            var plots = new List<PythonController.PyPlot.IPlot>();
+            var plots = new List<PyPlotWrapper.IPlot>();
             xLabel ??= xName;
             yLabel ??= yName.Length == 1 ? yName[0] : "";
 
@@ -327,7 +327,7 @@ public class TimeHistory
                     {
                         if (yName.Length == 1)
                         {
-                            plots.Add(new PythonController.PyPlot.ScatterPlot(x, this[yName[0]])
+                            plots.Add(new PyPlotWrapper.ScatterPlot(x, this[yName[0]])
                             {
                                 MarkerColor = "blue",
                             });
@@ -335,18 +335,18 @@ public class TimeHistory
                         else
                         {
                             foreach (var name in yName)
-                                plots.Add(new PythonController.PyPlot.ScatterPlot(x, this[name])
+                                plots.Add(new PyPlotWrapper.ScatterPlot(x, this[name])
                                 {
                                     LegendLabel = name,
                                 });
                         }
 
-                        new PythonController.PyPlot.Figure
+                        new PyPlotWrapper.Figure
                         {
                             IsTightLayout = true,
-                            SubPlots = new List<PythonController.PyPlot.SubPlot>()
+                            SubPlots = new List<PyPlotWrapper.SubPlot>()
                             {
-                                new PythonController.PyPlot.SubPlot()
+                                new PyPlotWrapper.SubPlot()
                                 {
                                     XLabel = xLabel,
                                     YLabel = yLabel,
@@ -363,7 +363,7 @@ public class TimeHistory
                     {
                         if (yName.Length == 1)
                         {
-                            plots.Add(new PythonController.PyPlot.LinePlot(x, this[yName[0]])
+                            plots.Add(new PyPlotWrapper.LinePlot(x, this[yName[0]])
                             {
                                 LineColor = "blue",
                             });
@@ -371,19 +371,19 @@ public class TimeHistory
                         else
                         {
                             foreach (var name in yName)
-                                plots.Add(new PythonController.PyPlot.LinePlot(x, this[name])
+                                plots.Add(new PyPlotWrapper.LinePlot(x, this[name])
                                 {
                                     LegendLabel = name,
                                     LineColor = null
                                 });
                         }
 
-                        new PythonController.PyPlot.Figure
+                        new PyPlotWrapper.Figure
                         {
                             IsTightLayout = true,
-                            SubPlots = new List<PythonController.PyPlot.SubPlot>()
+                            SubPlots = new List<PyPlotWrapper.SubPlot>()
                             {
-                                new PythonController.PyPlot.SubPlot()
+                                new PyPlotWrapper.SubPlot()
                                 {
                                     XLabel = xLabel,
                                     YLabel = yLabel,
