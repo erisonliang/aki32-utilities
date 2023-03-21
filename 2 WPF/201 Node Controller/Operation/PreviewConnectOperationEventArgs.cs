@@ -1,7 +1,6 @@
-﻿using System;
+﻿
 
 namespace Aki32Utilities.WPFAppUtilities.NodeController.Operation;
-
 public class PreviewConnectOperationEventArgs
 {
     public bool CanConnect { get; set; } = true;

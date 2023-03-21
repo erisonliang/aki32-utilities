@@ -1,13 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Input;
+﻿using System.Windows;
 
 namespace Aki32Utilities.WPFAppUtilities.NodeController.Controls;
-
 public class CanvasMouseEventArgs : EventArgs
 {
     // This position has taken scale and offset into account.

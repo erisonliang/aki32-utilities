@@ -1,7 +1,6 @@
-﻿using System;
+﻿
 
 namespace Aki32Utilities.WPFAppUtilities.NodeController.Operation;
-
 public class ConnectedOperationEventArgs : EventArgs
 {
     public Guid InputNodeGuid { get; } = Guid.Empty;

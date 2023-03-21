@@ -1,7 +1,6 @@
 ﻿using System.Windows;
 
 namespace Aki32Utilities.WPFAppUtilities.NodeController.Extensions;
-
 public static class PointExtension
 {
     public static Point Add(this Point a, Point b)

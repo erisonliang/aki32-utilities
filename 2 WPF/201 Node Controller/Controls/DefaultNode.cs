@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Specialized;
-using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace Aki32Utilities.WPFAppUtilities.NodeController.Controls;
-
 public class DefaultNode : NodeBase
 {
     public DataTemplate HeaderContentTemplate

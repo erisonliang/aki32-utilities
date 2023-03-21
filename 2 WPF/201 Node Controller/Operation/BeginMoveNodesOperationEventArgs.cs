@@ -1,7 +1,6 @@
-﻿using System;
+﻿
 
 namespace Aki32Utilities.WPFAppUtilities.NodeController.Operation;
-
 public class BeginMoveNodesOperationEventArgs : EventArgs
 {
     public Guid[] NodeGuids { get; } = null;

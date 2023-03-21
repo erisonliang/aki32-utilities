@@ -1,7 +1,6 @@
-﻿using System;
+﻿
 
 namespace Aki32Utilities.WPFAppUtilities.NodeController.OperationEventArgs;
-
 public class ConnectedLinkOperationEventArgs : EventArgs
 {
     public Guid OutputConnectorGuid { get; } = Guid.Empty;

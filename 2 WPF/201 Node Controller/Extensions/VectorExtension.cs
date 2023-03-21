@@ -1,7 +1,6 @@
 ﻿using System.Windows;
 
 namespace Aki32Utilities.WPFAppUtilities.NodeController.Extensions;
-
 public static class VectorExtension
 {
     public static double DotProduct(this Vector a, Vector b)

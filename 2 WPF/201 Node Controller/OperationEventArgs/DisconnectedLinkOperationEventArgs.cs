@@ -1,7 +1,6 @@
-﻿using System;
+﻿
 
 namespace Aki32Utilities.WPFAppUtilities.NodeController.OperationEventArgs;
-
 public class DisconnectedLinkOperationEventArgs : EventArgs
 {
     public Guid NodeLinkGuid { get; } = Guid.Empty;
