@@ -1,14 +1,11 @@
 ﻿using Aki32Utilities.ConsoleAppUtilities.Research;
 using Aki32Utilities.UsageExamples.ResearchArticlesNodeController.ViewModels;
 
-using DocumentFormat.OpenXml.Spreadsheet;
-
 using Newtonsoft.Json;
 
 using PropertyChanged;
 
 using System.Collections.ObjectModel;
-using System.Text.Json.Nodes;
 
 namespace Aki32Utilities.ViewModels.NodeViewModels;
 

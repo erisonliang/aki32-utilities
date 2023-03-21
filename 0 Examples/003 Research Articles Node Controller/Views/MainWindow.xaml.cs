@@ -1,10 +1,6 @@
 ﻿using System.Windows;
 
 namespace Aki32Utilities.UsageExamples.ResearchArticlesNodeController.Views;
-
-/// <summary>
-/// MainWindow.xaml の相互作用ロジック
-/// </summary>
 public partial class MainWindow : Window
 {
     public MainWindow()
@@ -12,8 +8,4 @@ public partial class MainWindow : Window
         InitializeComponent();
     }
 
-    private void Button_Click(object sender, RoutedEventArgs e)
-    {
-
-    }
 }

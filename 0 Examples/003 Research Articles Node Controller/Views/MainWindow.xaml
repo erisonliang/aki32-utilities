@@ -230,7 +230,7 @@
         <StackPanel Grid.Row="0">
 
             <DockPanel LastChildFill="False">
-                <Button Margin="4" Height="24" Content="AddTestNodeLink" Command="{Binding AddTestNodeLinkCommand}"/>
+                <Button Margin="4" Height="24" Content="AddTestNodeLink" Command="{Binding AddGroupNodeCommand}"  Click=""/>
                 <Button Margin="4" Height="24" Content="MoveTestNode" Command="{Binding MoveTestNodesCommand}"/>
                 <Button Margin="4" Height="24" Content="ClearNodes" Command="{Binding ClearNodesCommand}"/>
                 <Button Margin="4" Height="24" Content="ClearNodeLinks" Command="{Binding ClearNodeLinksCommand}"/>

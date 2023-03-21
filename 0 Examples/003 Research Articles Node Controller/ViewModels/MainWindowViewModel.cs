@@ -12,6 +12,7 @@ using System.DirectoryServices.ActiveDirectory;
 using System.Windows.Media.Animation;
 using Aki32Utilities.WPFAppUtilities.NodeController.Controls;
 using System.DirectoryServices;
+using System.Windows.Controls;
 
 namespace Aki32Utilities.UsageExamples.ResearchArticlesNodeController.ViewModels;
 
@@ -56,8 +57,12 @@ public class MainWindowViewModel : ViewModel
     public ListenerCommand<IList> SelectionChangedCommand => _SelectionChangedCommand.Get(SelectionChanged);
     ViewModelCommandHandler<IList> _SelectionChangedCommand = new();
 
+
+
     public ViewModelCommand AddTestNodeLinkCommand => _AddTestNodeLinkCommand.Get(AddTestNodeLink);
     ViewModelCommandHandler _AddTestNodeLinkCommand = new();
+
+
 
     public ViewModelCommand MoveTestNodesCommand => _MoveTestNodesCommand.Get(MoveTestNodes);
     ViewModelCommandHandler _MoveTestNodesCommand = new();
