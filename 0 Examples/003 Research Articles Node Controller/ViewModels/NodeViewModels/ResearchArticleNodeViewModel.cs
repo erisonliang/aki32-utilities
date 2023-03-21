@@ -39,7 +39,8 @@ public class ResearchArticleNodeViewModel : DefaultNodeViewModel
         {
             var temp = JsonConvert.SerializeObject(Article.Authors);
             RaisePropertyChangedIfSet(ref temp, value);
-            Article.Manual_Authors = JsonConvert.DeserializeObject<string[]>(temp);
+            if (temp is not null)
+                Article.Manual_Authors = JsonConvert.DeserializeObject<string[]>(temp);
         }
     }
 
