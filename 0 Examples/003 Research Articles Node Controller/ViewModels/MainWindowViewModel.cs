@@ -8,11 +8,6 @@ using System.Windows;
 using Aki32Utilities.ViewModels.NodeViewModels;
 using Aki32Utilities.ConsoleAppUtilities.Research;
 using System.IO;
-using System.DirectoryServices.ActiveDirectory;
-using System.Windows.Media.Animation;
-using Aki32Utilities.WPFAppUtilities.NodeController.Controls;
-using System.DirectoryServices;
-using System.Windows.Controls;
 
 namespace Aki32Utilities.UsageExamples.ResearchArticlesNodeController.ViewModels;
 
@@ -57,22 +52,6 @@ public class MainWindowViewModel : ViewModel
     public ListenerCommand<IList> SelectionChangedCommand => _SelectionChangedCommand.Get(SelectionChanged);
     ViewModelCommandHandler<IList> _SelectionChangedCommand = new();
 
-
-
-    public ViewModelCommand AddTestNodeLinkCommand => _AddTestNodeLinkCommand.Get(AddTestNodeLink);
-    ViewModelCommandHandler _AddTestNodeLinkCommand = new();
-
-
-
-    public ViewModelCommand MoveTestNodesCommand => _MoveTestNodesCommand.Get(MoveTestNodes);
-    ViewModelCommandHandler _MoveTestNodesCommand = new();
-
-    public ViewModelCommand ClearNodesCommand => _ClearNodesCommand.Get(ClearNodes);
-    ViewModelCommandHandler _ClearNodesCommand = new();
-
-    public ViewModelCommand ClearNodeLinksCommand => _ClearNodeLinksCommand.Get(ClearNodeLinks);
-    ViewModelCommandHandler _ClearNodeLinksCommand = new();
-
     public ViewModelCommand MoveGroupNodeCommand => _MoveGroupNodeCommand.Get(MoveGroupNode);
     ViewModelCommandHandler _MoveGroupNodeCommand = new();
 
@@ -84,10 +63,6 @@ public class MainWindowViewModel : ViewModel
 
     public ViewModelCommand RearrangeNodesCommand => _RearrangeNodesCommand.Get(RearrangeNodes);
     ViewModelCommandHandler _RearrangeNodesCommand = new();
-
-    public ViewModelCommand TestCommand => _TestCommand.Get(Test);
-    ViewModelCommandHandler _TestCommand = new();
-
 
     public IEnumerable<DefaultNodeViewModel> NodeViewModels => _NodeViewModels;
     ObservableCollection<DefaultNodeViewModel> _NodeViewModels = new();
@@ -135,9 +110,6 @@ public class MainWindowViewModel : ViewModel
         _NodeViewModels.Add(new ResearchArticleNodeViewModel() { Name = "ResearchArticle", Article = new ResearchArticle { Manual_ArticleTitle = "a5" }, Position = new Point(NODE_MARGIN_LEFT, NODE_MARGIN_TOP) });
 
 
-
-
-
         InitResearchArticlesManager();
 
         RearrangeNodes();
@@ -151,8 +123,8 @@ public class MainWindowViewModel : ViewModel
     private void InitResearchArticlesManager()
     {
 
-        var localDir = new DirectoryInfo($@"{Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory)}\ResearchArticleDB");
-        ResearchArticlesManager = new ResearchArticlesManager(localDir);
+        var databaseDir = new DirectoryInfo($@"{Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory)}\ResearchArticleDB");
+        ResearchArticlesManager = new ResearchArticlesManager(databaseDir);
         ResearchArticlesManager.OpenDatabase();
 
         var positionCounter = 100;
@@ -198,20 +170,19 @@ public class MainWindowViewModel : ViewModel
     }
 
 
-    // ★★★★★★★★★★★★★★★ methods (util)
+    // ★★★★★★★★★★★★★★★ methods (research manager handling)
 
+    #region research manager methods
 
-
-    // ★★★★★★★★★★★★★★★ methods (my node handling)
-
-    #region my node handle methods
-
-    void Test()
+    void ResearchManagerHandlingSample()
     {
+        // コピペ用に残しとく
+
         MessageBox.Show("NotImplemented");
+
     }
 
-    void aaa()
+    void ResearchManagerAAA()
     {
 
         // articles from j-stage
@@ -255,7 +226,6 @@ public class MainWindowViewModel : ViewModel
             //research.ArticleDatabase.First(x => x.DOI == "10.3130/aijs.87.822").TryOpenPDF(research.PDFsDirectory);
         }
 
-
     }
 
     void NotifyResearchArticlesPropertiesChanged()
@@ -263,6 +233,138 @@ public class MainWindowViewModel : ViewModel
         var articleNodes = _NodeViewModels.Select(n => (n is ResearchArticleNodeViewModel run) ? run : null).Where(run => run != null);
         foreach (var articleNode in articleNodes)
             articleNode!.NotifyArticleUpdated();
+
+    }
+
+
+    #endregion
+
+
+    // ★★★★★★★★★★★★★★★ methods (node handling)
+
+    #region node handling methods
+
+    void NodeHandlingSample()
+    {
+        // コピペ用に残しとく
+
+        // void AddTestNodeLink()
+        {
+            if (_NodeViewModels.Count < 2)
+            {
+                return;
+            }
+            var nodeLink = new NodeLinkViewModel
+            {
+                OutputConnectorNodeGuid = _NodeViewModels[0].Guid,
+                OutputConnectorGuid = _NodeViewModels[0].Outputs.ElementAt(0).Guid,
+                InputConnectorNodeGuid = _NodeViewModels[1].Guid,
+                InputConnectorGuid = _NodeViewModels[1].Inputs.ElementAt(0).Guid,
+            };
+            _NodeLinkViewModels.Add(nodeLink);
+        }
+
+        // void MoveTestNodes()
+        {
+            if (_NodeLinkViewModels.Any())
+                _NodeViewModels[0].Position = new Point(0, 0);
+        }
+
+        //void ClearNodes()
+        {
+            _NodeLinkViewModels.Clear();
+            _NodeViewModels.Clear();
+        }
+
+        //void ClearNodeLinks()
+        {
+            _NodeLinkViewModels.Clear();
+        }
+
+
+    }
+
+    void AddNode()
+    {
+        _NodeViewModels.Add(new ResearchArticleNodeViewModel() { Name = "ResearchArticle", Memo = "ここにメモ" });
+    }
+
+    void AddGroupNode()
+    {
+        _GroupNodeViewModels.Add(new GroupNodeViewModel() { Name = "Group" });
+    }
+
+    void RemoveNodes()
+    {
+        var removeNodes = _NodeViewModels.Where(arg => arg.IsSelected).ToArray();
+        foreach (var removeNode in removeNodes)
+        {
+            _NodeViewModels.Remove(removeNode);
+
+            var removeNodeLink = NodeLinkViewModels.FirstOrDefault(arg => arg.InputConnectorNodeGuid == removeNode.Guid || arg.OutputConnectorNodeGuid == removeNode.Guid);
+            _NodeLinkViewModels.Remove(removeNodeLink);
+        }
+    }
+
+    void MoveGroupNode()
+    {
+        _GroupNodeViewModels[0].InterlockPosition = new Point(0, 0);
+    }
+
+    void ChangeGroupInnerSize()
+    {
+        _GroupNodeViewModels[0].InnerWidth = 300;
+        _GroupNodeViewModels[0].InnerHeight = 300;
+    }
+
+    void ChangeGroupInnerPosition()
+    {
+        _GroupNodeViewModels[0].InnerPosition = new Point(0, 0);
+    }
+
+    void ResetScale()
+    {
+        Scale = 1.0f;
+    }
+
+    void UpdateIsLockedAllNodeLinksProperty(bool value)
+    {
+        _IsLockedAllNodeLinks = !_IsLockedAllNodeLinks;
+
+        foreach (var nodeLink in _NodeLinkViewModels)
+        {
+            nodeLink.IsLocked = _IsLockedAllNodeLinks;
+        }
+
+        RaisePropertyChanged(nameof(IsLockedAllNodeLinks));
+    }
+
+    void UpdateIsEnableAllNodeConnectorsProperty(bool value)
+    {
+        _IsEnableAllNodeConnectors = !_IsEnableAllNodeConnectors;
+
+        foreach (var node in _NodeViewModels)
+        {
+            foreach (var input in node.Inputs)
+            {
+                input.IsEnable = _IsEnableAllNodeConnectors;
+            }
+            foreach (var output in node.Outputs)
+            {
+                output.IsEnable = _IsEnableAllNodeConnectors;
+            }
+        }
+
+        RaisePropertyChanged(nameof(IsEnableAllNodeConnectors));
+    }
+
+    void NodesMoved(EndMoveNodesOperationEventArgs param)
+    {
+
+    }
+
+    void SelectionChanged(IList list)
+    {
 
     }
 
@@ -345,7 +447,6 @@ public class MainWindowViewModel : ViewModel
         foreach (var noInputNode in noInputNodes)
             ProcessOne(noInputNode);
 
-
     }
 
     private IEnumerable<DefaultNodeViewModel> GetChildrenNodes(DefaultNodeViewModel parentNode, IEnumerable<DefaultNodeViewModel> fromThisList = null)
@@ -363,99 +464,6 @@ public class MainWindowViewModel : ViewModel
         }
 
         return childrenNodes;
-    }
-
-
-    #endregion
-
-
-    // ★★★★★★★★★★★★★★★ methods (node handling)
-
-    #region node handle methods
-
-    void AddNode()
-    {
-        _NodeViewModels.Add(new ResearchArticleNodeViewModel() { Name = "ResearchArticle", Memo = "ここにメモ" });
-    }
-
-    void AddGroupNode()
-    {
-        _GroupNodeViewModels.Add(new GroupNodeViewModel() { Name = "Group" });
-    }
-
-    void RemoveNodes()
-    {
-        var removeNodes = _NodeViewModels.Where(arg => arg.IsSelected).ToArray();
-        foreach (var removeNode in removeNodes)
-        {
-            _NodeViewModels.Remove(removeNode);
-
-            var removeNodeLink = NodeLinkViewModels.FirstOrDefault(arg => arg.InputConnectorNodeGuid == removeNode.Guid || arg.OutputConnectorNodeGuid == removeNode.Guid);
-            _NodeLinkViewModels.Remove(removeNodeLink);
-        }
-    }
-
-    void ClearNodes()
-    {
-        _NodeLinkViewModels.Clear();
-        _NodeViewModels.Clear();
-    }
-
-    void ClearNodeLinks()
-    {
-        _NodeLinkViewModels.Clear();
-    }
-
-    void MoveGroupNode()
-    {
-        _GroupNodeViewModels[0].InterlockPosition = new Point(0, 0);
-    }
-
-    void ChangeGroupInnerSize()
-    {
-        _GroupNodeViewModels[0].InnerWidth = 300;
-        _GroupNodeViewModels[0].InnerHeight = 300;
-    }
-
-    void ChangeGroupInnerPosition()
-    {
-        _GroupNodeViewModels[0].InnerPosition = new Point(0, 0);
-    }
-
-    void ResetScale()
-    {
-        Scale = 1.0f;
-    }
-
-    void UpdateIsLockedAllNodeLinksProperty(bool value)
-    {
-        _IsLockedAllNodeLinks = !_IsLockedAllNodeLinks;
-
-        foreach (var nodeLink in _NodeLinkViewModels)
-        {
-            nodeLink.IsLocked = _IsLockedAllNodeLinks;
-        }
-
-        RaisePropertyChanged(nameof(IsLockedAllNodeLinks));
-    }
-
-    void UpdateIsEnableAllNodeConnectorsProperty(bool value)
-    {
-        _IsEnableAllNodeConnectors = !_IsEnableAllNodeConnectors;
-
-        foreach (var node in _NodeViewModels)
-        {
-            foreach (var input in node.Inputs)
-            {
-                input.IsEnable = _IsEnableAllNodeConnectors;
-            }
-            foreach (var output in node.Outputs)
-            {
-                output.IsEnable = _IsEnableAllNodeConnectors;
-            }
-        }
-
-        RaisePropertyChanged(nameof(IsEnableAllNodeConnectors));
     }
 
     void PreviewConnect(PreviewConnectLinkOperationEventArgs args)
@@ -484,41 +492,9 @@ public class MainWindowViewModel : ViewModel
         _NodeLinkViewModels.Remove(nodeLink);
     }
 
-    void NodesMoved(EndMoveNodesOperationEventArgs param)
-    {
-
-    }
-
-    void SelectionChanged(IList list)
-    {
-
-    }
-
-    void AddTestNodeLink()
-    {
-        if (_NodeViewModels.Count < 2)
-        {
-            return;
-        }
-        var nodeLink = new NodeLinkViewModel
-        {
-            OutputConnectorNodeGuid = _NodeViewModels[0].Guid,
-            OutputConnectorGuid = _NodeViewModels[0].Outputs.ElementAt(0).Guid,
-            InputConnectorNodeGuid = _NodeViewModels[1].Guid,
-            InputConnectorGuid = _NodeViewModels[1].Inputs.ElementAt(0).Guid,
-        };
-        _NodeLinkViewModels.Add(nodeLink);
-    }
-
-    void MoveTestNodes()
-    {
-        if (_NodeLinkViewModels.Any())
-            _NodeViewModels[0].Position = new Point(0, 0);
-    }
-
     #endregion
 
-
+    
     // ★★★★★★★★★★★★★★★ 
 
 }
