@@ -61,8 +61,11 @@ public class MainWindowViewModel : ViewModel
     public ViewModelCommand ChangeGroupInnerPositionCommand => _ChangeGroupInnerPositionCommand.Get(ChangeGroupInnerPosition);
     ViewModelCommandHandler _ChangeGroupInnerPositionCommand = new();
 
-    public ViewModelCommand RearrangeNodesCommand => _RearrangeNodesCommand.Get(RearrangeNodes);
-    ViewModelCommandHandler _RearrangeNodesCommand = new();
+    public ViewModelCommand RearrangeNodesAlignLeftCommand => _RearrangeNodesAlignLeftCommand.Get(RearrangeNodesAlignLeft);
+    ViewModelCommandHandler _RearrangeNodesAlignLeftCommand = new();
+
+    public ViewModelCommand RearrangeNodesAlignRightCommand => _RearrangeNodesAlignRightCommand.Get(RearrangeNodesAlignRight);
+    ViewModelCommandHandler _RearrangeNodesAlignRightCommand = new();
 
     public IEnumerable<DefaultNodeViewModel> NodeViewModels => _NodeViewModels;
     ObservableCollection<DefaultNodeViewModel> _NodeViewModels = new();
@@ -112,7 +115,7 @@ public class MainWindowViewModel : ViewModel
 
         InitResearchArticlesManager();
 
-        RearrangeNodes();
+        RearrangeNodesAlignLeft();
 
 
         //ResearchArticlesManager.ArticleDatabase[0].Memo = "hello from code behind";
@@ -368,11 +371,55 @@ public class MainWindowViewModel : ViewModel
 
     }
 
-    void RearrangeNodes()
+    void PreviewConnect(PreviewConnectLinkOperationEventArgs args)
+    {
+        var inputNode = NodeViewModels.First(arg => arg.Guid == args.ConnectToEndNodeGuid);
+        var inputConnector = inputNode.FindConnector(args.ConnectToEndConnectorGuid);
+        args.CanConnect = inputConnector.Label == "Limited Input" == false;
+    }
+
+    void Connected(ConnectedLinkOperationEventArgs param)
+    {
+        var nodeLink = new NodeLinkViewModel()
+        {
+            OutputConnectorGuid = param.OutputConnectorGuid,
+            OutputConnectorNodeGuid = param.OutputConnectorNodeGuid,
+            InputConnectorGuid = param.InputConnectorGuid,
+            InputConnectorNodeGuid = param.InputConnectorNodeGuid,
+            IsLocked = IsLockedAllNodeLinks,
+        };
+        _NodeLinkViewModels.Add(nodeLink);
+    }
+
+    void Disconnected(DisconnectedLinkOperationEventArgs param)
+    {
+        var nodeLink = _NodeLinkViewModels.First(arg => arg.Guid == param.NodeLinkGuid);
+        _NodeLinkViewModels.Remove(nodeLink);
+    }
+
+    void RearrangeNodesAlignLeft()
     {
         var rearrangingNodes = new List<DefaultNodeViewModel>(_NodeViewModels);
-        var OutputConnectorNodeGuids = _NodeLinkViewModels.Select(link => link.OutputConnectorNodeGuid).ToArray();
+        OrderByGroup(ref rearrangingNodes);
+        var basePosition = new Point(NODE_MARGIN_LEFT, NODE_MARGIN_TOP);
+        RearrangeNodesAlignLeft(rearrangingNodes, basePosition, true);
+    }
+
+    void RearrangeNodesAlignRight()
+    {
+        var rearrangingNodes = new List<DefaultNodeViewModel>(_NodeViewModels);
+        OrderByGroup(ref rearrangingNodes);
+        var basePosition = new Point(NODE_MARGIN_LEFT, NODE_MARGIN_TOP);
+        RearrangeNodesAlignRight(rearrangingNodes, basePosition, true);
+    }
+
+
+    void RearrangeNodesAlignLeft(List<DefaultNodeViewModel> rearrangingNodes, Point basePosition, bool toLowerDirection)
+    {
+        var horizontalCoef = 1;
+        var verticalCoef = toLowerDirection ? 1 : -1;
         var InputConnectorNodeGuids = _NodeLinkViewModels.Select(link => link.InputConnectorNodeGuid).ToArray();
+        var OutputConnectorNodeGuids = _NodeLinkViewModels.Select(link => link.OutputConnectorNodeGuid).ToArray();
 
         // ★★★★★ 用いる変数のリセット
         foreach (var rearrangingNode in rearrangingNodes)
@@ -390,8 +437,8 @@ public class MainWindowViewModel : ViewModel
             var noConnectionNode = noConnectionNodes[i];
             rearrangingNodes.Remove(noConnectionNode);
             noConnectionNode.Position = new Point(
-                NODE_MARGIN_LEFT + 0 * NODE_HORIZONTAL_SPAN,
-                NODE_MARGIN_TOP + i * NODE_VERTICAL_SPAN);
+                basePosition.X + horizontalCoef * 0 * NODE_HORIZONTAL_SPAN,
+                basePosition.Y + verticalCoef * i * NODE_VERTICAL_SPAN);
 
         }
 
@@ -419,15 +466,15 @@ public class MainWindowViewModel : ViewModel
         }
 
 
-        // ★★★★★ どんどん接続していく。深さ優先で。最深まで達したら次の列に進む。
+        // ★★★★★ どんどん右に接続していく。深さ優先で。最深まで達したら次の列に進む。
 
         var currentVerticalIndex = 0;
 
         void ProcessOne(DefaultNodeViewModel parentNode)
         {
             parentNode.Position = new Point(
-                NODE_MARGIN_LEFT + parentNode.__InnerMemo * NODE_HORIZONTAL_SPAN,
-                NODE_MARGIN_TOP + currentVerticalIndex * NODE_VERTICAL_SPAN);
+                basePosition.X + horizontalCoef * parentNode.__InnerMemo * NODE_HORIZONTAL_SPAN,
+                basePosition.Y + verticalCoef * currentVerticalIndex * NODE_VERTICAL_SPAN);
 
             var childrenNodes = GetChildrenNodes(parentNode, withInputNodes);
             if (childrenNodes.Any())
@@ -449,11 +496,151 @@ public class MainWindowViewModel : ViewModel
 
     }
 
-    private IEnumerable<DefaultNodeViewModel> GetChildrenNodes(DefaultNodeViewModel parentNode, IEnumerable<DefaultNodeViewModel> fromThisList = null)
+    void RearrangeNodesAlignRight(List<DefaultNodeViewModel> rearrangingNodes, Point basePosition, bool toLowerDirection)
+    {
+        var horizontalCoef = -1;
+        var verticalCoef = toLowerDirection ? 1 : -1;
+        var InputConnectorNodeGuids = _NodeLinkViewModels.Select(link => link.InputConnectorNodeGuid).ToArray();
+        var OutputConnectorNodeGuids = _NodeLinkViewModels.Select(link => link.OutputConnectorNodeGuid).ToArray();
+
+        // ★★★★★ 用いる変数のリセット
+        foreach (var rearrangingNode in rearrangingNodes)
+        {
+            rearrangingNode.__InnerMemo = 0;
+            rearrangingNode.Position = new Point(0, 0);
+        }
+
+
+        // ★★★★★ 最初にinputNodeにもoutputNodeにも何もない人をかき集めて問答無用で並べておく。
+        var noConnectionNodes = rearrangingNodes.Where(n => !InputConnectorNodeGuids.Contains(n.Guid) && !OutputConnectorNodeGuids.Contains(n.Guid)).ToArray();
+
+        for (int i = 0; i < noConnectionNodes.Length; i++)
+        {
+            var noConnectionNode = noConnectionNodes[i];
+            rearrangingNodes.Remove(noConnectionNode);
+            noConnectionNode.Position = new Point(
+                basePosition.X + horizontalCoef * 0 * NODE_HORIZONTAL_SPAN,
+                basePosition.Y + verticalCoef * i * NODE_VERTICAL_SPAN);
+
+        }
+
+
+        // ★★★★★ 水平方向の座標候補を算出。
+        var noOutputNodes = rearrangingNodes.Where(n => !OutputConnectorNodeGuids.Contains(n.Guid)).ToList();
+        var withOutputNodes = rearrangingNodes.Where(n => OutputConnectorNodeGuids.Contains(n.Guid)).ToList();
+
+        // ★ outputNodeに何もないNodeを1とする。
+        for (int i = 0; i < noOutputNodes.Count; i++)
+            noOutputNodes[i].__InnerMemo = 1;
+
+        // ★ そいつらを最初の親として，全てのNodeに対して，一番経路の長いものを算定する。
+        var childrenNodeQueue = new Queue<DefaultNodeViewModel>(noOutputNodes);
+
+        while (childrenNodeQueue.Count > 0)
+        {
+            var childNode = childrenNodeQueue.Dequeue();
+            var parentNodes = GetParentNodes(childNode, withOutputNodes);
+            foreach (var parentNode in parentNodes)
+            {
+                parentNode.__InnerMemo = Math.Max(parentNode.__InnerMemo, childNode.__InnerMemo + 1);
+                childrenNodeQueue.Enqueue(parentNode);
+            }
+        }
+
+
+        // ★★★★★ どんどん左に接続していく。深さ優先で。最深まで達したら次の列に進む。
+
+        var currentVerticalIndex = 0;
+
+        void ProcessOne(DefaultNodeViewModel childNode)
+        {
+            childNode.Position = new Point(
+                basePosition.X + horizontalCoef * childNode.__InnerMemo * NODE_HORIZONTAL_SPAN,
+                basePosition.Y + verticalCoef * currentVerticalIndex * NODE_VERTICAL_SPAN);
+
+            var parentNodes = GetParentNodes(childNode, withOutputNodes);
+            if (parentNodes.Any())
+            {
+                foreach (var parentNode in parentNodes)
+                {
+                    ProcessOne(parentNode);
+                    withOutputNodes.Remove(parentNode);
+                }
+            }
+            else
+            {
+                currentVerticalIndex++;
+            }
+        }
+
+        foreach (var noOutputNode in noOutputNodes)
+            ProcessOne(noOutputNode);
+
+    }
+
+    void OrderByGroup(ref List<DefaultNodeViewModel> targetNodes)
+    {
+        var InputConnectorNodeGuids = _NodeLinkViewModels.Select(link => link.InputConnectorNodeGuid).ToArray();
+        var OutputConnectorNodeGuids = _NodeLinkViewModels.Select(link => link.OutputConnectorNodeGuid).ToArray();
+
+        // ★★★★★ 用いる変数のリセット
+        foreach (var targetNode in targetNodes)
+        {
+            targetNode.__InnerMemo = -1;
+        }
+
+
+        // ★★★★★ 最初にinputNodeにもoutputNodeにも何もない人に番号を振る。
+        {
+            var currentTargetNodes = targetNodes.Where(node => node.__InnerMemo < 0);
+            var nextGroupNum = targetNodes.Max(node => node.__InnerMemo) + 1;
+
+            var noConnectionNodes = currentTargetNodes.Where(n => !InputConnectorNodeGuids.Contains(n.Guid) && !OutputConnectorNodeGuids.Contains(n.Guid)).ToArray();
+            foreach (var noConnectionNode in noConnectionNodes)
+                noConnectionNode.__InnerMemo = nextGroupNum++;
+        }
+
+
+        // ★★★★★ 次に，適当にピックしてそのNodeの関係あるノードを全てグループ付けする。
+        while (true)
+        {
+            var currentTargetNodes = targetNodes.Where(node => node.__InnerMemo < 0).ToList();
+            var nextGroupNum = targetNodes.Max(node => node.__InnerMemo) + 1;
+            if (!currentTargetNodes.Any())
+                break;
+
+            var currentTargetNodeQueue = new Queue<DefaultNodeViewModel>();
+            currentTargetNodeQueue.Enqueue(currentTargetNodes.First());
+
+            while (currentTargetNodeQueue.Count > 0)
+            {
+                var targetNode = currentTargetNodeQueue.Dequeue();
+                targetNode.__InnerMemo = nextGroupNum;
+                currentTargetNodes.Remove(targetNode);
+
+                var parentNodes = GetParentNodes(targetNode, currentTargetNodes);
+                foreach (var parentNode in parentNodes)
+                    currentTargetNodeQueue.Enqueue(parentNode);
+
+                var childrenNodes = GetChildrenNodes(targetNode, currentTargetNodes);
+                foreach (var childNodes in childrenNodes)
+                    currentTargetNodeQueue.Enqueue(childNodes);
+
+            }
+
+        }
+
+        targetNodes = targetNodes.OrderBy(node => node.__InnerMemo).ToList();
+
+    }
+
+
+
+    IEnumerable<DefaultNodeViewModel> GetChildrenNodes(DefaultNodeViewModel targetNode, IEnumerable<DefaultNodeViewModel> fromThisList = null)
     {
         var childrenNodes = new List<DefaultNodeViewModel>();
 
-        var childNodeGuids = NodeLinkViewModels.Where(link => link.OutputConnectorNodeGuid == parentNode.Guid).Select(link => link.InputConnectorNodeGuid);
+        var childNodeGuids = NodeLinkViewModels.Where(link => link.OutputConnectorNodeGuid == targetNode.Guid).Select(link => link.InputConnectorNodeGuid);
         foreach (var childNodeGuid in childNodeGuids)
         {
             var childNode = (fromThisList ?? NodeViewModels).FirstOrDefault(n => n.Guid == childNodeGuid);
@@ -466,35 +653,27 @@ public class MainWindowViewModel : ViewModel
         return childrenNodes;
     }
 
-    void PreviewConnect(PreviewConnectLinkOperationEventArgs args)
+    IEnumerable<DefaultNodeViewModel> GetParentNodes(DefaultNodeViewModel targetNode, IEnumerable<DefaultNodeViewModel> fromThisList = null)
     {
-        var inputNode = NodeViewModels.First(arg => arg.Guid == args.ConnectToEndNodeGuid);
-        var inputConnector = inputNode.FindConnector(args.ConnectToEndConnectorGuid);
-        args.CanConnect = inputConnector.Label == "Limited Input" == false;
-    }
+        var parentNodes = new List<DefaultNodeViewModel>();
 
-    void Connected(ConnectedLinkOperationEventArgs param)
-    {
-        var nodeLink = new NodeLinkViewModel()
+        var parentNodeGuids = NodeLinkViewModels.Where(link => link.InputConnectorNodeGuid == targetNode.Guid).Select(link => link.OutputConnectorNodeGuid);
+        foreach (var parentNodeGuid in parentNodeGuids)
         {
-            OutputConnectorGuid = param.OutputConnectorGuid,
-            OutputConnectorNodeGuid = param.OutputConnectorNodeGuid,
-            InputConnectorGuid = param.InputConnectorGuid,
-            InputConnectorNodeGuid = param.InputConnectorNodeGuid,
-            IsLocked = IsLockedAllNodeLinks,
-        };
-        _NodeLinkViewModels.Add(nodeLink);
+            var parentNode = (fromThisList ?? NodeViewModels).FirstOrDefault(n => n.Guid == parentNodeGuid);
+            if (parentNode == null)
+                continue;
+
+            parentNodes.Add(parentNode);
+        }
+
+        return parentNodes;
     }
 
-    void Disconnected(DisconnectedLinkOperationEventArgs param)
-    {
-        var nodeLink = _NodeLinkViewModels.First(arg => arg.Guid == param.NodeLinkGuid);
-        _NodeLinkViewModels.Remove(nodeLink);
-    }
 
     #endregion
 
-    
+
     // ★★★★★★★★★★★★★★★ 
 
 }

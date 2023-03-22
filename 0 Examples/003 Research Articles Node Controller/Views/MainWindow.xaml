@@ -24,9 +24,10 @@
         </Style>
 
         <ContextMenu x:Key="NodeGraphContextMenu">
-            <MenuItem Header="AddNode" Command="{Binding AddNodeCommand}"/>
-            <MenuItem Header="AddGroupNode" Command="{Binding AddGroupNodeCommand}"/>
-            <MenuItem Header="RemoveNodes" Command="{Binding RemoveNodesCommand}"/>
+            <MenuItem Header="Add Node" Command="{Binding AddNodeCommand}"/>
+            <MenuItem Header="Add GroupNode" Command="{Binding AddGroupNodeCommand}"/>
+            <MenuItem Header="Rearrange Nodes around this Node" Command="{Binding RearrangeNodesWithSelecetdCommand}"/>
+            <MenuItem Header="Remove Nodes" Command="{Binding RemoveNodesCommand}"/>
         </ContextMenu>
 
         <Style x:Key="NodeInputStyle" TargetType="{x:Type ctrl:NodeInputContent}" BasedOn="{StaticResource {x:Type ctrl:NodeInputContent}}">
@@ -233,7 +234,8 @@
                 <Button Margin="4" Height="24" Content="MoveGroupNode" Command="{Binding MoveGroupNodeCommand}"/>
                 <Button Margin="4" Height="24" Content="ChangeGroupInnerSize" Command="{Binding ChangeGroupInnerSizeCommand}"/>
                 <Button Margin="4" Height="24" Content="ChangeGroupInnerPosition" Command="{Binding ChangeGroupInnerPositionCommand}"/>
-                <Button Margin="4" Height="24" Content="RearrangeNodes" Command="{Binding RearrangeNodesCommand}"/>
+                <Button Margin="4" Height="24" Content="RearrangeNodesAlignLeft" Command="{Binding RearrangeNodesAlignLeftCommand}"/>
+                <Button Margin="4" Height="24" Content="RearrangeNodesAlignRight" Command="{Binding RearrangeNodesAlignRightCommand}"/>
             </DockPanel>
 
             <DockPanel>
