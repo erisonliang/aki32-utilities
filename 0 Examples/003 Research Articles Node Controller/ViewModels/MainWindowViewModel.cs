@@ -8,6 +8,7 @@ using System.Windows;
 using Aki32Utilities.ViewModels.NodeViewModels;
 using Aki32Utilities.ConsoleAppUtilities.Research;
 using System.IO;
+using DocumentFormat.OpenXml.Office.CustomUI;
 
 namespace Aki32Utilities.UsageExamples.ResearchArticlesNodeController.ViewModels;
 
@@ -52,15 +53,6 @@ public class MainWindowViewModel : ViewModel
     public ListenerCommand<IList> SelectionChangedCommand => _SelectionChangedCommand.Get(SelectionChanged);
     ViewModelCommandHandler<IList> _SelectionChangedCommand = new();
 
-    public ViewModelCommand MoveGroupNodeCommand => _MoveGroupNodeCommand.Get(MoveGroupNode);
-    ViewModelCommandHandler _MoveGroupNodeCommand = new();
-
-    public ViewModelCommand ChangeGroupInnerSizeCommand => _ChangeGroupInnerSizeCommand.Get(ChangeGroupInnerSize);
-    ViewModelCommandHandler _ChangeGroupInnerSizeCommand = new();
-
-    public ViewModelCommand ChangeGroupInnerPositionCommand => _ChangeGroupInnerPositionCommand.Get(ChangeGroupInnerPosition);
-    ViewModelCommandHandler _ChangeGroupInnerPositionCommand = new();
-
     public ViewModelCommand RearrangeNodesAlignLeftCommand => _RearrangeNodesAlignLeftCommand.Get(RearrangeNodesAlignLeft);
     ViewModelCommandHandler _RearrangeNodesAlignLeftCommand = new();
 
@@ -100,6 +92,8 @@ public class MainWindowViewModel : ViewModel
     #endregion
 
     public ResearchArticlesManager ResearchArticlesManager { get; set; }
+
+    public ResearchArticleNodeViewModel? SelectingNodeViewModel { get; set; } = null;
 
 
     // ★★★★★★★★★★★★★★★ inits
@@ -284,6 +278,21 @@ public class MainWindowViewModel : ViewModel
             _NodeLinkViewModels.Clear();
         }
 
+        //void MoveGroupNode()
+        {
+            _GroupNodeViewModels[0].InterlockPosition = new Point(0, 0);
+        }
+
+        //void ChangeGroupInnerPosition()
+        {
+            _GroupNodeViewModels[0].InnerPosition = new Point(0, 0);
+        }
+
+        //void ChangeGroupInnerSize()
+        {
+            _GroupNodeViewModels[0].InnerWidth = 300;
+            _GroupNodeViewModels[0].InnerHeight = 300;
+        }
 
     }
 
@@ -307,22 +316,6 @@ public class MainWindowViewModel : ViewModel
             var removeNodeLink = NodeLinkViewModels.FirstOrDefault(arg => arg.InputConnectorNodeGuid == removeNode.Guid || arg.OutputConnectorNodeGuid == removeNode.Guid);
             _NodeLinkViewModels.Remove(removeNodeLink);
         }
-    }
-
-    void MoveGroupNode()
-    {
-        _GroupNodeViewModels[0].InterlockPosition = new Point(0, 0);
-    }
-
-    void ChangeGroupInnerSize()
-    {
-        _GroupNodeViewModels[0].InnerWidth = 300;
-        _GroupNodeViewModels[0].InnerHeight = 300;
-    }
-
-    void ChangeGroupInnerPosition()
-    {
-        _GroupNodeViewModels[0].InnerPosition = new Point(0, 0);
     }
 
     void ResetScale()
@@ -366,11 +359,6 @@ public class MainWindowViewModel : ViewModel
 
     }
 
-    void SelectionChanged(IList list)
-    {
-
-    }
-
     void PreviewConnect(PreviewConnectLinkOperationEventArgs args)
     {
         var inputNode = NodeViewModels.First(arg => arg.Guid == args.ConnectToEndNodeGuid);
@@ -395,6 +383,26 @@ public class MainWindowViewModel : ViewModel
     {
         var nodeLink = _NodeLinkViewModels.First(arg => arg.Guid == param.NodeLinkGuid);
         _NodeLinkViewModels.Remove(nodeLink);
+    }
+
+    void SelectionChanged(IList list)
+    {
+        var hitArticleNodeFlag = false;
+        SelectingNodeViewModel = null;
+
+        foreach (var item in list)
+        {
+            if (item is ResearchArticleNodeViewModel articleNode)
+            {
+                if (hitArticleNodeFlag)
+                    SelectingNodeViewModel = null;
+                else
+                    SelectingNodeViewModel = articleNode;
+
+                hitArticleNodeFlag = true;
+            }
+        }
+
     }
 
     void RearrangeNodesAlignLeft()
@@ -601,7 +609,7 @@ public class MainWindowViewModel : ViewModel
         }
 
 
-        // ★★★★★ 次に，適当にピックしてそのNodeの関係あるノードを全てグループ付けする。
+        // ★★★★★ どんどん，適当にピックしてそのNodeに関係あるNodeを全て同じグループとしてグループ付けする。
         while (true)
         {
             var currentTargetNodes = targetNodes.Where(node => node.__InnerMemo < 0).ToList();
@@ -633,8 +641,6 @@ public class MainWindowViewModel : ViewModel
         targetNodes = targetNodes.OrderBy(node => node.__InnerMemo).ToList();
 
     }
-
-
 
     IEnumerable<DefaultNodeViewModel> GetChildrenNodes(DefaultNodeViewModel targetNode, IEnumerable<DefaultNodeViewModel> fromThisList = null)
     {

@@ -211,14 +211,14 @@ public class ResearchArticle : IComparable
     public string? Memo { get; set; }
 
     /// <summary>
-    /// Motivation: 研究の出発点
+    /// 【Motivation: 研究の出発点】
     /// <br/> - どんな課題や問題点を解決しようとしたのか？
     /// <br/> - 既存の研究で足りないところはどこだったのか？
     /// </summary>
     public string Memo_Motivation { get; set; } = "";
 
     /// <summary>
-    /// Method: 研究手法
+    /// 【Method: 研究手法】
     /// <br/> - どんなシステムを作ったか？なぜそのシステム設計でよいと仮定したか？
     /// <br/> - どんなアルゴリズムを作ったか？なぜそのアルゴリズム設計でよいと仮定したか？
     /// <br/> - どんな調査をしたか？なぜその調査計画でよいと仮定したか？
@@ -227,16 +227,15 @@ public class ResearchArticle : IComparable
     public string Memo_Method { get; set; } = "";
 
     /// <summary>
-    /// Insights: 結果と知見
+    /// 【Insights: 結果と知見】
     /// <br/> - どんな結果が得られたのか？どんな条件だと上手くいって，どんな場合は上手くいかなかったのか？
     /// <br/> - 新しくわかった知見はなにか？他のアプリケーションやシステムでも使えそうな知見は何か？
     /// </summary>
     public string Memo_Insights { get; set; } = "";
 
     /// <summary>
-    /// Contribution Summary: 貢献を一行で
-    /// <br/> - 結論を1行で！！
-    /// <br/> - 「[Author] は[Motivation] という課題のため，[Method] を行い，[Insight] がわかった．」
+    /// 【Contribution Summary: 貢献を一行で！】
+    /// <br/> - 「【Author】は，【Motivation】という課題解決のために【Method】を行い，【Insight】がわかった。」
     /// </summary>
     public string Memo_Contribution { get; set; } = "";
 

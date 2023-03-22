@@ -16,7 +16,8 @@ public class ResearchArticleNodeViewModel : DefaultNodeViewModel
 
     public ResearchArticle Article { get; set; } = new();
 
-    [AlsoNotifyFor(nameof(Name), nameof(ArticleTitle), nameof(Authors), nameof(Description), nameof(Memo), nameof(DOI))]
+    [AlsoNotifyFor(nameof(Name), nameof(ArticleTitle), nameof(Authors), nameof(TopAuthor), nameof(Memo), nameof(DOI),
+        nameof(Memo_Motivation), nameof(Memo_Method), nameof(Memo_Insights), nameof(Memo_Contribution))]
     private int NotifyArticleUpdatedBridge { get; set; } = 0;
 
     public string Name { get; set; }
@@ -34,35 +35,82 @@ public class ResearchArticleNodeViewModel : DefaultNodeViewModel
 
     public string Authors
     {
-        get => (Article.Authors == null) ? "不明" : JsonConvert.SerializeObject(Article.Authors);
+        get => (Article.Authors == null) ? "不明" : string.Join("; ", Article.Authors);
         set
         {
             var temp = JsonConvert.SerializeObject(Article.Authors);
             RaisePropertyChangedIfSet(ref temp, value);
             if (temp is not null)
-                Article.Manual_Authors = JsonConvert.DeserializeObject<string[]>(temp);
+                Article.Manual_Authors = temp.Split(';').Select(a => a.Trim()).ToArray();
         }
     }
 
-    public string Description
+    public string TopAuthor
     {
-        get => Article.Description ?? "";
-        set
-        {
-            var temp = Article.Description;
-            RaisePropertyChangedIfSet(ref temp, value);
-            Article.Manual_Description = temp;
-        }
+        get => (Article.Authors == null) ? "不明" : Article.Authors[0];
     }
 
     public string Memo
     {
-        get => Article.Memo ?? "";
+        get
+        {
+            if (Article.Memo is not null)
+                return Article.Memo;
+
+            if (!string.IsNullOrEmpty(Article.Description))
+                return $"【概要】{Article.Description}";
+
+            return "";
+        }
         set
         {
             var temp = Article.Memo;
             RaisePropertyChangedIfSet(ref temp, value);
             Article.Memo = temp;
+        }
+    }
+
+    public string Memo_Motivation
+    {
+        get => Article.Memo_Motivation;
+        set
+        {
+            var temp = Article.Memo_Motivation;
+            RaisePropertyChangedIfSet(ref temp, value);
+            Article.Memo_Motivation = temp;
+        }
+    }
+
+    public string Memo_Method
+    {
+        get => Article.Memo_Method;
+        set
+        {
+            var temp = Article.Memo_Method;
+            RaisePropertyChangedIfSet(ref temp, value);
+            Article.Memo_Method = temp;
+        }
+    }
+
+    public string Memo_Insights
+    {
+        get => Article.Memo_Insights;
+        set
+        {
+            var temp = Article.Memo_Insights;
+            RaisePropertyChangedIfSet(ref temp, value);
+            Article.Memo_Insights = temp;
+        }
+    }
+
+    public string Memo_Contribution
+    {
+        get => Article.Memo_Contribution;
+        set
+        {
+            var temp = Article.Memo_Contribution;
+            RaisePropertyChangedIfSet(ref temp, value);
+            Article.Memo_Contribution = temp;
         }
     }
 

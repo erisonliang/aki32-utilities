@@ -224,78 +224,260 @@
     <Grid>
 
         <Grid.RowDefinitions>
-            <RowDefinition Height="64"/>
+            <RowDefinition Height="auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="600"/>
+        </Grid.ColumnDefinitions>
 
-        <StackPanel Grid.Row="0">
+        <Grid Grid.Row="0" Grid.Column="0">
 
-            <DockPanel LastChildFill="False">
-                <Button Margin="4" Height="24" Content="MoveGroupNode" Command="{Binding MoveGroupNodeCommand}"/>
-                <Button Margin="4" Height="24" Content="ChangeGroupInnerSize" Command="{Binding ChangeGroupInnerSizeCommand}"/>
-                <Button Margin="4" Height="24" Content="ChangeGroupInnerPosition" Command="{Binding ChangeGroupInnerPositionCommand}"/>
-                <Button Margin="4" Height="24" Content="RearrangeNodesAlignLeft" Command="{Binding RearrangeNodesAlignLeftCommand}"/>
-                <Button Margin="4" Height="24" Content="RearrangeNodesAlignRight" Command="{Binding RearrangeNodesAlignRightCommand}"/>
-            </DockPanel>
+            <ScrollViewer 
+                HorizontalScrollBarVisibility="Auto" 
+                VerticalScrollBarVisibility="Disabled"
+                >
 
-            <DockPanel>
+                <StackPanel
+                    Orientation="Horizontal">
+
+                    <Button Margin="4" Height="24" Content="保存" Command="{Binding RearrangeNodesAlignRightCommand}"/>
+                    <Button Margin="4" Height="24" Content="整列" Command="{Binding RearrangeNodesAlignRightCommand}"/>
+
+                    <!-- コピペ用に残す。 -->
+                    <ComboBox Margin="4" Height="24" ItemsSource="{Binding GroupIntersectTypes, Mode=OneTime}" SelectedItem="{Binding SelectedGroupIntersectType}" ToolTip="group intersection type."/>
+                    <ComboBox Margin="4" Height="24" ItemsSource="{Binding RangeSelectionModes, Mode=OneTime}" SelectedItem="{Binding SelectedRangeSelectionMode}" ToolTip="range selection mode."/>
+                    <CheckBox Margin="4" Height="24" Content="IsLockedAllNodeLinks" IsChecked="{Binding IsLockedAllNodeLinks}" VerticalContentAlignment="Center"/>
+                    <CheckBox Margin="4" Height="24" Content="IsEnableAllNodeConnectors" IsChecked="{Binding IsEnableAllNodeConnectors}" VerticalContentAlignment="Center"/>
+
+                </StackPanel>
+
+            </ScrollViewer>
+
+        </Grid>
+
+        <Grid Grid.Row="1" Grid.Column="0">
+
+            <ctrl:NodeGraph
+                Grid.Row="1"
+                x:Name="NodeGraph"
+                MoveWithMouse="Right"
+                Scale="{Binding Scale}"
+                ItemsSource="{Binding NodeViewModels}"
+                ItemContainerStyle="{StaticResource DefaultNodeStyle}"
+                NodeLinks="{Binding NodeLinkViewModels}"
+                NodeLinkStyle="{StaticResource NodeLinkStyle}"
+                GroupNodes="{Binding GroupNodeViewModels}"
+                GroupNodeStyle="{StaticResource GroupNodeStyle}"
+                PreviewConnectLinkCommand="{Binding PreviewConnectLinkCommand}"
+                ConnectedLinkCommand="{Binding ConnectedLinkCommand}"
+                DisconnectedLinkCommand="{Binding DisconnectedLinkCommand}"
+                AllowToOverrideConnection="False"
+                ClipToBounds="True"
+                ContextMenu="{StaticResource NodeGraphContextMenu}">
+
+                <ctrl:NodeGraph.Style>
+                    <Style TargetType="{x:Type ctrl:NodeGraph}" BasedOn="{StaticResource {x:Type ctrl:NodeGraph}}">
+                        <Style.Triggers>
+                            <!--Group intersect -->
+                            <DataTrigger Binding="{Binding SelectedGroupIntersectType}" Value="{x:Static vm:GroupIntersectType.CursorPointVMDefine}">
+                                <Setter Property="GroupIntersectType" Value="{x:Static ctrl:GroupIntersectType.CursorPoint}"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding SelectedGroupIntersectType}" Value="{x:Static vm:GroupIntersectType.BoundingBoxVMDefine}">
+                                <Setter Property="GroupIntersectType" Value="{x:Static ctrl:GroupIntersectType.BoundingBox}"/>
+                            </DataTrigger>
+
+                            <!--Range selection mode-->
+                            <DataTrigger Binding="{Binding SelectedRangeSelectionMode}" Value="{x:Static vm:RangeSelectionMode.ContainVMDefine}">
+                                <Setter Property="RangeSelectionMdoe" Value="{x:Static ctrl:RangeSelectionMode.Contain}"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding SelectedRangeSelectionMode}" Value="{x:Static vm:RangeSelectionMode.IntersectVMDefine}">
+                                <Setter Property="RangeSelectionMdoe" Value="{x:Static ctrl:RangeSelectionMode.Intersect}"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </ctrl:NodeGraph.Style>
+
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="SelectionChanged">
+                        <i:InvokeCommandAction Command="{Binding SelectionChangedCommand}" CommandParameter="{Binding SelectedItems, ElementName=NodeGraph}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </ctrl:NodeGraph>
+
+        </Grid>
+
+        <Grid Grid.Row="0" Grid.Column="1" Grid.RowSpan="2">
+
+            <StackPanel Margin="4">
+
+                <Grid Height="30"/>
+
+                <Grid Margin="4">
+                    <TextBlock
+                        Text="著者：" 
+                        Width="50" 
+                        HorizontalAlignment="Left"
+                        TextAlignment="Right"
+                        ToolTipService.InitialShowDelay="10" 
+                        />
+                    <TextBox 
+                        Margin="50,0,0,0" 
+                        Text="{Binding SelectingNodeViewModel.Authors}" 
+                        TextWrapping="Wrap" AcceptsReturn="False"
+                        />
+                </Grid>
+
+                <Grid Margin="4">
+                    <TextBlock
+                        Text="タイトル：" 
+                        Width="50" 
+                        HorizontalAlignment="Left"
+                        TextAlignment="Right"
+                        ToolTipService.InitialShowDelay="10" 
+                        />
+                    <TextBox 
+                        Margin="50,0,0,0" 
+                        Text="{Binding SelectingNodeViewModel.ArticleTitle}" 
+                        TextWrapping="Wrap" AcceptsReturn="False"
+                        />
+                </Grid>
+
+                <Grid Margin="4">
+                    <TextBlock
+                        Text="メモ：" 
+                        Width="50" 
+                        HorizontalAlignment="Left"
+                        TextAlignment="Right"
+                        ToolTipService.InitialShowDelay="10" 
+                        />
+                    <TextBox 
+                        Margin="50,0,0,0" 
+                        Text="{Binding SelectingNodeViewModel.Memo}" 
+                        TextWrapping="Wrap" AcceptsReturn="True"
+                        />
+                </Grid>
+
+                <Grid Margin="4">
+                    <TextBlock
+                        Text="研究の出発点：" 
+                        ToolTip="
+                        【Motivation: 研究の出発点】
+ - どんな課題や問題点を解決しようとしたのか？
+ - 既存の研究で足りないところはどこだったのか？"
+                        Width="100" 
+                        HorizontalAlignment="Left"
+                        TextAlignment="Right"
+                        ToolTipService.InitialShowDelay="10" 
+                        />
+                    <TextBox 
+                        Margin="100,0,0,0" 
+                        Text="{Binding SelectingNodeViewModel.Memo_Motivation}" 
+                        TextWrapping="Wrap" AcceptsReturn="True"
+                        />
+                </Grid>
+
+                <Grid Margin="4">
+                    <TextBlock
+                        Text="研究手法：" 
+                        ToolTip="【Method: 研究手法】
+ - どんなシステムを作ったか？なぜそのシステム設計でよいと仮定したか？
+ - どんなアルゴリズムを作ったか？なぜそのアルゴリズム設計でよいと仮定したか？
+ - どんな調査をしたか？なぜその調査計画でよいと仮定したか？
+ - どんな実験をしたか？なぜその実験設計でよいと仮定したか？"
+                        Width="100" 
+                        HorizontalAlignment="Left"
+                        TextAlignment="Right"
+                        ToolTipService.InitialShowDelay="10" 
+                        />
+                    <TextBox 
+                        Margin="100,0,0,0" 
+                        Text="{Binding SelectingNodeViewModel.Memo_Method}" 
+                        TextWrapping="Wrap" AcceptsReturn="True"
+                        />
+                </Grid>
+
+                <Grid Margin="4">
+                    <TextBlock
+                        Text="結果と知見：" 
+                        ToolTip="【Insights: 結果と知見】
+ - どんな結果が得られたのか？どんな条件だと上手くいって，どんな場合は上手くいかなかったのか？
+ - 新しくわかった知見はなにか？他のアプリケーションやシステムでも使えそうな知見は何か？"
+                        Width="100" 
+                        HorizontalAlignment="Left"
+                        TextAlignment="Right"
+                        ToolTipService.InitialShowDelay="10" 
+                        />
+                    <TextBox 
+                        Margin="100,0,0,0" 
+                        Text="{Binding SelectingNodeViewModel.Memo_Insights}" 
+                        TextWrapping="Wrap" AcceptsReturn="True"
+                        />
+                </Grid>
+
+                <Grid Margin="4">
+                    <TextBlock
+                        Text="貢献を一行で：" 
+                        ToolTip="【Contribution Summary: 貢献を一行で】
+ - 「【Author】は，【Motivation】という課題解決のために【Method】を行い，【Insight】がわかった。」"
+                        Width="100" 
+                        HorizontalAlignment="Left"
+                        TextAlignment="Right"
+                        ToolTipService.InitialShowDelay="10" 
+                        />
+                    <TextBox 
+                        Margin="100,0,0,0" 
+                        Text="{Binding SelectingNodeViewModel.Memo_Contribution}" 
+                        TextWrapping="Wrap" AcceptsReturn="True"
+                        />
+                </Grid>
+
+            </StackPanel>
+
+            <StackPanel Margin="4" VerticalAlignment="Bottom" >
 
 
-                <!-- コピペ用に残す。 -->
-                <ComboBox Margin="4" Height="24" ItemsSource="{Binding GroupIntersectTypes, Mode=OneTime}" SelectedItem="{Binding SelectedGroupIntersectType}" ToolTip="group intersection type."/>
-                <ComboBox Margin="4" Height="24" ItemsSource="{Binding RangeSelectionModes, Mode=OneTime}" SelectedItem="{Binding SelectedRangeSelectionMode}" ToolTip="range selection mode."/>
-                <CheckBox Margin="4" Height="24" Content="IsLockedAllNodeLinks" IsChecked="{Binding IsLockedAllNodeLinks}" VerticalContentAlignment="Center"/>
-                <CheckBox Margin="4" Height="24" Content="IsEnableAllNodeConnectors" IsChecked="{Binding IsEnableAllNodeConnectors}" VerticalContentAlignment="Center"/>
-            </DockPanel>
+                <Grid Margin="4">
+                    <TextBlock
+                        Text="DOI：" 
+                        Width="50" 
+                        HorizontalAlignment="Left"
+                        TextAlignment="Right"
+                        ToolTipService.InitialShowDelay="10" 
+                        />
+                    <TextBox 
+                        Margin="50,0,0,0" 
+                        Text="{Binding SelectingNodeViewModel.DOI}" 
+                        TextWrapping="NoWrap" AcceptsReturn="False"
+                        />
+                </Grid>
 
-        </StackPanel>
+                <Grid Margin="4">
+                    <TextBlock
+                        Text="オンラインで情報を取得：" 
+                        ToolTip="aaa"
+                        Width="200" 
+                        HorizontalAlignment="Left"
+                        TextAlignment="Right"
+                        ToolTipService.InitialShowDelay="10" 
+                        />
+                </Grid>
 
-        <ctrl:NodeGraph
-            Grid.Row="3"
-            x:Name="NodeGraph"
-            MoveWithMouse="Right"
-            Scale="{Binding Scale}"
-            ItemsSource="{Binding NodeViewModels}"
-            ItemContainerStyle="{StaticResource DefaultNodeStyle}"
-            NodeLinks="{Binding NodeLinkViewModels}"
-            NodeLinkStyle="{StaticResource NodeLinkStyle}"
-            GroupNodes="{Binding GroupNodeViewModels}"
-            GroupNodeStyle="{StaticResource GroupNodeStyle}"
-            PreviewConnectLinkCommand="{Binding PreviewConnectLinkCommand}"
-            ConnectedLinkCommand="{Binding ConnectedLinkCommand}"
-            DisconnectedLinkCommand="{Binding DisconnectedLinkCommand}"
-            AllowToOverrideConnection="False"
-            ClipToBounds="True"
-            ContextMenu="{StaticResource NodeGraphContextMenu}">
+                <Grid Margin="4">
+                    <TextBlock
+                        Text="PDFをダウンロード・表示：" 
+                        ToolTip="aaa"
+                        Width="200" 
+                        HorizontalAlignment="Left"
+                        TextAlignment="Right"
+                        ToolTipService.InitialShowDelay="10" 
+                        />
+                </Grid>
 
-            <ctrl:NodeGraph.Style>
-                <Style TargetType="{x:Type ctrl:NodeGraph}" BasedOn="{StaticResource {x:Type ctrl:NodeGraph}}">
-                    <Style.Triggers>
-                        <!--Group intersect -->
-                        <DataTrigger Binding="{Binding SelectedGroupIntersectType}" Value="{x:Static vm:GroupIntersectType.CursorPointVMDefine}">
-                            <Setter Property="GroupIntersectType" Value="{x:Static ctrl:GroupIntersectType.CursorPoint}"/>
-                        </DataTrigger>
-                        <DataTrigger Binding="{Binding SelectedGroupIntersectType}" Value="{x:Static vm:GroupIntersectType.BoundingBoxVMDefine}">
-                            <Setter Property="GroupIntersectType" Value="{x:Static ctrl:GroupIntersectType.BoundingBox}"/>
-                        </DataTrigger>
+            </StackPanel>
 
-                        <!--Range selection mode-->
-                        <DataTrigger Binding="{Binding SelectedRangeSelectionMode}" Value="{x:Static vm:RangeSelectionMode.ContainVMDefine}">
-                            <Setter Property="RangeSelectionMdoe" Value="{x:Static ctrl:RangeSelectionMode.Contain}"/>
-                        </DataTrigger>
-                        <DataTrigger Binding="{Binding SelectedRangeSelectionMode}" Value="{x:Static vm:RangeSelectionMode.IntersectVMDefine}">
-                            <Setter Property="RangeSelectionMdoe" Value="{x:Static ctrl:RangeSelectionMode.Intersect}"/>
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </ctrl:NodeGraph.Style>
-
-            <i:Interaction.Triggers>
-                <i:EventTrigger EventName="SelectionChanged">
-                    <i:InvokeCommandAction Command="{Binding SelectionChangedCommand}" CommandParameter="{Binding SelectedItems, ElementName=NodeGraph}"/>
-                </i:EventTrigger>
-            </i:Interaction.Triggers>
-        </ctrl:NodeGraph>
+        </Grid>
 
     </Grid>
 </Window>
