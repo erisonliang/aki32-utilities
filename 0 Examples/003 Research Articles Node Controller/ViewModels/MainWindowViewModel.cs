@@ -9,6 +9,7 @@ using Aki32Utilities.ViewModels.NodeViewModels;
 using Aki32Utilities.ConsoleAppUtilities.Research;
 using System.IO;
 using DocumentFormat.OpenXml.Office.CustomUI;
+using PropertyChanged;
 
 namespace Aki32Utilities.UsageExamples.ResearchArticlesNodeController.ViewModels;
 
@@ -17,15 +18,17 @@ public class MainWindowViewModel : ViewModel
 
     // ★★★★★★★★★★★★★★★ felds
 
-    const int NODE_MARGIN_LEFT = 50;
-    const int NODE_MARGIN_TOP = 50;
+    const int NODE_MARGIN_LEFT = 0;
+    const int NODE_MARGIN_TOP = 0;
     const int NODE_VERTICAL_SPAN = 250;
     const int NODE_HORIZONTAL_SPAN = 500;
-
 
     // ★★★★★★★★★★★★★★★ props
 
     #region inner props
+
+    public string InfoMessage { get; set; }
+    private List<string> InfoMessageBuffer = new List<string>();
 
     public double Scale { get; set; } = 1d;
 
@@ -58,6 +61,9 @@ public class MainWindowViewModel : ViewModel
 
     public ViewModelCommand RearrangeNodesAlignRightCommand => _RearrangeNodesAlignRightCommand.Get(RearrangeNodesAlignRight);
     ViewModelCommandHandler _RearrangeNodesAlignRightCommand = new();
+
+    public ViewModelCommand SaveCommand => _SaveCommand.Get(Save);
+    ViewModelCommandHandler _SaveCommand = new();
 
     public IEnumerable<DefaultNodeViewModel> NodeViewModels => _NodeViewModels;
     ObservableCollection<DefaultNodeViewModel> _NodeViewModels = new();
@@ -100,27 +106,17 @@ public class MainWindowViewModel : ViewModel
 
     public MainWindowViewModel()
     {
-        _NodeViewModels.Add(new ResearchArticleNodeViewModel() { Name = "ResearchArticle", Article = new ResearchArticle { Manual_ArticleTitle = "a1" }, Position = new Point(NODE_MARGIN_LEFT, NODE_MARGIN_TOP) });
-        _NodeViewModels.Add(new ResearchArticleNodeViewModel() { Name = "ResearchArticle", Article = new ResearchArticle { Manual_ArticleTitle = "a2" }, Position = new Point(NODE_MARGIN_LEFT, NODE_MARGIN_TOP) });
-        _NodeViewModels.Add(new ResearchArticleNodeViewModel() { Name = "ResearchArticle", Article = new ResearchArticle { Manual_ArticleTitle = "a3" }, Position = new Point(NODE_MARGIN_LEFT, NODE_MARGIN_TOP) });
-        _NodeViewModels.Add(new ResearchArticleNodeViewModel() { Name = "ResearchArticle", Article = new ResearchArticle { Manual_ArticleTitle = "a4" }, Position = new Point(NODE_MARGIN_LEFT, NODE_MARGIN_TOP) });
-        _NodeViewModels.Add(new ResearchArticleNodeViewModel() { Name = "ResearchArticle", Article = new ResearchArticle { Manual_ArticleTitle = "a5" }, Position = new Point(NODE_MARGIN_LEFT, NODE_MARGIN_TOP) });
-
-
-        InitResearchArticlesManager();
+        var databaseDir = new DirectoryInfo($@"{Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory)}\ResearchArticleDB");
+        InitResearchArticlesManager(databaseDir);
 
         RearrangeNodesAlignLeft();
 
-
         //ResearchArticlesManager.ArticleDatabase[0].Memo = "hello from code behind";
         //NotifyResearchArticlesPropertiesChanged();
-
     }
 
-    private void InitResearchArticlesManager()
+    private void InitResearchArticlesManager(DirectoryInfo databaseDir)
     {
-
-        var databaseDir = new DirectoryInfo($@"{Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory)}\ResearchArticleDB");
         ResearchArticlesManager = new ResearchArticlesManager(databaseDir);
         ResearchArticlesManager.OpenDatabase();
 
@@ -164,6 +160,21 @@ public class MainWindowViewModel : ViewModel
             }
         }
 
+    }
+
+
+    // ★★★★★★★★★★★★★★★ methods (general)
+
+    void UpdateInfoMesssage(string message)
+    {
+        var now = DateTime.Now;
+        var newMessage = $" {now:HH:mm:ss}, {message}";
+        InfoMessageBuffer.Add(newMessage);
+
+        if (InfoMessageBuffer.Count > 5)
+            InfoMessageBuffer = InfoMessageBuffer.TakeLast(5).ToList();
+
+        InfoMessage = string.Join("\r\n", InfoMessageBuffer);
     }
 
 
@@ -233,6 +244,12 @@ public class MainWindowViewModel : ViewModel
 
     }
 
+    void Save()
+    {
+        UpdateInfoMesssage("保存開始");
+        ResearchArticlesManager.SaveDatabase(true, true);
+        UpdateInfoMesssage("保存完了");
+    }
 
     #endregion
 

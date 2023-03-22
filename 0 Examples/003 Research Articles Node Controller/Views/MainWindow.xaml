@@ -17,7 +17,7 @@
     <Window.Resources>
 
         <sys:Double x:Key="NodeContentFontSize">24.0</sys:Double>
-        
+
         <Style x:Key="UserTextBoxStyle" TargetType="TextBox">
             <Setter Property="Foreground" Value="WhiteSmoke"/>
             <Setter Property="Background" Value="#CC000000"/>
@@ -138,7 +138,7 @@
                                     />
 
                             </Grid>
-                            
+
                             <Grid Margin="3">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="50"/>
@@ -215,7 +215,7 @@
                 <StackPanel
                     Orientation="Horizontal">
 
-                    <Button Margin="4" Height="24" Content="保存" Command="{Binding RearrangeNodesAlignRightCommand}"/>
+                    <Button Margin="4" Height="24" Content="保存" Command="{Binding SaveCommand}"/>
                     <Button Margin="4" Height="24" Content="整列" Command="{Binding RearrangeNodesAlignLeftCommand}"/>
 
                     <!-- コピペ用に残す。 -->
@@ -283,72 +283,80 @@
 
         <Grid Grid.Row="0" Grid.Column="1" Grid.RowSpan="2">
 
-            <StackPanel Margin="4">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
 
-                <Grid Height="30"/>
+            <ScrollViewer
+                HorizontalScrollBarVisibility="Disabled">
 
-                <Grid Margin="4">
-                    <TextBlock
+                <StackPanel Margin="4">
+
+                    <Grid Height="30"/>
+
+                    <Grid Margin="4">
+                        <TextBlock
                         Text="著者：" 
                         Width="50" 
                         HorizontalAlignment="Left"
                         TextAlignment="Right"
                         ToolTipService.InitialShowDelay="10" 
                         />
-                    <TextBox 
+                        <TextBox 
                         Margin="50,0,0,0" 
                         Text="{Binding SelectingNodeViewModel.Authors}" 
                         TextWrapping="Wrap" AcceptsReturn="False"
                         />
-                </Grid>
+                    </Grid>
 
-                <Grid Margin="4">
-                    <TextBlock
+                    <Grid Margin="4">
+                        <TextBlock
                         Text="タイトル：" 
                         Width="50" 
                         HorizontalAlignment="Left"
                         TextAlignment="Right"
                         ToolTipService.InitialShowDelay="10" 
                         />
-                    <TextBox 
+                        <TextBox 
                         Margin="50,0,0,0" 
                         Text="{Binding SelectingNodeViewModel.ArticleTitle}" 
                         TextWrapping="Wrap" AcceptsReturn="False"
                         />
-                </Grid>
-                
-                <Grid Margin="4">
-                    <TextBlock
+                    </Grid>
+
+                    <Grid Margin="4">
+                        <TextBlock
                         Text="リリース：" 
                         Width="50" 
                         HorizontalAlignment="Left"
                         TextAlignment="Right"
                         ToolTipService.InitialShowDelay="10" 
                         />
-                    <TextBox 
+                        <TextBox 
                         Margin="50,0,0,0" 
                         Text="{Binding SelectingNodeViewModel.PublishedOn}" 
                         TextWrapping="NoWrap" AcceptsReturn="False"
                         />
-                </Grid>
+                    </Grid>
 
-                <Grid Margin="4">
-                    <TextBlock
+                    <Grid Margin="4">
+                        <TextBlock
                         Text="メモ：" 
                         Width="50" 
                         HorizontalAlignment="Left"
                         TextAlignment="Right"
                         ToolTipService.InitialShowDelay="10" 
                         />
-                    <TextBox 
+                        <TextBox 
                         Margin="50,0,0,0" 
                         Text="{Binding SelectingNodeViewModel.Memo}" 
                         TextWrapping="Wrap" AcceptsReturn="True"
                         />
-                </Grid>
+                    </Grid>
 
-                <Grid Margin="4">
-                    <TextBlock
+                    <Grid Margin="4">
+                        <TextBlock
                         Text="研究の出発点：" 
                         ToolTip="
                         【Motivation: 研究の出発点】
@@ -359,15 +367,15 @@
                         TextAlignment="Right"
                         ToolTipService.InitialShowDelay="10" 
                         />
-                    <TextBox 
+                        <TextBox 
                         Margin="100,0,0,0" 
                         Text="{Binding SelectingNodeViewModel.Memo_Motivation}" 
                         TextWrapping="Wrap" AcceptsReturn="True"
                         />
-                </Grid>
+                    </Grid>
 
-                <Grid Margin="4">
-                    <TextBlock
+                    <Grid Margin="4">
+                        <TextBlock
                         Text="研究手法：" 
                         ToolTip="【Method: 研究手法】
  - どんなシステムを作ったか？なぜそのシステム設計でよいと仮定したか？
@@ -379,15 +387,15 @@
                         TextAlignment="Right"
                         ToolTipService.InitialShowDelay="10" 
                         />
-                    <TextBox 
+                        <TextBox 
                         Margin="100,0,0,0" 
                         Text="{Binding SelectingNodeViewModel.Memo_Method}" 
                         TextWrapping="Wrap" AcceptsReturn="True"
                         />
-                </Grid>
+                    </Grid>
 
-                <Grid Margin="4">
-                    <TextBlock
+                    <Grid Margin="4">
+                        <TextBlock
                         Text="結果と知見：" 
                         ToolTip="【Insights: 結果と知見】
  - どんな結果が得られたのか？どんな条件だと上手くいって，どんな場合は上手くいかなかったのか？
@@ -397,15 +405,15 @@
                         TextAlignment="Right"
                         ToolTipService.InitialShowDelay="10" 
                         />
-                    <TextBox 
+                        <TextBox 
                         Margin="100,0,0,0" 
                         Text="{Binding SelectingNodeViewModel.Memo_Insights}" 
                         TextWrapping="Wrap" AcceptsReturn="True"
                         />
-                </Grid>
+                    </Grid>
 
-                <Grid Margin="4">
-                    <TextBlock
+                    <Grid Margin="4">
+                        <TextBlock
                         Text="貢献を一行で：" 
                         ToolTip="【Contribution Summary: 貢献を一行で】
  - 「【Author】は，【Motivation】という課題解決のために【Method】を行い，【Insight】がわかった。」"
@@ -414,35 +422,32 @@
                         TextAlignment="Right"
                         ToolTipService.InitialShowDelay="10" 
                         />
-                    <TextBox 
+                        <TextBox 
                         Margin="100,0,0,0" 
                         Text="{Binding SelectingNodeViewModel.Memo_Contribution}" 
                         TextWrapping="Wrap" AcceptsReturn="True"
                         />
-                </Grid>
+                    </Grid>
 
-            </StackPanel>
+                    <Grid Height="50"/>
 
-            <StackPanel Margin="4" VerticalAlignment="Bottom" >
-
-
-                <Grid Margin="4">
-                    <TextBlock
+                    <Grid Margin="4">
+                        <TextBlock
                         Text="DOI：" 
                         Width="50" 
                         HorizontalAlignment="Left"
                         TextAlignment="Right"
                         ToolTipService.InitialShowDelay="10" 
                         />
-                    <TextBox 
+                        <TextBox 
                         Margin="50,0,0,0" 
                         Text="{Binding SelectingNodeViewModel.DOI}" 
                         TextWrapping="NoWrap" AcceptsReturn="False"
                         />
-                </Grid>
+                    </Grid>
 
-                <Grid Margin="4">
-                    <TextBlock
+                    <Grid Margin="4">
+                        <TextBlock
                         Text="オンラインで情報を取得：" 
                         ToolTip="aaa"
                         Width="200" 
@@ -450,16 +455,38 @@
                         TextAlignment="Right"
                         ToolTipService.InitialShowDelay="10" 
                         />
-                </Grid>
+                    </Grid>
 
-                <Grid Margin="4">
-                    <TextBlock
+                    <Grid Margin="4">
+                        <TextBlock
                         Text="PDFをダウンロード・表示：" 
                         ToolTip="aaa"
                         Width="200" 
                         HorizontalAlignment="Left"
                         TextAlignment="Right"
                         ToolTipService.InitialShowDelay="10" 
+                        />
+                    </Grid>
+
+
+                </StackPanel>
+
+            </ScrollViewer>
+
+            <StackPanel Grid.Row="1" Margin="4">
+
+                <Grid Margin="4">
+                    <TextBlock
+                        Text="ℹ️ 通知：" 
+                        Width="50" 
+                        HorizontalAlignment="Left"
+                        TextAlignment="Right"
+                        ToolTipService.InitialShowDelay="10" 
+                        />
+                    <TextBlock
+                        Margin="50,0,0,0" 
+                        Text="{Binding InfoMessage}" 
+                        TextWrapping="NoWrap"
                         />
                 </Grid>
 
