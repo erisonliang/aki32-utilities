@@ -10,6 +10,7 @@ using Aki32Utilities.ConsoleAppUtilities.Research;
 using System.IO;
 using DocumentFormat.OpenXml.Office.CustomUI;
 using PropertyChanged;
+using System.IO.Packaging;
 
 namespace Aki32Utilities.UsageExamples.ResearchArticlesNodeController.ViewModels;
 
@@ -41,10 +42,10 @@ public class MainWindowViewModel : ViewModel
     public ListenerCommand<PreviewConnectLinkOperationEventArgs> PreviewConnectLinkCommand => _PreviewConnectLinkCommand.Get(PreviewConnect);
     ViewModelCommandHandler<PreviewConnectLinkOperationEventArgs> _PreviewConnectLinkCommand = new();
 
-    public ListenerCommand<ConnectedLinkOperationEventArgs> ConnectedLinkCommand => _ConnectedLinkCommand.Get(Connected);
+    public ListenerCommand<ConnectedLinkOperationEventArgs> ConnectedLinkCommand => _ConnectedLinkCommand.Get(NodeConnected);
     ViewModelCommandHandler<ConnectedLinkOperationEventArgs> _ConnectedLinkCommand = new();
 
-    public ListenerCommand<DisconnectedLinkOperationEventArgs> DisconnectedLinkCommand => _DisconnectedLinkCommand.Get(Disconnected);
+    public ListenerCommand<DisconnectedLinkOperationEventArgs> DisconnectedLinkCommand => _DisconnectedLinkCommand.Get(NodeDisconnected);
     ViewModelCommandHandler<DisconnectedLinkOperationEventArgs> _DisconnectedLinkCommand = new();
 
     public ListenerCommand<EndMoveNodesOperationEventArgs> EndMoveNodesCommand => _EndMoveNodesCommand.Get(NodesMoved);
@@ -71,10 +72,7 @@ public class MainWindowViewModel : ViewModel
     public IEnumerable<GroupNodeViewModel> GroupNodeViewModels => _GroupNodeViewModels;
     ObservableCollection<GroupNodeViewModel> _GroupNodeViewModels = new();
 
-    public GroupIntersectType[] GroupIntersectTypes { get; } = Enum.GetValues(typeof(GroupIntersectType)).OfType<GroupIntersectType>().ToArray();
     public RangeSelectionMode[] RangeSelectionModes { get; } = Enum.GetValues(typeof(RangeSelectionMode)).OfType<RangeSelectionMode>().ToArray();
-
-    public GroupIntersectType SelectedGroupIntersectType { get; set; }
 
     public RangeSelectionMode SelectedRangeSelectionMode { get; set; } = RangeSelectionMode.ContainVMDefine;
 
@@ -90,7 +88,7 @@ public class MainWindowViewModel : ViewModel
         get => _IsEnableAllNodeConnectors;
         set => UpdateIsEnableAllNodeConnectorsProperty(value);
     }
-    bool _IsEnableAllNodeConnectors = true;
+    bool _IsEnableAllNodeConnectors = false;
 
     #endregion
 
@@ -110,6 +108,9 @@ public class MainWindowViewModel : ViewModel
 
         //ResearchArticlesManager.ArticleDatabase[0].Memo = "hello from code behind";
         //NotifyResearchArticlesPropertiesChanged();
+
+        IsLockedAllNodeLinks = true;
+        IsEnableAllNodeConnectors = true;
     }
 
     private void InitResearchArticlesManager(DirectoryInfo databaseDir)
@@ -269,6 +270,35 @@ public class MainWindowViewModel : ViewModel
         }
     }
 
+    void NodeConnected(ConnectedLinkOperationEventArgs param)
+    {
+        var nodeLink = new NodeLinkViewModel()
+        {
+            OutputConnectorGuid = param.OutputConnectorGuid,
+            OutputConnectorNodeGuid = param.OutputConnectorNodeGuid,
+            InputConnectorGuid = param.InputConnectorGuid,
+            InputConnectorNodeGuid = param.InputConnectorNodeGuid,
+            IsLocked = IsLockedAllNodeLinks,
+        };
+        _NodeLinkViewModels.Add(nodeLink);
+
+        // 引用関係をデータベースに追加
+        var parentNode =(ResearchArticleNodeViewModel) NodeViewModels.First(node => node.Guid == nodeLink.OutputConnectorNodeGuid);
+        var childNode = (ResearchArticleNodeViewModel)NodeViewModels.First(node => node.Guid == nodeLink.InputConnectorNodeGuid);
+        childNode.Article.AddArticleReference(parentNode.Article);
+    }
+
+    void NodeDisconnected(DisconnectedLinkOperationEventArgs param)
+    {
+        var nodeLink = _NodeLinkViewModels.First(arg => arg.Guid == param.NodeLinkGuid);
+        _NodeLinkViewModels.Remove(nodeLink);
+
+        // 引用関係をデータベースから削除
+        var parentNode = (ResearchArticleNodeViewModel)NodeViewModels.First(node => node.Guid == nodeLink.OutputConnectorNodeGuid);
+        var childNode = (ResearchArticleNodeViewModel)NodeViewModels.First(node => node.Guid == nodeLink.InputConnectorNodeGuid);
+        childNode.Article.RemoveArticleReference(parentNode.Article);
+    }
+
     void Save()
     {
         UpdateInfoMesssage("保存開始");
@@ -345,7 +375,7 @@ public class MainWindowViewModel : ViewModel
 
     void UpdateIsLockedAllNodeLinksProperty(bool value)
     {
-        _IsLockedAllNodeLinks = !_IsLockedAllNodeLinks;
+        _IsLockedAllNodeLinks = value;
 
         foreach (var nodeLink in _NodeLinkViewModels)
         {
@@ -357,7 +387,7 @@ public class MainWindowViewModel : ViewModel
 
     void UpdateIsEnableAllNodeConnectorsProperty(bool value)
     {
-        _IsEnableAllNodeConnectors = !_IsEnableAllNodeConnectors;
+        _IsEnableAllNodeConnectors = value;
 
         foreach (var node in _NodeViewModels)
         {
@@ -384,25 +414,6 @@ public class MainWindowViewModel : ViewModel
         var inputNode = NodeViewModels.First(arg => arg.Guid == args.ConnectToEndNodeGuid);
         var inputConnector = inputNode.FindConnector(args.ConnectToEndConnectorGuid);
         args.CanConnect = inputConnector.Label == "Limited Input" == false;
-    }
-
-    void Connected(ConnectedLinkOperationEventArgs param)
-    {
-        var nodeLink = new NodeLinkViewModel()
-        {
-            OutputConnectorGuid = param.OutputConnectorGuid,
-            OutputConnectorNodeGuid = param.OutputConnectorNodeGuid,
-            InputConnectorGuid = param.InputConnectorGuid,
-            InputConnectorNodeGuid = param.InputConnectorNodeGuid,
-            IsLocked = IsLockedAllNodeLinks,
-        };
-        _NodeLinkViewModels.Add(nodeLink);
-    }
-
-    void Disconnected(DisconnectedLinkOperationEventArgs param)
-    {
-        var nodeLink = _NodeLinkViewModels.First(arg => arg.Guid == param.NodeLinkGuid);
-        _NodeLinkViewModels.Remove(nodeLink);
     }
 
     void SelectionChanged(IList list)

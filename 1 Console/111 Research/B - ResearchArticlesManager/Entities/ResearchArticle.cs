@@ -397,7 +397,7 @@ public class ResearchArticle : IComparable
     /// Add reference connection info to Article.
     /// </summary>
     /// <param name="referredArticle">
-    /// Article that is begin referred. 
+    /// Article that is being referred. 
     /// 参照される側の論文。
     /// </param>
     public void AddArticleReference(ResearchArticle referredArticle)
@@ -406,8 +406,29 @@ public class ResearchArticle : IComparable
         ReferenceDOIs ??= Array.Empty<string>();
 
         ReferenceDOIs = ReferenceDOIs
-            .Append(referredArticle.DOI ?? (referredArticle.AOI ??= Guid.NewGuid().ToString()))!
+            .Append(referredArticle.DOI.NullIfNullOrEmpty() ?? (referredArticle.AOI ??= Guid.NewGuid().ToString()))!
             .Distinct()
+            .ToArray()
+            ;
+
+    }
+
+    /// <summary>
+    /// Remove reference connection info from Article.
+    /// </summary>
+    /// <param name="referredArticle">
+    /// Article that used to be being referred. 
+    /// 参照されていた側の論文。
+    /// </param>
+    public void RemoveArticleReference(ResearchArticle referredArticle)
+    {
+        // Remove DOI and AOI from ReferenceDOIs.
+        if (ReferenceDOIs is null)
+            return;
+
+        ReferenceDOIs = ReferenceDOIs
+            .Where(dois => dois != referredArticle.DOI)
+            .Where(dois => dois != referredArticle.AOI)
             .ToArray()
             ;
 

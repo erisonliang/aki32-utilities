@@ -1418,66 +1418,66 @@ public static partial class ExampleExecuter
             // A - ResearchManager
             {
 
-                var databaseDir = new DirectoryInfo($@"{Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory)}\ResearchArticleDB");
+                //var databaseDir = new DirectoryInfo($@"{Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory)}\ResearchArticleDB");
 
-                var research = new ResearchArticlesManager(databaseDir);
-                research.OpenDatabase();
+                //var research = new ResearchArticlesManager(databaseDir);
+                //research.OpenDatabase();
 
-                //// ★ articles from j - stage
-                //var accessor = new JStageArticleAPIAccessor()
+                ////// ★ articles from j - stage
+                ////var accessor = new JStageArticleAPIAccessor()
+                ////{
+                ////    PublishedFrom = 2022,
+                ////    ISSN = ISSN.Architecture_Structure,
+                ////    RecordCount = 3,
+                ////    //Start = 1,
+                ////};
+                ////research.PullArticleInfo(accessor);
+
+
+                ////// ★ articles from cinii
+                ////var accessor = new CiNiiArticleAPIAccessor()
+                ////{
+                ////    RecordCount = 5,
+                ////    ISSN = ISSN.Architecture_Structure,
+                ////    SearchFreeWord = "小振幅"
+                ////};
+                ////research.PullArticleInfo(accessor);
+
+
+                ////// ★ article from crossref
+                ////var accessor = new CrossRefAPIAccessor()
+                ////{
+                ////    DOI = "10.3130/aijs.87.822"
+                ////};
+                ////research.PullArticleInfo(accessor);
+
+
+                ////// ★ articles from ndl search
+                ////var accessor = new NDLSearchAPIAccessor()
+                ////{
+                ////    RecordCount = 5,
+                ////    SearchFreeWord = "空間情報を表現するグラフ構造",
+                ////};
+                ////research.PullArticleInfo(accessor);
+
+
+
+                //// display
                 //{
-                //    PublishedFrom = 2022,
-                //    ISSN = ISSN.Architecture_Structure,
-                //    RecordCount = 3,
-                //    //Start = 1,
-                //};
-                //research.PullArticleInfo(accessor);
+                //    research.SaveDatabase(true, true);
 
+                //    Console.WriteLine();
+                //    Console.WriteLine();
+                //    Console.WriteLine($"★ {research.ArticleDatabase.Count} found in total");
+                //    Console.WriteLine();
+                //    //foreach (var article in research.ArticleDatabase)
+                //    //    Console.WriteLine($" + {article.Title_Japanese}");
+                //    //Console.WriteLine();
+                //    Console.WriteLine();
 
-                //// ★ articles from cinii
-                //var accessor = new CiNiiArticleAPIAccessor()
-                //{
-                //    RecordCount = 5,
-                //    ISSN = ISSN.Architecture_Structure,
-                //    SearchFreeWord = "小振幅"
-                //};
-                //research.PullArticleInfo(accessor);
+                //    //research.ArticleDatabase.First(x => x.DOI == "10.3130/aijs.87.822").TryOpenPDF(research.PDFsDirectory);
 
-
-                //// ★ article from crossref
-                //var accessor = new CrossRefAPIAccessor()
-                //{
-                //    DOI = "10.3130/aijs.87.822"
-                //};
-                //research.PullArticleInfo(accessor);
-
-
-                //// ★ articles from ndl search
-                //var accessor = new NDLSearchAPIAccessor()
-                //{
-                //    RecordCount = 5,
-                //    SearchFreeWord = "空間情報を表現するグラフ構造",
-                //};
-                //research.PullArticleInfo(accessor);
-
-
-
-                // display
-                {
-                    research.SaveDatabase(true, true);
-
-                    Console.WriteLine();
-                    Console.WriteLine();
-                    Console.WriteLine($"★ {research.ArticleDatabase.Count} found in total");
-                    Console.WriteLine();
-                    //foreach (var article in research.ArticleDatabase)
-                    //    Console.WriteLine($" + {article.Title_Japanese}");
-                    //Console.WriteLine();
-                    Console.WriteLine();
-
-                    //research.ArticleDatabase.First(x => x.DOI == "10.3130/aijs.87.822").TryOpenPDF(research.PDFsDirectory);
-
-                }
+                //}
 
             }
 

@@ -107,12 +107,13 @@
                                     Grid.Column="0"
                                     Text="著者:" 
                                     HorizontalAlignment="Right"
-                                    Margin="0,10,0,0"
+                                    VerticalAlignment="Center"
                                     />
                                 <TextBlock 
                                     Grid.Column="2"
                                     Text="{Binding TopAuthor,Mode=OneWay}"
                                     FontSize="{StaticResource NodeContentFontSize}"
+                                    VerticalAlignment="Center"
                                     />
 
                             </Grid>
@@ -128,13 +129,13 @@
                                     Grid.Column="0"
                                     Text="リリース:" 
                                     HorizontalAlignment="Right"
-                                    Margin="0,10,0,0"
+                                    VerticalAlignment="Center"
                                     />
-                                <TextBox 
+                                <TextBlock 
                                     Grid.Column="2"
-                                    Style="{StaticResource UserTextBoxStyle}"
                                     Text="{Binding PublishedOn}"
                                     FontSize="{StaticResource NodeContentFontSize}"
+                                    VerticalAlignment="Center"
                                     />
 
                             </Grid>
@@ -151,10 +152,10 @@
                                     Text="タイトル:" 
                                     HorizontalAlignment="Right"
                                     />
-                                <TextBox
+                                <TextBlock
                                     Grid.Column="2" 
-                                    Style="{StaticResource UserTextBoxStyle}"
-                                    Text="{Binding ArticleTitle}" 
+                                    Text="{Binding ArticleTitle}"
+                                    TextWrapping="Wrap"
                                     />
 
                             </Grid>
@@ -219,10 +220,8 @@
                     <Button Margin="4" Height="24" Content="整列" Command="{Binding RearrangeNodesAlignLeftCommand}"/>
 
                     <!-- コピペ用に残す。 -->
-                    <ComboBox Margin="4" Height="24" ItemsSource="{Binding GroupIntersectTypes, Mode=OneTime}" SelectedItem="{Binding SelectedGroupIntersectType}" ToolTip="group intersection type."/>
                     <ComboBox Margin="4" Height="24" ItemsSource="{Binding RangeSelectionModes, Mode=OneTime}" SelectedItem="{Binding SelectedRangeSelectionMode}" ToolTip="range selection mode."/>
-                    <CheckBox Margin="4" Height="24" Content="IsLockedAllNodeLinks" IsChecked="{Binding IsLockedAllNodeLinks}" VerticalContentAlignment="Center"/>
-                    <CheckBox Margin="4" Height="24" Content="IsEnableAllNodeConnectors" IsChecked="{Binding IsEnableAllNodeConnectors}" VerticalContentAlignment="Center"/>
+                    <CheckBox Margin="4" Height="24" Content="ノード接続保護" IsChecked="{Binding IsLockedAllNodeLinks}" VerticalContentAlignment="Center" ToolTip="ノード接続を削除できない状態にします。"/>
 
                 </StackPanel>
 

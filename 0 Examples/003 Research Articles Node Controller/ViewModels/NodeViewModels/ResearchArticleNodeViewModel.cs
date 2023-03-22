@@ -174,9 +174,7 @@ public class ResearchArticleNodeViewModel : DefaultNodeViewModel
     {
         var input = Inputs.FirstOrDefault(arg => arg.Guid == guid);
         if (input != null)
-        {
             return input;
-        }
 
         var output = Outputs.FirstOrDefault(arg => arg.Guid == guid);
         return output;
