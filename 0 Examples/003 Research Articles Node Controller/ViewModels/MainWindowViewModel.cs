@@ -19,8 +19,8 @@ public class MainWindowViewModel : ViewModel
 
     const int NODE_MARGIN_LEFT = 50;
     const int NODE_MARGIN_TOP = 50;
-    const int NODE_VERTICAL_SPAN = 300;
-    const int NODE_HORIZONTAL_SPAN = 600;
+    const int NODE_VERTICAL_SPAN = 250;
+    const int NODE_HORIZONTAL_SPAN = 500;
 
 
     // ★★★★★★★★★★★★★★★ props

@@ -16,7 +16,7 @@ public class ResearchArticleNodeViewModel : DefaultNodeViewModel
 
     public ResearchArticle Article { get; set; } = new();
 
-    [AlsoNotifyFor(nameof(Name), nameof(ArticleTitle), nameof(Authors), nameof(TopAuthor), nameof(Memo), nameof(DOI),
+    [AlsoNotifyFor(nameof(Name), nameof(ArticleTitle), nameof(Authors), nameof(TopAuthor), nameof(Memo), nameof(DOI), nameof(PublishedOn),
         nameof(Memo_Motivation), nameof(Memo_Method), nameof(Memo_Insights), nameof(Memo_Contribution))]
     private int NotifyArticleUpdatedBridge { get; set; } = 0;
 
@@ -33,6 +33,7 @@ public class ResearchArticleNodeViewModel : DefaultNodeViewModel
         }
     }
 
+    [AlsoNotifyFor(nameof(TopAuthor))]
     public string Authors
     {
         get => (Article.Authors == null) ? "不明" : string.Join("; ", Article.Authors);
@@ -41,13 +42,33 @@ public class ResearchArticleNodeViewModel : DefaultNodeViewModel
             var temp = JsonConvert.SerializeObject(Article.Authors);
             RaisePropertyChangedIfSet(ref temp, value);
             if (temp is not null)
-                Article.Manual_Authors = temp.Split(';').Select(a => a.Trim()).ToArray();
+                Article.Manual_Authors = temp.Split(';', StringSplitOptions.TrimEntries & StringSplitOptions.RemoveEmptyEntries);
         }
     }
 
     public string TopAuthor
     {
-        get => (Article.Authors == null) ? "不明" : Article.Authors[0];
+        get
+        {
+            if (Article.Authors is null || Article.Authors.Length == 0)
+                return "不明";
+
+            if (Article.Authors.Length == 1)
+                return $"{Article.Authors[0]}";
+
+            return $"{Article.Authors[0]} ら";
+        }
+    }
+
+    public string PublishedOn
+    {
+        get => Article.PublishedOn ?? "不明";
+        set
+        {
+            var temp = Article.PublishedOn;
+            RaisePropertyChangedIfSet(ref temp, value);
+            Article.Manual_PublishedDate = temp;
+        }
     }
 
     public string Memo
