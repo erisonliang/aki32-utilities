@@ -32,13 +32,10 @@ public class MainWindowViewModel : ViewModel
 
     public double Scale { get; set; } = 1d;
 
-    public ViewModelCommand AddNodeCommand => _AddNodeCommand.Get(AddNode);
+    public ViewModelCommand AddNodeCommand => _AddNodeCommand.Get(AddNewArticleNode);
     ViewModelCommandHandler _AddNodeCommand = new();
 
-    public ViewModelCommand AddGroupNodeCommand => _AddGroupNodeCommand.Get(AddGroupNode);
-    ViewModelCommandHandler _AddGroupNodeCommand = new();
-
-    public ViewModelCommand RemoveNodesCommand => _RemoveNodesCommand.Get(RemoveNodes);
+    public ViewModelCommand RemoveNodesCommand => _RemoveNodesCommand.Get(RemoveArticleNodes);
     ViewModelCommandHandler _RemoveNodesCommand = new();
 
     public ListenerCommand<PreviewConnectLinkOperationEventArgs> PreviewConnectLinkCommand => _PreviewConnectLinkCommand.Get(PreviewConnect);
@@ -244,6 +241,34 @@ public class MainWindowViewModel : ViewModel
 
     }
 
+    void AddNewArticleNode()
+    {
+        // 作って，新しいNodeも作ってあてがう。
+
+        var newArticle = ResearchArticle.CreateManually(new ResearchArticle_ManualInitInfo
+        {
+            Manual_ArticleTitle = "■ 未入力",
+            Manual_Authors = new string[] { "■ 未入力" },
+            Manual_PublishedDate = "■ 未入力",
+            Memo = "■ 未入力",
+        });
+
+        ResearchArticlesManager.MergeArticleInfo(new List<ResearchArticle> { newArticle });
+        _NodeViewModels.Add(new ResearchArticleNodeViewModel() { Article = newArticle, Name = "ResearchArticle" });
+    }
+
+    void RemoveArticleNodes()
+    {
+        var removeNodes = _NodeViewModels.Where(arg => arg.IsSelected).ToArray();
+        foreach (var removeNode in removeNodes)
+        {
+            _NodeViewModels.Remove(removeNode);
+
+            var removeNodeLink = NodeLinkViewModels.FirstOrDefault(arg => arg.InputConnectorNodeGuid == removeNode.Guid || arg.OutputConnectorNodeGuid == removeNode.Guid);
+            _NodeLinkViewModels.Remove(removeNodeLink);
+        }
+    }
+
     void Save()
     {
         UpdateInfoMesssage("保存開始");
@@ -311,28 +336,6 @@ public class MainWindowViewModel : ViewModel
             _GroupNodeViewModels[0].InnerHeight = 300;
         }
 
-    }
-
-    void AddNode()
-    {
-        _NodeViewModels.Add(new ResearchArticleNodeViewModel() { Name = "ResearchArticle", Memo = "ここにメモ" });
-    }
-
-    void AddGroupNode()
-    {
-        _GroupNodeViewModels.Add(new GroupNodeViewModel() { Name = "Group" });
-    }
-
-    void RemoveNodes()
-    {
-        var removeNodes = _NodeViewModels.Where(arg => arg.IsSelected).ToArray();
-        foreach (var removeNode in removeNodes)
-        {
-            _NodeViewModels.Remove(removeNode);
-
-            var removeNodeLink = NodeLinkViewModels.FirstOrDefault(arg => arg.InputConnectorNodeGuid == removeNode.Guid || arg.OutputConnectorNodeGuid == removeNode.Guid);
-            _NodeLinkViewModels.Remove(removeNodeLink);
-        }
     }
 
     void ResetScale()

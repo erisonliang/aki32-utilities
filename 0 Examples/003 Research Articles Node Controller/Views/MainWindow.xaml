@@ -28,7 +28,7 @@
 
         <ContextMenu x:Key="NodeGraphContextMenu">
             <MenuItem Header="Add Node" Command="{Binding AddNodeCommand}"/>
-            <MenuItem Header="Add GroupNode" Command="{Binding AddGroupNodeCommand}"/>
+            <!--<MenuItem Header="Add GroupNode" Command="{Binding AddGroupNodeCommand}"/>-->
             <MenuItem Header="Remove Nodes" Command="{Binding RemoveNodesCommand}"/>
         </ContextMenu>
 
