@@ -24,6 +24,9 @@ public class MainWindowViewModel : ViewModel
     const int NODE_VERTICAL_SPAN = 250;
     const int NODE_HORIZONTAL_SPAN = 500;
 
+    public static DirectoryInfo databaseDir = new($@"{Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory)}\ResearchArticleDB");
+
+
     // ★★★★★★★★★★★★★★★ props
 
     #region inner props
@@ -92,39 +95,50 @@ public class MainWindowViewModel : ViewModel
 
     #endregion
 
-    public ResearchArticlesManager ResearchArticlesManager { get; set; }
+    public static ResearchArticlesManager ResearchArticlesManager { get; set; }
 
     public ResearchArticleNodeViewModel? SelectingNodeViewModel { get; set; } = null;
+
+    public static string _LocalSearchString;
+    public string LocalSearchString
+    {
+        get => _LocalSearchString;
+        set
+        {
+            if (RaisePropertyChangedIfSet(ref _LocalSearchString, value))
+            {
+                NotifyResearchArticlesPropertiesChanged();
+                _LocalSearchString = value;
+            }
+        }
+    }
+
 
 
     // ★★★★★★★★★★★★★★★ inits
 
     public MainWindowViewModel()
     {
-        var databaseDir = new DirectoryInfo($@"{Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory)}\ResearchArticleDB");
-        InitResearchArticlesManager(databaseDir);
-
-        RearrangeNodesAlignLeft();
-
-        //ResearchArticlesManager.ArticleDatabase[0].Memo = "hello from code behind";
-        //NotifyResearchArticlesPropertiesChanged();
+        InitResearchArticlesManager();
 
         IsLockedAllNodeLinks = true;
         IsEnableAllNodeConnectors = true;
     }
 
-    private void InitResearchArticlesManager(DirectoryInfo databaseDir)
+    private void InitResearchArticlesManager()
     {
         ResearchArticlesManager = new ResearchArticlesManager(databaseDir);
         ResearchArticlesManager.OpenDatabase();
+        RedrawResearchArticlesManager();
+    }
 
-        var positionCounter = 100;
+    private void RedrawResearchArticlesManager()
+    {
+        _NodeViewModels = new ObservableCollection<DefaultNodeViewModel>();
+        _NodeLinkViewModels = new ObservableCollection<NodeLinkViewModel>();
 
         foreach (var article in ResearchArticlesManager.ArticleDatabase)
-        {
-            _NodeViewModels.Add(new ResearchArticleNodeViewModel() { Name = "ResearchArticle", Article = article, Position = new Point(100, positionCounter) });
-            positionCounter += NODE_VERTICAL_SPAN;
-        }
+            _NodeViewModels.Add(new ResearchArticleNodeViewModel() { Name = "ResearchArticle", Article = article, Position = new Point(0, 0) });
 
         foreach (var article in ResearchArticlesManager.ArticleDatabase)
         {
@@ -158,6 +172,7 @@ public class MainWindowViewModel : ViewModel
             }
         }
 
+        RearrangeNodesAlignLeft();
     }
 
 
@@ -283,7 +298,7 @@ public class MainWindowViewModel : ViewModel
         _NodeLinkViewModels.Add(nodeLink);
 
         // 引用関係をデータベースに追加
-        var parentNode =(ResearchArticleNodeViewModel) NodeViewModels.First(node => node.Guid == nodeLink.OutputConnectorNodeGuid);
+        var parentNode = (ResearchArticleNodeViewModel)NodeViewModels.First(node => node.Guid == nodeLink.OutputConnectorNodeGuid);
         var childNode = (ResearchArticleNodeViewModel)NodeViewModels.First(node => node.Guid == nodeLink.InputConnectorNodeGuid);
         childNode.Article.AddArticleReference(parentNode.Article);
     }

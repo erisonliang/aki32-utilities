@@ -100,6 +100,36 @@ public class ResearchArticle : IComparable
                 ;
         }
     }
+    [CsvIgnore]
+    public (int? year, int? month, int? day)? PublishedOn_Numbers
+    {
+        get
+        {
+            var s = PublishedOn;
+            int? year = null;
+            int? month = null;
+            int? day = null;
+
+            if (s is null)
+                return null;
+
+            var ss = s.Split(new char[] { '/', '-', '_', ',', '.', ' ', '\\' }, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+
+            if (ss.Length >= 1)
+                if (int.TryParse(ss[0], out int temp))
+                    year = temp;
+
+            if (ss.Length >= 2)
+                if (int.TryParse(ss[1], out int temp))
+                    month = temp;
+
+            if (ss.Length >= 3)
+                if (int.TryParse(ss[2], out int temp))
+                    day = temp;
+
+            return (year, month, day);
+        }
+    }
 
     public string? ReferenceString
     {
@@ -434,6 +464,41 @@ public class ResearchArticle : IComparable
 
     }
 
+    /// <summary>
+    /// Check if all search strings matched to this article
+    /// </summary>
+    /// <param name="searchFullString"></param>
+    /// <param name="needMatchAll"></param>
+    /// <returns></returns>
+    public bool GetIfSearchStringsMatched(string[] searchStrings)
+    {
+        if (searchStrings.Length == 0)
+            return false;
+
+        foreach (var searchString in searchStrings)
+            if (!GetIfSearchStringMatched(searchString))
+                return false;
+
+        return true;
+    }
+    private bool GetIfSearchStringMatched(string searchString)
+    {
+        if (Authors is not null && Authors.Any(a => a.Contains(searchString)))
+            return true;
+
+        if (ArticleTitle is not null && ArticleTitle.Contains(searchString))
+            return true;
+
+        if (PublishedOn is not null && PublishedOn.Contains(searchString))
+            return true;
+
+        if (Memo is not null && Memo.Contains(searchString))
+            return true;
+
+        return false;
+    }
+
+
 
     // ★★★★★★★★★★★★★★★ method (practical use)
 
@@ -481,6 +546,28 @@ public class ResearchArticle : IComparable
         catch (Exception ex)
         {
             ConsoleExtension.WriteLineWithColor($"Failed: {ex.Message}", ConsoleColor.Red);
+        }
+    }
+
+    public bool TryFindPDF(DirectoryInfo pdfStockDirectory)
+    {
+        UtilPreprocessors.PreprocessBasic();
+
+        try
+        {
+            if (LocalPDFName == null)
+                throw new Exception("Local PDF Name couldn't be implied.");
+
+            var outputFilePath = Path.Combine(pdfStockDirectory.FullName, $"{LocalPDFName}.pdf");
+
+            if (File.Exists(outputFilePath))
+                return true;
+
+            return false;
+        }
+        catch
+        {
+            return false;
         }
     }
 

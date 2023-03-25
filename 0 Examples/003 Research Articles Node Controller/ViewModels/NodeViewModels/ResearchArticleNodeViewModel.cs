@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using PropertyChanged;
 
 using System.Collections.ObjectModel;
+using System.Windows.Media;
 
 namespace Aki32Utilities.ViewModels.NodeViewModels;
 
@@ -17,7 +18,9 @@ public class ResearchArticleNodeViewModel : DefaultNodeViewModel
     public ResearchArticle Article { get; set; } = new();
 
     [AlsoNotifyFor(nameof(Name), nameof(ArticleTitle), nameof(Authors), nameof(TopAuthor), nameof(Memo), nameof(DOI), nameof(PublishedOn),
-        nameof(Memo_Motivation), nameof(Memo_Method), nameof(Memo_Insights), nameof(Memo_Contribution))]
+        nameof(Memo_Motivation), nameof(Memo_Method), nameof(Memo_Insights), nameof(Memo_Contribution),
+        nameof(IsLocalSearchMatched)
+        )]
     private int NotifyArticleUpdatedBridge { get; set; } = 0;
 
     public string Name { get; set; }
@@ -28,8 +31,8 @@ public class ResearchArticleNodeViewModel : DefaultNodeViewModel
         set
         {
             var temp = Article.ArticleTitle;
-            RaisePropertyChangedIfSet(ref temp, value);
-            Article.Manual_ArticleTitle = temp;
+            if (RaisePropertyChangedIfSet(ref temp, value))
+                Article.Manual_ArticleTitle = temp;
         }
     }
 
@@ -40,9 +43,8 @@ public class ResearchArticleNodeViewModel : DefaultNodeViewModel
         set
         {
             var temp = JsonConvert.SerializeObject(Article.Authors);
-            RaisePropertyChangedIfSet(ref temp, value);
-            if (temp is not null)
-                Article.Manual_Authors = temp.Split(';', StringSplitOptions.TrimEntries & StringSplitOptions.RemoveEmptyEntries);
+            if (RaisePropertyChangedIfSet(ref temp, value) && temp is not null)
+                Article.Manual_Authors = temp.Split(new char[] { ';', '；' }, StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
         }
     }
 
@@ -66,8 +68,8 @@ public class ResearchArticleNodeViewModel : DefaultNodeViewModel
         set
         {
             var temp = Article.PublishedOn;
-            RaisePropertyChangedIfSet(ref temp, value);
-            Article.Manual_PublishedDate = temp;
+            if (RaisePropertyChangedIfSet(ref temp, value))
+                Article.Manual_PublishedDate = temp!.Replace("/", "-");
         }
     }
 
@@ -86,52 +88,48 @@ public class ResearchArticleNodeViewModel : DefaultNodeViewModel
         set
         {
             var temp = Article.Memo;
-            RaisePropertyChangedIfSet(ref temp, value);
-            Article.Memo = temp;
+            if (RaisePropertyChangedIfSet(ref temp, value))
+                Article.Memo = temp;
         }
     }
-
     public string Memo_Motivation
     {
         get => Article.Memo_Motivation;
         set
         {
             var temp = Article.Memo_Motivation;
-            RaisePropertyChangedIfSet(ref temp, value);
-            Article.Memo_Motivation = temp;
+            if (RaisePropertyChangedIfSet(ref temp, value))
+                Article.Memo_Motivation = temp;
         }
     }
-
     public string Memo_Method
     {
         get => Article.Memo_Method;
         set
         {
             var temp = Article.Memo_Method;
-            RaisePropertyChangedIfSet(ref temp, value);
-            Article.Memo_Method = temp;
+            if (RaisePropertyChangedIfSet(ref temp, value))
+                Article.Memo_Method = temp;
         }
     }
-
     public string Memo_Insights
     {
         get => Article.Memo_Insights;
         set
         {
             var temp = Article.Memo_Insights;
-            RaisePropertyChangedIfSet(ref temp, value);
-            Article.Memo_Insights = temp;
+            if (RaisePropertyChangedIfSet(ref temp, value))
+                Article.Memo_Insights = temp;
         }
     }
-
     public string Memo_Contribution
     {
         get => Article.Memo_Contribution;
         set
         {
             var temp = Article.Memo_Contribution;
-            RaisePropertyChangedIfSet(ref temp, value);
-            Article.Memo_Contribution = temp;
+            if (RaisePropertyChangedIfSet(ref temp, value))
+                Article.Memo_Contribution = temp;
         }
     }
 
@@ -141,8 +139,77 @@ public class ResearchArticleNodeViewModel : DefaultNodeViewModel
         set
         {
             var temp = Article.DOI;
-            RaisePropertyChangedIfSet(ref temp, value);
-            Article.DOI = temp;
+            if (RaisePropertyChangedIfSet(ref temp, value))
+                Article.DOI = temp;
+        }
+    }
+
+    public string Tags
+    {
+        get
+        {
+            var ss = new List<string>();
+
+            if (Article.DataFrom_JStage.HasValue && Article.DataFrom_JStage.Value)
+                ss.Add("JStage");
+
+            if (Article.DataFrom_CiNii.HasValue && Article.DataFrom_CiNii.Value)
+                ss.Add("CiNii");
+
+            if (Article.DataFrom_CrossRef.HasValue && Article.DataFrom_CrossRef.Value)
+                ss.Add("CrossRef");
+
+            if (Article.DataFrom_NDLSearch.HasValue && Article.DataFrom_NDLSearch.Value)
+                ss.Add("NDLSearch");
+
+            if (Article.TryFindPDF(MainWindowViewModel.ResearchArticlesManager.PDFsDirectory))
+                ss.Add("PDF");
+
+            if (Article.Private_Favorite.HasValue && Article.Private_Favorite.Value)
+                ss.Add("★");
+
+            return string.Join(", ", ss.Select(s => $"[{s}]"));
+        }
+    }
+
+    [AlsoNotifyFor(nameof(Tags), nameof(LocalSearchMatchedColor))]
+    public bool IsFavorite
+    {
+        get => Article.Private_Favorite ?? false;
+        set
+        {
+            var temp = Article.Private_Favorite;
+            if (RaisePropertyChangedIfSet(ref temp, value))
+                Article.Private_Favorite = temp;
+        }
+    }
+
+    [AlsoNotifyFor(nameof(LocalSearchMatchedColor))]
+    public bool IsLocalSearchMatched
+    {
+        get
+        {
+            var searchFullString = MainWindowViewModel._LocalSearchString;
+            if (searchFullString is null)
+                return false;
+
+            var searchStrings = searchFullString.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+            if (searchStrings.Length == 0)
+                return false;
+            return Article.GetIfSearchStringsMatched(searchStrings);
+        }
+    }
+    public Brush LocalSearchMatchedColor
+    {
+        get
+        {
+            if (IsLocalSearchMatched)
+                return Brushes.Aqua;
+
+            if (Article.Private_Favorite ?? false)
+                return Brushes.Yellow;
+
+            return new SolidColorBrush(Color.FromArgb(0xFF, 0x66, 0x66, 0x66));
         }
     }
 

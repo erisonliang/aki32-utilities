@@ -175,13 +175,13 @@ public class NodeGraph : MultiSelector
     public static readonly DependencyProperty AllowToOverrideConnectionProperty =
         DependencyProperty.Register(nameof(AllowToOverrideConnection), typeof(bool), typeof(NodeGraph), new FrameworkPropertyMetadata(false, AllowToOverrideConnectionPropertyChanged));
 
-    public RangeSelectionMode RangeSelectionMdoe
+    public RangeSelectionMode RangeSelectionMode
     {
-        get => (RangeSelectionMode)GetValue(RangeSelectionMdoeProperty);
-        set => SetValue(RangeSelectionMdoeProperty, value);
+        get => (RangeSelectionMode)GetValue(RangeSelectionModeProperty);
+        set => SetValue(RangeSelectionModeProperty, value);
     }
-    public static readonly DependencyProperty RangeSelectionMdoeProperty =
-        DependencyProperty.Register(nameof(RangeSelectionMdoe), typeof(RangeSelectionMode), typeof(NodeGraph), new FrameworkPropertyMetadata(RangeSelectionMode.Contain));
+    public static readonly DependencyProperty RangeSelectionModeProperty =
+        DependencyProperty.Register(nameof(RangeSelectionMode), typeof(RangeSelectionMode), typeof(NodeGraph), new FrameworkPropertyMetadata(RangeSelectionMode.Contain));
 
     public ICommand PreviewDropOnCanvasCommand
     {
@@ -610,7 +610,7 @@ public class NodeGraph : MultiSelector
 
             foreach (var selectableObject in Canvas.Children.OfType<ISelectableObject>())
             {
-                switch (RangeSelectionMdoe)
+                switch (RangeSelectionMode)
                 {
                     case RangeSelectionMode.Contain:
                         selectableObject.IsSelected = selectableObject.Contains(selectingRangeRect);
