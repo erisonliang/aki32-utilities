@@ -207,13 +207,19 @@ public class ResearchArticle : IComparable
     /// <summary>
     /// favorite flag
     /// </summary>
-    public bool? Private_Favorite { get; set; }
+    public bool? Private_Favorite { get; set; } = false;
+    /// <summary>
+    /// read flag
+    /// </summary>
+    public bool? Private_Read { get; set; } = false;
 
-    public bool? DataFrom_Manual { get; set; }
-    public bool? DataFrom_JStage { get; set; }
-    public bool? DataFrom_CiNii { get; set; }
-    public bool? DataFrom_CrossRef { get; set; }
-    public bool? DataFrom_NDLSearch { get; set; }
+    public bool? IsTemporary { get; set; } = false;
+
+    public bool? DataFrom_Manual { get; set; } = false;
+    public bool? DataFrom_JStage { get; set; } = false;
+    public bool? DataFrom_CiNii { get; set; } = false;
+    public bool? DataFrom_CrossRef { get; set; } = false;
+    public bool? DataFrom_NDLSearch { get; set; } = false;
 
     /// <summary>
     /// Aki32 Object Identifier
@@ -495,6 +501,9 @@ public class ResearchArticle : IComparable
         if (Memo is not null && Memo.Contains(searchString))
             return true;
 
+        if (LocalPDFName is not null && LocalPDFName.Contains(searchString))
+            return true;
+
         return false;
     }
 
@@ -601,18 +610,20 @@ public class ResearchArticle : IComparable
             .Where(p => p.CanWrite)
             .Where(p => p.Name != "DOI")
             .Where(p => p.Name != "AOI")
+            .Where(p => p.Name != "IsTemporary")
             ;
 
-
         // DOIが存在する場合は，最優先で採用。
-        // AOIは，前の情報を正とする。
+        // AOIとIsTemporaryは，前の情報を正とする。
         if (DOI != null)
         {
             if (mergingArticle.DOI != null && DOI != mergingArticle.DOI)
                 throw new InvalidDataException("DOIが異なる2つがマージされようとしました。");
         }
         else if (mergingArticle.DOI != null)
+        {
             DOI = mergingArticle.DOI;
+        }
 
 
         // 後からの情報優先で上書き。

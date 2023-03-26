@@ -150,29 +150,35 @@ public class ResearchArticleNodeViewModel : DefaultNodeViewModel
         {
             var ss = new List<string>();
 
-            if (Article.DataFrom_JStage.HasValue && Article.DataFrom_JStage.Value)
-                ss.Add("JStage");
-
-            if (Article.DataFrom_CiNii.HasValue && Article.DataFrom_CiNii.Value)
-                ss.Add("CiNii");
-
-            if (Article.DataFrom_CrossRef.HasValue && Article.DataFrom_CrossRef.Value)
-                ss.Add("CrossRef");
-
-            if (Article.DataFrom_NDLSearch.HasValue && Article.DataFrom_NDLSearch.Value)
-                ss.Add("NDLSearch");
+            if (Article.Private_Favorite ?? false)
+                ss.Add("★");
 
             if (Article.TryFindPDF(MainWindowViewModel.ResearchArticlesManager.PDFsDirectory))
                 ss.Add("PDF");
 
-            if (Article.Private_Favorite.HasValue && Article.Private_Favorite.Value)
-                ss.Add("★");
+            if (Article.Private_Read ?? false)
+                ss.Add("Read");
+
+            if (Article.IsTemporary ?? false)
+                ss.Add("TEMP");
+
+            if (Article.DataFrom_JStage ?? false)
+                ss.Add("JStage");
+
+            if (Article.DataFrom_CiNii ?? false)
+                ss.Add("CiNii");
+
+            if (Article.DataFrom_CrossRef ?? false)
+                ss.Add("CrossRef");
+
+            if (Article.DataFrom_NDLSearch ?? false)
+                ss.Add("NDLSearch");
 
             return string.Join(", ", ss.Select(s => $"[{s}]"));
         }
     }
 
-    [AlsoNotifyFor(nameof(Tags), nameof(LocalSearchMatchedColor))]
+    [AlsoNotifyFor(nameof(Tags), nameof(ArticleHeaderColor))]
     public bool IsFavorite
     {
         get => Article.Private_Favorite ?? false;
@@ -184,7 +190,19 @@ public class ResearchArticleNodeViewModel : DefaultNodeViewModel
         }
     }
 
-    [AlsoNotifyFor(nameof(LocalSearchMatchedColor))]
+    [AlsoNotifyFor(nameof(Tags), nameof(ArticleHeaderColor))]
+    public bool IsRead
+    {
+        get => Article.Private_Read ?? false;
+        set
+        {
+            var temp = Article.Private_Read;
+            if (RaisePropertyChangedIfSet(ref temp, value))
+                Article.Private_Read = temp;
+        }
+    }
+
+    [AlsoNotifyFor(nameof(ArticleHeaderColor))]
     public bool IsLocalSearchMatched
     {
         get
@@ -199,15 +217,21 @@ public class ResearchArticleNodeViewModel : DefaultNodeViewModel
             return Article.GetIfSearchStringsMatched(searchStrings);
         }
     }
-    public Brush LocalSearchMatchedColor
+    public Brush ArticleHeaderColor
     {
         get
         {
             if (IsLocalSearchMatched)
                 return Brushes.Aqua;
 
+            if (Article.IsTemporary ?? false)
+                return Brushes.DarkRed;
+
             if (Article.Private_Favorite ?? false)
                 return Brushes.Yellow;
+
+            if (Article.Private_Read ?? false)
+                return Brushes.DarkOrange;
 
             return new SolidColorBrush(Color.FromArgb(0xFF, 0x66, 0x66, 0x66));
         }

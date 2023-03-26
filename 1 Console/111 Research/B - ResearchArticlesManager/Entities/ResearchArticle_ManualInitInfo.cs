@@ -14,7 +14,7 @@ public class ResearchArticle_ManualInitInfo
     /// <summary>
     /// favorite flag
     /// </summary>
-    public bool? Private_Favorite { get; set; }
+    public bool Private_Favorite { get; set; } = false;
 
 
     // ★★★★★ manual info

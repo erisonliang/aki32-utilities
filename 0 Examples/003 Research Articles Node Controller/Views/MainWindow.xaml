@@ -71,7 +71,7 @@
             <Setter Property="HeaderContentTemplate">
                 <Setter.Value>
                     <DataTemplate>
-                        <StackPanel Background="{Binding LocalSearchMatchedColor}">
+                        <StackPanel Background="{Binding ArticleHeaderColor}">
                             <Grid>
                                 <StackPanel HorizontalAlignment="Center">
                                     <Label Content="{Binding Name}"/>
@@ -660,10 +660,11 @@
                             ToolTip=""
                             />
 
-                        <Button
+                        <ToggleButton
                             Grid.Column="1"
                             Margin="3"
-                            Content="（）"
+                            Content="✓既読"
+                            IsChecked="{Binding SelectingNodeViewModel.IsRead}"
                             ToolTip=""
                             />
 
