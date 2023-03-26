@@ -586,24 +586,14 @@ public class ResearchArticle : IComparable
     }
 
     /// <summary>
-    /// 
     /// Merge two ResearchArticle instances.
-    /// 
     /// </summary>
     /// <remarks>
-    /// 
     /// 後からの情報が優先（最新）
-    /// 
     /// </remarks>
-    /// <param name="mergingArticle">Article that will be merged and eventually deleted</param>
-    /// <param name="articles">If given, this method will make sure to delete {mergingArticle} from this list for you</param>
-    public void MergeArticles(ResearchArticle mergingArticle, List<ResearchArticle>? articles = null)
+    /// <param name="mergingArticle">Article whose info will be extracted and eventually deleted</param>
+    public void MergeArticles(ResearchArticle mergingArticle)
     {
-        // prerocess
-        if (articles != null && !articles!.Contains(this))
-            throw new InvalidDataException("{mergedArticle} need to be in {articles}");
-
-
         // main
         var props = typeof(ResearchArticle)
             .GetProperties()
@@ -644,22 +634,6 @@ public class ResearchArticle : IComparable
             }
 
         }
-
-        //delete
-        if (articles != null && articles.Contains(mergingArticle))
-        {
-            // Ref整合性。消す場合はRefから消したい。つまり，前のやつのAOIを今のAOIに書き換える。
-
-            articles = articles.Select(a =>
-            {
-                if (a.ReferenceDOIs != null && a.ReferenceDOIs.Contains(mergingArticle.AOI))
-                    a.ReferenceDOIs = a.ReferenceDOIs.Select(r => r.Replace(mergingArticle.AOI, AOI)).ToArray();
-                return a;
-            }).ToList();
-
-            articles.Remove(mergingArticle);
-        }
-
     }
 
 

@@ -1,5 +1,7 @@
 ﻿using Aki32Utilities.ConsoleAppUtilities.General;
 
+using ClosedXML;
+
 namespace Aki32Utilities.ConsoleAppUtilities.Research;
 public partial class ResearchArticlesManager
 {
@@ -109,7 +111,7 @@ public partial class ResearchArticlesManager
     /// </summary>
     /// <param name="uriBuilder"></param>
     /// <exception cref="InvalidOperationException"></exception>
-    public void MergeArticleInfo(List<ResearchArticle> articles)
+    public void MergeArticleInfo(List<ResearchArticle> mergingArticles)
     {
         // preprocess
         if (ArticleDatabase == null)
@@ -119,38 +121,38 @@ public partial class ResearchArticlesManager
 
 
         Console.WriteLine();
-        Console.WriteLine($"★ Merging {articles.Count} articles in total...");
+        Console.WriteLine($"★ Merging {mergingArticles.Count} articles in total...");
         Console.WriteLine();
 
 
         // main
-        foreach (var article in articles)
+        foreach (var mergingArticle in mergingArticles)
         {
-            var matchedArticles = ArticleDatabase.Where(a => a.CompareTo(article) == 0);
+            var matchedArticles = ArticleDatabase.Where(a => a.CompareTo(mergingArticle) == 0);
 
-            // 更新・マージ
+            // merge/update
             if (matchedArticles != null && matchedArticles.Count() == 1)
             {
-                matchedArticles.First().MergeArticles(article!, ArticleDatabase);
+                MergeArticles(matchedArticles.First(), mergingArticle);
 
                 if (UtilConfig.ConsoleOutput_Contents)
-                    Console.WriteLine($"@@@ {article!.ArticleTitle}");
+                    Console.WriteLine($"@@@ {mergingArticle!.ArticleTitle}");
 
                 updatedCount++;
                 articleDatabaseUpdated = true;
             }
 
-            // おかしい
+            // two matches
             else if (matchedArticles!.Count() > 1)
-                throw new InvalidDataException($"{matchedArticles!.Count()} articles matched to {article.ArticleTitle}");
+                throw new InvalidDataException($"{matchedArticles!.Count()} articles matched to {mergingArticle.ArticleTitle}");
 
-            // 新規登録
+            // add new
             else
             {
-                ArticleDatabase.Add(article!);
+                ArticleDatabase.Add(mergingArticle!);
 
                 if (UtilConfig.ConsoleOutput_Contents)
-                    Console.WriteLine($"+++ {article!.ArticleTitle}");
+                    Console.WriteLine($"+++ {mergingArticle!.ArticleTitle}");
 
                 addedCount++;
                 articleDatabaseUpdated = true;
@@ -162,6 +164,39 @@ public partial class ResearchArticlesManager
         SaveDatabase();
         Console.WriteLine($"★ {addedCount} added, {updatedCount} updated.");
         Console.WriteLine();
+
+    }
+
+    /// <summary>
+    /// merge articles in ArticleDatabase
+    /// </summary>
+    /// <param name="mergedArticle">Article that will be merged and stay</param>
+    /// <param name="mergingArticle">Article whose info will be extracted and eventually deleted</param>
+    public void MergeArticles(ResearchArticle mergedArticle, ResearchArticle mergingArticle)
+    {
+        // prerocess
+        if (!ArticleDatabase!.Contains(mergedArticle))
+            throw new InvalidDataException("{mergedArticle} need to be in {ArticleDatabase}");
+
+
+        // main
+        mergedArticle.MergeArticles(mergingArticle);
+
+
+        // delete and update database 
+        if (ArticleDatabase.Contains(mergingArticle))
+        {
+            // Ref整合性。Replace previous AOI to new AOI.
+            foreach (var article in ArticleDatabase)
+            {
+                if (article.ReferenceDOIs != null && article.ReferenceDOIs.Contains(mergingArticle.AOI))
+                    article.ReferenceDOIs = article.ReferenceDOIs
+                        .Select(r => r.Replace(mergingArticle.AOI!, mergedArticle.AOI))
+                        .ToArray();
+            }
+
+            ArticleDatabase.Remove(mergingArticle);
+        }
 
     }
 
