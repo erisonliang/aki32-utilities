@@ -279,7 +279,6 @@ public class ResearchArticleNodeViewModel : DefaultNodeViewModel
                     if (IsTemp)
                         return Brushes.DarkOrange;
                     break;
-
                 case EmphasizePropertyItems.ﾒﾓ1:
                     if (IsCategory1)
                         return Brushes.White;

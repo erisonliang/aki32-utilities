@@ -125,6 +125,7 @@ public class MainWindowViewModel : ViewModel
             if (RaisePropertyChangedIfSet(ref _LocalSearchString, value))
             {
                 NotifyResearchArticlesPropertiesChanged();
+                SelectedEmphasizePropertyItem = ViewModels.EmphasizePropertyItems.検索結果;
                 _LocalSearchString = value;
             }
         }
