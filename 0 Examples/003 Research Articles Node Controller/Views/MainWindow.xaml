@@ -18,6 +18,52 @@
 
         <sys:Double x:Key="NodeContentFontSize">24.0</sys:Double>
 
+        <Brush x:Key="IsFavoriteColor">#E95B6B</Brush>
+        <Brush x:Key="IsReadColor">LightGreen</Brush>
+        <Brush x:Key="IsLocalSearchMatchedColor">Aqua</Brush>
+        <Brush x:Key="IsTempColor">DarkOrange</Brush>
+        <Brush x:Key="IsCat1Color">white</Brush>
+        <Brush x:Key="IsCat2Color">HotPink</Brush>
+        <Brush x:Key="IsCat3Color">Purple</Brush>
+
+        <Brush x:Key="temp1">Pink</Brush>
+        <Brush x:Key="temp2">DeepPink</Brush>
+        <Brush x:Key="temp3">MediumPurple</Brush>
+        <Brush x:Key="temp4">Purple</Brush>
+
+        <Style x:Key="ToggleButtonTextStyle" TargetType="ToggleButton">
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ToggleButton">
+                        <Border CornerRadius="11" Padding="6,3,6,3" Background="{TemplateBinding Background}">
+                            <ContentPresenter ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding Content}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsChecked" Value="True">
+                    <Setter Property="Background" Value="LightBlue" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="ButtonTextStyle" TargetType="Button">
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border CornerRadius="11" Padding="6,3,6,3" Background="{TemplateBinding Background}">
+                            <ContentPresenter ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding Content}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
         <Style x:Key="UserTextBoxStyle" TargetType="TextBox">
             <Setter Property="Foreground" Value="WhiteSmoke"/>
             <Setter Property="Background" Value="#CC000000"/>
@@ -74,10 +120,24 @@
                         <StackPanel Background="{Binding ArticleHeaderColor}">
                             <Grid>
                                 <StackPanel HorizontalAlignment="Center">
-                                    <Label Content="{Binding Name}"/>
+                                    <!--<Label Content="{Binding Name}"/>-->
                                 </StackPanel>
                                 <StackPanel HorizontalAlignment="Left">
-                                    <Label Content="■"/>
+                                    <!--<Label Content="■"/>-->
+                                </StackPanel>
+                                <StackPanel
+                                    HorizontalAlignment="Right"
+                                    Orientation="Horizontal"
+                                    Margin="5,0,2,0"
+                                    >
+                                    <Label Margin="0,0,3,0" Padding="0" Content="●" FontSize="20" Foreground="Transparent" Visibility="Visible"/>
+                                    <Label Margin="0,0,3,0" Padding="0" Content="●" FontSize="20" Foreground="{StaticResource IsFavoriteColor}" Visibility="{Binding IsFavorite, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                    <Label Margin="0,0,3,0" Padding="0" Content="●" FontSize="20" Foreground="{StaticResource IsReadColor}" Visibility="{Binding IsRead, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                    <Label Margin="0,0,3,0" Padding="0" Content="●" FontSize="20" Foreground="{StaticResource IsTempColor}" Visibility="{Binding IsTemp, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                    <Label Margin="0,0,3,0" Padding="0" Content="●" FontSize="20" Foreground="{StaticResource IsLocalSearchMatchedColor}" Visibility="{Binding IsLocalSearchMatched, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                    <Label Margin="0,0,3,0" Padding="0" Content="●" FontSize="20" Foreground="{StaticResource IsCat1Color}" Visibility="{Binding IsCategory1, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                    <Label Margin="0,0,3,0" Padding="0" Content="●" FontSize="20" Foreground="{StaticResource IsCat2Color}" Visibility="{Binding IsCategory2, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                    <Label Margin="0,0,3,0" Padding="0" Content="●" FontSize="20" Foreground="{StaticResource IsCat3Color}" Visibility="{Binding IsCategory3, Converter={StaticResource BooleanToVisibilityConverter}}"/>
                                 </StackPanel>
                             </Grid>
                         </StackPanel>
@@ -209,43 +269,47 @@
         <Grid 
             Grid.Row="0"
             Grid.Column="0"
+            Grid.ColumnSpan="2"
             Height="35" 
+            d:Height="50"
             >
 
             <ScrollViewer 
-                HorizontalScrollBarVisibility="Auto" 
+                HorizontalScrollBarVisibility="Hidden" 
                 VerticalScrollBarVisibility="Disabled"
                 >
 
                 <StackPanel
-                    Orientation="Horizontal">
+                    Orientation="Horizontal"
+                    Margin="4,0,0,0"
+                    >
 
                     <Button
-                        Margin="4"
-                        Padding="4"
+                        Margin="0,4,4,4"
                         Content=" 保存 "
                         Command="{Binding SaveCommand}"
+                        Style="{StaticResource ButtonTextStyle}"
                         />
-                    
+
                     <Button 
-                        Margin="4"
-                        Padding="5"
-                        Content=" 整列 " 
+                        Margin="0,4,4,4"
+                        Content=" 整列 "
                         Command="{Binding RearrangeNodesAlignLeftCommand}"
+                        Style="{StaticResource ButtonTextStyle}"
                         />
-                    
+
                     <ComboBox
-                        Margin="4"
+                        Margin="0,4,4,4"
                         Height="24" 
                         ItemsSource="{Binding RangeSelectionModes, Mode=OneTime}" 
                         SelectedItem="{Binding SelectedRangeSelectionMode}" 
-                        ToolTip="range selection mode."
+                        ToolTip="範囲選択モード"
                         />
 
-                    <TextBlock VerticalAlignment="Center" Text="|" Margin="10,0,10,5" FontSize="25" FontWeight="Thin" Foreground="Gray"/>
+                    <TextBlock VerticalAlignment="Center" Text="|" Margin="7,0,3,5" FontSize="25" FontWeight="Thin" Foreground="Gray"/>
 
                     <CheckBox
-                        Margin="4" 
+                        Margin="0,4,4,4"
                         Height="24"
                         Content="ノード接続保護"
                         IsChecked="{Binding IsLockedAllNodeLinks}" 
@@ -253,7 +317,7 @@
                         ToolTip="ノード接続を削除できない状態にします。"
                         />
 
-                    <TextBlock VerticalAlignment="Center" Text="|" Margin="10,0,10,5" FontSize="25" FontWeight="Thin" Foreground="Gray"/>
+                    <TextBlock VerticalAlignment="Center" Text="|" Margin="7,0,3,5" FontSize="25" FontWeight="Thin" Foreground="Gray"/>
 
                     <TextBlock
                         VerticalAlignment="Center" 
@@ -262,23 +326,38 @@
 
                     <TextBox
                         VerticalAlignment="Center" 
-                        Margin="4" 
+                        Margin="0,4,4,4"
                         Text="{Binding LocalSearchString, UpdateSourceTrigger=PropertyChanged}"
                         Width="150"
                         />
 
-                    <TextBlock VerticalAlignment="Center" Text="|" Margin="10,0,10,5" FontSize="25" FontWeight="Thin" Foreground="Gray"/>
+                    <TextBlock VerticalAlignment="Center" Text="|" Margin="7,0,3,5" FontSize="25" FontWeight="Thin" Foreground="Gray"/>
 
-                    
-                    
-                    
+                    <TextBlock
+                        VerticalAlignment="Center" 
+                        Text="強調：" 
+                        />
+
+                    <ComboBox
+                        Margin="0,4,4,4"
+                        Height="24" 
+                        ItemsSource="{Binding EmphasizePropertyItems, Mode=OneTime}" 
+                        SelectedItem="{Binding SelectedEmphasizePropertyItem}" 
+                        ToolTip="強調表示対象"
+                        />
+
+                    <TextBlock VerticalAlignment="Center" Text="|" Margin="7,0,3,5" FontSize="25" FontWeight="Thin" Foreground="Gray"/>
+
                 </StackPanel>
 
             </ScrollViewer>
 
         </Grid>
 
-        <Grid Grid.Row="1" Grid.Column="0">
+        <Grid
+            Grid.Row="1" 
+            Grid.Column="0"
+            >
 
             <ctrl:NodeGraph
                 Grid.Row="1"
@@ -310,10 +389,10 @@
                             </DataTrigger>
 
                             <!--Range selection mode-->
-                            <DataTrigger Binding="{Binding SelectedRangeSelectionMode}" Value="{x:Static vm:RangeSelectionMode.ContainVMDefine}">
+                            <DataTrigger Binding="{Binding SelectedRangeSelectionMode}" Value="{x:Static vm:RangeSelectionMode.包含選択}">
                                 <Setter Property="RangeSelectionMode" Value="{x:Static ctrl:RangeSelectionMode.Contain}"/>
                             </DataTrigger>
-                            <DataTrigger Binding="{Binding SelectedRangeSelectionMode}" Value="{x:Static vm:RangeSelectionMode.IntersectVMDefine}">
+                            <DataTrigger Binding="{Binding SelectedRangeSelectionMode}" Value="{x:Static vm:RangeSelectionMode.接触選択}">
                                 <Setter Property="RangeSelectionMode" Value="{x:Static ctrl:RangeSelectionMode.Intersect}"/>
                             </DataTrigger>
                         </Style.Triggers>
@@ -326,10 +405,13 @@
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
             </ctrl:NodeGraph>
-            
+
         </Grid>
 
-        <Grid Grid.Row="0" Grid.Column="1" Grid.RowSpan="2">
+        <Grid 
+            Grid.Row="1" 
+            Grid.Column="1"
+            >
 
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
@@ -341,7 +423,99 @@
 
                 <StackPanel Margin="4">
 
-                    <Grid Height="30"/>
+                    <Grid Margin="4">
+                        <StackPanel 
+                            Orientation="Horizontal"
+                            HorizontalAlignment="Right"
+                            >
+                            <ToggleButton
+                                Margin="3"
+                                Style="{StaticResource ToggleButtonTextStyle}"
+                                IsChecked="{Binding SelectingNodeViewModel.IsFavorite}"
+                                ToolTip=""
+                                >
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="♥" Foreground="{StaticResource IsFavoriteColor}"/>
+                                    <TextBlock Text="お気に入り"/>
+                                </StackPanel>
+                            </ToggleButton>
+
+                            <ToggleButton
+                                Margin="3"
+                                Style="{StaticResource ToggleButtonTextStyle}"
+                                IsChecked="{Binding SelectingNodeViewModel.IsRead}"
+                                ToolTip=""
+                                >
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="●" Foreground="{StaticResource IsReadColor}" Margin="0,0,2,0"/>
+                                    <TextBlock Text="既読"/>
+                                </StackPanel>
+                            </ToggleButton>
+
+                            <ToggleButton
+                                Margin="3"
+                                Style="{StaticResource ToggleButtonTextStyle}"
+                                IsChecked="{Binding SelectingNodeViewModel.IsTemp}"
+                                ToolTip=""
+                                >
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="●" Foreground="{StaticResource IsTempColor}" Margin="0,0,2,0"/>
+                                    <TextBlock Text="一時ﾃﾞｰﾀ"/>
+                                </StackPanel>
+                            </ToggleButton>
+
+                            <ToggleButton
+                                Margin="3"
+                                Style="{StaticResource ToggleButtonTextStyle}"
+                                IsChecked="{Binding SelectingNodeViewModel.IsLocalSearchMatched, Mode=OneWay}"
+                                IsHitTestVisible="False"
+                                ToolTip=""
+                                IsEnabled="False"
+                                >
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="●" Foreground="{StaticResource IsLocalSearchMatchedColor}" Margin="0,0,2,0"/>
+                                    <TextBlock Text="検索に一致"/>
+                                </StackPanel>
+                            </ToggleButton>
+
+                            <ToggleButton
+                                Margin="3"
+                                Style="{StaticResource ToggleButtonTextStyle}"
+                                IsChecked="{Binding SelectingNodeViewModel.IsCategory1}"
+                                ToolTip=""
+                                >
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="📒" Foreground="{StaticResource IsCat1Color}" Margin="0,0,2,0"/>
+                                    <TextBlock Text="ﾒﾓ1"/>
+                                </StackPanel>
+                            </ToggleButton>
+
+                            <ToggleButton
+                                Margin="3"
+                                Style="{StaticResource ToggleButtonTextStyle}"
+                                IsChecked="{Binding SelectingNodeViewModel.IsCategory2}"
+                                ToolTip=""
+                                >
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="📒" Foreground="{StaticResource IsCat2Color}" Margin="0,0,2,0"/>
+                                    <TextBlock Text="ﾒﾓ2"/>
+                                </StackPanel>
+                            </ToggleButton>
+
+                            <ToggleButton
+                                Margin="3"
+                                Style="{StaticResource ToggleButtonTextStyle}"
+                                IsChecked="{Binding SelectingNodeViewModel.IsCategory3}"
+                                ToolTip=""
+                                >
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="📒" Foreground="{StaticResource IsCat3Color}" Margin="0,0,2,0"/>
+                                    <TextBlock Text="ﾒﾓ3"/>
+                                </StackPanel>
+                            </ToggleButton>
+
+                        </StackPanel>
+                    </Grid>
 
                     <Grid Margin="4">
                         <TextBlock
@@ -535,7 +709,7 @@
 
                     <!-- ========================================== -->
                     <Grid Height="50"/>
-                   
+
                     <Grid Margin="4">
                         <TextBlock
                             Text="Tags：" 
@@ -593,6 +767,7 @@
                         <Button
                             Grid.Column="0"
                             Margin="3"
+                            Style="{StaticResource ButtonTextStyle}"
                             Content="オンラインで情報を取得"
                             ToolTip="自動でオンラインからメタ情報をダウンロードして反映"
                             />
@@ -600,6 +775,7 @@
                         <Button
                             Grid.Column="1"
                             Margin="3"
+                            Style="{StaticResource ButtonTextStyle}"
                             Content="PDFを表示"
                             ToolTip="PDFを表示。もしローカルに存在しない場合は，自動でダウンロードします。"
                             />
@@ -607,6 +783,7 @@
                         <Button
                             Grid.Column="2"
                             Margin="3"
+                            Style="{StaticResource ButtonTextStyle}"
                             Content="Webサイトを表示"
                             ToolTip="元データのWebサイトをブラウザで表示します。"
                             />
@@ -624,6 +801,7 @@
                         <Button
                             Grid.Column="0"
                             Margin="3"
+                            Style="{StaticResource ButtonTextStyle}"
                             Content="（）"
                             ToolTip=""
                             />
@@ -631,48 +809,17 @@
                         <Button
                             Grid.Column="1"
                             Margin="3"
-                            Content="（）"
-                            ToolTip=""
+                            Style="{StaticResource ButtonTextStyle}"
+                            Content="（PDF手動追加）"
+                            ToolTip="PDFをデータベースに手動で追加します。"
                             />
 
                         <Button
                             Grid.Column="2"
                             Margin="3"
+                            Style="{StaticResource ButtonTextStyle}"
                             Content="（AIにまとめてもらう）"
                             ToolTip="AIに論文を読んでもらって，まとめ文章を作成してもらいます。"
-                            />
-
-                    </Grid>
-                    
-                    <Grid Margin="4">
-
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-
-                        <ToggleButton
-                            Grid.Column="0"
-                            Margin="3"
-                            Content="★ お気に入り"
-                            IsChecked="{Binding SelectingNodeViewModel.IsFavorite}"
-                            ToolTip=""
-                            />
-
-                        <ToggleButton
-                            Grid.Column="1"
-                            Margin="3"
-                            Content="✓既読"
-                            IsChecked="{Binding SelectingNodeViewModel.IsRead}"
-                            ToolTip=""
-                            />
-
-                        <Button
-                            Grid.Column="2"
-                            Margin="3"
-                            Content="PDF手動追加"
-                            ToolTip="PDFをデータベースに手動で追加します。"
                             />
 
                     </Grid>

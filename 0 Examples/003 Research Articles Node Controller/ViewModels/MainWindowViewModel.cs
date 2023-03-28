@@ -76,8 +76,25 @@ public class MainWindowViewModel : ViewModel
     ObservableCollection<GroupNodeViewModel> _GroupNodeViewModels = new();
 
     public RangeSelectionMode[] RangeSelectionModes { get; } = Enum.GetValues(typeof(RangeSelectionMode)).OfType<RangeSelectionMode>().ToArray();
+    public RangeSelectionMode SelectedRangeSelectionMode { get; set; } = RangeSelectionMode.包含選択;
 
-    public RangeSelectionMode SelectedRangeSelectionMode { get; set; } = RangeSelectionMode.ContainVMDefine;
+    public EmphasizePropertyItems[] EmphasizePropertyItems { get; } = Enum.GetValues(typeof(EmphasizePropertyItems)).OfType<EmphasizePropertyItems>().ToArray();
+    public static EmphasizePropertyItems _SelectedEmphasizePropertyItem = ViewModels.EmphasizePropertyItems.なし;
+    public EmphasizePropertyItems SelectedEmphasizePropertyItem
+    {
+        get
+        {
+            return _SelectedEmphasizePropertyItem;
+        }
+        set
+        {
+            if (RaisePropertyChangedIfSet(ref _SelectedEmphasizePropertyItem, value))
+            {
+                NotifyResearchArticlesPropertiesChanged();
+                _SelectedEmphasizePropertyItem = value;
+            }
+        }
+    }
 
     public bool IsLockedAllNodeLinks
     {
@@ -112,7 +129,6 @@ public class MainWindowViewModel : ViewModel
             }
         }
     }
-
 
 
     // ★★★★★★★★★★★★★★★ inits
@@ -738,6 +754,18 @@ public enum GroupIntersectType
 
 public enum RangeSelectionMode
 {
-    ContainVMDefine,
-    IntersectVMDefine,
+    包含選択,
+    接触選択,
+}
+
+public enum EmphasizePropertyItems
+{
+    なし,
+    お気に入り,
+    既読,
+    検索結果,
+    一時ﾃﾞｰﾀ,
+    ﾒﾓ1,
+    ﾒﾓ2,
+    ﾒﾓ3,
 }

@@ -204,16 +204,12 @@ public class ResearchArticle : IComparable
 
     // ★★★★★ original meta info
 
-    /// <summary>
-    /// favorite flag
-    /// </summary>
     public bool? Private_Favorite { get; set; } = false;
-    /// <summary>
-    /// read flag
-    /// </summary>
     public bool? Private_Read { get; set; } = false;
-
-    public bool? IsTemporary { get; set; } = false;
+    public bool? Private_Temporary { get; set; } = false;
+    public bool? Private_IsCategory1 { get; set; } = false;
+    public bool? Private_IsCategory2 { get; set; } = false;
+    public bool? Private_IsCategory3 { get; set; } = false;
 
     public bool? DataFrom_Manual { get; set; } = false;
     public bool? DataFrom_JStage { get; set; } = false;

@@ -1,6 +1,8 @@
 ﻿using Aki32Utilities.ConsoleAppUtilities.Research;
 using Aki32Utilities.UsageExamples.ResearchArticlesNodeController.ViewModels;
 
+using DocumentFormat.OpenXml.Drawing;
+
 using Newtonsoft.Json;
 
 using PropertyChanged;
@@ -19,7 +21,8 @@ public class ResearchArticleNodeViewModel : DefaultNodeViewModel
 
     [AlsoNotifyFor(nameof(Name), nameof(ArticleTitle), nameof(Authors), nameof(TopAuthor), nameof(Memo), nameof(DOI), nameof(PublishedOn),
         nameof(Memo_Motivation), nameof(Memo_Method), nameof(Memo_Insights), nameof(Memo_Contribution),
-        nameof(IsLocalSearchMatched)
+        nameof(IsFavorite), nameof(IsRead), nameof(IsCategory1), nameof(IsCategory2), nameof(IsCategory3),
+        nameof(ArticleHeaderColor)
         )]
     private int NotifyArticleUpdatedBridge { get; set; } = 0;
 
@@ -150,17 +153,8 @@ public class ResearchArticleNodeViewModel : DefaultNodeViewModel
         {
             var ss = new List<string>();
 
-            if (Article.Private_Favorite ?? false)
-                ss.Add("★");
-
             if (Article.TryFindPDF(MainWindowViewModel.ResearchArticlesManager.PDFsDirectory))
                 ss.Add("PDF");
-
-            if (Article.Private_Read ?? false)
-                ss.Add("Read");
-
-            if (Article.IsTemporary ?? false)
-                ss.Add("TEMP");
 
             if (Article.DataFrom_JStage ?? false)
                 ss.Add("JStage");
@@ -178,7 +172,7 @@ public class ResearchArticleNodeViewModel : DefaultNodeViewModel
         }
     }
 
-    [AlsoNotifyFor(nameof(Tags), nameof(ArticleHeaderColor))]
+    [AlsoNotifyFor(nameof(ArticleHeaderColor))]
     public bool IsFavorite
     {
         get => Article.Private_Favorite ?? false;
@@ -189,8 +183,7 @@ public class ResearchArticleNodeViewModel : DefaultNodeViewModel
                 Article.Private_Favorite = temp;
         }
     }
-
-    [AlsoNotifyFor(nameof(Tags), nameof(ArticleHeaderColor))]
+    [AlsoNotifyFor(nameof(ArticleHeaderColor))]
     public bool IsRead
     {
         get => Article.Private_Read ?? false;
@@ -201,7 +194,17 @@ public class ResearchArticleNodeViewModel : DefaultNodeViewModel
                 Article.Private_Read = temp;
         }
     }
-
+    [AlsoNotifyFor(nameof(ArticleHeaderColor))]
+    public bool IsTemp
+    {
+        get => Article.Private_Temporary ?? false;
+        set
+        {
+            var temp = Article.Private_Temporary;
+            if (RaisePropertyChangedIfSet(ref temp, value))
+                Article.Private_Temporary = temp;
+        }
+    }
     [AlsoNotifyFor(nameof(ArticleHeaderColor))]
     public bool IsLocalSearchMatched
     {
@@ -214,29 +217,88 @@ public class ResearchArticleNodeViewModel : DefaultNodeViewModel
             var searchStrings = searchFullString.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
             if (searchStrings.Length == 0)
                 return false;
+
             return Article.GetIfSearchStringsMatched(searchStrings);
+        }
+    }
+
+    [AlsoNotifyFor(nameof(ArticleHeaderColor))]
+    public bool IsCategory1
+    {
+        get => Article.Private_IsCategory1 ?? false;
+        set
+        {
+            var temp = Article.Private_IsCategory1;
+            if (RaisePropertyChangedIfSet(ref temp, value))
+                Article.Private_IsCategory1 = temp;
+        }
+    }
+    [AlsoNotifyFor(nameof(ArticleHeaderColor))]
+    public bool IsCategory2
+    {
+        get => Article.Private_IsCategory2 ?? false;
+        set
+        {
+            var temp = Article.Private_IsCategory2;
+            if (RaisePropertyChangedIfSet(ref temp, value))
+                Article.Private_IsCategory2 = temp;
+        }
+    }
+    [AlsoNotifyFor(nameof(ArticleHeaderColor))]
+    public bool IsCategory3
+    {
+        get => Article.Private_IsCategory3 ?? false;
+        set
+        {
+            var temp = Article.Private_IsCategory3;
+            if (RaisePropertyChangedIfSet(ref temp, value))
+                Article.Private_IsCategory3 = temp;
         }
     }
     public Brush ArticleHeaderColor
     {
         get
         {
-            if (IsLocalSearchMatched)
-                return Brushes.Aqua;
+            switch (MainWindowViewModel._SelectedEmphasizePropertyItem)
+            {
+                case EmphasizePropertyItems.なし:
+                    break;
+                case EmphasizePropertyItems.お気に入り:
+                    if (IsFavorite)
+                        return new SolidColorBrush(Color.FromArgb(0xFF, 0xE9, 0x5B, 0x6B));
+                    break;
+                case EmphasizePropertyItems.既読:
+                    if (IsRead)
+                        return Brushes.LightGreen;
+                    break;
+                case EmphasizePropertyItems.検索結果:
+                    if (IsLocalSearchMatched)
+                        return Brushes.Aqua;
+                    break;
+                case EmphasizePropertyItems.一時ﾃﾞｰﾀ:
+                    if (IsTemp)
+                        return Brushes.DarkOrange;
+                    break;
 
-            if (Article.IsTemporary ?? false)
-                return Brushes.DarkRed;
-
-            if (Article.Private_Favorite ?? false)
-                return Brushes.Yellow;
-
-            if (Article.Private_Read ?? false)
-                return Brushes.DarkOrange;
+                case EmphasizePropertyItems.ﾒﾓ1:
+                    if (IsCategory1)
+                        return Brushes.White;
+                    break;
+                case EmphasizePropertyItems.ﾒﾓ2:
+                    if (IsCategory2)
+                        return Brushes.Pink;
+                    break;
+                case EmphasizePropertyItems.ﾒﾓ3:
+                    if (IsCategory3)
+                        return Brushes.Purple;
+                    break;
+                default:
+                    throw new NotImplementedException();
+            }
 
             return new SolidColorBrush(Color.FromArgb(0xFF, 0x66, 0x66, 0x66));
         }
     }
-
 
     public override IEnumerable<NodeConnectorViewModel> Inputs => _Inputs;
     readonly ObservableCollection<NodeInputViewModel> _Inputs = new();
