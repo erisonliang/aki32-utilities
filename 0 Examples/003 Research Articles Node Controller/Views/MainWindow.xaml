@@ -567,29 +567,6 @@
 
                     <Grid Margin="4">
                         <TextBlock
-                            Text="リリース：" 
-                            Width="50" 
-                            HorizontalAlignment="Left"
-                            TextAlignment="Right"
-                            ToolTipService.InitialShowDelay="10" 
-                            >
-                            <TextBlock.ToolTip>
-                                <TextBlock
-                                    TextAlignment="Left"
-                                    Text="release"
-                                    >
-                                </TextBlock>
-                            </TextBlock.ToolTip>
-                        </TextBlock>
-                        <TextBox 
-                            Margin="50,0,0,0" 
-                            Text="{Binding SelectingNodeViewModel.PublishedOn, UpdateSourceTrigger=PropertyChanged}" 
-                            TextWrapping="NoWrap" AcceptsReturn="False"
-                            />
-                    </Grid>
-
-                    <Grid Margin="4">
-                        <TextBlock
                             Text="メモ：" 
                             Width="50" 
                             HorizontalAlignment="Left"
@@ -714,7 +691,7 @@
 
                     <Grid Margin="4">
                         <TextBlock
-                            Text="タグ：" 
+                            Text="公開日：" 
                             Width="50" 
                             HorizontalAlignment="Left"
                             TextAlignment="Right"
@@ -723,17 +700,150 @@
                             <TextBlock.ToolTip>
                                 <TextBlock
                                     TextAlignment="Left"
-                                    Text="tags"
+                                    Text="release"
                                     >
                                 </TextBlock>
                             </TextBlock.ToolTip>
                         </TextBlock>
-                        <TextBlock 
-                            Text="{Binding SelectingNodeViewModel.Tags}" 
+                        <TextBox 
                             Margin="50,0,0,0" 
-                            TextWrapping="Wrap"
+                            Text="{Binding SelectingNodeViewModel.PublishedOn, UpdateSourceTrigger=PropertyChanged}" 
+                            TextWrapping="NoWrap" AcceptsReturn="False"
                             />
                     </Grid>
+
+                    <Grid Margin="4">
+                        <TextBlock
+                            Text="資料：" 
+                            Width="50" 
+                            HorizontalAlignment="Left"
+                            TextAlignment="Right"
+                            ToolTipService.InitialShowDelay="10" 
+                            >
+                            <TextBlock.ToolTip>
+                                <TextBlock
+                                    TextAlignment="Left"
+                                    Text="release"
+                                    >
+                                </TextBlock>
+                            </TextBlock.ToolTip>
+                        </TextBlock>
+                        <TextBox 
+                            Margin="50,0,0,0" 
+                            Text="{Binding SelectingNodeViewModel.MaterialTitle, UpdateSourceTrigger=PropertyChanged}" 
+                            TextWrapping="NoWrap" AcceptsReturn="False"
+                            />
+                    </Grid>
+
+                    <Grid Margin="4">
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="50"/>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock
+                            Grid.Column="1"
+                            Text="巻：" 
+                            Margin="10,0,0,0"
+                            HorizontalAlignment="Left"
+                            TextAlignment="Right"
+                            ToolTipService.InitialShowDelay="10" 
+                            >
+                            <TextBlock.ToolTip>
+                                <TextBlock
+                                    TextAlignment="Left"
+                                    Text="release"
+                                    >
+                                </TextBlock>
+                            </TextBlock.ToolTip>
+                        </TextBlock>
+                        <TextBox 
+                            Grid.Column="2"
+                            Text="{Binding SelectingNodeViewModel.MaterialVolume, UpdateSourceTrigger=PropertyChanged}" 
+                            TextWrapping="NoWrap" AcceptsReturn="False"
+                            />
+
+                        <TextBlock
+                            Grid.Column="3"
+                            Text="号：" 
+                            Margin="10,0,0,0"
+                            HorizontalAlignment="Left"
+                            TextAlignment="Right"
+                            ToolTipService.InitialShowDelay="10" 
+                            >
+                            <TextBlock.ToolTip>
+                                <TextBlock
+                                    TextAlignment="Left"
+                                    Text="release"
+                                    >
+                                </TextBlock>
+                            </TextBlock.ToolTip>
+                        </TextBlock>
+                        <TextBox 
+                            Grid.Column="4"
+                            Text="{Binding SelectingNodeViewModel.MaterialSubVolume, UpdateSourceTrigger=PropertyChanged}" 
+                            TextWrapping="NoWrap" AcceptsReturn="False"
+                            />
+
+                        <TextBlock
+                            Grid.Column="5"
+                            Text="開始ページ：" 
+                            Margin="10,0,0,0"
+                            HorizontalAlignment="Left"
+                            TextAlignment="Right"
+                            ToolTipService.InitialShowDelay="10" 
+                            >
+                            <TextBlock.ToolTip>
+                                <TextBlock
+                                    TextAlignment="Left"
+                                    Text="release"
+                                    >
+                                </TextBlock>
+                            </TextBlock.ToolTip>
+                        </TextBlock>
+                        
+                        <TextBox 
+                            Grid.Column="6"
+                            Text="{Binding SelectingNodeViewModel.StartingPage, UpdateSourceTrigger=PropertyChanged}" 
+                            TextWrapping="NoWrap" AcceptsReturn="False"
+                            />
+
+                        <TextBlock
+                            Grid.Column="7"
+                            Text="終了ページ：" 
+                            Margin="10,0,0,0"
+                            HorizontalAlignment="Left"
+                            TextAlignment="Right"
+                            ToolTipService.InitialShowDelay="10" 
+                            >
+                            <TextBlock.ToolTip>
+                                <TextBlock
+                                    TextAlignment="Left"
+                                    Text="release"
+                                    >
+                                </TextBlock>
+                            </TextBlock.ToolTip>
+                        </TextBlock>
+                        <TextBox 
+                            Grid.Column="8"
+                            Text="{Binding SelectingNodeViewModel.EndingPage, UpdateSourceTrigger=PropertyChanged}" 
+                            TextWrapping="NoWrap" AcceptsReturn="False"
+                            />
+
+                    </Grid>
+
+
+
+                    <!-- ========================================== -->
+                    <Grid Height="50"/>
 
                     <Grid Margin="4">
                         <TextBlock
@@ -783,6 +893,29 @@
                             <TextBlock Text="{Binding SelectingNodeViewModel.Article.Friendly_AOI}"/>
                             <TextBlock Text=" )"/>
                         </StackPanel>
+                    </Grid>
+
+                    <Grid Margin="4">
+                        <TextBlock
+                            Text="タグ：" 
+                            Width="50" 
+                            HorizontalAlignment="Left"
+                            TextAlignment="Right"
+                            ToolTipService.InitialShowDelay="10" 
+                            >
+                            <TextBlock.ToolTip>
+                                <TextBlock
+                                    TextAlignment="Left"
+                                    Text="tags"
+                                    >
+                                </TextBlock>
+                            </TextBlock.ToolTip>
+                        </TextBlock>
+                        <TextBlock 
+                            Text="{Binding SelectingNodeViewModel.Tags}" 
+                            Margin="50,0,0,0" 
+                            TextWrapping="Wrap"
+                            />
                     </Grid>
 
                     <Grid Margin="4">

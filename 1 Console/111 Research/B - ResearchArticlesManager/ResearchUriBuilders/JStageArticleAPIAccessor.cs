@@ -180,7 +180,7 @@ public class JStageArticleAPIAccessor : IResearchAPIAccessor
                 article.OnlineISSN = entity.Element(ExpandPrism("eIssn"))?.Value;
 
                 article.JStage_MaterialVolume = entity.Element(ExpandPrism("volume"))?.Value;
-                article.JStage_SubVolume = entity.Element(ExpandAtom("cdvols"))?.Value;
+                article.JStage_MaterialSubVolume = entity.Element(ExpandAtom("cdvols"))?.Value;
 
                 article.JStage_Number = entity.Element(ExpandPrism("number"))?.Value;
                 article.JStage_StartingPage = entity.Element(ExpandPrism("startingPage"))?.Value;

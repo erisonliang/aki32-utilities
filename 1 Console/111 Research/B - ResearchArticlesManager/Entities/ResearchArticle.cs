@@ -118,6 +118,22 @@ public class ResearchArticle : IComparable
                 ;
         }
     }
+    public string? MaterialSubVolume
+    {
+        get
+        {
+            return null
+                ?? Manual_MaterialSubVolume.NullIfNullOrEmpty()
+
+                ?? JStage_MaterialSubVolume.NullIfNullOrEmpty()
+                //?? NDLSearch_MaterialSubVolume.NullIfNullOrEmpty()
+                //?? CiNii_MaterialSubVolume.NullIfNullOrEmpty()
+
+                // 最終手段。
+                ?? null
+                ;
+        }
+    }
     public string? StartingPage
     {
         get
@@ -204,6 +220,8 @@ public class ResearchArticle : IComparable
         }
     }
 
+    [CsvIgnore]
+    public string? ReferenceErrorReasonString = "";
     public string? ReferenceString
     {
         get
@@ -211,36 +229,81 @@ public class ResearchArticle : IComparable
             string ReferenceStringManually()
             {
                 if (Authors is null)
-                    return "※ Need to fill Authors";
+                {
+                    ReferenceErrorReasonString = "※ Need to fill Authors";
+                    return null;
+                }
                 if (ArticleTitle is null)
-                    return "※ Need to fill ArticleTitle";
+                {
+                    ReferenceErrorReasonString = "※ Need to fill ArticleTitle";
+                    return null;
+                }
                 if (MaterialTitle is null)
-                    return "※ Need to fill MaterialTitle";
+                {
+                    ReferenceErrorReasonString = "※ Need to fill MaterialTitle";
+                    return null;
+                }
                 if (MaterialVolume is null)
-                    return "※ Need to fill MaterialVol";
+                {
+                    ReferenceErrorReasonString = "※ Need to fill MaterialVol";
+                    return null;
+                }
                 if (StartingPage is null)
-                    return "※ Need to fill StartingPage";
+                {
+                    ReferenceErrorReasonString = "※ Need to fill StartingPage";
+                    return null;
+                }
                 if (EndingPage is null)
-                    return "※ Need to fill EndingPage";
+                {
+                    ReferenceErrorReasonString = "※ Need to fill EndingPage";
+                    return null;
+                }
                 var date = PublishedOn_Numbers;
-                if (date is null)
-                    return "※ Need to fill PublishedYear";
-                if (date.Value.year is null)
-                    return "※ Need to fill PublishedYear";
+                if (date is null || date.Value.year is null)
+                {
+                    ReferenceErrorReasonString = "※ Need to fill PublishedYear";
+                    return null;
+                }
 
                 var authors = string.Join(", ", Authors!);
                 var dateString = $"{date.Value.year.Value}";
                 if (date.Value.month is not null)
                     dateString += $".{date.Value.month.Value}";
 
-                return $"{authors}, {ArticleTitle}, {MaterialTitle}{MaterialVolume}, pp. {StartingPage}-{EndingPage}, {dateString}";
+                var s = "";
+                s += $"{authors}, ";
+                s += $"{ArticleTitle}, ";
+                s += $"{MaterialTitle}, ";
+                if (MaterialVolume is not null)
+                {
+                    if (uint.TryParse(MaterialVolume, out uint a))
+                        s += $"第{MaterialVolume}巻, ";
+                    else
+                        s += $"{MaterialVolume}, ";
+                }
+                if (MaterialSubVolume is not null)
+                {
+                    if (uint.TryParse(MaterialSubVolume, out uint a))
+                        s += $"第{MaterialSubVolume}号, ";
+                    else
+                        s += $"{MaterialSubVolume}, ";
+                }
+
+                s += $"pp.{StartingPage}-{EndingPage}, ";
+                s += $"{dateString}";
+
+                return s;
             }
 
             return null
+               // 生成
+               ?? ReferenceStringManually().NullIfNullOrEmpty()
+
+               // 自動
                ?? CrossRef_UnstructuredRefString.NullIfNullOrEmpty()
 
-               // TODO: 手動作成！
-               ?? ReferenceStringManually()
+               // 生成失敗理由
+               ?? ReferenceErrorReasonString.NullIfNullOrEmpty()
                ?? null
                ;
         }
@@ -328,6 +391,7 @@ public class ResearchArticle : IComparable
 
     public string? Manual_MaterialTitle { get; set; }
     public string? Manual_MaterialVolume { get; set; }
+    public string? Manual_MaterialSubVolume { get; set; }
 
     public string? Manual_StartingPage { get; set; }
     public string? Manual_EndingPage { get; set; }
@@ -400,7 +464,7 @@ public class ResearchArticle : IComparable
     public string? JStage_PublishedYear { get; set; }
 
     public string? JStage_MaterialVolume { get; set; }
-    public string? JStage_SubVolume { get; set; }
+    public string? JStage_MaterialSubVolume { get; set; }
     public string? JStage_Number { get; set; }
     public string? JStage_StartingPage { get; set; }
     public string? JStage_EndingPage { get; set; }
@@ -428,6 +492,7 @@ public class ResearchArticle : IComparable
     public string? CiNii_PublishedDate { get; set; }
 
     public string? CiNii_MaterialVolume { get; set; }
+    //public string? CiNii_MaterialSubVolume { get; set; }
     public string? CiNii_Number { get; set; }
     public string? CiNii_StartingPage { get; set; }
     public string? CiNii_EndingPage { get; set; }
@@ -447,6 +512,7 @@ public class ResearchArticle : IComparable
     public string? NDLSearch_PublishedDate { get; set; }
 
     public string? NDLSearch_MaterialVolume { get; set; }
+    //public string? NDLSearch_MaterialSubVolume { get; set; }
     public string? NDLSearch_Number { get; set; }
     public string? NDLSearch_StartingPage { get; set; }
     public string? NDLSearch_EndingPage { get; set; }

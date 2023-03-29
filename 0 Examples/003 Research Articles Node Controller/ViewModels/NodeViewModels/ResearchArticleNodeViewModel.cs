@@ -29,24 +29,24 @@ public class ResearchArticleNodeViewModel : DefaultNodeViewModel
 
     public string ArticleTitle
     {
-        get => Article.ArticleTitle ?? "不明";
+        get => Article.ArticleTitle ?? "■";
         set
         {
             var temp = Article.ArticleTitle;
             if (RaisePropertyChangedIfSet(ref temp, value))
-                Article.Manual_ArticleTitle = temp;
+                Article.Manual_ArticleTitle = value;
         }
     }
 
-    [AlsoNotifyFor(nameof(TopAuthor))]
+    [AlsoNotifyFor(nameof(TopAuthor), nameof(Article))]
     public string Authors
     {
-        get => (Article.Authors == null) ? "不明" : string.Join("; ", Article.Authors);
+        get => (Article.Authors == null) ? "■" : string.Join("; ", Article.Authors);
         set
         {
             var temp = JsonConvert.SerializeObject(Article.Authors);
-            if (RaisePropertyChangedIfSet(ref temp, value) && temp is not null)
-                Article.Manual_Authors = temp.Split(new char[] { ';', '；' }, StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
+            if (RaisePropertyChangedIfSet(ref temp, value) && value is not null)
+                Article.Manual_Authors = value.Split(new char[] { ';', '；' }, StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
         }
     }
     public string TopAuthor
@@ -60,17 +60,6 @@ public class ResearchArticleNodeViewModel : DefaultNodeViewModel
                 return $"{Article.Authors[0]}";
 
             return $"{Article.Authors[0]} ら";
-        }
-    }
-
-    public string PublishedOn
-    {
-        get => Article.PublishedOn ?? "不明";
-        set
-        {
-            var temp = Article.PublishedOn;
-            if (RaisePropertyChangedIfSet(ref temp, value))
-                Article.Manual_PublishedDate = temp!.Replace("/", "-");
         }
     }
 
@@ -150,7 +139,7 @@ public class ResearchArticleNodeViewModel : DefaultNodeViewModel
         {
             var temp = Article.Private_Favorite;
             if (RaisePropertyChangedIfSet(ref temp, value))
-                Article.Private_Favorite = temp;
+                Article.Private_Favorite = value;
         }
     }
     [AlsoNotifyFor(nameof(ArticleHeaderColor))]
@@ -161,7 +150,7 @@ public class ResearchArticleNodeViewModel : DefaultNodeViewModel
         {
             var temp = Article.Private_Read;
             if (RaisePropertyChangedIfSet(ref temp, value))
-                Article.Private_Read = temp;
+                Article.Private_Read = value;
         }
     }
     [AlsoNotifyFor(nameof(ArticleHeaderColor))]
@@ -172,7 +161,7 @@ public class ResearchArticleNodeViewModel : DefaultNodeViewModel
         {
             var temp = Article.Private_Temporary;
             if (RaisePropertyChangedIfSet(ref temp, value))
-                Article.Private_Temporary = temp;
+                Article.Private_Temporary = value;
         }
     }
     [AlsoNotifyFor(nameof(ArticleHeaderColor))]
@@ -199,7 +188,7 @@ public class ResearchArticleNodeViewModel : DefaultNodeViewModel
         {
             var temp = Article.Private_IsCategory1;
             if (RaisePropertyChangedIfSet(ref temp, value))
-                Article.Private_IsCategory1 = temp;
+                Article.Private_IsCategory1 = value;
         }
     }
     [AlsoNotifyFor(nameof(ArticleHeaderColor))]
@@ -210,7 +199,7 @@ public class ResearchArticleNodeViewModel : DefaultNodeViewModel
         {
             var temp = Article.Private_IsCategory2;
             if (RaisePropertyChangedIfSet(ref temp, value))
-                Article.Private_IsCategory2 = temp;
+                Article.Private_IsCategory2 = value;
         }
     }
     [AlsoNotifyFor(nameof(ArticleHeaderColor))]
@@ -221,7 +210,70 @@ public class ResearchArticleNodeViewModel : DefaultNodeViewModel
         {
             var temp = Article.Private_IsCategory3;
             if (RaisePropertyChangedIfSet(ref temp, value))
-                Article.Private_IsCategory3 = temp;
+                Article.Private_IsCategory3 = value;
+        }
+    }
+
+    public string PublishedOn
+    {
+        get => Article.PublishedOn ?? "不明";
+        set
+        {
+            var temp = Article.PublishedOn;
+            if (RaisePropertyChangedIfSet(ref temp, value))
+                Article.Manual_PublishedDate = value!.Replace("/", "-").Replace(".", "-");
+        }
+    }
+    public string MaterialTitle
+    {
+        get => Article.MaterialTitle ?? "■";
+        set
+        {
+            var temp = Article.MaterialTitle;
+            if (RaisePropertyChangedIfSet(ref temp, value))
+                Article.Manual_MaterialTitle = value;
+        }
+    }
+    [AlsoNotifyFor(nameof(Article))]
+    public string MaterialVolume
+    {
+        get => Article.MaterialVolume ?? "■";
+        set
+        {
+            var temp = Article.MaterialVolume;
+            if (RaisePropertyChangedIfSet(ref temp, value))
+                Article.Manual_MaterialVolume = value;
+        }
+    }
+    [AlsoNotifyFor(nameof(Article))]
+    public string MaterialSubVolume
+    {
+        get => Article.MaterialSubVolume ?? "-";
+        set
+        {
+            var temp = Article.MaterialSubVolume;
+            if (RaisePropertyChangedIfSet(ref temp, value))
+                Article.Manual_MaterialSubVolume = value;
+        }
+    }
+    public string StartingPage
+    {
+        get => Article.StartingPage ?? "■";
+        set
+        {
+            var temp = Article.StartingPage;
+            if (RaisePropertyChangedIfSet(ref temp, value))
+                Article.Manual_StartingPage = value;
+        }
+    }
+    public string EndingPage
+    {
+        get => Article.EndingPage ?? "未入力";
+        set
+        {
+            var temp = Article.EndingPage;
+            if (RaisePropertyChangedIfSet(ref temp, value))
+                Article.Manual_EndingPage = value;
         }
     }
 
