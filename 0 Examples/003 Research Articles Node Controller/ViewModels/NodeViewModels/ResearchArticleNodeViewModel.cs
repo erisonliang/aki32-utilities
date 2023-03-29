@@ -21,7 +21,7 @@ public class ResearchArticleNodeViewModel : DefaultNodeViewModel
 
     [AlsoNotifyFor(nameof(Name), nameof(ArticleTitle), nameof(Authors), nameof(TopAuthor), nameof(Memo), nameof(DOI), nameof(PublishedOn),
         nameof(Memo_Motivation), nameof(Memo_Method), nameof(Memo_Insights), nameof(Memo_Contribution),
-        nameof(IsFavorite), nameof(IsRead), nameof(IsCategory1), nameof(IsCategory2), nameof(IsCategory3),
+        nameof(IsFavorite), nameof(IsRead), nameof(IsTemp), nameof(IsLocalSearchMatched), nameof(IsCategory1), nameof(IsCategory2), nameof(IsCategory3),
         nameof(ArticleHeaderColor)
         )]
     private int NotifyArticleUpdatedBridge { get; set; } = 0;
@@ -221,7 +221,6 @@ public class ResearchArticleNodeViewModel : DefaultNodeViewModel
             return Article.GetIfSearchStringsMatched(searchStrings);
         }
     }
-
     [AlsoNotifyFor(nameof(ArticleHeaderColor))]
     public bool IsCategory1
     {
