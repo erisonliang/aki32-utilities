@@ -8,7 +8,10 @@
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:ctrl="clr-namespace:Aki32Utilities.WPFAppUtilities.NodeController.Controls;assembly=NodeController"
         mc:Ignorable="d"
-        Title="Research Articles Node Controll" Height="600" Width="1000">
+        Title="Research Articles Node Controll" 
+        d:Height="600"
+        d:Width="1200"
+        >
 
     <Window.DataContext>
         <vm:MainWindowViewModel/>
@@ -271,11 +274,10 @@
             Grid.Column="0"
             Grid.ColumnSpan="2"
             Height="35" 
-            d:Height="50"
             >
 
             <ScrollViewer 
-                HorizontalScrollBarVisibility="Hidden" 
+                HorizontalScrollBarVisibility="Auto" 
                 VerticalScrollBarVisibility="Disabled"
                 >
 
@@ -712,7 +714,7 @@
 
                     <Grid Margin="4">
                         <TextBlock
-                            Text="Tags：" 
+                            Text="タグ：" 
                             Width="50" 
                             HorizontalAlignment="Left"
                             TextAlignment="Right"
@@ -753,6 +755,29 @@
                             Margin="50,0,0,0" 
                             Text="{Binding SelectingNodeViewModel.DOI, UpdateSourceTrigger=PropertyChanged}" 
                             TextWrapping="NoWrap" AcceptsReturn="False"
+                            />
+                    </Grid>
+
+                    <Grid Margin="4">
+                        <TextBlock
+                            Text="文献：" 
+                            Width="50" 
+                            HorizontalAlignment="Left"
+                            TextAlignment="Right"
+                            ToolTipService.InitialShowDelay="10" 
+                            >
+                            <TextBlock.ToolTip>
+                                <TextBlock
+                                    TextAlignment="Left"
+                                    Text="tags"
+                                    >
+                                </TextBlock>
+                            </TextBlock.ToolTip>
+                        </TextBlock>
+                        <TextBlock 
+                            Text="著者1, 著者2, 著者3, タイトルタイトルタイトルタイトルタイトルタイトルタイトルタイトル, 2022年度日本建築学会構造系論文集, 2023.4" 
+                            Margin="50,0,0,0" 
+                            TextWrapping="Wrap"
                             />
                     </Grid>
 
