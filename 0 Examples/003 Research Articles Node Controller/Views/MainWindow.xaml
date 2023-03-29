@@ -606,7 +606,7 @@
                         </TextBlock>
                         <TextBox 
                             Margin="50,0,0,0" 
-                            Text="{Binding SelectingNodeViewModel.Memo}" 
+                            Text="{Binding SelectingNodeViewModel.Article.Memo}" 
                             TextWrapping="Wrap" AcceptsReturn="True"
                             />
                     </Grid>
@@ -630,7 +630,7 @@
                         </TextBlock>
                         <TextBox 
                             Margin="100,0,0,0" 
-                            Text="{Binding SelectingNodeViewModel.Memo_Motivation}" 
+                            Text="{Binding SelectingNodeViewModel.Article.Memo_Motivation}" 
                             TextWrapping="Wrap" AcceptsReturn="True"
                             />
                     </Grid>
@@ -656,7 +656,7 @@
                         </TextBlock>
                         <TextBox 
                             Margin="100,0,0,0" 
-                            Text="{Binding SelectingNodeViewModel.Memo_Method}" 
+                            Text="{Binding SelectingNodeViewModel.Article.Memo_Method}" 
                             TextWrapping="Wrap" AcceptsReturn="True"
                             />
                     </Grid>
@@ -680,7 +680,7 @@
                         </TextBlock>
                         <TextBox 
                             Margin="100,0,0,0" 
-                            Text="{Binding SelectingNodeViewModel.Memo_Insights}" 
+                            Text="{Binding SelectingNodeViewModel.Article.Memo_Insights}" 
                             TextWrapping="Wrap" AcceptsReturn="True"
                             />
                     </Grid>
@@ -703,7 +703,7 @@
                         </TextBlock>
                         <TextBox 
                             Margin="100,0,0,0" 
-                            Text="{Binding SelectingNodeViewModel.Memo_Contribution}" 
+                            Text="{Binding SelectingNodeViewModel.Article.Memo_Contribution}" 
                             TextWrapping="Wrap" AcceptsReturn="True"
                             />
                     </Grid>
@@ -753,9 +753,36 @@
                         </TextBlock>
                         <TextBox 
                             Margin="50,0,0,0" 
-                            Text="{Binding SelectingNodeViewModel.DOI, UpdateSourceTrigger=PropertyChanged}" 
+                            Text="{Binding SelectingNodeViewModel.Article.DOI, UpdateSourceTrigger=PropertyChanged}" 
                             TextWrapping="NoWrap" AcceptsReturn="False"
                             />
+                    </Grid>
+
+                    <Grid Margin="4">
+                        <TextBlock
+                            Text="AOI：" 
+                            Width="50" 
+                            HorizontalAlignment="Left"
+                            TextAlignment="Right"
+                            ToolTipService.InitialShowDelay="10" 
+                            >
+                            <TextBlock.ToolTip>
+                                <TextBlock
+                                    TextAlignment="Left"
+                                    Text="AOI"
+                                    >
+                                </TextBlock>
+                            </TextBlock.ToolTip>
+                        </TextBlock>
+                        <StackPanel
+                            Margin="50,0,0,0" 
+                            Orientation="Horizontal"
+                            >
+                            <TextBlock Text="{Binding SelectingNodeViewModel.Article.AOI}"/>
+                            <TextBlock Text=" ( "/>
+                            <TextBlock Text="{Binding SelectingNodeViewModel.Article.Friendly_AOI}"/>
+                            <TextBlock Text=" )"/>
+                        </StackPanel>
                     </Grid>
 
                     <Grid Margin="4">
@@ -769,13 +796,13 @@
                             <TextBlock.ToolTip>
                                 <TextBlock
                                     TextAlignment="Left"
-                                    Text="tags"
+                                    Text="文献文字列。クリックしてコピー。"
                                     >
                                 </TextBlock>
                             </TextBlock.ToolTip>
                         </TextBlock>
                         <TextBlock 
-                            Text="著者1, 著者2, 著者3, タイトルタイトルタイトルタイトルタイトルタイトルタイトルタイトル, 2022年度日本建築学会構造系論文集, 2023.4" 
+                            Text="{Binding SelectingNodeViewModel.Article.ReferenceString}" 
                             Margin="50,0,0,0" 
                             TextWrapping="Wrap"
                             />

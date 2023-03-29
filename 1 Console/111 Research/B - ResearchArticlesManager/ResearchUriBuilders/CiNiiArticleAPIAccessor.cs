@@ -216,7 +216,7 @@ public class CiNiiArticleAPIAccessor : IResearchAPIAccessor
 
                     article.PrintISSN = entity?["prism:issn"]?.ToString();
 
-                    article.CiNii_Volume = entity?["prism:volume"]?.ToString();
+                    article.CiNii_MaterialVolume = entity?["prism:volume"]?.ToString();
                     article.CiNii_Number = entity?["prism:number"]?.ToString();
                     article.CiNii_StartingPage = entity?["prism:startingPage"]?.ToString();
                     article.CiNii_EndingPage = entity?["prism:endingPage"]?.ToString();

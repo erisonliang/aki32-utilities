@@ -4,6 +4,8 @@ using Aki32Utilities.ConsoleAppUtilities.General;
 
 using ClosedXML;
 
+using Org.BouncyCastle.Asn1.Anssi;
+
 namespace Aki32Utilities.ConsoleAppUtilities.Research;
 public class ResearchArticle : IComparable
 {
@@ -12,6 +14,7 @@ public class ResearchArticle : IComparable
 
     private static readonly Range UNSTRUCTURED_REF_STRING_RANGE = ..130;
     private static readonly Range GENERATED_PDF_FILE_NAME_RANGE = ^30..;
+    private static readonly Range FRIENDLY_AOI_RANGE = ^6..;
 
 
     // ★★★★★★★★★★★★★★★ prop
@@ -24,6 +27,8 @@ public class ResearchArticle : IComparable
         {
             return null
                 ?? Manual_ArticleTitle.NullIfNullOrEmpty()
+
+                // 日本語
                 ?? JStage_ArticleTitle_Japanese.NullIfNullOrEmpty()
                 ?? CiNii_ArticleTitle.NullIfNullOrEmpty()
                 ?? NDLSearch_ArticleTitle.NullIfNullOrEmpty()
@@ -44,6 +49,8 @@ public class ResearchArticle : IComparable
         {
             return null
                 ?? Manual_Authors
+
+                // 日本語
                 ?? JStage_Authors_Japanese
                 ?? CiNii_Authors
                 ?? NDLSearch_Authors
@@ -71,6 +78,72 @@ public class ResearchArticle : IComparable
 
                 // 英語は後回し
 
+
+                // 最終手段。
+                ?? null
+                ;
+        }
+    }
+    public string? MaterialTitle
+    {
+        get
+        {
+            return null
+                ?? Manual_MaterialTitle.NullIfNullOrEmpty()
+
+                // 日本語
+                ?? JStage_MaterialTitle_Japanese.NullIfNullOrEmpty()
+
+                // 英語は後回し
+                ?? JStage_MaterialTitle_English.NullIfNullOrEmpty()
+
+                // 最終手段。
+                ?? null
+                ;
+        }
+    }
+    public string? MaterialVolume
+    {
+        get
+        {
+            return null
+                ?? Manual_MaterialVolume.NullIfNullOrEmpty()
+
+                ?? JStage_MaterialVolume.NullIfNullOrEmpty()
+                ?? NDLSearch_MaterialVolume.NullIfNullOrEmpty()
+                ?? CiNii_MaterialVolume.NullIfNullOrEmpty()
+
+                // 最終手段。
+                ?? null
+                ;
+        }
+    }
+    public string? StartingPage
+    {
+        get
+        {
+            return null
+                ?? Manual_StartingPage.NullIfNullOrEmpty()
+
+                ?? JStage_StartingPage.NullIfNullOrEmpty()
+                ?? NDLSearch_StartingPage.NullIfNullOrEmpty()
+                ?? CiNii_StartingPage.NullIfNullOrEmpty()
+
+                // 最終手段。
+                ?? null
+                ;
+        }
+    }
+    public string? EndingPage
+    {
+        get
+        {
+            return null
+                ?? Manual_EndingPage.NullIfNullOrEmpty()
+
+                ?? JStage_EndingPage.NullIfNullOrEmpty()
+                ?? NDLSearch_EndingPage.NullIfNullOrEmpty()
+                ?? CiNii_EndingPage.NullIfNullOrEmpty()
 
                 // 最終手段。
                 ?? null
@@ -135,21 +208,49 @@ public class ResearchArticle : IComparable
     {
         get
         {
+            string ReferenceStringManually()
+            {
+                if (Authors is null)
+                    return "※ Need to fill Authors";
+                if (ArticleTitle is null)
+                    return "※ Need to fill ArticleTitle";
+                if (MaterialTitle is null)
+                    return "※ Need to fill MaterialTitle";
+                if (MaterialVolume is null)
+                    return "※ Need to fill MaterialVol";
+                if (StartingPage is null)
+                    return "※ Need to fill StartingPage";
+                if (EndingPage is null)
+                    return "※ Need to fill EndingPage";
+                var date = PublishedOn_Numbers;
+                if (date is null)
+                    return "※ Need to fill PublishedYear";
+                if (date.Value.year is null)
+                    return "※ Need to fill PublishedYear";
+
+                var authors = string.Join(", ", Authors!);
+                var dateString = $"{date.Value.year.Value}";
+                if (date.Value.month is not null)
+                    dateString += $".{date.Value.month.Value}";
+
+                return $"{authors}, {ArticleTitle}, {MaterialTitle}{MaterialVolume}, pp. {StartingPage}-{EndingPage}, {dateString}";
+            }
+
             return null
                ?? CrossRef_UnstructuredRefString.NullIfNullOrEmpty()
 
                // TODO: 手動作成！
+               ?? ReferenceStringManually()
                ?? null
                ;
         }
     }
 
     public string? DOI { get; set; }
-    public string[]? ReferenceDOIs { get; set; }
+    public string[]? ReferenceAOIs { get; set; }
 
     public string? PrintISSN { get; set; }
     public string? OnlineISSN { get; set; }
-
 
 
 
@@ -160,6 +261,9 @@ public class ResearchArticle : IComparable
     [CsvIgnore]
     public string? CrossRefAPI_Link => (string.IsNullOrEmpty(DOI)) ? null : $"https://api.crossref.org/v1/works/{DOI}";
 
+    /// <summary>
+    /// online PDF link
+    /// </summary>
     public string? PDF_Link
     {
         get
@@ -180,26 +284,11 @@ public class ResearchArticle : IComparable
         }
     }
 
-    public string? LocalPDFName
-    {
-        get
-        {
-            if (!string.IsNullOrEmpty(DOI))
-                return DOI.Replace("/", "_");
-
-            if (!string.IsNullOrEmpty(AOI))
-                return AOI;
-
-            if (!string.IsNullOrEmpty(PDF_Link))
-            {
-                var candidate = PDF_Link.Replace("/", "_").Replace(":", "_");
-                return candidate.Shorten(GENERATED_PDF_FILE_NAME_RANGE);
-            }
-
-            return null;
-        }
-    }
-
+    /// <summary>
+    /// local PDF name
+    /// </summary>
+    [CsvIgnore]
+    public string LocalPDFName => $"{AOI}.pdf";
 
 
     // ★★★★★ original meta info
@@ -223,9 +312,12 @@ public class ResearchArticle : IComparable
     /// </summary>
     /// <remarks>
     /// 全ての要素に対して発行。
-    /// AOIで接続するのは，本当に最終手段。
+    /// これをメインIDとして使う。
     /// </remarks>
-    public string? AOI { get; set; }
+    public string AOI { get; set; } = Ulid.NewUlid().ToString();
+    [CsvIgnore]
+    public string Friendly_AOI => AOI[FRIENDLY_AOI_RANGE];
+
 
 
     // ★★★★★ manual info
@@ -233,9 +325,16 @@ public class ResearchArticle : IComparable
     public string? Manual_ArticleTitle { get; set; }
     public string[]? Manual_Authors { get; set; }
     public string? Manual_Description { get; set; }
-    public string? Manual_PublishedDate { get; set; }
 
-    public string? Manual_CreatedDate { get; set; }
+    public string? Manual_MaterialTitle { get; set; }
+    public string? Manual_MaterialVolume { get; set; }
+
+    public string? Manual_StartingPage { get; set; }
+    public string? Manual_EndingPage { get; set; }
+
+    public string? Manual_PublishedDate { get; set; }
+    public string Manual_CreatedDate { get; set; } = DateTime.Today.ToLongDateString();
+
 
 
     // ★★★★★ memo info
@@ -300,7 +399,7 @@ public class ResearchArticle : IComparable
 
     public string? JStage_PublishedYear { get; set; }
 
-    public string? JStage_Volume { get; set; }
+    public string? JStage_MaterialVolume { get; set; }
     public string? JStage_SubVolume { get; set; }
     public string? JStage_Number { get; set; }
     public string? JStage_StartingPage { get; set; }
@@ -328,7 +427,7 @@ public class ResearchArticle : IComparable
     public string? CiNii_PublicationName { get; set; }
     public string? CiNii_PublishedDate { get; set; }
 
-    public string? CiNii_Volume { get; set; }
+    public string? CiNii_MaterialVolume { get; set; }
     public string? CiNii_Number { get; set; }
     public string? CiNii_StartingPage { get; set; }
     public string? CiNii_EndingPage { get; set; }
@@ -347,7 +446,7 @@ public class ResearchArticle : IComparable
     public string? NDLSearch_PublicationName { get; set; }
     public string? NDLSearch_PublishedDate { get; set; }
 
-    public string? NDLSearch_Volume { get; set; }
+    public string? NDLSearch_MaterialVolume { get; set; }
     public string? NDLSearch_Number { get; set; }
     public string? NDLSearch_StartingPage { get; set; }
     public string? NDLSearch_EndingPage { get; set; }
@@ -357,7 +456,6 @@ public class ResearchArticle : IComparable
 
     public ResearchArticle()
     {
-        AOI = Guid.NewGuid().ToString();
     }
 
 
@@ -381,8 +479,6 @@ public class ResearchArticle : IComparable
         // Create AOI first
         var addingArticle = new ResearchArticle()
         {
-            AOI = Guid.NewGuid().ToString(),
-            Manual_CreatedDate = DateTime.Today.ToLongDateString(),
             DataFrom_Manual = true,
 
             DOI = addingArticleBasicInfo.DOI,
@@ -413,7 +509,7 @@ public class ResearchArticle : IComparable
             if (pdfStockDirectory == null)
                 throw new InvalidDataException("When tring to add PDF file, {pdfStockDirectory} must not be null");
 
-            var targetFile = pdfStockDirectory.GetChildFileInfo($"{addingArticle.LocalPDFName}.pdf");
+            var targetFile = pdfStockDirectory.GetChildFileInfo(addingArticle.LocalPDFName);
 
             if (deleteOriginalPdfFile)
                 addingPdfFile.MoveTo(targetFile);
@@ -435,10 +531,10 @@ public class ResearchArticle : IComparable
     public void AddArticleReference(ResearchArticle referredArticle)
     {
         // Add DOI or AOI to ReferenceDOIs.
-        ReferenceDOIs ??= Array.Empty<string>();
+        ReferenceAOIs ??= Array.Empty<string>();
 
-        ReferenceDOIs = ReferenceDOIs
-            .Append(referredArticle.DOI.NullIfNullOrEmpty() ?? (referredArticle.AOI ??= Guid.NewGuid().ToString()))!
+        ReferenceAOIs = ReferenceAOIs
+            .Append(referredArticle.AOI)!
             .Distinct()
             .ToArray()
             ;
@@ -455,12 +551,11 @@ public class ResearchArticle : IComparable
     public void RemoveArticleReference(ResearchArticle referredArticle)
     {
         // Remove DOI and AOI from ReferenceDOIs.
-        if (ReferenceDOIs is null)
+        if (ReferenceAOIs is null)
             return;
 
-        ReferenceDOIs = ReferenceDOIs
-            .Where(dois => dois != referredArticle.DOI)
-            .Where(dois => dois != referredArticle.AOI)
+        ReferenceAOIs = ReferenceAOIs
+            .Where(aoi => aoi != referredArticle.AOI)
             .ToArray()
             ;
 
@@ -497,7 +592,7 @@ public class ResearchArticle : IComparable
         if (Memo is not null && Memo.Contains(searchString))
             return true;
 
-        if (LocalPDFName is not null && LocalPDFName.Contains(searchString))
+        if (AOI.Contains(searchString))
             return true;
 
         return false;
@@ -507,37 +602,34 @@ public class ResearchArticle : IComparable
 
     // ★★★★★★★★★★★★★★★ method (practical use)
 
-    public void TryDownloadPDF(DirectoryInfo pdfStockDirectory)
+    public async Task<bool> TryDownloadPDF(DirectoryInfo pdfStockDirectory)
     {
         UtilPreprocessors.PreprocessBasic();
 
         try
         {
-            if (LocalPDFName == null)
-                throw new Exception("Local PDF Name cannot be implied.");
+            var outputFile = pdfStockDirectory.GetChildFileInfo(LocalPDFName);
+            await new Uri(PDF_Link!).DownloadFileAsync(outputFile, true);
 
-            var outputFile = pdfStockDirectory.GetChildFileInfo($"{LocalPDFName}.pdf");
-            new Uri(PDF_Link!).DownloadFileAsync(outputFile, true).Wait();
+            return true;
         }
         catch (Exception ex)
         {
             ConsoleExtension.WriteLineWithColor($"Failed: {ex.Message}", ConsoleColor.Red);
+            return false;
         }
     }
 
-    public void TryOpenPDF(DirectoryInfo pdfStockDirectory)
+    public async Task<bool> TryOpenPDF(DirectoryInfo pdfStockDirectory)
     {
         UtilPreprocessors.PreprocessBasic();
 
         try
         {
-            if (LocalPDFName == null)
-                throw new Exception("Local PDF Name couldn't be implied.");
-
-            var outputFilePath = Path.Combine(pdfStockDirectory.FullName, $"{LocalPDFName}.pdf");
+            var outputFilePath = Path.Combine(pdfStockDirectory.FullName, LocalPDFName);
 
             if (!File.Exists(outputFilePath))
-                TryDownloadPDF(pdfStockDirectory);
+                await TryDownloadPDF(pdfStockDirectory);
 
             var p = Process.Start(new ProcessStartInfo()
             {
@@ -545,12 +637,12 @@ public class ResearchArticle : IComparable
                 UseShellExecute = true,
             });
 
-            return;
-
+            return true;
         }
         catch (Exception ex)
         {
             ConsoleExtension.WriteLineWithColor($"Failed: {ex.Message}", ConsoleColor.Red);
+            return false;
         }
     }
 
@@ -558,25 +650,11 @@ public class ResearchArticle : IComparable
     {
         UtilPreprocessors.PreprocessBasic();
 
-        try
-        {
-            if (LocalPDFName == null)
-                throw new Exception("Local PDF Name couldn't be implied.");
-
-            var outputFilePath = Path.Combine(pdfStockDirectory.FullName, $"{LocalPDFName}.pdf");
-
-            if (File.Exists(outputFilePath))
-                return true;
-
-            return false;
-        }
-        catch
-        {
-            return false;
-        }
+        var outputFilePath = Path.Combine(pdfStockDirectory.FullName, LocalPDFName);
+        return File.Exists(outputFilePath);
     }
 
-    public void TryOpenDOI()
+    public void TryOpenDOILink()
     {
         UtilPreprocessors.PreprocessBasic();
 
@@ -609,17 +687,14 @@ public class ResearchArticle : IComparable
             .Where(p => p.Name != "IsTemporary")
             ;
 
-        // DOIが存在する場合は，最優先で採用。
         // AOIとIsTemporaryは，前の情報を正とする。
-        if (DOI != null)
-        {
-            if (mergingArticle.DOI != null && DOI != mergingArticle.DOI)
-                throw new InvalidDataException("DOIが異なる2つがマージされようとしました。");
-        }
-        else if (mergingArticle.DOI != null)
-        {
+
+
+        // DOIが存在する場合は，最優先で採用。
+        if (DOI != null && mergingArticle.DOI != null && DOI != mergingArticle.DOI)
+            throw new InvalidDataException("DOIが異なる2つがマージされようとしました。");
+        if (DOI == null && mergingArticle.DOI != null)
             DOI = mergingArticle.DOI;
-        }
 
 
         // 後からの情報優先で上書き。
@@ -689,7 +764,6 @@ public class ResearchArticle : IComparable
 
             // others
             yield return nameof(CrossRef_UnstructuredRefString);
-
         }
 
         foreach (var target in Targets())

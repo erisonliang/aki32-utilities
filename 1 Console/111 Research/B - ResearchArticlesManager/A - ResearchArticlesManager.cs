@@ -2,6 +2,10 @@
 
 using ClosedXML;
 
+using DocumentFormat.OpenXml.Spreadsheet;
+
+using MathNet.Numerics.Distributions;
+
 namespace Aki32Utilities.ConsoleAppUtilities.Research;
 public partial class ResearchArticlesManager
 {
@@ -107,11 +111,13 @@ public partial class ResearchArticlesManager
     }
 
     /// <summary>
-    /// merge articles to local database
+    /// merge/add articles to local database
     /// </summary>
-    /// <param name="uriBuilder"></param>
+    /// <param name="mergingArticles"></param>
+    /// <param name="forceAdd">never merge and force add all to database</param>
     /// <exception cref="InvalidOperationException"></exception>
-    public void MergeArticleInfo(List<ResearchArticle> mergingArticles)
+    /// <exception cref="InvalidDataException"></exception>
+    public void MergeArticleInfo(List<ResearchArticle> mergingArticles, bool forceAdd = false, bool warnMultipleMatches = false)
     {
         // preprocess
         if (ArticleDatabase == null)
@@ -130,8 +136,12 @@ public partial class ResearchArticlesManager
         {
             var matchedArticles = ArticleDatabase.Where(a => a.CompareTo(mergingArticle) == 0);
 
+            // multiple matches
+            if (warnMultipleMatches && matchedArticles!.Count() > 1)
+                throw new InvalidDataException($"{matchedArticles!.Count()} articles matched to {mergingArticle.ArticleTitle}");
+
             // merge/update
-            if (matchedArticles != null && matchedArticles.Count() == 1)
+            if (matchedArticles.Count() == 1 && !forceAdd)
             {
                 MergeArticles(matchedArticles.First(), mergingArticle);
 
@@ -141,10 +151,6 @@ public partial class ResearchArticlesManager
                 updatedCount++;
                 articleDatabaseUpdated = true;
             }
-
-            // two matches
-            else if (matchedArticles!.Count() > 1)
-                throw new InvalidDataException($"{matchedArticles!.Count()} articles matched to {mergingArticle.ArticleTitle}");
 
             // add new
             else
@@ -186,13 +192,22 @@ public partial class ResearchArticlesManager
         // delete and update database 
         if (ArticleDatabase.Contains(mergingArticle))
         {
-            // Ref整合性。Replace previous AOI to new AOI.
+            // Ref整合性。
+            // Replace previous AOI to new AOI.
             foreach (var article in ArticleDatabase)
             {
-                if (article.ReferenceDOIs != null && article.ReferenceDOIs.Contains(mergingArticle.AOI))
-                    article.ReferenceDOIs = article.ReferenceDOIs
-                        .Select(r => r.Replace(mergingArticle.AOI!, mergedArticle.AOI))
+                if (article.ReferenceAOIs != null && article.ReferenceAOIs.Contains(mergingArticle.AOI))
+                    article.ReferenceAOIs = article.ReferenceAOIs
+                        .Select(r => r.Replace(mergingArticle.AOI, mergedArticle.AOI))
                         .ToArray();
+            }
+
+            // Replace previous PDF names to new PDF names.
+            if (mergingArticle.TryFindPDF(PDFsDirectory) && !mergedArticle.TryFindPDF(PDFsDirectory))
+            {
+                var srcPDF = PDFsDirectory.GetChildFileInfo(mergingArticle.LocalPDFName);
+                var destPDF = PDFsDirectory.GetChildFileInfo(mergedArticle.LocalPDFName);
+                srcPDF.MoveTo(destPDF);
             }
 
             ArticleDatabase.Remove(mergingArticle);

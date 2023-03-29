@@ -8,9 +8,6 @@ using System.Windows;
 using Aki32Utilities.ViewModels.NodeViewModels;
 using Aki32Utilities.ConsoleAppUtilities.Research;
 using System.IO;
-using DocumentFormat.OpenXml.Office.CustomUI;
-using PropertyChanged;
-using System.IO.Packaging;
 
 namespace Aki32Utilities.UsageExamples.ResearchArticlesNodeController.ViewModels;
 
@@ -155,20 +152,20 @@ public class MainWindowViewModel : ViewModel
         _NodeLinkViewModels = new ObservableCollection<NodeLinkViewModel>();
 
         foreach (var article in ResearchArticlesManager.ArticleDatabase)
-            _NodeViewModels.Add(new ResearchArticleNodeViewModel() { Name = "ResearchArticle", Article = article, Position = new Point(0, 0) });
+            _NodeViewModels.Add(new ResearchArticleNodeViewModel() { NodeName = "ResearchArticle", Article = article, Position = new Point(0, 0) });
 
         foreach (var article in ResearchArticlesManager.ArticleDatabase)
         {
-            if (article.ReferenceDOIs == null || !article.ReferenceDOIs.Any())
+            if (article.ReferenceAOIs == null || !article.ReferenceAOIs.Any())
                 continue;
 
             var articleNode = _NodeViewModels.FirstOrDefault(x => x is ResearchArticleNodeViewModel ran && ran.Article == article);
             if (articleNode == null)
                 continue;
 
-            foreach (var referenceDOI in article.ReferenceDOIs)
+            foreach (var referenceAOI in article.ReferenceAOIs)
             {
-                var referenceArticle = ResearchArticlesManager.ArticleDatabase.FirstOrDefault(a => a.DOI == referenceDOI || a.AOI == referenceDOI);
+                var referenceArticle = ResearchArticlesManager.ArticleDatabase.FirstOrDefault(a => a.AOI == referenceAOI);
                 if (referenceArticle == null)
                     continue;
 
@@ -286,8 +283,8 @@ public class MainWindowViewModel : ViewModel
             Memo = "■ 未入力",
         });
 
-        ResearchArticlesManager.MergeArticleInfo(new List<ResearchArticle> { newArticle });
-        _NodeViewModels.Add(new ResearchArticleNodeViewModel() { Article = newArticle, Name = "ResearchArticle" });
+        ResearchArticlesManager.MergeArticleInfo(new List<ResearchArticle> { newArticle }, forceAdd: true);
+        _NodeViewModels.Add(new ResearchArticleNodeViewModel() { Article = newArticle, NodeName = "ResearchArticle" });
     }
 
     void RemoveArticleNodes()

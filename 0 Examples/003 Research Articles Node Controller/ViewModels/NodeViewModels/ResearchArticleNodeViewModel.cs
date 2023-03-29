@@ -19,14 +19,13 @@ public class ResearchArticleNodeViewModel : DefaultNodeViewModel
 
     public ResearchArticle Article { get; set; } = new();
 
-    [AlsoNotifyFor(nameof(Name), nameof(ArticleTitle), nameof(Authors), nameof(TopAuthor), nameof(Memo), nameof(DOI), nameof(PublishedOn),
-        nameof(Memo_Motivation), nameof(Memo_Method), nameof(Memo_Insights), nameof(Memo_Contribution),
-        nameof(IsFavorite), nameof(IsRead), nameof(IsTemp), nameof(IsLocalSearchMatched), nameof(IsCategory1), nameof(IsCategory2), nameof(IsCategory3),
-        nameof(ArticleHeaderColor)
+    [AlsoNotifyFor(nameof(NodeName), nameof(ArticleTitle), nameof(Authors), nameof(TopAuthor), nameof(PublishedOn), nameof(Tags),
+        nameof(ArticleHeaderColor), nameof(IsFavorite), nameof(IsRead), nameof(IsTemp), nameof(IsLocalSearchMatched), nameof(IsCategory1), nameof(IsCategory2), nameof(IsCategory3),
+        nameof(Article)
         )]
     private int NotifyArticleUpdatedBridge { get; set; } = 0;
 
-    public string Name { get; set; }
+    public string NodeName { get; set; }
 
     public string ArticleTitle
     {
@@ -50,7 +49,6 @@ public class ResearchArticleNodeViewModel : DefaultNodeViewModel
                 Article.Manual_Authors = temp.Split(new char[] { ';', '；' }, StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
         }
     }
-
     public string TopAuthor
     {
         get
@@ -73,77 +71,6 @@ public class ResearchArticleNodeViewModel : DefaultNodeViewModel
             var temp = Article.PublishedOn;
             if (RaisePropertyChangedIfSet(ref temp, value))
                 Article.Manual_PublishedDate = temp!.Replace("/", "-");
-        }
-    }
-
-    public string Memo
-    {
-        get
-        {
-            if (Article.Memo is not null)
-                return Article.Memo;
-
-            if (!string.IsNullOrEmpty(Article.Description))
-                return $"【概要】{Article.Description}";
-
-            return "";
-        }
-        set
-        {
-            var temp = Article.Memo;
-            if (RaisePropertyChangedIfSet(ref temp, value))
-                Article.Memo = temp;
-        }
-    }
-    public string Memo_Motivation
-    {
-        get => Article.Memo_Motivation;
-        set
-        {
-            var temp = Article.Memo_Motivation;
-            if (RaisePropertyChangedIfSet(ref temp, value))
-                Article.Memo_Motivation = temp;
-        }
-    }
-    public string Memo_Method
-    {
-        get => Article.Memo_Method;
-        set
-        {
-            var temp = Article.Memo_Method;
-            if (RaisePropertyChangedIfSet(ref temp, value))
-                Article.Memo_Method = temp;
-        }
-    }
-    public string Memo_Insights
-    {
-        get => Article.Memo_Insights;
-        set
-        {
-            var temp = Article.Memo_Insights;
-            if (RaisePropertyChangedIfSet(ref temp, value))
-                Article.Memo_Insights = temp;
-        }
-    }
-    public string Memo_Contribution
-    {
-        get => Article.Memo_Contribution;
-        set
-        {
-            var temp = Article.Memo_Contribution;
-            if (RaisePropertyChangedIfSet(ref temp, value))
-                Article.Memo_Contribution = temp;
-        }
-    }
-
-    public string DOI
-    {
-        get => Article.DOI ?? "";
-        set
-        {
-            var temp = Article.DOI;
-            if (RaisePropertyChangedIfSet(ref temp, value))
-                Article.DOI = temp;
         }
     }
 
@@ -172,6 +99,49 @@ public class ResearchArticleNodeViewModel : DefaultNodeViewModel
         }
     }
 
+    public Brush ArticleHeaderColor
+    {
+        get
+        {
+            switch (MainWindowViewModel._SelectedEmphasizePropertyItem)
+            {
+                case EmphasizePropertyItems.なし:
+                    break;
+                case EmphasizePropertyItems.お気に入り:
+                    if (IsFavorite)
+                        return new SolidColorBrush(Color.FromArgb(0xFF, 0xE9, 0x5B, 0x6B));
+                    break;
+                case EmphasizePropertyItems.既読:
+                    if (IsRead)
+                        return Brushes.LightGreen;
+                    break;
+                case EmphasizePropertyItems.検索結果:
+                    if (IsLocalSearchMatched)
+                        return Brushes.Aqua;
+                    break;
+                case EmphasizePropertyItems.一時ﾃﾞｰﾀ:
+                    if (IsTemp)
+                        return Brushes.DarkOrange;
+                    break;
+                case EmphasizePropertyItems.ﾒﾓ1:
+                    if (IsCategory1)
+                        return Brushes.White;
+                    break;
+                case EmphasizePropertyItems.ﾒﾓ2:
+                    if (IsCategory2)
+                        return Brushes.Pink;
+                    break;
+                case EmphasizePropertyItems.ﾒﾓ3:
+                    if (IsCategory3)
+                        return Brushes.Purple;
+                    break;
+                default:
+                    throw new NotImplementedException();
+            }
+
+            return new SolidColorBrush(Color.FromArgb(0xFF, 0x66, 0x66, 0x66));
+        }
+    }
     [AlsoNotifyFor(nameof(ArticleHeaderColor))]
     public bool IsFavorite
     {
@@ -252,49 +222,6 @@ public class ResearchArticleNodeViewModel : DefaultNodeViewModel
             var temp = Article.Private_IsCategory3;
             if (RaisePropertyChangedIfSet(ref temp, value))
                 Article.Private_IsCategory3 = temp;
-        }
-    }
-    public Brush ArticleHeaderColor
-    {
-        get
-        {
-            switch (MainWindowViewModel._SelectedEmphasizePropertyItem)
-            {
-                case EmphasizePropertyItems.なし:
-                    break;
-                case EmphasizePropertyItems.お気に入り:
-                    if (IsFavorite)
-                        return new SolidColorBrush(Color.FromArgb(0xFF, 0xE9, 0x5B, 0x6B));
-                    break;
-                case EmphasizePropertyItems.既読:
-                    if (IsRead)
-                        return Brushes.LightGreen;
-                    break;
-                case EmphasizePropertyItems.検索結果:
-                    if (IsLocalSearchMatched)
-                        return Brushes.Aqua;
-                    break;
-                case EmphasizePropertyItems.一時ﾃﾞｰﾀ:
-                    if (IsTemp)
-                        return Brushes.DarkOrange;
-                    break;
-                case EmphasizePropertyItems.ﾒﾓ1:
-                    if (IsCategory1)
-                        return Brushes.White;
-                    break;
-                case EmphasizePropertyItems.ﾒﾓ2:
-                    if (IsCategory2)
-                        return Brushes.Pink;
-                    break;
-                case EmphasizePropertyItems.ﾒﾓ3:
-                    if (IsCategory3)
-                        return Brushes.Purple;
-                    break;
-                default:
-                    throw new NotImplementedException();
-            }
-
-            return new SolidColorBrush(Color.FromArgb(0xFF, 0x66, 0x66, 0x66));
         }
     }
 
