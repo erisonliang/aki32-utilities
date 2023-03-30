@@ -77,6 +77,7 @@
 
         <ContextMenu x:Key="NodeGraphContextMenu">
             <MenuItem Header="新規文献を追加" Command="{Binding AddNodeCommand}"/>
+            <MenuItem Header="文献を整列" Command="{Binding RearrangeNodesAlignLeftCommand}"/>
             <MenuItem Header="選択中の文献を削除" Command="{Binding RemoveNodesCommand}"/>
         </ContextMenu>
 
@@ -289,13 +290,6 @@
                         Margin="0,4,4,4"
                         Content=" 保存 "
                         Command="{Binding SaveCommand}"
-                        Style="{StaticResource ButtonTextStyle}"
-                        />
-
-                    <Button 
-                        Margin="0,4,4,4"
-                        Content=" 整列 "
-                        Command="{Binding RearrangeNodesAlignLeftCommand}"
                         Style="{StaticResource ButtonTextStyle}"
                         />
 

@@ -1,8 +1,6 @@
 ﻿using Aki32Utilities.ConsoleAppUtilities.Research;
 using Aki32Utilities.UsageExamples.ResearchArticlesNodeController.ViewModels;
 
-using DocumentFormat.OpenXml.Drawing;
-
 using Newtonsoft.Json;
 
 using PropertyChanged;

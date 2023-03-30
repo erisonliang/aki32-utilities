@@ -311,14 +311,36 @@ public class MainWindowViewModel : ViewModel
 
     void RemoveArticleNodes()
     {
-        var removeNodes = _NodeViewModels.Where(arg => arg.IsSelected).ToArray();
-        foreach (var removeNode in removeNodes)
-        {
-            _NodeViewModels.Remove(removeNode);
+        var removingNodes = _NodeViewModels
+            .Where(node => node.IsSelected)
+            .Where(node => node is ResearchArticleNodeViewModel)
+            .Cast<ResearchArticleNodeViewModel>()
+            .ToArray();
 
-            var removeNodeLink = NodeLinkViewModels.FirstOrDefault(arg => arg.InputConnectorNodeGuid == removeNode.Guid || arg.OutputConnectorNodeGuid == removeNode.Guid);
-            _NodeLinkViewModels.Remove(removeNodeLink);
+        if (removingNodes.Length == 0)
+            return;
+
+        var result = MessageBox.Show($"選択中の{removingNodes.Length}個の文献を削除しようとしています。\r\n本当によろしいですか？", "確認", MessageBoxButton.OKCancel, MessageBoxImage.Warning);
+        if (result is not MessageBoxResult.OK)
+            return;
+
+        foreach (var removingNode in removingNodes)
+        {
+            // remove all node links...
+            var removingNodeLinks = NodeLinkViewModels
+                .Where(arg => arg.InputConnectorNodeGuid == removingNode.Guid || arg.OutputConnectorNodeGuid == removingNode.Guid)
+                .ToArray();
+            foreach (var removingNodeLink in removingNodeLinks)
+                _NodeLinkViewModels.Remove(removingNodeLink);
+
+            // remove node
+            _NodeViewModels.Remove(removingNode);
+
+            // remove from database
+            ResearchArticlesManager.RemoveArticleInfo(new List<ResearchArticle> { removingNode.Article }, save: true);
         }
+
+        ResearchArticlesManager.SaveDatabase();
     }
 
     void NodeConnected(ConnectedLinkOperationEventArgs param)
@@ -760,7 +782,6 @@ public class MainWindowViewModel : ViewModel
 
 
     #endregion
-
 
     // ★★★★★★★★★★★★★★★ 
 

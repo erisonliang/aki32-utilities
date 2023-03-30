@@ -216,6 +216,66 @@ public partial class ResearchArticlesManager
 
     }
 
+    /// <summary>
+    /// remove articles from local database
+    /// </summary>
+    /// <param name="mergingArticles"></param>
+    /// <param name="forceAdd">never merge and force add all to database</param>
+    /// <exception cref="InvalidOperationException"></exception>
+    /// <exception cref="InvalidDataException"></exception>
+    public void RemoveArticleInfo(List<ResearchArticle> removingArticles, bool save = true)
+    {
+        // preprocess
+        if (ArticleDatabase == null)
+            throw new InvalidOperationException("Database has not been opened yet. Consider to call OpenDataBase() first.");
+        var removedCount = 0;
+
+        Console.WriteLine();
+        Console.WriteLine($"★ Removing {removingArticles.Count} articles in total...");
+        Console.WriteLine();
+
+
+        // main
+        foreach (var removingArticle in removingArticles)
+        {
+
+            if (!ArticleDatabase.Contains(removingArticle))
+            {
+                Console.WriteLine($"(!) Could not find the article to remove (AOI:{removingArticle.AOI}) in database.");
+                continue;
+            }
+
+            // remove
+            else
+            {
+                // remove ref first...
+                foreach (var article in ArticleDatabase)
+                {
+                    if (article.ReferenceAOIs != null && article.ReferenceAOIs.Contains(removingArticle.AOI))
+                        article.ReferenceAOIs = article.ReferenceAOIs
+                            .Where(aoi => aoi != removingArticle.AOI)
+                            .ToArray();
+                }
+
+                // remove article
+                ArticleDatabase.Remove(removingArticle);
+
+                if (UtilConfig.ConsoleOutput_Contents)
+                    Console.WriteLine($"--- {removingArticle!.ArticleTitle}");
+
+                removedCount++;
+                articleDatabaseUpdated = true;
+            }
+        }
+
+
+        // save local
+        if (save)
+            SaveDatabase();
+        Console.WriteLine($"★ {removedCount} removed.");
+        Console.WriteLine();
+    }
+
 
     // ★★★★★★★★★★★★★★★ methods (practical use)
 
