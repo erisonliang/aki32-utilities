@@ -76,9 +76,8 @@
         </Style>
 
         <ContextMenu x:Key="NodeGraphContextMenu">
-            <MenuItem Header="Add Node" Command="{Binding AddNodeCommand}"/>
-            <!--<MenuItem Header="Add GroupNode" Command="{Binding AddGroupNodeCommand}"/>-->
-            <MenuItem Header="Remove Nodes" Command="{Binding RemoveNodesCommand}"/>
+            <MenuItem Header="新規文献を追加" Command="{Binding AddNodeCommand}"/>
+            <MenuItem Header="選択中の文献を削除" Command="{Binding RemoveNodesCommand}"/>
         </ContextMenu>
 
         <Style x:Key="NodeInputStyle" TargetType="{x:Type ctrl:NodeInputContent}" BasedOn="{StaticResource {x:Type ctrl:NodeInputContent}}">
@@ -366,6 +365,7 @@
                 x:Name="NodeGraph"
                 MoveWithMouse="Right"
                 Scale="{Binding Scale}"
+                Offset="{Binding Offset}"
                 ItemsSource="{Binding NodeViewModels}"
                 ItemContainerStyle="{StaticResource DefaultNodeStyle}"
                 NodeLinks="{Binding NodeLinkViewModels}"

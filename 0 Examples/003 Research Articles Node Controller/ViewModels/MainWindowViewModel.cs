@@ -8,6 +8,11 @@ using System.Windows;
 using Aki32Utilities.ViewModels.NodeViewModels;
 using Aki32Utilities.ConsoleAppUtilities.Research;
 using System.IO;
+using System.Windows.Input;
+using System.Windows.Controls;
+using Aki32Utilities.UsageExamples.ResearchArticlesNodeController.Views;
+using Aki32Utilities.WPFAppUtilities.NodeController.Controls;
+using System.Net.NetworkInformation;
 
 namespace Aki32Utilities.UsageExamples.ResearchArticlesNodeController.ViewModels;
 
@@ -23,6 +28,9 @@ public class MainWindowViewModel : ViewModel
 
     public static DirectoryInfo databaseDir = new($@"{Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory)}\ResearchArticleDB");
 
+    internal MainWindow ParentView;
+
+
 
     // ★★★★★★★★★★★★★★★ props
 
@@ -32,6 +40,7 @@ public class MainWindowViewModel : ViewModel
     private List<string> InfoMessageBuffer = new List<string>();
 
     public double Scale { get; set; } = 1d;
+    public Point Offset { get; set; } = new Point(0, 0);
 
     public ViewModelCommand AddNodeCommand => _AddNodeCommand.Get(AddNewArticleNode);
     ViewModelCommandHandler _AddNodeCommand = new();
@@ -192,7 +201,7 @@ public class MainWindowViewModel : ViewModel
 
     // ★★★★★★★★★★★★★★★ methods (general)
 
-    void UpdateInfoMesssage(string message)
+    void UpdateInfoMessage(string message)
     {
         var now = DateTime.Now;
         var newMessage = $" {now:HH:mm:ss}, {message}";
@@ -273,8 +282,18 @@ public class MainWindowViewModel : ViewModel
 
     void AddNewArticleNode()
     {
-        // 作って，新しいNodeも作ってあてがう。
+        var posOnCanvas = Mouse.GetPosition(ParentView.NodeGraph.Canvas);
+        var posOnContextMenu = Mouse.GetPosition(ParentView.Resources["NodeGraphContextMenu"] as IInputElement);
 
+        var offsetPosOnCanvasX = posOnCanvas.X - Offset.X - posOnContextMenu.X / Scale;
+        var offsetPosOnCanvasY = posOnCanvas.Y - Offset.Y - posOnContextMenu.Y / Scale;
+        var addingPosition = new Point(offsetPosOnCanvasX, offsetPosOnCanvasY);
+
+        AddNewArticleNode(addingPosition);
+    }
+    void AddNewArticleNode(Point addingPosition)
+    {
+        // 作って，新しいNodeも作ってあてがう。
         var newArticle = ResearchArticle.CreateManually(new ResearchArticle_ManualInitInfo
         {
             Manual_ArticleTitle = "■ 未入力",
@@ -283,8 +302,11 @@ public class MainWindowViewModel : ViewModel
             Memo = "■ 未入力",
         });
 
-        ResearchArticlesManager.MergeArticleInfo(new List<ResearchArticle> { newArticle }, forceAdd: true);
-        _NodeViewModels.Add(new ResearchArticleNodeViewModel() { Article = newArticle, NodeName = "ResearchArticle" });
+        ResearchArticlesManager.MergeArticleInfo(new List<ResearchArticle> { newArticle }, forceAdd: true, save: true);
+        var addingNode = new ResearchArticleNodeViewModel() { Article = newArticle, NodeName = "ResearchArticle" };
+        _NodeViewModels.Add(addingNode);
+
+        addingNode.Position = addingPosition;
     }
 
     void RemoveArticleNodes()
@@ -330,9 +352,9 @@ public class MainWindowViewModel : ViewModel
 
     void Save()
     {
-        UpdateInfoMesssage("保存開始");
+        UpdateInfoMessage("保存開始");
         ResearchArticlesManager.SaveDatabase(true, true);
-        UpdateInfoMesssage("保存完了");
+        UpdateInfoMessage("保存完了");
     }
 
     #endregion

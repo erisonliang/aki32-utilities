@@ -117,7 +117,7 @@ public partial class ResearchArticlesManager
     /// <param name="forceAdd">never merge and force add all to database</param>
     /// <exception cref="InvalidOperationException"></exception>
     /// <exception cref="InvalidDataException"></exception>
-    public void MergeArticleInfo(List<ResearchArticle> mergingArticles, bool forceAdd = false, bool warnMultipleMatches = false)
+    public void MergeArticleInfo(List<ResearchArticle> mergingArticles, bool forceAdd = false, bool warnMultipleMatches = false, bool save = true)
     {
         // preprocess
         if (ArticleDatabase == null)
@@ -167,7 +167,8 @@ public partial class ResearchArticlesManager
 
 
         // save local
-        SaveDatabase();
+        if (save)
+            SaveDatabase();
         Console.WriteLine($"★ {addedCount} added, {updatedCount} updated.");
         Console.WriteLine();
 
