@@ -105,11 +105,11 @@ public partial class MainWindowViewModel : ViewModel
             Memo = "■ 未入力",
         });
 
-        ResearchArticlesManager.MergeArticleInfo(new List<ResearchArticle> { newArticle }, forceAdd: true, save: true);
+        ResearchArticlesManager.MergeArticleInfo(new List<ResearchArticle> { newArticle }, forceAdd: true, save: false);
         var addingNode = new ResearchArticleNodeViewModel() { Article = newArticle, NodeName = "ResearchArticle" };
         _NodeViewModels.Add(addingNode);
-
         addingNode.Position = addingPosition;
+        var task = Save();
     }
 
     void RemoveArticleNodes()
@@ -139,11 +139,13 @@ public partial class MainWindowViewModel : ViewModel
             // remove node
             _NodeViewModels.Remove(removingNode);
 
-            // remove from database
-            ResearchArticlesManager.RemoveArticleInfo(new List<ResearchArticle> { removingNode.Article }, save: true);
+
         }
 
-        ResearchArticlesManager.SaveDatabase();
+        // remove from database
+        var removingArticles = removingNodes.Select(n => n.Article).ToList();
+        ResearchArticlesManager.RemoveArticleInfo(removingArticles, save: false);
+        var task = Save();
     }
 
     void NodeConnected(ConnectedLinkOperationEventArgs param)
@@ -175,11 +177,18 @@ public partial class MainWindowViewModel : ViewModel
         childNode.Article.RemoveArticleReference(parentNode.Article);
     }
 
-    void Save()
+    async Task Save()
     {
-        UpdateInfoMessage("保存開始");
+        if (IsSaveBusy)
+            return;
+        IsSaveBusy = true;
         ResearchArticlesManager.SaveDatabase(true, true);
-        UpdateInfoMessage("保存完了");
+        //UpdateInfoMessage("保存完了");
+        await Task.Delay(100);
+        IsSaveBusy = false;
+        IsSaveDone = true;
+        await Task.Delay(2000);
+        IsSaveDone = false;
     }
 
 
@@ -576,6 +585,10 @@ public partial class MainWindowViewModel : ViewModel
     {
         try
         {
+            if (IsOpenPDFBusy)
+                return;
+            IsOpenPDFBusy = true;
+
             if (SelectingNodeViewModel is null)
                 throw new Exception("文献が選択されていません。");
 
@@ -590,12 +603,20 @@ public partial class MainWindowViewModel : ViewModel
         {
             MessageBox.Show($"失敗しました。\r\nﾒｯｾｰｼﾞ: {ex.Message}", "Webサイトを表示", MessageBoxButton.OK, MessageBoxImage.Error);
         }
+        finally
+        {
+            IsOpenPDFBusy = false;
+        }
     }
 
     void OpenDOIWebSite()
     {
         try
         {
+            if (IsOpenDOIWebSiteBusy)
+                return;
+            IsOpenDOIWebSiteBusy = true;
+
             if (SelectingNodeViewModel is null)
                 throw new Exception("文献が選択されていません。");
 
@@ -607,6 +628,10 @@ public partial class MainWindowViewModel : ViewModel
         catch (Exception ex)
         {
             MessageBox.Show($"失敗しました。\r\nﾒｯｾｰｼﾞ: {ex.Message}", "Webサイトを表示", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+        finally
+        {
+            IsOpenDOIWebSiteBusy = false;
         }
     }
 

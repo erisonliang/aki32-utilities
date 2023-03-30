@@ -68,6 +68,13 @@
             </Setter>
         </Style>
 
+        <Style x:Key="ProgressRingStyle" TargetType="mah:ProgressRing">
+            <Setter Property="Height" Value="13"/>
+            <Setter Property="Width" Value="13"/>
+            <Setter Property="MinWidth" Value="13"/>
+            <Setter Property="MinHeight" Value="13"/>
+        </Style>
+
         <Style x:Key="UserTextBoxStyle" TargetType="TextBox">
             <Setter Property="Foreground" Value="WhiteSmoke"/>
             <Setter Property="Background" Value="#CC000000"/>
@@ -289,10 +296,20 @@
 
                     <Button
                         Margin="0,4,4,4"
-                        Content=" 保存 "
                         Command="{Binding SaveCommand}"
                         Style="{StaticResource ButtonTextStyle}"
-                        />
+                        >
+                        <StackPanel Orientation="Horizontal">
+                            <Grid>
+                                <mah:ProgressRing Style="{StaticResource ProgressRingStyle}" Margin="0,0,3,0" Visibility="{Binding IsSaveBusy, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                <Grid Visibility="{Binding IsSaveBusy, Converter={StaticResource InverseBooleanToVisibility}}">
+                                    <TextBlock Text="💾" Visibility="{Binding IsSaveDone, Converter={StaticResource InverseBooleanToVisibility}}"/>
+                                    <TextBlock Text="✔️" Foreground="Green" Visibility="{Binding IsSaveDone, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                </Grid>
+                            </Grid>
+                            <TextBlock Text=" 保存 "/>
+                        </StackPanel>
+                    </Button>
 
                     <ComboBox
                         Margin="0,4,4,4"
@@ -948,18 +965,26 @@
                             Grid.Column="0"
                             Margin="3"
                             Style="{StaticResource ButtonTextStyle}"
-                            Content="オンラインで情報を取得"
-                            ToolTip="自動でオンラインからメタ情報をダウンロードして反映"
-                            />
+                            ToolTip="自動でオンラインからメタ情報をダウンロードして，必要に応じてマージします。"
+                            >
+                            <StackPanel Orientation="Horizontal">
+                                <mah:ProgressRing Style="{StaticResource ProgressRingStyle}" Margin="0,0,5,0" Visibility="{Binding IsFetchingOnlineInfoBusy, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                <TextBlock Text="オンラインで情報を取得"/>
+                            </StackPanel>
+                        </Button>
 
                         <Button
                             Grid.Column="1"
                             Margin="3"
                             Style="{StaticResource ButtonTextStyle}"
                             Command="{Binding OpenPDFCommand}"
-                            Content="PDFを表示"
-                            ToolTip="PDFを表示。もしローカルに存在しない場合は，自動でダウンロードします。"
-                            />
+                            ToolTip="PDFを表示します。&#10;もしローカルに存在しない場合は，自動でダウンロードします。"
+                            >
+                            <StackPanel Orientation="Horizontal">
+                                <mah:ProgressRing Style="{StaticResource ProgressRingStyle}" Margin="0,0,5,0" Visibility="{Binding IsOpenPDFBusy, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                <TextBlock Text="PDFを表示"/>
+                            </StackPanel>
+                        </Button>
 
                         <Button
                             Grid.Column="2"
@@ -969,11 +994,10 @@
                             ToolTip="元データのWebサイトをブラウザで表示します。"
                             >
                             <StackPanel Orientation="Horizontal">
-                                <mah:ProgressRing Visibility="Visible" Height="13" Width="13" MinHeight="0" MinWidth="0" Margin="0,0,5,0"/>
+                                <mah:ProgressRing Style="{StaticResource ProgressRingStyle}" Margin="0,0,5,0" Visibility="{Binding IsOpenDOIWebSiteBusy, Converter={StaticResource BooleanToVisibilityConverter}}"/>
                                 <TextBlock Text="Webサイトを表示"/>
                             </StackPanel>
                         </Button>
-
 
                     </Grid>
 

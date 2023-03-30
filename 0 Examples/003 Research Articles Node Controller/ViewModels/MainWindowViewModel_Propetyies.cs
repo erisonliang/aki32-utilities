@@ -41,7 +41,9 @@ public partial class MainWindowViewModel : ViewModel
 
     // ★★★★★★★★★★★★★★★ ヘッダー内
 
-    public ViewModelCommand SaveCommand => _SaveCommand.Get(Save);
+    public bool IsSaveBusy { get; set; } = false;
+    public bool IsSaveDone { get; set; } = false;
+    public ViewModelCommand SaveCommand => _SaveCommand.Get(async () => await Save());
     ViewModelCommandHandler _SaveCommand = new();
 
     public RangeSelectionMode[] RangeSelectionModes { get; } = Enum.GetValues(typeof(RangeSelectionMode)).OfType<RangeSelectionMode>().ToArray();
@@ -142,9 +144,14 @@ public partial class MainWindowViewModel : ViewModel
 
     // ★★★★★★★★★★★★★★★ 右パネル内
 
+    public bool IsFetchingOnlineInfoBusy { get; set; } = false;
+
+
+    public bool IsOpenPDFBusy { get; set; } = false;
     public ViewModelCommand OpenPDFCommand => _OpenPDFCommand.Get(async () => await OpenPDF());
     ViewModelCommandHandler _OpenPDFCommand = new();
 
+    public bool IsOpenDOIWebSiteBusy { get; set; } = false;
     public ViewModelCommand OpenDOIWebSiteCommand => _OpenDOIWebSiteCommand.Get(OpenDOIWebSite);
     ViewModelCommandHandler _OpenDOIWebSiteCommand = new();
 
