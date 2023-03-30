@@ -718,17 +718,23 @@ public class ResearchArticle : IComparable
         return File.Exists(outputFilePath);
     }
 
-    public void TryOpenDOILink()
+    public bool TryOpenDOILink()
     {
         UtilPreprocessors.PreprocessBasic();
 
         try
         {
-            var p = Process.Start(DOI_Link!);
+            var p = Process.Start(new ProcessStartInfo
+            {
+                FileName = DOI_Link!,
+                UseShellExecute = true,
+            });
+            return true;
         }
         catch (Exception ex)
         {
             ConsoleExtension.WriteLineWithColor($"Failed: {ex.Message}", ConsoleColor.Red);
+            return false;
         }
     }
 

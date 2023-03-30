@@ -32,17 +32,53 @@ public class MainWindowViewModel : ViewModel
 
     #region inner props
 
+    // ★★★★★ props
+
     public string InfoMessage { get; set; }
     private List<string> InfoMessageBuffer = new List<string>();
 
     public double Scale { get; set; } = 1d;
     public Point Offset { get; set; } = new Point(0, 0);
 
+    // ★★★★★ ヘッダー内
+
+    public ViewModelCommand SaveCommand => _SaveCommand.Get(Save);
+    ViewModelCommandHandler _SaveCommand = new();
+
+    public RangeSelectionMode[] RangeSelectionModes { get; } = Enum.GetValues(typeof(RangeSelectionMode)).OfType<RangeSelectionMode>().ToArray();
+    public RangeSelectionMode SelectedRangeSelectionMode { get; set; } = RangeSelectionMode.包含選択;
+
+    public bool IsLockedAllNodeLinks
+    {
+        get => _IsLockedAllNodeLinks;
+        set => UpdateIsLockedAllNodeLinksProperty(value);
+    }
+    bool _IsLockedAllNodeLinks = false;
+
+    public bool IsEnableAllNodeConnectors
+    {
+        get => _IsEnableAllNodeConnectors;
+        set => UpdateIsEnableAllNodeConnectorsProperty(value);
+    }
+    bool _IsEnableAllNodeConnectors = false;
+
+
+    // ★★★★★ 右クリック
+
     public ViewModelCommand AddNodeCommand => _AddNodeCommand.Get(AddNewArticleNode);
     ViewModelCommandHandler _AddNodeCommand = new();
 
+    public ViewModelCommand RearrangeNodesAlignLeftCommand => _RearrangeNodesAlignLeftCommand.Get(RearrangeNodesAlignLeft);
+    ViewModelCommandHandler _RearrangeNodesAlignLeftCommand = new();
+
+    public ViewModelCommand RearrangeNodesAlignRightCommand => _RearrangeNodesAlignRightCommand.Get(RearrangeNodesAlignRight);
+    ViewModelCommandHandler _RearrangeNodesAlignRightCommand = new();
+
     public ViewModelCommand RemoveNodesCommand => _RemoveNodesCommand.Get(RemoveArticleNodes);
     ViewModelCommandHandler _RemoveNodesCommand = new();
+
+
+    // ★★★★★ Node Controller 内
 
     public ListenerCommand<PreviewConnectLinkOperationEventArgs> PreviewConnectLinkCommand => _PreviewConnectLinkCommand.Get(PreviewConnect);
     ViewModelCommandHandler<PreviewConnectLinkOperationEventArgs> _PreviewConnectLinkCommand = new();
@@ -59,14 +95,6 @@ public class MainWindowViewModel : ViewModel
     public ListenerCommand<IList> SelectionChangedCommand => _SelectionChangedCommand.Get(SelectionChanged);
     ViewModelCommandHandler<IList> _SelectionChangedCommand = new();
 
-    public ViewModelCommand RearrangeNodesAlignLeftCommand => _RearrangeNodesAlignLeftCommand.Get(RearrangeNodesAlignLeft);
-    ViewModelCommandHandler _RearrangeNodesAlignLeftCommand = new();
-
-    public ViewModelCommand RearrangeNodesAlignRightCommand => _RearrangeNodesAlignRightCommand.Get(RearrangeNodesAlignRight);
-    ViewModelCommandHandler _RearrangeNodesAlignRightCommand = new();
-
-    public ViewModelCommand SaveCommand => _SaveCommand.Get(Save);
-    ViewModelCommandHandler _SaveCommand = new();
 
     public IEnumerable<DefaultNodeViewModel> NodeViewModels => _NodeViewModels;
     ObservableCollection<DefaultNodeViewModel> _NodeViewModels = new();
@@ -77,8 +105,6 @@ public class MainWindowViewModel : ViewModel
     public IEnumerable<GroupNodeViewModel> GroupNodeViewModels => _GroupNodeViewModels;
     ObservableCollection<GroupNodeViewModel> _GroupNodeViewModels = new();
 
-    public RangeSelectionMode[] RangeSelectionModes { get; } = Enum.GetValues(typeof(RangeSelectionMode)).OfType<RangeSelectionMode>().ToArray();
-    public RangeSelectionMode SelectedRangeSelectionMode { get; set; } = RangeSelectionMode.包含選択;
 
     public EmphasizePropertyItems[] EmphasizePropertyItems { get; } = Enum.GetValues(typeof(EmphasizePropertyItems)).OfType<EmphasizePropertyItems>().ToArray();
     public static EmphasizePropertyItems _SelectedEmphasizePropertyItem = ViewModels.EmphasizePropertyItems.なし;
@@ -98,19 +124,13 @@ public class MainWindowViewModel : ViewModel
         }
     }
 
-    public bool IsLockedAllNodeLinks
-    {
-        get => _IsLockedAllNodeLinks;
-        set => UpdateIsLockedAllNodeLinksProperty(value);
-    }
-    bool _IsLockedAllNodeLinks = false;
+    // ★★★★★ 右パネル内
 
-    public bool IsEnableAllNodeConnectors
-    {
-        get => _IsEnableAllNodeConnectors;
-        set => UpdateIsEnableAllNodeConnectorsProperty(value);
-    }
-    bool _IsEnableAllNodeConnectors = false;
+    public ViewModelCommand ShowDOIWebSiteCommand => _ShowDOIWebSiteCommand.Get(ShowDOIWebSite);
+    ViewModelCommandHandler _ShowDOIWebSiteCommand = new();
+
+
+    // ★★★★★ 
 
     #endregion
 
@@ -195,7 +215,9 @@ public class MainWindowViewModel : ViewModel
     }
 
 
-    // ★★★★★★★★★★★★★★★ methods (general)
+    // ★★★★★★★★★★★★★★★ methods
+
+    // ★★★★★ general methods
 
     void UpdateInfoMessage(string message)
     {
@@ -210,20 +232,12 @@ public class MainWindowViewModel : ViewModel
     }
 
 
-    // ★★★★★★★★★★★★★★★ methods (research manager handling)
-
-    #region research manager methods
+    // ★★★★★ research manager editing methods
 
     void ResearchManagerHandlingSample()
     {
         // コピペ用に残しとく
-
         MessageBox.Show("NotImplemented");
-
-    }
-
-    void ResearchManagerAAA()
-    {
 
         // articles from j-stage
         {
@@ -375,12 +389,8 @@ public class MainWindowViewModel : ViewModel
         UpdateInfoMessage("保存完了");
     }
 
-    #endregion
 
-
-    // ★★★★★★★★★★★★★★★ methods (node handling)
-
-    #region node handling methods
+    // ★★★★★ node handling methods
 
     void NodeHandlingSample()
     {
@@ -453,7 +463,6 @@ public class MainWindowViewModel : ViewModel
 
         RaisePropertyChanged(nameof(IsLockedAllNodeLinks));
     }
-
     void UpdateIsEnableAllNodeConnectorsProperty(bool value)
     {
         _IsEnableAllNodeConnectors = value;
@@ -475,7 +484,6 @@ public class MainWindowViewModel : ViewModel
 
     void NodesMoved(EndMoveNodesOperationEventArgs param)
     {
-
     }
 
     void PreviewConnect(PreviewConnectLinkOperationEventArgs args)
@@ -502,7 +510,6 @@ public class MainWindowViewModel : ViewModel
                 hitArticleNodeFlag = true;
             }
         }
-
     }
 
     void RearrangeNodesAlignLeft()
@@ -512,7 +519,6 @@ public class MainWindowViewModel : ViewModel
         var basePosition = new Point(NODE_MARGIN_LEFT, NODE_MARGIN_TOP);
         RearrangeNodesAlignLeft(rearrangingNodes, basePosition, true);
     }
-
     void RearrangeNodesAlignRight()
     {
         var rearrangingNodes = new List<DefaultNodeViewModel>(_NodeViewModels);
@@ -520,8 +526,61 @@ public class MainWindowViewModel : ViewModel
         var basePosition = new Point(NODE_MARGIN_LEFT, NODE_MARGIN_TOP);
         RearrangeNodesAlignRight(rearrangingNodes, basePosition, true);
     }
+    void OrderByGroup(ref List<DefaultNodeViewModel> targetNodes)
+    {
+        var InputConnectorNodeGuids = _NodeLinkViewModels.Select(link => link.InputConnectorNodeGuid).ToArray();
+        var OutputConnectorNodeGuids = _NodeLinkViewModels.Select(link => link.OutputConnectorNodeGuid).ToArray();
+
+        // ★★★★★ 用いる変数のリセット
+        foreach (var targetNode in targetNodes)
+        {
+            targetNode.__InnerMemo = -1;
+        }
 
 
+        // ★★★★★ 最初にinputNodeにもoutputNodeにも何もない人に番号を振る。
+        {
+            var currentTargetNodes = targetNodes.Where(node => node.__InnerMemo < 0);
+            var nextGroupNum = targetNodes.Max(node => node.__InnerMemo) + 1;
+
+            var noConnectionNodes = currentTargetNodes.Where(n => !InputConnectorNodeGuids.Contains(n.Guid) && !OutputConnectorNodeGuids.Contains(n.Guid)).ToArray();
+            foreach (var noConnectionNode in noConnectionNodes)
+                noConnectionNode.__InnerMemo = nextGroupNum++;
+        }
+
+
+        // ★★★★★ どんどん，適当にピックしてそのNodeに関係あるNodeを全て同じグループとしてグループ付けする。
+        while (true)
+        {
+            var currentTargetNodes = targetNodes.Where(node => node.__InnerMemo < 0).ToList();
+            var nextGroupNum = targetNodes.Max(node => node.__InnerMemo) + 1;
+            if (!currentTargetNodes.Any())
+                break;
+
+            var currentTargetNodeQueue = new Queue<DefaultNodeViewModel>();
+            currentTargetNodeQueue.Enqueue(currentTargetNodes.First());
+
+            while (currentTargetNodeQueue.Count > 0)
+            {
+                var targetNode = currentTargetNodeQueue.Dequeue();
+                targetNode.__InnerMemo = nextGroupNum;
+                currentTargetNodes.Remove(targetNode);
+
+                var parentNodes = GetParentNodes(targetNode, currentTargetNodes);
+                foreach (var parentNode in parentNodes)
+                    currentTargetNodeQueue.Enqueue(parentNode);
+
+                var childrenNodes = GetChildrenNodes(targetNode, currentTargetNodes);
+                foreach (var childNodes in childrenNodes)
+                    currentTargetNodeQueue.Enqueue(childNodes);
+
+            }
+
+        }
+
+        targetNodes = targetNodes.OrderBy(node => node.__InnerMemo).ToList();
+
+    }
     void RearrangeNodesAlignLeft(List<DefaultNodeViewModel> rearrangingNodes, Point basePosition, bool toLowerDirection)
     {
         var horizontalCoef = 1;
@@ -603,7 +662,6 @@ public class MainWindowViewModel : ViewModel
             ProcessOne(noInputNode);
 
     }
-
     void RearrangeNodesAlignRight(List<DefaultNodeViewModel> rearrangingNodes, Point basePosition, bool toLowerDirection)
     {
         var horizontalCoef = -1;
@@ -685,63 +743,6 @@ public class MainWindowViewModel : ViewModel
             ProcessOne(noOutputNode);
 
     }
-
-    void OrderByGroup(ref List<DefaultNodeViewModel> targetNodes)
-    {
-        var InputConnectorNodeGuids = _NodeLinkViewModels.Select(link => link.InputConnectorNodeGuid).ToArray();
-        var OutputConnectorNodeGuids = _NodeLinkViewModels.Select(link => link.OutputConnectorNodeGuid).ToArray();
-
-        // ★★★★★ 用いる変数のリセット
-        foreach (var targetNode in targetNodes)
-        {
-            targetNode.__InnerMemo = -1;
-        }
-
-
-        // ★★★★★ 最初にinputNodeにもoutputNodeにも何もない人に番号を振る。
-        {
-            var currentTargetNodes = targetNodes.Where(node => node.__InnerMemo < 0);
-            var nextGroupNum = targetNodes.Max(node => node.__InnerMemo) + 1;
-
-            var noConnectionNodes = currentTargetNodes.Where(n => !InputConnectorNodeGuids.Contains(n.Guid) && !OutputConnectorNodeGuids.Contains(n.Guid)).ToArray();
-            foreach (var noConnectionNode in noConnectionNodes)
-                noConnectionNode.__InnerMemo = nextGroupNum++;
-        }
-
-
-        // ★★★★★ どんどん，適当にピックしてそのNodeに関係あるNodeを全て同じグループとしてグループ付けする。
-        while (true)
-        {
-            var currentTargetNodes = targetNodes.Where(node => node.__InnerMemo < 0).ToList();
-            var nextGroupNum = targetNodes.Max(node => node.__InnerMemo) + 1;
-            if (!currentTargetNodes.Any())
-                break;
-
-            var currentTargetNodeQueue = new Queue<DefaultNodeViewModel>();
-            currentTargetNodeQueue.Enqueue(currentTargetNodes.First());
-
-            while (currentTargetNodeQueue.Count > 0)
-            {
-                var targetNode = currentTargetNodeQueue.Dequeue();
-                targetNode.__InnerMemo = nextGroupNum;
-                currentTargetNodes.Remove(targetNode);
-
-                var parentNodes = GetParentNodes(targetNode, currentTargetNodes);
-                foreach (var parentNode in parentNodes)
-                    currentTargetNodeQueue.Enqueue(parentNode);
-
-                var childrenNodes = GetChildrenNodes(targetNode, currentTargetNodes);
-                foreach (var childNodes in childrenNodes)
-                    currentTargetNodeQueue.Enqueue(childNodes);
-
-            }
-
-        }
-
-        targetNodes = targetNodes.OrderBy(node => node.__InnerMemo).ToList();
-
-    }
-
     IEnumerable<DefaultNodeViewModel> GetChildrenNodes(DefaultNodeViewModel targetNode, IEnumerable<DefaultNodeViewModel> fromThisList = null)
     {
         var childrenNodes = new List<DefaultNodeViewModel>();
@@ -758,7 +759,6 @@ public class MainWindowViewModel : ViewModel
 
         return childrenNodes;
     }
-
     IEnumerable<DefaultNodeViewModel> GetParentNodes(DefaultNodeViewModel targetNode, IEnumerable<DefaultNodeViewModel> fromThisList = null)
     {
         var parentNodes = new List<DefaultNodeViewModel>();
@@ -777,7 +777,33 @@ public class MainWindowViewModel : ViewModel
     }
 
 
-    #endregion
+    // ★★★★★ selecting node handling methods
+
+    void ShowDOIWebSite()
+    {
+        try
+        {
+            if (SelectingNodeViewModel is null)
+                throw new Exception("文献が選択されていません。");
+
+            var result = SelectingNodeViewModel.Article.TryOpenDOILink();
+            if (!result)
+                throw new Exception("DOIを保持していない文献の可能性があります。");
+
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show($"失敗しました。\r\nﾒｯｾｰｼﾞ: {ex.Message}", "Webサイトを表示", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+    }
+
+
+
+
+
+
+    // ★★★★★
+
 
     // ★★★★★★★★★★★★★★★ 
 

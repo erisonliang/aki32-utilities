@@ -9,7 +9,7 @@
         xmlns:ctrl="clr-namespace:Aki32Utilities.WPFAppUtilities.NodeController.Controls;assembly=NodeController"
         mc:Ignorable="d"
         Title="Research Articles Node Controll" 
-        d:Height="600"
+        d:Height="1000"
         d:Width="1200"
         >
 
@@ -955,6 +955,7 @@
                             Grid.Column="1"
                             Margin="3"
                             Style="{StaticResource ButtonTextStyle}"
+                            Command="{Binding ShowDOIWebSiteCommand}"
                             Content="PDFを表示"
                             ToolTip="PDFを表示。もしローカルに存在しない場合は，自動でダウンロードします。"
                             />
