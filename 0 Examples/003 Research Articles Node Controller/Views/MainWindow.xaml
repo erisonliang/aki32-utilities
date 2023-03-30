@@ -301,7 +301,7 @@
                         >
                         <StackPanel Orientation="Horizontal">
                             <Grid>
-                                <mah:ProgressRing Style="{StaticResource ProgressRingStyle}" Margin="0,0,3,0" Visibility="{Binding IsSaveBusy, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                <mah:ProgressRing Style="{StaticResource ProgressRingStyle}" Margin="0,0,3.5,0" Visibility="{Binding IsSaveBusy, Converter={StaticResource BooleanToVisibilityConverter}}"/>
                                 <Grid Visibility="{Binding IsSaveBusy, Converter={StaticResource InverseBooleanToVisibility}}">
                                     <TextBlock Text="💾" Visibility="{Binding IsSaveDone, Converter={StaticResource InverseBooleanToVisibility}}"/>
                                     <TextBlock Text="✔️" Foreground="Green" Visibility="{Binding IsSaveDone, Converter={StaticResource BooleanToVisibilityConverter}}"/>
