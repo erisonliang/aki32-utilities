@@ -684,29 +684,29 @@ public class ResearchArticle : IComparable
         }
     }
 
-    public async Task<bool> TryOpenPDF(DirectoryInfo pdfStockDirectory)
+    public async Task<(bool download, bool open)> TryOpenPDF(DirectoryInfo pdfStockDirectory)
     {
         UtilPreprocessors.PreprocessBasic();
+        var outputFilePath = Path.Combine(pdfStockDirectory.FullName, LocalPDFName);
+
+        if (!File.Exists(outputFilePath))
+            if (!await TryDownloadPDF(pdfStockDirectory))
+                return (false, false);
 
         try
         {
-            var outputFilePath = Path.Combine(pdfStockDirectory.FullName, LocalPDFName);
-
-            if (!File.Exists(outputFilePath))
-                await TryDownloadPDF(pdfStockDirectory);
-
             var p = Process.Start(new ProcessStartInfo()
             {
                 FileName = outputFilePath,
                 UseShellExecute = true,
             });
 
-            return true;
+            return (true, true);
         }
         catch (Exception ex)
         {
             ConsoleExtension.WriteLineWithColor($"Failed: {ex.Message}", ConsoleColor.Red);
-            return false;
+            return (true, false);
         }
     }
 

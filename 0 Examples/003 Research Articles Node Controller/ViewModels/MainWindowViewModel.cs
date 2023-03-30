@@ -126,8 +126,11 @@ public class MainWindowViewModel : ViewModel
 
     // ★★★★★ 右パネル内
 
-    public ViewModelCommand ShowDOIWebSiteCommand => _ShowDOIWebSiteCommand.Get(ShowDOIWebSite);
-    ViewModelCommandHandler _ShowDOIWebSiteCommand = new();
+    public ViewModelCommand OpenPDFCommand => _OpenPDFCommand.Get(async () => await OpenPDF());
+    ViewModelCommandHandler _OpenPDFCommand = new();
+
+    public ViewModelCommand OpenDOIWebSiteCommand => _OpenDOIWebSiteCommand.Get(OpenDOIWebSite);
+    ViewModelCommandHandler _OpenDOIWebSiteCommand = new();
 
 
     // ★★★★★ 
@@ -779,7 +782,27 @@ public class MainWindowViewModel : ViewModel
 
     // ★★★★★ selecting node handling methods
 
-    void ShowDOIWebSite()
+    async Task OpenPDF()
+    {
+        try
+        {
+            if (SelectingNodeViewModel is null)
+                throw new Exception("文献が選択されていません。");
+
+            var result = await SelectingNodeViewModel.Article.TryOpenPDF(ResearchArticlesManager.PDFsDirectory);
+            if (!result.download)
+                throw new Exception("PDFのダウンロードに失敗しました。\r\nこの情報提供元に対応していない可能性があります。");
+            if (!result.download)
+                throw new Exception("PDFを開くのに失敗しました。\r\n他のプロセスによって使われていないか確認してください。");
+
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show($"失敗しました。\r\nﾒｯｾｰｼﾞ: {ex.Message}", "Webサイトを表示", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+    }
+
+    void OpenDOIWebSite()
     {
         try
         {
