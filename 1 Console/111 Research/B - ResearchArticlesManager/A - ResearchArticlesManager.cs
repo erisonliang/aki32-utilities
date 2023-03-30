@@ -1,11 +1,5 @@
 ﻿using Aki32Utilities.ConsoleAppUtilities.General;
 
-using ClosedXML;
-
-using DocumentFormat.OpenXml.Spreadsheet;
-
-using MathNet.Numerics.Distributions;
-
 namespace Aki32Utilities.ConsoleAppUtilities.Research;
 public partial class ResearchArticlesManager
 {

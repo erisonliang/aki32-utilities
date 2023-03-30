@@ -4,8 +4,6 @@ using Aki32Utilities.ConsoleAppUtilities.General;
 
 using ClosedXML;
 
-using Org.BouncyCastle.Asn1.Anssi;
-
 namespace Aki32Utilities.ConsoleAppUtilities.Research;
 public class ResearchArticle : IComparable
 {

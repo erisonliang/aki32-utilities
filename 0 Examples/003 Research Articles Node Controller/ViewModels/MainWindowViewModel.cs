@@ -9,13 +9,9 @@ using Aki32Utilities.ViewModels.NodeViewModels;
 using Aki32Utilities.ConsoleAppUtilities.Research;
 using System.IO;
 using System.Windows.Input;
-using System.Windows.Controls;
 using Aki32Utilities.UsageExamples.ResearchArticlesNodeController.Views;
-using Aki32Utilities.WPFAppUtilities.NodeController.Controls;
-using System.Net.NetworkInformation;
 
 namespace Aki32Utilities.UsageExamples.ResearchArticlesNodeController.ViewModels;
-
 public class MainWindowViewModel : ViewModel
 {
 
