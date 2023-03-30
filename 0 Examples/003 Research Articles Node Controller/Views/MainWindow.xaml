@@ -7,6 +7,7 @@
         xmlns:vm="clr-namespace:Aki32Utilities.UsageExamples.ResearchArticlesNodeController.ViewModels"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:ctrl="clr-namespace:Aki32Utilities.WPFAppUtilities.NodeController.Controls;assembly=NodeController"
+        xmlns:mah="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
         mc:Ignorable="d"
         Title="Research Articles Node Controll" 
         d:Height="1000"
@@ -965,15 +966,15 @@
                             Margin="3"
                             Style="{StaticResource ButtonTextStyle}"
                             Command="{Binding OpenDOIWebSiteCommand}"
-                            Content="Webサイトを表示"
                             ToolTip="元データのWebサイトをブラウザで表示します。"
-                            />
+                            >
+                            <StackPanel Orientation="Horizontal">
+                                <mah:ProgressRing Visibility="Visible" Height="13" Width="13" MinHeight="0" MinWidth="0" Margin="0,0,5,0"/>
+                                <TextBlock Text="Webサイトを表示"/>
+                            </StackPanel>
+                        </Button>
 
 
-
-                        <ProgressBar>
-                            
-                        </ProgressBar>
                     </Grid>
 
                     <Grid Margin="4">
