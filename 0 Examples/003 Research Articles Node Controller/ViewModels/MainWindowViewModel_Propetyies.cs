@@ -47,7 +47,7 @@ public partial class MainWindowViewModel : ViewModel
     ViewModelCommandHandler _SaveCommand = new();
 
     public RangeSelectionMode[] RangeSelectionModes { get; } = Enum.GetValues(typeof(RangeSelectionMode)).OfType<RangeSelectionMode>().ToArray();
-    public RangeSelectionMode SelectedRangeSelectionMode { get; set; } = RangeSelectionMode.包含選択;
+    public RangeSelectionMode SelectedRangeSelectionMode { get; set; } = RangeSelectionMode.包含;
 
     public bool IsLockedAllNodeLinks
     {
@@ -90,8 +90,12 @@ public partial class MainWindowViewModel : ViewModel
     public ViewModelCommand RearrangeNodesAlignRightCommand => _RearrangeNodesAlignRightCommand.Get(RearrangeNodesAlignRight);
     ViewModelCommandHandler _RearrangeNodesAlignRightCommand = new();
 
-    public ViewModelCommand RemoveNodesCommand => _RemoveNodesCommand.Get(RemoveArticleNodes);
-    ViewModelCommandHandler _RemoveNodesCommand = new();
+    public ViewModelCommand RemoveSelectingNodesCommand => _RemoveSelectingNodesCommand.Get(RemoveSelectingArticleNodes);
+    ViewModelCommandHandler _RemoveSelectingNodesCommand = new();
+
+    public ViewModelCommand RemoveTempNodesCommand => _RemoveTempNodesCommand.Get(RemoveTempArticleNodes);
+    ViewModelCommandHandler _RemoveTempNodesCommand = new();
+
 
 
     // ★★★★★★★★★★★★★★★ Node Controller 内

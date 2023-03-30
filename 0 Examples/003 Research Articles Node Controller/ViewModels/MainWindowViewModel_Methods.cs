@@ -10,7 +10,7 @@ namespace Aki32Utilities.UsageExamples.ResearchArticlesNodeController.ViewModels
 public partial class MainWindowViewModel : ViewModel
 {
 
-    // ★★★★★★★★★★★★★★★ general methods
+    // ★★★★★★★★★★★★★★★ general
 
     void UpdateInfoMessage(string message)
     {
@@ -24,57 +24,6 @@ public partial class MainWindowViewModel : ViewModel
         InfoMessage = string.Join("\r\n", InfoMessageBuffer);
     }
 
-
-    // ★★★★★★★★★★★★★★★ research manager editing methods
-
-    void ResearchManagerHandlingSample()
-    {
-        // コピペ用に残しとく
-        MessageBox.Show("NotImplemented");
-
-        // articles from j-stage
-        {
-            //var builder = new JStageArticleUriBuilder()
-            //{
-            //    Pubyearfrom = 2022,
-            //    Issn = ISSN.Architecture_Structure,
-            //    Count = 1000,
-            //    //Start = 1,
-            //};
-            //research.PullArticleInfo(builder);
-
-        }
-
-        // articles from cinii
-        {
-            //var builder = new CiNiiArticleUriBuilder()
-            //{
-            //    Count = 5,
-            //    ISSN = ISSN.Architecture_Structure,
-            //    FreeWord = "小振幅"
-            //};
-            //research.PullArticleInfo(builder);
-
-        }
-
-        // article from crossref
-        {
-            //var builder = new CrossRefArticleUriBuilder()
-            //{
-            //    DOI = "10.3130/aijs.87.822"
-            //};
-            //research.PullArticleInfo(builder);
-
-        }
-
-        // display
-        {
-            //research.SaveDatabase(true);
-            //research.ArticleDatabase.First(x => x.DOI == "10.3130/aijs.87.822").TryOpenPDF(research.PDFsDirectory);
-        }
-
-    }
-
     void NotifyResearchArticlesPropertiesChanged()
     {
         var articleNodes = _NodeViewModels.Select(n => (n is ResearchArticleNodeViewModel run) ? run : null).Where(run => run != null);
@@ -83,99 +32,8 @@ public partial class MainWindowViewModel : ViewModel
 
     }
 
-    void AddNewArticleNode()
-    {
-        var posOnCanvas = Mouse.GetPosition(ParentView.NodeGraph.Canvas);
-        var posOnContextMenu = Mouse.GetPosition(ParentView.Resources["NodeGraphContextMenu"] as IInputElement);
 
-        var offsetPosOnCanvasX = posOnCanvas.X - Offset.X - posOnContextMenu.X / Scale;
-        var offsetPosOnCanvasY = posOnCanvas.Y - Offset.Y - posOnContextMenu.Y / Scale;
-        var addingPosition = new Point(offsetPosOnCanvasX, offsetPosOnCanvasY);
-
-        AddNewArticleNode(addingPosition);
-    }
-    void AddNewArticleNode(Point addingPosition)
-    {
-        // 作って，新しいNodeも作ってあてがう。
-        var newArticle = ResearchArticle.CreateManually(new ResearchArticle_ManualInitInfo
-        {
-            Manual_ArticleTitle = "■ 未入力",
-            Manual_Authors = new string[] { "■ 未入力" },
-            Manual_PublishedDate = "■ 未入力",
-            Memo = "■ 未入力",
-        });
-
-        ResearchArticlesManager.MergeArticleInfo(new List<ResearchArticle> { newArticle }, forceAdd: true, save: false);
-        var addingNode = new ResearchArticleNodeViewModel() { Article = newArticle, NodeName = "ResearchArticle" };
-        _NodeViewModels.Add(addingNode);
-        addingNode.Position = addingPosition;
-        var task = Save();
-    }
-
-    void RemoveArticleNodes()
-    {
-        var removingNodes = _NodeViewModels
-            .Where(node => node.IsSelected)
-            .Where(node => node is ResearchArticleNodeViewModel)
-            .Cast<ResearchArticleNodeViewModel>()
-            .ToArray();
-
-        if (removingNodes.Length == 0)
-            return;
-
-        var result = MessageBox.Show($"選択中の{removingNodes.Length}個の文献を削除しようとしています。\r\n本当によろしいですか？", "確認", MessageBoxButton.OKCancel, MessageBoxImage.Warning);
-        if (result is not MessageBoxResult.OK)
-            return;
-
-        foreach (var removingNode in removingNodes)
-        {
-            // remove all node links...
-            var removingNodeLinks = NodeLinkViewModels
-                .Where(arg => arg.InputConnectorNodeGuid == removingNode.Guid || arg.OutputConnectorNodeGuid == removingNode.Guid)
-                .ToArray();
-            foreach (var removingNodeLink in removingNodeLinks)
-                _NodeLinkViewModels.Remove(removingNodeLink);
-
-            // remove node
-            _NodeViewModels.Remove(removingNode);
-
-
-        }
-
-        // remove from database
-        var removingArticles = removingNodes.Select(n => n.Article).ToList();
-        ResearchArticlesManager.RemoveArticleInfo(removingArticles, save: false);
-        var task = Save();
-    }
-
-    void NodeConnected(ConnectedLinkOperationEventArgs param)
-    {
-        var nodeLink = new NodeLinkViewModel()
-        {
-            OutputConnectorGuid = param.OutputConnectorGuid,
-            OutputConnectorNodeGuid = param.OutputConnectorNodeGuid,
-            InputConnectorGuid = param.InputConnectorGuid,
-            InputConnectorNodeGuid = param.InputConnectorNodeGuid,
-            IsLocked = IsLockedAllNodeLinks,
-        };
-        _NodeLinkViewModels.Add(nodeLink);
-
-        // 引用関係をデータベースに追加
-        var parentNode = (ResearchArticleNodeViewModel)NodeViewModels.First(node => node.Guid == nodeLink.OutputConnectorNodeGuid);
-        var childNode = (ResearchArticleNodeViewModel)NodeViewModels.First(node => node.Guid == nodeLink.InputConnectorNodeGuid);
-        childNode.Article.AddArticleReference(parentNode.Article);
-    }
-
-    void NodeDisconnected(DisconnectedLinkOperationEventArgs param)
-    {
-        var nodeLink = _NodeLinkViewModels.First(arg => arg.Guid == param.NodeLinkGuid);
-        _NodeLinkViewModels.Remove(nodeLink);
-
-        // 引用関係をデータベースから削除
-        var parentNode = (ResearchArticleNodeViewModel)NodeViewModels.First(node => node.Guid == nodeLink.OutputConnectorNodeGuid);
-        var childNode = (ResearchArticleNodeViewModel)NodeViewModels.First(node => node.Guid == nodeLink.InputConnectorNodeGuid);
-        childNode.Article.RemoveArticleReference(parentNode.Article);
-    }
+    // ★★★★★★★★★★★★★★★ ヘッダー内
 
     async Task Save()
     {
@@ -189,69 +47,6 @@ public partial class MainWindowViewModel : ViewModel
         IsSaveDone = true;
         await Task.Delay(2000);
         IsSaveDone = false;
-    }
-
-
-    // ★★★★★★★★★★★★★★★ node handling methods
-
-    void NodeHandlingSample()
-    {
-        // コピペ用に残しとく
-
-        // void AddTestNodeLink()
-        {
-            if (_NodeViewModels.Count < 2)
-            {
-                return;
-            }
-            var nodeLink = new NodeLinkViewModel
-            {
-                OutputConnectorNodeGuid = _NodeViewModels[0].Guid,
-                OutputConnectorGuid = _NodeViewModels[0].Outputs.ElementAt(0).Guid,
-                InputConnectorNodeGuid = _NodeViewModels[1].Guid,
-                InputConnectorGuid = _NodeViewModels[1].Inputs.ElementAt(0).Guid,
-            };
-            _NodeLinkViewModels.Add(nodeLink);
-        }
-
-        // void MoveTestNodes()
-        {
-            if (_NodeLinkViewModels.Any())
-                _NodeViewModels[0].Position = new Point(0, 0);
-        }
-
-        //void ClearNodes()
-        {
-            _NodeLinkViewModels.Clear();
-            _NodeViewModels.Clear();
-        }
-
-        //void ClearNodeLinks()
-        {
-            _NodeLinkViewModels.Clear();
-        }
-
-        //void MoveGroupNode()
-        {
-            _GroupNodeViewModels[0].InterlockPosition = new Point(0, 0);
-        }
-
-        //void ChangeGroupInnerPosition()
-        {
-            _GroupNodeViewModels[0].InnerPosition = new Point(0, 0);
-        }
-
-        //void ChangeGroupInnerSize()
-        {
-            _GroupNodeViewModels[0].InnerWidth = 300;
-            _GroupNodeViewModels[0].InnerHeight = 300;
-        }
-
-    }
-
-    void ResetScale()
-    {
-        Scale = 1.0f;
     }
 
     void UpdateIsLockedAllNodeLinksProperty(bool value)
@@ -284,34 +79,36 @@ public partial class MainWindowViewModel : ViewModel
         RaisePropertyChanged(nameof(IsEnableAllNodeConnectors));
     }
 
-    void NodesMoved(EndMoveNodesOperationEventArgs param)
+
+    // ★★★★★★★★★★★★★★★ 右クリック
+
+    void AddNewArticleNode()
     {
+        var posOnCanvas = Mouse.GetPosition(ParentView.NodeGraph.Canvas);
+        var posOnContextMenu = Mouse.GetPosition(ParentView.Resources["NodeGraphContextMenu"] as IInputElement);
+
+        var offsetPosOnCanvasX = posOnCanvas.X - Offset.X - posOnContextMenu.X / Scale;
+        var offsetPosOnCanvasY = posOnCanvas.Y - Offset.Y - posOnContextMenu.Y / Scale;
+        var addingPosition = new Point(offsetPosOnCanvasX, offsetPosOnCanvasY);
+
+        AddNewArticleNode(addingPosition);
     }
-
-    void PreviewConnect(PreviewConnectLinkOperationEventArgs args)
+    void AddNewArticleNode(Point addingPosition)
     {
-        var inputNode = NodeViewModels.First(arg => arg.Guid == args.ConnectToEndNodeGuid);
-        var inputConnector = inputNode.FindConnector(args.ConnectToEndConnectorGuid);
-        args.CanConnect = inputConnector.Label == "Limited Input" == false;
-    }
-
-    void SelectionChanged(IList list)
-    {
-        var hitArticleNodeFlag = false;
-        SelectingNodeViewModel = null;
-
-        foreach (var item in list)
+        // 作って，新しいNodeも作ってあてがう。
+        var newArticle = ResearchArticle.CreateManually(new ResearchArticle_ManualInitInfo
         {
-            if (item is ResearchArticleNodeViewModel articleNode)
-            {
-                if (hitArticleNodeFlag)
-                    SelectingNodeViewModel = null;
-                else
-                    SelectingNodeViewModel = articleNode;
+            Manual_ArticleTitle = "■ 未入力",
+            Manual_Authors = new string[] { "■ 未入力" },
+            Manual_PublishedDate = "■ 未入力",
+            Memo = "■ 未入力",
+        });
 
-                hitArticleNodeFlag = true;
-            }
-        }
+        ResearchArticlesManager.MergeArticleInfo(new List<ResearchArticle> { newArticle }, forceAdd: true, save: false);
+        var addingNode = new ResearchArticleNodeViewModel() { Article = newArticle, NodeName = "ResearchArticle" };
+        _NodeViewModels.Add(addingNode);
+        addingNode.Position = addingPosition;
+        var task = Save();
     }
 
     void RearrangeNodesAlignLeft()
@@ -578,8 +375,115 @@ public partial class MainWindowViewModel : ViewModel
         return parentNodes;
     }
 
+    void RemoveSelectingArticleNodes()
+    {
+        var removingNodes = _NodeViewModels
+            .Where(node => node.IsSelected)
+            .Where(node => node is ResearchArticleNodeViewModel)
+            .Cast<ResearchArticleNodeViewModel>()
+            .ToArray();
 
-    // ★★★★★★★★★★★★★★★ selecting node handling methods
+        if (removingNodes.Length == 0)
+            return;
+
+        var result = MessageBox.Show($"選択中の{removingNodes.Length}個の文献を全て削除しようとしています。\r\n本当によろしいですか？", "確認", MessageBoxButton.OKCancel, MessageBoxImage.Warning);
+        if (result is not MessageBoxResult.OK)
+            return;
+
+        foreach (var removingNode in removingNodes)
+            RemoveOneArticleNode(removingNode);
+
+        var task = Save();
+    }
+    void RemoveTempArticleNodes()
+    {
+        var removingNodes = _NodeViewModels
+            .Where(node => node is ResearchArticleNodeViewModel)
+            .Cast<ResearchArticleNodeViewModel>()
+            .Where(node => node.Article.Private_Temporary ?? false)
+            .ToArray();
+
+        if (removingNodes.Length == 0)
+            return;
+
+        var result = MessageBox.Show($"{removingNodes.Length}個の一時的な文献データを全て削除しようとしています。\r\n本当によろしいですか？", "確認", MessageBoxButton.OKCancel, MessageBoxImage.Warning);
+        if (result is not MessageBoxResult.OK)
+            return;
+
+        foreach (var removingNode in removingNodes)
+            RemoveOneArticleNode(removingNode);
+
+        var task = Save();
+    }
+    void RemoveOneArticleNode(ResearchArticleNodeViewModel removingNode)
+    {
+        // remove all node links...
+        var removingNodeLinks = NodeLinkViewModels
+            .Where(arg => arg.InputConnectorNodeGuid == removingNode.Guid || arg.OutputConnectorNodeGuid == removingNode.Guid)
+            .ToArray();
+        foreach (var removingNodeLink in removingNodeLinks)
+            _NodeLinkViewModels.Remove(removingNodeLink);
+
+        // remove node
+        _NodeViewModels.Remove(removingNode);
+
+        // remove from database
+        ResearchArticlesManager.RemoveArticleInfo(new List<ResearchArticle> { removingNode.Article }, save: false);
+    }
+
+
+    // ★★★★★★★★★★★★★★★ Node Controller 内
+
+    void SelectionChanged(IList list)
+    {
+        var hitArticleNodeFlag = false;
+        SelectingNodeViewModel = null;
+
+        foreach (var item in list)
+        {
+            if (item is ResearchArticleNodeViewModel articleNode)
+            {
+                if (hitArticleNodeFlag)
+                    SelectingNodeViewModel = null;
+                else
+                    SelectingNodeViewModel = articleNode;
+
+                hitArticleNodeFlag = true;
+            }
+        }
+    }
+
+    void NodeConnected(ConnectedLinkOperationEventArgs param)
+    {
+        var nodeLink = new NodeLinkViewModel()
+        {
+            OutputConnectorGuid = param.OutputConnectorGuid,
+            OutputConnectorNodeGuid = param.OutputConnectorNodeGuid,
+            InputConnectorGuid = param.InputConnectorGuid,
+            InputConnectorNodeGuid = param.InputConnectorNodeGuid,
+            IsLocked = IsLockedAllNodeLinks,
+        };
+        _NodeLinkViewModels.Add(nodeLink);
+
+        // 引用関係をデータベースに追加
+        var parentNode = (ResearchArticleNodeViewModel)NodeViewModels.First(node => node.Guid == nodeLink.OutputConnectorNodeGuid);
+        var childNode = (ResearchArticleNodeViewModel)NodeViewModels.First(node => node.Guid == nodeLink.InputConnectorNodeGuid);
+        childNode.Article.AddArticleReference(parentNode.Article);
+    }
+
+    void NodeDisconnected(DisconnectedLinkOperationEventArgs param)
+    {
+        var nodeLink = _NodeLinkViewModels.First(arg => arg.Guid == param.NodeLinkGuid);
+        _NodeLinkViewModels.Remove(nodeLink);
+
+        // 引用関係をデータベースから削除
+        var parentNode = (ResearchArticleNodeViewModel)NodeViewModels.First(node => node.Guid == nodeLink.OutputConnectorNodeGuid);
+        var childNode = (ResearchArticleNodeViewModel)NodeViewModels.First(node => node.Guid == nodeLink.InputConnectorNodeGuid);
+        childNode.Article.RemoveArticleReference(parentNode.Article);
+    }
+
+
+    // ★★★★★★★★★★★★★★★ 右パネル内
 
     async Task OpenPDF()
     {
@@ -633,6 +537,127 @@ public partial class MainWindowViewModel : ViewModel
         {
             IsOpenDOIWebSiteBusy = false;
         }
+    }
+
+
+
+    // ★★★★★★★★★★★★★★★ not using
+
+    void Memos()
+    {
+        // コピペ用に残しとく
+        MessageBox.Show("NotImplemented");
+
+        // articles from j-stage
+        {
+            //var builder = new JStageArticleUriBuilder()
+            //{
+            //    Pubyearfrom = 2022,
+            //    Issn = ISSN.Architecture_Structure,
+            //    Count = 1000,
+            //    //Start = 1,
+            //};
+            //research.PullArticleInfo(builder);
+
+        }
+
+        // articles from cinii
+        {
+            //var builder = new CiNiiArticleUriBuilder()
+            //{
+            //    Count = 5,
+            //    ISSN = ISSN.Architecture_Structure,
+            //    FreeWord = "小振幅"
+            //};
+            //research.PullArticleInfo(builder);
+
+        }
+
+        // article from crossref
+        {
+            //var builder = new CrossRefArticleUriBuilder()
+            //{
+            //    DOI = "10.3130/aijs.87.822"
+            //};
+            //research.PullArticleInfo(builder);
+
+        }
+
+        // display
+        {
+            //research.SaveDatabase(true);
+            //research.ArticleDatabase.First(x => x.DOI == "10.3130/aijs.87.822").TryOpenPDF(research.PDFsDirectory);
+        }
+
+        // void AddTestNodeLink()
+        {
+            if (_NodeViewModels.Count < 2)
+            {
+                return;
+            }
+            var nodeLink = new NodeLinkViewModel
+            {
+                OutputConnectorNodeGuid = _NodeViewModels[0].Guid,
+                OutputConnectorGuid = _NodeViewModels[0].Outputs.ElementAt(0).Guid,
+                InputConnectorNodeGuid = _NodeViewModels[1].Guid,
+                InputConnectorGuid = _NodeViewModels[1].Inputs.ElementAt(0).Guid,
+            };
+            _NodeLinkViewModels.Add(nodeLink);
+        }
+
+        // void MoveTestNodes()
+        {
+            if (_NodeLinkViewModels.Any())
+                _NodeViewModels[0].Position = new Point(0, 0);
+        }
+
+        //void ClearNodes()
+        {
+            _NodeLinkViewModels.Clear();
+            _NodeViewModels.Clear();
+        }
+
+        //void ClearNodeLinks()
+        {
+            _NodeLinkViewModels.Clear();
+        }
+
+        //void MoveGroupNode()
+        {
+            _GroupNodeViewModels[0].InterlockPosition = new Point(0, 0);
+        }
+
+        //void ChangeGroupInnerPosition()
+        {
+            _GroupNodeViewModels[0].InnerPosition = new Point(0, 0);
+        }
+
+        //void ChangeGroupInnerSize()
+        {
+            _GroupNodeViewModels[0].InnerWidth = 300;
+            _GroupNodeViewModels[0].InnerHeight = 300;
+        }
+
+    }
+
+    void ResetScale()
+    {
+        Scale = 1.0f;
+    }
+
+    void NodesMoved(EndMoveNodesOperationEventArgs param)
+    {
+    }
+
+
+    // ★★★★★★★★★★★★★★★ auto
+
+
+    void PreviewConnect(PreviewConnectLinkOperationEventArgs args)
+    {
+        var inputNode = NodeViewModels.First(arg => arg.Guid == args.ConnectToEndNodeGuid);
+        var inputConnector = inputNode.FindConnector(args.ConnectToEndConnectorGuid);
+        args.CanConnect = inputConnector.Label == "Limited Input" == false;
     }
 
 

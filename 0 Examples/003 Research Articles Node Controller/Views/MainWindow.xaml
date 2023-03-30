@@ -86,7 +86,9 @@
         <ContextMenu x:Key="NodeGraphContextMenu">
             <MenuItem Header="新規文献を追加" Command="{Binding AddNodeCommand}"/>
             <MenuItem Header="文献を整列" Command="{Binding RearrangeNodesAlignLeftCommand}"/>
-            <MenuItem Header="選択中の文献を削除" Command="{Binding RemoveNodesCommand}"/>
+            <MenuItem Header="選択中の文献を全て削除" Command="{Binding RemoveSelectingNodesCommand}"/>
+            <MenuItem Header="-------------------------------"/>
+            <MenuItem Header="一時的な文献データを全て削除" Command="{Binding RemoveTempNodesCommand}"/>
         </ContextMenu>
 
         <Style x:Key="NodeInputStyle" TargetType="{x:Type ctrl:NodeInputContent}" BasedOn="{StaticResource {x:Type ctrl:NodeInputContent}}">
@@ -311,14 +313,6 @@
                         </StackPanel>
                     </Button>
 
-                    <ComboBox
-                        Margin="0,4,4,4"
-                        Height="24" 
-                        ItemsSource="{Binding RangeSelectionModes, Mode=OneTime}" 
-                        SelectedItem="{Binding SelectedRangeSelectionMode}" 
-                        ToolTip="範囲選択モード"
-                        />
-
                     <TextBlock VerticalAlignment="Center" Text="|" Margin="7,0,3,5" FontSize="25" FontWeight="Thin" Foreground="Gray"/>
 
                     <CheckBox
@@ -342,6 +336,21 @@
                         Margin="0,4,4,4"
                         Text="{Binding LocalSearchString, UpdateSourceTrigger=PropertyChanged}"
                         Width="150"
+                        />
+
+                    <TextBlock VerticalAlignment="Center" Text="|" Margin="7,0,3,5" FontSize="25" FontWeight="Thin" Foreground="Gray"/>
+
+                    <TextBlock
+                        VerticalAlignment="Center" 
+                        Text="選択：" 
+                        />
+
+                    <ComboBox
+                        Margin="0,4,4,4"
+                        Height="24" 
+                        ItemsSource="{Binding RangeSelectionModes, Mode=OneTime}" 
+                        SelectedItem="{Binding SelectedRangeSelectionMode}" 
+                        ToolTip="範囲選択モード"
                         />
 
                     <TextBlock VerticalAlignment="Center" Text="|" Margin="7,0,3,5" FontSize="25" FontWeight="Thin" Foreground="Gray"/>
@@ -403,10 +412,10 @@
                             </DataTrigger>
 
                             <!--Range selection mode-->
-                            <DataTrigger Binding="{Binding SelectedRangeSelectionMode}" Value="{x:Static vm:RangeSelectionMode.包含選択}">
+                            <DataTrigger Binding="{Binding SelectedRangeSelectionMode}" Value="{x:Static vm:RangeSelectionMode.包含}">
                                 <Setter Property="RangeSelectionMode" Value="{x:Static ctrl:RangeSelectionMode.Contain}"/>
                             </DataTrigger>
-                            <DataTrigger Binding="{Binding SelectedRangeSelectionMode}" Value="{x:Static vm:RangeSelectionMode.接触選択}">
+                            <DataTrigger Binding="{Binding SelectedRangeSelectionMode}" Value="{x:Static vm:RangeSelectionMode.接触}">
                                 <Setter Property="RangeSelectionMode" Value="{x:Static ctrl:RangeSelectionMode.Intersect}"/>
                             </DataTrigger>
                         </Style.Triggers>
@@ -918,7 +927,7 @@
                             <TextBlock.ToolTip>
                                 <TextBlock
                                     TextAlignment="Left"
-                                    Text="tags"
+                                    Text="「ローカルのPDFの有無」「データ取得元」を列挙します。"
                                     >
                                 </TextBlock>
                             </TextBlock.ToolTip>

@@ -87,8 +87,8 @@ public enum GroupIntersectType
 
 public enum RangeSelectionMode
 {
-    包含選択,
-    接触選択,
+    包含,
+    接触,
 }
 
 public enum EmphasizePropertyItems
