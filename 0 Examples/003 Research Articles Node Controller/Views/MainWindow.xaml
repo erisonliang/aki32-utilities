@@ -18,6 +18,10 @@
         <vm:MainWindowViewModel/>
     </Window.DataContext>
 
+    <Window.InputBindings>
+        <KeyBinding Gesture="Ctrl+S" Command="{Binding SaveCommand}"/>
+    </Window.InputBindings>
+    
     <Window.Resources>
 
         <sys:Double x:Key="NodeContentFontSize">24.0</sys:Double>

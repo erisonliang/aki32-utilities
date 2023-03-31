@@ -48,8 +48,9 @@ public partial class MainWindowViewModel : ViewModel
         await Task.Delay(100);
         IsSaveBusy = false;
         IsSaveDone = true;
-        await Task.Delay(2000);
-        IsSaveDone = false;
+        await Task.Delay(2222);
+        if (!IsSaveBusy)
+            IsSaveDone = false;
     }
 
     void UpdateIsLockedAllNodeLinksProperty(bool value)
