@@ -1,14 +1,8 @@
 ﻿using Livet;
-using Livet.Commands;
-using Aki32Utilities.WPFAppUtilities.NodeController.Operation;
-using NodeGraph.Utilities;
-using System.Collections;
 using System.Collections.ObjectModel;
 using System.Windows;
 using Aki32Utilities.ViewModels.NodeViewModels;
 using Aki32Utilities.ConsoleAppUtilities.Research;
-using System.IO;
-using System.Windows.Input;
 
 namespace Aki32Utilities.UsageExamples.ResearchArticlesNodeController.ViewModels;
 public partial class MainWindowViewModel : ViewModel
@@ -33,8 +27,8 @@ public partial class MainWindowViewModel : ViewModel
 
     private void RedrawResearchArticlesManager()
     {
-        _NodeViewModels = new ObservableCollection<DefaultNodeViewModel>();
         _NodeLinkViewModels = new ObservableCollection<NodeLinkViewModel>();
+        _NodeViewModels = new ObservableCollection<DefaultNodeViewModel>();
 
         foreach (var article in ResearchArticlesManager.ArticleDatabase)
             _NodeViewModels.Add(new ResearchArticleNodeViewModel() { NodeName = "ResearchArticle", Article = article, Position = new Point(0, 0) });
@@ -66,8 +60,6 @@ public partial class MainWindowViewModel : ViewModel
                     InputConnectorGuid = articleNode.Inputs.ElementAt(0).Guid,
                 };
                 _NodeLinkViewModels.Add(nodeLink);
-
-
             }
         }
 

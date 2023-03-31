@@ -97,7 +97,6 @@ public partial class MainWindowViewModel : ViewModel
     ViewModelCommandHandler _RemoveTempNodesCommand = new();
 
 
-
     // ★★★★★★★★★★★★★★★ Node Controller 内
 
     public ResearchArticleNodeViewModel? SelectingNodeViewModel { get; set; } = null;

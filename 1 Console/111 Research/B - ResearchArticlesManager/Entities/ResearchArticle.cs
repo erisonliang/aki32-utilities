@@ -17,6 +17,9 @@ public class ResearchArticle : IComparable
 
     // ★★★★★★★★★★★★★★★ prop
 
+    private int aaa = 0;
+
+
     // ★★★★★ shared info (*main common info)
 
     public string? ArticleTitle

@@ -271,11 +271,6 @@ public partial class ResearchArticlesManager
     }
 
 
-    // ★★★★★★★★★★★★★★★ methods (practical use)
-
-
-
-
     // ★★★★★★★★★★★★★★★
 
 }
