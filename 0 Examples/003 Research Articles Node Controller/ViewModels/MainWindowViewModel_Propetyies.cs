@@ -159,6 +159,13 @@ public partial class MainWindowViewModel : ViewModel
     public ViewModelCommand OpenDOIWebSiteCommand => _OpenDOIWebSiteCommand.Get(OpenDOIWebSite);
     ViewModelCommandHandler _OpenDOIWebSiteCommand = new();
 
+    public bool IsManuallyAddPDFBusy { get; set; } = false;
+    public ViewModelCommand ManuallyAddPDFCommand => _ManuallyAddPDFCommand.Get(ManuallyAddPDF);
+    ViewModelCommandHandler _ManuallyAddPDFCommand = new();
+
+    public bool IsAISummaryBusy { get; set; } = false;
+    public ViewModelCommand IsAISummaryCommand => _IsAISummaryCommand.Get(AISummary);
+    ViewModelCommandHandler _IsAISummaryCommand = new();
 
 
     // ★★★★★★★★★★★★★★★ 

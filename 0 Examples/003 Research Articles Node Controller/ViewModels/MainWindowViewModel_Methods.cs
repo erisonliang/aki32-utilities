@@ -5,6 +5,9 @@ using System.Windows;
 using Aki32Utilities.ViewModels.NodeViewModels;
 using Aki32Utilities.ConsoleAppUtilities.Research;
 using System.Windows.Input;
+using Aki32Utilities.ConsoleAppUtilities.General;
+using Microsoft.Win32;
+using System.IO;
 
 namespace Aki32Utilities.UsageExamples.ResearchArticlesNodeController.ViewModels;
 public partial class MainWindowViewModel : ViewModel
@@ -539,6 +542,76 @@ public partial class MainWindowViewModel : ViewModel
         }
     }
 
+    void ManuallyAddPDF()
+    {
+        try
+        {
+            if (IsManuallyAddPDFBusy)
+                return;
+            IsManuallyAddPDFBusy = true;
+
+            if (SelectingNodeViewModel is null)
+                throw new Exception("文献が選択されていません。");
+
+            //
+            var dialog = new OpenFileDialog
+            {
+                Filter = "PDFファイル (*.pdf)|*.pdf"
+            };
+            if (dialog.ShowDialog() != true)
+                return;
+            var addingPDFFile = new FileInfo(dialog.FileName);
+
+            //
+            if (SelectingNodeViewModel.Article.TryFindPDF(ResearchArticlesManager.PDFsDirectory))
+            {
+                var result_ForceOverwrite = MessageBox.Show($"この文献には既にPDFが存在していて，上書きしようとしています。\r\n本当によろしいですか？", "PDF手動追加", MessageBoxButton.OKCancel, MessageBoxImage.Warning);
+                if (result_ForceOverwrite is not MessageBoxResult.OK)
+                    return;
+            }
+
+            //
+            var result_DeleteOriginal = MessageBox.Show($"コピー元のPDFを削除しますか？", "PDF手動追加", MessageBoxButton.OKCancel, MessageBoxImage.Information);
+            var deleteOriginalPdfFile = result_DeleteOriginal is MessageBoxResult.OK;
+
+            //
+            SelectingNodeViewModel.Article.AddPDFManually(ResearchArticlesManager.PDFsDirectory,
+                addingPDFFile, deleteOriginalPdfFile,
+                forceOverwriteExistingPDF: true);
+
+            //
+            MessageBox.Show($"追加に成功しました。", "PDF手動追加", MessageBoxButton.OK, MessageBoxImage.Information);
+
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show($"失敗しました。\r\nﾒｯｾｰｼﾞ: {ex.Message}", "PDF手動追加", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+        finally
+        {
+            IsManuallyAddPDFBusy = false;
+        }
+    }
+
+    void AISummary()
+    {
+        try
+        {
+            if (IsAISummaryBusy)
+                return;
+            IsAISummaryBusy = true;
+
+            throw new NotImplementedException("申し訳ありません。未実装です…。");
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show($"失敗しました。\r\nﾒｯｾｰｼﾞ: {ex.Message}", "AIにまとめてもらう", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+        finally
+        {
+            IsAISummaryBusy = false;
+        }
+    }
 
 
     // ★★★★★★★★★★★★★★★ not using

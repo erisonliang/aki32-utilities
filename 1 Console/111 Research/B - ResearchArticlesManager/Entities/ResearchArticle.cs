@@ -522,9 +522,6 @@ public class ResearchArticle : IComparable
     {
     }
 
-
-    // ★★★★★★★★★★★★★★★ method (data handling)
-
     /// <summary>
     /// Create ResearchArticle instance manually.
     /// </summary>
@@ -540,7 +537,7 @@ public class ResearchArticle : IComparable
         bool deleteOriginalPdfFile = true
         )
     {
-        // Create AOI first
+        // create new article
         var addingArticle = new ResearchArticle()
         {
             DataFrom_Manual = true,
@@ -556,6 +553,7 @@ public class ResearchArticle : IComparable
             Memo = addingArticleBasicInfo.Memo,
         };
 
+        // add ref
         if (references_parents != null)
         {
             foreach (var references_parent in references_parents)
@@ -567,22 +565,36 @@ public class ResearchArticle : IComparable
                 references_child.AddArticleReference(addingArticle);
         }
 
-        // stock pdf file to database
-        if (addingPdfFile != null)
-        {
-            if (pdfStockDirectory == null)
-                throw new InvalidDataException("When tring to add PDF file, {pdfStockDirectory} must not be null");
-
-            var targetFile = pdfStockDirectory.GetChildFileInfo(addingArticle.LocalPDFName);
-
-            if (deleteOriginalPdfFile)
-                addingPdfFile.MoveTo(targetFile);
-            else
-                addingPdfFile.CopyTo(targetFile);
-
-        }
+        // add pdf
+        if (addingPdfFile != null && pdfStockDirectory != null)
+            addingArticle.AddPDFManually(pdfStockDirectory, addingPdfFile, deleteOriginalPdfFile: deleteOriginalPdfFile);
 
         return addingArticle;
+    }
+
+
+    // ★★★★★★★★★★★★★★★ method (data handling)
+
+    /// <summary>
+    /// Add pdf manually
+    /// </summary>
+    /// <param name="pdfStockDirectory"></param>
+    /// <param name="addingPdfFile"></param>
+    public void AddPDFManually(DirectoryInfo pdfStockDirectory, FileInfo addingPdfFile,
+        bool deleteOriginalPdfFile = true,
+        bool forceOverwriteExistingPDF = false
+        )
+    {
+        var destinationFile = pdfStockDirectory.GetChildFileInfo(LocalPDFName);
+
+        if (destinationFile.Exists && !forceOverwriteExistingPDF)
+            throw new IOException("PDF already exist.");
+
+        if (deleteOriginalPdfFile)
+            addingPdfFile.MoveTo(destinationFile);
+        else
+            addingPdfFile.CopyTo(destinationFile);
+
     }
 
     /// <summary>
