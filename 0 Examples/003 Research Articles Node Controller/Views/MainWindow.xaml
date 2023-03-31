@@ -77,6 +77,11 @@
             </Setter>
         </Style>
 
+        <Style x:Key="ButtonTextStretchStyle" TargetType="Button" BasedOn="{StaticResource ButtonTextStyle}">
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="VerticalAlignment" Value="Stretch"/>
+        </Style>
+
         <Style x:Key="ProgressRingStyle" TargetType="mah:ProgressRing">
             <Setter Property="Height" Value="13"/>
             <Setter Property="Width" Value="13"/>
@@ -535,7 +540,7 @@
                             <Grid Margin="4">
                                 <TextBlock
                                     Text="著者：" 
-                                    Width="50" 
+                                    Width="70" 
                                     HorizontalAlignment="Left"
                                     TextAlignment="Right"
                                     ToolTipService.InitialShowDelay="10" 
@@ -549,7 +554,7 @@
                                     </TextBlock.ToolTip>
                                 </TextBlock>
                                 <TextBox 
-                                    Margin="50,0,0,0" 
+                                    Margin="70,0,0,0" 
                                     Text="{Binding SelectingNodeViewModel.Authors, UpdateSourceTrigger=LostFocus}" 
                                     TextWrapping="Wrap" AcceptsReturn="False"
                                     />
@@ -558,7 +563,7 @@
                             <Grid Margin="4">
                                 <TextBlock
                                     Text="タイトル：" 
-                                    Width="50" 
+                                    Width="70" 
                                     HorizontalAlignment="Left"
                                     TextAlignment="Right"
                                     ToolTipService.InitialShowDelay="10" 
@@ -572,7 +577,7 @@
                                     </TextBlock.ToolTip>
                                 </TextBlock>
                                 <TextBox 
-                                    Margin="50,0,0,0" 
+                                    Margin="70,0,0,0" 
                                     Text="{Binding SelectingNodeViewModel.ArticleTitle, UpdateSourceTrigger=PropertyChanged}" 
                                     TextWrapping="Wrap" AcceptsReturn="False"
                                     />
@@ -581,7 +586,7 @@
                             <Grid Margin="4">
                                 <TextBlock
                                     Text="メモ：" 
-                                    Width="50" 
+                                    Width="70" 
                                     HorizontalAlignment="Left"
                                     TextAlignment="Right"
                                     ToolTipService.InitialShowDelay="10" 
@@ -595,7 +600,7 @@
                                     </TextBlock.ToolTip>
                                 </TextBlock>
                                 <TextBox 
-                                    Margin="50,0,0,0" 
+                                    Margin="70,0,0,0" 
                                     Text="{Binding SelectingNodeViewModel.Article.Memo}" 
                                     TextWrapping="Wrap" AcceptsReturn="True"
                                     />
@@ -705,7 +710,7 @@
                             <Grid Margin="4">
                                 <TextBlock
                                     Text="公開日：" 
-                                    Width="50" 
+                                    Width="70" 
                                     HorizontalAlignment="Left"
                                     TextAlignment="Right"
                                     ToolTipService.InitialShowDelay="10" 
@@ -719,7 +724,7 @@
                                     </TextBlock.ToolTip>
                                 </TextBlock>
                                 <TextBox 
-                                    Margin="50,0,0,0" 
+                                    Margin="70,0,0,0" 
                                     Text="{Binding SelectingNodeViewModel.PublishedOn, UpdateSourceTrigger=PropertyChanged}" 
                                     TextWrapping="NoWrap" AcceptsReturn="False"
                                     />
@@ -728,7 +733,7 @@
                             <Grid Margin="4">
                                 <TextBlock
                                     Text="資料：" 
-                                    Width="50" 
+                                    Width="70" 
                                     HorizontalAlignment="Left"
                                     TextAlignment="Right"
                                     ToolTipService.InitialShowDelay="10" 
@@ -742,7 +747,7 @@
                                     </TextBlock.ToolTip>
                                 </TextBlock>
                                 <TextBox 
-                                    Margin="50,0,0,0" 
+                                    Margin="70,0,0,0" 
                                     Text="{Binding SelectingNodeViewModel.MaterialTitle, UpdateSourceTrigger=PropertyChanged}" 
                                     TextWrapping="NoWrap" AcceptsReturn="False"
                                     />
@@ -751,7 +756,7 @@
                             <Grid Margin="4">
 
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="50"/>
+                                    <ColumnDefinition Width="70"/>
                                     <ColumnDefinition Width="auto"/>
                                     <ColumnDefinition Width="*"/>
                                     <ColumnDefinition Width="auto"/>
@@ -861,7 +866,7 @@
                             <Grid Margin="4">
                                 <TextBlock
                                     Text="DOI：" 
-                                    Width="50" 
+                                    Width="70" 
                                     HorizontalAlignment="Left"
                                     TextAlignment="Right"
                                     ToolTipService.InitialShowDelay="10" 
@@ -875,7 +880,7 @@
                                     </TextBlock.ToolTip>
                                 </TextBlock>
                                 <TextBox 
-                                    Margin="50,0,0,0" 
+                                    Margin="70,0,0,0" 
                                     Text="{Binding SelectingNodeViewModel.Article.DOI, UpdateSourceTrigger=PropertyChanged}" 
                                     TextWrapping="NoWrap" AcceptsReturn="False"
                                     />
@@ -884,7 +889,7 @@
                             <Grid Margin="4">
                                 <TextBlock
                                     Text="AOI：" 
-                                    Width="50" 
+                                    Width="70" 
                                     HorizontalAlignment="Left"
                                     TextAlignment="Right"
                                     ToolTipService.InitialShowDelay="10" 
@@ -898,7 +903,7 @@
                                     </TextBlock.ToolTip>
                                 </TextBlock>
                                 <StackPanel
-                                    Margin="50,0,0,0" 
+                                    Margin="70,0,0,0" 
                                     Orientation="Horizontal"
                                     >
                                     <TextBlock Text="{Binding SelectingNodeViewModel.Article.AOI}"/>
@@ -911,7 +916,7 @@
                             <Grid Margin="4">
                                 <TextBlock
                                     Text="タグ：" 
-                                    Width="50" 
+                                    Width="70" 
                                     HorizontalAlignment="Left"
                                     TextAlignment="Right"
                                     ToolTipService.InitialShowDelay="10" 
@@ -926,7 +931,7 @@
                                 </TextBlock>
                                 <TextBlock 
                                     Text="{Binding SelectingNodeViewModel.Tags}" 
-                                    Margin="50,0,0,0" 
+                                    Margin="70,0,0,0" 
                                     TextWrapping="Wrap"
                                     />
                             </Grid>
@@ -934,7 +939,7 @@
                             <Grid Margin="4">
                                 <TextBlock
                                     Text="文献：" 
-                                    Width="50" 
+                                    Width="70" 
                                     HorizontalAlignment="Left"
                                     TextAlignment="Right"
                                     ToolTipService.InitialShowDelay="10" 
@@ -949,7 +954,7 @@
                                 </TextBlock>
                                 <TextBlock 
                                     Text="{Binding SelectingNodeViewModel.Article.ReferenceString}" 
-                                    Margin="50,0,0,0" 
+                                    Margin="70,0,0,0" 
                                     TextWrapping="Wrap"
                                     />
                             </Grid>
@@ -957,15 +962,17 @@
                             <Grid Margin="4">
 
                                 <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="70"/>
                                     <ColumnDefinition Width="*"/>
                                     <ColumnDefinition Width="*"/>
                                     <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
 
                                 <Button
-                                    Grid.Column="0"
+                                    Grid.Column="1"
                                     Margin="3"
-                                    Style="{StaticResource ButtonTextStyle}"
+                                    Style="{StaticResource ButtonTextStretchStyle}"
+                                    Command="{Binding FetchOnlineInfoCommand}"
                                     ToolTip="オンラインからメタ情報および引用関係をダウンロードして，追記します。"
                                     >
                                     <StackPanel Orientation="Horizontal">
@@ -975,9 +982,9 @@
                                 </Button>
 
                                 <Button
-                                    Grid.Column="1"
+                                    Grid.Column="2"
                                     Margin="3"
-                                    Style="{StaticResource ButtonTextStyle}"
+                                    Style="{StaticResource ButtonTextStretchStyle}"
                                     Command="{Binding OpenPDFCommand}"
                                     ToolTip="PDFを表示します。&#10;もしローカルに存在しない場合は，自動でダウンロードします。"
                                     >
@@ -988,9 +995,9 @@
                                 </Button>
 
                                 <Button
-                                    Grid.Column="2"
+                                    Grid.Column="3"
                                     Margin="3"
-                                    Style="{StaticResource ButtonTextStyle}"
+                                    Style="{StaticResource ButtonTextStretchStyle}"
                                     Command="{Binding OpenDOIWebSiteCommand}"
                                     ToolTip="元データのWebサイトをブラウザで表示します。"
                                     >
@@ -1005,23 +1012,24 @@
                             <Grid Margin="4">
 
                                 <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="70"/>
                                     <ColumnDefinition Width="*"/>
                                     <ColumnDefinition Width="*"/>
                                     <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
 
                                 <Button
-                                    Grid.Column="0"
+                                    Grid.Column="1"
                                     Margin="3"
-                                    Style="{StaticResource ButtonTextStyle}"
+                                    Style="{StaticResource ButtonTextStretchStyle}"
                                     Content="（）"
                                     ToolTip=""
                                     />
 
                                 <Button
-                                    Grid.Column="1"
+                                    Grid.Column="2"
                                     Margin="3"
-                                    Style="{StaticResource ButtonTextStyle}"
+                                    Style="{StaticResource ButtonTextStretchStyle}"
                                     Command="{Binding ManuallyAddPDFCommand}"
                                     ToolTip="PDFをデータベースに手動で追加します。"
                                         >
@@ -1032,9 +1040,9 @@
                                 </Button>
 
                                 <Button
-                                    Grid.Column="2"
+                                    Grid.Column="3"
                                     Margin="3"
-                                    Style="{StaticResource ButtonTextStyle}"
+                                    Style="{StaticResource ButtonTextStretchStyle}"
                                     Command="{Binding IsAISummaryCommand}"
                                     ToolTip="AIに論文を読んでもらって，まとめ文章を作成してもらいます。"
                                     >
@@ -1067,7 +1075,7 @@
                             <Grid Margin="4">
                                 <TextBlock
                                     Text="検索文字列：" 
-                                    Width="100" 
+                                    Width="70" 
                                     HorizontalAlignment="Left"
                                     TextAlignment="Right"
                                     ToolTipService.InitialShowDelay="10" 
@@ -1082,7 +1090,7 @@
                                 </TextBlock>
                                 <TextBox 
                                     x:Name="TextBox_LocalSearch"
-                                    Margin="100,0,0,0" 
+                                    Margin="70,0,0,0" 
                                     Text="{Binding LocalSearchString, UpdateSourceTrigger=PropertyChanged}"
                                     TextWrapping="Wrap" AcceptsReturn="False"
                                     />
@@ -1094,6 +1102,7 @@
                                     HorizontalAlignment="Right"
                                     >
                                     <Button
+                                        Margin="3"
                                         Command="{Binding ResetLocalSearchStringCommand}"
                                         Style="{StaticResource ButtonTextStyle}"
                                         Content="リセット"
@@ -1114,8 +1123,8 @@
 
                             <Grid Margin="4">
                                 <TextBlock
-                                    Text="検索文字列：" 
-                                    Width="100" 
+                                    Text="フリーワード：" 
+                                    Width="70" 
                                     HorizontalAlignment="Left"
                                     TextAlignment="Right"
                                     ToolTipService.InitialShowDelay="10" 
@@ -1129,10 +1138,333 @@
                                     </TextBlock.ToolTip>
                                 </TextBlock>
                                 <TextBox 
-                                    Margin="100,0,0,0" 
-                                    Text="{Binding InternetSearchString, UpdateSourceTrigger=PropertyChanged}" 
+                                    Margin="70,0,0,0" 
+                                    Text="{Binding InternetSearch_FreeWord, UpdateSourceTrigger=PropertyChanged}" 
                                     TextWrapping="Wrap" AcceptsReturn="False"
                                     />
+                            </Grid>
+
+                            <Grid Margin="4">
+
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="70"/>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <TextBlock
+                                    Grid.Column="3"
+                                    Text="何年から：" 
+                                    Margin="10,0,0,0"
+                                    HorizontalAlignment="Left"
+                                    TextAlignment="Right"
+                                    ToolTipService.InitialShowDelay="10" 
+                                    >
+                                    <TextBlock.ToolTip>
+                                        <TextBlock
+                                            TextAlignment="Left"
+                                            Text="release"
+                                            >
+                                        </TextBlock>
+                                    </TextBlock.ToolTip>
+                                </TextBlock>
+                                <TextBox 
+                                    Grid.Column="4"
+                                    Text="{Binding InternetSearch_PublishedFrom, UpdateSourceTrigger=PropertyChanged}" 
+                                    TextWrapping="NoWrap" AcceptsReturn="False"
+                                    />
+
+                                <TextBlock
+                                    Grid.Column="5"
+                                    Text="何年まで：" 
+                                    Margin="10,0,0,0"
+                                    HorizontalAlignment="Left"
+                                    TextAlignment="Right"
+                                    ToolTipService.InitialShowDelay="10" 
+                                    >
+                                    <TextBlock.ToolTip>
+                                        <TextBlock
+                                            TextAlignment="Left"
+                                            Text="release"
+                                            >
+                                        </TextBlock>
+                                    </TextBlock.ToolTip>
+                                </TextBlock>
+
+                                <TextBox 
+                                    Grid.Column="6"
+                                    Text="{Binding InternetSearch_PublishedTo, UpdateSourceTrigger=PropertyChanged}" 
+                                    TextWrapping="NoWrap" AcceptsReturn="False"
+                                    />
+
+                                <TextBlock
+                                    Grid.Column="7"
+                                    Text="最大データ数：" 
+                                    Margin="10,0,0,0"
+                                    HorizontalAlignment="Left"
+                                    TextAlignment="Right"
+                                    ToolTipService.InitialShowDelay="10" 
+                                    >
+                                    <TextBlock.ToolTip>
+                                        <TextBlock
+                                            TextAlignment="Left"
+                                            Text="release"
+                                            >
+                                        </TextBlock>
+                                    </TextBlock.ToolTip>
+                                </TextBlock>
+                                <TextBox 
+                                    Grid.Column="8"
+                                    Text="{Binding InternetSearch_DataMaxCount, UpdateSourceTrigger=PropertyChanged}" 
+                                    TextWrapping="NoWrap" AcceptsReturn="False"
+                                    />
+
+                            </Grid>
+                            
+                            <Grid Margin="4">
+                                <StackPanel 
+                                    Orientation="Horizontal"
+                                    HorizontalAlignment="Right"
+                                    >
+                                    <Button
+                                        Margin="3"
+                                        Command="{Binding InternetSearchCiNiiCommand}"
+                                        Style="{StaticResource ButtonTextStyle}"
+                                        >
+                                        <StackPanel Orientation="Horizontal">
+                                            <Grid>
+                                                <mah:ProgressRing Visibility="{Binding IsInternetSearchCiNiiBusy, Converter={StaticResource BooleanToVisibilityConverter}}" Style="{StaticResource ProgressRingStyle}" Margin="0,0,3.5,0"/>
+                                                <Grid Visibility="{Binding IsInternetSearchCiNiiBusy, Converter={StaticResource InverseBooleanToVisibility}}">
+                                                    <TextBlock Text="🔎" Visibility="{Binding IsInternetSearchCiNiiDone, Converter={StaticResource InverseBooleanToVisibility}}"/>
+                                                    <TextBlock Text="✔️" Visibility="{Binding IsInternetSearchCiNiiDone, Converter={StaticResource BooleanToVisibilityConverter}}" Foreground="Green"/>
+                                                </Grid>
+                                            </Grid>
+                                            <TextBlock Text=" CiNii "/>
+                                        </StackPanel>
+                                    </Button>
+
+                                    <Button
+                                        Margin="3"
+                                        Command="{Binding InternetSearchNDLSearchCommand}"
+                                        Style="{StaticResource ButtonTextStyle}"
+                                        >
+                                        <StackPanel Orientation="Horizontal">
+                                            <Grid>
+                                                <mah:ProgressRing Visibility="{Binding IsInternetSearchNDLSearchBusy, Converter={StaticResource BooleanToVisibilityConverter}}" Style="{StaticResource ProgressRingStyle}" Margin="0,0,3.5,0"/>
+                                                <Grid Visibility="{Binding IsInternetSearchNDLSearchBusy, Converter={StaticResource InverseBooleanToVisibility}}">
+                                                    <TextBlock Text="🔎" Visibility="{Binding IsInternetSearchNDLSearchDone, Converter={StaticResource InverseBooleanToVisibility}}"/>
+                                                    <TextBlock Text="✔️" Visibility="{Binding IsInternetSearchNDLSearchDone, Converter={StaticResource BooleanToVisibilityConverter}}" Foreground="Green"/>
+                                                </Grid>
+                                            </Grid>
+                                            <TextBlock Text=" NDL Search "/>
+                                        </StackPanel>
+                                    </Button>
+
+                                </StackPanel>
+                            </Grid>
+
+                            <Grid Height="20"/>
+
+                            <Grid Margin="4">
+                                <TextBlock
+                                    Text="著者：" 
+                                    Width="70" 
+                                    HorizontalAlignment="Left"
+                                    TextAlignment="Right"
+                                    ToolTipService.InitialShowDelay="10" 
+                                    >
+                                    <TextBlock.ToolTip>
+                                        <TextBlock
+                                            TextAlignment="Left"
+                                            Text="authors"
+                                            >
+                                        </TextBlock>
+                                    </TextBlock.ToolTip>
+                                </TextBlock>
+                                <TextBox 
+                                    Margin="70,0,0,0" 
+                                    Text="{Binding InternetSearch_Authors, UpdateSourceTrigger=PropertyChanged}" 
+                                    TextWrapping="Wrap" AcceptsReturn="False"
+                                    />
+                            </Grid>
+                            <Grid Margin="4">
+                                <TextBlock
+                                    Text="タイトル：" 
+                                    Width="70" 
+                                    HorizontalAlignment="Left"
+                                    TextAlignment="Right"
+                                    ToolTipService.InitialShowDelay="10" 
+                                    >
+                                    <TextBlock.ToolTip>
+                                        <TextBlock
+                                            TextAlignment="Left"
+                                            Text="title"
+                                            >
+                                        </TextBlock>
+                                    </TextBlock.ToolTip>
+                                </TextBlock>
+                                <TextBox 
+                                    Margin="70,0,0,0" 
+                                    Text="{Binding InternetSearch_ArticleTitle, UpdateSourceTrigger=PropertyChanged}" 
+                                    TextWrapping="Wrap" AcceptsReturn="False"
+                                    />
+                            </Grid>
+
+                            <Grid Margin="4">
+                                <TextBlock
+                                    Text="資料：" 
+                                    Width="70" 
+                                    HorizontalAlignment="Left"
+                                    TextAlignment="Right"
+                                    ToolTipService.InitialShowDelay="10" 
+                                    >
+                                    <TextBlock.ToolTip>
+                                        <TextBlock
+                                            TextAlignment="Left"
+                                            Text="release"
+                                            >
+                                        </TextBlock>
+                                    </TextBlock.ToolTip>
+                                </TextBlock>
+                                <TextBox 
+                                    Margin="70,0,0,0" 
+                                    Text="{Binding InternetSearch_MaterialTitle, UpdateSourceTrigger=PropertyChanged}" 
+                                    TextWrapping="NoWrap" AcceptsReturn="False"
+                                    />
+                            </Grid>
+
+                            <Grid Margin="4">
+                                <TextBlock
+                                    Text="キーワード：" 
+                                    Width="70" 
+                                    HorizontalAlignment="Left"
+                                    TextAlignment="Right"
+                                    ToolTipService.InitialShowDelay="10" 
+                                    >
+                                    <TextBlock.ToolTip>
+                                        <TextBlock
+                                            TextAlignment="Left"
+                                            Text="memo"
+                                            >
+                                        </TextBlock>
+                                    </TextBlock.ToolTip>
+                                </TextBlock>
+                                <TextBox 
+                                    Margin="70,0,0,0" 
+                                    Text="{Binding InternetSearch_Keywords, UpdateSourceTrigger=PropertyChanged}" 
+                                    TextWrapping="Wrap" AcceptsReturn="True"
+                                    />
+                            </Grid>
+
+                            <Grid Margin="4">
+
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="70"/>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <TextBlock
+                                    Grid.Column="1"
+                                    Text="巻：" 
+                                    Margin="10,0,0,0"
+                                    HorizontalAlignment="Left"
+                                    TextAlignment="Right"
+                                    ToolTipService.InitialShowDelay="10" 
+                                    >
+                                    <TextBlock.ToolTip>
+                                        <TextBlock
+                                            TextAlignment="Left"
+                                            Text="release"
+                                            >
+                                        </TextBlock>
+                                    </TextBlock.ToolTip>
+                                </TextBlock>
+                                <TextBox 
+                                    Grid.Column="2"
+                                    Text="{Binding InternetSearch_MaterialVolume, UpdateSourceTrigger=PropertyChanged}" 
+                                    TextWrapping="NoWrap" AcceptsReturn="False"
+                                    />
+
+                                <TextBlock
+                                    Grid.Column="3"
+                                    Text="何年から：" 
+                                    Margin="10,0,0,0"
+                                    HorizontalAlignment="Left"
+                                    TextAlignment="Right"
+                                    ToolTipService.InitialShowDelay="10" 
+                                    >
+                                    <TextBlock.ToolTip>
+                                        <TextBlock
+                                            TextAlignment="Left"
+                                            Text="release"
+                                            >
+                                        </TextBlock>
+                                    </TextBlock.ToolTip>
+                                </TextBlock>
+                                <TextBox 
+                                    Grid.Column="4"
+                                    Text="{Binding InternetSearch_PublishedFrom, UpdateSourceTrigger=PropertyChanged}" 
+                                    TextWrapping="NoWrap" AcceptsReturn="False"
+                                    />
+
+                                <TextBlock
+                                    Grid.Column="5"
+                                    Text="何年まで：" 
+                                    Margin="10,0,0,0"
+                                    HorizontalAlignment="Left"
+                                    TextAlignment="Right"
+                                    ToolTipService.InitialShowDelay="10" 
+                                    >
+                                    <TextBlock.ToolTip>
+                                        <TextBlock
+                                            TextAlignment="Left"
+                                            Text="release"
+                                            >
+                                        </TextBlock>
+                                    </TextBlock.ToolTip>
+                                </TextBlock>
+
+                                <TextBox 
+                                    Grid.Column="6"
+                                    Text="{Binding InternetSearch_PublishedTo, UpdateSourceTrigger=PropertyChanged}" 
+                                    TextWrapping="NoWrap" AcceptsReturn="False"
+                                    />
+
+                                <TextBlock
+                                    Grid.Column="7"
+                                    Text="最大データ数：" 
+                                    Margin="10,0,0,0"
+                                    HorizontalAlignment="Left"
+                                    TextAlignment="Right"
+                                    ToolTipService.InitialShowDelay="10" 
+                                    >
+                                    <TextBlock.ToolTip>
+                                        <TextBlock
+                                            TextAlignment="Left"
+                                            Text="release"
+                                            >
+                                        </TextBlock>
+                                    </TextBlock.ToolTip>
+                                </TextBlock>
+                                <TextBox 
+                                    Grid.Column="8"
+                                    Text="{Binding InternetSearch_DataMaxCount, UpdateSourceTrigger=PropertyChanged}" 
+                                    TextWrapping="NoWrap" AcceptsReturn="False"
+                                    />
+
                             </Grid>
 
                             <Grid Margin="4">
@@ -1141,6 +1473,7 @@
                                     HorizontalAlignment="Right"
                                     >
                                     <Button
+                                        Margin="3"
                                         Command="{Binding InternetSearchJStageCommand}"
                                         Style="{StaticResource ButtonTextStyle}"
                                         >
@@ -1157,13 +1490,35 @@
                                     </Button>
 
 
-                                    
-                                    
-                                    
-                                    
-                                    
+
                                 </StackPanel>
                             </Grid>
+
+                            <Grid Height="20"/>
+
+                            <Grid Margin="4">
+                                <TextBlock
+                                    Text="DOI：" 
+                                    Width="70" 
+                                    HorizontalAlignment="Left"
+                                    TextAlignment="Right"
+                                    ToolTipService.InitialShowDelay="10" 
+                                    >
+                                    <TextBlock.ToolTip>
+                                        <TextBlock
+                                            TextAlignment="Left"
+                                            Text="doi"
+                                            >
+                                        </TextBlock>
+                                    </TextBlock.ToolTip>
+                                </TextBlock>
+                                <TextBox 
+                                    Margin="70,0,0,0" 
+                                    Text="{Binding SelectingNodeViewModel.Article.DOI, UpdateSourceTrigger=PropertyChanged}" 
+                                    TextWrapping="NoWrap" AcceptsReturn="False"
+                                    />
+                            </Grid>
+
 
                         </StackPanel>
                     </ScrollViewer>

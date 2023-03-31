@@ -1431,8 +1431,7 @@ public static partial class ExampleExecuter
                 ////    RecordCount = 3,
                 ////    //Start = 1,
                 ////};
-                ////research.PullArticleInfo(accessor);
-
+                ////research.PullArticleInfo(accessor).Wait();
 
                 ////// ★ articles from cinii
                 ////var accessor = new CiNiiArticleAPIAccessor()
@@ -1441,16 +1440,7 @@ public static partial class ExampleExecuter
                 ////    ISSN = ISSN.Architecture_Structure,
                 ////    SearchFreeWord = "小振幅"
                 ////};
-                ////research.PullArticleInfo(accessor);
-
-
-                ////// ★ article from crossref
-                ////var accessor = new CrossRefAPIAccessor()
-                ////{
-                ////    DOI = "10.3130/aijs.87.822"
-                ////};
-                ////research.PullArticleInfo(accessor);
-
+                ////research.PullArticleInfo(accessor).Wait();
 
                 ////// ★ articles from ndl search
                 ////var accessor = new NDLSearchAPIAccessor()
@@ -1458,7 +1448,14 @@ public static partial class ExampleExecuter
                 ////    RecordCount = 5,
                 ////    SearchFreeWord = "空間情報を表現するグラフ構造",
                 ////};
-                ////research.PullArticleInfo(accessor);
+                ////research.PullArticleInfo(accessor).Wait();
+
+                ////// ★ article from crossref
+                ////var accessor = new CrossRefAPIAccessor()
+                ////{
+                ////    DOI = "10.3130/aijs.87.822"
+                ////};
+                ////research.PullArticleInfo(accessor).Wait();
 
 
                 //// display

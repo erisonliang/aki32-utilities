@@ -14,7 +14,6 @@ public interface IResearchAPIAccessor
     /// fetch articles
     /// </summary>
     /// <returns></returns>
-    public IEnumerable<ResearchArticle> FetchArticles();
-
+    public Task<List<ResearchArticle>> FetchArticles();
 
 }

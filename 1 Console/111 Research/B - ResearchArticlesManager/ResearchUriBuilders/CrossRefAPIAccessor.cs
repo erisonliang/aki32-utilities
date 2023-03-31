@@ -51,7 +51,11 @@ public class CrossRefAPIAccessor : IResearchAPIAccessor
     /// fetch articles
     /// </summary>
     /// <returns></returns>
-    public IEnumerable<ResearchArticle> FetchArticles()
+    public async Task<List<ResearchArticle>> FetchArticles()
+    {
+        return await Task.Run(() => _FetchArticles().ToList());
+    }
+    private IEnumerable<ResearchArticle> _FetchArticles()
     {
         // get json
         dynamic json = BuildUri().CallAPIAsync_ForJsonData<dynamic>(HttpMethod.Get).Result;

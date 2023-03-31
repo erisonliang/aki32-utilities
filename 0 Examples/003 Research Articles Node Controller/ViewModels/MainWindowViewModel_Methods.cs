@@ -41,17 +41,29 @@ public partial class MainWindowViewModel : ViewModel
 
     async Task Save()
     {
-        if (IsSaveBusy)
-            return;
-        IsSaveBusy = true;
-        ResearchArticlesManager.SaveDatabase(true, true);
-        //UpdateInfoMessage("保存完了");
-        await Task.Delay(100);
-        IsSaveBusy = false;
-        IsSaveDone = true;
-        await Task.Delay(2222);
-        if (!IsSaveBusy)
-            IsSaveDone = false;
+        try
+        {
+            if (IsSaveBusy)
+                return;
+            IsSaveBusy = true;
+            ResearchArticlesManager.SaveDatabase(true, true);
+            await Task.Delay(100);
+            //UpdateInfoMessage("保存完了");
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show($"失敗しました。\r\nﾒｯｾｰｼﾞ: {ex.Message}", "保存", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+        finally
+        {
+            IsSaveBusy = false;
+
+            IsSaveDone = true;
+            await Task.Delay(2222);
+            if (!IsSaveBusy)
+                IsSaveDone = false;
+        }
+
     }
 
     void UpdateIsLockedAllNodeLinksProperty(bool value)
@@ -505,7 +517,7 @@ public partial class MainWindowViewModel : ViewModel
             if (SelectingNodeViewModel is null)
                 throw new Exception("文献が選択されていません。");
 
-            throw new NotImplementedException("申し訳ありません。未実装です…。");
+            throw new NotImplementedException("申し訳ありません。\r\n未実装です…。");
         }
         catch (Exception ex)
         {
@@ -630,7 +642,7 @@ public partial class MainWindowViewModel : ViewModel
                 return;
             IsAISummaryBusy = true;
 
-            throw new NotImplementedException("申し訳ありません。未実装です…。");
+            throw new NotImplementedException("申し訳ありません。\r\n未実装です…。");
         }
         catch (Exception ex)
         {
@@ -684,6 +696,84 @@ public partial class MainWindowViewModel : ViewModel
         ParentView.TextBox_LocalSearch.Focus();
     }
 
+    async Task InternetSearchCiNii()
+    {
+        try
+        {
+            if (IsInternetSearchCiNiiBusy)
+                return;
+            IsInternetSearchCiNiiBusy = true;
+
+            if (!int.TryParse(InternetSearch_DataMaxCount, out int dataMaxCount))
+                throw new InvalidDataException("データの最大値を正しい数値形式で入力してください。");
+
+            if (string.IsNullOrEmpty(InternetSearch_FreeWord))
+                throw new InvalidDataException("フリーワードを埋めてください。");
+
+            var accessor = new CiNiiArticleAPIAccessor()
+            {
+                ISSN = ISSN.Architecture_Structure,
+                RecordCount = dataMaxCount,
+                SearchFreeWord = InternetSearch_FreeWord
+            };
+            await ResearchArticlesManager.PullArticleInfo(accessor, asTempArticles: true);
+
+            RedrawResearchArticlesManager();
+            SelectedEmphasizePropertyItem = ViewModels.EmphasizePropertyItems.一時ﾃﾞｰﾀ;
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show($"失敗しました。\r\nﾒｯｾｰｼﾞ: {ex.Message}", "CiNiiで検索", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+        finally
+        {
+            IsInternetSearchCiNiiBusy = false;
+
+            IsInternetSearchCiNiiDone = true;
+            await Task.Delay(2222);
+            if (!IsInternetSearchCiNiiBusy)
+                IsInternetSearchCiNiiDone = false;
+        }
+    }
+
+    async Task InternetSearchNDLSearch()
+    {
+        try
+        {
+            if (IsInternetSearchNDLSearchBusy)
+                return;
+            IsInternetSearchNDLSearchBusy = true;
+
+            //// ★ articles from j-stage
+            //var accessor = new JStageArticleAPIAccessor()
+            //{
+            //    PublishedFrom = 2022,
+            //    ISSN = ISSN.Architecture_Structure,
+            //    RecordCount = 3,
+            //    //Start = 1,
+            //};
+            //await ResearchArticlesManager.PullArticleInfo(accessor, asTempArticles: true);
+
+            throw new NotImplementedException("申し訳ありません。\r\n未実装です…。");
+
+            RedrawResearchArticlesManager();
+            SelectedEmphasizePropertyItem = ViewModels.EmphasizePropertyItems.一時ﾃﾞｰﾀ;
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show($"失敗しました。\r\nﾒｯｾｰｼﾞ: {ex.Message}", "NDLSearchで検索", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+        finally
+        {
+            IsInternetSearchNDLSearchBusy = false;
+
+            IsInternetSearchNDLSearchDone = true;
+            await Task.Delay(2222);
+            if (!IsInternetSearchNDLSearchBusy)
+                IsInternetSearchNDLSearchDone = false;
+        }
+    }
+
     async Task InternetSearchJStage()
     {
         try
@@ -700,10 +790,12 @@ public partial class MainWindowViewModel : ViewModel
             //    RecordCount = 3,
             //    //Start = 1,
             //};
-            //ResearchArticlesManager.PullArticleInfo(accessor);
+            //await ResearchArticlesManager.PullArticleInfo(accessor, asTempArticles: true);
 
+            throw new NotImplementedException("申し訳ありません。\r\n未実装です…。");
+
+            RedrawResearchArticlesManager();
             SelectedEmphasizePropertyItem = ViewModels.EmphasizePropertyItems.一時ﾃﾞｰﾀ;
-            IsInternetSearchJStageDone = true;
         }
         catch (Exception ex)
         {
@@ -712,6 +804,11 @@ public partial class MainWindowViewModel : ViewModel
         finally
         {
             IsInternetSearchJStageBusy = false;
+
+            IsInternetSearchJStageDone = true;
+            await Task.Delay(2222);
+            if (!IsInternetSearchJStageBusy)
+                IsInternetSearchJStageDone = false;
         }
     }
 

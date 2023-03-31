@@ -176,20 +176,26 @@ public partial class MainWindowViewModel : ViewModel
     public ViewModelCommand ResetLocalSearchStringCommand => _ResetLocalSearchStringCommand.Get(() => LocalSearchString = "");
     ViewModelCommandHandler _ResetLocalSearchStringCommand = new();
 
-    public static string _InternetSearchString;
-    public string InternetSearchString
-    {
-        get => _InternetSearchString;
-        set
-        {
-            if (RaisePropertyChangedIfSet(ref _InternetSearchString, value))
-            {
-                IsInternetSearchJStageDone = false;
+    public string InternetSearch_FreeWord { get; set; }
 
-                _InternetSearchString = value;
-            }
-        }
-    }
+    public string InternetSearch_Authors { get; set; }
+    public string InternetSearch_ArticleTitle { get; set; }
+    public string InternetSearch_MaterialTitle { get; set; }
+    public string InternetSearch_Keywords { get; set; }
+    public string InternetSearch_MaterialVolume { get; set; }
+    public string InternetSearch_PublishedFrom { get; set; }
+    public string InternetSearch_PublishedTo { get; set; }
+    public string InternetSearch_DataMaxCount { get; set; } = "20";
+
+    public bool IsInternetSearchCiNiiBusy { get; set; } = false;
+    public bool IsInternetSearchCiNiiDone { get; set; } = false;
+    public ViewModelCommand InternetSearchCiNiiCommand => _InternetSearchCiNiiCommand.Get(async () => await InternetSearchCiNii());
+    ViewModelCommandHandler _InternetSearchCiNiiCommand = new();
+
+    public bool IsInternetSearchNDLSearchBusy { get; set; } = false;
+    public bool IsInternetSearchNDLSearchDone { get; set; } = false;
+    public ViewModelCommand InternetSearchNDLSearchCommand => _InternetSearchNDLSearchCommand.Get(async () => await InternetSearchNDLSearch());
+    ViewModelCommandHandler _InternetSearchNDLSearchCommand = new();
 
     public bool IsInternetSearchJStageBusy { get; set; } = false;
     public bool IsInternetSearchJStageDone { get; set; } = false;

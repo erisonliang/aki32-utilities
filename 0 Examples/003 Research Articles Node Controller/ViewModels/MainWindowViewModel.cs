@@ -27,8 +27,8 @@ public partial class MainWindowViewModel : ViewModel
 
     private void RedrawResearchArticlesManager()
     {
-        _NodeLinkViewModels = new ObservableCollection<NodeLinkViewModel>();
-        _NodeViewModels = new ObservableCollection<DefaultNodeViewModel>();
+        _NodeLinkViewModels.Clear();
+        _NodeViewModels.Clear();
 
         foreach (var article in ResearchArticlesManager.ArticleDatabase)
             _NodeViewModels.Add(new ResearchArticleNodeViewModel() { NodeName = "ResearchArticle", Article = article, Position = new Point(0, 0) });

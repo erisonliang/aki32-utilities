@@ -13,15 +13,14 @@ public class JStageArticleAPIAccessor : IResearchAPIAccessor
 
     internal Uri builtUri = null;
 
-    
+
     public string SearchMaterial { get; set; }
     public string SearchTitle { get; set; }
     public string SearchAuthorName { get; set; }
     public string SearchAffiliation { get; set; }
-    public string SearchFreeWord { get; set; }
+    public string SearchKeyWord { get; set; }
     public string SearchAbstract { get; set; }
     public string SearchText { get; set; }
-
 
     /// <summary>
     /// YYYY
@@ -34,13 +33,11 @@ public class JStageArticleAPIAccessor : IResearchAPIAccessor
     public int? RecordStart { get; set; }
     public int? RecordCount { get; set; }
 
-
     public string ISSN { get; set; }
     public string JournalCode { get; set; }
     public bool? IsAscendingOrder { get; set; } = null;
     public string Vol { get; set; }
     public string No { get; set; }
-
 
 
     // ★★★★★★★★★★★★★★★ inits
@@ -89,8 +86,8 @@ public class JStageArticleAPIAccessor : IResearchAPIAccessor
             queryList.Add("affil", SearchAffiliation);
 
         //8 keyword 任意 キーワードの検索語句を指定します中間一致検索大文字・小文字、全角・半角は区別しない
-        if (!string.IsNullOrEmpty(SearchFreeWord))
-            queryList.Add("keyword", SearchFreeWord);
+        if (!string.IsNullOrEmpty(SearchKeyWord))
+            queryList.Add("keyword", SearchKeyWord);
 
         //9 abst 任意 抄録の検索語句を指定します中間一致検索大文字・小文字、全角・半角は区別しない
         if (!string.IsNullOrEmpty(SearchAbstract))
@@ -128,7 +125,7 @@ public class JStageArticleAPIAccessor : IResearchAPIAccessor
         if (RecordCount != null)
             queryList.Add("count", RecordCount!.Value.ToString());
 
-        
+
         // post process
         var query = new FormUrlEncodedContent(queryList).ReadAsStringAsync().Result;
         return builtUri = new Uri($"{BASE_URL}?{query}");
@@ -139,7 +136,11 @@ public class JStageArticleAPIAccessor : IResearchAPIAccessor
     /// fetch articles
     /// </summary>
     /// <returns></returns>
-    public IEnumerable<ResearchArticle> FetchArticles()
+    public async Task<List<ResearchArticle>> FetchArticles()
+    {
+        return await Task.Run(() => _FetchArticles().ToList());
+    }
+    private IEnumerable<ResearchArticle> _FetchArticles()
     {
         // get xml
         var xml = XElement.Load(BuildUri().AbsoluteUri);

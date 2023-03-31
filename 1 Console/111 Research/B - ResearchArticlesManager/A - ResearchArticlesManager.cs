@@ -80,10 +80,10 @@ public partial class ResearchArticlesManager
     /// </summary>
     /// <param name="uriBuilder"></param>
     /// <exception cref="InvalidOperationException"></exception>
-    public void PullArticleInfo(IResearchAPIAccessor uriBuilder)
+    public async Task PullArticleInfo(IResearchAPIAccessor uriBuilder, bool asTempArticles = false)
     {
-        var fetchedArticles = FetchArticleInfo(uriBuilder);
-        MergeArticleInfo(fetchedArticles);
+        var fetchedArticles = await FetchArticleInfo(uriBuilder);
+        MergeArticleInfo(fetchedArticles, asTempArticles: asTempArticles);
     }
 
     /// <summary>
@@ -91,7 +91,7 @@ public partial class ResearchArticlesManager
     /// </summary>
     /// <param name="apiAccessor"></param>
     /// <exception cref="InvalidOperationException"></exception>
-    public List<ResearchArticle> FetchArticleInfo(IResearchAPIAccessor apiAccessor)
+    public async Task<List<ResearchArticle>> FetchArticleInfo(IResearchAPIAccessor apiAccessor)
     {
         // preprocess
         if (ArticleDatabase == null)
@@ -100,7 +100,7 @@ public partial class ResearchArticlesManager
 
         // main
         // post process
-        return apiAccessor.FetchArticles().ToList();
+        return await apiAccessor.FetchArticles();
 
     }
 
@@ -111,7 +111,7 @@ public partial class ResearchArticlesManager
     /// <param name="forceAdd">never merge and force add all to database</param>
     /// <exception cref="InvalidOperationException"></exception>
     /// <exception cref="InvalidDataException"></exception>
-    public void MergeArticleInfo(List<ResearchArticle> mergingArticles, bool forceAdd = false, bool warnMultipleMatches = false, bool save = true)
+    public void MergeArticleInfo(List<ResearchArticle> mergingArticles, bool forceAdd = false, bool warnMultipleMatches = false, bool save = true, bool asTempArticles = false)
     {
         // preprocess
         if (ArticleDatabase == null)
@@ -128,6 +128,7 @@ public partial class ResearchArticlesManager
         // main
         foreach (var mergingArticle in mergingArticles)
         {
+            mergingArticle.Private_Temporary = asTempArticles;
             var matchedArticles = ArticleDatabase.Where(a => a.CompareTo(mergingArticle) == 0);
 
             // multiple matches

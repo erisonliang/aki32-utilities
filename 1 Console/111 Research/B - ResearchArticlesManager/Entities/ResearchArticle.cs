@@ -11,7 +11,6 @@ public class ResearchArticle : IComparable
     // ★★★★★★★★★★★★★★★ field
 
     private static readonly Range UNSTRUCTURED_REF_STRING_RANGE = ..130;
-    private static readonly Range GENERATED_PDF_FILE_NAME_RANGE = ^30..;
     private static readonly Range FRIENDLY_AOI_RANGE = ^6..;
 
 
