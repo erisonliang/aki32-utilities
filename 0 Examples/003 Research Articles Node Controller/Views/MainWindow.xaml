@@ -21,7 +21,7 @@
     <Window.InputBindings>
         <KeyBinding Gesture="Ctrl+S" Command="{Binding SaveCommand}"/>
     </Window.InputBindings>
-    
+
     <Window.Resources>
 
         <sys:Double x:Key="NodeContentFontSize">24.0</sys:Double>
@@ -834,7 +834,7 @@
                                 </TextBlock>
                             </TextBlock.ToolTip>
                         </TextBlock>
-                        
+
                         <TextBox 
                             Grid.Column="6"
                             Text="{Binding SelectingNodeViewModel.StartingPage, UpdateSourceTrigger=PropertyChanged}" 
@@ -978,11 +978,11 @@
                             Grid.Column="0"
                             Margin="3"
                             Style="{StaticResource ButtonTextStyle}"
-                            ToolTip="自動でオンラインからメタ情報をダウンロードして，必要に応じてマージします。"
+                            ToolTip="オンラインからメタ情報および引用関係をダウンロードして，追記します。"
                             >
                             <StackPanel Orientation="Horizontal">
-                                <mah:ProgressRing Style="{StaticResource ProgressRingStyle}" Margin="0,0,5,0" Visibility="{Binding IsFetchingOnlineInfoBusy, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-                                <TextBlock Text="オンラインで情報を取得"/>
+                                <mah:ProgressRing Style="{StaticResource ProgressRingStyle}" Margin="0,0,5,0" Visibility="{Binding IsFetchOnlineInfoBusy, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                <TextBlock Text="（オンラインで情報を取得）"/>
                             </StackPanel>
                         </Button>
 

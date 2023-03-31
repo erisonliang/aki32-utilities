@@ -489,6 +489,29 @@ public partial class MainWindowViewModel : ViewModel
 
     // ★★★★★★★★★★★★★★★ 右パネル内
 
+    async Task FetchOnlineInfo()
+    {
+        try
+        {
+            if (IsFetchOnlineInfoBusy)
+                return;
+            IsFetchOnlineInfoBusy = true;
+
+            if (SelectingNodeViewModel is null)
+                throw new Exception("文献が選択されていません。");
+
+            throw new NotImplementedException("申し訳ありません。未実装です…。");
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show($"失敗しました。\r\nﾒｯｾｰｼﾞ: {ex.Message}", "オンラインで情報を取得", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+        finally
+        {
+            IsFetchOnlineInfoBusy = false;
+        }
+    }
+
     async Task OpenPDF()
     {
         try

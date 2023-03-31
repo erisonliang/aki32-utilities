@@ -147,8 +147,9 @@ public partial class MainWindowViewModel : ViewModel
 
     // ★★★★★★★★★★★★★★★ 右パネル内
 
-    public bool IsFetchingOnlineInfoBusy { get; set; } = false;
-
+    public bool IsFetchOnlineInfoBusy { get; set; } = false;
+    public ViewModelCommand FetchOnlineInfoCommand => _FetchOnlineInfoCommand.Get(FetchOnlineInfo);
+    ViewModelCommandHandler _FetchOnlineInfoCommand = new();
 
     public bool IsOpenPDFBusy { get; set; } = false;
     public ViewModelCommand OpenPDFCommand => _OpenPDFCommand.Get(async () => await OpenPDF());
