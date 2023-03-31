@@ -20,6 +20,7 @@
 
     <Window.InputBindings>
         <KeyBinding Gesture="Ctrl+S" Command="{Binding SaveCommand}"/>
+        <KeyBinding Gesture="Ctrl+F" Command="{Binding OpenSearchTabCommand}"/>
     </Window.InputBindings>
 
     <Window.Resources>
@@ -60,6 +61,10 @@
         </Style>
 
         <Style x:Key="ButtonTextStyle" TargetType="Button">
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
             <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="Template">
                 <Setter.Value>
@@ -307,10 +312,10 @@
                         >
                         <StackPanel Orientation="Horizontal">
                             <Grid>
-                                <mah:ProgressRing Style="{StaticResource ProgressRingStyle}" Margin="0,0,3.5,0" Visibility="{Binding IsSaveBusy, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                <mah:ProgressRing Visibility="{Binding IsSaveBusy, Converter={StaticResource BooleanToVisibilityConverter}}" Style="{StaticResource ProgressRingStyle}" Margin="0,0,3.5,0"/>
                                 <Grid Visibility="{Binding IsSaveBusy, Converter={StaticResource InverseBooleanToVisibility}}">
                                     <TextBlock Text="💾" Visibility="{Binding IsSaveDone, Converter={StaticResource InverseBooleanToVisibility}}"/>
-                                    <TextBlock Text="✔️" Foreground="Green" Visibility="{Binding IsSaveDone, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                    <TextBlock Text="✔️" Visibility="{Binding IsSaveDone, Converter={StaticResource BooleanToVisibilityConverter}}" Foreground="Green"/>
                                 </Grid>
                             </Grid>
                             <TextBlock Text=" 保存 "/>
@@ -326,20 +331,6 @@
                         IsChecked="{Binding IsLockedAllNodeLinks}" 
                         VerticalContentAlignment="Center" 
                         ToolTip="ノード接続を削除できない状態にします。"
-                        />
-
-                    <TextBlock VerticalAlignment="Center" Text="|" Margin="7,0,3,5" FontSize="25" FontWeight="Thin" Foreground="Gray"/>
-
-                    <TextBlock
-                        VerticalAlignment="Center" 
-                        Text="検索：" 
-                        />
-
-                    <TextBox
-                        VerticalAlignment="Center" 
-                        Margin="0,4,4,4"
-                        Text="{Binding LocalSearchString, UpdateSourceTrigger=PropertyChanged}"
-                        Width="150"
                         />
 
                     <TextBlock VerticalAlignment="Center" Text="|" Margin="7,0,3,5" FontSize="25" FontWeight="Thin" Foreground="Gray"/>
@@ -373,6 +364,7 @@
                         />
 
                     <TextBlock VerticalAlignment="Center" Text="|" Margin="7,0,3,5" FontSize="25" FontWeight="Thin" Foreground="Gray"/>
+
 
                 </StackPanel>
 
@@ -439,629 +431,746 @@
             Grid.Row="1" 
             Grid.Column="1"
             >
+            <TabControl x:Name="TabControl_RightPanel">
+                <TabItem Header="選択中の文献" x:Name="TabItem_SelectingNode">
+                    <ScrollViewer
+                        HorizontalScrollBarVisibility="Disabled">
 
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="auto"/>
-            </Grid.RowDefinitions>
+                        <StackPanel Margin="4">
 
-            <ScrollViewer
-                HorizontalScrollBarVisibility="Disabled">
-
-                <StackPanel Margin="4">
-
-                    <Grid Margin="4">
-                        <StackPanel 
-                            Orientation="Horizontal"
-                            HorizontalAlignment="Right"
-                            >
-                            <ToggleButton
-                                Margin="3"
-                                Style="{StaticResource ToggleButtonTextStyle}"
-                                IsChecked="{Binding SelectingNodeViewModel.IsFavorite}"
-                                ToolTip=""
-                                >
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="♥" Foreground="{StaticResource IsFavoriteColor}"/>
-                                    <TextBlock Text="お気に入り"/>
-                                </StackPanel>
-                            </ToggleButton>
-
-                            <ToggleButton
-                                Margin="3"
-                                Style="{StaticResource ToggleButtonTextStyle}"
-                                IsChecked="{Binding SelectingNodeViewModel.IsRead}"
-                                ToolTip=""
-                                >
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="●" Foreground="{StaticResource IsReadColor}" Margin="0,0,2,0"/>
-                                    <TextBlock Text="既読"/>
-                                </StackPanel>
-                            </ToggleButton>
-
-                            <ToggleButton
-                                Margin="3"
-                                Style="{StaticResource ToggleButtonTextStyle}"
-                                IsChecked="{Binding SelectingNodeViewModel.IsTemp}"
-                                ToolTip=""
-                                >
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="●" Foreground="{StaticResource IsTempColor}" Margin="0,0,2,0"/>
-                                    <TextBlock Text="一時ﾃﾞｰﾀ"/>
-                                </StackPanel>
-                            </ToggleButton>
-
-                            <ToggleButton
-                                Margin="3"
-                                Style="{StaticResource ToggleButtonTextStyle}"
-                                IsChecked="{Binding SelectingNodeViewModel.IsLocalSearchMatched, Mode=OneWay}"
-                                IsHitTestVisible="False"
-                                ToolTip=""
-                                IsEnabled="False"
-                                >
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="●" Foreground="{StaticResource IsLocalSearchMatchedColor}" Margin="0,0,2,0"/>
-                                    <TextBlock Text="検索に一致"/>
-                                </StackPanel>
-                            </ToggleButton>
-
-                            <ToggleButton
-                                Margin="3"
-                                Style="{StaticResource ToggleButtonTextStyle}"
-                                IsChecked="{Binding SelectingNodeViewModel.IsCategory1}"
-                                ToolTip=""
-                                >
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="📒" Foreground="{StaticResource IsCat1Color}" Margin="0,0,2,0"/>
-                                    <TextBlock Text="ﾒﾓ1"/>
-                                </StackPanel>
-                            </ToggleButton>
-
-                            <ToggleButton
-                                Margin="3"
-                                Style="{StaticResource ToggleButtonTextStyle}"
-                                IsChecked="{Binding SelectingNodeViewModel.IsCategory2}"
-                                ToolTip=""
-                                >
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="📒" Foreground="{StaticResource IsCat2Color}" Margin="0,0,2,0"/>
-                                    <TextBlock Text="ﾒﾓ2"/>
-                                </StackPanel>
-                            </ToggleButton>
-
-                            <ToggleButton
-                                Margin="3"
-                                Style="{StaticResource ToggleButtonTextStyle}"
-                                IsChecked="{Binding SelectingNodeViewModel.IsCategory3}"
-                                ToolTip=""
-                                >
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="📒" Foreground="{StaticResource IsCat3Color}" Margin="0,0,2,0"/>
-                                    <TextBlock Text="ﾒﾓ3"/>
-                                </StackPanel>
-                            </ToggleButton>
-
-                        </StackPanel>
-                    </Grid>
-
-                    <Grid Margin="4">
-                        <TextBlock
-                            Text="著者：" 
-                            Width="50" 
-                            HorizontalAlignment="Left"
-                            TextAlignment="Right"
-                            ToolTipService.InitialShowDelay="10" 
-                            >
-                            <TextBlock.ToolTip>
-                                <TextBlock
-                                    TextAlignment="Left"
-                                    Text="authors"
+                            <Grid Margin="4">
+                                <StackPanel 
+                                    Orientation="Horizontal"
+                                    HorizontalAlignment="Right"
                                     >
-                                </TextBlock>
-                            </TextBlock.ToolTip>
-                        </TextBlock>
-                        <TextBox 
-                            Margin="50,0,0,0" 
-                            Text="{Binding SelectingNodeViewModel.Authors, UpdateSourceTrigger=LostFocus}" 
-                            TextWrapping="Wrap" AcceptsReturn="False"
-                            />
-                    </Grid>
+                                    <ToggleButton
+                                        Margin="3"
+                                        Style="{StaticResource ToggleButtonTextStyle}"
+                                        IsChecked="{Binding SelectingNodeViewModel.IsFavorite}"
+                                        ToolTip=""
+                                        >
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="♥" Foreground="{StaticResource IsFavoriteColor}"/>
+                                            <TextBlock Text="お気に入り"/>
+                                        </StackPanel>
+                                    </ToggleButton>
 
-                    <Grid Margin="4">
-                        <TextBlock
-                            Text="タイトル：" 
-                            Width="50" 
-                            HorizontalAlignment="Left"
-                            TextAlignment="Right"
-                            ToolTipService.InitialShowDelay="10" 
-                            >
-                            <TextBlock.ToolTip>
+                                    <ToggleButton
+                                        Margin="3"
+                                        Style="{StaticResource ToggleButtonTextStyle}"
+                                        IsChecked="{Binding SelectingNodeViewModel.IsRead}"
+                                        ToolTip=""
+                                        >
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="●" Foreground="{StaticResource IsReadColor}" Margin="0,0,2,0"/>
+                                            <TextBlock Text="既読"/>
+                                        </StackPanel>
+                                    </ToggleButton>
+
+                                    <ToggleButton
+                                        Margin="3"
+                                        Style="{StaticResource ToggleButtonTextStyle}"
+                                        IsChecked="{Binding SelectingNodeViewModel.IsTemp}"
+                                        ToolTip=""
+                                        >
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="●" Foreground="{StaticResource IsTempColor}" Margin="0,0,2,0"/>
+                                            <TextBlock Text="一時ﾃﾞｰﾀ"/>
+                                        </StackPanel>
+                                    </ToggleButton>
+
+                                    <ToggleButton
+                                        Margin="3"
+                                        Style="{StaticResource ToggleButtonTextStyle}"
+                                        IsChecked="{Binding SelectingNodeViewModel.IsLocalSearchMatched, Mode=OneWay}"
+                                        IsHitTestVisible="False"
+                                        ToolTip=""
+                                        IsEnabled="False"
+                                        >
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="●" Foreground="{StaticResource IsLocalSearchMatchedColor}" Margin="0,0,2,0"/>
+                                            <TextBlock Text="検索に一致"/>
+                                        </StackPanel>
+                                    </ToggleButton>
+
+                                    <ToggleButton
+                                        Margin="3"
+                                        Style="{StaticResource ToggleButtonTextStyle}"
+                                        IsChecked="{Binding SelectingNodeViewModel.IsCategory1}"
+                                        ToolTip=""
+                                        >
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="📒" Foreground="{StaticResource IsCat1Color}" Margin="0,0,2,0"/>
+                                            <TextBlock Text="ﾒﾓ1"/>
+                                        </StackPanel>
+                                    </ToggleButton>
+
+                                    <ToggleButton
+                                        Margin="3"
+                                        Style="{StaticResource ToggleButtonTextStyle}"
+                                        IsChecked="{Binding SelectingNodeViewModel.IsCategory2}"
+                                        ToolTip=""
+                                        >
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="📒" Foreground="{StaticResource IsCat2Color}" Margin="0,0,2,0"/>
+                                            <TextBlock Text="ﾒﾓ2"/>
+                                        </StackPanel>
+                                    </ToggleButton>
+
+                                    <ToggleButton
+                                        Margin="3"
+                                        Style="{StaticResource ToggleButtonTextStyle}"
+                                        IsChecked="{Binding SelectingNodeViewModel.IsCategory3}"
+                                        ToolTip=""
+                                        >
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="📒" Foreground="{StaticResource IsCat3Color}" Margin="0,0,2,0"/>
+                                            <TextBlock Text="ﾒﾓ3"/>
+                                        </StackPanel>
+                                    </ToggleButton>
+
+                                </StackPanel>
+                            </Grid>
+
+                            <Grid Margin="4">
                                 <TextBlock
-                                    TextAlignment="Left"
-                                    Text="title"
+                                    Text="著者：" 
+                                    Width="50" 
+                                    HorizontalAlignment="Left"
+                                    TextAlignment="Right"
+                                    ToolTipService.InitialShowDelay="10" 
                                     >
+                                    <TextBlock.ToolTip>
+                                        <TextBlock
+                                            TextAlignment="Left"
+                                            Text="authors"
+                                            >
+                                        </TextBlock>
+                                    </TextBlock.ToolTip>
                                 </TextBlock>
-                            </TextBlock.ToolTip>
-                        </TextBlock>
-                        <TextBox 
-                            Margin="50,0,0,0" 
-                            Text="{Binding SelectingNodeViewModel.ArticleTitle, UpdateSourceTrigger=PropertyChanged}" 
-                            TextWrapping="Wrap" AcceptsReturn="False"
-                            />
-                    </Grid>
+                                <TextBox 
+                                    Margin="50,0,0,0" 
+                                    Text="{Binding SelectingNodeViewModel.Authors, UpdateSourceTrigger=LostFocus}" 
+                                    TextWrapping="Wrap" AcceptsReturn="False"
+                                    />
+                            </Grid>
 
-                    <Grid Margin="4">
-                        <TextBlock
-                            Text="メモ：" 
-                            Width="50" 
-                            HorizontalAlignment="Left"
-                            TextAlignment="Right"
-                            ToolTipService.InitialShowDelay="10" 
-                            >
-                            <TextBlock.ToolTip>
+                            <Grid Margin="4">
                                 <TextBlock
-                                    TextAlignment="Left"
-                                    Text="memo"
+                                    Text="タイトル：" 
+                                    Width="50" 
+                                    HorizontalAlignment="Left"
+                                    TextAlignment="Right"
+                                    ToolTipService.InitialShowDelay="10" 
                                     >
+                                    <TextBlock.ToolTip>
+                                        <TextBlock
+                                            TextAlignment="Left"
+                                            Text="title"
+                                            >
+                                        </TextBlock>
+                                    </TextBlock.ToolTip>
                                 </TextBlock>
-                            </TextBlock.ToolTip>
-                        </TextBlock>
-                        <TextBox 
-                            Margin="50,0,0,0" 
-                            Text="{Binding SelectingNodeViewModel.Article.Memo}" 
-                            TextWrapping="Wrap" AcceptsReturn="True"
-                            />
-                    </Grid>
+                                <TextBox 
+                                    Margin="50,0,0,0" 
+                                    Text="{Binding SelectingNodeViewModel.ArticleTitle, UpdateSourceTrigger=PropertyChanged}" 
+                                    TextWrapping="Wrap" AcceptsReturn="False"
+                                    />
+                            </Grid>
 
-                    <Grid Margin="4">
-                        <TextBlock
-                            Text="研究の出発点：" 
-                            Width="100" 
-                            HorizontalAlignment="Left"
-                            TextAlignment="Right"
-                            ToolTipService.InitialShowDelay="10" 
-                            >
-                            <TextBlock.ToolTip>
+                            <Grid Margin="4">
                                 <TextBlock
-                                    TextAlignment="Left"
-                                    Text="【Motivation: 研究の出発点】
+                                    Text="メモ：" 
+                                    Width="50" 
+                                    HorizontalAlignment="Left"
+                                    TextAlignment="Right"
+                                    ToolTipService.InitialShowDelay="10" 
+                                    >
+                                    <TextBlock.ToolTip>
+                                        <TextBlock
+                                            TextAlignment="Left"
+                                            Text="memo"
+                                            >
+                                        </TextBlock>
+                                    </TextBlock.ToolTip>
+                                </TextBlock>
+                                <TextBox 
+                                    Margin="50,0,0,0" 
+                                    Text="{Binding SelectingNodeViewModel.Article.Memo}" 
+                                    TextWrapping="Wrap" AcceptsReturn="True"
+                                    />
+                            </Grid>
+
+                            <Grid Margin="4">
+                                <TextBlock
+                                    Text="研究の出発点：" 
+                                    Width="100" 
+                                    HorizontalAlignment="Left"
+                                    TextAlignment="Right"
+                                    ToolTipService.InitialShowDelay="10" 
+                                    >
+                                    <TextBlock.ToolTip>
+                                        <TextBlock
+                                            TextAlignment="Left"
+                                            Text="【Motivation: 研究の出発点】
 &#10; - どんな課題や問題点を解決しようとしたのか？
 &#10; - 既存の研究で足りないところはどこだったのか？">
+                                        </TextBlock>
+                                    </TextBlock.ToolTip>
                                 </TextBlock>
-                            </TextBlock.ToolTip>
-                        </TextBlock>
-                        <TextBox 
-                            Margin="100,0,0,0" 
-                            Text="{Binding SelectingNodeViewModel.Article.Memo_Motivation}" 
-                            TextWrapping="Wrap" AcceptsReturn="True"
-                            />
-                    </Grid>
+                                <TextBox 
+                                    Margin="100,0,0,0" 
+                                    Text="{Binding SelectingNodeViewModel.Article.Memo_Motivation}" 
+                                    TextWrapping="Wrap" AcceptsReturn="True"
+                                    />
+                            </Grid>
 
-                    <Grid Margin="4">
-                        <TextBlock
-                            Text="研究手法：" 
-                            Width="100" 
-                            HorizontalAlignment="Left"
-                            TextAlignment="Right"
-                            ToolTipService.InitialShowDelay="10" 
-                            >
-                            <TextBlock.ToolTip>
+                            <Grid Margin="4">
                                 <TextBlock
-                                    TextAlignment="Left"
-                                    Text="【Method: 研究手法】
+                                    Text="研究手法：" 
+                                    Width="100" 
+                                    HorizontalAlignment="Left"
+                                    TextAlignment="Right"
+                                    ToolTipService.InitialShowDelay="10" 
+                                    >
+                                    <TextBlock.ToolTip>
+                                        <TextBlock
+                                            TextAlignment="Left"
+                                            Text="【Method: 研究手法】
 &#10; - どんなシステムを作ったか？なぜそのシステム設計でよいと仮定したか？
 &#10; - どんなアルゴリズムを作ったか？なぜそのアルゴリズム設計でよいと仮定したか？
 &#10; - どんな調査をしたか？なぜその調査計画でよいと仮定したか？
 &#10; - どんな実験をしたか？なぜその実験設計でよいと仮定したか？">
+                                        </TextBlock>
+                                    </TextBlock.ToolTip>
                                 </TextBlock>
-                            </TextBlock.ToolTip>
-                        </TextBlock>
-                        <TextBox 
-                            Margin="100,0,0,0" 
-                            Text="{Binding SelectingNodeViewModel.Article.Memo_Method}" 
-                            TextWrapping="Wrap" AcceptsReturn="True"
-                            />
-                    </Grid>
+                                <TextBox 
+                                    Margin="100,0,0,0" 
+                                    Text="{Binding SelectingNodeViewModel.Article.Memo_Method}" 
+                                    TextWrapping="Wrap" AcceptsReturn="True"
+                                    />
+                            </Grid>
 
-                    <Grid Margin="4">
-                        <TextBlock
-                            Text="結果と知見：" 
-                            Width="100" 
-                            HorizontalAlignment="Left"
-                            TextAlignment="Right"
-                            ToolTipService.InitialShowDelay="10" 
-                            >
-                            <TextBlock.ToolTip>
+                            <Grid Margin="4">
                                 <TextBlock
-                                    TextAlignment="Left"
-                                    Text="【Insights: 結果と知見】
+                                    Text="結果と知見：" 
+                                    Width="100" 
+                                    HorizontalAlignment="Left"
+                                    TextAlignment="Right"
+                                    ToolTipService.InitialShowDelay="10" 
+                                    >
+                                    <TextBlock.ToolTip>
+                                        <TextBlock
+                                            TextAlignment="Left"
+                                            Text="【Insights: 結果と知見】
 &#10; - どんな結果が得られたのか？どんな条件だと上手くいって，どんな場合は上手くいかなかったのか？
 &#10; - 新しくわかった知見はなにか？他のアプリケーションやシステムでも使えそうな知見は何か？">
+                                        </TextBlock>
+                                    </TextBlock.ToolTip>
                                 </TextBlock>
-                            </TextBlock.ToolTip>
-                        </TextBlock>
-                        <TextBox 
-                            Margin="100,0,0,0" 
-                            Text="{Binding SelectingNodeViewModel.Article.Memo_Insights}" 
-                            TextWrapping="Wrap" AcceptsReturn="True"
-                            />
-                    </Grid>
+                                <TextBox 
+                                    Margin="100,0,0,0" 
+                                    Text="{Binding SelectingNodeViewModel.Article.Memo_Insights}" 
+                                    TextWrapping="Wrap" AcceptsReturn="True"
+                                    />
+                            </Grid>
 
-                    <Grid Margin="4">
-                        <TextBlock
-                            Text="貢献を一行で：" 
-                            Width="100" 
-                            HorizontalAlignment="Left"
-                            TextAlignment="Right"
-                            ToolTipService.InitialShowDelay="10" 
-                            >
-                            <TextBlock.ToolTip>
+                            <Grid Margin="4">
                                 <TextBlock
-                                    TextAlignment="Left"
-                                    Text="【Contribution Summary: 貢献を一行で】
+                                    Text="貢献を一行で：" 
+                                    Width="100" 
+                                    HorizontalAlignment="Left"
+                                    TextAlignment="Right"
+                                    ToolTipService.InitialShowDelay="10" 
+                                    >
+                                    <TextBlock.ToolTip>
+                                        <TextBlock
+                                            TextAlignment="Left"
+                                            Text="【Contribution Summary: 貢献を一行で】
 &#10; - 「【Author】は，【Motivation】という課題解決のために【Method】を行い，【Insight】がわかった。」">
+                                        </TextBlock>
+                                    </TextBlock.ToolTip>
                                 </TextBlock>
-                            </TextBlock.ToolTip>
-                        </TextBlock>
-                        <TextBox 
-                            Margin="100,0,0,0" 
-                            Text="{Binding SelectingNodeViewModel.Article.Memo_Contribution}" 
-                            TextWrapping="Wrap" AcceptsReturn="True"
-                            />
-                    </Grid>
+                                <TextBox 
+                                    Margin="100,0,0,0" 
+                                    Text="{Binding SelectingNodeViewModel.Article.Memo_Contribution}" 
+                                    TextWrapping="Wrap" AcceptsReturn="True"
+                                    />
+                            </Grid>
 
 
-                    <!-- ========================================== -->
-                    <Grid Height="50"/>
+                            <!-- ========================================== -->
+                            <Grid Height="50"/>
 
-                    <Grid Margin="4">
-                        <TextBlock
-                            Text="公開日：" 
-                            Width="50" 
-                            HorizontalAlignment="Left"
-                            TextAlignment="Right"
-                            ToolTipService.InitialShowDelay="10" 
-                            >
-                            <TextBlock.ToolTip>
+                            <Grid Margin="4">
                                 <TextBlock
-                                    TextAlignment="Left"
-                                    Text="release"
+                                    Text="公開日：" 
+                                    Width="50" 
+                                    HorizontalAlignment="Left"
+                                    TextAlignment="Right"
+                                    ToolTipService.InitialShowDelay="10" 
                                     >
+                                    <TextBlock.ToolTip>
+                                        <TextBlock
+                                            TextAlignment="Left"
+                                            Text="release"
+                                            >
+                                        </TextBlock>
+                                    </TextBlock.ToolTip>
                                 </TextBlock>
-                            </TextBlock.ToolTip>
-                        </TextBlock>
-                        <TextBox 
-                            Margin="50,0,0,0" 
-                            Text="{Binding SelectingNodeViewModel.PublishedOn, UpdateSourceTrigger=PropertyChanged}" 
-                            TextWrapping="NoWrap" AcceptsReturn="False"
-                            />
-                    </Grid>
+                                <TextBox 
+                                    Margin="50,0,0,0" 
+                                    Text="{Binding SelectingNodeViewModel.PublishedOn, UpdateSourceTrigger=PropertyChanged}" 
+                                    TextWrapping="NoWrap" AcceptsReturn="False"
+                                    />
+                            </Grid>
 
-                    <Grid Margin="4">
-                        <TextBlock
-                            Text="資料：" 
-                            Width="50" 
-                            HorizontalAlignment="Left"
-                            TextAlignment="Right"
-                            ToolTipService.InitialShowDelay="10" 
-                            >
-                            <TextBlock.ToolTip>
+                            <Grid Margin="4">
                                 <TextBlock
-                                    TextAlignment="Left"
-                                    Text="release"
+                                    Text="資料：" 
+                                    Width="50" 
+                                    HorizontalAlignment="Left"
+                                    TextAlignment="Right"
+                                    ToolTipService.InitialShowDelay="10" 
                                     >
+                                    <TextBlock.ToolTip>
+                                        <TextBlock
+                                            TextAlignment="Left"
+                                            Text="release"
+                                            >
+                                        </TextBlock>
+                                    </TextBlock.ToolTip>
                                 </TextBlock>
-                            </TextBlock.ToolTip>
-                        </TextBlock>
-                        <TextBox 
-                            Margin="50,0,0,0" 
-                            Text="{Binding SelectingNodeViewModel.MaterialTitle, UpdateSourceTrigger=PropertyChanged}" 
-                            TextWrapping="NoWrap" AcceptsReturn="False"
-                            />
-                    </Grid>
+                                <TextBox 
+                                    Margin="50,0,0,0" 
+                                    Text="{Binding SelectingNodeViewModel.MaterialTitle, UpdateSourceTrigger=PropertyChanged}" 
+                                    TextWrapping="NoWrap" AcceptsReturn="False"
+                                    />
+                            </Grid>
 
-                    <Grid Margin="4">
+                            <Grid Margin="4">
 
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="50"/>
-                            <ColumnDefinition Width="auto"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="auto"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="auto"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="auto"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="50"/>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
 
-                        <TextBlock
-                            Grid.Column="1"
-                            Text="巻：" 
-                            Margin="10,0,0,0"
-                            HorizontalAlignment="Left"
-                            TextAlignment="Right"
-                            ToolTipService.InitialShowDelay="10" 
-                            >
-                            <TextBlock.ToolTip>
                                 <TextBlock
-                                    TextAlignment="Left"
-                                    Text="release"
+                                    Grid.Column="1"
+                                    Text="巻：" 
+                                    Margin="10,0,0,0"
+                                    HorizontalAlignment="Left"
+                                    TextAlignment="Right"
+                                    ToolTipService.InitialShowDelay="10" 
                                     >
+                                    <TextBlock.ToolTip>
+                                        <TextBlock
+                                            TextAlignment="Left"
+                                            Text="release"
+                                            >
+                                        </TextBlock>
+                                    </TextBlock.ToolTip>
                                 </TextBlock>
-                            </TextBlock.ToolTip>
-                        </TextBlock>
-                        <TextBox 
-                            Grid.Column="2"
-                            Text="{Binding SelectingNodeViewModel.MaterialVolume, UpdateSourceTrigger=PropertyChanged}" 
-                            TextWrapping="NoWrap" AcceptsReturn="False"
-                            />
+                                <TextBox 
+                                    Grid.Column="2"
+                                    Text="{Binding SelectingNodeViewModel.MaterialVolume, UpdateSourceTrigger=PropertyChanged}" 
+                                    TextWrapping="NoWrap" AcceptsReturn="False"
+                                    />
 
-                        <TextBlock
-                            Grid.Column="3"
-                            Text="号：" 
-                            Margin="10,0,0,0"
-                            HorizontalAlignment="Left"
-                            TextAlignment="Right"
-                            ToolTipService.InitialShowDelay="10" 
-                            >
-                            <TextBlock.ToolTip>
                                 <TextBlock
-                                    TextAlignment="Left"
-                                    Text="release"
+                                    Grid.Column="3"
+                                    Text="号：" 
+                                    Margin="10,0,0,0"
+                                    HorizontalAlignment="Left"
+                                    TextAlignment="Right"
+                                    ToolTipService.InitialShowDelay="10" 
                                     >
+                                    <TextBlock.ToolTip>
+                                        <TextBlock
+                                            TextAlignment="Left"
+                                            Text="release"
+                                            >
+                                        </TextBlock>
+                                    </TextBlock.ToolTip>
                                 </TextBlock>
-                            </TextBlock.ToolTip>
-                        </TextBlock>
-                        <TextBox 
-                            Grid.Column="4"
-                            Text="{Binding SelectingNodeViewModel.MaterialSubVolume, UpdateSourceTrigger=PropertyChanged}" 
-                            TextWrapping="NoWrap" AcceptsReturn="False"
-                            />
+                                <TextBox 
+                                    Grid.Column="4"
+                                    Text="{Binding SelectingNodeViewModel.MaterialSubVolume, UpdateSourceTrigger=PropertyChanged}" 
+                                    TextWrapping="NoWrap" AcceptsReturn="False"
+                                    />
 
-                        <TextBlock
-                            Grid.Column="5"
-                            Text="開始ページ：" 
-                            Margin="10,0,0,0"
-                            HorizontalAlignment="Left"
-                            TextAlignment="Right"
-                            ToolTipService.InitialShowDelay="10" 
-                            >
-                            <TextBlock.ToolTip>
                                 <TextBlock
-                                    TextAlignment="Left"
-                                    Text="release"
+                                    Grid.Column="5"
+                                    Text="開始ページ：" 
+                                    Margin="10,0,0,0"
+                                    HorizontalAlignment="Left"
+                                    TextAlignment="Right"
+                                    ToolTipService.InitialShowDelay="10" 
                                     >
+                                    <TextBlock.ToolTip>
+                                        <TextBlock
+                                            TextAlignment="Left"
+                                            Text="release"
+                                            >
+                                        </TextBlock>
+                                    </TextBlock.ToolTip>
                                 </TextBlock>
-                            </TextBlock.ToolTip>
-                        </TextBlock>
 
-                        <TextBox 
-                            Grid.Column="6"
-                            Text="{Binding SelectingNodeViewModel.StartingPage, UpdateSourceTrigger=PropertyChanged}" 
-                            TextWrapping="NoWrap" AcceptsReturn="False"
-                            />
+                                <TextBox 
+                                    Grid.Column="6"
+                                    Text="{Binding SelectingNodeViewModel.StartingPage, UpdateSourceTrigger=PropertyChanged}" 
+                                    TextWrapping="NoWrap" AcceptsReturn="False"
+                                    />
 
-                        <TextBlock
-                            Grid.Column="7"
-                            Text="終了ページ：" 
-                            Margin="10,0,0,0"
-                            HorizontalAlignment="Left"
-                            TextAlignment="Right"
-                            ToolTipService.InitialShowDelay="10" 
-                            >
-                            <TextBlock.ToolTip>
                                 <TextBlock
-                                    TextAlignment="Left"
-                                    Text="release"
+                                    Grid.Column="7"
+                                    Text="終了ページ：" 
+                                    Margin="10,0,0,0"
+                                    HorizontalAlignment="Left"
+                                    TextAlignment="Right"
+                                    ToolTipService.InitialShowDelay="10" 
                                     >
+                                    <TextBlock.ToolTip>
+                                        <TextBlock
+                                            TextAlignment="Left"
+                                            Text="release"
+                                            >
+                                        </TextBlock>
+                                    </TextBlock.ToolTip>
                                 </TextBlock>
-                            </TextBlock.ToolTip>
-                        </TextBlock>
-                        <TextBox 
-                            Grid.Column="8"
-                            Text="{Binding SelectingNodeViewModel.EndingPage, UpdateSourceTrigger=PropertyChanged}" 
-                            TextWrapping="NoWrap" AcceptsReturn="False"
-                            />
+                                <TextBox 
+                                    Grid.Column="8"
+                                    Text="{Binding SelectingNodeViewModel.EndingPage, UpdateSourceTrigger=PropertyChanged}" 
+                                    TextWrapping="NoWrap" AcceptsReturn="False"
+                                    />
 
-                    </Grid>
+                            </Grid>
 
 
 
-                    <!-- ========================================== -->
-                    <Grid Height="50"/>
+                            <!-- ========================================== -->
+                            <Grid Height="50"/>
 
-                    <Grid Margin="4">
-                        <TextBlock
-                            Text="DOI：" 
-                            Width="50" 
-                            HorizontalAlignment="Left"
-                            TextAlignment="Right"
-                            ToolTipService.InitialShowDelay="10" 
-                            >
-                            <TextBlock.ToolTip>
+                            <Grid Margin="4">
                                 <TextBlock
-                                    TextAlignment="Left"
-                                    Text="doi"
+                                    Text="DOI：" 
+                                    Width="50" 
+                                    HorizontalAlignment="Left"
+                                    TextAlignment="Right"
+                                    ToolTipService.InitialShowDelay="10" 
                                     >
+                                    <TextBlock.ToolTip>
+                                        <TextBlock
+                                            TextAlignment="Left"
+                                            Text="doi"
+                                            >
+                                        </TextBlock>
+                                    </TextBlock.ToolTip>
                                 </TextBlock>
-                            </TextBlock.ToolTip>
-                        </TextBlock>
-                        <TextBox 
-                            Margin="50,0,0,0" 
-                            Text="{Binding SelectingNodeViewModel.Article.DOI, UpdateSourceTrigger=PropertyChanged}" 
-                            TextWrapping="NoWrap" AcceptsReturn="False"
-                            />
-                    </Grid>
+                                <TextBox 
+                                    Margin="50,0,0,0" 
+                                    Text="{Binding SelectingNodeViewModel.Article.DOI, UpdateSourceTrigger=PropertyChanged}" 
+                                    TextWrapping="NoWrap" AcceptsReturn="False"
+                                    />
+                            </Grid>
 
-                    <Grid Margin="4">
-                        <TextBlock
-                            Text="AOI：" 
-                            Width="50" 
-                            HorizontalAlignment="Left"
-                            TextAlignment="Right"
-                            ToolTipService.InitialShowDelay="10" 
-                            >
-                            <TextBlock.ToolTip>
+                            <Grid Margin="4">
                                 <TextBlock
-                                    TextAlignment="Left"
-                                    Text="AOI"
+                                    Text="AOI：" 
+                                    Width="50" 
+                                    HorizontalAlignment="Left"
+                                    TextAlignment="Right"
+                                    ToolTipService.InitialShowDelay="10" 
                                     >
+                                    <TextBlock.ToolTip>
+                                        <TextBlock
+                                            TextAlignment="Left"
+                                            Text="AOI"
+                                            >
+                                        </TextBlock>
+                                    </TextBlock.ToolTip>
                                 </TextBlock>
-                            </TextBlock.ToolTip>
-                        </TextBlock>
-                        <StackPanel
-                            Margin="50,0,0,0" 
-                            Orientation="Horizontal"
-                            >
-                            <TextBlock Text="{Binding SelectingNodeViewModel.Article.AOI}"/>
-                            <TextBlock Text=" ( "/>
-                            <TextBlock Text="{Binding SelectingNodeViewModel.Article.Friendly_AOI}"/>
-                            <TextBlock Text=" )"/>
+                                <StackPanel
+                                    Margin="50,0,0,0" 
+                                    Orientation="Horizontal"
+                                    >
+                                    <TextBlock Text="{Binding SelectingNodeViewModel.Article.AOI}"/>
+                                    <TextBlock Text=" ( "/>
+                                    <TextBlock Text="{Binding SelectingNodeViewModel.Article.Friendly_AOI}"/>
+                                    <TextBlock Text=" )"/>
+                                </StackPanel>
+                            </Grid>
+
+                            <Grid Margin="4">
+                                <TextBlock
+                                    Text="タグ：" 
+                                    Width="50" 
+                                    HorizontalAlignment="Left"
+                                    TextAlignment="Right"
+                                    ToolTipService.InitialShowDelay="10" 
+                                    >
+                                    <TextBlock.ToolTip>
+                                        <TextBlock
+                                            TextAlignment="Left"
+                                            Text="「ローカルのPDFの有無」「データ取得元」を列挙します。"
+                                            >
+                                        </TextBlock>
+                                    </TextBlock.ToolTip>
+                                </TextBlock>
+                                <TextBlock 
+                                    Text="{Binding SelectingNodeViewModel.Tags}" 
+                                    Margin="50,0,0,0" 
+                                    TextWrapping="Wrap"
+                                    />
+                            </Grid>
+
+                            <Grid Margin="4">
+                                <TextBlock
+                                    Text="文献：" 
+                                    Width="50" 
+                                    HorizontalAlignment="Left"
+                                    TextAlignment="Right"
+                                    ToolTipService.InitialShowDelay="10" 
+                                    >
+                                    <TextBlock.ToolTip>
+                                        <TextBlock
+                                            TextAlignment="Left"
+                                            Text="文献文字列。クリックしてコピー。"
+                                            >
+                                        </TextBlock>
+                                    </TextBlock.ToolTip>
+                                </TextBlock>
+                                <TextBlock 
+                                    Text="{Binding SelectingNodeViewModel.Article.ReferenceString}" 
+                                    Margin="50,0,0,0" 
+                                    TextWrapping="Wrap"
+                                    />
+                            </Grid>
+
+                            <Grid Margin="4">
+
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <Button
+                                    Grid.Column="0"
+                                    Margin="3"
+                                    Style="{StaticResource ButtonTextStyle}"
+                                    ToolTip="オンラインからメタ情報および引用関係をダウンロードして，追記します。"
+                                    >
+                                    <StackPanel Orientation="Horizontal">
+                                        <mah:ProgressRing Visibility="{Binding IsFetchOnlineInfoBusy, Converter={StaticResource BooleanToVisibilityConverter}}" Style="{StaticResource ProgressRingStyle}" Margin="0,0,5,0"/>
+                                        <TextBlock Text="（オンラインで情報を取得）"/>
+                                    </StackPanel>
+                                </Button>
+
+                                <Button
+                                    Grid.Column="1"
+                                    Margin="3"
+                                    Style="{StaticResource ButtonTextStyle}"
+                                    Command="{Binding OpenPDFCommand}"
+                                    ToolTip="PDFを表示します。&#10;もしローカルに存在しない場合は，自動でダウンロードします。"
+                                    >
+                                    <StackPanel Orientation="Horizontal">
+                                        <mah:ProgressRing Visibility="{Binding IsOpenPDFBusy, Converter={StaticResource BooleanToVisibilityConverter}}" Style="{StaticResource ProgressRingStyle}" Margin="0,0,5,0"/>
+                                        <TextBlock Text="PDFを表示"/>
+                                    </StackPanel>
+                                </Button>
+
+                                <Button
+                                    Grid.Column="2"
+                                    Margin="3"
+                                    Style="{StaticResource ButtonTextStyle}"
+                                    Command="{Binding OpenDOIWebSiteCommand}"
+                                    ToolTip="元データのWebサイトをブラウザで表示します。"
+                                    >
+                                    <StackPanel Orientation="Horizontal">
+                                        <mah:ProgressRing Visibility="{Binding IsOpenDOIWebSiteBusy, Converter={StaticResource BooleanToVisibilityConverter}}" Style="{StaticResource ProgressRingStyle}" Margin="0,0,5,0"/>
+                                        <TextBlock Text="Webサイトを表示"/>
+                                    </StackPanel>
+                                </Button>
+
+                            </Grid>
+
+                            <Grid Margin="4">
+
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <Button
+                                    Grid.Column="0"
+                                    Margin="3"
+                                    Style="{StaticResource ButtonTextStyle}"
+                                    Content="（）"
+                                    ToolTip=""
+                                    />
+
+                                <Button
+                                    Grid.Column="1"
+                                    Margin="3"
+                                    Style="{StaticResource ButtonTextStyle}"
+                                    Command="{Binding ManuallyAddPDFCommand}"
+                                    ToolTip="PDFをデータベースに手動で追加します。"
+                                        >
+                                    <StackPanel Orientation="Horizontal">
+                                        <mah:ProgressRing Visibility="{Binding IsManuallyAddPDFBusy, Converter={StaticResource BooleanToVisibilityConverter}}" Style="{StaticResource ProgressRingStyle}" Margin="0,0,5,0"/>
+                                        <TextBlock Text="PDF手動追加"/>
+                                    </StackPanel>
+                                </Button>
+
+                                <Button
+                                    Grid.Column="2"
+                                    Margin="3"
+                                    Style="{StaticResource ButtonTextStyle}"
+                                    Command="{Binding IsAISummaryCommand}"
+                                    ToolTip="AIに論文を読んでもらって，まとめ文章を作成してもらいます。"
+                                    >
+                                    <StackPanel Orientation="Horizontal">
+                                        <mah:ProgressRing Visibility="{Binding IsAISummaryBusy, Converter={StaticResource BooleanToVisibilityConverter}}" Style="{StaticResource ProgressRingStyle}" Margin="0,0,5,0"/>
+                                        <TextBlock Text="（AIにまとめてもらう）"/>
+                                    </StackPanel>
+                                </Button>
+                            </Grid>
+
                         </StackPanel>
-                    </Grid>
 
-                    <Grid Margin="4">
-                        <TextBlock
-                            Text="タグ：" 
-                            Width="50" 
-                            HorizontalAlignment="Left"
-                            TextAlignment="Right"
-                            ToolTipService.InitialShowDelay="10" 
-                            >
-                            <TextBlock.ToolTip>
+                    </ScrollViewer>
+                </TabItem>
+                <TabItem Header="検索" x:Name="TabItem_Search">
+                    <ScrollViewer
+                        HorizontalScrollBarVisibility="Disabled">
+                        <StackPanel Margin="4">
+
+                            <Grid Height="10"/>
+                            <Grid Margin="4">
                                 <TextBlock
-                                    TextAlignment="Left"
-                                    Text="「ローカルのPDFの有無」「データ取得元」を列挙します。"
+                                    Text="ローカル検索"
+                                    FontSize="17"
+                                    HorizontalAlignment="Left"
                                     >
                                 </TextBlock>
-                            </TextBlock.ToolTip>
-                        </TextBlock>
-                        <TextBlock 
-                            Text="{Binding SelectingNodeViewModel.Tags}" 
-                            Margin="50,0,0,0" 
-                            TextWrapping="Wrap"
-                            />
-                    </Grid>
+                            </Grid>
 
-                    <Grid Margin="4">
-                        <TextBlock
-                            Text="文献：" 
-                            Width="50" 
-                            HorizontalAlignment="Left"
-                            TextAlignment="Right"
-                            ToolTipService.InitialShowDelay="10" 
-                            >
-                            <TextBlock.ToolTip>
+                            <Grid Margin="4">
                                 <TextBlock
-                                    TextAlignment="Left"
-                                    Text="文献文字列。クリックしてコピー。"
+                                    Text="検索文字列：" 
+                                    Width="100" 
+                                    HorizontalAlignment="Left"
+                                    TextAlignment="Right"
+                                    ToolTipService.InitialShowDelay="10" 
+                                    >
+                                    <TextBlock.ToolTip>
+                                        <TextBlock
+                                            TextAlignment="Left"
+                                            Text="検索対象：著者名，タイトル，AOI"
+                                            >
+                                        </TextBlock>
+                                    </TextBlock.ToolTip>
+                                </TextBlock>
+                                <TextBox 
+                                    x:Name="TextBox_LocalSearch"
+                                    Margin="100,0,0,0" 
+                                    Text="{Binding LocalSearchString, UpdateSourceTrigger=PropertyChanged}"
+                                    TextWrapping="Wrap" AcceptsReturn="False"
+                                    />
+                            </Grid>
+
+                            <Grid Margin="4">
+                                <StackPanel 
+                                    Orientation="Horizontal"
+                                    HorizontalAlignment="Right"
+                                    >
+                                    <Button
+                                        Command="{Binding ResetLocalSearchStringCommand}"
+                                        Style="{StaticResource ButtonTextStyle}"
+                                        Content="リセット"
+                                        />
+
+                                </StackPanel>
+                            </Grid>
+
+                            <Grid Height="40"/>
+                            <Grid Margin="4">
+                                <TextBlock
+                                    Text="オンライン検索"
+                                    FontSize="17"
+                                    HorizontalAlignment="Left"
                                     >
                                 </TextBlock>
-                            </TextBlock.ToolTip>
-                        </TextBlock>
-                        <TextBlock 
-                            Text="{Binding SelectingNodeViewModel.Article.ReferenceString}" 
-                            Margin="50,0,0,0" 
-                            TextWrapping="Wrap"
-                            />
-                    </Grid>
+                            </Grid>
 
-                    <Grid Margin="4">
+                            <Grid Margin="4">
+                                <TextBlock
+                                    Text="検索文字列：" 
+                                    Width="100" 
+                                    HorizontalAlignment="Left"
+                                    TextAlignment="Right"
+                                    ToolTipService.InitialShowDelay="10" 
+                                    >
+                                    <TextBlock.ToolTip>
+                                        <TextBlock
+                                            TextAlignment="Left"
+                                            Text="authors"
+                                            >
+                                        </TextBlock>
+                                    </TextBlock.ToolTip>
+                                </TextBlock>
+                                <TextBox 
+                                    Margin="100,0,0,0" 
+                                    Text="{Binding InternetSearchString, UpdateSourceTrigger=PropertyChanged}" 
+                                    TextWrapping="Wrap" AcceptsReturn="False"
+                                    />
+                            </Grid>
 
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
+                            <Grid Margin="4">
+                                <StackPanel 
+                                    Orientation="Horizontal"
+                                    HorizontalAlignment="Right"
+                                    >
+                                    <Button
+                                        Command="{Binding InternetSearchJStageCommand}"
+                                        Style="{StaticResource ButtonTextStyle}"
+                                        >
+                                        <StackPanel Orientation="Horizontal">
+                                            <Grid>
+                                                <mah:ProgressRing Visibility="{Binding IsInternetSearchJStageBusy, Converter={StaticResource BooleanToVisibilityConverter}}" Style="{StaticResource ProgressRingStyle}" Margin="0,0,3.5,0"/>
+                                                <Grid Visibility="{Binding IsInternetSearchJStageBusy, Converter={StaticResource InverseBooleanToVisibility}}">
+                                                    <TextBlock Text="🔎" Visibility="{Binding IsInternetSearchJStageDone, Converter={StaticResource InverseBooleanToVisibility}}"/>
+                                                    <TextBlock Text="✔️" Visibility="{Binding IsInternetSearchJStageDone, Converter={StaticResource BooleanToVisibilityConverter}}" Foreground="Green"/>
+                                                </Grid>
+                                            </Grid>
+                                            <TextBlock Text=" J-Stage "/>
+                                        </StackPanel>
+                                    </Button>
 
-                        <Button
-                            Grid.Column="0"
-                            Margin="3"
-                            Style="{StaticResource ButtonTextStyle}"
-                            ToolTip="オンラインからメタ情報および引用関係をダウンロードして，追記します。"
-                            >
-                            <StackPanel Orientation="Horizontal">
-                                <mah:ProgressRing Style="{StaticResource ProgressRingStyle}" Margin="0,0,5,0" Visibility="{Binding IsFetchOnlineInfoBusy, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-                                <TextBlock Text="（オンラインで情報を取得）"/>
-                            </StackPanel>
-                        </Button>
 
-                        <Button
-                            Grid.Column="1"
-                            Margin="3"
-                            Style="{StaticResource ButtonTextStyle}"
-                            Command="{Binding OpenPDFCommand}"
-                            ToolTip="PDFを表示します。&#10;もしローカルに存在しない場合は，自動でダウンロードします。"
-                            >
-                            <StackPanel Orientation="Horizontal">
-                                <mah:ProgressRing Style="{StaticResource ProgressRingStyle}" Margin="0,0,5,0" Visibility="{Binding IsOpenPDFBusy, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-                                <TextBlock Text="PDFを表示"/>
-                            </StackPanel>
-                        </Button>
+                                    
+                                    
+                                    
+                                    
+                                    
+                                </StackPanel>
+                            </Grid>
 
-                        <Button
-                            Grid.Column="2"
-                            Margin="3"
-                            Style="{StaticResource ButtonTextStyle}"
-                            Command="{Binding OpenDOIWebSiteCommand}"
-                            ToolTip="元データのWebサイトをブラウザで表示します。"
-                            >
-                            <StackPanel Orientation="Horizontal">
-                                <mah:ProgressRing Style="{StaticResource ProgressRingStyle}" Margin="0,0,5,0" Visibility="{Binding IsOpenDOIWebSiteBusy, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-                                <TextBlock Text="Webサイトを表示"/>
-                            </StackPanel>
-                        </Button>
+                        </StackPanel>
+                    </ScrollViewer>
+                </TabItem>
+            </TabControl>
 
-                    </Grid>
-
-                    <Grid Margin="4">
-
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-
-                        <Button
-                            Grid.Column="0"
-                            Margin="3"
-                            Style="{StaticResource ButtonTextStyle}"
-                            Content="（）"
-                            ToolTip=""
-                            />
-
-                        <Button
-                            Grid.Column="1"
-                            Margin="3"
-                            Style="{StaticResource ButtonTextStyle}"
-                            Command="{Binding ManuallyAddPDFCommand}"
-                            ToolTip="PDFをデータベースに手動で追加します。"
-                               >
-                            <StackPanel Orientation="Horizontal">
-                                <mah:ProgressRing Style="{StaticResource ProgressRingStyle}" Margin="0,0,5,0" Visibility="{Binding IsManuallyAddPDFBusy, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-                                <TextBlock Text="PDF手動追加"/>
-                            </StackPanel>
-                        </Button>
-
-                        <Button
-                            Grid.Column="2"
-                            Margin="3"
-                            Style="{StaticResource ButtonTextStyle}"
-                            Command="{Binding IsAISummaryCommand}"
-                            ToolTip="AIに論文を読んでもらって，まとめ文章を作成してもらいます。"
-                            >
-                            <StackPanel Orientation="Horizontal">
-                                <mah:ProgressRing Style="{StaticResource ProgressRingStyle}" Margin="0,0,5,0" Visibility="{Binding IsAISummaryBusy, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-                                <TextBlock Text="（AIにまとめてもらう）"/>
-                            </StackPanel>
-                        </Button>
-                    </Grid>
-
-                </StackPanel>
-
-            </ScrollViewer>
-
-            <StackPanel Grid.Row="1" Margin="4">
+            <StackPanel Margin="4" VerticalAlignment="Bottom">
 
                 <Grid Margin="4">
                     <TextBlock
@@ -1081,6 +1190,5 @@
             </StackPanel>
 
         </Grid>
-
     </Grid>
 </Window>

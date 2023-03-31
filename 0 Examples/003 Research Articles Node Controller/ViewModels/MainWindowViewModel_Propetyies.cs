@@ -63,21 +63,6 @@ public partial class MainWindowViewModel : ViewModel
     }
     bool _IsEnableAllNodeConnectors = false;
 
-    public static string _LocalSearchString;
-    public string LocalSearchString
-    {
-        get => _LocalSearchString;
-        set
-        {
-            if (RaisePropertyChangedIfSet(ref _LocalSearchString, value))
-            {
-                NotifyResearchArticlesPropertiesChanged();
-                SelectedEmphasizePropertyItem = ViewModels.EmphasizePropertyItems.検索結果;
-                _LocalSearchString = value;
-            }
-        }
-    }
-
 
     // ★★★★★★★★★★★★★★★ 右クリック
 
@@ -145,7 +130,7 @@ public partial class MainWindowViewModel : ViewModel
         }
     }
 
-    // ★★★★★★★★★★★★★★★ 右パネル内
+    // ★★★★★★★★★★★★★★★ 右パネル内 → 選択中の文献
 
     public bool IsFetchOnlineInfoBusy { get; set; } = false;
     public ViewModelCommand FetchOnlineInfoCommand => _FetchOnlineInfoCommand.Get(FetchOnlineInfo);
@@ -166,6 +151,50 @@ public partial class MainWindowViewModel : ViewModel
     public bool IsAISummaryBusy { get; set; } = false;
     public ViewModelCommand IsAISummaryCommand => _IsAISummaryCommand.Get(AISummary);
     ViewModelCommandHandler _IsAISummaryCommand = new();
+
+
+    // ★★★★★★★★★★★★★★★ 右パネル内 → 検索
+
+    public ViewModelCommand OpenSearchTabCommand => _OpenSearchTabCommand.Get(async () => await OpenLocalSearch());
+    ViewModelCommandHandler _OpenSearchTabCommand = new();
+
+    public static string _LocalSearchString;
+    public string LocalSearchString
+    {
+        get => _LocalSearchString;
+        set
+        {
+            if (RaisePropertyChangedIfSet(ref _LocalSearchString, value))
+            {
+                NotifyResearchArticlesPropertiesChanged();
+                SelectedEmphasizePropertyItem = ViewModels.EmphasizePropertyItems.検索結果;
+                _LocalSearchString = value;
+            }
+        }
+    }
+
+    public ViewModelCommand ResetLocalSearchStringCommand => _ResetLocalSearchStringCommand.Get(() => LocalSearchString = "");
+    ViewModelCommandHandler _ResetLocalSearchStringCommand = new();
+
+    public static string _InternetSearchString;
+    public string InternetSearchString
+    {
+        get => _InternetSearchString;
+        set
+        {
+            if (RaisePropertyChangedIfSet(ref _InternetSearchString, value))
+            {
+                IsInternetSearchJStageDone = false;
+
+                _InternetSearchString = value;
+            }
+        }
+    }
+
+    public bool IsInternetSearchJStageBusy { get; set; } = false;
+    public bool IsInternetSearchJStageDone { get; set; } = false;
+    public ViewModelCommand InternetSearchJStageCommand => _InternetSearchJStageCommand.Get(async () => await InternetSearchJStage());
+    ViewModelCommandHandler _InternetSearchJStageCommand = new();
 
 
     // ★★★★★★★★★★★★★★★ 

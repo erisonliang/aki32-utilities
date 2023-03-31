@@ -1423,7 +1423,7 @@ public static partial class ExampleExecuter
                 //var research = new ResearchArticlesManager(databaseDir);
                 //research.OpenDatabase();
 
-                ////// ★ articles from j - stage
+                ////// ★ articles from j-stage
                 ////var accessor = new JStageArticleAPIAccessor()
                 ////{
                 ////    PublishedFrom = 2022,
@@ -1459,7 +1459,6 @@ public static partial class ExampleExecuter
                 ////    SearchFreeWord = "空間情報を表現するグラフ構造",
                 ////};
                 ////research.PullArticleInfo(accessor);
-
 
 
                 //// display

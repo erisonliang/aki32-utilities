@@ -8,6 +8,7 @@ using System.Windows.Input;
 using Aki32Utilities.ConsoleAppUtilities.General;
 using Microsoft.Win32;
 using System.IO;
+using Livet.Commands;
 
 namespace Aki32Utilities.UsageExamples.ResearchArticlesNodeController.ViewModels;
 public partial class MainWindowViewModel : ViewModel
@@ -455,6 +456,10 @@ public partial class MainWindowViewModel : ViewModel
                 hitArticleNodeFlag = true;
             }
         }
+
+        if (SelectingNodeViewModel is not null)
+            ParentView.TabControl_RightPanel.SelectedItem = ParentView.TabItem_SelectingNode;
+
     }
 
     void NodeConnected(ConnectedLinkOperationEventArgs param)
@@ -487,9 +492,9 @@ public partial class MainWindowViewModel : ViewModel
     }
 
 
-    // ★★★★★★★★★★★★★★★ 右パネル内
+    // ★★★★★★★★★★★★★★★ 右パネル内 → 選択中の文献
 
-    async Task FetchOnlineInfo()
+    void FetchOnlineInfo()
     {
         try
         {
@@ -634,6 +639,79 @@ public partial class MainWindowViewModel : ViewModel
         finally
         {
             IsAISummaryBusy = false;
+        }
+    }
+
+
+    // ★★★★★★★★★★★★★★★ 右パネル内 → 検索
+
+    void aaa()
+    {
+
+        ////// ★ articles from cinii
+        ////var accessor = new CiNiiArticleAPIAccessor()
+        ////{
+        ////    RecordCount = 5,
+        ////    ISSN = ISSN.Architecture_Structure,
+        ////    SearchFreeWord = "小振幅"
+        ////};
+        ////research.PullArticleInfo(accessor);
+
+
+        ////// ★ article from crossref
+        ////var accessor = new CrossRefAPIAccessor()
+        ////{
+        ////    DOI = "10.3130/aijs.87.822"
+        ////};
+        ////research.PullArticleInfo(accessor);
+
+
+        ////// ★ articles from ndl search
+        ////var accessor = new NDLSearchAPIAccessor()
+        ////{
+        ////    RecordCount = 5,
+        ////    SearchFreeWord = "空間情報を表現するグラフ構造",
+        ////};
+        ////research.PullArticleInfo(accessor);
+
+    }
+
+    async Task OpenLocalSearch()
+    {
+        ParentView.TabControl_RightPanel.SelectedItem = ParentView.TabItem_Search;
+        //ParentView.TextBox_LocalSearch.Text = "";
+        await Task.Delay(10);
+        ParentView.TextBox_LocalSearch.Focus();
+    }
+
+    async Task InternetSearchJStage()
+    {
+        try
+        {
+            if (IsInternetSearchJStageBusy)
+                return;
+            IsInternetSearchJStageBusy = true;
+
+            //// ★ articles from j-stage
+            //var accessor = new JStageArticleAPIAccessor()
+            //{
+            //    PublishedFrom = 2022,
+            //    ISSN = ISSN.Architecture_Structure,
+            //    RecordCount = 3,
+            //    //Start = 1,
+            //};
+            //ResearchArticlesManager.PullArticleInfo(accessor);
+
+            SelectedEmphasizePropertyItem = ViewModels.EmphasizePropertyItems.一時ﾃﾞｰﾀ;
+            IsInternetSearchJStageDone = true;
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show($"失敗しました。\r\nﾒｯｾｰｼﾞ: {ex.Message}", "J-Stageで検索", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+        finally
+        {
+            IsInternetSearchJStageBusy = false;
         }
     }
 
