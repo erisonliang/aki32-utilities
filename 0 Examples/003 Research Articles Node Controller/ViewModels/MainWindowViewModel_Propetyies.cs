@@ -111,7 +111,6 @@ public partial class MainWindowViewModel : ViewModel
     public IEnumerable<GroupNodeViewModel> GroupNodeViewModels => _GroupNodeViewModels;
     ObservableCollection<GroupNodeViewModel> _GroupNodeViewModels = new();
 
-
     public EmphasizePropertyItems[] EmphasizePropertyItems { get; } = Enum.GetValues(typeof(EmphasizePropertyItems)).OfType<EmphasizePropertyItems>().ToArray();
     public static EmphasizePropertyItems _SelectedEmphasizePropertyItem = ViewModels.EmphasizePropertyItems.なし;
     public EmphasizePropertyItems SelectedEmphasizePropertyItem
@@ -129,6 +128,7 @@ public partial class MainWindowViewModel : ViewModel
             }
         }
     }
+
 
     // ★★★★★★★★★★★★★★★ 右パネル内 → 選択中の文献
 
@@ -177,30 +177,30 @@ public partial class MainWindowViewModel : ViewModel
     ViewModelCommandHandler _ResetLocalSearchStringCommand = new();
 
     public string InternetSearch_FreeWord { get; set; }
+    public string InternetSearch_PublishedFrom { get; set; }
+    public string InternetSearch_PublishedUntil { get; set; }
+    public string InternetSearch_DataMaxCount { get; set; } = "20";
 
     public string InternetSearch_Authors { get; set; }
     public string InternetSearch_ArticleTitle { get; set; }
     public string InternetSearch_MaterialTitle { get; set; }
     public string InternetSearch_Keywords { get; set; }
     public string InternetSearch_MaterialVolume { get; set; }
-    public string InternetSearch_PublishedFrom { get; set; }
-    public string InternetSearch_PublishedTo { get; set; }
-    public string InternetSearch_DataMaxCount { get; set; } = "20";
 
-    public bool IsInternetSearchCiNiiBusy { get; set; } = false;
-    public bool IsInternetSearchCiNiiDone { get; set; } = false;
-    public ViewModelCommand InternetSearchCiNiiCommand => _InternetSearchCiNiiCommand.Get(async () => await InternetSearchCiNii());
-    ViewModelCommandHandler _InternetSearchCiNiiCommand = new();
+    public bool IsInternetSearch_CiNii_A_Busy { get; set; } = false;
+    public bool IsInternetSearch_CiNii_A_Done { get; set; } = false;
+    public ViewModelCommand InternetSearch_CiNii_A_Command => _InternetSearch_CiNii_A_Command.Get(async () => await InternetSearch_CiNii_A());
+    ViewModelCommandHandler _InternetSearch_CiNii_A_Command = new();
 
-    public bool IsInternetSearchNDLSearchBusy { get; set; } = false;
-    public bool IsInternetSearchNDLSearchDone { get; set; } = false;
-    public ViewModelCommand InternetSearchNDLSearchCommand => _InternetSearchNDLSearchCommand.Get(async () => await InternetSearchNDLSearch());
-    ViewModelCommandHandler _InternetSearchNDLSearchCommand = new();
+    public bool IsInternetSearch_NDLSearch_A_Busy { get; set; } = false;
+    public bool IsInternetSearch_NDLSearch_A_Done { get; set; } = false;
+    public ViewModelCommand InternetSearch_NDLSearch_A_Command => _InternetSearch_NDLSearch_A_Command.Get(async () => await InternetSearch_NDLSearch_A());
+    ViewModelCommandHandler _InternetSearch_NDLSearch_A_Command = new();
 
-    public bool IsInternetSearchJStageBusy { get; set; } = false;
-    public bool IsInternetSearchJStageDone { get; set; } = false;
-    public ViewModelCommand InternetSearchJStageCommand => _InternetSearchJStageCommand.Get(async () => await InternetSearchJStage());
-    ViewModelCommandHandler _InternetSearchJStageCommand = new();
+    public bool IsInternetSearchJStage_B_Busy { get; set; } = false;
+    public bool IsInternetSearchJStage_B_Done { get; set; } = false;
+    public ViewModelCommand InternetSearchJStage_B_Command => _InternetSearchJStage_B_Command.Get(async () => await InternetSearchJStage_B_());
+    ViewModelCommandHandler _InternetSearchJStage_B_Command = new();
 
 
     // ★★★★★★★★★★★★★★★ 

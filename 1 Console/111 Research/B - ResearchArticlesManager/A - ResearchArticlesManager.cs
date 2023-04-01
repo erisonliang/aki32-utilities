@@ -80,10 +80,11 @@ public partial class ResearchArticlesManager
     /// </summary>
     /// <param name="uriBuilder"></param>
     /// <exception cref="InvalidOperationException"></exception>
-    public async Task PullArticleInfo(IResearchAPIAccessor uriBuilder, bool asTempArticles = false)
+    public async Task<List<ResearchArticle>> PullArticleInfo(IResearchAPIAccessor uriBuilder, bool asTempArticles = false)
     {
         var fetchedArticles = await FetchArticleInfo(uriBuilder);
-        MergeArticleInfo(fetchedArticles, asTempArticles: asTempArticles);
+        var mergedArticles = MergeArticleInfo(fetchedArticles, asTempArticles: asTempArticles);
+        return mergedArticles;
     }
 
     /// <summary>
@@ -111,14 +112,14 @@ public partial class ResearchArticlesManager
     /// <param name="forceAdd">never merge and force add all to database</param>
     /// <exception cref="InvalidOperationException"></exception>
     /// <exception cref="InvalidDataException"></exception>
-    public void MergeArticleInfo(List<ResearchArticle> mergingArticles, bool forceAdd = false, bool warnMultipleMatches = false, bool save = true, bool asTempArticles = false)
+    public List<ResearchArticle> MergeArticleInfo(List<ResearchArticle> mergingArticles, bool forceAdd = false, bool warnMultipleMatches = false, bool save = true, bool asTempArticles = false)
     {
         // preprocess
         if (ArticleDatabase == null)
             throw new InvalidOperationException("Database has not been opened yet. Consider to call OpenDataBase() first.");
         var addedCount = 0;
         var updatedCount = 0;
-
+        var mergedArticles = new List<ResearchArticle>();
 
         Console.WriteLine();
         Console.WriteLine($"★ Merging {mergingArticles.Count} articles in total...");
@@ -129,20 +130,21 @@ public partial class ResearchArticlesManager
         foreach (var mergingArticle in mergingArticles)
         {
             mergingArticle.Private_Temporary = asTempArticles;
-            var matchedArticles = ArticleDatabase.Where(a => a.CompareTo(mergingArticle) == 0);
+            var matchedArticles = ArticleDatabase.Where(a => a.CompareTo(mergingArticle) == 0).ToList();
 
             // multiple matches
-            if (warnMultipleMatches && matchedArticles!.Count() > 1)
-                throw new InvalidDataException($"{matchedArticles!.Count()} articles matched to {mergingArticle.ArticleTitle}");
+            if (warnMultipleMatches && matchedArticles!.Count > 1)
+                throw new InvalidDataException($"{matchedArticles!.Count} articles matched to {mergingArticle.ArticleTitle}");
 
             // merge/update
-            if (matchedArticles.Count() == 1 && !forceAdd)
+            if (matchedArticles.Count == 1 && !forceAdd)
             {
                 MergeArticles(matchedArticles.First(), mergingArticle);
 
                 if (UtilConfig.ConsoleOutput_Contents)
                     Console.WriteLine($"@@@ {mergingArticle!.ArticleTitle}");
 
+                mergedArticles.Add(matchedArticles.First());
                 updatedCount++;
                 articleDatabaseUpdated = true;
             }
@@ -155,6 +157,7 @@ public partial class ResearchArticlesManager
                 if (UtilConfig.ConsoleOutput_Contents)
                     Console.WriteLine($"+++ {mergingArticle!.ArticleTitle}");
 
+                mergedArticles.Add(mergingArticle);
                 addedCount++;
                 articleDatabaseUpdated = true;
             }
@@ -167,6 +170,7 @@ public partial class ResearchArticlesManager
         Console.WriteLine($"★ {addedCount} added, {updatedCount} updated.");
         Console.WriteLine();
 
+        return mergedArticles;
     }
 
     /// <summary>

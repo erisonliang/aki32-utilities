@@ -21,6 +21,7 @@
     <Window.InputBindings>
         <KeyBinding Gesture="Ctrl+S" Command="{Binding SaveCommand}"/>
         <KeyBinding Gesture="Ctrl+F" Command="{Binding OpenSearchTabCommand}"/>
+        <KeyBinding Gesture="Delete" Command="{Binding RemoveSelectingNodesCommand}"/>
     </Window.InputBindings>
 
     <Window.Resources>
@@ -902,6 +903,7 @@
                                         </TextBlock>
                                     </TextBlock.ToolTip>
                                 </TextBlock>
+                                
                                 <StackPanel
                                     Margin="70,0,0,0" 
                                     Orientation="Horizontal"
@@ -911,6 +913,7 @@
                                     <TextBlock Text="{Binding SelectingNodeViewModel.Article.Friendly_AOI}"/>
                                     <TextBlock Text=" )"/>
                                 </StackPanel>
+
                             </Grid>
 
                             <Grid Margin="4">
@@ -1066,7 +1069,7 @@
                             <Grid Margin="4">
                                 <TextBlock
                                     Text="ローカル検索"
-                                    FontSize="17"
+                                    FontSize="20"
                                     HorizontalAlignment="Left"
                                     >
                                 </TextBlock>
@@ -1115,6 +1118,16 @@
                             <Grid Margin="4">
                                 <TextBlock
                                     Text="オンライン検索"
+                                    FontSize="20"
+                                    HorizontalAlignment="Left"
+                                    >
+                                </TextBlock>
+                            </Grid>
+
+                            <Grid Margin="4">
+                                <TextBlock
+                                    Text="パターンA"
+                                    Margin="4,0,0,0"
                                     FontSize="17"
                                     HorizontalAlignment="Left"
                                     >
@@ -1199,7 +1212,7 @@
 
                                 <TextBox 
                                     Grid.Column="6"
-                                    Text="{Binding InternetSearch_PublishedTo, UpdateSourceTrigger=PropertyChanged}" 
+                                    Text="{Binding InternetSearch_PublishedUntil, UpdateSourceTrigger=PropertyChanged}" 
                                     TextWrapping="NoWrap" AcceptsReturn="False"
                                     />
 
@@ -1234,15 +1247,15 @@
                                     >
                                     <Button
                                         Margin="3"
-                                        Command="{Binding InternetSearchCiNiiCommand}"
+                                        Command="{Binding InternetSearch_CiNii_A_Command}"
                                         Style="{StaticResource ButtonTextStyle}"
                                         >
                                         <StackPanel Orientation="Horizontal">
                                             <Grid>
-                                                <mah:ProgressRing Visibility="{Binding IsInternetSearchCiNiiBusy, Converter={StaticResource BooleanToVisibilityConverter}}" Style="{StaticResource ProgressRingStyle}" Margin="0,0,3.5,0"/>
-                                                <Grid Visibility="{Binding IsInternetSearchCiNiiBusy, Converter={StaticResource InverseBooleanToVisibility}}">
-                                                    <TextBlock Text="🔎" Visibility="{Binding IsInternetSearchCiNiiDone, Converter={StaticResource InverseBooleanToVisibility}}"/>
-                                                    <TextBlock Text="✔️" Visibility="{Binding IsInternetSearchCiNiiDone, Converter={StaticResource BooleanToVisibilityConverter}}" Foreground="Green"/>
+                                                <mah:ProgressRing Visibility="{Binding IsInternetSearch_CiNii_A_Busy, Converter={StaticResource BooleanToVisibilityConverter}}" Style="{StaticResource ProgressRingStyle}" Margin="0,0,3.5,0"/>
+                                                <Grid Visibility="{Binding IsInternetSearch_CiNii_A_Busy, Converter={StaticResource InverseBooleanToVisibility}}">
+                                                    <TextBlock Text="🔎" Visibility="{Binding IsInternetSearch_CiNii_A_Done, Converter={StaticResource InverseBooleanToVisibility}}"/>
+                                                    <TextBlock Text="✔️" Visibility="{Binding IsInternetSearch_CiNii_A_Done, Converter={StaticResource BooleanToVisibilityConverter}}" Foreground="Green"/>
                                                 </Grid>
                                             </Grid>
                                             <TextBlock Text=" CiNii "/>
@@ -1251,15 +1264,15 @@
 
                                     <Button
                                         Margin="3"
-                                        Command="{Binding InternetSearchNDLSearchCommand}"
+                                        Command="{Binding InternetSearch_NDLSearch_A_Command}"
                                         Style="{StaticResource ButtonTextStyle}"
                                         >
                                         <StackPanel Orientation="Horizontal">
                                             <Grid>
-                                                <mah:ProgressRing Visibility="{Binding IsInternetSearchNDLSearchBusy, Converter={StaticResource BooleanToVisibilityConverter}}" Style="{StaticResource ProgressRingStyle}" Margin="0,0,3.5,0"/>
-                                                <Grid Visibility="{Binding IsInternetSearchNDLSearchBusy, Converter={StaticResource InverseBooleanToVisibility}}">
-                                                    <TextBlock Text="🔎" Visibility="{Binding IsInternetSearchNDLSearchDone, Converter={StaticResource InverseBooleanToVisibility}}"/>
-                                                    <TextBlock Text="✔️" Visibility="{Binding IsInternetSearchNDLSearchDone, Converter={StaticResource BooleanToVisibilityConverter}}" Foreground="Green"/>
+                                                <mah:ProgressRing Visibility="{Binding IsInternetSearch_NDLSearch_A_Busy, Converter={StaticResource BooleanToVisibilityConverter}}" Style="{StaticResource ProgressRingStyle}" Margin="0,0,3.5,0"/>
+                                                <Grid Visibility="{Binding IsInternetSearch_NDLSearch_A_Busy, Converter={StaticResource InverseBooleanToVisibility}}">
+                                                    <TextBlock Text="🔎" Visibility="{Binding IsInternetSearch_NDLSearch_A_Done, Converter={StaticResource InverseBooleanToVisibility}}"/>
+                                                    <TextBlock Text="✔️" Visibility="{Binding IsInternetSearch_NDLSearch_A_Done, Converter={StaticResource BooleanToVisibilityConverter}}" Foreground="Green"/>
                                                 </Grid>
                                             </Grid>
                                             <TextBlock Text=" NDL Search "/>
@@ -1270,6 +1283,16 @@
                             </Grid>
 
                             <Grid Height="20"/>
+
+                            <Grid Margin="4">
+                                <TextBlock
+                                    Text="パターンB"
+                                    Margin="4,0,0,0"
+                                    FontSize="17"
+                                    HorizontalAlignment="Left"
+                                    >
+                                </TextBlock>
+                            </Grid>
 
                             <Grid Margin="4">
                                 <TextBlock
@@ -1336,29 +1359,6 @@
                                     Margin="70,0,0,0" 
                                     Text="{Binding InternetSearch_MaterialTitle, UpdateSourceTrigger=PropertyChanged}" 
                                     TextWrapping="NoWrap" AcceptsReturn="False"
-                                    />
-                            </Grid>
-
-                            <Grid Margin="4">
-                                <TextBlock
-                                    Text="キーワード：" 
-                                    Width="70" 
-                                    HorizontalAlignment="Left"
-                                    TextAlignment="Right"
-                                    ToolTipService.InitialShowDelay="10" 
-                                    >
-                                    <TextBlock.ToolTip>
-                                        <TextBlock
-                                            TextAlignment="Left"
-                                            Text="memo"
-                                            >
-                                        </TextBlock>
-                                    </TextBlock.ToolTip>
-                                </TextBlock>
-                                <TextBox 
-                                    Margin="70,0,0,0" 
-                                    Text="{Binding InternetSearch_Keywords, UpdateSourceTrigger=PropertyChanged}" 
-                                    TextWrapping="Wrap" AcceptsReturn="True"
                                     />
                             </Grid>
 
@@ -1439,7 +1439,7 @@
 
                                 <TextBox 
                                     Grid.Column="6"
-                                    Text="{Binding InternetSearch_PublishedTo, UpdateSourceTrigger=PropertyChanged}" 
+                                    Text="{Binding InternetSearch_PublishedUntil, UpdateSourceTrigger=PropertyChanged}" 
                                     TextWrapping="NoWrap" AcceptsReturn="False"
                                     />
 
@@ -1468,21 +1468,44 @@
                             </Grid>
 
                             <Grid Margin="4">
+                                <TextBlock
+                                    Text="キーワード：" 
+                                    Width="70" 
+                                    HorizontalAlignment="Left"
+                                    TextAlignment="Right"
+                                    ToolTipService.InitialShowDelay="10" 
+                                    >
+                                    <TextBlock.ToolTip>
+                                        <TextBlock
+                                            TextAlignment="Left"
+                                            Text="memo"
+                                            >
+                                        </TextBlock>
+                                    </TextBlock.ToolTip>
+                                </TextBlock>
+                                <TextBox 
+                                    Margin="70,0,0,0" 
+                                    Text="{Binding InternetSearch_Keywords, UpdateSourceTrigger=PropertyChanged}" 
+                                    TextWrapping="Wrap" AcceptsReturn="True"
+                                    />
+                            </Grid>
+
+                            <Grid Margin="4">
                                 <StackPanel 
                                     Orientation="Horizontal"
                                     HorizontalAlignment="Right"
                                     >
                                     <Button
                                         Margin="3"
-                                        Command="{Binding InternetSearchJStageCommand}"
+                                        Command="{Binding InternetSearchJStage_B_Command}"
                                         Style="{StaticResource ButtonTextStyle}"
                                         >
                                         <StackPanel Orientation="Horizontal">
                                             <Grid>
-                                                <mah:ProgressRing Visibility="{Binding IsInternetSearchJStageBusy, Converter={StaticResource BooleanToVisibilityConverter}}" Style="{StaticResource ProgressRingStyle}" Margin="0,0,3.5,0"/>
-                                                <Grid Visibility="{Binding IsInternetSearchJStageBusy, Converter={StaticResource InverseBooleanToVisibility}}">
-                                                    <TextBlock Text="🔎" Visibility="{Binding IsInternetSearchJStageDone, Converter={StaticResource InverseBooleanToVisibility}}"/>
-                                                    <TextBlock Text="✔️" Visibility="{Binding IsInternetSearchJStageDone, Converter={StaticResource BooleanToVisibilityConverter}}" Foreground="Green"/>
+                                                <mah:ProgressRing Visibility="{Binding IsInternetSearchJStage_B_Busy, Converter={StaticResource BooleanToVisibilityConverter}}" Style="{StaticResource ProgressRingStyle}" Margin="0,0,3.5,0"/>
+                                                <Grid Visibility="{Binding IsInternetSearchJStage_B_Busy, Converter={StaticResource InverseBooleanToVisibility}}">
+                                                    <TextBlock Text="🔎" Visibility="{Binding IsInternetSearchJStage_B_Done, Converter={StaticResource InverseBooleanToVisibility}}"/>
+                                                    <TextBlock Text="✔️" Visibility="{Binding IsInternetSearchJStage_B_Done, Converter={StaticResource BooleanToVisibilityConverter}}" Foreground="Green"/>
                                                 </Grid>
                                             </Grid>
                                             <TextBlock Text=" J-Stage "/>
@@ -1495,6 +1518,16 @@
                             </Grid>
 
                             <Grid Height="20"/>
+
+                            <Grid Margin="4">
+                                <TextBlock
+                                    Text="パターンC"
+                                    Margin="4,0,0,0"
+                                    FontSize="17"
+                                    HorizontalAlignment="Left"
+                                    >
+                                </TextBlock>
+                            </Grid>
 
                             <Grid Margin="4">
                                 <TextBlock
@@ -1519,6 +1552,19 @@
                                     />
                             </Grid>
 
+                            <Grid Height="20"/>
+
+                            <Grid Margin="4">
+                                <TextBlock
+                                    Text="パターンD"
+                                    Margin="4,0,0,0"
+                                    FontSize="17"
+                                    HorizontalAlignment="Left"
+                                    >
+                                </TextBlock>
+                            </Grid>
+
+                            <Grid Height="20"/>
 
                         </StackPanel>
                     </ScrollViewer>
