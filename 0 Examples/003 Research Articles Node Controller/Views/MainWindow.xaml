@@ -980,7 +980,7 @@
                                     >
                                     <StackPanel Orientation="Horizontal">
                                         <mah:ProgressRing Visibility="{Binding IsFetchOnlineInfoBusy, Converter={StaticResource BooleanToVisibilityConverter}}" Style="{StaticResource ProgressRingStyle}" Margin="0,0,5,0"/>
-                                        <TextBlock Text="（オンラインで情報を取得）"/>
+                                        <TextBlock Text="オンラインで情報を取得"/>
                                     </StackPanel>
                                 </Button>
 
@@ -1512,6 +1512,39 @@
                                         </StackPanel>
                                     </Button>
 
+                                    <Button
+                                        Margin="3"
+                                        Command="{Binding InternetSearch_CiNii_B_Command}"
+                                        Style="{StaticResource ButtonTextStyle}"
+                                        >
+                                        <StackPanel Orientation="Horizontal">
+                                            <Grid>
+                                                <mah:ProgressRing Visibility="{Binding IsInternetSearch_CiNii_B_Busy, Converter={StaticResource BooleanToVisibilityConverter}}" Style="{StaticResource ProgressRingStyle}" Margin="0,0,3.5,0"/>
+                                                <Grid Visibility="{Binding IsInternetSearch_CiNii_B_Busy, Converter={StaticResource InverseBooleanToVisibility}}">
+                                                    <TextBlock Text="🔎" Visibility="{Binding IsInternetSearch_CiNii_B_Done, Converter={StaticResource InverseBooleanToVisibility}}"/>
+                                                    <TextBlock Text="✔️" Visibility="{Binding IsInternetSearch_CiNii_B_Done, Converter={StaticResource BooleanToVisibilityConverter}}" Foreground="Green"/>
+                                                </Grid>
+                                            </Grid>
+                                            <TextBlock Text=" CiNii "/>
+                                        </StackPanel>
+                                    </Button>
+
+                                    <Button
+                                        Margin="3"
+                                        Command="{Binding InternetSearch_NDLSearch_B_Command}"
+                                        Style="{StaticResource ButtonTextStyle}"
+                                        >
+                                        <StackPanel Orientation="Horizontal">
+                                            <Grid>
+                                                <mah:ProgressRing Visibility="{Binding IsInternetSearch_NDLSearch_B_Busy, Converter={StaticResource BooleanToVisibilityConverter}}" Style="{StaticResource ProgressRingStyle}" Margin="0,0,3.5,0"/>
+                                                <Grid Visibility="{Binding IsInternetSearch_NDLSearch_B_Busy, Converter={StaticResource InverseBooleanToVisibility}}">
+                                                    <TextBlock Text="🔎" Visibility="{Binding IsInternetSearch_NDLSearch_B_Done, Converter={StaticResource InverseBooleanToVisibility}}"/>
+                                                    <TextBlock Text="✔️" Visibility="{Binding IsInternetSearch_NDLSearch_B_Done, Converter={StaticResource BooleanToVisibilityConverter}}" Foreground="Green"/>
+                                                </Grid>
+                                            </Grid>
+                                            <TextBlock Text=" NDL Search "/>
+                                        </StackPanel>
+                                    </Button>
 
 
                                 </StackPanel>
@@ -1547,24 +1580,59 @@
                                 </TextBlock>
                                 <TextBox 
                                     Margin="70,0,0,0" 
-                                    Text="{Binding SelectingNodeViewModel.Article.DOI, UpdateSourceTrigger=PropertyChanged}" 
+                                    Text="{Binding InternetSearch_DOI, UpdateSourceTrigger=PropertyChanged}" 
                                     TextWrapping="NoWrap" AcceptsReturn="False"
                                     />
                             </Grid>
 
-                            <Grid Height="20"/>
-
                             <Grid Margin="4">
-                                <TextBlock
-                                    Text="パターンD"
-                                    Margin="4,0,0,0"
-                                    FontSize="17"
-                                    HorizontalAlignment="Left"
+                                <StackPanel 
+                                    Orientation="Horizontal"
+                                    HorizontalAlignment="Right"
                                     >
-                                </TextBlock>
-                            </Grid>
+                                    <Button
+                                        Margin="3"
+                                        Command="{Binding InternetSearch_CiNii_C_Command}"
+                                        Style="{StaticResource ButtonTextStyle}"
+                                        >
+                                        <StackPanel Orientation="Horizontal">
+                                            <Grid>
+                                                <mah:ProgressRing Visibility="{Binding IsInternetSearch_CiNii_C_Busy, Converter={StaticResource BooleanToVisibilityConverter}}" Style="{StaticResource ProgressRingStyle}" Margin="0,0,3.5,0"/>
+                                                <Grid Visibility="{Binding IsInternetSearch_CiNii_C_Busy, Converter={StaticResource InverseBooleanToVisibility}}">
+                                                    <TextBlock Text="🔎" Visibility="{Binding IsInternetSearch_CiNii_C_Done, Converter={StaticResource InverseBooleanToVisibility}}"/>
+                                                    <TextBlock Text="✔️" Visibility="{Binding IsInternetSearch_CiNii_C_Done, Converter={StaticResource BooleanToVisibilityConverter}}" Foreground="Green"/>
+                                                </Grid>
+                                            </Grid>
+                                            <TextBlock Text=" CiNii "/>
+                                        </StackPanel>
+                                    </Button>
+                                    
+                                    <Button
+                                        Margin="3"
+                                        Command="{Binding InternetSearch_CrossRef_C_Command}"
+                                        Style="{StaticResource ButtonTextStyle}"
+                                        >
+                                        <StackPanel Orientation="Horizontal">
+                                            <Grid>
+                                                <mah:ProgressRing Visibility="{Binding IsInternetSearch_CrossRef_C_Busy, Converter={StaticResource BooleanToVisibilityConverter}}" Style="{StaticResource ProgressRingStyle}" Margin="0,0,3.5,0"/>
+                                                <Grid Visibility="{Binding IsInternetSearch_CrossRef_C_Busy, Converter={StaticResource InverseBooleanToVisibility}}">
+                                                    <TextBlock Text="🔎" Visibility="{Binding IsInternetSearch_CrossRef_C_Done, Converter={StaticResource InverseBooleanToVisibility}}"/>
+                                                    <TextBlock Text="✔️" Visibility="{Binding IsInternetSearch_CrossRef_C_Done, Converter={StaticResource BooleanToVisibilityConverter}}" Foreground="Green"/>
+                                                </Grid>
+                                            </Grid>
+                                            <TextBlock Text=" CrossRef "/>
+                                        </StackPanel>
+                                    </Button>
 
+
+                                </StackPanel>
+                            </Grid>
+                            
                             <Grid Height="20"/>
+
+                            
+                            
+                            
 
                         </StackPanel>
                     </ScrollViewer>

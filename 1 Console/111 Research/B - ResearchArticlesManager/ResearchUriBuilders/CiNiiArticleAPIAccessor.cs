@@ -22,11 +22,11 @@ public class CiNiiArticleAPIAccessor : IResearchAPIAccessor
     internal Uri builtUri = null;
 
 
-    public string SearchTitle { get; set; }
-    public string SearchFreeWord { get; set; }
-    public string SearchAuthorName { get; set; }
-    public string SearchAffiliation { get; set; }
-    public string SearchPublicationTitle { get; set; }
+    public string ArticleTitle { get; set; }
+    public string FreeWord { get; set; }
+    public string AuthorName { get; set; }
+    public string Affiliation { get; set; }
+    public string MaterialTitle { get; set; }
 
 
     /// <summary>
@@ -109,13 +109,13 @@ public class CiNiiArticleAPIAccessor : IResearchAPIAccessor
 
 
         //フリーワード q	◯	◯	◯	◯	◯	◯	○	AND
-        if (!string.IsNullOrEmpty(SearchFreeWord))
-            queryList.Add("q", SearchFreeWord!.ToString()!);
+        if (!string.IsNullOrEmpty(FreeWord))
+            queryList.Add("q", FreeWord!.ToString()!);
 
 
         //人物名 creator ◯	◯	◯	◯	◯	◯	○	AND
-        if (!string.IsNullOrEmpty(SearchAuthorName))
-            queryList.Add("creator", SearchAuthorName!.ToString()!);
+        if (!string.IsNullOrEmpty(AuthorName))
+            queryList.Add("creator", AuthorName!.ToString()!);
 
 
         //開始年 from    ◯	◯	◯	◯	-   ◯	×	不可 YYYY
@@ -137,18 +137,18 @@ public class CiNiiArticleAPIAccessor : IResearchAPIAccessor
 
 
         //研究課題名   title   ◯	◯	◯	◯	◯	◯	○	AND
-        if (!string.IsNullOrEmpty(SearchTitle))
-            queryList.Add("title", SearchTitle!.ToString()!);
+        if (!string.IsNullOrEmpty(ArticleTitle))
+            queryList.Add("title", ArticleTitle!.ToString()!);
 
 
         //所属機関    affiliation ◯	◯	◯	- -   ◯	○	AND
-        if (!string.IsNullOrEmpty(SearchAffiliation))
-            queryList.Add("affiliation", SearchAffiliation!.ToString()!);
+        if (!string.IsNullOrEmpty(Affiliation))
+            queryList.Add("affiliation", Affiliation!.ToString()!);
 
 
         //刊行物名    publicationTitle -   ◯	◯	- - -   ○	AND
-        if (!string.IsNullOrEmpty(SearchPublicationTitle))
-            queryList.Add("publicationTitle", SearchPublicationTitle!.ToString()!);
+        if (!string.IsNullOrEmpty(MaterialTitle))
+            queryList.Add("publicationTitle", MaterialTitle!.ToString()!);
 
 
         //ISSN    issn    ◯	◯	◯	◯	- -   ×	OR

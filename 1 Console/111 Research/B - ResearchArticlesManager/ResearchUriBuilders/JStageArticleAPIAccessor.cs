@@ -14,13 +14,13 @@ public class JStageArticleAPIAccessor : IResearchAPIAccessor
     internal Uri builtUri = null;
 
 
-    public string SearchMaterial { get; set; }
-    public string SearchTitle { get; set; }
-    public string SearchAuthorName { get; set; }
-    public string SearchAffiliation { get; set; }
-    public string SearchKeyWord { get; set; }
-    public string SearchAbstract { get; set; }
-    public string SearchText { get; set; }
+    public string ArticleTitle { get; set; }
+    public string AuthorName { get; set; }
+    public string Affiliation { get; set; }
+    public string MaterialTitle { get; set; }
+    public string KeyWord { get; set; }
+    public string Abstract { get; set; }
+    public string Text { get; set; }
 
     /// <summary>
     /// YYYY
@@ -29,15 +29,15 @@ public class JStageArticleAPIAccessor : IResearchAPIAccessor
     /// <summary>
     /// YYYY
     /// </summary>
-    public int? PublishedTo { get; set; } = null;
+    public int? PublishedUntil { get; set; } = null;
     public int? RecordStart { get; set; }
     public int? RecordCount { get; set; }
 
     public string ISSN { get; set; }
     public string JournalCode { get; set; }
     public bool? IsAscendingOrder { get; set; } = null;
-    public string Vol { get; set; }
-    public string No { get; set; }
+    public string MaterialVolume { get; set; }
+    public string MaterialSubVolume { get; set; }
 
 
     // ★★★★★★★★★★★★★★★ inits
@@ -66,36 +66,36 @@ public class JStageArticleAPIAccessor : IResearchAPIAccessor
             queryList.Add("pubyearfrom", PublishedFrom!.ToString()!);
 
         //3 pubyearto 任意 発行年の範囲（To）を指定します西暦 4 桁
-        if (PublishedTo != null)
-            queryList.Add("pubyearto", PublishedTo!.ToString()!);
+        if (PublishedUntil != null)
+            queryList.Add("pubyearto", PublishedUntil!.ToString()!);
 
         //4 material 任意 資料名の検索語句を指定します中間一致検索大文字・小文字、全角・半角は区別しない
-        if (!string.IsNullOrEmpty(SearchMaterial))
-            queryList.Add("material", SearchMaterial);
+        if (!string.IsNullOrEmpty(MaterialTitle))
+            queryList.Add("material", MaterialTitle);
 
         //5 article 任意 論文タイトルの検索語句を指定します中間一致検索大文字・小文字、全角・半角は区別しない
-        if (!string.IsNullOrEmpty(SearchTitle))
-            queryList.Add("article", SearchTitle);
+        if (!string.IsNullOrEmpty(ArticleTitle))
+            queryList.Add("article", ArticleTitle);
 
         //6 author 任意 著者名の検索語句を指定します中間一致検索大文字・小文字、全角・半角は区別しない
-        if (!string.IsNullOrEmpty(SearchAuthorName))
-            queryList.Add("author", SearchAuthorName);
+        if (!string.IsNullOrEmpty(AuthorName))
+            queryList.Add("author", AuthorName);
 
         //7 affil 任意 著者所属機関の検索語句を指定します中間一致検索大文字・小文字、全角・半角は区別しない
-        if (!string.IsNullOrEmpty(SearchAffiliation))
-            queryList.Add("affil", SearchAffiliation);
+        if (!string.IsNullOrEmpty(Affiliation))
+            queryList.Add("affil", Affiliation);
 
         //8 keyword 任意 キーワードの検索語句を指定します中間一致検索大文字・小文字、全角・半角は区別しない
-        if (!string.IsNullOrEmpty(SearchKeyWord))
-            queryList.Add("keyword", SearchKeyWord);
+        if (!string.IsNullOrEmpty(KeyWord))
+            queryList.Add("keyword", KeyWord);
 
         //9 abst 任意 抄録の検索語句を指定します中間一致検索大文字・小文字、全角・半角は区別しない
-        if (!string.IsNullOrEmpty(SearchAbstract))
-            queryList.Add("abst", SearchAbstract);
+        if (!string.IsNullOrEmpty(Abstract))
+            queryList.Add("abst", Abstract);
 
         //10 text 任意 全文の検索語句を指定します中間一致検索大文字・小文字、全角・半角は区別しない
-        if (!string.IsNullOrEmpty(SearchText))
-            queryList.Add("text", SearchText);
+        if (!string.IsNullOrEmpty(Text))
+            queryList.Add("text", Text);
 
         //11 issn 任意 Online ISSN またはPrint ISSN を指定します完全一致検索XXXX - XXXX 形式
         if (!string.IsNullOrEmpty(ISSN))
@@ -110,12 +110,12 @@ public class JStageArticleAPIAccessor : IResearchAPIAccessor
             queryList.Add("sortflg", IsAscendingOrder.Value ? "1" : "2");
 
         //14 vol 任意 巻を指定します 完全一致
-        if (!string.IsNullOrEmpty(Vol))
-            queryList.Add("vol", Vol);
+        if (!string.IsNullOrEmpty(MaterialVolume))
+            queryList.Add("vol", MaterialVolume);
 
         //15 no 任意 号を指定します 完全一致
-        if (!string.IsNullOrEmpty(No))
-            queryList.Add("no", No);
+        if (!string.IsNullOrEmpty(MaterialSubVolume))
+            queryList.Add("no", MaterialSubVolume);
 
         //16 start 任意 検索結果の中から取得を開始する件数を指定します※
         if (RecordStart != null)

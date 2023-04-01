@@ -133,7 +133,8 @@ public partial class MainWindowViewModel : ViewModel
     // ★★★★★★★★★★★★★★★ 右パネル内 → 選択中の文献
 
     public bool IsFetchOnlineInfoBusy { get; set; } = false;
-    public ViewModelCommand FetchOnlineInfoCommand => _FetchOnlineInfoCommand.Get(FetchOnlineInfo);
+    public bool IsFetchOnlineInfoDone { get; set; } = false;
+    public ViewModelCommand FetchOnlineInfoCommand => _FetchOnlineInfoCommand.Get(async () => await FetchOnlineInfo());
     ViewModelCommandHandler _FetchOnlineInfoCommand = new();
 
     public bool IsOpenPDFBusy { get; set; } = false;
@@ -187,20 +188,42 @@ public partial class MainWindowViewModel : ViewModel
     public string InternetSearch_Keywords { get; set; }
     public string InternetSearch_MaterialVolume { get; set; }
 
+    public string InternetSearch_DOI { get; set; }
+
     public bool IsInternetSearch_CiNii_A_Busy { get; set; } = false;
     public bool IsInternetSearch_CiNii_A_Done { get; set; } = false;
-    public ViewModelCommand InternetSearch_CiNii_A_Command => _InternetSearch_CiNii_A_Command.Get(async () => await InternetSearch_CiNii_A());
+    public ViewModelCommand InternetSearch_CiNii_A_Command => _InternetSearch_CiNii_A_Command.Get(async () => await InternetSearch_CiNii_A_());
     ViewModelCommandHandler _InternetSearch_CiNii_A_Command = new();
 
     public bool IsInternetSearch_NDLSearch_A_Busy { get; set; } = false;
     public bool IsInternetSearch_NDLSearch_A_Done { get; set; } = false;
-    public ViewModelCommand InternetSearch_NDLSearch_A_Command => _InternetSearch_NDLSearch_A_Command.Get(async () => await InternetSearch_NDLSearch_A());
+    public ViewModelCommand InternetSearch_NDLSearch_A_Command => _InternetSearch_NDLSearch_A_Command.Get(async () => await InternetSearch_NDLSearch_A_());
     ViewModelCommandHandler _InternetSearch_NDLSearch_A_Command = new();
 
     public bool IsInternetSearchJStage_B_Busy { get; set; } = false;
     public bool IsInternetSearchJStage_B_Done { get; set; } = false;
     public ViewModelCommand InternetSearchJStage_B_Command => _InternetSearchJStage_B_Command.Get(async () => await InternetSearchJStage_B_());
     ViewModelCommandHandler _InternetSearchJStage_B_Command = new();
+
+    public bool IsInternetSearch_CiNii_B_Busy { get; set; } = false;
+    public bool IsInternetSearch_CiNii_B_Done { get; set; } = false;
+    public ViewModelCommand InternetSearch_CiNii_B_Command => _InternetSearch_CiNii_B_Command.Get(async () => await InternetSearch_CiNii_B_());
+    ViewModelCommandHandler _InternetSearch_CiNii_B_Command = new();
+
+    public bool IsInternetSearch_NDLSearch_B_Busy { get; set; } = false;
+    public bool IsInternetSearch_NDLSearch_B_Done { get; set; } = false;
+    public ViewModelCommand InternetSearch_NDLSearch_B_Command => _InternetSearch_NDLSearch_B_Command.Get(async () => await InternetSearch_NDLSearch_B_());
+    ViewModelCommandHandler _InternetSearch_NDLSearch_B_Command = new();
+
+    public bool IsInternetSearch_CiNii_C_Busy { get; set; } = false;
+    public bool IsInternetSearch_CiNii_C_Done { get; set; } = false;
+    public ViewModelCommand InternetSearch_CiNii_C_Command => _InternetSearch_CiNii_C_Command.Get(async () => await InternetSearch_CiNii_C_());
+    ViewModelCommandHandler _InternetSearch_CiNii_C_Command = new();
+
+    public bool IsInternetSearch_CrossRef_C_Busy { get; set; } = false;
+    public bool IsInternetSearch_CrossRef_C_Done { get; set; } = false;
+    public ViewModelCommand InternetSearch_CrossRef_C_Command => _InternetSearch_CrossRef_C_Command.Get(async () => await InternetSearch_CrossRef_C_());
+    ViewModelCommandHandler _InternetSearch_CrossRef_C_Command = new();
 
 
     // ★★★★★★★★★★★★★★★ 

@@ -80,10 +80,10 @@ public partial class ResearchArticlesManager
     /// </summary>
     /// <param name="uriBuilder"></param>
     /// <exception cref="InvalidOperationException"></exception>
-    public async Task<List<ResearchArticle>> PullArticleInfo(IResearchAPIAccessor uriBuilder, bool asTempArticles = false)
+    public async Task<List<ResearchArticle>> PullArticleInfo(IResearchAPIAccessor uriBuilder, bool asTempArticles = false, bool save = true)
     {
         var fetchedArticles = await FetchArticleInfo(uriBuilder);
-        var mergedArticles = MergeArticleInfo(fetchedArticles, asTempArticles: asTempArticles);
+        var mergedArticles = MergeArticleInfo(fetchedArticles, asTempArticles: asTempArticles, save: save);
         return mergedArticles;
     }
 

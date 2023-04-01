@@ -9,6 +9,7 @@ using Aki32Utilities.ConsoleAppUtilities.General;
 using Microsoft.Win32;
 using System.IO;
 using Livet.Commands;
+using System.Runtime.Versioning;
 
 namespace Aki32Utilities.UsageExamples.ResearchArticlesNodeController.ViewModels;
 public partial class MainWindowViewModel : ViewModel
@@ -506,7 +507,7 @@ public partial class MainWindowViewModel : ViewModel
 
     // ★★★★★★★★★★★★★★★ 右パネル内 → 選択中の文献
 
-    void FetchOnlineInfo()
+    async Task FetchOnlineInfo()
     {
         try
         {
@@ -517,7 +518,28 @@ public partial class MainWindowViewModel : ViewModel
             if (SelectingNodeViewModel is null)
                 throw new Exception("文献が選択されていません。");
 
-            throw new NotImplementedException("申し訳ありません。\r\n未実装です…。");
+            // crossref
+            if (!string.IsNullOrEmpty(SelectingNodeViewModel.Article.DOI))
+            {
+                var accessor = new CrossRefAPIAccessor()
+                {
+                    DOI = SelectingNodeViewModel.Article.DOI!,
+                };
+
+                var pulledArticles = await ResearchArticlesManager.PullArticleInfo(accessor, asTempArticles: true, save: false);
+                if (pulledArticles.Count == 0)
+                    throw new Exception("マッチするデータがありませんでした。");
+
+            }
+
+            // 対象のサイトからの情報
+            // TODO
+
+
+            RedrawResearchArticlesManager();
+            MoveCanvasToTargetArticle(SelectingNodeViewModel);
+            SelectedEmphasizePropertyItem = ViewModels.EmphasizePropertyItems.一時ﾃﾞｰﾀ;
+            var task = Save();
         }
         catch (Exception ex)
         {
@@ -526,6 +548,10 @@ public partial class MainWindowViewModel : ViewModel
         finally
         {
             IsFetchOnlineInfoBusy = false;
+            IsFetchOnlineInfoDone = true;
+            await Task.Delay(2222);
+            if (!IsFetchOnlineInfoBusy)
+                IsFetchOnlineInfoDone = false;
         }
     }
 
@@ -696,7 +722,7 @@ public partial class MainWindowViewModel : ViewModel
         ParentView.TextBox_LocalSearch.Focus();
     }
 
-    async Task InternetSearch_CiNii_A()
+    async Task InternetSearch_CiNii_A_()
     {
         try
         {
@@ -704,37 +730,41 @@ public partial class MainWindowViewModel : ViewModel
                 return;
             IsInternetSearch_CiNii_A_Busy = true;
 
-            var accessor = new CiNiiArticleAPIAccessor()
+            var accessor = new CiNiiArticleAPIAccessor();
             {
-                //ISSN = ISSN.Architecture_Structure,
-            };
+                //accessor.ISSN = ISSN.Architecture_Structure;
 
-            if (!int.TryParse(InternetSearch_DataMaxCount, out int dataMaxCount))
-                throw new InvalidDataException("「最大データ数」を正しい数値形式で入力してください。");
-            accessor.RecordCount = dataMaxCount;
+                if (string.IsNullOrEmpty(InternetSearch_FreeWord))
+                    throw new InvalidDataException("フリーワードを埋めてください。");
+                accessor.FreeWord = InternetSearch_FreeWord;
 
-            if (string.IsNullOrEmpty(InternetSearch_FreeWord))
-                throw new InvalidDataException("フリーワードを埋めてください。");
-            accessor.SearchFreeWord = InternetSearch_FreeWord;
+                if (!int.TryParse(InternetSearch_DataMaxCount, out int dataMaxCount))
+                    throw new InvalidDataException("「最大データ数」を正しい数値形式で入力してください。");
+                accessor.RecordCount = dataMaxCount;
 
-            if (!string.IsNullOrEmpty(InternetSearch_PublishedFrom))
-            {
-                if (!int.TryParse(InternetSearch_PublishedFrom, out int publishedFrom))
-                    throw new InvalidDataException("「何年から」を正しい数値形式で入力してください。\r\nもしくは空欄にしてください。");
-                accessor.PublishedFrom = publishedFrom;
+                if (!string.IsNullOrEmpty(InternetSearch_PublishedFrom))
+                {
+                    if (!int.TryParse(InternetSearch_PublishedFrom, out int publishedFrom))
+                        throw new InvalidDataException("「何年から」を正しい数値形式で入力してください。\r\nもしくは空欄にしてください。");
+                    accessor.PublishedFrom = publishedFrom;
+                }
+                if (!string.IsNullOrEmpty(InternetSearch_PublishedUntil))
+                {
+                    if (!int.TryParse(InternetSearch_PublishedUntil, out int publishedUntil))
+                        throw new InvalidDataException("「何年まで」を正しい数値形式で入力してください。\r\nもしくは空欄にしてください。");
+                    accessor.PublishedUntil = publishedUntil;
+                }
+
             }
-            if (!string.IsNullOrEmpty(InternetSearch_PublishedUntil))
-            {
-                if (!int.TryParse(InternetSearch_PublishedUntil, out int publishedUntil))
-                    throw new InvalidDataException("「何年まで」を正しい数値形式で入力してください。\r\nもしくは空欄にしてください。");
-                accessor.PublishedUntil = publishedUntil;
-            }
 
-            var pulledArticles = await ResearchArticlesManager.PullArticleInfo(accessor, asTempArticles: true);
+            var pulledArticles = await ResearchArticlesManager.PullArticleInfo(accessor, asTempArticles: true, save: false);
+            if (pulledArticles.Count == 0)
+                throw new Exception("マッチするデータがありませんでした。");
 
-            MoveCanvasToTargetArticle(pulledArticles.FirstOrDefault());
             RedrawResearchArticlesManager();
+            MoveCanvasToTargetArticle(pulledArticles.FirstOrDefault());
             SelectedEmphasizePropertyItem = ViewModels.EmphasizePropertyItems.一時ﾃﾞｰﾀ;
+            var task = Save();
         }
         catch (Exception ex)
         {
@@ -743,15 +773,13 @@ public partial class MainWindowViewModel : ViewModel
         finally
         {
             IsInternetSearch_CiNii_A_Busy = false;
-
             IsInternetSearch_CiNii_A_Done = true;
             await Task.Delay(2222);
             if (!IsInternetSearch_CiNii_A_Busy)
                 IsInternetSearch_CiNii_A_Done = false;
         }
     }
-
-    async Task InternetSearch_NDLSearch_A()
+    async Task InternetSearch_NDLSearch_A_()
     {
         try
         {
@@ -759,20 +787,42 @@ public partial class MainWindowViewModel : ViewModel
                 return;
             IsInternetSearch_NDLSearch_A_Busy = true;
 
-            //// ★ articles from j-stage
-            //var accessor = new JStageArticleAPIAccessor()
-            //{
-            //    PublishedFrom = 2022,
-            //    ISSN = ISSN.Architecture_Structure,
-            //    RecordCount = 3,
-            //    //Start = 1,
-            //};
-            //await ResearchArticlesManager.PullArticleInfo(accessor, asTempArticles: true);
+            var accessor = new NDLSearchAPIAccessor();
+            {
+                //accessor.ISSN = ISSN.Architecture_Structure;
 
-            throw new NotImplementedException("申し訳ありません。\r\n未実装です…。");
+                if (string.IsNullOrEmpty(InternetSearch_FreeWord))
+                    throw new InvalidDataException("フリーワードを埋めてください。");
+                accessor.FreeWord = InternetSearch_FreeWord;
+
+                if (!int.TryParse(InternetSearch_DataMaxCount, out int dataMaxCount))
+                    throw new InvalidDataException("「最大データ数」を正しい数値形式で入力してください。");
+                accessor.RecordCount = dataMaxCount;
+
+                if (!string.IsNullOrEmpty(InternetSearch_PublishedFrom))
+                {
+                    if (!int.TryParse(InternetSearch_PublishedFrom, out int publishedFrom))
+                        throw new InvalidDataException("「何年から」を正しい数値形式で入力してください。\r\nもしくは空欄にしてください。");
+                    accessor.PublishedFrom = publishedFrom;
+                }
+
+                if (!string.IsNullOrEmpty(InternetSearch_PublishedUntil))
+                {
+                    if (!int.TryParse(InternetSearch_PublishedUntil, out int publishedUntil))
+                        throw new InvalidDataException("「何年まで」を正しい数値形式で入力してください。\r\nもしくは空欄にしてください。");
+                    accessor.PublishedUntil = publishedUntil;
+                }
+
+            }
+
+            var pulledArticles = await ResearchArticlesManager.PullArticleInfo(accessor, asTempArticles: true, save: false);
+            if (pulledArticles.Count == 0)
+                throw new Exception("マッチするデータがありませんでした。");
 
             RedrawResearchArticlesManager();
+            MoveCanvasToTargetArticle(pulledArticles.FirstOrDefault());
             SelectedEmphasizePropertyItem = ViewModels.EmphasizePropertyItems.一時ﾃﾞｰﾀ;
+            var task = Save();
         }
         catch (Exception ex)
         {
@@ -781,7 +831,6 @@ public partial class MainWindowViewModel : ViewModel
         finally
         {
             IsInternetSearch_NDLSearch_A_Busy = false;
-
             IsInternetSearch_NDLSearch_A_Done = true;
             await Task.Delay(2222);
             if (!IsInternetSearch_NDLSearch_A_Busy)
@@ -797,20 +846,57 @@ public partial class MainWindowViewModel : ViewModel
                 return;
             IsInternetSearchJStage_B_Busy = true;
 
-            //// ★ articles from j-stage
-            //var accessor = new JStageArticleAPIAccessor()
-            //{
-            //    PublishedFrom = 2022,
-            //    ISSN = ISSN.Architecture_Structure,
-            //    RecordCount = 3,
-            //    //Start = 1,
-            //};
-            //await ResearchArticlesManager.PullArticleInfo(accessor, asTempArticles: true);
+            var accessor = new JStageArticleAPIAccessor();
+            {
+                //accessor.ISSN = ISSN.Architecture_Structure;
 
-            throw new NotImplementedException("申し訳ありません。\r\n未実装です…。");
+                if (!string.IsNullOrEmpty(InternetSearch_Authors))
+                    accessor.AuthorName = InternetSearch_Authors;
+
+                if (!string.IsNullOrEmpty(InternetSearch_ArticleTitle))
+                    accessor.ArticleTitle = InternetSearch_ArticleTitle;
+
+                if (!string.IsNullOrEmpty(InternetSearch_MaterialTitle))
+                    accessor.MaterialTitle = InternetSearch_MaterialTitle;
+
+                if (!string.IsNullOrEmpty(InternetSearch_MaterialVolume))
+                {
+                    if (!int.TryParse(InternetSearch_MaterialVolume, out int _))
+                        throw new InvalidDataException("「巻」を正しい数値形式で入力してください。\r\nもしくは空欄にしてください。");
+                    accessor.MaterialVolume = InternetSearch_MaterialVolume;
+                }
+
+                if (!int.TryParse(InternetSearch_DataMaxCount, out int dataMaxCount))
+                    throw new InvalidDataException("「最大データ数」を正しい数値形式で入力してください。");
+                accessor.RecordCount = dataMaxCount;
+
+                if (!string.IsNullOrEmpty(InternetSearch_PublishedFrom))
+                {
+                    if (!int.TryParse(InternetSearch_PublishedFrom, out int publishedFrom))
+                        throw new InvalidDataException("「何年から」を正しい数値形式で入力してください。\r\nもしくは空欄にしてください。");
+                    accessor.PublishedFrom = publishedFrom;
+                }
+
+                if (!string.IsNullOrEmpty(InternetSearch_PublishedUntil))
+                {
+                    if (!int.TryParse(InternetSearch_PublishedUntil, out int publishedUntil))
+                        throw new InvalidDataException("「何年まで」を正しい数値形式で入力してください。\r\nもしくは空欄にしてください。");
+                    accessor.PublishedUntil = publishedUntil;
+                }
+
+                if (!string.IsNullOrEmpty(InternetSearch_Keywords))
+                    accessor.KeyWord = InternetSearch_Keywords;
+
+            }
+
+            var pulledArticles = await ResearchArticlesManager.PullArticleInfo(accessor, asTempArticles: true, save: false);
+            if (pulledArticles.Count == 0)
+                throw new Exception("マッチするデータがありませんでした。");
 
             RedrawResearchArticlesManager();
+            MoveCanvasToTargetArticle(pulledArticles.FirstOrDefault());
             SelectedEmphasizePropertyItem = ViewModels.EmphasizePropertyItems.一時ﾃﾞｰﾀ;
+            var task = Save();
         }
         catch (Exception ex)
         {
@@ -819,13 +905,244 @@ public partial class MainWindowViewModel : ViewModel
         finally
         {
             IsInternetSearchJStage_B_Busy = false;
-
             IsInternetSearchJStage_B_Done = true;
             await Task.Delay(2222);
             if (!IsInternetSearchJStage_B_Busy)
                 IsInternetSearchJStage_B_Done = false;
         }
     }
+    async Task InternetSearch_CiNii_B_()
+    {
+        try
+        {
+            if (IsInternetSearch_CiNii_B_Busy)
+                return;
+            IsInternetSearch_CiNii_B_Busy = true;
+
+            var accessor = new CiNiiArticleAPIAccessor();
+            {
+                //accessor.ISSN = ISSN.Architecture_Structure;
+
+                if (!string.IsNullOrEmpty(InternetSearch_Authors))
+                    accessor.AuthorName = InternetSearch_Authors;
+
+                if (!string.IsNullOrEmpty(InternetSearch_ArticleTitle))
+                    accessor.ArticleTitle = InternetSearch_ArticleTitle;
+
+                if (!string.IsNullOrEmpty(InternetSearch_MaterialTitle))
+                    accessor.MaterialTitle = InternetSearch_MaterialTitle;
+
+                // ※ 検索項目にない。
+                //if (!string.IsNullOrEmpty(InternetSearch_MaterialVolume))
+                //{
+                //    if (!int.TryParse(InternetSearch_MaterialVolume, out int _))
+                //        throw new InvalidDataException("「巻」を正しい数値形式で入力してください。\r\nもしくは空欄にしてください。");
+                //    accessor.MaterialVolume = InternetSearch_MaterialVolume;
+                //}
+
+                if (!int.TryParse(InternetSearch_DataMaxCount, out int dataMaxCount))
+                    throw new InvalidDataException("「最大データ数」を正しい数値形式で入力してください。");
+                accessor.RecordCount = dataMaxCount;
+
+                if (!string.IsNullOrEmpty(InternetSearch_PublishedFrom))
+                {
+                    if (!int.TryParse(InternetSearch_PublishedFrom, out int publishedFrom))
+                        throw new InvalidDataException("「何年から」を正しい数値形式で入力してください。\r\nもしくは空欄にしてください。");
+                    accessor.PublishedFrom = publishedFrom;
+                }
+
+                if (!string.IsNullOrEmpty(InternetSearch_PublishedUntil))
+                {
+                    if (!int.TryParse(InternetSearch_PublishedUntil, out int publishedUntil))
+                        throw new InvalidDataException("「何年まで」を正しい数値形式で入力してください。\r\nもしくは空欄にしてください。");
+                    accessor.PublishedUntil = publishedUntil;
+                }
+
+                // ※ キーワードをフリーワードに入れてる。
+                if (!string.IsNullOrEmpty(InternetSearch_Keywords))
+                    accessor.FreeWord = InternetSearch_Keywords;
+
+            }
+
+            var pulledArticles = await ResearchArticlesManager.PullArticleInfo(accessor, asTempArticles: true, save: false);
+            if (pulledArticles.Count == 0)
+                throw new Exception("マッチするデータがありませんでした。");
+
+            RedrawResearchArticlesManager();
+            MoveCanvasToTargetArticle(pulledArticles.FirstOrDefault());
+            SelectedEmphasizePropertyItem = ViewModels.EmphasizePropertyItems.一時ﾃﾞｰﾀ;
+            var task = Save();
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show($"失敗しました。\r\nﾒｯｾｰｼﾞ: {ex.Message}", "CiNiiで検索", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+        finally
+        {
+            IsInternetSearch_CiNii_B_Busy = false;
+            IsInternetSearch_CiNii_B_Done = true;
+            await Task.Delay(2222);
+            if (!IsInternetSearch_CiNii_B_Busy)
+                IsInternetSearch_CiNii_B_Done = false;
+        }
+    }
+    async Task InternetSearch_NDLSearch_B_()
+    {
+        try
+        {
+            if (IsInternetSearch_NDLSearch_B_Busy)
+                return;
+            IsInternetSearch_NDLSearch_B_Busy = true;
+
+            var accessor = new NDLSearchAPIAccessor();
+            {
+                //accessor.ISSN = ISSN.Architecture_Structure;
+
+                if (!string.IsNullOrEmpty(InternetSearch_Authors))
+                    accessor.AuthorName = InternetSearch_Authors;
+
+                if (!string.IsNullOrEmpty(InternetSearch_ArticleTitle))
+                    accessor.ArticleTitle = InternetSearch_ArticleTitle;
+
+                // ※ 検索項目にない。
+                //if (!string.IsNullOrEmpty(InternetSearch_MaterialTitle))
+                //    accessor.MaterialTitle = InternetSearch_MaterialTitle;
+
+                // ※ 検索項目にない。
+                //if (!string.IsNullOrEmpty(InternetSearch_MaterialVolume))
+                //{
+                //    if (!int.TryParse(InternetSearch_MaterialVolume, out int _))
+                //        throw new InvalidDataException("「巻」を正しい数値形式で入力してください。\r\nもしくは空欄にしてください。");
+                //    accessor.MaterialVolume = InternetSearch_MaterialVolume;
+                //}
+
+                if (!int.TryParse(InternetSearch_DataMaxCount, out int dataMaxCount))
+                    throw new InvalidDataException("「最大データ数」を正しい数値形式で入力してください。");
+                accessor.RecordCount = dataMaxCount;
+
+                if (!string.IsNullOrEmpty(InternetSearch_PublishedFrom))
+                {
+                    if (!int.TryParse(InternetSearch_PublishedFrom, out int publishedFrom))
+                        throw new InvalidDataException("「何年から」を正しい数値形式で入力してください。\r\nもしくは空欄にしてください。");
+                    accessor.PublishedFrom = publishedFrom;
+                }
+
+                if (!string.IsNullOrEmpty(InternetSearch_PublishedUntil))
+                {
+                    if (!int.TryParse(InternetSearch_PublishedUntil, out int publishedUntil))
+                        throw new InvalidDataException("「何年まで」を正しい数値形式で入力してください。\r\nもしくは空欄にしてください。");
+                    accessor.PublishedUntil = publishedUntil;
+                }
+
+                // ※ キーワードをフリーワードに入れてる。
+                if (!string.IsNullOrEmpty(InternetSearch_Keywords))
+                    accessor.FreeWord = InternetSearch_Keywords;
+
+            }
+
+            var pulledArticles = await ResearchArticlesManager.PullArticleInfo(accessor, asTempArticles: true, save: false);
+            if (pulledArticles.Count == 0)
+                throw new Exception("マッチするデータがありませんでした。");
+
+            RedrawResearchArticlesManager();
+            MoveCanvasToTargetArticle(pulledArticles.FirstOrDefault());
+            SelectedEmphasizePropertyItem = ViewModels.EmphasizePropertyItems.一時ﾃﾞｰﾀ;
+            var task = Save();
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show($"失敗しました。\r\nﾒｯｾｰｼﾞ: {ex.Message}", "NDLSearchで検索", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+        finally
+        {
+            IsInternetSearch_NDLSearch_B_Busy = false;
+            IsInternetSearch_NDLSearch_B_Done = true;
+            await Task.Delay(2222);
+            if (!IsInternetSearch_NDLSearch_B_Busy)
+                IsInternetSearch_NDLSearch_B_Done = false;
+        }
+    }
+
+    async Task InternetSearch_CiNii_C_()
+    {
+        try
+        {
+            if (IsInternetSearch_CiNii_C_Busy)
+                return;
+            IsInternetSearch_CiNii_C_Busy = true;
+
+            var accessor = new CiNiiArticleAPIAccessor();
+            {
+                //accessor.ISSN = ISSN.Architecture_Structure;
+
+                if (string.IsNullOrEmpty(InternetSearch_DOI))
+                    throw new InvalidDataException("DOIを埋めてください。");
+                accessor.DOI = InternetSearch_DOI;
+
+            }
+
+            var pulledArticles = await ResearchArticlesManager.PullArticleInfo(accessor, asTempArticles: true, save: false);
+            if (pulledArticles.Count == 0)
+                throw new Exception("マッチするデータがありませんでした。");
+
+            RedrawResearchArticlesManager();
+            MoveCanvasToTargetArticle(pulledArticles.FirstOrDefault());
+            SelectedEmphasizePropertyItem = ViewModels.EmphasizePropertyItems.一時ﾃﾞｰﾀ;
+            var task = Save();
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show($"失敗しました。\r\nﾒｯｾｰｼﾞ: {ex.Message}", "CiNiiで検索", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+        finally
+        {
+            IsInternetSearch_CiNii_C_Busy = false;
+            IsInternetSearch_CiNii_C_Done = true;
+            await Task.Delay(2222);
+            if (!IsInternetSearch_CiNii_C_Busy)
+                IsInternetSearch_CiNii_C_Done = false;
+        }
+    }
+    async Task InternetSearch_CrossRef_C_()
+    {
+        try
+        {
+            if (IsInternetSearch_CrossRef_C_Busy)
+                return;
+            IsInternetSearch_CrossRef_C_Busy = true;
+
+            var accessor = new CrossRefAPIAccessor();
+            {
+                //accessor.ISSN = ISSN.Architecture_Structure;
+
+                if (string.IsNullOrEmpty(InternetSearch_DOI))
+                    throw new InvalidDataException("DOIを埋めてください。");
+                accessor.DOI = InternetSearch_DOI;
+            }
+
+            var pulledArticles = await ResearchArticlesManager.PullArticleInfo(accessor, asTempArticles: true, save: false);
+            if (pulledArticles.Count == 0)
+                throw new Exception("マッチするデータがありませんでした。");
+
+            RedrawResearchArticlesManager();
+            MoveCanvasToTargetArticle(pulledArticles.FirstOrDefault());
+            SelectedEmphasizePropertyItem = ViewModels.EmphasizePropertyItems.一時ﾃﾞｰﾀ;
+            var task = Save();
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show($"失敗しました。\r\nﾒｯｾｰｼﾞ: {ex.Message}", "CrossRefで検索", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+        finally
+        {
+            IsInternetSearch_CrossRef_C_Busy = false;
+            IsInternetSearch_CrossRef_C_Done = true;
+            await Task.Delay(2222);
+            if (!IsInternetSearch_CrossRef_C_Busy)
+                IsInternetSearch_CrossRef_C_Done = false;
+        }
+    }
+
 
 
     // ★★★★★★★★★★★★★★★ not using
@@ -955,8 +1272,14 @@ public partial class MainWindowViewModel : ViewModel
             return;
 
         var targetArticleNode = _NodeViewModels
-            .FirstOrDefault(n => n is ResearchArticleNodeViewModel an && an.Article == targetArticle);
+            .Where(n => n is ResearchArticleNodeViewModel)
+            .Cast<ResearchArticleNodeViewModel>()
+            .FirstOrDefault(n => n.Article == targetArticle);
 
+        MoveCanvasToTargetArticle(targetArticleNode);
+    }
+    void MoveCanvasToTargetArticle(ResearchArticleNodeViewModel? targetArticleNode)
+    {
         if (targetArticleNode == null)
             return;
 

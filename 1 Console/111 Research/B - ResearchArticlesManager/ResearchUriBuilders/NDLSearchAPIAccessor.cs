@@ -34,11 +34,11 @@ public class NDLSearchAPIAccessor : IResearchAPIAccessor
     public int? MediaType { get; set; } = 2;
 
 
-    public string SearchFreeWord { get; set; }
-    public string SearchTitle { get; set; }
-    public string SearchAuthorName { get; set; }
-    public string SearchPublisherName { get; set; }
-    public string SearchDigitizedPublisherName { get; set; }
+    public string FreeWord { get; set; }
+    public string ArticleTitle { get; set; }
+    public string AuthorName { get; set; }
+    public string PublisherName { get; set; }
+    public string DigitizedPublisherName { get; set; }
 
 
     /// <summary>
@@ -89,24 +89,24 @@ public class NDLSearchAPIAccessor : IResearchAPIAccessor
             queryList.Add("dpgroupid", DataProviderGroupId);
 
         // 3//any//すべての項目を対象に検索//部分一致//○
-        if (!string.IsNullOrEmpty(SearchFreeWord))
-            queryList.Add("any", SearchFreeWord);
+        if (!string.IsNullOrEmpty(FreeWord))
+            queryList.Add("any", FreeWord);
 
         // 4//title//タイトル//部分一致//○
-        if (!string.IsNullOrEmpty(SearchTitle))
-            queryList.Add("title", SearchTitle);
+        if (!string.IsNullOrEmpty(ArticleTitle))
+            queryList.Add("title", ArticleTitle);
 
         // 5//creator//作成者//部分一致//○
-        if (!string.IsNullOrEmpty(SearchAuthorName))
-            queryList.Add("creator", SearchAuthorName);
+        if (!string.IsNullOrEmpty(AuthorName))
+            queryList.Add("creator", AuthorName);
 
         // 6//publisher//出版者//部分一致//○
-        if (!string.IsNullOrEmpty(SearchPublisherName))
-            queryList.Add("publisher", SearchPublisherName);
+        if (!string.IsNullOrEmpty(PublisherName))
+            queryList.Add("publisher", PublisherName);
 
         // 7//digitized_publisher//デジタル化した製作者//部分一致//○
-        if (!string.IsNullOrEmpty(SearchDigitizedPublisherName))
-            queryList.Add("digitized_publisher", SearchDigitizedPublisherName);
+        if (!string.IsNullOrEmpty(DigitizedPublisherName))
+            queryList.Add("digitized_publisher", DigitizedPublisherName);
 
         // 8//ndc//分類（NDC）//前方一致//×
         if (!string.IsNullOrEmpty(NDC))
