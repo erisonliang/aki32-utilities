@@ -4,6 +4,8 @@ using Aki32Utilities.ConsoleAppUtilities.General;
 
 using ClosedXML;
 
+using DocumentFormat.OpenXml.Spreadsheet;
+
 namespace Aki32Utilities.ConsoleAppUtilities.Research;
 public class ResearchArticle : IComparable
 {
@@ -309,7 +311,9 @@ public class ResearchArticle : IComparable
         }
     }
 
+    [UseExceptionalMerging]
     public string? DOI { get; set; }
+    [UseExceptionalMerging]
     public string[]? ReferenceAOIs { get; set; }
 
     public string? PrintISSN { get; set; }
@@ -357,16 +361,27 @@ public class ResearchArticle : IComparable
     // ★★★★★ original meta info
 
     public bool? Private_Favorite { get; set; } = false;
+
+    [UseExceptionalBinaryEitherMerging]
     public bool? Private_Read { get; set; } = false;
+    [UseExceptionalMerging]
     public bool? Private_Temporary { get; set; } = false;
+    [UseExceptionalBinaryEitherMerging]
     public bool? Private_IsCategory1 { get; set; } = false;
+    [UseExceptionalBinaryEitherMerging]
     public bool? Private_IsCategory2 { get; set; } = false;
+    [UseExceptionalBinaryEitherMerging]
     public bool? Private_IsCategory3 { get; set; } = false;
 
+    [UseExceptionalBinaryEitherMerging]
     public bool? DataFrom_Manual { get; set; } = false;
+    [UseExceptionalBinaryEitherMerging]
     public bool? DataFrom_JStage { get; set; } = false;
+    [UseExceptionalBinaryEitherMerging]
     public bool? DataFrom_CiNii { get; set; } = false;
+    [UseExceptionalBinaryEitherMerging]
     public bool? DataFrom_CrossRef { get; set; } = false;
+    [UseExceptionalBinaryEitherMerging]
     public bool? DataFrom_NDLSearch { get; set; } = false;
 
     /// <summary>
@@ -377,6 +392,7 @@ public class ResearchArticle : IComparable
     /// 全ての要素に対して発行。
     /// これをメインIDとして使う。
     /// </remarks>
+    [UseExceptionalMerging]
     public string AOI { get; set; } = Ulid.NewUlid().ToString();
     [CsvIgnore]
     public string Friendly_AOI => AOI[FRIENDLY_AOI_RANGE];
@@ -762,44 +778,93 @@ public class ResearchArticle : IComparable
     public void MergeArticles(ResearchArticle mergingArticle)
     {
         // main
-        var props = typeof(ResearchArticle)
-            .GetProperties()
-            .Where(p => !p.HasAttribute<CsvIgnoreAttribute>())
-            .Where(p => p.CanWrite)
-            .Where(p => p.Name != "DOI")
-            .Where(p => p.Name != "AOI")
-            .Where(p => p.Name != "IsTemporary")
-            ;
 
         // AOIとIsTemporaryは，前の情報を正とする。
-
-
-        // DOIが存在する場合は，最優先で採用。
-        if (DOI != null && mergingArticle.DOI != null && DOI != mergingArticle.DOI)
-            throw new InvalidDataException("DOIが異なる2つがマージされようとしました。");
-        if (DOI == null && mergingArticle.DOI != null)
-            DOI = mergingArticle.DOI;
-
-
-        // 後からの情報優先で上書き。
-        foreach (var prop in props)
         {
-            var addingArticleInfoProp = prop.GetValue(mergingArticle);
+        }
 
-            if (prop.PropertyType == typeof(string))
+        // DOIは存在するほうを採用。異なる場合は許容しない。
+        {
+            if (DOI != null && mergingArticle.DOI != null && DOI != mergingArticle.DOI)
+                throw new InvalidDataException("DOIが異なる2つがマージされようとしました。");
+            if (DOI == null && mergingArticle.DOI != null)
+                DOI = mergingArticle.DOI;
+        }
+
+        // 引用関係は，被りなく両方から持ってくる。
+        {
+            if (ReferenceAOIs is null)
             {
-                if (addingArticleInfoProp?.ToString().NullIfNullOrEmpty() != null)
-                    prop.SetValue(this, addingArticleInfoProp);
-
+                ReferenceAOIs = mergingArticle.ReferenceAOIs;
             }
             else
             {
-                if (addingArticleInfoProp != null)
-                    prop.SetValue(this, addingArticleInfoProp);
+                if (mergingArticle.ReferenceAOIs is null)
+                {
+                }
+                else
+                {
+                    ReferenceAOIs = ReferenceAOIs
+                        .Concat(mergingArticle.ReferenceAOIs)
+                        .Distinct()
+                        .ToArray();
+                }
+            }
+        }
+
+        // UseExceptionalBinaryEitherMergingAttribute付きは，印ついてるほうを優先して採用。
+        {
+            var orMixingBinaryProps = typeof(ResearchArticle)
+                 .GetProperties()
+                 .Where(p => p.CanWrite)
+                 .Where(p => !p.HasAttribute<CsvIgnoreAttribute>())
+                 .Where(p => p.HasAttribute<UseExceptionalBinaryEitherMergingAttribute>())
+                 ;
+
+            foreach (var prop in orMixingBinaryProps)
+            {
+                var thisArticleInfoProp = prop.GetValue(this);
+                var mergingArticleInfoProp = prop.GetValue(mergingArticle);
+
+                var binaryMixedValue =
+                    ((bool?)thisArticleInfoProp ?? false) ||
+                    ((bool?)mergingArticleInfoProp ?? false);
+
+                prop.SetValue(this, binaryMixedValue);
+            }
+        }
+
+        // 他は，後からの情報優先で上書き。
+        {
+            var latterOrientedProps = typeof(ResearchArticle)
+                .GetProperties()
+                .Where(p => p.CanWrite)
+                .Where(p => !p.HasAttribute<CsvIgnoreAttribute>())
+                .Where(p => !p.HasAttribute<UseExceptionalMergingAttribute>())
+                .Where(p => !p.HasAttribute<UseExceptionalBinaryEitherMergingAttribute>())
+                ;
+
+            foreach (var prop in latterOrientedProps)
+            {
+                var mergingArticleInfoProp = prop.GetValue(mergingArticle);
+
+                if (prop.PropertyType == typeof(string))
+                {
+                    if (mergingArticleInfoProp?.ToString().NullIfNullOrEmpty() != null)
+                        prop.SetValue(this, mergingArticleInfoProp);
+
+                }
+                else
+                {
+                    if (mergingArticleInfoProp != null)
+                        prop.SetValue(this, mergingArticleInfoProp);
+
+                }
 
             }
-
         }
+
+
     }
 
 
@@ -868,6 +933,19 @@ public class ResearchArticle : IComparable
         }
 
         return (result == 0) ? (GetHashCode() - comparingArticle.GetHashCode()) : result;
+    }
+
+
+    // ★★★★★★★★★★★★★★★ attributes
+
+    [AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
+    internal sealed class UseExceptionalMergingAttribute : Attribute
+    {
+    }
+
+    [AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
+    internal sealed class UseExceptionalBinaryEitherMergingAttribute : Attribute
+    {
     }
 
 

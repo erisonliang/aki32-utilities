@@ -53,7 +53,7 @@ public class CrossRefAPIAccessor : IResearchAPIAccessor
     /// <returns></returns>
     public async Task<List<ResearchArticle>> FetchArticles()
     {
-        return await Task.Run(() => _FetchArticles().ToList());
+        return await Task.Run(() => _FetchArticles().Reverse().ToList()); // need Reverse() to move addingMainArticle to top.
     }
     private IEnumerable<ResearchArticle> _FetchArticles()
     {
@@ -62,21 +62,21 @@ public class CrossRefAPIAccessor : IResearchAPIAccessor
 
         //if (json == null || json!["status"].ToString() != "ok"){}
 
-        var article = new ResearchArticle();
+        var addingMainArticle = new ResearchArticle();
         {
-            article.DataFrom_CrossRef = true;
+            addingMainArticle.DataFrom_CrossRef = true;
 
-            article.DOI = json?["message"]?["DOI"]?.ToString();
+            addingMainArticle.DOI = json?["message"]?["DOI"]?.ToString();
 
-            article.CrossRef_ArticleTitle = (json?["message"]?["title"] as JArray)?.FirstOrDefault()?.ToString();
+            addingMainArticle.CrossRef_ArticleTitle = (json?["message"]?["title"] as JArray)?.FirstOrDefault()?.ToString();
 
-            article.CrossRef_Authors = (json?["message"]?["author"] as JArray)?.Select(x => $"{x?["given"]?.ToString().Trim()} {x?["family"]?.ToString().Trim()}").ToArray();
+            addingMainArticle.CrossRef_Authors = (json?["message"]?["author"] as JArray)?.Select(x => $"{x?["given"]?.ToString().Trim()} {x?["family"]?.ToString().Trim()}").ToArray();
 
-            article.PrintISSN = (json?["message"]?["issn-type"] as JArray)?.FirstOrDefault(i => (dynamic)i?["type"]?.ToString()! == "print")?["value"]?.ToString();
-            article.OnlineISSN = (json?["message"]?["issn-type"] as JArray)?.FirstOrDefault(i => (dynamic)i?["type"]?.ToString()! == "electronic")?["value"]?.ToString();
+            addingMainArticle.PrintISSN = (json?["message"]?["issn-type"] as JArray)?.FirstOrDefault(i => (dynamic)i?["type"]?.ToString()! == "print")?["value"]?.ToString();
+            addingMainArticle.OnlineISSN = (json?["message"]?["issn-type"] as JArray)?.FirstOrDefault(i => (dynamic)i?["type"]?.ToString()! == "electronic")?["value"]?.ToString();
 
-            var publishedDateAray = (json?["message"]?["published"]?["date-parts"] as JArray)?.FirstOrDefault();
-            article.CrossRef_PublishedDate = (publishedDateAray == null) ? null : string.Join('/', publishedDateAray!.AsEnumerable());
+            var publishedDateArray = (json?["message"]?["published"]?["date-parts"] as JArray)?.FirstOrDefault();
+            addingMainArticle.CrossRef_PublishedDate = (publishedDateArray == null) ? null : string.Join('/', publishedDateArray!.AsEnumerable());
 
             // add reference
             if (json?["message"]?["reference"] is JArray references)
@@ -84,20 +84,20 @@ public class CrossRefAPIAccessor : IResearchAPIAccessor
                 foreach (var reference in references)
                 {
                     // Create and add referred article
-                    var addingArticle = new ResearchArticle
+                    var addingSubArticle = new ResearchArticle
                     {
                         DOI = reference?["DOI"]?.ToString(),
                         CrossRef_UnstructuredRefString = ResearchArticle.CleanUp_UnstructuredRefString(reference?["unstructured"]?.ToString())
                     };
-                    article.AddArticleReference(addingArticle);
+                    addingMainArticle.AddArticleReference(addingSubArticle);
 
-                    yield return addingArticle;
+                    yield return addingSubArticle;
                 }
             }
         }
 
         // return 
-        yield return article;
+        yield return addingMainArticle;
 
     }
 

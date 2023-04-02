@@ -199,6 +199,7 @@ public partial class ResearchArticlesManager
                 if (article.ReferenceAOIs != null && article.ReferenceAOIs.Contains(mergingArticle.AOI))
                     article.ReferenceAOIs = article.ReferenceAOIs
                         .Select(r => r.Replace(mergingArticle.AOI, mergedArticle.AOI))
+                        .Distinct()
                         .ToArray();
             }
 

@@ -507,13 +507,13 @@ public partial class MainWindowViewModel : ViewModel
 
     // ★★★★★★★★★★★★★★★ 右パネル内 → 選択中の文献
 
-    async Task FetchOnlineInfo()
+    async Task PullOnlineInfo()
     {
         try
         {
-            if (IsFetchOnlineInfoBusy)
+            if (IsPullOnlineInfoBusy)
                 return;
-            IsFetchOnlineInfoBusy = true;
+            IsPullOnlineInfoBusy = true;
 
             if (SelectingNodeViewModel is null)
                 throw new Exception("文献が選択されていません。");
@@ -547,11 +547,11 @@ public partial class MainWindowViewModel : ViewModel
         }
         finally
         {
-            IsFetchOnlineInfoBusy = false;
-            IsFetchOnlineInfoDone = true;
+            IsPullOnlineInfoBusy = false;
+            IsPullOnlineInfoDone = true;
             await Task.Delay(2222);
-            if (!IsFetchOnlineInfoBusy)
-                IsFetchOnlineInfoDone = false;
+            if (!IsPullOnlineInfoBusy)
+                IsPullOnlineInfoDone = false;
         }
     }
 

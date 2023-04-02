@@ -132,10 +132,10 @@ public partial class MainWindowViewModel : ViewModel
 
     // ★★★★★★★★★★★★★★★ 右パネル内 → 選択中の文献
 
-    public bool IsFetchOnlineInfoBusy { get; set; } = false;
-    public bool IsFetchOnlineInfoDone { get; set; } = false;
-    public ViewModelCommand FetchOnlineInfoCommand => _FetchOnlineInfoCommand.Get(async () => await FetchOnlineInfo());
-    ViewModelCommandHandler _FetchOnlineInfoCommand = new();
+    public bool IsPullOnlineInfoBusy { get; set; } = false;
+    public bool IsPullOnlineInfoDone { get; set; } = false;
+    public ViewModelCommand PullOnlineInfoCommand => _PullOnlineInfoCommand.Get(async () => await PullOnlineInfo());
+    ViewModelCommandHandler _PullOnlineInfoCommand = new();
 
     public bool IsOpenPDFBusy { get; set; } = false;
     public ViewModelCommand OpenPDFCommand => _OpenPDFCommand.Get(async () => await OpenPDF());

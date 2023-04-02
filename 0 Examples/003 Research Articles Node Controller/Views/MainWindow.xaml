@@ -976,11 +976,11 @@
                                     Grid.Column="1"
                                     Margin="3"
                                     Style="{StaticResource ButtonTextStretchStyle}"
-                                    Command="{Binding FetchOnlineInfoCommand}"
+                                    Command="{Binding PullOnlineInfoCommand}"
                                     ToolTip="オンラインからメタ情報および引用関係をダウンロードして，追記します。"
                                     >
                                     <StackPanel Orientation="Horizontal">
-                                        <mah:ProgressRing Visibility="{Binding IsFetchOnlineInfoBusy, Converter={StaticResource BooleanToVisibilityConverter}}" Style="{StaticResource ProgressRingStyle}" Margin="0,0,5,0"/>
+                                        <mah:ProgressRing Visibility="{Binding IsPullOnlineInfoBusy, Converter={StaticResource BooleanToVisibilityConverter}}" Style="{StaticResource ProgressRingStyle}" Margin="0,0,5,0"/>
                                         <TextBlock Text="オンラインで情報を取得"/>
                                     </StackPanel>
                                 </Button>
