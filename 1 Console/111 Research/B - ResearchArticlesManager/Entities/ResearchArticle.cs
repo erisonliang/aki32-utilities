@@ -12,7 +12,7 @@ public class ResearchArticle : IComparable
 
     // ★★★★★★★★★★★★★★★ field
 
-    private static readonly Range UNSTRUCTURED_REF_STRING_RANGE = ..130;
+    private static readonly Range UNSTRUCTURED_REF_STRING_RANGE = ..200;
     private static readonly Range FRIENDLY_AOI_RANGE = ^6..;
 
 
@@ -360,12 +360,13 @@ public class ResearchArticle : IComparable
 
     // ★★★★★ original meta info
 
-    public bool? Private_Favorite { get; set; } = false;
-
-    [UseExceptionalBinaryEitherMerging]
-    public bool? Private_Read { get; set; } = false;
     [UseExceptionalMerging]
     public bool? Private_Temporary { get; set; } = false;
+
+    [UseExceptionalBinaryEitherMerging]
+    public bool? Private_Favorite { get; set; } = false;
+    [UseExceptionalBinaryEitherMerging]
+    public bool? Private_Read { get; set; } = false;
     [UseExceptionalBinaryEitherMerging]
     public bool? Private_IsCategory1 { get; set; } = false;
     [UseExceptionalBinaryEitherMerging]

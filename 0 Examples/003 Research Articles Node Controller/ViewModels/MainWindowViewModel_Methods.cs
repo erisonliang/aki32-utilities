@@ -42,14 +42,24 @@ public partial class MainWindowViewModel : ViewModel
 
     async Task Save()
     {
+        if (IsSaveBusy)
+            return;
+
         try
         {
-            if (IsSaveBusy)
-                return;
+
             IsSaveBusy = true;
             ResearchArticlesManager.SaveDatabase(true, true);
             await Task.Delay(100);
             //UpdateInfoMessage("保存完了");
+
+            var successAnimationTask = Task.Run(async () =>
+            {
+                IsSaveDone = true;
+                await Task.Delay(2222);
+                if (!IsSaveBusy)
+                    IsSaveDone = false;
+            });
         }
         catch (Exception ex)
         {
@@ -58,11 +68,6 @@ public partial class MainWindowViewModel : ViewModel
         finally
         {
             IsSaveBusy = false;
-
-            IsSaveDone = true;
-            await Task.Delay(2222);
-            if (!IsSaveBusy)
-                IsSaveDone = false;
         }
 
     }
@@ -126,7 +131,7 @@ public partial class MainWindowViewModel : ViewModel
         var addingNode = new ResearchArticleNodeViewModel() { Article = newArticle, NodeName = "ResearchArticle" };
         _NodeViewModels.Add(addingNode);
         addingNode.Position = addingPosition;
-        var task = Save();
+        var saveTask = Save();
     }
 
     void RearrangeNodesAlignLeft()
@@ -411,7 +416,7 @@ public partial class MainWindowViewModel : ViewModel
         foreach (var removingNode in removingNodes)
             RemoveOneArticleNode(removingNode);
 
-        var task = Save();
+        var saveTask = Save();
     }
     void RemoveTempArticleNodes()
     {
@@ -431,7 +436,7 @@ public partial class MainWindowViewModel : ViewModel
         foreach (var removingNode in removingNodes)
             RemoveOneArticleNode(removingNode);
 
-        var task = Save();
+        var saveTask = Save();
     }
     void RemoveOneArticleNode(ResearchArticleNodeViewModel removingNode)
     {
@@ -509,10 +514,11 @@ public partial class MainWindowViewModel : ViewModel
 
     async Task PullOnlineInfo()
     {
+        if (IsPullOnlineInfoBusy)
+            return;
+
         try
         {
-            if (IsPullOnlineInfoBusy)
-                return;
             IsPullOnlineInfoBusy = true;
 
             if (SelectingNodeViewModel is null)
@@ -533,13 +539,22 @@ public partial class MainWindowViewModel : ViewModel
             }
 
             // 対象のサイトからの情報
-            // TODO
-
+            {
+                // TODO
+            }
 
             RedrawResearchArticlesManager();
             MoveCanvasToTargetArticle(SelectingNodeViewModel);
             SelectedEmphasizePropertyItem = ViewModels.EmphasizePropertyItems.一時ﾃﾞｰﾀ;
-            var task = Save();
+            var saveTask = Save();
+
+            var successAnimationTask = Task.Run(async () =>
+            {
+                IsPullOnlineInfoDone = true;
+                await Task.Delay(2222);
+                if (!IsPullOnlineInfoBusy)
+                    IsPullOnlineInfoDone = false;
+            });
         }
         catch (Exception ex)
         {
@@ -548,19 +563,16 @@ public partial class MainWindowViewModel : ViewModel
         finally
         {
             IsPullOnlineInfoBusy = false;
-            IsPullOnlineInfoDone = true;
-            await Task.Delay(2222);
-            if (!IsPullOnlineInfoBusy)
-                IsPullOnlineInfoDone = false;
         }
     }
 
     async Task OpenPDF()
     {
+        if (IsOpenPDFBusy)
+            return;
+
         try
         {
-            if (IsOpenPDFBusy)
-                return;
             IsOpenPDFBusy = true;
 
             if (SelectingNodeViewModel is null)
@@ -572,6 +584,13 @@ public partial class MainWindowViewModel : ViewModel
             if (!result.download)
                 throw new Exception("PDFを開くのに失敗しました。\r\n他のプロセスによって使われていないか確認してください。");
 
+            var successAnimationTask = Task.Run(async () =>
+            {
+                IsOpenPDFDone = true;
+                await Task.Delay(2222);
+                if (!IsOpenPDFBusy)
+                    IsOpenPDFDone = false;
+            });
         }
         catch (Exception ex)
         {
@@ -583,12 +602,13 @@ public partial class MainWindowViewModel : ViewModel
         }
     }
 
-    void OpenDOIWebSite()
+    async Task OpenDOIWebSite()
     {
+        if (IsOpenDOIWebSiteBusy)
+            return;
+
         try
         {
-            if (IsOpenDOIWebSiteBusy)
-                return;
             IsOpenDOIWebSiteBusy = true;
 
             if (SelectingNodeViewModel is null)
@@ -598,6 +618,13 @@ public partial class MainWindowViewModel : ViewModel
             if (!result)
                 throw new Exception("DOIを保持していない文献の可能性があります。");
 
+            var successAnimationTask = Task.Run(async () =>
+            {
+                IsOpenDOIWebSiteDone = true;
+                await Task.Delay(2222);
+                if (!IsOpenDOIWebSiteBusy)
+                    IsOpenDOIWebSiteDone = false;
+            });
         }
         catch (Exception ex)
         {
@@ -609,12 +636,43 @@ public partial class MainWindowViewModel : ViewModel
         }
     }
 
-    void ManuallyAddPDF()
+    async Task UndefinedButton1()
     {
+        if (IsUndefinedButton1Busy)
+            return;
+
         try
         {
-            if (IsManuallyAddPDFBusy)
-                return;
+            IsUndefinedButton1Busy = true;
+
+            await Task.Delay(2222);
+            //throw new NotImplementedException("申し訳ありません。\r\n未実装です…。");
+
+            var successAnimationTask = Task.Run(async () =>
+            {
+                IsUndefinedButton1Done = true;
+                await Task.Delay(2222);
+                if (!IsUndefinedButton1Busy)
+                    IsUndefinedButton1Done = false;
+            });
+        }
+        catch (Exception ex)
+        {
+            //MessageBox.Show($"失敗しました。\r\nﾒｯｾｰｼﾞ: {ex.Message}", "AIにまとめてもらう", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+        finally
+        {
+            IsUndefinedButton1Busy = false;
+        }
+    }
+
+    async Task ManuallyAddPDF()
+    {
+        if (IsManuallyAddPDFBusy)
+            return;
+
+        try
+        {
             IsManuallyAddPDFBusy = true;
 
             if (SelectingNodeViewModel is null)
@@ -649,6 +707,15 @@ public partial class MainWindowViewModel : ViewModel
             //
             MessageBox.Show($"追加に成功しました。", "PDF手動追加", MessageBoxButton.OK, MessageBoxImage.Information);
 
+            IsManuallyAddPDFBusy = false;
+
+            var successAnimationTask = Task.Run(async () =>
+            {
+                IsManuallyAddPDFDone = true;
+                await Task.Delay(2222);
+                if (!IsManuallyAddPDFBusy)
+                    IsManuallyAddPDFDone = false;
+            });
         }
         catch (Exception ex)
         {
@@ -660,15 +727,24 @@ public partial class MainWindowViewModel : ViewModel
         }
     }
 
-    void AISummary()
+    async Task AISummary()
     {
+        if (IsAISummaryBusy)
+            return;
+
         try
         {
-            if (IsAISummaryBusy)
-                return;
             IsAISummaryBusy = true;
 
             throw new NotImplementedException("申し訳ありません。\r\n未実装です…。");
+
+            var successAnimationTask = Task.Run(async () =>
+            {
+                IsAISummaryDone = true;
+                await Task.Delay(2222);
+                if (!IsAISummaryBusy)
+                    IsAISummaryDone = false;
+            });
         }
         catch (Exception ex)
         {
@@ -724,10 +800,11 @@ public partial class MainWindowViewModel : ViewModel
 
     async Task InternetSearch_CiNii_A_()
     {
+        if (IsInternetSearch_CiNii_A_Busy)
+            return;
+
         try
         {
-            if (IsInternetSearch_CiNii_A_Busy)
-                return;
             IsInternetSearch_CiNii_A_Busy = true;
 
             var accessor = new CiNiiArticleAPIAccessor();
@@ -764,7 +841,15 @@ public partial class MainWindowViewModel : ViewModel
             RedrawResearchArticlesManager();
             MoveCanvasToTargetArticle(pulledArticles.FirstOrDefault());
             SelectedEmphasizePropertyItem = ViewModels.EmphasizePropertyItems.一時ﾃﾞｰﾀ;
-            var task = Save();
+            var saveTask = Save();
+
+            var successAnimationTask = Task.Run(async () =>
+            {
+                IsInternetSearch_CiNii_A_Done = true;
+                await Task.Delay(2222);
+                if (!IsInternetSearch_CiNii_A_Busy)
+                    IsInternetSearch_CiNii_A_Done = false;
+            });
         }
         catch (Exception ex)
         {
@@ -773,18 +858,15 @@ public partial class MainWindowViewModel : ViewModel
         finally
         {
             IsInternetSearch_CiNii_A_Busy = false;
-            IsInternetSearch_CiNii_A_Done = true;
-            await Task.Delay(2222);
-            if (!IsInternetSearch_CiNii_A_Busy)
-                IsInternetSearch_CiNii_A_Done = false;
         }
     }
     async Task InternetSearch_NDLSearch_A_()
     {
+        if (IsInternetSearch_NDLSearch_A_Busy)
+            return;
+
         try
         {
-            if (IsInternetSearch_NDLSearch_A_Busy)
-                return;
             IsInternetSearch_NDLSearch_A_Busy = true;
 
             var accessor = new NDLSearchAPIAccessor();
@@ -822,7 +904,15 @@ public partial class MainWindowViewModel : ViewModel
             RedrawResearchArticlesManager();
             MoveCanvasToTargetArticle(pulledArticles.FirstOrDefault());
             SelectedEmphasizePropertyItem = ViewModels.EmphasizePropertyItems.一時ﾃﾞｰﾀ;
-            var task = Save();
+            var saveTask = Save();
+
+            var successAnimationTask = Task.Run(async () =>
+            {
+                IsInternetSearch_NDLSearch_A_Done = true;
+                await Task.Delay(2222);
+                if (!IsInternetSearch_NDLSearch_A_Busy)
+                    IsInternetSearch_NDLSearch_A_Done = false;
+            });
         }
         catch (Exception ex)
         {
@@ -831,19 +921,16 @@ public partial class MainWindowViewModel : ViewModel
         finally
         {
             IsInternetSearch_NDLSearch_A_Busy = false;
-            IsInternetSearch_NDLSearch_A_Done = true;
-            await Task.Delay(2222);
-            if (!IsInternetSearch_NDLSearch_A_Busy)
-                IsInternetSearch_NDLSearch_A_Done = false;
         }
     }
 
     async Task InternetSearchJStage_B_()
     {
+        if (IsInternetSearchJStage_B_Busy)
+            return;
+
         try
         {
-            if (IsInternetSearchJStage_B_Busy)
-                return;
             IsInternetSearchJStage_B_Busy = true;
 
             var accessor = new JStageArticleAPIAccessor();
@@ -896,7 +983,15 @@ public partial class MainWindowViewModel : ViewModel
             RedrawResearchArticlesManager();
             MoveCanvasToTargetArticle(pulledArticles.FirstOrDefault());
             SelectedEmphasizePropertyItem = ViewModels.EmphasizePropertyItems.一時ﾃﾞｰﾀ;
-            var task = Save();
+            var saveTask = Save();
+
+            var successAnimationTask = Task.Run(async () =>
+            {
+                IsInternetSearchJStage_B_Done = true;
+                await Task.Delay(2222);
+                if (!IsInternetSearchJStage_B_Busy)
+                    IsInternetSearchJStage_B_Done = false;
+            });
         }
         catch (Exception ex)
         {
@@ -905,18 +1000,15 @@ public partial class MainWindowViewModel : ViewModel
         finally
         {
             IsInternetSearchJStage_B_Busy = false;
-            IsInternetSearchJStage_B_Done = true;
-            await Task.Delay(2222);
-            if (!IsInternetSearchJStage_B_Busy)
-                IsInternetSearchJStage_B_Done = false;
         }
     }
     async Task InternetSearch_CiNii_B_()
     {
+        if (IsInternetSearch_CiNii_B_Busy)
+            return;
+
         try
         {
-            if (IsInternetSearch_CiNii_B_Busy)
-                return;
             IsInternetSearch_CiNii_B_Busy = true;
 
             var accessor = new CiNiiArticleAPIAccessor();
@@ -971,7 +1063,15 @@ public partial class MainWindowViewModel : ViewModel
             RedrawResearchArticlesManager();
             MoveCanvasToTargetArticle(pulledArticles.FirstOrDefault());
             SelectedEmphasizePropertyItem = ViewModels.EmphasizePropertyItems.一時ﾃﾞｰﾀ;
-            var task = Save();
+            var saveTask = Save();
+
+            var successAnimationTask = Task.Run(async () =>
+            {
+                IsInternetSearch_CiNii_B_Done = true;
+                await Task.Delay(2222);
+                if (!IsInternetSearch_CiNii_B_Busy)
+                    IsInternetSearch_CiNii_B_Done = false;
+            });
         }
         catch (Exception ex)
         {
@@ -980,18 +1080,15 @@ public partial class MainWindowViewModel : ViewModel
         finally
         {
             IsInternetSearch_CiNii_B_Busy = false;
-            IsInternetSearch_CiNii_B_Done = true;
-            await Task.Delay(2222);
-            if (!IsInternetSearch_CiNii_B_Busy)
-                IsInternetSearch_CiNii_B_Done = false;
         }
     }
     async Task InternetSearch_NDLSearch_B_()
     {
+        if (IsInternetSearch_NDLSearch_B_Busy)
+            return;
+
         try
         {
-            if (IsInternetSearch_NDLSearch_B_Busy)
-                return;
             IsInternetSearch_NDLSearch_B_Busy = true;
 
             var accessor = new NDLSearchAPIAccessor();
@@ -1047,7 +1144,15 @@ public partial class MainWindowViewModel : ViewModel
             RedrawResearchArticlesManager();
             MoveCanvasToTargetArticle(pulledArticles.FirstOrDefault());
             SelectedEmphasizePropertyItem = ViewModels.EmphasizePropertyItems.一時ﾃﾞｰﾀ;
-            var task = Save();
+            var saveTask = Save();
+
+            var successAnimationTask = Task.Run(async () =>
+            {
+                IsInternetSearch_NDLSearch_B_Done = true;
+                await Task.Delay(2222);
+                if (!IsInternetSearch_NDLSearch_B_Busy)
+                    IsInternetSearch_NDLSearch_B_Done = false;
+            });
         }
         catch (Exception ex)
         {
@@ -1056,19 +1161,16 @@ public partial class MainWindowViewModel : ViewModel
         finally
         {
             IsInternetSearch_NDLSearch_B_Busy = false;
-            IsInternetSearch_NDLSearch_B_Done = true;
-            await Task.Delay(2222);
-            if (!IsInternetSearch_NDLSearch_B_Busy)
-                IsInternetSearch_NDLSearch_B_Done = false;
         }
     }
 
     async Task InternetSearch_CiNii_C_()
     {
+        if (IsInternetSearch_CiNii_C_Busy)
+            return;
+
         try
         {
-            if (IsInternetSearch_CiNii_C_Busy)
-                return;
             IsInternetSearch_CiNii_C_Busy = true;
 
             var accessor = new CiNiiArticleAPIAccessor();
@@ -1088,7 +1190,15 @@ public partial class MainWindowViewModel : ViewModel
             RedrawResearchArticlesManager();
             MoveCanvasToTargetArticle(pulledArticles.FirstOrDefault());
             SelectedEmphasizePropertyItem = ViewModels.EmphasizePropertyItems.一時ﾃﾞｰﾀ;
-            var task = Save();
+            var saveTask = Save();
+
+            var successAnimationTask = Task.Run(async () =>
+            {
+                IsInternetSearch_CiNii_C_Done = true;
+                await Task.Delay(2222);
+                if (!IsInternetSearch_CiNii_C_Busy)
+                    IsInternetSearch_CiNii_C_Done = false;
+            });
         }
         catch (Exception ex)
         {
@@ -1097,18 +1207,15 @@ public partial class MainWindowViewModel : ViewModel
         finally
         {
             IsInternetSearch_CiNii_C_Busy = false;
-            IsInternetSearch_CiNii_C_Done = true;
-            await Task.Delay(2222);
-            if (!IsInternetSearch_CiNii_C_Busy)
-                IsInternetSearch_CiNii_C_Done = false;
         }
     }
     async Task InternetSearch_CrossRef_C_()
     {
+        if (IsInternetSearch_CrossRef_C_Busy)
+            return;
+
         try
         {
-            if (IsInternetSearch_CrossRef_C_Busy)
-                return;
             IsInternetSearch_CrossRef_C_Busy = true;
 
             var accessor = new CrossRefAPIAccessor();
@@ -1127,7 +1234,7 @@ public partial class MainWindowViewModel : ViewModel
             RedrawResearchArticlesManager();
             MoveCanvasToTargetArticle(pulledArticles.FirstOrDefault());
             SelectedEmphasizePropertyItem = ViewModels.EmphasizePropertyItems.一時ﾃﾞｰﾀ;
-            var task = Save();
+            var saveTask = Save();
         }
         catch (Exception ex)
         {

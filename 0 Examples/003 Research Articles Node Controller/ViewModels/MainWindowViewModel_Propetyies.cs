@@ -138,19 +138,28 @@ public partial class MainWindowViewModel : ViewModel
     ViewModelCommandHandler _PullOnlineInfoCommand = new();
 
     public bool IsOpenPDFBusy { get; set; } = false;
+    public bool IsOpenPDFDone { get; set; } = false;
     public ViewModelCommand OpenPDFCommand => _OpenPDFCommand.Get(async () => await OpenPDF());
     ViewModelCommandHandler _OpenPDFCommand = new();
 
     public bool IsOpenDOIWebSiteBusy { get; set; } = false;
-    public ViewModelCommand OpenDOIWebSiteCommand => _OpenDOIWebSiteCommand.Get(OpenDOIWebSite);
+    public bool IsOpenDOIWebSiteDone { get; set; } = false;
+    public ViewModelCommand OpenDOIWebSiteCommand => _OpenDOIWebSiteCommand.Get(async () => await OpenDOIWebSite());
     ViewModelCommandHandler _OpenDOIWebSiteCommand = new();
 
+    public bool IsUndefinedButton1Busy { get; set; } = false;
+    public bool IsUndefinedButton1Done { get; set; } = false;
+    public ViewModelCommand IsUndefinedButton1Command => _IsUndefinedButton1Command.Get(async () => await UndefinedButton1());
+    ViewModelCommandHandler _IsUndefinedButton1Command = new();
+
     public bool IsManuallyAddPDFBusy { get; set; } = false;
-    public ViewModelCommand ManuallyAddPDFCommand => _ManuallyAddPDFCommand.Get(ManuallyAddPDF);
+    public bool IsManuallyAddPDFDone { get; set; } = false;
+    public ViewModelCommand ManuallyAddPDFCommand => _ManuallyAddPDFCommand.Get(async () => await ManuallyAddPDF());
     ViewModelCommandHandler _ManuallyAddPDFCommand = new();
 
     public bool IsAISummaryBusy { get; set; } = false;
-    public ViewModelCommand IsAISummaryCommand => _IsAISummaryCommand.Get(AISummary);
+    public bool IsAISummaryDone { get; set; } = false;
+    public ViewModelCommand IsAISummaryCommand => _IsAISummaryCommand.Get(async () => await AISummary());
     ViewModelCommandHandler _IsAISummaryCommand = new();
 
 

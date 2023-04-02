@@ -876,7 +876,7 @@
                                     <TextBlock.ToolTip>
                                         <TextBlock
                                             TextAlignment="Left"
-                                            Text="doi"
+                                            Text="DOI"
                                             >
                                         </TextBlock>
                                     </TextBlock.ToolTip>
@@ -904,11 +904,20 @@
                                         </TextBlock>
                                     </TextBlock.ToolTip>
                                 </TextBlock>
-                                
+
                                 <StackPanel
                                     Margin="70,0,0,0" 
                                     Orientation="Horizontal"
+                                    ToolTipService.InitialShowDelay="10" 
                                     >
+                                    <StackPanel.ToolTip>
+                                        <TextBlock
+                                            TextAlignment="Left"
+                                            Text="AOI ( 簡易AOI )&#10;クリックして簡易AOIをコピー"
+                                            >
+                                        </TextBlock>
+                                    </StackPanel.ToolTip>
+                                    
                                     <TextBlock Text="{Binding SelectingNodeViewModel.Article.AOI}"/>
                                     <TextBlock Text=" ( "/>
                                     <TextBlock Text="{Binding SelectingNodeViewModel.Article.Friendly_AOI}"/>
@@ -951,7 +960,7 @@
                                     <TextBlock.ToolTip>
                                         <TextBlock
                                             TextAlignment="Left"
-                                            Text="文献文字列。クリックしてコピー。"
+                                            Text="文献文字列&#10;クリックしてコピー"
                                             >
                                         </TextBlock>
                                     </TextBlock.ToolTip>
@@ -960,8 +969,20 @@
                                     Text="{Binding SelectingNodeViewModel.Article.ReferenceString}" 
                                     Margin="70,0,0,0" 
                                     TextWrapping="Wrap"
-                                    />
+                                    ToolTipService.InitialShowDelay="10" 
+                                    >
+                                    <TextBlock.ToolTip>
+                                        <TextBlock
+                                            TextAlignment="Left"
+                                            Text="文献文字列&#10;クリックしてコピー"
+                                            >
+                                        </TextBlock>
+                                    </TextBlock.ToolTip>
+                                </TextBlock>
                             </Grid>
+
+                            <!-- ========================================== -->
+                            <Grid Height="50"/>
 
                             <Grid Margin="4">
 
@@ -972,6 +993,23 @@
                                     <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
 
+                                <TextBlock
+                                    Text="コマンド：" 
+                                    Width="70"
+                                    VerticalAlignment="Center"
+                                    HorizontalAlignment="Left"
+                                    TextAlignment="Right"
+                                    ToolTipService.InitialShowDelay="10" 
+                                    >
+                                    <TextBlock.ToolTip>
+                                        <TextBlock
+                                            TextAlignment="Left"
+                                            Text="各種コマンド"
+                                            >
+                                        </TextBlock>
+                                    </TextBlock.ToolTip>
+                                </TextBlock>
+
                                 <Button
                                     Grid.Column="1"
                                     Margin="3"
@@ -980,7 +1018,13 @@
                                     ToolTip="オンラインからメタ情報および引用関係をダウンロードして，追記します。"
                                     >
                                     <StackPanel Orientation="Horizontal">
-                                        <mah:ProgressRing Visibility="{Binding IsPullOnlineInfoBusy, Converter={StaticResource BooleanToVisibilityConverter}}" Style="{StaticResource ProgressRingStyle}" Margin="0,0,5,0"/>
+                                        <Grid Margin="0,0,3,0">
+                                            <mah:ProgressRing Visibility="{Binding IsPullOnlineInfoBusy, Converter={StaticResource BooleanToVisibilityConverter}}" Style="{StaticResource ProgressRingStyle}" Margin="0,0,3.5,0"/>
+                                            <Grid Visibility="{Binding IsPullOnlineInfoBusy, Converter={StaticResource InverseBooleanToVisibility}}">
+                                                <TextBlock Text="⬇️" Visibility="{Binding IsPullOnlineInfoDone, Converter={StaticResource InverseBooleanToVisibility}}"/>
+                                                <TextBlock Text="✔️ " Visibility="{Binding IsPullOnlineInfoDone, Converter={StaticResource BooleanToVisibilityConverter}}" Foreground="Green"/>
+                                            </Grid>
+                                        </Grid>
                                         <TextBlock Text="オンラインで情報を取得"/>
                                     </StackPanel>
                                 </Button>
@@ -993,7 +1037,13 @@
                                     ToolTip="PDFを表示します。&#10;もしローカルに存在しない場合は，自動でダウンロードします。"
                                     >
                                     <StackPanel Orientation="Horizontal">
-                                        <mah:ProgressRing Visibility="{Binding IsOpenPDFBusy, Converter={StaticResource BooleanToVisibilityConverter}}" Style="{StaticResource ProgressRingStyle}" Margin="0,0,5,0"/>
+                                        <Grid Margin="0,0,3,0">
+                                            <mah:ProgressRing Visibility="{Binding IsOpenPDFBusy, Converter={StaticResource BooleanToVisibilityConverter}}" Style="{StaticResource ProgressRingStyle}" Margin="0,0,3.5,0"/>
+                                            <Grid Visibility="{Binding IsOpenPDFBusy, Converter={StaticResource InverseBooleanToVisibility}}">
+                                                <TextBlock Text="📑" Visibility="{Binding IsOpenPDFDone, Converter={StaticResource InverseBooleanToVisibility}}"/>
+                                                <TextBlock Text="✔️" Visibility="{Binding IsOpenPDFDone, Converter={StaticResource BooleanToVisibilityConverter}}" Foreground="Green"/>
+                                            </Grid>
+                                        </Grid>
                                         <TextBlock Text="PDFを表示"/>
                                     </StackPanel>
                                 </Button>
@@ -1006,7 +1056,13 @@
                                     ToolTip="元データのWebサイトをブラウザで表示します。"
                                     >
                                     <StackPanel Orientation="Horizontal">
-                                        <mah:ProgressRing Visibility="{Binding IsOpenDOIWebSiteBusy, Converter={StaticResource BooleanToVisibilityConverter}}" Style="{StaticResource ProgressRingStyle}" Margin="0,0,5,0"/>
+                                        <Grid Margin="0,0,3,0">
+                                            <mah:ProgressRing Visibility="{Binding IsOpenDOIWebSiteBusy, Converter={StaticResource BooleanToVisibilityConverter}}" Style="{StaticResource ProgressRingStyle}" Margin="0,0,3.5,0"/>
+                                            <Grid Visibility="{Binding IsOpenDOIWebSiteBusy, Converter={StaticResource InverseBooleanToVisibility}}">
+                                                <TextBlock Text="🌐" Visibility="{Binding IsOpenDOIWebSiteDone, Converter={StaticResource InverseBooleanToVisibility}}"/>
+                                                <TextBlock Text="✔️ " Visibility="{Binding IsOpenDOIWebSiteDone, Converter={StaticResource BooleanToVisibilityConverter}}" Foreground="Green"/>
+                                            </Grid>
+                                        </Grid>
                                         <TextBlock Text="Webサイトを表示"/>
                                     </StackPanel>
                                 </Button>
@@ -1026,9 +1082,20 @@
                                     Grid.Column="1"
                                     Margin="3"
                                     Style="{StaticResource ButtonTextStretchStyle}"
-                                    Content="（）"
+                                    Command="{Binding IsUndefinedButton1Command}"
                                     ToolTip=""
-                                    />
+                                    >
+                                    <StackPanel Orientation="Horizontal">
+                                        <Grid Margin="0,0,3,0">
+                                            <mah:ProgressRing Visibility="{Binding IsUndefinedButton1Busy, Converter={StaticResource BooleanToVisibilityConverter}}" Style="{StaticResource ProgressRingStyle}" Margin="0,0,3.5,0"/>
+                                            <Grid Visibility="{Binding IsUndefinedButton1Busy, Converter={StaticResource InverseBooleanToVisibility}}">
+                                                <TextBlock Text="❓" Visibility="{Binding IsUndefinedButton1Done, Converter={StaticResource InverseBooleanToVisibility}}"/>
+                                                <TextBlock Text="✔️" Visibility="{Binding IsUndefinedButton1Done, Converter={StaticResource BooleanToVisibilityConverter}}" Foreground="Green"/>
+                                            </Grid>
+                                        </Grid>
+                                        <TextBlock Text="（）"/>
+                                    </StackPanel>
+                                </Button>
 
                                 <Button
                                     Grid.Column="2"
@@ -1036,9 +1103,15 @@
                                     Style="{StaticResource ButtonTextStretchStyle}"
                                     Command="{Binding ManuallyAddPDFCommand}"
                                     ToolTip="PDFをデータベースに手動で追加します。"
-                                        >
+                                    >
                                     <StackPanel Orientation="Horizontal">
-                                        <mah:ProgressRing Visibility="{Binding IsManuallyAddPDFBusy, Converter={StaticResource BooleanToVisibilityConverter}}" Style="{StaticResource ProgressRingStyle}" Margin="0,0,5,0"/>
+                                        <Grid Margin="0,0,3,0">
+                                            <mah:ProgressRing Visibility="{Binding IsManuallyAddPDFBusy, Converter={StaticResource BooleanToVisibilityConverter}}" Style="{StaticResource ProgressRingStyle}" Margin="0,0,3.5,0"/>
+                                            <Grid Visibility="{Binding IsManuallyAddPDFBusy, Converter={StaticResource InverseBooleanToVisibility}}">
+                                                <TextBlock Text="📑" Visibility="{Binding IsManuallyAddPDFDone, Converter={StaticResource InverseBooleanToVisibility}}"/>
+                                                <TextBlock Text="✔️ " Visibility="{Binding IsManuallyAddPDFDone, Converter={StaticResource BooleanToVisibilityConverter}}" Foreground="Green"/>
+                                            </Grid>
+                                        </Grid>
                                         <TextBlock Text="PDF手動追加"/>
                                     </StackPanel>
                                 </Button>
@@ -1051,7 +1124,13 @@
                                     ToolTip="AIに論文を読んでもらって，まとめ文章を作成してもらいます。"
                                     >
                                     <StackPanel Orientation="Horizontal">
-                                        <mah:ProgressRing Visibility="{Binding IsAISummaryBusy, Converter={StaticResource BooleanToVisibilityConverter}}" Style="{StaticResource ProgressRingStyle}" Margin="0,0,5,0"/>
+                                        <Grid Margin="0,0,3,0">
+                                            <mah:ProgressRing Visibility="{Binding IsAISummaryBusy, Converter={StaticResource BooleanToVisibilityConverter}}" Style="{StaticResource ProgressRingStyle}" Margin="0,0,3.5,0"/>
+                                            <Grid Visibility="{Binding IsAISummaryBusy, Converter={StaticResource InverseBooleanToVisibility}}">
+                                                <TextBlock Text="⚡" Visibility="{Binding IsAISummaryDone, Converter={StaticResource InverseBooleanToVisibility}}"/>
+                                                <TextBlock Text="✔️ " Visibility="{Binding IsAISummaryDone, Converter={StaticResource BooleanToVisibilityConverter}}" Foreground="Green"/>
+                                            </Grid>
+                                        </Grid>
                                         <TextBlock Text="（AIにまとめてもらう）"/>
                                     </StackPanel>
                                 </Button>
@@ -1240,7 +1319,7 @@
                                     />
 
                             </Grid>
-                            
+
                             <Grid Margin="4">
                                 <StackPanel 
                                     Orientation="Horizontal"
@@ -1607,7 +1686,7 @@
                                             <TextBlock Text=" CiNii "/>
                                         </StackPanel>
                                     </Button>
-                                    
+
                                     <Button
                                         Margin="3"
                                         Command="{Binding InternetSearch_CrossRef_C_Command}"
@@ -1628,12 +1707,12 @@
 
                                 </StackPanel>
                             </Grid>
-                            
+
                             <Grid Height="20"/>
 
-                            
-                            
-                            
+
+
+
 
                         </StackPanel>
                     </ScrollViewer>
