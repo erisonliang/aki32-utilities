@@ -265,7 +265,7 @@ public class ResearchArticle : IComparable
 
                     s = s.Replace("{MaterialTitle}", MaterialTitle);
                 }
-     
+
                 if (ReferenceStringTemplate.Contains("{MaterialVolume}"))
                 {
                     if (MaterialVolume is null)
@@ -381,6 +381,7 @@ public class ResearchArticle : IComparable
                     return JStage_Link_Japanese!.Replace($"_article/", $"_pdf/");
                 if (JStage_Link_English != null)
                     return JStage_Link_English!.Replace($"_article/", $"_pdf/");
+
             }
 
             return null;

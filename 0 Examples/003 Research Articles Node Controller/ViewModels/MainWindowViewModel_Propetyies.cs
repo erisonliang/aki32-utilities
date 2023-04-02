@@ -144,7 +144,7 @@ public partial class MainWindowViewModel : ViewModel
 
     public bool IsOpenDOIWebSiteBusy { get; set; } = false;
     public bool IsOpenDOIWebSiteDone { get; set; } = false;
-    public ViewModelCommand OpenDOIWebSiteCommand => _OpenDOIWebSiteCommand.Get(async () => await OpenDOIWebSite());
+    public ViewModelCommand OpenDOIWebSiteCommand => _OpenDOIWebSiteCommand.Get(OpenDOIWebSite);
     ViewModelCommandHandler _OpenDOIWebSiteCommand = new();
 
     public bool IsUndefinedButton1Busy { get; set; } = false;
@@ -154,12 +154,12 @@ public partial class MainWindowViewModel : ViewModel
 
     public bool IsManuallyAddPDFBusy { get; set; } = false;
     public bool IsManuallyAddPDFDone { get; set; } = false;
-    public ViewModelCommand ManuallyAddPDFCommand => _ManuallyAddPDFCommand.Get(async () => await ManuallyAddPDF());
+    public ViewModelCommand ManuallyAddPDFCommand => _ManuallyAddPDFCommand.Get(ManuallyAddPDF);
     ViewModelCommandHandler _ManuallyAddPDFCommand = new();
 
     public bool IsAISummaryBusy { get; set; } = false;
     public bool IsAISummaryDone { get; set; } = false;
-    public ViewModelCommand IsAISummaryCommand => _IsAISummaryCommand.Get(async () => await AISummary());
+    public ViewModelCommand IsAISummaryCommand => _IsAISummaryCommand.Get(AISummary);
     ViewModelCommandHandler _IsAISummaryCommand = new();
 
 

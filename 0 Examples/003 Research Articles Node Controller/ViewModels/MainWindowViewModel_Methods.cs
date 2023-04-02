@@ -602,7 +602,7 @@ public partial class MainWindowViewModel : ViewModel
         }
     }
 
-    async Task OpenDOIWebSite()
+    void OpenDOIWebSite()
     {
         if (IsOpenDOIWebSiteBusy)
             return;
@@ -666,7 +666,7 @@ public partial class MainWindowViewModel : ViewModel
         }
     }
 
-    async Task ManuallyAddPDF()
+    void ManuallyAddPDF()
     {
         if (IsManuallyAddPDFBusy)
             return;
@@ -685,29 +685,10 @@ public partial class MainWindowViewModel : ViewModel
             };
             if (dialog.ShowDialog() != true)
                 return;
+
+            //
             var addingPDFFile = new FileInfo(dialog.FileName);
-
-            //
-            if (SelectingNodeViewModel.Article.TryFindPDF(ResearchArticlesManager.PDFsDirectory))
-            {
-                var result_ForceOverwrite = MessageBox.Show($"この文献には既にPDFが存在していて，上書きしようとしています。\r\n本当によろしいですか？", "PDF手動追加", MessageBoxButton.OKCancel, MessageBoxImage.Warning);
-                if (result_ForceOverwrite is not MessageBoxResult.OK)
-                    return;
-            }
-
-            //
-            var result_DeleteOriginal = MessageBox.Show($"コピー元のPDFを削除しますか？", "PDF手動追加", MessageBoxButton.OKCancel, MessageBoxImage.Information);
-            var deleteOriginalPdfFile = result_DeleteOriginal is MessageBoxResult.OK;
-
-            //
-            SelectingNodeViewModel.Article.AddPDFManually(ResearchArticlesManager.PDFsDirectory,
-                addingPDFFile, deleteOriginalPdfFile,
-                forceOverwriteExistingPDF: true);
-
-            //
-            MessageBox.Show($"追加に成功しました。", "PDF手動追加", MessageBoxButton.OK, MessageBoxImage.Information);
-
-            IsManuallyAddPDFBusy = false;
+            ManuallyAddPDF_FromFileInfo(addingPDFFile);
 
             var successAnimationTask = Task.Run(async () =>
             {
@@ -726,8 +707,80 @@ public partial class MainWindowViewModel : ViewModel
             IsManuallyAddPDFBusy = false;
         }
     }
+    public void Button_ManuallyAddPDF_Drop(object sender, DragEventArgs e)
+    {
+        if (IsManuallyAddPDFBusy)
+            return;
 
-    async Task AISummary()
+        try
+        {
+            IsManuallyAddPDFBusy = true;
+
+            if (SelectingNodeViewModel is null)
+                throw new Exception("文献が選択されていません。");
+
+            //
+            if (!e.Data.GetDataPresent(DataFormats.FileDrop))
+                return;
+
+            var droppedFileNames = (string[])e.Data.GetData(DataFormats.FileDrop);
+            if (droppedFileNames.Length > 1)
+                throw new Exception("複数のファイルがドロップされました。");
+
+            var droppedFileName = droppedFileNames[0];
+            if (Path.GetExtension(droppedFileName) != ".pdf")
+                if (Path.GetExtension(droppedFileName) != ".PDF")
+                    throw new Exception(".pdf ファイルのみ受付可能です。");
+
+
+            //
+            var addingPDFFile = new FileInfo(droppedFileName);
+            ManuallyAddPDF_FromFileInfo(addingPDFFile);
+
+            var successAnimationTask = Task.Run(async () =>
+            {
+                IsManuallyAddPDFDone = true;
+                await Task.Delay(2222);
+                if (!IsManuallyAddPDFBusy)
+                    IsManuallyAddPDFDone = false;
+            });
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show($"失敗しました。\r\nﾒｯｾｰｼﾞ: {ex.Message}", "PDF手動追加", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+        finally
+        {
+            IsManuallyAddPDFBusy = false;
+        }
+    }
+    private void ManuallyAddPDF_FromFileInfo(FileInfo addingPDFFile)
+    {
+        //
+        if (SelectingNodeViewModel!.Article.TryFindPDF(ResearchArticlesManager.PDFsDirectory))
+        {
+            var result_ForceOverwrite = MessageBox.Show($"この文献には既にPDFが存在していて，上書きしようとしています。\r\n本当によろしいですか？", "PDF手動追加", MessageBoxButton.OKCancel, MessageBoxImage.Warning);
+            if (result_ForceOverwrite is not MessageBoxResult.OK)
+                return;
+        }
+
+        //
+        var result_DeleteOriginal = MessageBox.Show($"コピー元のPDFを削除しますか？", "PDF手動追加", MessageBoxButton.OKCancel, MessageBoxImage.Information);
+        var deleteOriginalPdfFile = result_DeleteOriginal is MessageBoxResult.OK;
+
+        //
+        SelectingNodeViewModel.Article.AddPDFManually(ResearchArticlesManager.PDFsDirectory,
+            addingPDFFile, deleteOriginalPdfFile,
+            forceOverwriteExistingPDF: true);
+
+        //
+        MessageBox.Show($"追加に成功しました。", "PDF手動追加", MessageBoxButton.OK, MessageBoxImage.Information);
+
+
+
+    }
+
+    void AISummary()
     {
         if (IsAISummaryBusy)
             return;

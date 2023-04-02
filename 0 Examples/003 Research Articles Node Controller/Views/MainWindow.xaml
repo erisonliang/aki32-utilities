@@ -1100,9 +1100,11 @@
                                 <Button
                                     Grid.Column="2"
                                     Margin="3"
+                                    Name="Button_ManuallyAddPDF"
                                     Style="{StaticResource ButtonTextStretchStyle}"
                                     Command="{Binding ManuallyAddPDFCommand}"
-                                    ToolTip="PDFをデータベースに手動で追加します。"
+                                    ToolTip="PDFをデータベースに手動で追加します。&#10;PDFファイルをここにドロップすることもできます。"
+                                    AllowDrop="True"
                                     >
                                     <StackPanel Orientation="Horizontal">
                                         <Grid Margin="0,0,3,0">

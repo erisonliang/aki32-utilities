@@ -1,7 +1,6 @@
 ﻿using Livet.Commands;
 
 namespace NodeGraph.Utilities;
-
 public class ViewModelCommandHandler
 {
     public ViewModelCommand Get(Action execute, Func<bool>? canExecute = null) => command ??= new ViewModelCommand(execute, canExecute);
