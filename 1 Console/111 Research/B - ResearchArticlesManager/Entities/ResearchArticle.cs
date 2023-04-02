@@ -224,75 +224,112 @@ public class ResearchArticle : IComparable
 
     [CsvIgnore]
     public string? ReferenceErrorReasonString = "";
+    [CsvIgnore]
+    public string ReferenceStringTemplate = "{Authors}: {ArticleTitle}, {MaterialTitle}, {MaterialVolume}, {MaterialSubVolume}, pp.{StartingPage}-{EndingPage}, {PublishedYear}";
     public string? ReferenceString
     {
         get
         {
             string ReferenceStringManually()
             {
-                if (Authors is null)
-                {
-                    ReferenceErrorReasonString = "※ Need to fill Authors";
-                    return null;
-                }
-                if (ArticleTitle is null)
-                {
-                    ReferenceErrorReasonString = "※ Need to fill ArticleTitle";
-                    return null;
-                }
-                if (MaterialTitle is null)
-                {
-                    ReferenceErrorReasonString = "※ Need to fill MaterialTitle";
-                    return null;
-                }
-                if (MaterialVolume is null)
-                {
-                    ReferenceErrorReasonString = "※ Need to fill MaterialVol";
-                    return null;
-                }
-                if (StartingPage is null)
-                {
-                    ReferenceErrorReasonString = "※ Need to fill StartingPage";
-                    return null;
-                }
-                if (EndingPage is null)
-                {
-                    ReferenceErrorReasonString = "※ Need to fill EndingPage";
-                    return null;
-                }
-                var date = PublishedOn_Numbers;
-                if (date is null || date.Value.year is null)
-                {
-                    ReferenceErrorReasonString = "※ Need to fill PublishedYear";
-                    return null;
-                }
+                var s = ReferenceStringTemplate;
 
-                var authors = string.Join(", ", Authors!);
-                var dateString = $"{date.Value.year.Value}";
-                if (date.Value.month is not null)
-                    dateString += $".{date.Value.month.Value}";
-
-                var s = "";
-                s += $"{authors}, ";
-                s += $"{ArticleTitle}, ";
-                s += $"{MaterialTitle}, ";
-                if (MaterialVolume is not null)
+                if (ReferenceStringTemplate.Contains("{Authors}"))
                 {
+                    if (Authors is null)
+                    {
+                        ReferenceErrorReasonString = "※ Need to fill Authors";
+                        return null;
+                    }
+
+                    var authors = string.Join(", ", Authors!);
+                    s = s.Replace("{Authors}", authors);
+                }
+                if (ReferenceStringTemplate.Contains("{ArticleTitle}"))
+                {
+                    if (ArticleTitle is null)
+                    {
+                        ReferenceErrorReasonString = "※ Need to fill ArticleTitle";
+                        return null;
+                    }
+
+                    s = s.Replace("{ArticleTitle}", ArticleTitle);
+                }
+                if (ReferenceStringTemplate.Contains("{MaterialTitle}"))
+                {
+                    if (MaterialTitle is null)
+                    {
+                        ReferenceErrorReasonString = "※ Need to fill MaterialTitle";
+                        return null;
+                    }
+
+                    s = s.Replace("{MaterialTitle}", MaterialTitle);
+                }
+     
+                if (ReferenceStringTemplate.Contains("{MaterialVolume}"))
+                {
+                    if (MaterialVolume is null)
+                    {
+                        ReferenceErrorReasonString = "※ Need to fill MaterialVol";
+                        return null;
+                    }
+
                     if (uint.TryParse(MaterialVolume, out uint a))
-                        s += $"第{MaterialVolume}巻, ";
+                        s = s.Replace("{MaterialVolume}", $"第{MaterialVolume}巻");
                     else
-                        s += $"{MaterialVolume}, ";
+                        s = s.Replace("{MaterialVolume}", $"{MaterialVolume}");
                 }
-                if (MaterialSubVolume is not null)
+                if (ReferenceStringTemplate.Contains("{MaterialSubVolume}"))
                 {
-                    if (uint.TryParse(MaterialSubVolume, out uint a))
-                        s += $"第{MaterialSubVolume}号, ";
+                    if (MaterialSubVolume is null)
+                    {
+                        s = s.Replace("{MaterialSubVolume}", $"");
+                    }
                     else
-                        s += $"{MaterialSubVolume}, ";
+                    {
+                        if (uint.TryParse(MaterialSubVolume, out uint a))
+                            s = s.Replace("{MaterialSubVolume}", $"第{MaterialVolume}号");
+                        else
+                            s = s.Replace("{MaterialSubVolume}", $"{MaterialVolume}");
+                    }
                 }
 
-                s += $"pp.{StartingPage}-{EndingPage}, ";
-                s += $"{dateString}";
+                if (ReferenceStringTemplate.Contains("{StartingPage}"))
+                {
+                    if (StartingPage is null)
+                    {
+                        ReferenceErrorReasonString = "※ Need to fill StartingPage";
+                        return null;
+                    }
+
+                    s = s.Replace("{StartingPage}", StartingPage);
+                }
+                if (ReferenceStringTemplate.Contains("{EndingPage}"))
+                {
+                    if (EndingPage is null)
+                    {
+                        ReferenceErrorReasonString = "※ Need to fill EndingPage";
+                        return null;
+                    }
+
+                    s = s.Replace("{EndingPage}", EndingPage);
+                }
+
+                if (ReferenceStringTemplate.Contains("{PublishedYear}"))
+                {
+                    var date = PublishedOn_Numbers;
+                    if (date is null || date.Value.year is null)
+                    {
+                        ReferenceErrorReasonString = "※ Need to fill PublishedYear";
+                        return null;
+                    }
+
+                    var dateString = $"{date.Value.year.Value}";
+                    if (date.Value.month is not null)
+                        dateString += $".{date.Value.month.Value}";
+
+                    s = s.Replace("{PublishedYear}", dateString);
+                }
 
                 return s;
             }
@@ -318,7 +355,6 @@ public class ResearchArticle : IComparable
 
     public string? PrintISSN { get; set; }
     public string? OnlineISSN { get; set; }
-
 
 
     // ★★★★★ shared links (*main common info)
