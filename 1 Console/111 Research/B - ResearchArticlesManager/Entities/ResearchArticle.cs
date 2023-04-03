@@ -920,6 +920,41 @@ public class ResearchArticle : IComparable
         }
     }
 
+    /// <summary>
+    /// Predict meta info from Unstructured reference string by ChatGPT
+    /// </summary>
+    /// <returns></returns>
+    public bool TryPredictMetaInfo_ChatGPT()
+    {
+        UtilPreprocessors.PreprocessBasic();
+
+        try
+        {
+            var refString = ReferenceString;
+
+            if (refString is null || refString == ReferenceErrorReasonString)
+                throw new Exception("文献文字列がないため，推測が出来ません。");
+
+
+
+
+
+
+
+
+
+
+
+            throw new NotImplementedException("未実装です…。");
+
+            return true;
+        }
+        catch (Exception ex)
+        {
+            ConsoleExtension.WriteLineWithColor($"Failed: {ex.Message}", ConsoleColor.Red);
+            return false;
+        }
+    }
 
 
     // ★★★★★★★★★★★★★★★ method (helper)
