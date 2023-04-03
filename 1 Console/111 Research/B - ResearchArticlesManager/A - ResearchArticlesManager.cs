@@ -199,21 +199,21 @@ public partial class ResearchArticlesManager
         if (ArticleDatabase.Contains(mergingArticle))
         {
             // Ref整合性。
-            // Replace previous AOI to new AOI.
+            // Replace former AOI to latter AOI.
             foreach (var article in ArticleDatabase)
             {
                 if (article.ReferenceAOIs != null && article.ReferenceAOIs.Contains(mergingArticle.AOI))
                     article.ReferenceAOIs = article.ReferenceAOIs
-                        .Select(r => r.Replace(mergingArticle.AOI, mergedArticle.AOI))
+                        .Select(r => r.Replace(mergedArticle.AOI, mergingArticle.AOI))
                         .Distinct()
                         .ToArray();
             }
 
             // Replace previous PDF names to new PDF names.
-            if (mergingArticle.TryFindPDF(PDFsDirectory) && !mergedArticle.TryFindPDF(PDFsDirectory))
+            if (mergedArticle.TryFindPDF(PDFsDirectory) && !mergingArticle.TryFindPDF(PDFsDirectory))
             {
-                var srcPDF = PDFsDirectory.GetChildFileInfo(mergingArticle.LocalPDFName);
-                var destPDF = PDFsDirectory.GetChildFileInfo(mergedArticle.LocalPDFName);
+                var srcPDF = PDFsDirectory.GetChildFileInfo(mergedArticle.LocalPDFName);
+                var destPDF = PDFsDirectory.GetChildFileInfo(mergingArticle.LocalPDFName);
                 srcPDF.MoveTo(destPDF);
             }
 

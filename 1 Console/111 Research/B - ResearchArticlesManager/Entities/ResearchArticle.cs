@@ -396,7 +396,7 @@ public class ResearchArticle : IComparable
 
     // ★★★★★ original meta info
 
-    [UseExceptionalMerging]
+    [UseExceptionalBinaryBothMerging]
     public bool? Private_Temporary { get; set; } = false;
 
     [UseExceptionalBinaryEitherMerging]
@@ -429,7 +429,6 @@ public class ResearchArticle : IComparable
     /// 全ての要素に対して発行。
     /// これをメインIDとして使う。
     /// </remarks>
-    [UseExceptionalMerging]
     public string AOI { get; set; } = Ulid.NewUlid().ToString();
     [CsvIgnore]
     public string Friendly_AOI => AOI[FRIENDLY_AOI_RANGE];
@@ -814,10 +813,6 @@ public class ResearchArticle : IComparable
     {
         // main
 
-        // AOIとIsTemporaryは，前の情報を正とする。
-        {
-        }
-
         // DOIは存在するほうを採用。異なる場合は許容しない。
         {
             if (DOI != null && mergingArticle.DOI != null && DOI != mergingArticle.DOI)
@@ -844,6 +839,28 @@ public class ResearchArticle : IComparable
                         .Distinct()
                         .ToArray();
                 }
+            }
+        }
+
+        // UseExceptionalBinaryBothMergingAttribute付きは，両方に印ついてるなら採用。
+        {
+            var andMixingBinaryProps = typeof(ResearchArticle)
+                 .GetProperties()
+                 .Where(p => p.CanWrite)
+                 .Where(p => !p.HasAttribute<CsvIgnoreAttribute>())
+                 .Where(p => p.HasAttribute<UseExceptionalBinaryBothMergingAttribute>())
+                 ;
+
+            foreach (var prop in andMixingBinaryProps)
+            {
+                var thisArticleInfoProp = prop.GetValue(this);
+                var mergingArticleInfoProp = prop.GetValue(mergingArticle);
+
+                var binaryMixedValue =
+                    ((bool?)thisArticleInfoProp ?? false) &&
+                    ((bool?)mergingArticleInfoProp ?? false);
+
+                prop.SetValue(this, binaryMixedValue);
             }
         }
 
@@ -876,6 +893,7 @@ public class ResearchArticle : IComparable
                 .Where(p => p.CanWrite)
                 .Where(p => !p.HasAttribute<CsvIgnoreAttribute>())
                 .Where(p => !p.HasAttribute<UseExceptionalMergingAttribute>())
+                .Where(p => !p.HasAttribute<UseExceptionalBinaryBothMergingAttribute>())
                 .Where(p => !p.HasAttribute<UseExceptionalBinaryEitherMergingAttribute>())
                 ;
 
@@ -980,6 +998,11 @@ public class ResearchArticle : IComparable
 
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
     internal sealed class UseExceptionalBinaryEitherMergingAttribute : Attribute
+    {
+    }
+
+    [AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
+    internal sealed class UseExceptionalBinaryBothMergingAttribute : Attribute
     {
     }
 
