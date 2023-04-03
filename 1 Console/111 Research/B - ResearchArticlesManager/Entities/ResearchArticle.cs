@@ -224,16 +224,16 @@ public class ResearchArticle : IComparable
     [CsvIgnore]
     public string? ReferenceErrorReasonString = "";
     [CsvIgnore]
-    public string ReferenceStringTemplate = "{Authors}: {ArticleTitle}, {MaterialTitle}, {MaterialVolume}, {MaterialSubVolume}, pp.{StartingPage}-{EndingPage}, {PublishedYear}";
+    public string ReferenceStringFormat = "{Authors}: {ArticleTitle}, {MaterialTitle}, {MaterialVolume}, {MaterialSubVolume}, pp.{StartingPage}-{EndingPage}, {PublishedYear}";
     public string? ReferenceString
     {
         get
         {
             string ReferenceStringManually()
             {
-                var s = ReferenceStringTemplate;
+                var s = ReferenceStringFormat;
 
-                if (ReferenceStringTemplate.Contains("{Authors}"))
+                if (ReferenceStringFormat.Contains("{Authors}"))
                 {
                     if (Authors is null)
                     {
@@ -244,7 +244,7 @@ public class ResearchArticle : IComparable
                     var authors = string.Join(", ", Authors!);
                     s = s.Replace("{Authors}", authors);
                 }
-                if (ReferenceStringTemplate.Contains("{ArticleTitle}"))
+                if (ReferenceStringFormat.Contains("{ArticleTitle}"))
                 {
                     if (ArticleTitle is null)
                     {
@@ -254,7 +254,7 @@ public class ResearchArticle : IComparable
 
                     s = s.Replace("{ArticleTitle}", ArticleTitle);
                 }
-                if (ReferenceStringTemplate.Contains("{MaterialTitle}"))
+                if (ReferenceStringFormat.Contains("{MaterialTitle}"))
                 {
                     if (MaterialTitle is null)
                     {
@@ -265,7 +265,7 @@ public class ResearchArticle : IComparable
                     s = s.Replace("{MaterialTitle}", MaterialTitle);
                 }
 
-                if (ReferenceStringTemplate.Contains("{MaterialVolume}"))
+                if (ReferenceStringFormat.Contains("{MaterialVolume}"))
                 {
                     if (MaterialVolume is null)
                     {
@@ -278,7 +278,7 @@ public class ResearchArticle : IComparable
                     else
                         s = s.Replace("{MaterialVolume}", $"{MaterialVolume}");
                 }
-                if (ReferenceStringTemplate.Contains("{MaterialSubVolume}"))
+                if (ReferenceStringFormat.Contains("{MaterialSubVolume}"))
                 {
                     if (MaterialSubVolume is null)
                     {
@@ -293,7 +293,7 @@ public class ResearchArticle : IComparable
                     }
                 }
 
-                if (ReferenceStringTemplate.Contains("{StartingPage}"))
+                if (ReferenceStringFormat.Contains("{StartingPage}"))
                 {
                     if (StartingPage is null)
                     {
@@ -303,7 +303,7 @@ public class ResearchArticle : IComparable
 
                     s = s.Replace("{StartingPage}", StartingPage);
                 }
-                if (ReferenceStringTemplate.Contains("{EndingPage}"))
+                if (ReferenceStringFormat.Contains("{EndingPage}"))
                 {
                     if (EndingPage is null)
                     {
@@ -314,7 +314,7 @@ public class ResearchArticle : IComparable
                     s = s.Replace("{EndingPage}", EndingPage);
                 }
 
-                if (ReferenceStringTemplate.Contains("{PublishedYear}"))
+                if (ReferenceStringFormat.Contains("{PublishedYear}"))
                 {
                     var date = PublishedOn_Numbers;
                     if (date is null || date.Value.year is null)
