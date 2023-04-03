@@ -521,9 +521,16 @@ public partial class MainWindowViewModel : ViewModel
                 DOI = SelectingNodeViewModel.Article.DOI!,
             };
 
-            var pulledArticles = await ResearchArticlesManager.PullArticleInfo(accessor, asTempArticles: true, save: false);
-            if (pulledArticles.Count == 0)
-                throw new Exception("マッチするデータがありませんでした。");
+            try
+            {
+                var pulledArticles = await ResearchArticlesManager.PullArticleInfo(accessor, asTempArticles: true, save: false);
+                if (pulledArticles.Count == 0)
+                    throw new Exception("マッチするデータがありませんでした。");
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"{ex}\r\nCrossRef側がこの文献に対応していない可能性があります。");
+            }
 
             RedrawResearchArticlesManager();
             MoveCanvasToTargetArticle(SelectingNodeViewModel);

@@ -457,6 +457,7 @@ public class ResearchArticle : IComparable
     /// 全ての要素に対して発行。
     /// これをメインIDとして使う。
     /// </remarks>
+    [UseExceptionalMerging]
     public string AOI { get; set; } = Ulid.NewUlid().ToString();
     [CsvIgnore]
     public string Friendly_AOI => AOI[FRIENDLY_AOI_RANGE];
@@ -764,6 +765,11 @@ public class ResearchArticle : IComparable
     public void MergeArticles(ResearchArticle mergingArticle)
     {
         // main
+
+        // AOIは前のものを採用。
+        {
+
+        }
 
         // DOIは存在するほうを採用。異なる場合は許容しない。
         {
@@ -1097,8 +1103,8 @@ public class ResearchArticle : IComparable
         static IEnumerable<string> Targets()
         {
             // id
-            yield return nameof(DOI);
             yield return nameof(AOI);
+            yield return nameof(DOI);
             yield return nameof(JStage_Id);
 
             // title
@@ -1107,7 +1113,6 @@ public class ResearchArticle : IComparable
             yield return nameof(CrossRef_ArticleTitle);
             yield return nameof(CiNii_ArticleTitle);
             yield return nameof(NDLSearch_ArticleTitle);
-            yield return nameof(Manual_ArticleTitle);
             yield return nameof(ArticleTitle);
 
             // others

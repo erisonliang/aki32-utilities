@@ -1279,9 +1279,6 @@
                                 </StackPanel>
                             </Grid>
 
-                            <!-- ========================================== -->
-                            <Grid Height="40"/>
-
                             <Grid Margin="4">
 
                                 <TextBlock
@@ -1945,5 +1942,7 @@
             </StackPanel>
 
         </Grid>
+            
     </Grid>
+        
 </Window>
