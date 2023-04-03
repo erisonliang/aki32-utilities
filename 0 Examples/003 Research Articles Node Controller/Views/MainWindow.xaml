@@ -10,7 +10,7 @@
         xmlns:mah="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
         mc:Ignorable="d"
         Title="Research Articles Node Controll" 
-        d:Height="1000"
+        d:Height="3000"
         d:Width="1200"
         >
 
@@ -1069,7 +1069,7 @@
                                                     <TextBlock Text="✔️" Visibility="{Binding IsPullAIMetaInfoDone, Converter={StaticResource BooleanToVisibilityConverter}}" Foreground="Green"/>
                                                 </Grid>
                                             </Grid>
-                                            <TextBlock Text="メタ情報を推測 *"/>
+                                            <TextBlock Text="メタ情報を推測"/>
                                         </StackPanel>
                                     </Button>
 
@@ -1279,14 +1279,13 @@
                                 </StackPanel>
                             </Grid>
 
-
                             <!-- ========================================== -->
                             <Grid Height="40"/>
 
                             <Grid Margin="4">
 
                                 <TextBlock
-                                    Text="* 未完成" 
+                                    Text="* 不完全" 
                                     Margin="70,0,0,0"
                                     VerticalAlignment="Center"
                                     HorizontalAlignment="Right"
@@ -1296,13 +1295,49 @@
                                     <TextBlock.ToolTip>
                                         <TextBlock
                                             TextAlignment="Left"
-                                            Text="* のついている項目は未実装です。"
+                                            Text="* のついている項目は不完全です。"
                                             >
                                         </TextBlock>
                                     </TextBlock.ToolTip>
                                 </TextBlock>
 
                             </Grid>
+
+                            <!-- ========================================== -->
+                            <Grid Height="40"/>
+
+                            <Grid Margin="4">
+                                <TextBlock
+                                    Text="XRef文献：" 
+                                    Width="70" 
+                                    HorizontalAlignment="Left"
+                                    TextAlignment="Right"
+                                    ToolTipService.InitialShowDelay="10" 
+                                    >
+                                    <TextBlock.ToolTip>
+                                        <TextBlock
+                                            TextAlignment="Left"
+                                            Text="CrossRef_UnstructuredRefString"
+                                            >
+                                        </TextBlock>
+                                    </TextBlock.ToolTip>
+                                </TextBlock>
+                                <TextBlock 
+                                    Text="{Binding SelectingNodeViewModel.Article.CrossRef_UnstructuredRefString}" 
+                                    Margin="70,0,0,0" 
+                                    TextWrapping="Wrap"
+                                    >
+                                </TextBlock>
+                            </Grid>
+
+
+                                
+                                
+
+
+
+
+
 
                         </StackPanel>
 

@@ -540,7 +540,7 @@ public partial class MainWindowViewModel : ViewModel
         }
         catch (Exception ex)
         {
-            MessageBox.Show($"失敗しました。\r\nﾒｯｾｰｼﾞ: {ex.Message}", "オンラインで情報を取得", MessageBoxButton.OK, MessageBoxImage.Error);
+            MessageBox.Show($"失敗しました。\r\nﾒｯｾｰｼﾞ: {ex.Message}", "引用関係を取得", MessageBoxButton.OK, MessageBoxImage.Error);
         }
         finally
         {
@@ -589,7 +589,7 @@ public partial class MainWindowViewModel : ViewModel
         }
         catch (Exception ex)
         {
-            MessageBox.Show($"失敗しました。\r\nﾒｯｾｰｼﾞ: {ex.Message}", "オンラインで情報を取得", MessageBoxButton.OK, MessageBoxImage.Error);
+            MessageBox.Show($"失敗しました。\r\nﾒｯｾｰｼﾞ: {ex.Message}", "メタ情報を取得", MessageBoxButton.OK, MessageBoxImage.Error);
         }
         finally
         {
@@ -610,22 +610,11 @@ public partial class MainWindowViewModel : ViewModel
                 throw new Exception("文献が選択されていません。");
 
             // ChatGPTによる推定
-            // TODO
-            throw new NotImplementedException("申し訳ありません。\r\n未実装です…。");
-            {
-                var accessor = new CrossRefAPIAccessor()
-                {
-                    DOI = SelectingNodeViewModel.Article.DOI!,
-                };
+            var result = await SelectingNodeViewModel.Article.TryPredictMetaInfo_ChatGPT();
+            if (!result)
+                throw new Exception("推測に失敗しました。");
 
-                var pulledArticles = await ResearchArticlesManager.PullArticleInfo(accessor, asTempArticles: true, save: false);
-                if (pulledArticles.Count == 0)
-                    throw new Exception("マッチするデータがありませんでした。");
-            }
-
-            RedrawResearchArticlesManager();
-            MoveCanvasToTargetArticle(SelectingNodeViewModel);
-            SelectedEmphasizePropertyItem = ViewModels.EmphasizePropertyItems.一時ﾃﾞｰﾀ;
+            SelectingNodeViewModel.NotifyArticleUpdated();
             var saveTask = Save();
 
             var successAnimationTask = Task.Run(async () =>
@@ -638,7 +627,7 @@ public partial class MainWindowViewModel : ViewModel
         }
         catch (Exception ex)
         {
-            MessageBox.Show($"失敗しました。\r\nﾒｯｾｰｼﾞ: {ex.Message}", "オンラインで情報を取得", MessageBoxButton.OK, MessageBoxImage.Error);
+            MessageBox.Show($"失敗しました。\r\nﾒｯｾｰｼﾞ: {ex.Message}", "メタ情報を推測", MessageBoxButton.OK, MessageBoxImage.Error);
         }
         finally
         {

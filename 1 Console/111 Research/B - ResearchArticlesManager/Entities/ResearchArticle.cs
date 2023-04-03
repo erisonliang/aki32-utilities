@@ -224,7 +224,7 @@ public class ResearchArticle : IComparable
     [CsvIgnore]
     public string? ReferenceErrorReasonString = "";
     [CsvIgnore]
-    public string ReferenceStringFormat = "{Authors}: {ArticleTitle}, {MaterialTitle}, {MaterialVolume}, {MaterialSubVolume}, pp.{StartingPage}-{EndingPage}, {PublishedYear}";
+    public string ReferenceStringFormat = "{Authors}: {ArticleTitle}, {MaterialTitle}, {MaterialVolume}, {MaterialSubVolume}, pp.{StartingPage}-{EndingPage}, {PublishedYearAndMonth}";
     public string? ReferenceString
     {
         get
@@ -235,7 +235,7 @@ public class ResearchArticle : IComparable
 
                 if (ReferenceStringFormat.Contains("{Authors}"))
                 {
-                    if (Authors is null)
+                    if (Authors is null || Authors.Length == 0)
                     {
                         ReferenceErrorReasonString = "※ Need to fill Authors";
                         return null;
@@ -246,7 +246,7 @@ public class ResearchArticle : IComparable
                 }
                 if (ReferenceStringFormat.Contains("{ArticleTitle}"))
                 {
-                    if (ArticleTitle is null)
+                    if (string.IsNullOrEmpty(ArticleTitle))
                     {
                         ReferenceErrorReasonString = "※ Need to fill ArticleTitle";
                         return null;
@@ -256,7 +256,7 @@ public class ResearchArticle : IComparable
                 }
                 if (ReferenceStringFormat.Contains("{MaterialTitle}"))
                 {
-                    if (MaterialTitle is null)
+                    if (string.IsNullOrEmpty(MaterialTitle))
                     {
                         ReferenceErrorReasonString = "※ Need to fill MaterialTitle";
                         return null;
@@ -267,7 +267,7 @@ public class ResearchArticle : IComparable
 
                 if (ReferenceStringFormat.Contains("{MaterialVolume}"))
                 {
-                    if (MaterialVolume is null)
+                    if (string.IsNullOrEmpty(MaterialVolume))
                     {
                         ReferenceErrorReasonString = "※ Need to fill MaterialVol";
                         return null;
@@ -280,7 +280,7 @@ public class ResearchArticle : IComparable
                 }
                 if (ReferenceStringFormat.Contains("{MaterialSubVolume}"))
                 {
-                    if (MaterialSubVolume is null)
+                    if (string.IsNullOrEmpty(MaterialSubVolume) || MaterialSubVolume == "不明")
                     {
                         s = s.Replace("{MaterialSubVolume}", $"");
                         s = s.Replace(", , ", $", ");
@@ -288,15 +288,15 @@ public class ResearchArticle : IComparable
                     else
                     {
                         if (uint.TryParse(MaterialSubVolume, out uint a))
-                            s = s.Replace("{MaterialSubVolume}", $"第{MaterialVolume}号");
+                            s = s.Replace("{MaterialSubVolume}", $"第{MaterialSubVolume}号");
                         else
-                            s = s.Replace("{MaterialSubVolume}", $"{MaterialVolume}");
+                            s = s.Replace("{MaterialSubVolume}", $"{MaterialSubVolume}");
                     }
                 }
 
                 if (ReferenceStringFormat.Contains("{StartingPage}"))
                 {
-                    if (StartingPage is null)
+                    if (string.IsNullOrEmpty(StartingPage))
                     {
                         ReferenceErrorReasonString = "※ Need to fill StartingPage";
                         return null;
@@ -306,7 +306,7 @@ public class ResearchArticle : IComparable
                 }
                 if (ReferenceStringFormat.Contains("{EndingPage}"))
                 {
-                    if (EndingPage is null)
+                    if (string.IsNullOrEmpty(EndingPage))
                     {
                         ReferenceErrorReasonString = "※ Need to fill EndingPage";
                         return null;
@@ -315,7 +315,7 @@ public class ResearchArticle : IComparable
                     s = s.Replace("{EndingPage}", EndingPage);
                 }
 
-                if (ReferenceStringFormat.Contains("{PublishedYear}"))
+                if (ReferenceStringFormat.Contains("{PublishedYearAndMonth}"))
                 {
                     var date = PublishedOn_Numbers;
                     if (date is null || date.Value.year is null)
@@ -328,7 +328,31 @@ public class ResearchArticle : IComparable
                     if (date.Value.month is not null)
                         dateString += $".{date.Value.month.Value}";
 
+                    s = s.Replace("{PublishedYearAndMonth}", dateString);
+                }
+                if (ReferenceStringFormat.Contains("{PublishedYear}"))
+                {
+                    var date = PublishedOn_Numbers;
+                    if (date is null || date.Value.year is null)
+                    {
+                        ReferenceErrorReasonString = "※ Need to fill PublishedYear";
+                        return null;
+                    }
+
+                    var dateString = $"{date.Value.year.Value}";
                     s = s.Replace("{PublishedYear}", dateString);
+                }
+                if (ReferenceStringFormat.Contains("{PublishedMonth}"))
+                {
+                    var date = PublishedOn_Numbers;
+                    if (date is null || date.Value.month is null)
+                    {
+                        ReferenceErrorReasonString = "※ Need to fill PublishedMonth";
+                        return null;
+                    }
+
+                    var dateString = $"{date.Value.month.Value}";
+                    s = s.Replace("{PublishedMonth}", dateString);
                 }
 
                 return s;
@@ -930,7 +954,7 @@ public class ResearchArticle : IComparable
     /// Predict meta info from Unstructured reference string by ChatGPT
     /// </summary>
     /// <returns></returns>
-    public bool TryPredictMetaInfo_ChatGPT()
+    public async Task<bool> TryPredictMetaInfo_ChatGPT()
     {
         UtilPreprocessors.PreprocessBasic();
 
@@ -941,17 +965,97 @@ public class ResearchArticle : IComparable
             if (refString is null || refString == ReferenceErrorReasonString)
                 throw new Exception("文献文字列がないため，推測が出来ません。");
 
+            // ★ cross ref
+            if (refString.Contains("(in Japanese)"))
+                refString = refString.Split("(in Japanese)", StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.RemoveEmptyEntries).Last();
 
+            // ★ chat gpt
+            var s = $@"以下の論文の参考資料の文字列から、フォーマットを埋める形で情報を抜き出してください。日本語がある場合は日本語にして、日本語がない場合は英語としてください。著者リストは「,」区切りでリストアップしてください。情報が無い場合は空白としてください。
 
+【参考資料の文字列】
+{refString}
 
+【フォーマット】
+著者リスト：{{}}
+文献タイトル：{{}}
+文献書籍名：{{}}
+文献書籍巻：{{}}
+文献書籍号：{{}}
+開始ページ：{{}}
+終了ページ：{{}}
+文献発行年：{{}}
+文献発行月：{{}}";
 
+            var apiSecretKey = Environment.GetEnvironmentVariable("OpenAI_SecretKey")!
+                ?? throw new Exception("ChatGPTの情報が必要です。環境変数に\"OpenAI_SecretKey\"という変数を追加してください。");
+            var openAI = new OpenAIController(apiSecretKey);
 
+            var results = await openAI.CallChatAsync(s);
+            var result = results[0];
 
+            var lines = result.Split(new char[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.RemoveEmptyEntries);
 
+            string publishedYear = "";
+            string publishedMonth = "";
 
+            foreach (var line in lines)
+            {
+                if (line.Contains("著者リスト："))
+                {
+                    if (Manual_Authors is null || Manual_Authors.Length == 0)
+                        Manual_Authors = line.Replace("著者リスト：", "").Split(",").ToArray();
+                    continue;
+                }
+                if (line.Contains("文献タイトル："))
+                {
+                    if (string.IsNullOrEmpty(Manual_ArticleTitle))
+                        Manual_ArticleTitle = line.Replace("文献タイトル：", "");
+                    continue;
+                }
+                if (line.Contains("文献書籍名："))
+                {
+                    if (string.IsNullOrEmpty(Manual_MaterialTitle))
+                        Manual_MaterialTitle = line.Replace("文献書籍名：", "");
+                    continue;
+                }
+                if (line.Contains("文献書籍巻："))
+                {
+                    if (string.IsNullOrEmpty(Manual_MaterialVolume))
+                        Manual_MaterialVolume = line.Replace("文献書籍巻：", "");
+                    continue;
+                }
+                if (line.Contains("文献書籍号："))
+                {
+                    if (string.IsNullOrEmpty(Manual_MaterialSubVolume))
+                        Manual_MaterialSubVolume = line.Replace("文献書籍号：", "");
+                    continue;
+                }
+                if (line.Contains("開始ページ："))
+                {
+                    if (string.IsNullOrEmpty(Manual_StartingPage))
+                        Manual_StartingPage = line.Replace("開始ページ：", "");
+                    continue;
+                }
+                if (line.Contains("終了ページ："))
+                {
+                    if (string.IsNullOrEmpty(Manual_EndingPage))
+                        Manual_EndingPage = line.Replace("終了ページ：", "");
+                    continue;
+                }
+                if (line.Contains("文献発行年："))
+                {
+                    publishedYear = line.Replace("文献発行年：", "");
+                    continue;
+                }
+                if (line.Contains("文献発行月："))
+                {
+                    publishedMonth = line.Replace("文献発行月：", "");
+                    continue;
+                }
+            }
 
-
-            throw new NotImplementedException("未実装です…。");
+            if (string.IsNullOrEmpty(Manual_PublishedDate))
+                Manual_PublishedDate = $"{publishedYear}-{publishedMonth}";
 
             return true;
         }

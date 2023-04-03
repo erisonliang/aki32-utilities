@@ -2,6 +2,8 @@
 using System.Windows;
 using Aki32Utilities.ViewModels.NodeViewModels;
 using Aki32Utilities.ConsoleAppUtilities.Research;
+using Aki32Utilities.ConsoleAppUtilities.General;
+using System.IO;
 
 namespace Aki32Utilities.UsageExamples.ResearchArticlesNodeController.ViewModels;
 public partial class MainWindowViewModel : ViewModel
@@ -15,6 +17,14 @@ public partial class MainWindowViewModel : ViewModel
 
         IsLockedAllNodeLinks = true;
         IsEnableAllNodeConnectors = true;
+
+        try
+        {
+            UtilConfig.ReadEnvConfig(new FileInfo(@"C:\Users\aki32\Dropbox\PC\★ PC間共有\MyEnvConfig.json"));
+        }
+        catch (Exception)
+        {
+        }
     }
 
     private void InitResearchArticlesManager()

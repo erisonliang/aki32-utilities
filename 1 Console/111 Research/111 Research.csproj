@@ -41,6 +41,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\100 General\100 General.csproj" />
+    <ProjectReference Include="..\101 AI\101 AI.csproj" />
   </ItemGroup>
 
   <ItemGroup>
