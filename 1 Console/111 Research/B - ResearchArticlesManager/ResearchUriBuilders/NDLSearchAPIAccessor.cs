@@ -183,7 +183,8 @@ public class NDLSearchAPIAccessor : IResearchAPIAccessor
     private IEnumerable<ResearchArticle> _FetchArticles()
     {
         // get xml
-        var xml = XElement.Load(BuildUri().AbsoluteUri);
+        var uri = BuildUri();
+        var xml = XElement.Load(uri.AbsoluteUri);
 
 
         // analyse 
