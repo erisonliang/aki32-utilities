@@ -40,7 +40,7 @@ public class ResearchArticle : IComparable
                 ?? JStage_ArticleTitle_English.NullIfNullOrEmpty()
 
                 // 最終手段。
-                ?? ((CrossRef_UnstructuredRefString.NullIfNullOrEmpty() == null) ? null : CrossRef_UnstructuredRefString!.Shorten(UNSTRUCTURED_REF_STRING_RANGE))
+                // ?? ((CrossRef_UnstructuredRefString.NullIfNullOrEmpty() == null) ? null : CrossRef_UnstructuredRefString!.Shorten(UNSTRUCTURED_REF_STRING_RANGE))
                 ?? null
                 ;
         }
@@ -62,7 +62,7 @@ public class ResearchArticle : IComparable
                 ?? JStage_Authors_English
 
                 // 最終手段。
-                ?? ((CrossRef_UnstructuredRefString.NullIfNullOrEmpty() == null) ? null : new string[] { CrossRef_UnstructuredRefString!.Shorten(UNSTRUCTURED_REF_STRING_RANGE) })
+                // ?? ((CrossRef_UnstructuredRefString.NullIfNullOrEmpty() == null) ? null : new string[] { CrossRef_UnstructuredRefString!.Shorten(UNSTRUCTURED_REF_STRING_RANGE) })
                 ?? null
                 ;
         }
@@ -224,11 +224,16 @@ public class ResearchArticle : IComparable
     [CsvIgnore]
     public string? ReferenceErrorReasonString = "";
     [CsvIgnore]
+    public bool IsLastReferenceStringFromManual = false;
+    [CsvIgnore]
     public string ReferenceStringFormat = "{Authors}: {ArticleTitle}, {MaterialTitle}, {MaterialVolume}, {MaterialSubVolume}, pp.{StartingPage}-{EndingPage}, {PublishedYearAndMonth}";
     public string? ReferenceString
     {
         get
         {
+            ReferenceErrorReasonString = "";
+            IsLastReferenceStringFromManual = false;
+
             string ReferenceStringManually()
             {
                 var s = ReferenceStringFormat;
@@ -269,28 +274,32 @@ public class ResearchArticle : IComparable
                 {
                     if (string.IsNullOrEmpty(MaterialVolume))
                     {
-                        ReferenceErrorReasonString = "※ Need to fill MaterialVol";
-                        return null;
+                        s = s.Replace("{MaterialVolume}", $"");
+                        s = s.Replace(", , ", $", ");
                     }
-
-                    if (uint.TryParse(MaterialVolume, out uint a))
-                        s = s.Replace("{MaterialVolume}", $"第{MaterialVolume}巻");
                     else
+                    {
                         s = s.Replace("{MaterialVolume}", $"{MaterialVolume}");
+                        //if (uint.TryParse(MaterialVolume, out uint a))
+                        //    s = s.Replace("{MaterialVolume}", $"第{MaterialVolume}巻");
+                        //else
+                        //    s = s.Replace("{MaterialVolume}", $"{MaterialVolume}");
+                    }
                 }
                 if (ReferenceStringFormat.Contains("{MaterialSubVolume}"))
                 {
-                    if (string.IsNullOrEmpty(MaterialSubVolume) || MaterialSubVolume == "不明")
+                    if (string.IsNullOrEmpty(MaterialSubVolume))
                     {
                         s = s.Replace("{MaterialSubVolume}", $"");
                         s = s.Replace(", , ", $", ");
                     }
                     else
                     {
-                        if (uint.TryParse(MaterialSubVolume, out uint a))
-                            s = s.Replace("{MaterialSubVolume}", $"第{MaterialSubVolume}号");
-                        else
-                            s = s.Replace("{MaterialSubVolume}", $"{MaterialSubVolume}");
+                        s = s.Replace("{MaterialSubVolume}", $"{MaterialSubVolume}");
+                        //if (uint.TryParse(MaterialSubVolume, out uint a))
+                        //    s = s.Replace("{MaterialSubVolume}", $"第{MaterialSubVolume}号");
+                        //else
+                        //    s = s.Replace("{MaterialSubVolume}", $"{MaterialSubVolume}");
                     }
                 }
 
@@ -354,6 +363,9 @@ public class ResearchArticle : IComparable
                     var dateString = $"{date.Value.month.Value}";
                     s = s.Replace("{PublishedMonth}", dateString);
                 }
+
+                if (!string.IsNullOrEmpty(s))
+                    IsLastReferenceStringFromManual = true;
 
                 return s;
             }
@@ -875,7 +887,6 @@ public class ResearchArticle : IComparable
             }
         }
 
-
     }
 
 
@@ -976,7 +987,7 @@ public class ResearchArticle : IComparable
                 refString = refString.Split("(in Japanese)", StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.RemoveEmptyEntries).Last();
 
             // ★ chat gpt
-            var s = $@"以下の論文の参考資料の文字列から、フォーマットを埋める形で情報を抜き出してください。日本語がある場合は日本語にして、日本語がない場合は英語としてください。著者リストは「,」区切りでリストアップしてください。情報が無い場合は空白としてください。
+            var s = $@"以下の論文の参考資料の文字列から、フォーマットを埋める形で情報を抜き出してください。日本語がある場合は日本語にして、日本語がない場合は英語としてください。著者リストは「,」区切りでリストアップしてください。情報が無い場合は「※不明」としてください。
 
 【参考資料の文字列】
 {refString}
@@ -1008,54 +1019,54 @@ public class ResearchArticle : IComparable
             {
                 if (line.Contains("著者リスト："))
                 {
-                    if (Manual_Authors is null || Manual_Authors.Length == 0)
+                    if (Manual_Authors is null || Manual_Authors.Length == 0 || Manual_Authors[0] == "※不明")
                         Manual_Authors = line.Replace("著者リスト：", "").Split(",").ToArray();
                     continue;
                 }
                 if (line.Contains("文献タイトル："))
                 {
                     if (string.IsNullOrEmpty(Manual_ArticleTitle))
-                        Manual_ArticleTitle = line.Replace("文献タイトル：", "");
+                        Manual_ArticleTitle = line.Replace("文献タイトル：", "").Replace("※不明", "");
                     continue;
                 }
                 if (line.Contains("文献書籍名："))
                 {
                     if (string.IsNullOrEmpty(Manual_MaterialTitle))
-                        Manual_MaterialTitle = line.Replace("文献書籍名：", "");
+                        Manual_MaterialTitle = line.Replace("文献書籍名：", "").Replace("※不明", "");
                     continue;
                 }
                 if (line.Contains("文献書籍巻："))
                 {
                     if (string.IsNullOrEmpty(Manual_MaterialVolume))
-                        Manual_MaterialVolume = line.Replace("文献書籍巻：", "");
+                        Manual_MaterialVolume = line.Replace("文献書籍巻：", "").Replace("※不明", "");
                     continue;
                 }
                 if (line.Contains("文献書籍号："))
                 {
                     if (string.IsNullOrEmpty(Manual_MaterialSubVolume))
-                        Manual_MaterialSubVolume = line.Replace("文献書籍号：", "");
+                        Manual_MaterialSubVolume = line.Replace("文献書籍号：", "").Replace("※不明", "");
                     continue;
                 }
                 if (line.Contains("開始ページ："))
                 {
                     if (string.IsNullOrEmpty(Manual_StartingPage))
-                        Manual_StartingPage = line.Replace("開始ページ：", "");
+                        Manual_StartingPage = line.Replace("開始ページ：", "").Replace("※不明", "");
                     continue;
                 }
                 if (line.Contains("終了ページ："))
                 {
                     if (string.IsNullOrEmpty(Manual_EndingPage))
-                        Manual_EndingPage = line.Replace("終了ページ：", "");
+                        Manual_EndingPage = line.Replace("終了ページ：", "").Replace("※不明", "");
                     continue;
                 }
                 if (line.Contains("文献発行年："))
                 {
-                    publishedYear = line.Replace("文献発行年：", "");
+                    publishedYear = line.Replace("文献発行年：", "").Replace("※不明", "");
                     continue;
                 }
                 if (line.Contains("文献発行月："))
                 {
-                    publishedMonth = line.Replace("文献発行月：", "");
+                    publishedMonth = line.Replace("文献発行月：", "").Replace("※不明", "");
                     continue;
                 }
             }

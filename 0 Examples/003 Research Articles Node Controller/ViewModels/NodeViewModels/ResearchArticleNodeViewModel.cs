@@ -17,7 +17,7 @@ public class ResearchArticleNodeViewModel : DefaultNodeViewModel
 
     public ResearchArticle Article { get; set; } = new();
 
-    [AlsoNotifyFor(nameof(NodeName), nameof(ArticleTitle), nameof(Authors), nameof(TopAuthor), nameof(PublishedOn), nameof(Tags),
+    [AlsoNotifyFor(nameof(NodeName), nameof(ArticleTitle), nameof(Authors), nameof(TopAuthor), nameof(PublishedOn), nameof(DataFrom),
         nameof(ArticleHeaderColor), nameof(IsFavorite), nameof(IsRead), nameof(IsTemp), nameof(IsLocalSearchMatched), nameof(IsCategory1), nameof(IsCategory2), nameof(IsCategory3),
         nameof(Article)
         )]
@@ -25,9 +25,96 @@ public class ResearchArticleNodeViewModel : DefaultNodeViewModel
 
     public string NodeName { get; set; }
 
+
+    // ★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★
+
+    public bool RecommendPullCrossRefInfo
+    {
+        get
+        {
+            if (Article.DataFrom_CrossRef ?? false)
+                return false;
+            return true;
+        }
+    }
+    public bool RecommendPullNormalMetaInfo
+    {
+        get
+        {
+            // TODO
+            return false;
+        }
+    }
+    public bool RecommendPullAIMetaInfo
+    {
+        get
+        {
+            // ErrorReason 存在してるけど ErrorReason じゃないものが返って来た時にオススメ。
+            _ = Article.ReferenceString;
+            if (!Article.IsLastReferenceStringFromManual)
+                return true;
+            return false;
+        }
+    }
+    public bool RecommendOpenPDF
+    {
+        get
+        {
+            if (Article.TryFindPDF(MainWindowViewModel.ResearchArticlesManager.PDFsDirectory))
+                return false;
+            if (string.IsNullOrEmpty(Article.PDF_Link))
+                return false;
+            return true;
+        }
+    }
+    public bool RecommendOpenDOIWebSite
+    {
+        get
+        {
+            if (string.IsNullOrEmpty(Article.DOI_Link))
+                return false;
+            return true;
+        }
+    }
+    public bool RecommendExecuteAll
+    {
+        get
+        {
+            // TODO
+            return false;
+        }
+    }
+    public bool RecommendAISummary
+    {
+        get
+        {
+            // TODO
+            return false;
+        }
+    }
+    public bool RecommendManuallyAddPDF
+    {
+        get
+        {
+            if (Article.TryFindPDF(MainWindowViewModel.ResearchArticlesManager.PDFsDirectory))
+                return false;
+            return true;
+        }
+    }
+    public bool RecommendKeep
+    {
+        get
+        {
+            return false;
+        }
+    }
+
+
+    // ★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★
+
     public string ArticleTitle
     {
-        get => Article.ArticleTitle ?? "■";
+        get => Article.ArticleTitle ?? "";
         set
         {
             var temp = Article.ArticleTitle;
@@ -39,7 +126,7 @@ public class ResearchArticleNodeViewModel : DefaultNodeViewModel
     [AlsoNotifyFor(nameof(TopAuthor), nameof(Article))]
     public string Authors
     {
-        get => (Article.Authors == null) ? "■" : string.Join("; ", Article.Authors);
+        get => (Article.Authors == null) ? "" : string.Join("; ", Article.Authors);
         set
         {
             var temp = JsonConvert.SerializeObject(Article.Authors);
@@ -61,14 +148,14 @@ public class ResearchArticleNodeViewModel : DefaultNodeViewModel
         }
     }
 
-    public string Tags
+    public string DataFrom
     {
         get
         {
             var ss = new List<string>();
 
-            if (Article.TryFindPDF(MainWindowViewModel.ResearchArticlesManager.PDFsDirectory))
-                ss.Add("PDF");
+            if (Article.DataFrom_Manual ?? false)
+                ss.Add("Manual");
 
             if (Article.DataFrom_JStage ?? false)
                 ss.Add("JStage");
@@ -214,7 +301,7 @@ public class ResearchArticleNodeViewModel : DefaultNodeViewModel
 
     public string PublishedOn
     {
-        get => Article.PublishedOn ?? "不明";
+        get => Article.PublishedOn ?? "";
         set
         {
             var temp = Article.PublishedOn;
@@ -224,7 +311,7 @@ public class ResearchArticleNodeViewModel : DefaultNodeViewModel
     }
     public string MaterialTitle
     {
-        get => Article.MaterialTitle ?? "■";
+        get => Article.MaterialTitle ?? "";
         set
         {
             var temp = Article.MaterialTitle;
@@ -235,7 +322,7 @@ public class ResearchArticleNodeViewModel : DefaultNodeViewModel
     [AlsoNotifyFor(nameof(Article))]
     public string MaterialVolume
     {
-        get => Article.MaterialVolume ?? "■";
+        get => Article.MaterialVolume ?? "";
         set
         {
             var temp = Article.MaterialVolume;
@@ -246,7 +333,7 @@ public class ResearchArticleNodeViewModel : DefaultNodeViewModel
     [AlsoNotifyFor(nameof(Article))]
     public string MaterialSubVolume
     {
-        get => Article.MaterialSubVolume ?? "-";
+        get => Article.MaterialSubVolume ?? "";
         set
         {
             var temp = Article.MaterialSubVolume;
@@ -256,7 +343,7 @@ public class ResearchArticleNodeViewModel : DefaultNodeViewModel
     }
     public string StartingPage
     {
-        get => Article.StartingPage ?? "■";
+        get => Article.StartingPage ?? "";
         set
         {
             var temp = Article.StartingPage;
@@ -266,7 +353,7 @@ public class ResearchArticleNodeViewModel : DefaultNodeViewModel
     }
     public string EndingPage
     {
-        get => Article.EndingPage ?? "未入力";
+        get => Article.EndingPage ?? "";
         set
         {
             var temp = Article.EndingPage;

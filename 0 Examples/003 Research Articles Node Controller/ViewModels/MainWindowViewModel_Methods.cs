@@ -620,6 +620,7 @@ public partial class MainWindowViewModel : ViewModel
             var result = await SelectingNodeViewModel.Article.TryPredictMetaInfo_ChatGPT();
             if (!result)
                 throw new Exception("推測に失敗しました。");
+            Console.WriteLine("推測に成功しました。");
 
             SelectingNodeViewModel.NotifyArticleUpdated();
             var saveTask = Save();
@@ -712,33 +713,61 @@ public partial class MainWindowViewModel : ViewModel
         }
     }
 
-    async Task UndefinedButton1()
+    void ExecuteAll()
     {
-        if (IsUndefinedButton1Busy)
+        if (IsExecuteAllBusy)
             return;
 
         try
         {
-            IsUndefinedButton1Busy = true;
+            IsExecuteAllBusy = true;
 
-            await Task.Delay(2222);
-            //throw new NotImplementedException("申し訳ありません。\r\n未実装です…。");
+            throw new NotImplementedException("申し訳ありません。\r\n未実装です…。");
 
             var successAnimationTask = Task.Run(async () =>
             {
-                IsUndefinedButton1Done = true;
+                IsExecuteAllDone = true;
                 await Task.Delay(2222);
-                if (!IsUndefinedButton1Busy)
-                    IsUndefinedButton1Done = false;
+                if (!IsExecuteAllBusy)
+                    IsExecuteAllDone = false;
             });
         }
         catch (Exception ex)
         {
-            //MessageBox.Show($"失敗しました。\r\nﾒｯｾｰｼﾞ: {ex.Message}", "AIにまとめてもらう", MessageBoxButton.OK, MessageBoxImage.Error);
+            MessageBox.Show($"失敗しました。\r\nﾒｯｾｰｼﾞ: {ex.Message}", "AIにまとめてもらう", MessageBoxButton.OK, MessageBoxImage.Error);
         }
         finally
         {
-            IsUndefinedButton1Busy = false;
+            IsExecuteAllBusy = false;
+        }
+    }
+
+    void AISummary()
+    {
+        if (IsAISummaryBusy)
+            return;
+
+        try
+        {
+            IsAISummaryBusy = true;
+
+            throw new NotImplementedException("申し訳ありません。\r\n未実装です…。");
+
+            var successAnimationTask = Task.Run(async () =>
+            {
+                IsAISummaryDone = true;
+                await Task.Delay(2222);
+                if (!IsAISummaryBusy)
+                    IsAISummaryDone = false;
+            });
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show($"失敗しました。\r\nﾒｯｾｰｼﾞ: {ex.Message}", "AIにまとめてもらう", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+        finally
+        {
+            IsAISummaryBusy = false;
         }
     }
 
@@ -856,32 +885,33 @@ public partial class MainWindowViewModel : ViewModel
 
     }
 
-    void AISummary()
+    async Task UndefinedButton1()
     {
-        if (IsAISummaryBusy)
+        if (IsUndefinedButton1Busy)
             return;
 
         try
         {
-            IsAISummaryBusy = true;
+            IsUndefinedButton1Busy = true;
 
-            throw new NotImplementedException("申し訳ありません。\r\n未実装です…。");
+            await Task.Delay(2222);
+            //throw new NotImplementedException("申し訳ありません。\r\n未実装です…。");
 
             var successAnimationTask = Task.Run(async () =>
             {
-                IsAISummaryDone = true;
+                IsUndefinedButton1Done = true;
                 await Task.Delay(2222);
-                if (!IsAISummaryBusy)
-                    IsAISummaryDone = false;
+                if (!IsUndefinedButton1Busy)
+                    IsUndefinedButton1Done = false;
             });
         }
         catch (Exception ex)
         {
-            MessageBox.Show($"失敗しました。\r\nﾒｯｾｰｼﾞ: {ex.Message}", "AIにまとめてもらう", MessageBoxButton.OK, MessageBoxImage.Error);
+            //MessageBox.Show($"失敗しました。\r\nﾒｯｾｰｼﾞ: {ex.Message}", "AIにまとめてもらう", MessageBoxButton.OK, MessageBoxImage.Error);
         }
         finally
         {
-            IsAISummaryBusy = false;
+            IsUndefinedButton1Busy = false;
         }
     }
 

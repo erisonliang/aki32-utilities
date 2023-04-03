@@ -154,20 +154,25 @@ public partial class MainWindowViewModel : ViewModel
     public ViewModelCommand OpenDOIWebSiteCommand => _OpenDOIWebSiteCommand.Get(OpenDOIWebSite);
     ViewModelCommandHandler _OpenDOIWebSiteCommand = new();
 
-    public bool IsUndefinedButton1Busy { get; set; } = false;
-    public bool IsUndefinedButton1Done { get; set; } = false;
-    public ViewModelCommand IsUndefinedButton1Command => _IsUndefinedButton1Command.Get(async () => await UndefinedButton1());
-    ViewModelCommandHandler _IsUndefinedButton1Command = new();
+    public bool IsExecuteAllBusy { get; set; } = false;
+    public bool IsExecuteAllDone { get; set; } = false;
+    public ViewModelCommand ExecuteAllCommand => _ExecuteAllCommand.Get(ExecuteAll);
+    ViewModelCommandHandler _ExecuteAllCommand = new();
+
+    public bool IsAISummaryBusy { get; set; } = false;
+    public bool IsAISummaryDone { get; set; } = false;
+    public ViewModelCommand AISummaryCommand => _AISummaryCommand.Get(AISummary);
+    ViewModelCommandHandler _AISummaryCommand = new();
 
     public bool IsManuallyAddPDFBusy { get; set; } = false;
     public bool IsManuallyAddPDFDone { get; set; } = false;
     public ViewModelCommand ManuallyAddPDFCommand => _ManuallyAddPDFCommand.Get(ManuallyAddPDF);
     ViewModelCommandHandler _ManuallyAddPDFCommand = new();
 
-    public bool IsAISummaryBusy { get; set; } = false;
-    public bool IsAISummaryDone { get; set; } = false;
-    public ViewModelCommand IsAISummaryCommand => _IsAISummaryCommand.Get(AISummary);
-    ViewModelCommandHandler _IsAISummaryCommand = new();
+    public bool IsUndefinedButton1Busy { get; set; } = false;
+    public bool IsUndefinedButton1Done { get; set; } = false;
+    public ViewModelCommand IsUndefinedButton1Command => _IsUndefinedButton1Command.Get(async () => await UndefinedButton1());
+    ViewModelCommandHandler _IsUndefinedButton1Command = new();
 
 
     // ★★★★★★★★★★★★★★★ 右パネル内 → 検索
