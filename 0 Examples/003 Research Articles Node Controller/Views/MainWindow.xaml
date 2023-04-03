@@ -438,7 +438,16 @@
             Grid.Row="1" 
             Grid.Column="1"
             >
-            <TabControl x:Name="TabControl_RightPanel">
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+
+            <TabControl 
+                x:Name="TabControl_RightPanel"
+                Grid.Row="0"
+                >
                 <TabItem Header="選択中の文献" x:Name="TabItem_SelectingNode">
                     <ScrollViewer
                         HorizontalScrollBarVisibility="Disabled">
@@ -1878,20 +1887,23 @@
                 </TabItem>
             </TabControl>
 
-            <StackPanel Margin="4" VerticalAlignment="Bottom">
+            <StackPanel 
+                Margin="4"
+                Grid.Row="1"
+                >
 
                 <Grid Margin="4">
                     <TextBlock
-                        Text="ℹ️ 通知：" 
-                        Width="50" 
+                        Text="メッセージ：" 
+                        Width="70" 
                         HorizontalAlignment="Left"
                         TextAlignment="Right"
                         ToolTipService.InitialShowDelay="10" 
                         />
-                    <TextBlock
-                        Margin="50,0,0,0" 
-                        Text="{Binding InfoMessage}" 
-                        TextWrapping="NoWrap"
+                    <ListView
+                        Margin="70,0,0,0"
+                        x:Name="ListView_Console"
+                        Height="200"
                         />
                 </Grid>
 

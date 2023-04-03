@@ -15,18 +15,6 @@ public partial class MainWindowViewModel : ViewModel
 
     // ★★★★★★★★★★★★★★★ general
 
-    void UpdateInfoMessage(string message)
-    {
-        var now = DateTime.Now;
-        var newMessage = $" {now:HH:mm:ss}, {message}";
-        InfoMessageBuffer.Add(newMessage);
-
-        if (InfoMessageBuffer.Count > 5)
-            InfoMessageBuffer = InfoMessageBuffer.TakeLast(5).ToList();
-
-        InfoMessage = string.Join("\r\n", InfoMessageBuffer);
-    }
-
     void NotifyResearchArticlesPropertiesChanged()
     {
         var articleNodes = _NodeViewModels.Select(n => (n is ResearchArticleNodeViewModel run) ? run : null).Where(run => run != null);
@@ -45,12 +33,10 @@ public partial class MainWindowViewModel : ViewModel
 
         try
         {
-
             IsSaveBusy = true;
             ResearchArticlesManager.SaveDatabase(true, true);
             await Task.Delay(100);
-            //UpdateInfoMessage("保存完了");
-
+            Console.WriteLine("💾 保存完了");
             var successAnimationTask = Task.Run(async () =>
             {
                 IsSaveDone = true;
@@ -61,6 +47,7 @@ public partial class MainWindowViewModel : ViewModel
         }
         catch (Exception ex)
         {
+            Console.WriteLine($"❌ 保存失敗：{ex.Message}");
             MessageBox.Show($"失敗しました。\r\nﾒｯｾｰｼﾞ: {ex.Message}", "保存", MessageBoxButton.OK, MessageBoxImage.Error);
         }
         finally
@@ -411,8 +398,7 @@ public partial class MainWindowViewModel : ViewModel
         if (result is not MessageBoxResult.OK)
             return;
 
-        foreach (var removingNode in removingNodes)
-            RemoveOneArticleNode(removingNode);
+        RemoveArticleNodes(removingNodes);
 
         var saveTask = Save();
     }
@@ -431,25 +417,29 @@ public partial class MainWindowViewModel : ViewModel
         if (result is not MessageBoxResult.OK)
             return;
 
-        foreach (var removingNode in removingNodes)
-            RemoveOneArticleNode(removingNode);
+        // remove from node controller
+        RemoveArticleNodes(removingNodes);
 
         var saveTask = Save();
     }
-    void RemoveOneArticleNode(ResearchArticleNodeViewModel removingNode)
+    void RemoveArticleNodes(ResearchArticleNodeViewModel[] removingNodes)
     {
-        // remove all node links...
-        var removingNodeLinks = NodeLinkViewModels
-            .Where(arg => arg.InputConnectorNodeGuid == removingNode.Guid || arg.OutputConnectorNodeGuid == removingNode.Guid)
-            .ToArray();
-        foreach (var removingNodeLink in removingNodeLinks)
-            _NodeLinkViewModels.Remove(removingNodeLink);
+        // remove from node controller
+        foreach (var removingNode in removingNodes)
+        {
+            // remove all node links...
+            var removingNodeLinks = NodeLinkViewModels
+                .Where(arg => arg.InputConnectorNodeGuid == removingNode.Guid || arg.OutputConnectorNodeGuid == removingNode.Guid)
+                .ToArray();
+            foreach (var removingNodeLink in removingNodeLinks)
+                _NodeLinkViewModels.Remove(removingNodeLink);
 
-        // remove node
-        _NodeViewModels.Remove(removingNode);
+            // remove node
+            _NodeViewModels.Remove(removingNode);
+        }
 
         // remove from database
-        ResearchArticlesManager.RemoveArticleInfo(new List<ResearchArticle> { removingNode.Article }, save: false);
+        ResearchArticlesManager.RemoveArticleInfo(removingNodes.Select(n => n.Article).ToList(), save: false);
     }
 
 

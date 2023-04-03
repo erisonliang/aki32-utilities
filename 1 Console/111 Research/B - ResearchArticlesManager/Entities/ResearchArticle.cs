@@ -854,6 +854,9 @@ public class ResearchArticle : IComparable
 
         try
         {
+            if (string.IsNullOrEmpty(PDF_Link))
+                throw new Exception("PDF link does not exist");
+
             var outputFile = pdfStockDirectory.GetChildFileInfo(LocalPDFName);
             await new Uri(PDF_Link!).DownloadFileAsync(outputFile, true);
 

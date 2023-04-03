@@ -20,6 +20,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\1 Console\100 General\100 General.csproj" />
     <ProjectReference Include="..\..\1 Console\111 Research\111 Research.csproj" />
+    <ProjectReference Include="..\..\2 WPF\200 General\200 General.csproj" />
     <ProjectReference Include="..\..\2 WPF\201 Node Controller\201 Node Controller.csproj" />
   </ItemGroup>
 

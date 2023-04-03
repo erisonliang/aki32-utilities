@@ -30,9 +30,6 @@ public partial class MainWindowViewModel : ViewModel
 
     // ★★★★★★★★★★★★★★★ props
 
-    public string InfoMessage { get; set; }
-    private List<string> InfoMessageBuffer = new List<string>();
-
     public double Scale { get; set; } = 1d;
     public Point Offset { get; set; } = new Point(0, 0);
 
