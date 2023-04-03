@@ -1,5 +1,4 @@
 ﻿using Livet;
-using System.Collections.ObjectModel;
 using System.Windows;
 using Aki32Utilities.ViewModels.NodeViewModels;
 using Aki32Utilities.ConsoleAppUtilities.Research;

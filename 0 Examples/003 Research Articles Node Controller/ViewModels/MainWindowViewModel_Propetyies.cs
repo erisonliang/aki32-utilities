@@ -132,10 +132,20 @@ public partial class MainWindowViewModel : ViewModel
 
     // ★★★★★★★★★★★★★★★ 右パネル内 → 選択中の文献
 
-    public bool IsPullOnlineInfoBusy { get; set; } = false;
-    public bool IsPullOnlineInfoDone { get; set; } = false;
-    public ViewModelCommand PullOnlineInfoCommand => _PullOnlineInfoCommand.Get(async () => await PullOnlineInfo());
-    ViewModelCommandHandler _PullOnlineInfoCommand = new();
+    public bool IsPullCrossRefInfoBusy { get; set; } = false;
+    public bool IsPullCrossRefInfoDone { get; set; } = false;
+    public ViewModelCommand PullCrossRefInfoCommand => _PullCrossRefInfoCommand.Get(async () => await PullCrossRefInfo());
+    ViewModelCommandHandler _PullCrossRefInfoCommand = new();
+
+    public bool IsPullNormalMetaInfoBusy { get; set; } = false;
+    public bool IsPullNormalMetaInfoDone { get; set; } = false;
+    public ViewModelCommand PullNormalMetaInfoCommand => _PullNormalMetaInfoCommand.Get(async () => await PullNormalMetaInfo());
+    ViewModelCommandHandler _PullNormalMetaInfoCommand = new();
+
+    public bool IsPullAIMetaInfoBusy { get; set; } = false;
+    public bool IsPullAIMetaInfoDone { get; set; } = false;
+    public ViewModelCommand PullAIMetaInfoCommand => _PullAIMetaInfoCommand.Get(async () => await PullAIMetaInfo());
+    ViewModelCommandHandler _PullAIMetaInfoCommand = new();
 
     public bool IsOpenPDFBusy { get; set; } = false;
     public bool IsOpenPDFDone { get; set; } = false;

@@ -72,7 +72,6 @@ public class ResearchArticle : IComparable
         get
         {
             return null
-                ?? Manual_Description.NullIfNullOrEmpty()
                 ?? CiNii_Description.NullIfNullOrEmpty()
 
                 // 優先度低め
@@ -441,7 +440,6 @@ public class ResearchArticle : IComparable
 
     public string? Manual_ArticleTitle { get; set; }
     public string[]? Manual_Authors { get; set; }
-    public string? Manual_Description { get; set; }
 
     public string? Manual_MaterialTitle { get; set; }
     public string? Manual_MaterialVolume { get; set; }
@@ -603,7 +601,6 @@ public class ResearchArticle : IComparable
 
             Manual_ArticleTitle = addingArticleBasicInfo.Manual_ArticleTitle,
             Manual_Authors = addingArticleBasicInfo.Manual_Authors,
-            Manual_Description = addingArticleBasicInfo.Manual_Description,
             Manual_PublishedDate = addingArticleBasicInfo.Manual_PublishedDate,
 
             Memo = addingArticleBasicInfo.Memo,

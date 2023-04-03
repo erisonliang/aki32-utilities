@@ -101,8 +101,14 @@ public partial class ResearchArticlesManager
 
         // main
         // post process
-        return await apiAccessor.FetchArticles();
-
+        try
+        {
+            return await apiAccessor.FetchArticles();
+        }
+        catch (Exception ex)
+        {
+            throw new Exception("情報のフェッチに失敗しました。検索条件を見直してください。");
+        }
     }
 
     /// <summary>

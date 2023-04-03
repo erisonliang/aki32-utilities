@@ -21,7 +21,6 @@ public class ResearchArticle_ManualInitInfo
 
     public string? Manual_ArticleTitle { get; set; }
     public string[]? Manual_Authors { get; set; }
-    public string? Manual_Description { get; set; }
     public string? Manual_PublishedDate { get; set; }
 
     public string? Memo { get; set; }

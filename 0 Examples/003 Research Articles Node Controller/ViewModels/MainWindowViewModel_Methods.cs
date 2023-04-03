@@ -8,8 +8,6 @@ using System.Windows.Input;
 using Aki32Utilities.ConsoleAppUtilities.General;
 using Microsoft.Win32;
 using System.IO;
-using Livet.Commands;
-using System.Runtime.Versioning;
 
 namespace Aki32Utilities.UsageExamples.ResearchArticlesNodeController.ViewModels;
 public partial class MainWindowViewModel : ViewModel
@@ -512,20 +510,69 @@ public partial class MainWindowViewModel : ViewModel
 
     // ★★★★★★★★★★★★★★★ 右パネル内 → 選択中の文献
 
-    async Task PullOnlineInfo()
+    async Task PullCrossRefInfo()
     {
-        if (IsPullOnlineInfoBusy)
+        if (IsPullCrossRefInfoBusy)
             return;
 
         try
         {
-            IsPullOnlineInfoBusy = true;
+            IsPullCrossRefInfoBusy = true;
 
             if (SelectingNodeViewModel is null)
                 throw new Exception("文献が選択されていません。");
 
             // crossref
-            if (!string.IsNullOrEmpty(SelectingNodeViewModel.Article.DOI))
+            if (string.IsNullOrEmpty(SelectingNodeViewModel.Article.DOI))
+                throw new Exception("DOIがない文献はこの機能を使うことができません。");
+
+            var accessor = new CrossRefAPIAccessor()
+            {
+                DOI = SelectingNodeViewModel.Article.DOI!,
+            };
+
+            var pulledArticles = await ResearchArticlesManager.PullArticleInfo(accessor, asTempArticles: true, save: false);
+            if (pulledArticles.Count == 0)
+                throw new Exception("マッチするデータがありませんでした。");
+
+            RedrawResearchArticlesManager();
+            MoveCanvasToTargetArticle(SelectingNodeViewModel);
+            SelectedEmphasizePropertyItem = ViewModels.EmphasizePropertyItems.一時ﾃﾞｰﾀ;
+            var saveTask = Save();
+
+            var successAnimationTask = Task.Run(async () =>
+            {
+                IsPullCrossRefInfoDone = true;
+                await Task.Delay(2222);
+                if (!IsPullCrossRefInfoBusy)
+                    IsPullCrossRefInfoDone = false;
+            });
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show($"失敗しました。\r\nﾒｯｾｰｼﾞ: {ex.Message}", "オンラインで情報を取得", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+        finally
+        {
+            IsPullCrossRefInfoBusy = false;
+        }
+    }
+
+    async Task PullNormalMetaInfo()
+    {
+        if (IsPullNormalMetaInfoBusy)
+            return;
+
+        try
+        {
+            IsPullNormalMetaInfoBusy = true;
+
+            if (SelectingNodeViewModel is null)
+                throw new Exception("文献が選択されていません。");
+
+            // 対象のサイトからの情報
+            // TODO
+            throw new NotImplementedException("申し訳ありません。\r\n未実装です…。");
             {
                 var accessor = new CrossRefAPIAccessor()
                 {
@@ -535,12 +582,6 @@ public partial class MainWindowViewModel : ViewModel
                 var pulledArticles = await ResearchArticlesManager.PullArticleInfo(accessor, asTempArticles: true, save: false);
                 if (pulledArticles.Count == 0)
                     throw new Exception("マッチするデータがありませんでした。");
-
-            }
-
-            // 対象のサイトからの情報
-            {
-                // TODO
             }
 
             RedrawResearchArticlesManager();
@@ -550,10 +591,10 @@ public partial class MainWindowViewModel : ViewModel
 
             var successAnimationTask = Task.Run(async () =>
             {
-                IsPullOnlineInfoDone = true;
+                IsPullNormalMetaInfoDone = true;
                 await Task.Delay(2222);
-                if (!IsPullOnlineInfoBusy)
-                    IsPullOnlineInfoDone = false;
+                if (!IsPullNormalMetaInfoBusy)
+                    IsPullNormalMetaInfoDone = false;
             });
         }
         catch (Exception ex)
@@ -562,7 +603,56 @@ public partial class MainWindowViewModel : ViewModel
         }
         finally
         {
-            IsPullOnlineInfoBusy = false;
+            IsPullNormalMetaInfoBusy = false;
+        }
+    }
+
+    async Task PullAIMetaInfo()
+    {
+        if (IsPullAIMetaInfoBusy)
+            return;
+
+        try
+        {
+            IsPullAIMetaInfoBusy = true;
+
+            if (SelectingNodeViewModel is null)
+                throw new Exception("文献が選択されていません。");
+
+            // ChatGPTによる推定
+            // TODO
+            throw new NotImplementedException("申し訳ありません。\r\n未実装です…。");
+            {
+                var accessor = new CrossRefAPIAccessor()
+                {
+                    DOI = SelectingNodeViewModel.Article.DOI!,
+                };
+
+                var pulledArticles = await ResearchArticlesManager.PullArticleInfo(accessor, asTempArticles: true, save: false);
+                if (pulledArticles.Count == 0)
+                    throw new Exception("マッチするデータがありませんでした。");
+            }
+
+            RedrawResearchArticlesManager();
+            MoveCanvasToTargetArticle(SelectingNodeViewModel);
+            SelectedEmphasizePropertyItem = ViewModels.EmphasizePropertyItems.一時ﾃﾞｰﾀ;
+            var saveTask = Save();
+
+            var successAnimationTask = Task.Run(async () =>
+            {
+                IsPullAIMetaInfoDone = true;
+                await Task.Delay(2222);
+                if (!IsPullAIMetaInfoBusy)
+                    IsPullAIMetaInfoDone = false;
+            });
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show($"失敗しました。\r\nﾒｯｾｰｼﾞ: {ex.Message}", "オンラインで情報を取得", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+        finally
+        {
+            IsPullAIMetaInfoBusy = false;
         }
     }
 
