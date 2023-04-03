@@ -283,6 +283,7 @@ public class ResearchArticle : IComparable
                     if (MaterialSubVolume is null)
                     {
                         s = s.Replace("{MaterialSubVolume}", $"");
+                        s = s.Replace(", , ", $", ");
                     }
                     else
                     {
@@ -726,82 +727,6 @@ public class ResearchArticle : IComparable
         return false;
     }
 
-
-
-    // ★★★★★★★★★★★★★★★ method (practical use)
-
-    public async Task<bool> TryDownloadPDF(DirectoryInfo pdfStockDirectory)
-    {
-        UtilPreprocessors.PreprocessBasic();
-
-        try
-        {
-            var outputFile = pdfStockDirectory.GetChildFileInfo(LocalPDFName);
-            await new Uri(PDF_Link!).DownloadFileAsync(outputFile, true);
-
-            return true;
-        }
-        catch (Exception ex)
-        {
-            ConsoleExtension.WriteLineWithColor($"Failed: {ex.Message}", ConsoleColor.Red);
-            return false;
-        }
-    }
-
-    public async Task<(bool download, bool open)> TryOpenPDF(DirectoryInfo pdfStockDirectory)
-    {
-        UtilPreprocessors.PreprocessBasic();
-        var outputFilePath = Path.Combine(pdfStockDirectory.FullName, LocalPDFName);
-
-        if (!File.Exists(outputFilePath))
-            if (!await TryDownloadPDF(pdfStockDirectory))
-                return (false, false);
-
-        try
-        {
-            var p = Process.Start(new ProcessStartInfo()
-            {
-                FileName = outputFilePath,
-                UseShellExecute = true,
-            });
-
-            return (true, true);
-        }
-        catch (Exception ex)
-        {
-            ConsoleExtension.WriteLineWithColor($"Failed: {ex.Message}", ConsoleColor.Red);
-            return (true, false);
-        }
-    }
-
-    public bool TryFindPDF(DirectoryInfo pdfStockDirectory)
-    {
-        UtilPreprocessors.PreprocessBasic();
-
-        var outputFilePath = Path.Combine(pdfStockDirectory.FullName, LocalPDFName);
-        return File.Exists(outputFilePath);
-    }
-
-    public bool TryOpenDOILink()
-    {
-        UtilPreprocessors.PreprocessBasic();
-
-        try
-        {
-            var p = Process.Start(new ProcessStartInfo
-            {
-                FileName = DOI_Link!,
-                UseShellExecute = true,
-            });
-            return true;
-        }
-        catch (Exception ex)
-        {
-            ConsoleExtension.WriteLineWithColor($"Failed: {ex.Message}", ConsoleColor.Red);
-            return false;
-        }
-    }
-
     /// <summary>
     /// Merge two ResearchArticle instances.
     /// </summary>
@@ -919,6 +844,82 @@ public class ResearchArticle : IComparable
 
 
     }
+
+
+    // ★★★★★★★★★★★★★★★ method (practical use)
+
+    public async Task<bool> TryDownloadPDF(DirectoryInfo pdfStockDirectory)
+    {
+        UtilPreprocessors.PreprocessBasic();
+
+        try
+        {
+            var outputFile = pdfStockDirectory.GetChildFileInfo(LocalPDFName);
+            await new Uri(PDF_Link!).DownloadFileAsync(outputFile, true);
+
+            return true;
+        }
+        catch (Exception ex)
+        {
+            ConsoleExtension.WriteLineWithColor($"Failed: {ex.Message}", ConsoleColor.Red);
+            return false;
+        }
+    }
+
+    public async Task<(bool download, bool open)> TryOpenPDF(DirectoryInfo pdfStockDirectory)
+    {
+        UtilPreprocessors.PreprocessBasic();
+        var outputFilePath = Path.Combine(pdfStockDirectory.FullName, LocalPDFName);
+
+        if (!File.Exists(outputFilePath))
+            if (!await TryDownloadPDF(pdfStockDirectory))
+                return (false, false);
+
+        try
+        {
+            var p = Process.Start(new ProcessStartInfo()
+            {
+                FileName = outputFilePath,
+                UseShellExecute = true,
+            });
+
+            return (true, true);
+        }
+        catch (Exception ex)
+        {
+            ConsoleExtension.WriteLineWithColor($"Failed: {ex.Message}", ConsoleColor.Red);
+            return (true, false);
+        }
+    }
+
+    public bool TryFindPDF(DirectoryInfo pdfStockDirectory)
+    {
+        UtilPreprocessors.PreprocessBasic();
+
+        var outputFilePath = Path.Combine(pdfStockDirectory.FullName, LocalPDFName);
+        return File.Exists(outputFilePath);
+    }
+
+    public bool TryOpenDOILink()
+    {
+        UtilPreprocessors.PreprocessBasic();
+
+        try
+        {
+            var p = Process.Start(new ProcessStartInfo
+            {
+                FileName = DOI_Link!,
+                UseShellExecute = true,
+            });
+            return true;
+        }
+        catch (Exception ex)
+        {
+            ConsoleExtension.WriteLineWithColor($"Failed: {ex.Message}", ConsoleColor.Red);
+            return false;
+        }
+    }
+
 
 
     // ★★★★★★★★★★★★★★★ method (helper)
