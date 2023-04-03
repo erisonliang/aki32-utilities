@@ -371,18 +371,21 @@ public class ResearchArticle : IComparable
     {
         get
         {
+            // ★★★★★ 日本語優先
+            // j-stage
+            if (JStage_Link_Japanese != null)
+                return JStage_Link_Japanese!.Replace($"_article/", $"_pdf/");
+
+
+            // ★★★★★ 英語は後回し
+            // j-stage 
+            if (JStage_Link_English != null)
+                return JStage_Link_English!.Replace($"_article/", $"_pdf/");
+
+
+            // キープ。いつかdoiから判明させれる…？
             if (string.IsNullOrEmpty(DOI))
                 return null;
-
-            // get data from aij
-            if (DOI.Contains("aijs"))
-            {
-                if (JStage_Link_Japanese != null)
-                    return JStage_Link_Japanese!.Replace($"_article/", $"_pdf/");
-                if (JStage_Link_English != null)
-                    return JStage_Link_English!.Replace($"_article/", $"_pdf/");
-
-            }
 
             return null;
         }
