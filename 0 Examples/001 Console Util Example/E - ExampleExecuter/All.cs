@@ -1147,7 +1147,7 @@ public static partial class ExampleExecuter
 
                     //var whisper = new WhisperCppWrapper();
                     //whisper.ExecuteWhisper(input, output,
-                    //    usingModel: WhisperCppWrapper.ModelType.Base,
+                    //    usingModel: WhisperCppWrapper.ModelType.Small,
                     //    outputFormat: WhisperCppWrapper.OutputFormat.srt,
                     //    usingThreadsCount: 16
                     //    );
