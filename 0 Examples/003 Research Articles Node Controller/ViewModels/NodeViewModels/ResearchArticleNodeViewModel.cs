@@ -34,6 +34,8 @@ public class ResearchArticleNodeViewModel : DefaultNodeViewModel
         {
             if (Article.DataFrom_CrossRef ?? false)
                 return false;
+            if (string.IsNullOrEmpty(Article.DOI))
+                return false;
             return true;
         }
     }
