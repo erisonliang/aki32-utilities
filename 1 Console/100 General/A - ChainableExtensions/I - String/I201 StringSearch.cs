@@ -52,10 +52,10 @@ public static partial class ChainableExtensions
     // ★★★★★★★★★★★★★★★ sub
 
     public static string[] GetRegexen_ImageFiles(
-            bool jpg = true,
-            bool png = true,
-            bool bmp = true,
-            bool heic = true)
+            bool jpg = false,
+            bool png = false,
+            bool bmp = false,
+            bool heic = false)
     {
         var regexen = new List<string>();
 
@@ -85,9 +85,35 @@ public static partial class ChainableExtensions
         return regexen.ToArray();
     }
 
+    public static string[] GetRegexen_SoundFiles(
+        bool wav = false,
+        bool mp3 = false,
+        bool m4a = false)
+    {
+        var regexen = new List<string>();
+
+        if (wav)
+        {
+            regexen.Add(@"^.*\.wav$");
+            regexen.Add(@"^.*\.WAV$");
+        }
+        if (mp3)
+        {
+            regexen.Add(@"^.*\.mp3$");
+            regexen.Add(@"^.*\.MP3$");
+        }
+        if (m4a)
+        {
+            regexen.Add(@"^.*\.m4a$");
+            regexen.Add(@"^.*\.M4A$");
+        }
+
+        return regexen.ToArray();
+    }
+
     public static string[] GetRegexen_VideoFiles(
-        bool mp4 = true,
-        bool avi = true)
+        bool mp4 = false,
+        bool avi = false)
     {
         var regexen = new List<string>();
 
@@ -106,7 +132,7 @@ public static partial class ChainableExtensions
     }
 
     public static string[] GetRegexen_CsvFiles(
-        bool csv = true)
+        bool csv = false)
     {
         var regexen = new List<string>();
 
@@ -120,10 +146,10 @@ public static partial class ChainableExtensions
     }
 
     public static string[] GetRegexen_XmlTypedExcelFiles(
-        bool xlsx = true,
-        bool xlsm = true,
-        bool xltx = true,
-        bool xltm = true)
+        bool xlsx = false,
+        bool xlsm = false,
+        bool xltx = false,
+        bool xltm = false)
     {
         var regexen = new List<string>();
 

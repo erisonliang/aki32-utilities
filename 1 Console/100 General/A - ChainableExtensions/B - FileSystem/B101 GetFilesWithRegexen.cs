@@ -47,7 +47,7 @@ public static partial class ChainableExtensions
     /// <param name="outputFile">when null, automatically set</param>
     /// <returns></returns>
     public static IEnumerable<FileInfo> GetFiles_Images(this DirectoryInfo inputDir, SearchOption searchOption = SearchOption.TopDirectoryOnly)
-        => inputDir.GetFilesWithRegexen(searchOption, GetRegexen_ImageFiles());
+        => inputDir.GetFilesWithRegexen(searchOption, GetRegexen_ImageFiles(jpg: true, png: true, bmp: true, heic: true));
 
     /// <summary>
     /// Return if string match any of search regexen
@@ -65,7 +65,7 @@ public static partial class ChainableExtensions
     /// <param name="outputFile">when null, automatically set</param>
     /// <returns></returns>
     public static IEnumerable<FileInfo> GetFiles_Csvs(this DirectoryInfo inputDir, SearchOption searchOption = SearchOption.TopDirectoryOnly)
-        => inputDir.GetFilesWithRegexen(searchOption, GetRegexen_CsvFiles());
+        => inputDir.GetFilesWithRegexen(searchOption, GetRegexen_CsvFiles(csv: true));
 
     /// <summary>
     /// Return if string match any of search regexen
@@ -74,7 +74,7 @@ public static partial class ChainableExtensions
     /// <param name="outputFile">when null, automatically set</param>
     /// <returns></returns>
     public static IEnumerable<FileInfo> GetFiles_XmlTypedExcels(this DirectoryInfo inputDir, SearchOption searchOption = SearchOption.TopDirectoryOnly)
-        => inputDir.GetFilesWithRegexen(searchOption, GetRegexen_XmlTypedExcelFiles());
+        => inputDir.GetFilesWithRegexen(searchOption, GetRegexen_XmlTypedExcelFiles(xlsx: true, xlsm: true, xltx: true, xltm: true));
 
 
     // ★★★★★★★★★★★★★★★ 
