@@ -208,6 +208,10 @@ public static partial class ExampleExecuter
                     //    .Decompress_Gzip(null)
                     //    ;
 
+                    ////input3
+                    ////    .Decompress_Rar(null)
+                    ////    ;
+
                 }
 
                 // B008 Encrypt, Decrypt

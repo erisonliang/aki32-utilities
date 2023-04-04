@@ -2,6 +2,8 @@
 using System.IO.Compression;
 using System.Text;
 
+using Aspose.Zip.Rar;
+
 using ICSharpCode.SharpZipLib.GZip;
 using ICSharpCode.SharpZipLib.Tar;
 
@@ -178,6 +180,37 @@ public static partial class ChainableExtensions
         return outputDir!;
     }
 
+    /// <summary>
+    /// decompress .rar
+    /// </summary>
+    /// <param name="inputFile"></param>
+    /// <param name="outputDir">when null, automatically set</param>
+    /// <returns></returns>
+    public static DirectoryInfo Decompress_Rar(this FileInfo inputFile, DirectoryInfo? outputDir, string? password = null)
+    {
+        // preprocess
+        outputDir ??= new DirectoryInfo(inputFile.FullName.Replace(".tar", ""));
+        UtilPreprocessors.PreprocessOutDir(ref outputDir, inputFile.Directory!);
+
+
+        // main
+        if (string.IsNullOrEmpty(password))
+        {
+            var rarArchive = new RarArchive(inputFile.FullName);
+            rarArchive.ExtractToDirectory(outputDir!.FullName);
+        }
+        else
+        {
+            var setting = new RarArchiveLoadOptions { DecryptionPassword = password };
+            var rarArchive = new RarArchive(inputFile.FullName, setting);
+            rarArchive.ExtractToDirectory(outputDir!.FullName);
+        }
+
+
+        // post process
+        return outputDir!;
+    }
+
 
     // ★★★★★★★★★★★★★★★ loop sugar
 
@@ -215,7 +248,7 @@ public static partial class ChainableExtensions
     /// <returns></returns>
     public static DirectoryInfo Decompress_TarGzip_Loop(this DirectoryInfo inputDir, DirectoryInfo? outputDir)
         => inputDir.Loop(outputDir, (inF, _) => inF.Decompress_TarGzip(null),
-            searchRegexen: new string[] { @"^.*\.tar.gz$",@"^.*\.tgz$" });
+            searchRegexen: new string[] { @"^.*\.tar.gz$", @"^.*\.tgz$" });
 
 
     // ★★★★★★★★★★★★★★★
