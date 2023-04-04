@@ -1135,28 +1135,26 @@ public static partial class ExampleExecuter
 
             }
 
-
             // E - Wrappers
             {
                 var baseDir_101_E = baseDir_101.GetChildDirectoryInfo($@"E - Wrappers");
 
-
                 // E001 WhisperCppWrapper
                 {
                     //var baseDir_101_E001 = baseDir_101_E.GetChildDirectoryInfo($@"E001 WhisperCppWrapper");
-                    //var output = baseDir_101_E001.GetChildDirectoryInfo($@"output");
+                    //var input = baseDir_101_E001.GetChildFileInfo($@"input.m4a");
+                    //var output = baseDir_101_E001.GetChildFileInfo($@"output.txt");
 
-
-                    var input = new FileInfo(@"C:\Users\aki32\Dropbox\PC\Desktop\001-sibutomo.mp3");
-                    var whisper = new WhisperCppWrapper();
-                    whisper.ExecuteWhisper(input,
-                        usingModel:WhisperCppWrapper.ModelType.Tiny,
-                        outputFormat:WhisperCppWrapper.OutputFormat.srt,
-                        usingThreadsCount:8
-                        ).Wait();
+                    //var whisper = new WhisperCppWrapper();
+                    //whisper.ExecuteWhisper(input, output,
+                    //    usingModel: WhisperCppWrapper.ModelType.Base,
+                    //    outputFormat: WhisperCppWrapper.OutputFormat.srt,
+                    //    usingThreadsCount: 16
+                    //    );
 
                 }
             }
+
             // X - CheatSheet
             {
                 var baseDir_101_X = baseDir_101.GetChildDirectoryInfo($@"X - CheatSheet");

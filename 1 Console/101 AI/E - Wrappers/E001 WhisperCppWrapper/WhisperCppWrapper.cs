@@ -42,7 +42,8 @@ public class WhisperCppWrapper
 
     // ★★★★★★★★★★★★★★★ methods
 
-    public async Task<FileInfo> ExecuteWhisper(FileInfo inputAudioFile,
+    public FileInfo ExecuteWhisper(FileInfo inputAudioFile,
+        FileInfo? outputTextFile = null,
         ModelType usingModel = ModelType.Medium,
         int usingThreadsCount = 4,
         int usingProcessorsCount = 1,
@@ -68,83 +69,62 @@ public class WhisperCppWrapper
 
 
         // Convert to WAV format
-        var wavFile = inputAudioFile.GetExtensionChangedFileInfo(".temp.wav");
-        inputAudioFile.ConvertAnySoundToWav(wavFile);
+        var tempWavFile = inputAudioFile.GetExtensionChangedFileInfo(".temp.wav");
+        inputAudioFile.ConvertAnySoundToWav(tempWavFile);
 
         // Run whisper
         {
-            string whisperCommand = mainExecuter.FullName;
-
-            string whisperArguments = "";
-            whisperArguments += $"-m \"{modelBinary}\"";
-            whisperArguments += $" ";
-            whisperArguments += $"-t {usingThreadsCount}";
-            whisperArguments += $" ";
-            whisperArguments += $"-p {usingProcessorsCount}";
-            whisperArguments += $" ";
-            whisperArguments += $"-o{outputFormat}";
-            whisperArguments += $" ";
-            whisperArguments += $"-l {targetLanguage}";
-            whisperArguments += $" ";
-            whisperArguments += $"\"{wavFile}\"";
-
-            var process = new Process
+            using var prompt = new CommandPromptController()
             {
-                StartInfo = new ProcessStartInfo
-                {
-                    FileName = whisperCommand,
-                    Arguments = whisperArguments,
-                    RedirectStandardOutput = true,
-                    RedirectStandardError = true,
-                    UseShellExecute = false,
-                    CreateNoWindow = true
-                }
+                RealTimeConsoleWriteLineOutput = true,
+                OmitCurrentDirectoryDisplay = false,
+                ErrorTextForeground = ConsoleColor.Gray,
             };
 
-            process.OutputDataReceived += (sender, e) =>
-            {
-                if (!string.IsNullOrEmpty(e.Data))
-                {
-                    byte[] bytesUTF8 = System.Text.Encoding.Default.GetBytes(e.Data);
-                    string stringSJIS = System.Text.Encoding.UTF8.GetString(bytesUTF8);
-                    Console.WriteLine(stringSJIS);
-                }
-            };
+            string command = "";
+            command += $"\"{mainExecuter.FullName}\"";
+            command += $" ";
+            command += $"-m \"{modelBinary}\"";
+            command += $" ";
+            command += $"-t {usingThreadsCount}";
+            command += $" ";
+            command += $"-p {usingProcessorsCount}";
+            command += $" ";
+            command += $"-o{outputFormat}";
+            command += $" ";
+            command += $"-l {targetLanguage}";
+            command += $" ";
+            command += $"\"{tempWavFile}\"";
 
-            process.ErrorDataReceived += (sender, e) =>
-            {
-                if (!string.IsNullOrEmpty(e.Data))
-                {
-                    byte[] bytesUTF8 = System.Text.Encoding.Default.GetBytes(e.Data);
-                    string stringSJIS = System.Text.Encoding.UTF8.GetString(bytesUTF8);
-                    Console.WriteLine(stringSJIS);
-                }
-            };
-
-            process.Start();
-            process.BeginOutputReadLine();
-            process.BeginErrorReadLine();
-
-            await process.WaitForExitAsync();
+            prompt.WriteLine(command);
+            prompt.WaitForAllProcessFinished();
         }
 
         //出力テキストをリネーム
-        var outputFile = wavFile.GetExtensionChangedFileInfo(outputFormat.ToString());
-        if (outputFile.Exists)
+        var autoOutputFile = new FileInfo($"{tempWavFile}.{outputFormat}");
+        if (autoOutputFile.Exists)
         {
-            string path1 = Path.GetFileNameWithoutExtension(outputFile.FullName);
-            string path2 = Path.GetFileNameWithoutExtension(path1);
-            string path3 = Path.GetFileNameWithoutExtension(path2);
-            var finalFile = outputFile.Directory!.GetChildFileInfo($"{path3}.{outputFormat}");
-            outputFile.MoveTo(finalFile, overwriteExistingFile: true);
-            outputFile = finalFile;
+            if (outputTextFile is not null)
+            {
+                autoOutputFile.MoveTo(outputTextFile, overwriteExistingFile: true);
+            }
+            else
+            {
+                string path1 = Path.GetFileNameWithoutExtension(autoOutputFile.FullName);
+                string path2 = Path.GetFileNameWithoutExtension(path1);
+                string path3 = Path.GetFileNameWithoutExtension(path2);
+                var finalFile = autoOutputFile.Directory!.GetChildFileInfo($"{path3}{autoOutputFile.Extension}");
+                autoOutputFile.MoveTo(finalFile, overwriteExistingFile: true);
+
+                // 最終的な出力で上書き
+                outputTextFile = finalFile;
+            }
         }
 
         //一時的なwavファイルを全部消す
-        wavFile.Delete();
+        tempWavFile.Delete();
 
-
-        return outputFile;
+        return outputTextFile!;
     }
 
 

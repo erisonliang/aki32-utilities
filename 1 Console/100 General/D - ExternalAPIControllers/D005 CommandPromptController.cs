@@ -5,7 +5,7 @@ using Aki32Utilities.ConsoleAppUtilities.General;
 namespace Aki32Utilities.ConsoleAppUtilities.General;
 public class CommandPromptController : IDisposable
 {
-    public bool RealTimeConsoleWriteLineOutput { get; set; }
+    public bool RealTimeConsoleWriteLineOutput { get; set; } = true;
     public bool OmitCurrentDirectoryDisplay { get; set; } = false;
 
     public Action<string>? OutputReceivedAction { get; set; } = null;
@@ -14,6 +14,8 @@ public class CommandPromptController : IDisposable
     public Process CommandPromptProcess { get; set; }
     public StreamWriter InputStream => CommandPromptProcess.StandardInput;
     public List<string> ResponseList { get; set; } = new List<string>();
+
+    public ConsoleColor ErrorTextForeground { get; set; } = ConsoleColor.Red;
 
 
     public CommandPromptController()
@@ -63,7 +65,7 @@ public class CommandPromptController : IDisposable
             data = OmitCurrentDirectoryString(data);
 
             if (RealTimeConsoleWriteLineOutput)
-                ConsoleExtension.WriteLineWithColor(data, foreground: ConsoleColor.Red);
+                ConsoleExtension.WriteLineWithColor(data, foreground: ErrorTextForeground);
 
             ErrorReceivedAction?.Invoke(data);
 
