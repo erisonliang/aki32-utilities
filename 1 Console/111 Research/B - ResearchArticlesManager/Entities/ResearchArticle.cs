@@ -1033,7 +1033,7 @@ public class ResearchArticle : IComparable
             {
                 if (line.Contains("著者リスト："))
                 {
-                    if (Manual_Authors is null || Manual_Authors.Length == 0 || Manual_Authors[0] == "※不明")
+                    if (Manual_Authors is null && !line.Contains("※不明"))
                         Manual_Authors = line.Replace("著者リスト：", "").Split(",").ToArray();
                     continue;
                 }

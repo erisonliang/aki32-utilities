@@ -195,7 +195,7 @@ public class NDLSearchAPIAccessor : IResearchAPIAccessor
         var toIndex = int.Parse(startIndex) + int.Parse(itemsPerPage) - 1;
 
         Console.WriteLine();
-        Console.WriteLine($"★ Obtained {itemsPerPage} items out of {totalResults} matches ( From #{startIndex} to #{toIndex} )");
+        Console.WriteLine($"★ Obtained {itemsPerPage} item(s) out of {totalResults} matches ( From #{startIndex} to #{toIndex} )");
         Console.WriteLine();
 
         var entities = channel.Elements("item");
