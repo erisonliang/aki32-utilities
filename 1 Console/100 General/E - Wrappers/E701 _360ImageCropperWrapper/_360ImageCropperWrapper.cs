@@ -37,7 +37,6 @@ public class _360ImageCropperWrapper
 
         var E2P = PythonController.Import("Equirec2Perspec");
         var cv2 = PythonController.Import("cv2");
-        var np = PythonController.Import("numpy");
 
         var equ = E2P.Equirectangular(inputImageFile.FullName);
 
