@@ -1,7 +1,7 @@
 ﻿
 
 namespace Aki32Utilities.ConsoleAppUtilities.General;
-public partial class NumpyWrapper
+public class NumpyWrapper
 {
     // ★★★★★★★★★★★★★★★ props
 

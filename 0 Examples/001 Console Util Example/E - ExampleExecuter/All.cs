@@ -34,7 +34,6 @@ using Org.BouncyCastle.Crypto.Macs;
 using NumSharp.Utilities;
 using DocumentFormat.OpenXml.Office2013.Excel;
 using MathNet.Numerics;
-using static Aki32Utilities.ConsoleAppUtilities.General.PythonClassesWrapper;
 
 namespace Aki32Utilities.UsageExamples.ConsoleAppUtilities;
 public static partial class ExampleExecuter
@@ -1016,27 +1015,23 @@ public static partial class ExampleExecuter
 
                 }
 
-                // E700 _360ImageCropperWrapper
+                // E701 _360ImageCropperWrapper
                 {
-                    // E701 Equirec2Perspec
-                    {
-                        //var baseDir_100_E701 = baseDir_100_E.GetChildDirectoryInfo($@"E701 _360ImageCropperWrapper");
+                    //var baseDir_100_E701 = baseDir_100_E.GetChildDirectoryInfo($@"E701 _360ImageCropperWrapper");
 
-                        //var inputImage = baseDir_100_E701.GetChildFileInfo($@"input.jpg");
-                        //var outputDir = baseDir_100_E701.GetChildDirectoryInfo($@"output");
-                        //var outputImage = outputDir.GetChildFileInfo($@"output.jpg");
-                        //var outputJson = outputDir.GetChildFileInfo($@"output.json");
+                    //var inputImage = baseDir_100_E701.GetChildFileInfo($@"input.jpg");
+                    //var outputDir = baseDir_100_E701.GetChildDirectoryInfo($@"output");
+                    //var outputImage = outputDir.GetChildFileInfo($@"output.jpg");
+                    //var outputJson = outputDir.GetChildFileInfo($@"output.json");
 
-                        //var ep = new _360ImageCropperWrapper();
-                        //ep.CropAndSave(inputImage, outputImage,
-                        //    800, 2500, 2000,
-                        //    -Math.PI / 4, 0, 0,
-                        //    outputJson
-                        //    );
+                    //var ep = new _360ImageCropperWrapper();
+                    //ep.CropAndSave(inputImage, outputImage,
+                    //    800, 2500, 2000,
+                    //    -Math.PI / 4, 0, 0,
+                    //    outputJson
+                    //    );
 
-                        ////ep.AutoCropAndSave(inputImage, outputDir, 1000, 2000, 1500, false, 10);
-
-                    }
+                    ////ep.AutoCropAndSave(inputImage, outputDir, 1000, 2000, 1500, false, 10);
 
                 }
 
