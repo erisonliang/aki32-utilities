@@ -51,7 +51,7 @@ public static partial class ChainableExtensions
     {
         // main
         var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(inputPath);
-        newExtension = newExtension.Replace(".", "");
+        newExtension = newExtension.TrimStart('.');
 
         var outputFileName = $"{fileNameWithoutExtension}.{newExtension}";
         var outputFilePath = Path.Combine(Path.GetDirectoryName(inputPath)!, outputFileName);

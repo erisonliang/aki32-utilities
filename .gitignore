@@ -379,3 +379,10 @@ MigrationBackup/
 FodyWeavers.xsd
 
 *MLNetExampleSummary/
+/1 Console/101 AI/E - Wrappers/E001 WhisperCppWrapper/Models/whisper.dll
+/1 Console/101 AI/E - Wrappers/E001 WhisperCppWrapper/Models/main.exe
+/1 Console/101 AI/E - Wrappers/E001 WhisperCppWrapper/Models/ggml-tiny.bin
+/1 Console/101 AI/E - Wrappers/E001 WhisperCppWrapper/Models/ggml-small.bin
+/1 Console/101 AI/E - Wrappers/E001 WhisperCppWrapper/Models/ggml-medium.bin
+/1 Console/101 AI/E - Wrappers/E001 WhisperCppWrapper/Models/ggml-large.bin
+/1 Console/101 AI/E - Wrappers/E001 WhisperCppWrapper/Models/ggml-base.bin

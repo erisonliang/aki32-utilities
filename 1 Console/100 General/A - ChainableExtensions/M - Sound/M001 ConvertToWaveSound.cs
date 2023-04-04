@@ -32,10 +32,7 @@ public static partial class ChainableExtensions
 
         if (inputFile.Extension.IsMatchAny(GetRegexen_VideoFiles(mp4: true, avi: true)))
         {
-            ConvertSoundToWav(inputFile, outputFile!);
-        }
-        else if (inputFile.Extension.IsMatchAny(GetRegexen_SoundFiles(wav: true, mp3: true, m4a: true)))
-        {
+
             var tempOutputFile = inputFile.GetExtensionChangedFileInfo(".temp.v.wav");
 
             var inputMediaFile = new MediaFile { Filename = inputFile.FullName };
@@ -47,6 +44,10 @@ public static partial class ChainableExtensions
 
             ConvertSoundToWav(tempOutputFile, outputFile!);
             tempOutputFile.Delete();
+        }
+        else if (inputFile.Extension.IsMatchAny(GetRegexen_SoundFiles(wav: true, mp3: true, m4a: true)))
+        {
+            ConvertSoundToWav(inputFile, outputFile!);
         }
         else
             throw new Exception("input file extension was out of expectations");
