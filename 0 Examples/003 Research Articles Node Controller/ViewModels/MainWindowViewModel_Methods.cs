@@ -620,7 +620,6 @@ public partial class MainWindowViewModel : ViewModel
             var result = await SelectingNodeViewModel.Article.TryPredictMetaInfo_ChatGPT();
             if (!result)
                 throw new Exception("推測に失敗しました。");
-            Console.WriteLine("推測に成功しました。");
 
             SelectingNodeViewModel.NotifyArticleUpdated();
             var saveTask = Save();

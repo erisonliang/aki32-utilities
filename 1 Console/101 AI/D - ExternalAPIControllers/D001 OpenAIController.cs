@@ -1,12 +1,4 @@
-﻿using System.Net.Http.Json;
-using System.Text;
-using System.Text.Json.Nodes;
-
-using Aki32Utilities.ConsoleAppUtilities.General;
-
-using DocumentFormat.OpenXml.Drawing.Charts;
-
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace Aki32Utilities.ConsoleAppUtilities.General;
@@ -23,6 +15,10 @@ public class OpenAIController
 
     private static readonly string BaseUriString = "https://api.openai.com/v1";
     private List<KeyValuePair<string, string>> Header => new() { new("OpenAI-Organization", APIOrganization) };
+
+    const double yenPerDollar = 130;
+    public double lastPriceInYen = -1;
+
 
     // ★★★★★★★★★★★★★★★ init
 
@@ -65,6 +61,8 @@ public class OpenAIController
              additionalHeaders: Header,
              httpContent: content);
 
+        lastPriceInYen = -1;
+
         return response.ToString();
     }
 
@@ -94,6 +92,8 @@ public class OpenAIController
              additionalHeaders: Header,
              jsonStringContent: jsonContent
              );
+
+        lastPriceInYen = -1;
 
         return response["choices"]!.Select(x => x!["text"]!.ToString()).ToArray();
         //return response["choices"]![0]!["text"]!.ToString();
@@ -128,6 +128,17 @@ public class OpenAIController
              jsonStringContent: jsonContent
              );
 
+        try
+        {
+            lastPriceInYen = -1;
+            var consumedToken = int.Parse(response["usage"]!["total_tokens"]!.ToString());
+            var dollarPerToken = 0.002 / 1000;
+            lastPriceInYen = consumedToken * dollarPerToken * yenPerDollar;
+        }
+        catch (Exception)
+        {
+        }
+
         return response["choices"]!.Select(x => x!["message"]!["content"]!.ToString()).ToArray();
     }
 
@@ -157,6 +168,8 @@ public class OpenAIController
              additionalHeaders: Header,
              jsonStringContent: jsonContent
              );
+
+        lastPriceInYen = -1;
 
         return (response["data"] as JArray)?.Select(x => new Uri(x["url"]?.ToString()!))?.ToArray()!;
     }
@@ -198,6 +211,8 @@ public class OpenAIController
              httpContent: httpContent
              );
 
+        lastPriceInYen = -1;
+
         return response["text"]!.ToString();
     }
 
@@ -229,6 +244,8 @@ public class OpenAIController
              additionalHeaders: Header,
              httpContent: httpContent
              );
+
+        lastPriceInYen = -1;
 
         return response["text"]!.ToString();
     }

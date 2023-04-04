@@ -1093,6 +1093,8 @@ public class ResearchArticle : IComparable
                         Manual_PublishedDate += $"-{publishedMonth}";
                 }
 
+            Console.WriteLine($"推測に成功。(約 {openAI.lastPriceInYen:F3} 円)");
+
             return true;
         }
         catch (Exception ex)
