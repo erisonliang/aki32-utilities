@@ -521,15 +521,41 @@ public partial class MainWindowViewModel : ViewModel
                 DOI = SelectingNodeViewModel.Article.DOI!,
             };
 
+            var pulledArticles = new List<ResearchArticle>();
             try
             {
-                var pulledArticles = await ResearchArticlesManager.PullArticleInfo(accessor, asTempArticles: true, save: false);
+                pulledArticles = await ResearchArticlesManager.PullArticleInfo(accessor, asTempArticles: true, save: false);
                 if (pulledArticles.Count == 0)
                     throw new Exception("マッチするデータがありませんでした。");
             }
             catch (Exception ex)
             {
                 throw new Exception($"{ex}\r\nCrossRef側がこの文献に対応していない可能性があります。");
+            }
+
+            // 全てに対して GPT予測！？？
+            var pulledCount = pulledArticles.Count;
+            var result_UseGPT = MessageBox.Show($"取得に成功した {pulledCount} 件の文献に対して，AIによるメタ情報推定を行いますか？", "引用関係を取得", MessageBoxButton.OKCancel, MessageBoxImage.Information);
+            if (result_UseGPT == MessageBoxResult.OK)
+            {
+                var failCount = 0;
+
+                foreach (var pulledArticle in pulledArticles)
+                {
+                    try
+                    {
+                        var result = await pulledArticle.TryPredictMetaInfo_ChatGPT();
+                        if (!result)
+                            throw new Exception("推測に失敗しました。");
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"失敗しました。\r\nﾒｯｾｰｼﾞ: {ex.Message}", "メタ情報を推測", MessageBoxButton.OK, MessageBoxImage.Error);
+                        failCount++;
+                    }
+                }
+
+                Console.WriteLine($"★ メタ情報の収集が完了しました。(成功: {pulledCount - failCount} / {pulledCount})");
             }
 
             RedrawResearchArticlesManager();
