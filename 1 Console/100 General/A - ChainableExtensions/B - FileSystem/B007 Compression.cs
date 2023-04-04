@@ -189,7 +189,7 @@ public static partial class ChainableExtensions
     public static DirectoryInfo Decompress_Rar(this FileInfo inputFile, DirectoryInfo? outputDir, string? password = null)
     {
         // preprocess
-        outputDir ??= new DirectoryInfo(inputFile.FullName.Replace(".tar", ""));
+        outputDir ??= new DirectoryInfo(inputFile.FullName.Replace(".rar", ""));
         UtilPreprocessors.PreprocessOutDir(ref outputDir, inputFile.Directory!);
 
 
