@@ -479,7 +479,21 @@ public class ResearchArticle : IComparable
     // ★★★★★ manual info
 
     public string? Manual_ArticleTitle { get; set; }
-    public string[]? Manual_Authors { get; set; }
+    [CsvIgnore]
+    private string[]? _Manual_Authors;
+    public string[]? Manual_Authors
+    {
+        get
+        {
+            if (_Manual_Authors is null || _Manual_Authors.Length == 0)
+                return null;
+            return _Manual_Authors;
+        }
+        set
+        {
+            _Manual_Authors = value;
+        }
+    }
 
     public string? Manual_MaterialTitle { get; set; }
     public string? Manual_MaterialVolume { get; set; }
@@ -1072,7 +1086,12 @@ public class ResearchArticle : IComparable
             }
 
             if (string.IsNullOrEmpty(Manual_PublishedDate))
-                Manual_PublishedDate = $"{publishedYear}-{publishedMonth}";
+                if (!string.IsNullOrEmpty(publishedYear))
+                {
+                    Manual_PublishedDate = $"{publishedYear}";
+                    if (!string.IsNullOrEmpty(publishedMonth))
+                        Manual_PublishedDate += $"-{publishedMonth}";
+                }
 
             return true;
         }
