@@ -11,8 +11,8 @@
         xmlns:converters="clr-namespace:Aki32Utilities.UsageExamples.ResearchArticlesNodeController.Converters"
         mc:Ignorable="d"
         Title="Research Articles Node Controll" 
-        d:Height="3000"
-        d:Width="1200"
+        d:Height="1300"
+        d:Width="1300"
         >
 
     <Window.DataContext>
