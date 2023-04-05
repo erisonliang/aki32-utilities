@@ -16,26 +16,37 @@ public class WhisperCppWrapper
 {
     // ★★★★★★★★★★★★★★★ props
 
-    private DirectoryInfo modelDir;
-    private FileInfo mainExecuter;
-    private FileInfo whisperDll;
-    private FileInfo modelBinary;
+    private readonly DirectoryInfo modelDir;
+    private readonly FileInfo mainExecuterFile;
+    private readonly FileInfo whisperDllFile;
 
 
     // ★★★★★★★★★★★★★★★ init
 
-    public WhisperCppWrapper()
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <exception cref="Exception"></exception>
+    public WhisperCppWrapper(
+        FileInfo designatedMainExecuterFile = null,
+        FileInfo designatedWhisperDllFile = null,
+        DirectoryInfo designatedModelDir = null
+        )
     {
         // re-init
         var stackFrame = new StackFrame(true);
         string currentFilePath = stackFrame.GetFileName()!;
-        modelDir = new FileInfo(currentFilePath).Directory!.GetChildDirectoryInfo("Models");
+        modelDir = designatedModelDir ?? new FileInfo(currentFilePath).Directory!.GetChildDirectoryInfo("WhisperCpp");
 
         // read whisper.cpp
-        mainExecuter = modelDir.GetChildFileInfo("main.exe");
-        whisperDll = modelDir.GetChildFileInfo("whisper.dll");
-        if (!mainExecuter.Exists || !whisperDll.Exists)
-            throw new Exception("※ You need to build this(https://github.com/ggerganov/whisper.cpp) and move \"main.exe\" and \"whisper.dll\" to \"Models\" directory.");
+        var whisperCppDir = new FileInfo(currentFilePath).Directory!.GetChildDirectoryInfo("WhisperCpp");
+        mainExecuterFile = designatedMainExecuterFile ?? whisperCppDir.GetChildFileInfo("main.exe");
+        if (!mainExecuterFile.Exists)
+            throw new Exception($"※ You need to build this(https://github.com/ggerganov/whisper.cpp) and move \"main.exe\" to \"{mainExecuterFile}\".");
+
+        whisperDllFile = designatedWhisperDllFile ?? whisperCppDir.GetChildFileInfo("whisper.dll");
+        if (!whisperDllFile.Exists)
+            throw new Exception($"※ You need to build this(https://github.com/ggerganov/whisper.cpp) and move \"whisper.dll\" to \"{whisperDllFile}\".");
 
     }
 
@@ -55,7 +66,7 @@ public class WhisperCppWrapper
 
 
         // read whisper model
-        modelBinary = usingModel switch
+        var modelBinaryFile = usingModel switch
         {
             ModelType.Large => modelDir.GetChildFileInfo("ggml-large.bin"),
             ModelType.Medium => modelDir.GetChildFileInfo("ggml-medium.bin"),
@@ -64,8 +75,8 @@ public class WhisperCppWrapper
             ModelType.Tiny => modelDir.GetChildFileInfo("ggml-tiny.bin"),
             _ => throw new Exception("!"),
         };
-        if (!modelBinary.Exists)
-            throw new Exception("You need to download whisper model from here (https://huggingface.co/datasets/ggerganov/whisper.cpp/tree/main) and move to \"Models\" directory.");
+        if (!modelBinaryFile.Exists)
+            throw new Exception($"You need to download whisper models from here (https://huggingface.co/datasets/ggerganov/whisper.cpp/tree/main) and move to \"{modelDir}\".");
 
 
         // Convert to WAV format
@@ -82,9 +93,9 @@ public class WhisperCppWrapper
             };
 
             string command = "";
-            command += $"\"{mainExecuter.FullName}\"";
+            command += $"\"{mainExecuterFile.FullName}\"";
             command += $" ";
-            command += $"-m \"{modelBinary}\"";
+            command += $"-m \"{modelBinaryFile}\"";
             command += $" ";
             command += $"-t {usingThreadsCount}";
             command += $" ";
