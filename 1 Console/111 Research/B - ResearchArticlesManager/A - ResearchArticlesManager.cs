@@ -135,7 +135,7 @@ public partial class ResearchArticlesManager
         var mergedArticles = new List<ResearchArticle>();
 
         Console.WriteLine();
-        Console.WriteLine($"★ Merging {mergingArticles.Count} articles in total...");
+        Console.WriteLine($"★ Merging {mergingArticles.Count} article(s) in total...");
         Console.WriteLine();
 
 

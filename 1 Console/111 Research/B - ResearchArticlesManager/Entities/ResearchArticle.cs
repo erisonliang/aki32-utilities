@@ -468,9 +468,13 @@ public class ResearchArticle : IComparable
     [UseExceptionalBinaryEitherMerging]
     public bool? DataFrom_JStage_DOI { get; set; } = false;
     [UseExceptionalBinaryEitherMerging]
+    public bool? DataFrom_JStage_SimpleRef { get; set; } = false;
+    [UseExceptionalBinaryEitherMerging]
     public bool? DataFrom_CiNii_Main { get; set; } = false;
     [UseExceptionalBinaryEitherMerging]
     public bool? DataFrom_CrossRef_DOI { get; set; } = false;
+    [UseExceptionalBinaryEitherMerging]
+    public bool? DataFrom_CrossRef_SimpleRef { get; set; } = false;
     [UseExceptionalBinaryEitherMerging]
     public bool? DataFrom_NDLSearch_Main { get; set; } = false;
     [UseExceptionalBinaryEitherMerging]

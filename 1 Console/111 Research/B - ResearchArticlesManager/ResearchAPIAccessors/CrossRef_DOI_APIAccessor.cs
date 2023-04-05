@@ -87,6 +87,7 @@ public class CrossRef_DOI_APIAccessor : IResearchAPIAccessor
                     // Create and add referred article
                     var addingSubArticle = new ResearchArticle
                     {
+                        DataFrom_CrossRef_SimpleRef = true,
                         DOI = reference?["DOI"]?.ToString(),
                         CrossRef_UnstructuredRefString = ResearchArticle.CleanUp_UnstructuredRefString(reference?["unstructured"]?.ToString())
                     };

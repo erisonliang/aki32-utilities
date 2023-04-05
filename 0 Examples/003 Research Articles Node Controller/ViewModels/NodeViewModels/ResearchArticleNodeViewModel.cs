@@ -159,12 +159,16 @@ public class ResearchArticleNodeViewModel : DefaultNodeViewModel
 
             if ((Article.DataFrom_JStage_Main ?? false) || (Article.DataFrom_JStage_DOI ?? false))
                 ss.Add("JStage");
-
-            if (Article.DataFrom_CiNii_Main ?? false)
-                ss.Add("CiNii");
+            else if (Article.DataFrom_JStage_SimpleRef ?? false)
+                ss.Add("JStage (Simple)");
 
             if (Article.DataFrom_CrossRef_DOI ?? false)
                 ss.Add("CrossRef");
+            else if (Article.DataFrom_CrossRef_SimpleRef ?? false)
+                ss.Add("CrossRef (Simple)");
+
+            if (Article.DataFrom_CiNii_Main ?? false)
+                ss.Add("CiNii");
 
             if (Article.DataFrom_NDLSearch_Main ?? false)
                 ss.Add("NDLSearch");
@@ -377,8 +381,8 @@ public class ResearchArticleNodeViewModel : DefaultNodeViewModel
 
     public ResearchArticleNodeViewModel()
     {
-        _Inputs.Add(new NodeInputViewModel("", true, "← この文献が引用している文献")); // 引用
-        _Outputs.Add(new NodeOutputViewModel("", "この文献を引用している文献 →"));// 被引用
+        _Inputs.Add(new NodeInputViewModel("", true, "この文献が引用している文献 ← ")); // 引用
+        _Outputs.Add(new NodeOutputViewModel("", " → この文献を引用している文献"));// 被引用
     }
 
 

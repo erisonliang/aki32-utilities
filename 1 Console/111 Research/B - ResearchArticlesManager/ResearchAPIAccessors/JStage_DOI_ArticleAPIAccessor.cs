@@ -81,7 +81,7 @@ public class JStage_DOI_ArticleAPIAccessor : IResearchAPIAccessor
 
             var addingMainArticle = new ResearchArticle();
             {
-                addingMainArticle.DataFrom_JStage_Main = true;
+                addingMainArticle.DataFrom_JStage_DOI = true;
 
                 // メタ情報へのアクセスを定義
                 string? GetMetaValue(string targetName) => metas
@@ -150,6 +150,7 @@ public class JStage_DOI_ArticleAPIAccessor : IResearchAPIAccessor
                         // Create and add referred article
                         var addingSubArticle = new ResearchArticle
                         {
+                            DataFrom_JStage_SimpleRef = true,
                             JStage_UnstructuredRefString = ResearchArticle.CleanUp_UnstructuredRefString(reference)
                         };
                         addingMainArticle.AddArticleReference(addingSubArticle);
