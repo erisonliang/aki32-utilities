@@ -151,18 +151,24 @@
             <Setter Property="HeaderContentTemplate">
                 <Setter.Value>
                     <DataTemplate>
-
                         <Border 
                             Background="{Binding ArticleHeaderColor}"
                             CornerRadius="11,11,0,0"
+                            Margin="-1"
                             >
                             <StackPanel>
                                 <Grid>
                                     <StackPanel HorizontalAlignment="Center">
                                         <!--<Label Content="{Binding Name}"/>-->
                                     </StackPanel>
-                                    <StackPanel HorizontalAlignment="Left">
+                                    <StackPanel 
+                                        HorizontalAlignment="Left"
+                                        Orientation="Horizontal"
+                                        Margin="5,0,2,0"
+                                        >
                                         <!--<Label Content="■"/>-->
+                                        <Label Content="📄" Padding="0" VerticalAlignment="Center"/>
+                                        <Label Content="文献" Padding="2,0,0,0" VerticalAlignment="Center" FontWeight="Bold"/>
                                     </StackPanel>
                                     <StackPanel
                                         HorizontalAlignment="Right"
