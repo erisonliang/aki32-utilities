@@ -31,9 +31,9 @@
     </Style>
 
     <Style TargetType="{x:Type local:NodeLink}" BasedOn="{StaticResource __NodeLinkAnimationStyle__}">
-        <Setter Property="LinkSize" Value="2"/>
+        <Setter Property="LinkSize" Value="5"/>
         <Setter Property="Fill" Value="#FFAAAAAA"/>
-        <Setter Property="StrokeThickness" Value="10"/>
+        <Setter Property="StrokeThickness" Value="13"/>
         <Setter Property="StrokeEndLineCap" Value="Round"/>
         <Setter Property="StrokeStartLineCap" Value="Round"/>
         <Style.Triggers>

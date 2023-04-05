@@ -35,8 +35,6 @@
                         ContentTemplate="{TemplateBinding HeaderContentTemplate}"/>
                 </Border>
 
-
-
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" x:Name="__NodeInputGridColumnDefinition__"/>
@@ -83,6 +81,41 @@
                         VerticalAlignment="{TemplateBinding OutputLayout}"
                         ItemContainerStyle="{TemplateBinding OutputStyle}"
                         />
+                    
+                    <!--<local:NodeInput
+                        Grid.Column="0"
+                        Grid.Row="0"
+                        x:Name="__NodeInput__"
+                        ItemsSource="{TemplateBinding Inputs}"
+                        ConnectorMargin="{TemplateBinding InputMargin}"
+                        VerticalAlignment="{TemplateBinding InputLayout}"
+                        ItemContainerStyle="{TemplateBinding InputStyle}"
+                        />
+
+                    --><!--Grid.Column="1"
+                        Grid.Row="0"
+                        Grid.ColumnSpan="1"--><!--
+                    <ContentPresenter 
+                        Grid.Column="0"
+                        Grid.Row="1"
+                        Grid.ColumnSpan="3"
+                        x:Name="__NodeContentTemplate__"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Top"
+                        Margin="{TemplateBinding ContentMargin}"
+                        Content="{TemplateBinding DataContext}"
+                        ContentTemplate="{TemplateBinding ContentTemplate}"
+                        />
+
+                    <local:NodeOutput 
+                        Grid.Column="2"
+                        Grid.Row="0"
+                        x:Name="__NodeOutput__"
+                        ItemsSource="{TemplateBinding Outputs}"
+                        ConnectorMargin="{TemplateBinding OutputMargin}"
+                        VerticalAlignment="{TemplateBinding OutputLayout}"
+                        ItemContainerStyle="{TemplateBinding OutputStyle}"
+                        />-->
 
                 </Grid>
 
