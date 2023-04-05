@@ -12,7 +12,7 @@ namespace Aki32Utilities.ConsoleAppUtilities.Research;
 /// <summary>
 /// https://support.nii.ac.jp/ja/cir/r_opensearch
 /// </summary>
-public class CiNiiArticleAPIAccessor : IResearchAPIAccessor
+public class CiNii_Main_ArticleAPIAccessor : IResearchAPIAccessor
 {
 
     // ★★★★★★★★★★★★★★★ props
@@ -52,7 +52,7 @@ public class CiNiiArticleAPIAccessor : IResearchAPIAccessor
 
     // ★★★★★★★★★★★★★★★ inits
 
-    public CiNiiArticleAPIAccessor()
+    public CiNii_Main_ArticleAPIAccessor()
     {
     }
 

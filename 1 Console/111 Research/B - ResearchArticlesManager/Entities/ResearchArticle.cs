@@ -571,7 +571,6 @@ public class ResearchArticle : IComparable
 
     public string? JStage_MaterialVolume { get; set; }
     public string? JStage_MaterialSubVolume { get; set; }
-    public string? JStage_Number { get; set; }
     public string? JStage_StartingPage { get; set; }
     public string? JStage_EndingPage { get; set; }
 

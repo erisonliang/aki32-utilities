@@ -9,7 +9,7 @@ using DocumentFormat.OpenXml.Bibliography;
 using DocumentFormat.OpenXml.Spreadsheet;
 
 namespace Aki32Utilities.ConsoleAppUtilities.Research;
-public class NDLSearchAPIAccessor : IResearchAPIAccessor
+public class NDLSearch_Main_APIAccessor : IResearchAPIAccessor
 {
 
     // ★★★★★★★★★★★★★★★ props
@@ -61,7 +61,7 @@ public class NDLSearchAPIAccessor : IResearchAPIAccessor
 
     // ★★★★★★★★★★★★★★★ inits
 
-    public NDLSearchAPIAccessor()
+    public NDLSearch_Main_APIAccessor()
     {
     }
 

@@ -516,7 +516,7 @@ public partial class MainWindowViewModel : ViewModel
             if (string.IsNullOrEmpty(SelectingNodeViewModel.Article.DOI))
                 throw new Exception("DOIがない文献はこの機能を使うことができません。");
 
-            var accessor = new CrossRefAPIAccessor()
+            var accessor = new CrossRef_DOI_APIAccessor()
             {
                 DOI = SelectingNodeViewModel.Article.DOI!,
             };
@@ -597,7 +597,7 @@ public partial class MainWindowViewModel : ViewModel
             // TODO
             throw new NotImplementedException("申し訳ありません。\r\n未実装です…。");
             {
-                var accessor = new CrossRefAPIAccessor()
+                var accessor = new CrossRef_DOI_APIAccessor()
                 {
                     DOI = SelectingNodeViewModel.Article.DOI!,
                 };
@@ -991,7 +991,7 @@ public partial class MainWindowViewModel : ViewModel
         {
             IsInternetSearch_CiNii_A_Busy = true;
 
-            var accessor = new CiNiiArticleAPIAccessor();
+            var accessor = new CiNii_Main_ArticleAPIAccessor();
             {
                 //accessor.ISSN = ISSN.Architecture_Structure;
 
@@ -1053,7 +1053,7 @@ public partial class MainWindowViewModel : ViewModel
         {
             IsInternetSearch_NDLSearch_A_Busy = true;
 
-            var accessor = new NDLSearchAPIAccessor();
+            var accessor = new NDLSearch_Main_APIAccessor();
             {
                 //accessor.ISSN = ISSN.Architecture_Structure;
 
@@ -1117,7 +1117,7 @@ public partial class MainWindowViewModel : ViewModel
         {
             IsInternetSearchJStage_B_Busy = true;
 
-            var accessor = new JStageArticleAPIAccessor();
+            var accessor = new JStage_Main_ArticleAPIAccessor();
             {
                 //accessor.ISSN = ISSN.Architecture_Structure;
 
@@ -1195,7 +1195,7 @@ public partial class MainWindowViewModel : ViewModel
         {
             IsInternetSearch_CiNii_B_Busy = true;
 
-            var accessor = new CiNiiArticleAPIAccessor();
+            var accessor = new CiNii_Main_ArticleAPIAccessor();
             {
                 //accessor.ISSN = ISSN.Architecture_Structure;
 
@@ -1275,7 +1275,7 @@ public partial class MainWindowViewModel : ViewModel
         {
             IsInternetSearch_NDLSearch_B_Busy = true;
 
-            var accessor = new NDLSearchAPIAccessor();
+            var accessor = new NDLSearch_Main_APIAccessor();
             {
                 //accessor.ISSN = ISSN.Architecture_Structure;
 
@@ -1357,7 +1357,7 @@ public partial class MainWindowViewModel : ViewModel
         {
             IsInternetSearch_CiNii_C_Busy = true;
 
-            var accessor = new CiNiiArticleAPIAccessor();
+            var accessor = new CiNii_Main_ArticleAPIAccessor();
             {
                 //accessor.ISSN = ISSN.Architecture_Structure;
 
@@ -1402,7 +1402,7 @@ public partial class MainWindowViewModel : ViewModel
         {
             IsInternetSearch_CrossRef_C_Busy = true;
 
-            var accessor = new CrossRefAPIAccessor();
+            var accessor = new CrossRef_DOI_APIAccessor();
             {
                 //accessor.ISSN = ISSN.Architecture_Structure;
 

@@ -4,7 +4,7 @@ using System.Xml.Linq;
 using System;
 
 namespace Aki32Utilities.ConsoleAppUtilities.Research;
-public class JStageArticleAPIAccessor : IResearchAPIAccessor
+public class JStage_Main_ArticleAPIAccessor : IResearchAPIAccessor
 {
 
     // ★★★★★★★★★★★★★★★ props
@@ -42,7 +42,7 @@ public class JStageArticleAPIAccessor : IResearchAPIAccessor
 
     // ★★★★★★★★★★★★★★★ inits
 
-    public JStageArticleAPIAccessor()
+    public JStage_Main_ArticleAPIAccessor()
     {
     }
 
@@ -182,9 +182,11 @@ public class JStageArticleAPIAccessor : IResearchAPIAccessor
                 article.OnlineISSN = entity.Element(ExpandPrism("eIssn"))?.Value;
 
                 article.JStage_MaterialVolume = entity.Element(ExpandPrism("volume"))?.Value;
-                article.JStage_MaterialSubVolume = entity.Element(ExpandAtom("cdvols"))?.Value;
+                article.JStage_MaterialSubVolume = null
+                    ?? entity.Element(ExpandPrism("number"))?.Value
+                    ?? entity.Element(ExpandAtom("cdvols"))?.Value
+                    ;
 
-                article.JStage_Number = entity.Element(ExpandPrism("number"))?.Value;
                 article.JStage_StartingPage = entity.Element(ExpandPrism("startingPage"))?.Value;
                 article.JStage_EndingPage = entity.Element(ExpandPrism("endingPage"))?.Value;
 

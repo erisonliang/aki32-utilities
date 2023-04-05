@@ -9,7 +9,7 @@ using System;
 using XPlot.Plotly;
 
 namespace Aki32Utilities.ConsoleAppUtilities.Research;
-public class CrossRefAPIAccessor : IResearchAPIAccessor
+public class CrossRef_DOI_APIAccessor : IResearchAPIAccessor
 {
 
     // ★★★★★★★★★★★★★★★ props
@@ -23,7 +23,7 @@ public class CrossRefAPIAccessor : IResearchAPIAccessor
 
     // ★★★★★★★★★★★★★★★ inits
 
-    public CrossRefAPIAccessor()
+    public CrossRef_DOI_APIAccessor()
     {
     }
 

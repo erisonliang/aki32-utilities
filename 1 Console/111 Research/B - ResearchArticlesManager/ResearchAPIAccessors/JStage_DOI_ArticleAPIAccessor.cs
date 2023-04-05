@@ -14,9 +14,11 @@ using Aki32Utilities.ConsoleAppUtilities.General;
 using System.Text.RegularExpressions;
 using HtmlAgilityPack;
 using System.Xml;
+using DocumentFormat.OpenXml.Spreadsheet;
+using Microsoft.ML.AutoML;
 
 namespace Aki32Utilities.ConsoleAppUtilities.Research;
-public class JStageArticleAPIAccessor_DOI : IResearchAPIAccessor
+public class JStage_DOI_ArticleAPIAccessor : IResearchAPIAccessor
 {
 
     // ★★★★★★★★★★★★★★★ props
@@ -30,9 +32,10 @@ public class JStageArticleAPIAccessor_DOI : IResearchAPIAccessor
 
     // ★★★★★★★★★★★★★★★ inits
 
-    public JStageArticleAPIAccessor_DOI()
+    public JStage_DOI_ArticleAPIAccessor()
     {
     }
+
 
 
     // ★★★★★★★★★★★★★★★ methods
@@ -65,99 +68,73 @@ public class JStageArticleAPIAccessor_DOI : IResearchAPIAccessor
     {
         // get xml
         var uri = BuildUri();
-        //var xml = XElement.Load(uri.AbsoluteUri);
         using var htmlStream = uri.CallAPIAsync_ForResponseStream(HttpMethod.Get).Result;
         using var htmlStreamReader = new StreamReader(htmlStream);
         var htmlSting = htmlStreamReader.ReadToEnd();
-
-        //rawXmlLines = rawXmlLines.Select(line =>
-        //    {
-        //        var trimmed = line.Trim();
-        //        if (trimmed.StartsWith("<meta") && !trimmed.EndsWith("/>"))
-        //            return trimmed.Replace(">", "/>");
-        //        return line;
-        //    })
-        //    .ToArray();
-
-        //var rawXml = string.Join("\r\n", rawXmlLines);
-        //rawXml = Regex.Replace(rawXml, @"&#?x?[a-zA-Z0-9]{2,7};", ReplaceCharEntities);
-
         var html = new HtmlDocument();
         html.LoadHtml(htmlSting);
 
-        var metas = html.DocumentNode.SelectNodes(@"//meta").ToList();
-
-
         // analyse 
         {
+
             var article = new ResearchArticle();
             {
                 article.DataFrom_JStage = true;
 
-                // アクセス方法定義！
-                string? GetMeta(string targetName) => metas
-                        ?.FirstOrDefault(m => m.Attributes.Any(a => a.Name == "name" && a.Value == "title"))
+                // メタ情報にアクセス！
+                var metas = html.DocumentNode.SelectNodes(@"//meta").ToList();
+                string? GetMetaValue(string targetName) => metas
+                        ?.FirstOrDefault(m => m.Attributes.Any(a => a.Name == "name" && a.Value == targetName))
                         ?.Attributes
                         ?.FirstOrDefault(a => a.Name == "content")
                         ?.Value
                         ;
+                string[]? GetMetaValues(string targetName) => metas
+                        ?.FirstOrDefault(m => m.Attributes.Any(a => a.Name == "name" && a.Value == targetName))
+                        ?.Attributes
+                        ?.Where(a => a.Name == "content")
+                        ?.Select(a => a.Value)
+                        ?.ToArray()
+                        ;
 
                 // タイトルはいつもここ
-                article.JStage_ArticleTitle_Japanese = GetMeta("title");
+                article.JStage_ArticleTitle_Japanese = GetMetaValue("title");
+                article.JStage_ArticleTitle_English = null;
 
-                var a = 0;
+                article.JStage_Authors_Japanese = GetMetaValues("authors");
+                article.JStage_Authors_English = null;
 
+                article.JStage_Link_Japanese = uri.AbsoluteUri;
+                article.JStage_Link_English = null;
 
+                article.JStage_JournalCode = entity.Element(ExpandAtom("cdjournal"))?.Value;
 
+                article.JStage_MaterialTitle_English = entity.Element(ExpandAtom("material_title"))?.Element(ExpandAtom("en"))?.Value;
+                article.JStage_MaterialTitle_Japanese = entity.Element(ExpandAtom("material_title"))?.Element(ExpandAtom("ja"))?.Value;
 
-                //article.JStage_ArticleTitle_Japanese = entity.Element("title")?.Value;
+                article.PrintISSN = GetMetaValue("print_issn");
+                article.OnlineISSN = GetMetaValue("online_issn");
 
+                article.JStage_MaterialVolume = GetMetaValue("volume");
+                article.JStage_MaterialSubVolume = GetMetaValue("issue");
 
+                article.JStage_Number = GetMetaValue("■■■■■■");
+                article.JStage_StartingPage = GetMetaValue("firstpage");
+                article.JStage_EndingPage = GetMetaValue("lastpage");
 
+                article.JStage_PublishedYear = entity.Element(ExpandAtom("pubyear"))?.Value;
 
+                article.JStage_JOI = entity.Element(ExpandAtom("joi"))?.Value;
+                article.DOI = entity.Element(ExpandPrism("doi"))?.Value;
 
+                article.JStage_SystemCode = entity.Element(ExpandAtom("systemcode"))?.Value;
+                article.JStage_SystemName = entity.Element(ExpandAtom("systemname"))?.Value;
 
+                //article.JStage_ArticleTitle = entity.Element(ExpandXml("title"))?.Value;
 
-
-
-
-                //article.JStage_ArticleTitle_English = entity.Element(ExpandAtom("article_title"))?.Element(ExpandAtom("en"))?.Value;
-                //article.JStage_ArticleTitle_Japanese = entity.Element(ExpandAtom("article_title"))?.Element(ExpandAtom("ja"))?.Value;
-
-                //article.JStage_Link_English = entity.Element(ExpandAtom("article_link"))?.Element(ExpandAtom("en"))?.Value;
-                //article.JStage_Link_Japanese = entity.Element(ExpandAtom("article_link"))?.Element(ExpandAtom("ja"))?.Value;
-
-                //article.JStage_Authors_English = entity.Element(ExpandAtom("author"))?.Element(ExpandAtom("en"))?.Elements(ExpandAtom("name"))?.Select(e => e?.Value ?? "")?.ToArray();
-                //article.JStage_Authors_Japanese = entity.Element(ExpandAtom("author"))?.Element(ExpandAtom("ja"))?.Elements(ExpandAtom("name"))?.Select(e => e?.Value ?? "")?.ToArray();
-
-                //article.JStage_JournalCode = entity.Element(ExpandAtom("cdjournal"))?.Value;
-
-                //article.JStage_MaterialTitle_English = entity.Element(ExpandAtom("material_title"))?.Element(ExpandAtom("en"))?.Value;
-                //article.JStage_MaterialTitle_Japanese = entity.Element(ExpandAtom("material_title"))?.Element(ExpandAtom("ja"))?.Value;
-
-                //article.PrintISSN = entity.Element(ExpandPrism("issn"))?.Value;
-                //article.OnlineISSN = entity.Element(ExpandPrism("eIssn"))?.Value;
-
-                //article.JStage_MaterialVolume = entity.Element(ExpandPrism("volume"))?.Value;
-                //article.JStage_MaterialSubVolume = entity.Element(ExpandAtom("cdvols"))?.Value;
-
-                //article.JStage_Number = entity.Element(ExpandPrism("number"))?.Value;
-                //article.JStage_StartingPage = entity.Element(ExpandPrism("startingPage"))?.Value;
-                //article.JStage_EndingPage = entity.Element(ExpandPrism("endingPage"))?.Value;
-
-                //article.JStage_PublishedYear = entity.Element(ExpandAtom("pubyear"))?.Value;
-
-                //article.JStage_JOI = entity.Element(ExpandAtom("joi"))?.Value;
-                //article.DOI = entity.Element(ExpandPrism("doi"))?.Value;
-
-                //article.JStage_SystemCode = entity.Element(ExpandAtom("systemcode"))?.Value;
-                //article.JStage_SystemName = entity.Element(ExpandAtom("systemname"))?.Value;
-
-                ////article.JStage_ArticleTitle = entity.Element(ExpandXml("title"))?.Value;
-
-                ////article.JStage_Link = entity.Element(ExpandXml("link"))?.Value;
-                //article.JStage_Id = entity.Element(ExpandAtom("id"))?.Value;
-                //article.JStage_UpdatedOn = entity.Element(ExpandAtom("updated"))?.Value;
+                //article.JStage_Link = entity.Element(ExpandXml("link"))?.Value;
+                article.JStage_Id = entity.Element(ExpandAtom("id"))?.Value;
+                article.JStage_UpdatedOn = entity.Element(ExpandAtom("updated"))?.Value;
 
             }
 
