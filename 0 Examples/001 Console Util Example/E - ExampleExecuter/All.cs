@@ -1141,21 +1141,21 @@ public static partial class ExampleExecuter
 
                 // E001 WhisperCppWrapper
                 {
-                    var baseDir_101_E001 = baseDir_101_E.GetChildDirectoryInfo($@"E001 WhisperCppWrapper");
-                    var input = baseDir_101_E001.GetChildFileInfo($@"input.m4a");
-                    var output = baseDir_101_E001.GetChildFileInfo($@"output.txt");
+                    //var baseDir_101_E001 = baseDir_101_E.GetChildDirectoryInfo($@"E001 WhisperCppWrapper");
+                    //var input = baseDir_101_E001.GetChildFileInfo($@"input.m4a");
+                    //var output = baseDir_101_E001.GetChildFileInfo($@"output.txt");
 
-                    var whisper = new WhisperCppWrapper(
-                        designatedModelDir: new DirectoryInfo(@"C:\Users\aki32\Dropbox\PC\★ PC間共有\Programming\WhisperCpp"),
-                        designatedMainExecuterFile: new FileInfo(@"C:\Users\aki32\Dropbox\PC\★ PC間共有\Programming\WhisperCpp\main.exe"),
-                        designatedWhisperDllFile: new FileInfo(@"C:\Users\aki32\Dropbox\PC\★ PC間共有\Programming\WhisperCpp\whisper.dll")
-                        );
+                    //var whisper = new WhisperCppWrapper(
+                    //    designatedModelDir: new DirectoryInfo(@"C:\Users\aki32\Dropbox\PC\★ PC間共有\Programming\WhisperCpp"),
+                    //    designatedMainExecuterFile: new FileInfo(@"C:\Users\aki32\Dropbox\PC\★ PC間共有\Programming\WhisperCpp\main.exe"),
+                    //    designatedWhisperDllFile: new FileInfo(@"C:\Users\aki32\Dropbox\PC\★ PC間共有\Programming\WhisperCpp\whisper.dll")
+                    //    );
 
-                    whisper.ExecuteWhisper(input, output,
-                        usingModel: WhisperCppWrapper.ModelType.Small,
-                        outputFormat: WhisperCppWrapper.OutputFormat.srt,
-                        usingThreadsCount: 16
-                        );
+                    //whisper.ExecuteWhisper(input, output,
+                    //    usingModel: WhisperCppWrapper.ModelType.Small,
+                    //    outputFormat: WhisperCppWrapper.OutputFormat.srt,
+                    //    usingThreadsCount: 16
+                    //    );
 
                 }
             }
