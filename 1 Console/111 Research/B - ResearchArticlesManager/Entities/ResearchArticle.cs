@@ -4,8 +4,6 @@ using Aki32Utilities.ConsoleAppUtilities.General;
 
 using ClosedXML;
 
-using DocumentFormat.OpenXml.Spreadsheet;
-
 namespace Aki32Utilities.ConsoleAppUtilities.Research;
 public class ResearchArticle : IComparable
 {
@@ -247,7 +245,7 @@ public class ResearchArticle : IComparable
             ReferenceErrorReasonString = "";
             IsLastReferenceStringFromTemplateGeneration = false;
 
-            string ReferenceStringManually()
+            string? ReferenceStringManually()
             {
                 var s = ReferenceStringFormat;
 
@@ -293,7 +291,7 @@ public class ResearchArticle : IComparable
                     else
                     {
                         //s = s.Replace("{MaterialVolume}", $"{MaterialVolume}");
-                        if (uint.TryParse(MaterialVolume, out uint a))
+                        if (uint.TryParse(MaterialVolume, out uint _))
                             s = s.Replace("{MaterialVolume}", $"第{MaterialVolume}巻");
                         else
                             s = s.Replace("{MaterialVolume}", $"{MaterialVolume}");
@@ -309,7 +307,7 @@ public class ResearchArticle : IComparable
                     else
                     {
                         //s = s.Replace("{MaterialSubVolume}", $"{MaterialSubVolume}");
-                        if (uint.TryParse(MaterialSubVolume, out uint a))
+                        if (uint.TryParse(MaterialSubVolume, out uint _))
                             s = s.Replace("{MaterialSubVolume}", $"第{MaterialSubVolume}号");
                         else
                             s = s.Replace("{MaterialSubVolume}", $"{MaterialSubVolume}");
@@ -1197,17 +1195,17 @@ public class ResearchArticle : IComparable
 
     // ★★★★★★★★★★★★★★★ attributes
 
-    [AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
+    [AttributeUsage(AttributeTargets.Property)]
     internal sealed class UseExceptionalMergingAttribute : Attribute
     {
     }
 
-    [AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
+    [AttributeUsage(AttributeTargets.Property)]
     internal sealed class UseExceptionalBinaryEitherMergingAttribute : Attribute
     {
     }
 
-    [AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
+    [AttributeUsage(AttributeTargets.Property)]
     internal sealed class UseExceptionalBinaryBothMergingAttribute : Attribute
     {
     }
