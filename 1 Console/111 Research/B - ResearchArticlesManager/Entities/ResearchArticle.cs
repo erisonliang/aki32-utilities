@@ -376,6 +376,7 @@ public class ResearchArticle : IComparable
 
                // 自動
                ?? CrossRef_UnstructuredRefString.NullIfNullOrEmpty()
+               ?? JStage_UnstructuredRefString.NullIfNullOrEmpty()
 
                // 生成失敗理由
                ?? ReferenceErrorReasonString.NullIfNullOrEmpty()
@@ -580,6 +581,9 @@ public class ResearchArticle : IComparable
     public string? JStage_SystemName { get; set; }
 
     public string? JStage_UpdatedOn { get; set; }
+
+    public string? JStage_UnstructuredRefString { get; set; }
+
 
 
     // ★★★★★ from CiNii
@@ -1120,7 +1124,7 @@ public class ResearchArticle : IComparable
                 unstructuredRefString = unstructuredRefString[1..];
         }
 
-        return rawUnstructuredRefString;
+        return rawUnstructuredRefString.Trim();
     }
 
     public int CompareTo(object? obj)
@@ -1148,6 +1152,7 @@ public class ResearchArticle : IComparable
 
             // others
             yield return nameof(CrossRef_UnstructuredRefString);
+            yield return nameof(JStage_UnstructuredRefString);
         }
 
         foreach (var target in Targets())

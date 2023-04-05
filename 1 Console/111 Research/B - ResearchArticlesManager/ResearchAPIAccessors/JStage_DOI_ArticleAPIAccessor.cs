@@ -17,6 +17,7 @@ using System.Xml;
 using DocumentFormat.OpenXml.Spreadsheet;
 using Microsoft.ML.AutoML;
 using Org.BouncyCastle.Asn1.Cms;
+using Newtonsoft.Json.Linq;
 
 namespace Aki32Utilities.ConsoleAppUtilities.Research;
 public class JStage_DOI_ArticleAPIAccessor : IResearchAPIAccessor
@@ -62,7 +63,7 @@ public class JStage_DOI_ArticleAPIAccessor : IResearchAPIAccessor
     /// <returns></returns>
     public async Task<List<ResearchArticle>> FetchArticles()
     {
-        return await Task.Run(() => _FetchArticles().ToList());
+        return await Task.Run(() => _FetchArticles().Reverse().ToList()); // need Reverse() to move addingMainArticle to top.
     }
     private IEnumerable<ResearchArticle> _FetchArticles()
     {
@@ -76,13 +77,13 @@ public class JStage_DOI_ArticleAPIAccessor : IResearchAPIAccessor
 
         // analyse 
         {
+            var metas = html.DocumentNode.SelectNodes(@"//meta").ToList();
 
-            var article = new ResearchArticle();
+            var addingMainArticle = new ResearchArticle();
             {
-                article.DataFrom_JStage = true;
+                addingMainArticle.DataFrom_JStage = true;
 
                 // メタ情報へのアクセスを定義
-                var metas = html.DocumentNode.SelectNodes(@"//meta").ToList();
                 string? GetMetaValue(string targetName) => metas
                         ?.FirstOrDefault(m => m.Attributes.Any(a => a.Name == "name" && a.Value == targetName))
                         ?.Attributes
@@ -105,44 +106,60 @@ public class JStage_DOI_ArticleAPIAccessor : IResearchAPIAccessor
                         ;
 
                 // main
-                article.JStage_ArticleTitle_Japanese = GetMetaValue("title");
-                article.JStage_ArticleTitle_English ??= null;
+                addingMainArticle.JStage_ArticleTitle_Japanese = GetMetaValue("title");
+                addingMainArticle.JStage_ArticleTitle_English ??= null;
 
-                article.JStage_Authors_Japanese = GetMetaValues("authors");
-                article.JStage_Authors_English ??= null;
+                addingMainArticle.JStage_Authors_Japanese = GetMetaValues("authors");
+                addingMainArticle.JStage_Authors_English ??= null;
 
-                article.JStage_Link_Japanese = GetMetaValue("og:url") ?? uri.AbsoluteUri;
-                article.JStage_Link_English ??= null;
+                addingMainArticle.JStage_Link_Japanese = GetMetaValue("og:url") ?? uri.AbsoluteUri;
+                addingMainArticle.JStage_Link_English ??= null;
 
-                article.JStage_MaterialCode = GetMetaValue("aijs");
-                article.JStage_MaterialTitle_Japanese = null
+                addingMainArticle.JStage_MaterialCode = GetMetaValue("aijs");
+                addingMainArticle.JStage_MaterialTitle_Japanese = null
                     ?? GetMetaValue("journal_title")
                     ?? GetMetaValue("journal_abbrev")
                     ;
-                article.JStage_MaterialTitle_English = null;
+                addingMainArticle.JStage_MaterialTitle_English = null;
 
-                article.PrintISSN = GetMetaValue("print_issn");
-                article.OnlineISSN = GetMetaValue("online_issn");
+                addingMainArticle.PrintISSN = GetMetaValue("print_issn");
+                addingMainArticle.OnlineISSN = GetMetaValue("online_issn");
 
-                article.JStage_MaterialVolume = GetMetaValue("volume");
-                article.JStage_MaterialSubVolume = GetMetaValue("issue");
+                addingMainArticle.JStage_MaterialVolume = GetMetaValue("volume");
+                addingMainArticle.JStage_MaterialSubVolume = GetMetaValue("issue");
 
-                article.JStage_StartingPage = GetMetaValue("firstpage");
-                article.JStage_EndingPage = GetMetaValue("lastpage");
+                addingMainArticle.JStage_StartingPage = GetMetaValue("firstpage");
+                addingMainArticle.JStage_EndingPage = GetMetaValue("lastpage");
 
-                article.JStage_PublishedYear = GetMetaValue("publication_date");
+                addingMainArticle.JStage_PublishedYear = GetMetaValue("publication_date");
 
-                article.JStage_JOI = GetMetaValue("dc.identifier");
-                article.DOI ??= GetMetaValue("doi");
+                addingMainArticle.JStage_JOI = GetMetaValue("dc.identifier");
+                addingMainArticle.DOI ??= GetMetaValue("doi");
 
-                article.JStage_SystemCode ??= null;
-                article.JStage_SystemName = GetMetaValue("og:site_name");
+                addingMainArticle.JStage_SystemCode ??= null;
+                addingMainArticle.JStage_SystemName = GetMetaValue("og:site_name");
 
-                article.JStage_UpdatedOn = GetMetaValue("citation_online_date");
+                addingMainArticle.JStage_UpdatedOn = GetMetaValue("citation_online_date");
 
+                // add references
+                var references = GetMetaValues("references");
+                if (references is not null)
+                {
+                    foreach (var reference in references)
+                    {
+                        // Create and add referred article
+                        var addingSubArticle = new ResearchArticle
+                        {
+                            JStage_UnstructuredRefString = ResearchArticle.CleanUp_UnstructuredRefString(reference)
+                        };
+                        addingMainArticle.AddArticleReference(addingSubArticle);
+
+                        yield return addingSubArticle;
+                    }
+                }
             }
 
-            yield return article;
+            yield return addingMainArticle;
 
         }
     }

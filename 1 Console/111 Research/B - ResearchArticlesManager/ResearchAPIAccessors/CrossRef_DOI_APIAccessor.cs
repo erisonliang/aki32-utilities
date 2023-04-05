@@ -79,7 +79,7 @@ public class CrossRef_DOI_APIAccessor : IResearchAPIAccessor
             var publishedDateArray = (json?["message"]?["published"]?["date-parts"] as JArray)?.FirstOrDefault();
             addingMainArticle.CrossRef_PublishedDate = (publishedDateArray == null) ? null : string.Join('/', publishedDateArray!.AsEnumerable());
 
-            // add reference
+            // add references
             if (json?["message"]?["reference"] is JArray references)
             {
                 foreach (var reference in references)
