@@ -29,7 +29,7 @@
     <Window.Resources>
 
         <converters:BooleanToForegroundBrushConverter x:Key="BooleanToForegroundBrushConverter"/>
-        
+
         <sys:Double x:Key="NodeContentFontSize">24.0</sys:Double>
 
         <Brush x:Key="IsFavoriteColor">#E95B6B</Brush>
@@ -96,7 +96,7 @@
 
         <Style x:Key="UserTextBoxStyle" TargetType="TextBox">
             <Setter Property="Foreground" Value="WhiteSmoke"/>
-            <Setter Property="Background" Value="#CC000000"/>
+            <Setter Property="Background" Value="#FF080808"/>
             <Setter Property="AcceptsReturn" Value="True"/>
             <Setter Property="TextWrapping" Value="Wrap"/>
             <Setter Property="BorderThickness" Value="0"/>
@@ -149,30 +149,37 @@
             <Setter Property="HeaderContentTemplate">
                 <Setter.Value>
                     <DataTemplate>
-                        <StackPanel Background="{Binding ArticleHeaderColor}">
-                            <Grid>
-                                <StackPanel HorizontalAlignment="Center">
-                                    <!--<Label Content="{Binding Name}"/>-->
-                                </StackPanel>
-                                <StackPanel HorizontalAlignment="Left">
-                                    <!--<Label Content="■"/>-->
-                                </StackPanel>
-                                <StackPanel
-                                    HorizontalAlignment="Right"
-                                    Orientation="Horizontal"
-                                    Margin="5,0,2,0"
-                                    >
-                                    <Label Margin="0,0,3,0" Padding="0" Content="●" FontSize="20" Foreground="Transparent" Visibility="Visible"/>
-                                    <Label Margin="0,0,3,0" Padding="0" Content="●" FontSize="20" Foreground="{StaticResource IsFavoriteColor}" Visibility="{Binding IsFavorite, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-                                    <Label Margin="0,0,3,0" Padding="0" Content="●" FontSize="20" Foreground="{StaticResource IsReadColor}" Visibility="{Binding IsRead, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-                                    <Label Margin="0,0,3,0" Padding="0" Content="●" FontSize="20" Foreground="{StaticResource IsTempColor}" Visibility="{Binding IsTemp, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-                                    <Label Margin="0,0,3,0" Padding="0" Content="●" FontSize="20" Foreground="{StaticResource IsLocalSearchMatchedColor}" Visibility="{Binding IsLocalSearchMatched, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-                                    <Label Margin="0,0,3,0" Padding="0" Content="●" FontSize="20" Foreground="{StaticResource IsCat1Color}" Visibility="{Binding IsCategory1, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-                                    <Label Margin="0,0,3,0" Padding="0" Content="●" FontSize="20" Foreground="{StaticResource IsCat2Color}" Visibility="{Binding IsCategory2, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-                                    <Label Margin="0,0,3,0" Padding="0" Content="●" FontSize="20" Foreground="{StaticResource IsCat3Color}" Visibility="{Binding IsCategory3, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-                                </StackPanel>
-                            </Grid>
-                        </StackPanel>
+
+                        <Border 
+                            Background="{Binding ArticleHeaderColor}"
+                            CornerRadius="11,11,0,0"
+                            >
+                            <StackPanel>
+                                <Grid>
+                                    <StackPanel HorizontalAlignment="Center">
+                                        <!--<Label Content="{Binding Name}"/>-->
+                                    </StackPanel>
+                                    <StackPanel HorizontalAlignment="Left">
+                                        <!--<Label Content="■"/>-->
+                                    </StackPanel>
+                                    <StackPanel
+                                        HorizontalAlignment="Right"
+                                        Orientation="Horizontal"
+                                        Margin="5,0,2,0"
+                                        >
+                                        <Label Margin="0,0,3,0" Padding="0" Content="●" FontSize="20" Foreground="Transparent" Visibility="Visible"/>
+                                        <Label Margin="0,0,3,0" Padding="0" Content="●" FontSize="20" Foreground="{StaticResource IsFavoriteColor}" Visibility="{Binding IsFavorite, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                        <Label Margin="0,0,3,0" Padding="0" Content="●" FontSize="20" Foreground="{StaticResource IsReadColor}" Visibility="{Binding IsRead, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                        <Label Margin="0,0,3,0" Padding="0" Content="●" FontSize="20" Foreground="{StaticResource IsTempColor}" Visibility="{Binding IsTemp, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                        <Label Margin="0,0,3,0" Padding="0" Content="●" FontSize="20" Foreground="{StaticResource IsLocalSearchMatchedColor}" Visibility="{Binding IsLocalSearchMatched, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                        <Label Margin="0,0,3,0" Padding="0" Content="●" FontSize="20" Foreground="{StaticResource IsCat1Color}" Visibility="{Binding IsCategory1, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                        <Label Margin="0,0,3,0" Padding="0" Content="●" FontSize="20" Foreground="{StaticResource IsCat2Color}" Visibility="{Binding IsCategory2, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                        <Label Margin="0,0,3,0" Padding="0" Content="●" FontSize="20" Foreground="{StaticResource IsCat3Color}" Visibility="{Binding IsCategory3, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                    </StackPanel>
+                                </Grid>
+                            </StackPanel>
+                        </Border>
+                        
                     </DataTemplate>
                 </Setter.Value>
             </Setter>
@@ -183,14 +190,14 @@
                         <!-- グリッド内に表示する情報 -->
                         <StackPanel
                             Orientation="Vertical"
-                            Width="344"
+                            Width="300"
                             Margin="3"
                             TextBlock.Foreground="White"
                             >
 
                             <Grid Margin="3">
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="50"/>
+                                    <ColumnDefinition Width="40"/>
                                     <ColumnDefinition Width="6"/>
                                     <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
@@ -212,14 +219,14 @@
 
                             <Grid Margin="3">
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="50"/>
+                                    <ColumnDefinition Width="40"/>
                                     <ColumnDefinition Width="6"/>
                                     <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
 
                                 <TextBlock 
                                     Grid.Column="0"
-                                    Text="リリース:" 
+                                    Text="公開:" 
                                     HorizontalAlignment="Right"
                                     VerticalAlignment="Center"
                                     />
@@ -234,7 +241,7 @@
 
                             <Grid Margin="3">
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="50"/>
+                                    <ColumnDefinition Width="40"/>
                                     <ColumnDefinition Width="6"/>
                                     <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
@@ -951,7 +958,7 @@
                                 </Grid>
 
                             </StackPanel>
-                            
+
                         </ScrollViewer>
 
                         <ScrollViewer
@@ -1994,7 +2001,7 @@
                                     Orientation="Horizontal"
                                     HorizontalAlignment="Right"
                                     >
-                                    
+
                                     <Button
                                         Margin="3"
                                         Command="{Binding InternetSearch_JStage_C_Command}"

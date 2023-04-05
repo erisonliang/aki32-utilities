@@ -41,8 +41,6 @@ public class ResearchArticleNodeViewModel : DefaultNodeViewModel
     string _DOI = string.Empty;
 
 
-
-
     public override IEnumerable<NodeConnectorViewModel> Inputs => _Inputs;
     readonly ObservableCollection<NodeInputViewModel> _Inputs = new();
 
@@ -51,8 +49,8 @@ public class ResearchArticleNodeViewModel : DefaultNodeViewModel
 
     public ResearchArticleNodeViewModel()
     {
-        _Inputs.Add(new NodeInputViewModel("引用", true));
-        _Outputs.Add(new NodeOutputViewModel($"被引用"));
+        _Inputs.Add(new NodeInputViewModel("", true)); // 引用
+        _Outputs.Add(new NodeOutputViewModel(""));// 被引用
     }
 
     public override NodeConnectorViewModel FindConnector(Guid guid)

@@ -4,7 +4,7 @@ namespace Aki32Utilities.WPFAppUtilities.NodeController.Controls;
 
 public static class ControlSize
 {
-    public const double ConnectorSize = 13;
+    public const double ConnectorSize = 22;
 }
 
 public static class GroupNodeDefault

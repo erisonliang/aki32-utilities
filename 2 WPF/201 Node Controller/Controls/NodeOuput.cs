@@ -28,27 +28,20 @@ public class NodeOutputContent : NodeConnectorContent
         var posOnCanvas = transformer.Transform(new Point(ConnectorControl.ActualWidth * 0.5, ConnectorControl.ActualHeight * 0.5));
 
         foreach (var nodeLink in NodeLinks)
-        {
             nodeLink.UpdateOutputEdge(posOnCanvas.X, posOnCanvas.Y);
-        }
+
     }
 
     public override bool CanConnectTo(NodeConnectorContent connector)
     {
         if ((CanConnect && connector is NodeInputContent && Node != connector.Node) == false)
-        {
             return false;
-        }
 
         // check for circulation connecting.
         var nodeLinks = connector.Node.EnumrateConnectedNodeLinks();
         foreach (var nodeLink in nodeLinks)
-        {
             if (nodeLink.Input?.Node == Node)
-            {
                 return false;
-            }
-        }
 
         return true;
     }

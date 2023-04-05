@@ -377,8 +377,8 @@ public class ResearchArticleNodeViewModel : DefaultNodeViewModel
 
     public ResearchArticleNodeViewModel()
     {
-        _Inputs.Add(new NodeInputViewModel("引用", true));
-        _Outputs.Add(new NodeOutputViewModel($"被引用"));
+        _Inputs.Add(new NodeInputViewModel("", true, "← この文献が引用している文献")); // 引用
+        _Outputs.Add(new NodeOutputViewModel("", "この文献を引用している文献 →"));// 被引用
     }
 
 

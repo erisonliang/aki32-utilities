@@ -7,8 +7,9 @@
     <converters:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibility"/>
 
     <Style TargetType="{x:Type local:NodeInputContent}">
+        <Setter Property="StrokeThickness" Value="2"/>
         <Setter Property="Stroke" Value="Gray"/>
-        <Setter Property="Fill" Value="Transparent"/>
+        <Setter Property="Fill" Value="#FF080808"/>
         <Style.Triggers>
             <MultiTrigger>
                 <MultiTrigger.Conditions>
@@ -29,56 +30,79 @@
         </Style.Triggers>
     </Style>
 
-    <ControlTemplate x:Key="__NodeInputContentTemplate__" TargetType="{x:Type local:NodeInputContent}">
-        <Border Background="{TemplateBinding Background}"
-                BorderBrush="{TemplateBinding BorderBrush}"
-                BorderThickness="{TemplateBinding BorderThickness}">
+    <ControlTemplate
+        x:Key="__NodeInputContentTemplate__" 
+        TargetType="{x:Type local:NodeInputContent}"
+        >
+        <Border 
+            Background="{TemplateBinding Background}"
+            BorderBrush="{TemplateBinding BorderBrush}"
+            BorderThickness="{TemplateBinding BorderThickness}"
+            >
             <DockPanel>
-                <DockPanel x:Name="__InputConnector__"
-                           Background="#00FFFFFF" 
-                           Tag="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:NodeInputContent}}}"
-                           Visibility="{TemplateBinding CanConnect, Converter={StaticResource BooleanToVisibilityConverter}}">
-                    <Ellipse x:Name="ConnectorShape1"
-                             Width="{x:Static local:ControlSize.ConnectorSize}"
-                             Height="{x:Static local:ControlSize.ConnectorSize}"
-                             StrokeThickness="{TemplateBinding StrokeThickness}"
-                             Stroke="{TemplateBinding Stroke}"
-                             Fill="{TemplateBinding Fill}"
-                             IsHitTestVisible="False"/>
-                    <ContentPresenter Margin="4,2,0,0" VerticalAlignment="Center" IsHitTestVisible="False">
+                <DockPanel
+                    x:Name="__InputConnector__"
+                    Background="#00FFFFFF" 
+                    DockPanel.Dock="Left"
+                    Tag="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:NodeInputContent}}}"
+                    Visibility="{TemplateBinding CanConnect, Converter={StaticResource BooleanToVisibilityConverter}}"
+                    ToolTip="{TemplateBinding ToolTip}"
+                    ToolTipService.InitialShowDelay="10"
+                    >
+                    <Grid
+                        Width="{x:Static local:ControlSize.ConnectorSize}"
+                        >
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Ellipse
+                            Grid.Column="0"
+                            x:Name="ConnectorShape1"
+                            Width="{x:Static local:ControlSize.ConnectorSize}"
+                            Height="{x:Static local:ControlSize.ConnectorSize}"
+                            StrokeThickness="{TemplateBinding StrokeThickness}"
+                            Stroke="{TemplateBinding Stroke}"
+                            Fill="{TemplateBinding Fill}"
+                            IsHitTestVisible="False"
+                            />
+                    </Grid>
+                 
+                </DockPanel>
+                <DockPanel 
+                    HorizontalAlignment="Center"
+                    DockPanel.Dock="Left"
+                    >
+                    <ContentPresenter
+                        VerticalAlignment="Center"
+                        IsHitTestVisible="False"
+                        Width="{Binding ActualWidth, ElementName=__InputConnector__}"
+                        Visibility="{TemplateBinding CanConnect, Converter={StaticResource InverseBooleanToVisibility}}"
+                        >
                         <ContentPresenter.Content>
-                            <Path x:Name="ConnectorShape2"
-                                  Fill="{TemplateBinding Fill}"
-                                  Stroke="{TemplateBinding Stroke}"
-                                  StrokeThickness="{TemplateBinding StrokeThickness}"
-                                  Data="M 0,0 L 5,4.5 L 0,9 Z"/>
+                            <Path 
+                                Margin="-30,0,0,0" 
+                                Fill="Transparent"
+                                Stroke="Red"
+                                StrokeThickness="2"
+                                VerticalAlignment="Center"
+                                Data="M 0,0 L 20,0 L 20,20 L 0,20 Z M 0,0 L 0,0 L 20,20"
+                                />
                         </ContentPresenter.Content>
                     </ContentPresenter>
                 </DockPanel>
-
-                <DockPanel Margin="4,0,0,0" HorizontalAlignment="Center">
-                    <ContentPresenter VerticalAlignment="Center"
-                                      IsHitTestVisible="False"
-                                      Width="{Binding ActualWidth, ElementName=__InputConnector__}"
-                                      Visibility="{TemplateBinding CanConnect, Converter={StaticResource InverseBooleanToVisibility}}">
-                        <ContentPresenter.Content>
-                            <Path Fill="Transparent"
-                                  Stroke="Red"
-                                  StrokeThickness="1"
-                                  VerticalAlignment="Center"
-                                  Data="M 0,0 L 11,0 L 11,11 L 0,11 Z M 0,0 L 0,0 L 11,11"/>
-                        </ContentPresenter.Content>
-                    </ContentPresenter>
-                </DockPanel>
-
-                <Label Content="{TemplateBinding Content}" Foreground="WhiteSmoke" VerticalAlignment="Center" VerticalContentAlignment="Center" Padding="{TemplateBinding Padding}"/>
+                <Label 
+                    Content="{TemplateBinding Content}" 
+                    Foreground="WhiteSmoke" 
+                    VerticalAlignment="Center"
+                    VerticalContentAlignment="Center"
+                    Padding="{TemplateBinding Padding}"
+                    />
             </DockPanel>
         </Border>
-
         <ControlTemplate.Triggers>
             <DataTrigger Binding="{Binding IsMouseOver, ElementName=__InputConnector__}" Value="True">
                 <Setter Property="Fill" Value="DarkCyan" TargetName="ConnectorShape1"/>
-                <Setter Property="Fill" Value="DarkCyan" TargetName="ConnectorShape2"/>
             </DataTrigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>
@@ -88,9 +112,11 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type local:NodeInput}">
-                    <Border Background="{TemplateBinding Background}"
-                            BorderBrush="{TemplateBinding BorderBrush}"
-                            BorderThickness="{TemplateBinding BorderThickness}">
+                    <Border
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        >
                         <Canvas>
                             <Canvas x:Name="__NodeInputCanvas__"/>
                         </Canvas>
