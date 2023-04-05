@@ -134,16 +134,24 @@ public partial class ResearchArticlesManager
         var updatedCount = 0;
         var mergedArticles = new List<ResearchArticle>();
 
+        // temp
+        if (asTempArticles)
+            mergingArticles.ForEach(a => a.Private_Temporary = true);
+
         Console.WriteLine();
         Console.WriteLine($"★ Merging {mergingArticles.Count} article(s) in total...");
         Console.WriteLine();
 
+        // add all first
+        ArticleDatabase.AddRange(mergingArticles);
 
-        // main
+        // if mergeable, merge
         foreach (var mergingArticle in mergingArticles)
         {
-            mergingArticle.Private_Temporary = asTempArticles;
-            var matchedArticles = ArticleDatabase.Where(a => a.CompareTo(mergingArticle) == 0).ToList();
+            var matchedArticles = ArticleDatabase
+                .Where(a => a.CompareTo(mergingArticle) == 0)
+                .Where(a => a != mergingArticle)
+                .ToList();
 
             // multiple matches
             if (warnMultipleMatches && matchedArticles!.Count > 1)
@@ -170,8 +178,6 @@ public partial class ResearchArticlesManager
             // add new
             else
             {
-                ArticleDatabase.Add(mergingArticle!);
-
                 if (UtilConfig.ConsoleOutput_Contents)
                     Console.WriteLine($"+++ {mergingArticle!.ArticleTitle}");
 

@@ -154,7 +154,7 @@
                         <Border 
                             Background="{Binding ArticleHeaderColor}"
                             CornerRadius="11,11,0,0"
-                            Margin="-1"
+                            Margin="-0.1"
                             >
                             <StackPanel>
                                 <Grid>

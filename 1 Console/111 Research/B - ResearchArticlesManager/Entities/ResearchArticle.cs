@@ -1172,8 +1172,7 @@ public class ResearchArticle : IComparable
             yield return nameof(ArticleTitle);
 
             // others
-            yield return nameof(CrossRef_UnstructuredRefString);
-            yield return nameof(JStage_UnstructuredRefString);
+            yield return nameof(ReferenceString_FromUnstructured);
         }
 
         foreach (var target in Targets())
