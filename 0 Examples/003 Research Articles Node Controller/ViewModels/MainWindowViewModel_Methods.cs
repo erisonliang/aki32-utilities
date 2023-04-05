@@ -561,7 +561,7 @@ public partial class MainWindowViewModel : ViewModel
                 {
                     currentFriendlyIndex++;
 
-                    Console.WriteLine($"{currentFriendlyIndex} / {pulledCount} を処理中…");
+                    Console.WriteLine($"{currentFriendlyIndex}/{pulledCount}件を処理中…");
 
                     try
                     {
@@ -569,16 +569,16 @@ public partial class MainWindowViewModel : ViewModel
                         if (!result)
                             throw new Exception("推測に失敗しました。");
 
-                        Console.WriteLine($"成功。(成功: {currentFriendlyIndex - failCount} / {currentFriendlyIndex})");
+                        Console.WriteLine($"成功。(成功:{currentFriendlyIndex - failCount}/{currentFriendlyIndex}件)");
                     }
                     catch (Exception ex)
                     {
                         failCount++;
-                        Console.WriteLine($"失敗。(成功: {currentFriendlyIndex - failCount} / {currentFriendlyIndex}) ﾒｯｾｰｼﾞ: {ex.Message}");
+                        Console.WriteLine($"失敗。(成功: {currentFriendlyIndex - failCount}/{currentFriendlyIndex}件) ﾒｯｾｰｼﾞ: {ex.Message}");
                     }
                 }
 
-                Console.WriteLine($"★ メタ情報の収集が完了しました。(成功: {pulledCount - failCount} / {pulledCount})");
+                Console.WriteLine($"★ メタ情報の収集が完了しました。(成功: {pulledCount - failCount}/{pulledCount}件)");
             }
 
             RedrawResearchArticlesManager();

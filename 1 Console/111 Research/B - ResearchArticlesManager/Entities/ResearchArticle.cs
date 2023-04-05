@@ -279,11 +279,11 @@ public class ResearchArticle : IComparable
                     }
                     else
                     {
-                        s = s.Replace("{MaterialVolume}", $"{MaterialVolume}");
-                        //if (uint.TryParse(MaterialVolume, out uint a))
-                        //    s = s.Replace("{MaterialVolume}", $"第{MaterialVolume}巻");
-                        //else
-                        //    s = s.Replace("{MaterialVolume}", $"{MaterialVolume}");
+                        //s = s.Replace("{MaterialVolume}", $"{MaterialVolume}");
+                        if (uint.TryParse(MaterialVolume, out uint a))
+                            s = s.Replace("{MaterialVolume}", $"第{MaterialVolume}巻");
+                        else
+                            s = s.Replace("{MaterialVolume}", $"{MaterialVolume}");
                     }
                 }
                 if (ReferenceStringFormat.Contains("{MaterialSubVolume}"))
@@ -295,11 +295,11 @@ public class ResearchArticle : IComparable
                     }
                     else
                     {
-                        s = s.Replace("{MaterialSubVolume}", $"{MaterialSubVolume}");
-                        //if (uint.TryParse(MaterialSubVolume, out uint a))
-                        //    s = s.Replace("{MaterialSubVolume}", $"第{MaterialSubVolume}号");
-                        //else
-                        //    s = s.Replace("{MaterialSubVolume}", $"{MaterialSubVolume}");
+                        //s = s.Replace("{MaterialSubVolume}", $"{MaterialSubVolume}");
+                        if (uint.TryParse(MaterialSubVolume, out uint a))
+                            s = s.Replace("{MaterialSubVolume}", $"第{MaterialSubVolume}号");
+                        else
+                            s = s.Replace("{MaterialSubVolume}", $"{MaterialSubVolume}");
                     }
                 }
 
@@ -464,7 +464,7 @@ public class ResearchArticle : IComparable
     [UseExceptionalBinaryEitherMerging]
     public bool? DataFrom_NDLSearch_Main { get; set; } = false;
     [UseExceptionalBinaryEitherMerging]
-    public bool? DataFrom_AI_RefString { get; set; } = false;
+    public bool? DataFrom_AI_PredictFromRefString { get; set; } = false;
 
     /// <summary>
     /// Aki32 Object Identifier
@@ -1101,6 +1101,7 @@ public class ResearchArticle : IComparable
                         Manual_PublishedDate += $"-{publishedMonth}";
                 }
 
+            DataFrom_AI_PredictFromRefString = true;
             Console.WriteLine($"推測に成功。(約 {openAI.lastPriceInYen:F3} 円)");
 
             return true;

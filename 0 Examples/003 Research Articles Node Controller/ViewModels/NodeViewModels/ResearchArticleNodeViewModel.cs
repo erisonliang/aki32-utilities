@@ -169,7 +169,7 @@ public class ResearchArticleNodeViewModel : DefaultNodeViewModel
             if (Article.DataFrom_NDLSearch_Main ?? false)
                 ss.Add("NDLSearch");
 
-            if (Article.DataFrom_AI_RefString ?? false)
+            if (Article.DataFrom_AI_PredictFromRefString ?? false)
                 ss.Add("AI Prediction");
 
             return string.Join(", ", ss.Select(s => $"[{s}]"));
