@@ -28,13 +28,11 @@ public class ResearchArticleNodeViewModel : DefaultNodeViewModel
 
     // ★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★
 
-    public bool RecommendPullCrossRefInfo
+    public bool RecommendPullReferenceInfo
     {
         get
         {
-            if (Article.DataFrom_CrossRef ?? false)
-                return false;
-            if (string.IsNullOrEmpty(Article.DOI))
+            if ((Article.DataFrom_CrossRef_DOI ?? false) || (Article.DataFrom_JStage_DOI ?? false))
                 return false;
             return true;
         }
@@ -159,17 +157,20 @@ public class ResearchArticleNodeViewModel : DefaultNodeViewModel
             if (Article.DataFrom_Manual ?? false)
                 ss.Add("Manual");
 
-            if (Article.DataFrom_JStage ?? false)
+            if ((Article.DataFrom_JStage_Main ?? false) || (Article.DataFrom_JStage_DOI ?? false))
                 ss.Add("JStage");
 
-            if (Article.DataFrom_CiNii ?? false)
+            if (Article.DataFrom_CiNii_Main ?? false)
                 ss.Add("CiNii");
 
-            if (Article.DataFrom_CrossRef ?? false)
+            if (Article.DataFrom_CrossRef_DOI ?? false)
                 ss.Add("CrossRef");
 
-            if (Article.DataFrom_NDLSearch ?? false)
+            if (Article.DataFrom_NDLSearch_Main ?? false)
                 ss.Add("NDLSearch");
+
+            if (Article.DataFrom_AI_RefString ?? false)
+                ss.Add("AI Prediction");
 
             return string.Join(", ", ss.Select(s => $"[{s}]"));
         }

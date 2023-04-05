@@ -203,7 +203,7 @@ public class NDLSearch_Main_APIAccessor : IResearchAPIAccessor
         {
             var article = new ResearchArticle();
             {
-                article.DataFrom_NDLSearch = true;
+                article.DataFrom_NDLSearch_Main = true;
 
                 // タイトルはいつもここ
                 article.NDLSearch_ArticleTitle = entity.Element("title")?.Value;

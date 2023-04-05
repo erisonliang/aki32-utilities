@@ -454,13 +454,17 @@ public class ResearchArticle : IComparable
     [UseExceptionalBinaryEitherMerging]
     public bool? DataFrom_Manual { get; set; } = false;
     [UseExceptionalBinaryEitherMerging]
-    public bool? DataFrom_JStage { get; set; } = false;
+    public bool? DataFrom_JStage_Main { get; set; } = false;
     [UseExceptionalBinaryEitherMerging]
-    public bool? DataFrom_CiNii { get; set; } = false;
+    public bool? DataFrom_JStage_DOI { get; set; } = false;
     [UseExceptionalBinaryEitherMerging]
-    public bool? DataFrom_CrossRef { get; set; } = false;
+    public bool? DataFrom_CiNii_Main { get; set; } = false;
     [UseExceptionalBinaryEitherMerging]
-    public bool? DataFrom_NDLSearch { get; set; } = false;
+    public bool? DataFrom_CrossRef_DOI { get; set; } = false;
+    [UseExceptionalBinaryEitherMerging]
+    public bool? DataFrom_NDLSearch_Main { get; set; } = false;
+    [UseExceptionalBinaryEitherMerging]
+    public bool? DataFrom_AI_RefString { get; set; } = false;
 
     /// <summary>
     /// Aki32 Object Identifier
@@ -801,9 +805,9 @@ public class ResearchArticle : IComparable
 
         // DOIは存在するほうを採用。異なる場合は許容しない。
         {
-            if (DOI != null && mergingArticle.DOI != null && DOI != mergingArticle.DOI)
+            if (!string.IsNullOrEmpty(DOI) && !string.IsNullOrEmpty(mergingArticle.DOI) && DOI != mergingArticle.DOI)
                 throw new InvalidDataException("DOIが異なる2つがマージされようとしました。");
-            if (DOI == null && mergingArticle.DOI != null)
+            if (string.IsNullOrEmpty(DOI) && !string.IsNullOrEmpty(mergingArticle.DOI))
                 DOI = mergingArticle.DOI;
         }
 
@@ -987,7 +991,7 @@ public class ResearchArticle : IComparable
     /// Predict meta info from Unstructured reference string by ChatGPT
     /// </summary>
     /// <returns></returns>
-    public async Task<bool> TryPredictMetaInfo_ChatGPT()
+    public async Task<bool> TryPredictMetaInfo_ChatGPT(string? designatedOpenAIAPISecretKey = null)
     {
         UtilPreprocessors.PreprocessBasic();
 
@@ -1019,8 +1023,10 @@ public class ResearchArticle : IComparable
 文献発行年：{{}}
 文献発行月：{{}}";
 
-            var apiSecretKey = Environment.GetEnvironmentVariable("OpenAI_SecretKey")!
-                ?? throw new Exception("ChatGPTの情報が必要です。環境変数に\"OpenAI_SecretKey\"という変数を追加してください。");
+            var apiSecretKey = null
+                ?? designatedOpenAIAPISecretKey
+                ?? Environment.GetEnvironmentVariable("OpenAI_SecretKey")!
+                ?? throw new Exception("ChatGPTのAPIキーが必要です。環境変数に\"OpenAI_SecretKey\"を追加するか，引数の\"designatedOpenAIAPISecretKey\"に値を入れてください。。");
             var openAI = new OpenAIController(apiSecretKey);
 
             var results = await openAI.CallChatAsync(s);

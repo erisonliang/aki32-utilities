@@ -129,10 +129,10 @@ public partial class MainWindowViewModel : ViewModel
 
     // ★★★★★★★★★★★★★★★ 右パネル内 → 選択中の文献
 
-    public bool IsPullCrossRefInfoBusy { get; set; } = false;
-    public bool IsPullCrossRefInfoDone { get; set; } = false;
-    public ViewModelCommand PullCrossRefInfoCommand => _PullCrossRefInfoCommand.Get(async () => await PullCrossRefInfo());
-    ViewModelCommandHandler _PullCrossRefInfoCommand = new();
+    public bool IsPullReferenceInfoBusy { get; set; } = false;
+    public bool IsPullReferenceInfoDone { get; set; } = false;
+    public ViewModelCommand PullReferenceInfoCommand => _PullReferenceInfoCommand.Get(async () => await PullReferenceInfo());
+    ViewModelCommandHandler _PullReferenceInfoCommand = new();
 
     public bool IsPullNormalMetaInfoBusy { get; set; } = false;
     public bool IsPullNormalMetaInfoDone { get; set; } = false;
@@ -221,10 +221,10 @@ public partial class MainWindowViewModel : ViewModel
     public ViewModelCommand InternetSearch_NDLSearch_A_Command => _InternetSearch_NDLSearch_A_Command.Get(async () => await InternetSearch_NDLSearch_A_());
     ViewModelCommandHandler _InternetSearch_NDLSearch_A_Command = new();
 
-    public bool IsInternetSearchJStage_B_Busy { get; set; } = false;
-    public bool IsInternetSearchJStage_B_Done { get; set; } = false;
-    public ViewModelCommand InternetSearchJStage_B_Command => _InternetSearchJStage_B_Command.Get(async () => await InternetSearchJStage_B_());
-    ViewModelCommandHandler _InternetSearchJStage_B_Command = new();
+    public bool IsInternetSearch_JStage_B_Busy { get; set; } = false;
+    public bool IsInternetSearch_JStage_B_Done { get; set; } = false;
+    public ViewModelCommand InternetSearch_JStage_B_Command => _InternetSearch_JStage_B_Command.Get(async () => await InternetSearch_JStage_B_());
+    ViewModelCommandHandler _InternetSearch_JStage_B_Command = new();
 
     public bool IsInternetSearch_CiNii_B_Busy { get; set; } = false;
     public bool IsInternetSearch_CiNii_B_Done { get; set; } = false;
@@ -235,6 +235,11 @@ public partial class MainWindowViewModel : ViewModel
     public bool IsInternetSearch_NDLSearch_B_Done { get; set; } = false;
     public ViewModelCommand InternetSearch_NDLSearch_B_Command => _InternetSearch_NDLSearch_B_Command.Get(async () => await InternetSearch_NDLSearch_B_());
     ViewModelCommandHandler _InternetSearch_NDLSearch_B_Command = new();
+
+    public bool IsInternetSearch_JStage_C_Busy { get; set; } = false;
+    public bool IsInternetSearch_JStage_C_Done { get; set; } = false;
+    public ViewModelCommand InternetSearch_JStage_C_Command => _InternetSearch_JStage_C_Command.Get(async () => await InternetSearch_JStage_C_());
+    ViewModelCommandHandler _InternetSearch_JStage_C_Command = new();
 
     public bool IsInternetSearch_CiNii_C_Busy { get; set; } = false;
     public bool IsInternetSearch_CiNii_C_Done { get; set; } = false;

@@ -81,7 +81,7 @@ public class JStage_DOI_ArticleAPIAccessor : IResearchAPIAccessor
 
             var addingMainArticle = new ResearchArticle();
             {
-                addingMainArticle.DataFrom_JStage = true;
+                addingMainArticle.DataFrom_JStage_Main = true;
 
                 // メタ情報へのアクセスを定義
                 string? GetMetaValue(string targetName) => metas

@@ -487,17 +487,17 @@
                                     <Button
                                         Margin="3"
                                         Style="{StaticResource ButtonTextStretchStyle}"
-                                        Command="{Binding PullCrossRefInfoCommand}"
-                                        Foreground="{Binding SelectingNodeViewModel.RecommendPullCrossRefInfo, Converter={StaticResource BooleanToForegroundBrushConverter}}"
+                                        Command="{Binding PullReferenceInfoCommand}"
+                                        Foreground="{Binding SelectingNodeViewModel.RecommendPullReferenceInfo, Converter={StaticResource BooleanToForegroundBrushConverter}}"
                                         ToolTip="オンラインから引用関係をダウンロードして，追記します。&#10;&#10;※ 既に十分なデータが揃っている場合，薄い表示になります。"
                                         ToolTipService.InitialShowDelay="10" 
                                         >
                                         <StackPanel Orientation="Horizontal">
                                             <Grid Margin="0,0,3,0">
-                                                <mah:ProgressRing Visibility="{Binding IsPullCrossRefInfoBusy, Converter={StaticResource BooleanToVisibilityConverter}}" Style="{StaticResource ProgressRingStyle}" Margin="0,0,3.5,0"/>
-                                                <Grid Visibility="{Binding IsPullCrossRefInfoBusy, Converter={StaticResource InverseBooleanToVisibility}}">
-                                                    <TextBlock Text="⬇️" Visibility="{Binding IsPullCrossRefInfoDone, Converter={StaticResource InverseBooleanToVisibility}}"/>
-                                                    <TextBlock Text="✔️" Visibility="{Binding IsPullCrossRefInfoDone, Converter={StaticResource BooleanToVisibilityConverter}}" Foreground="Green"/>
+                                                <mah:ProgressRing Visibility="{Binding IsPullReferenceInfoBusy, Converter={StaticResource BooleanToVisibilityConverter}}" Style="{StaticResource ProgressRingStyle}" Margin="0,0,3.5,0"/>
+                                                <Grid Visibility="{Binding IsPullReferenceInfoBusy, Converter={StaticResource InverseBooleanToVisibility}}">
+                                                    <TextBlock Text="⬇️" Visibility="{Binding IsPullReferenceInfoDone, Converter={StaticResource InverseBooleanToVisibility}}"/>
+                                                    <TextBlock Text="✔️" Visibility="{Binding IsPullReferenceInfoDone, Converter={StaticResource BooleanToVisibilityConverter}}" Foreground="Green"/>
                                                 </Grid>
                                             </Grid>
                                             <TextBlock Text="引用関係を取得 "/>
@@ -1860,15 +1860,15 @@
                                     >
                                     <Button
                                         Margin="3"
-                                        Command="{Binding InternetSearchJStage_B_Command}"
+                                        Command="{Binding InternetSearch_JStage_B_Command}"
                                         Style="{StaticResource ButtonTextStyle}"
                                         >
                                         <StackPanel Orientation="Horizontal">
                                             <Grid>
-                                                <mah:ProgressRing Visibility="{Binding IsInternetSearchJStage_B_Busy, Converter={StaticResource BooleanToVisibilityConverter}}" Style="{StaticResource ProgressRingStyle}" Margin="0,0,3.5,0"/>
-                                                <Grid Visibility="{Binding IsInternetSearchJStage_B_Busy, Converter={StaticResource InverseBooleanToVisibility}}">
-                                                    <TextBlock Text="🔎" Visibility="{Binding IsInternetSearchJStage_B_Done, Converter={StaticResource InverseBooleanToVisibility}}"/>
-                                                    <TextBlock Text="✔️" Visibility="{Binding IsInternetSearchJStage_B_Done, Converter={StaticResource BooleanToVisibilityConverter}}" Foreground="Green"/>
+                                                <mah:ProgressRing Visibility="{Binding IsInternetSearch_JStage_B_Busy, Converter={StaticResource BooleanToVisibilityConverter}}" Style="{StaticResource ProgressRingStyle}" Margin="0,0,3.5,0"/>
+                                                <Grid Visibility="{Binding IsInternetSearch_JStage_B_Busy, Converter={StaticResource InverseBooleanToVisibility}}">
+                                                    <TextBlock Text="🔎" Visibility="{Binding IsInternetSearch_JStage_B_Done, Converter={StaticResource InverseBooleanToVisibility}}"/>
+                                                    <TextBlock Text="✔️" Visibility="{Binding IsInternetSearch_JStage_B_Done, Converter={StaticResource BooleanToVisibilityConverter}}" Foreground="Green"/>
                                                 </Grid>
                                             </Grid>
                                             <TextBlock Text=" J-Stage "/>
@@ -1953,6 +1953,24 @@
                                     Orientation="Horizontal"
                                     HorizontalAlignment="Right"
                                     >
+                                    
+                                    <Button
+                                        Margin="3"
+                                        Command="{Binding InternetSearch_JStage_C_Command}"
+                                        Style="{StaticResource ButtonTextStyle}"
+                                        >
+                                        <StackPanel Orientation="Horizontal">
+                                            <Grid>
+                                                <mah:ProgressRing Visibility="{Binding IsInternetSearch_JStage_C_Busy, Converter={StaticResource BooleanToVisibilityConverter}}" Style="{StaticResource ProgressRingStyle}" Margin="0,0,3.5,0"/>
+                                                <Grid Visibility="{Binding IsInternetSearch_JStage_C_Busy, Converter={StaticResource InverseBooleanToVisibility}}">
+                                                    <TextBlock Text="🔎" Visibility="{Binding IsInternetSearch_JStage_C_Done, Converter={StaticResource InverseBooleanToVisibility}}"/>
+                                                    <TextBlock Text="✔️" Visibility="{Binding IsInternetSearch_JStage_C_Done, Converter={StaticResource BooleanToVisibilityConverter}}" Foreground="Green"/>
+                                                </Grid>
+                                            </Grid>
+                                            <TextBlock Text=" J-Stage "/>
+                                        </StackPanel>
+                                    </Button>
+
                                     <Button
                                         Margin="3"
                                         Command="{Binding InternetSearch_CiNii_C_Command}"

@@ -162,7 +162,7 @@ public class JStage_Main_ArticleAPIAccessor : IResearchAPIAccessor
         {
             var article = new ResearchArticle();
             {
-                article.DataFrom_JStage = true;
+                article.DataFrom_JStage_Main = true;
 
                 article.JStage_ArticleTitle_English = entity.Element(ExpandAtom("article_title"))?.Element(ExpandAtom("en"))?.Value;
                 article.JStage_ArticleTitle_Japanese = entity.Element(ExpandAtom("article_title"))?.Element(ExpandAtom("ja"))?.Value;

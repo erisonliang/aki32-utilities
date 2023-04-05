@@ -500,58 +500,81 @@ public partial class MainWindowViewModel : ViewModel
 
     // ★★★★★★★★★★★★★★★ 右パネル内 → 選択中の文献
 
-    async Task PullCrossRefInfo()
+    async Task PullReferenceInfo()
     {
-        if (IsPullCrossRefInfoBusy)
+        if (IsPullReferenceInfoBusy)
             return;
 
         try
         {
-            IsPullCrossRefInfoBusy = true;
+            IsPullReferenceInfoBusy = true;
 
             if (SelectingNodeViewModel is null)
                 throw new Exception("文献が選択されていません。");
 
-            // crossref
             if (string.IsNullOrEmpty(SelectingNodeViewModel.Article.DOI))
                 throw new Exception("DOIがない文献はこの機能を使うことができません。");
 
-            var accessor = new CrossRef_DOI_APIAccessor()
-            {
-                DOI = SelectingNodeViewModel.Article.DOI!,
-            };
-
             var pulledArticles = new List<ResearchArticle>();
-            try
+
+            // access until match any
+            var accessorInfos = new Dictionary<string, IResearchAPIAccessor>()
             {
-                pulledArticles = await ResearchArticlesManager.PullArticleInfo(accessor, asTempArticles: true, save: false);
-                if (pulledArticles.Count == 0)
-                    throw new Exception("マッチするデータがありませんでした。");
-            }
-            catch (Exception ex)
+                { "CrossRef", new CrossRef_DOI_APIAccessor() { DOI = SelectingNodeViewModel.Article.DOI! } },
+                { "J-Stage", new JStage_DOI_ArticleAPIAccessor() { DOI = SelectingNodeViewModel.Article.DOI! } },
+            };
+            foreach (var accessorInfo in accessorInfos)
             {
-                throw new Exception($"{ex}\r\nCrossRef側がこの文献に対応していない可能性があります。");
+                var siteName = accessorInfo.Key;
+                var accessor = accessorInfo.Value;
+
+                try
+                {
+                    Console.WriteLine($"★ {siteName} にアクセス中…");
+                    pulledArticles = await ResearchArticlesManager.PullArticleInfo(accessor, asTempArticles: true, save: false);
+                    if (!pulledArticles.Any())
+                        throw new Exception("マッチするデータがありませんでした。");
+                }
+                catch (Exception ex1)
+                {
+                    Console.WriteLine($"{ex1}\r\n{siteName} がこの文献に対応していない可能性があります。");
+                }
+
+                if (pulledArticles is not null && pulledArticles.Any())
+                    break;
+
             }
+
+            // not found
+            if (pulledArticles is null || pulledArticles.Count == 0)
+                throw new Exception($"CrossRef および J-Stage がこの文献に対応していない，もしくは引用関係が存在しない資料である可能性があります。");
+
 
             // 全てに対して GPT予測！？？
             var pulledCount = pulledArticles.Count;
             var result_UseGPT = MessageBox.Show($"取得に成功した {pulledCount} 件の文献に対して，AIによるメタ情報推定を行いますか？", "引用関係を取得", MessageBoxButton.OKCancel, MessageBoxImage.Information);
             if (result_UseGPT == MessageBoxResult.OK)
             {
+                var currentFriendlyIndex = 0;
                 var failCount = 0;
-
                 foreach (var pulledArticle in pulledArticles)
                 {
+                    currentFriendlyIndex++;
+
+                    Console.WriteLine($"{currentFriendlyIndex} / {pulledCount} を処理中…");
+
                     try
                     {
                         var result = await pulledArticle.TryPredictMetaInfo_ChatGPT();
                         if (!result)
                             throw new Exception("推測に失敗しました。");
+
+                        Console.WriteLine($"成功。(成功: {currentFriendlyIndex - failCount} / {currentFriendlyIndex})");
                     }
                     catch (Exception ex)
                     {
-                        MessageBox.Show($"失敗しました。\r\nﾒｯｾｰｼﾞ: {ex.Message}", "メタ情報を推測", MessageBoxButton.OK, MessageBoxImage.Error);
                         failCount++;
+                        Console.WriteLine($"失敗。(成功: {currentFriendlyIndex - failCount} / {currentFriendlyIndex}) ﾒｯｾｰｼﾞ: {ex.Message}");
                     }
                 }
 
@@ -565,10 +588,10 @@ public partial class MainWindowViewModel : ViewModel
 
             var successAnimationTask = Task.Run(async () =>
             {
-                IsPullCrossRefInfoDone = true;
+                IsPullReferenceInfoDone = true;
                 await Task.Delay(2222);
-                if (!IsPullCrossRefInfoBusy)
-                    IsPullCrossRefInfoDone = false;
+                if (!IsPullReferenceInfoBusy)
+                    IsPullReferenceInfoDone = false;
             });
         }
         catch (Exception ex)
@@ -577,7 +600,7 @@ public partial class MainWindowViewModel : ViewModel
         }
         finally
         {
-            IsPullCrossRefInfoBusy = false;
+            IsPullReferenceInfoBusy = false;
         }
     }
 
@@ -1108,14 +1131,14 @@ public partial class MainWindowViewModel : ViewModel
         }
     }
 
-    async Task InternetSearchJStage_B_()
+    async Task InternetSearch_JStage_B_()
     {
-        if (IsInternetSearchJStage_B_Busy)
+        if (IsInternetSearch_JStage_B_Busy)
             return;
 
         try
         {
-            IsInternetSearchJStage_B_Busy = true;
+            IsInternetSearch_JStage_B_Busy = true;
 
             var accessor = new JStage_Main_ArticleAPIAccessor();
             {
@@ -1171,10 +1194,10 @@ public partial class MainWindowViewModel : ViewModel
 
             var successAnimationTask = Task.Run(async () =>
             {
-                IsInternetSearchJStage_B_Done = true;
+                IsInternetSearch_JStage_B_Done = true;
                 await Task.Delay(2222);
-                if (!IsInternetSearchJStage_B_Busy)
-                    IsInternetSearchJStage_B_Done = false;
+                if (!IsInternetSearch_JStage_B_Busy)
+                    IsInternetSearch_JStage_B_Done = false;
             });
         }
         catch (Exception ex)
@@ -1183,7 +1206,7 @@ public partial class MainWindowViewModel : ViewModel
         }
         finally
         {
-            IsInternetSearchJStage_B_Busy = false;
+            IsInternetSearch_JStage_B_Busy = false;
         }
     }
     async Task InternetSearch_CiNii_B_()
@@ -1348,6 +1371,48 @@ public partial class MainWindowViewModel : ViewModel
         }
     }
 
+    async Task InternetSearch_JStage_C_()
+    {
+        if (IsInternetSearch_JStage_C_Busy)
+            return;
+
+        try
+        {
+            IsInternetSearch_JStage_C_Busy = true;
+
+            var accessor = new JStage_DOI_ArticleAPIAccessor();
+            {
+                if (string.IsNullOrEmpty(InternetSearch_DOI))
+                    throw new InvalidDataException("DOIを埋めてください。");
+                accessor.DOI = InternetSearch_DOI;
+            }
+
+            var pulledArticles = await ResearchArticlesManager.PullArticleInfo(accessor, asTempArticles: true, save: false);
+            if (pulledArticles.Count == 0)
+                throw new Exception("マッチするデータがありませんでした。");
+
+            RedrawResearchArticlesManager();
+            MoveCanvasToTargetArticle(pulledArticles.FirstOrDefault());
+            SelectedEmphasizePropertyItem = ViewModels.EmphasizePropertyItems.一時ﾃﾞｰﾀ;
+            var saveTask = Save();
+
+            var successAnimationTask = Task.Run(async () =>
+            {
+                IsInternetSearch_JStage_C_Done = true;
+                await Task.Delay(2222);
+                if (!IsInternetSearch_JStage_C_Busy)
+                    IsInternetSearch_JStage_C_Done = false;
+            });
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show($"失敗しました。\r\nﾒｯｾｰｼﾞ: {ex.Message}", "J-Stageで検索", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+        finally
+        {
+            IsInternetSearch_JStage_C_Busy = false;
+        }
+    }
     async Task InternetSearch_CiNii_C_()
     {
         if (IsInternetSearch_CiNii_C_Busy)
@@ -1359,12 +1424,9 @@ public partial class MainWindowViewModel : ViewModel
 
             var accessor = new CiNii_Main_ArticleAPIAccessor();
             {
-                //accessor.ISSN = ISSN.Architecture_Structure;
-
                 if (string.IsNullOrEmpty(InternetSearch_DOI))
                     throw new InvalidDataException("DOIを埋めてください。");
                 accessor.DOI = InternetSearch_DOI;
-
             }
 
             var pulledArticles = await ResearchArticlesManager.PullArticleInfo(accessor, asTempArticles: true, save: false);
@@ -1404,8 +1466,6 @@ public partial class MainWindowViewModel : ViewModel
 
             var accessor = new CrossRef_DOI_APIAccessor();
             {
-                //accessor.ISSN = ISSN.Architecture_Structure;
-
                 if (string.IsNullOrEmpty(InternetSearch_DOI))
                     throw new InvalidDataException("DOIを埋めてください。");
                 accessor.DOI = InternetSearch_DOI;

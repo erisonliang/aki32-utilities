@@ -65,7 +65,7 @@ public class CrossRef_DOI_APIAccessor : IResearchAPIAccessor
 
         var addingMainArticle = new ResearchArticle();
         {
-            addingMainArticle.DataFrom_CrossRef = true;
+            addingMainArticle.DataFrom_CrossRef_DOI = true;
 
             addingMainArticle.DOI = json?["message"]?["DOI"]?.ToString();
 

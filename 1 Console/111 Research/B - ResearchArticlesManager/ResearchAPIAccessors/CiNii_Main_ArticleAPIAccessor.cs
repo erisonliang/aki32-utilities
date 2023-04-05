@@ -208,7 +208,7 @@ public class CiNii_Main_ArticleAPIAccessor : IResearchAPIAccessor
             {
                 var article = new ResearchArticle();
                 {
-                    article.DataFrom_CiNii = true;
+                    article.DataFrom_CiNii_Main = true;
 
                     article.CiNii_ArticleTitle = entity?["title"]?.ToString();
 

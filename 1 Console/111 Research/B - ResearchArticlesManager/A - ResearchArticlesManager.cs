@@ -1,5 +1,7 @@
 ﻿using Aki32Utilities.ConsoleAppUtilities.General;
 
+using Tensorflow;
+
 namespace Aki32Utilities.ConsoleAppUtilities.Research;
 public partial class ResearchArticlesManager
 {
@@ -83,7 +85,7 @@ public partial class ResearchArticlesManager
     public async Task<List<ResearchArticle>> PullArticleInfo(IResearchAPIAccessor uriBuilder, bool asTempArticles = false, bool save = true)
     {
         var fetchedArticles = await FetchArticleInfo(uriBuilder);
-        var mergedArticles = MergeArticleInfo(fetchedArticles, asTempArticles: asTempArticles, save: save);
+        var mergedArticles = MergeArticleInfo(fetchedArticles, warnMultipleMatches: false, asTempArticles: asTempArticles, save: save);
         return mergedArticles;
     }
 
@@ -118,7 +120,12 @@ public partial class ResearchArticlesManager
     /// <param name="forceAdd">never merge and force add all to database</param>
     /// <exception cref="InvalidOperationException"></exception>
     /// <exception cref="InvalidDataException"></exception>
-    public List<ResearchArticle> MergeArticleInfo(List<ResearchArticle> mergingArticles, bool forceAdd = false, bool warnMultipleMatches = false, bool save = true, bool asTempArticles = false)
+    public List<ResearchArticle> MergeArticleInfo(List<ResearchArticle> mergingArticles,
+        bool asTempArticles = false,
+        bool warnMultipleMatches = false,
+        bool forceAdd = false,
+        bool save = true
+        )
     {
         // preprocess
         if (ArticleDatabase == null)
@@ -143,16 +150,21 @@ public partial class ResearchArticlesManager
                 throw new InvalidDataException($"{matchedArticles!.Count} articles matched to {mergingArticle.ArticleTitle}");
 
             // merge/update
-            if (matchedArticles.Count == 1 && !forceAdd)
+            if (matchedArticles!.Any() && !forceAdd)
             {
-                MergeArticles(matchedArticles.First(), mergingArticle);
+                var currentLeftArticle = mergingArticle;
 
-                if (UtilConfig.ConsoleOutput_Contents)
-                    Console.WriteLine($"@@@ {mergingArticle!.ArticleTitle}");
+                foreach (var matchedArticle in matchedArticles)
+                {
+                    MergeArticles(matchedArticle, currentLeftArticle);
+                    currentLeftArticle = matchedArticle;
+                    updatedCount++;
+                }
 
-                mergedArticles.Add(matchedArticles.First());
-                updatedCount++;
+                mergedArticles.Add(currentLeftArticle);
                 articleDatabaseUpdated = true;
+                if (UtilConfig.ConsoleOutput_Contents)
+                    Console.WriteLine($"@@@ {currentLeftArticle!.ArticleTitle}");
             }
 
             // add new
