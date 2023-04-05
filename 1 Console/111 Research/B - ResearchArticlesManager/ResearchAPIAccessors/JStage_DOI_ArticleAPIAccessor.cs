@@ -16,6 +16,7 @@ using HtmlAgilityPack;
 using System.Xml;
 using DocumentFormat.OpenXml.Spreadsheet;
 using Microsoft.ML.AutoML;
+using Org.BouncyCastle.Asn1.Cms;
 
 namespace Aki32Utilities.ConsoleAppUtilities.Research;
 public class JStage_DOI_ArticleAPIAccessor : IResearchAPIAccessor
@@ -35,7 +36,6 @@ public class JStage_DOI_ArticleAPIAccessor : IResearchAPIAccessor
     public JStage_DOI_ArticleAPIAccessor()
     {
     }
-
 
 
     // ★★★★★★★★★★★★★★★ methods
@@ -81,7 +81,7 @@ public class JStage_DOI_ArticleAPIAccessor : IResearchAPIAccessor
             {
                 article.DataFrom_JStage = true;
 
-                // メタ情報にアクセス！
+                // メタ情報へのアクセスを定義
                 var metas = html.DocumentNode.SelectNodes(@"//meta").ToList();
                 string? GetMetaValue(string targetName) => metas
                         ?.FirstOrDefault(m => m.Attributes.Any(a => a.Name == "name" && a.Value == targetName))
@@ -90,27 +90,36 @@ public class JStage_DOI_ArticleAPIAccessor : IResearchAPIAccessor
                         ?.Value
                         ;
                 string[]? GetMetaValues(string targetName) => metas
-                        ?.FirstOrDefault(m => m.Attributes.Any(a => a.Name == "name" && a.Value == targetName))
-                        ?.Attributes
-                        ?.Where(a => a.Name == "content")
-                        ?.Select(a => a.Value)
+                        ?.Where(m => m.Attributes.Any(a => a.Name == "name" && a.Value == targetName))
+                        ?.Select(a =>
+                        {
+                            return a
+                              ?.Attributes
+                              ?.FirstOrDefault(a => a.Name == "content")
+                              ?.Value
+                              ?.ToString()
+                              ;
+                        })
+                        ?.Cast<string>()
                         ?.ToArray()
                         ;
 
-                // タイトルはいつもここ
+                // main
                 article.JStage_ArticleTitle_Japanese = GetMetaValue("title");
-                article.JStage_ArticleTitle_English = null;
+                article.JStage_ArticleTitle_English ??= null;
 
                 article.JStage_Authors_Japanese = GetMetaValues("authors");
-                article.JStage_Authors_English = null;
+                article.JStage_Authors_English ??= null;
 
-                article.JStage_Link_Japanese = uri.AbsoluteUri;
-                article.JStage_Link_English = null;
+                article.JStage_Link_Japanese = GetMetaValue("og:url") ?? uri.AbsoluteUri;
+                article.JStage_Link_English ??= null;
 
-                article.JStage_JournalCode = entity.Element(ExpandAtom("cdjournal"))?.Value;
-
-                article.JStage_MaterialTitle_English = entity.Element(ExpandAtom("material_title"))?.Element(ExpandAtom("en"))?.Value;
-                article.JStage_MaterialTitle_Japanese = entity.Element(ExpandAtom("material_title"))?.Element(ExpandAtom("ja"))?.Value;
+                article.JStage_MaterialCode = GetMetaValue("aijs");
+                article.JStage_MaterialTitle_Japanese = null
+                    ?? GetMetaValue("journal_title")
+                    ?? GetMetaValue("journal_abbrev")
+                    ;
+                article.JStage_MaterialTitle_English = null;
 
                 article.PrintISSN = GetMetaValue("print_issn");
                 article.OnlineISSN = GetMetaValue("online_issn");
@@ -118,23 +127,18 @@ public class JStage_DOI_ArticleAPIAccessor : IResearchAPIAccessor
                 article.JStage_MaterialVolume = GetMetaValue("volume");
                 article.JStage_MaterialSubVolume = GetMetaValue("issue");
 
-                article.JStage_Number = GetMetaValue("■■■■■■");
                 article.JStage_StartingPage = GetMetaValue("firstpage");
                 article.JStage_EndingPage = GetMetaValue("lastpage");
 
-                article.JStage_PublishedYear = entity.Element(ExpandAtom("pubyear"))?.Value;
+                article.JStage_PublishedYear = GetMetaValue("publication_date");
 
-                article.JStage_JOI = entity.Element(ExpandAtom("joi"))?.Value;
-                article.DOI = entity.Element(ExpandPrism("doi"))?.Value;
+                article.JStage_JOI = GetMetaValue("dc.identifier");
+                article.DOI ??= GetMetaValue("doi");
 
-                article.JStage_SystemCode = entity.Element(ExpandAtom("systemcode"))?.Value;
-                article.JStage_SystemName = entity.Element(ExpandAtom("systemname"))?.Value;
+                article.JStage_SystemCode ??= null;
+                article.JStage_SystemName = GetMetaValue("og:site_name");
 
-                //article.JStage_ArticleTitle = entity.Element(ExpandXml("title"))?.Value;
-
-                //article.JStage_Link = entity.Element(ExpandXml("link"))?.Value;
-                article.JStage_Id = entity.Element(ExpandAtom("id"))?.Value;
-                article.JStage_UpdatedOn = entity.Element(ExpandAtom("updated"))?.Value;
+                article.JStage_UpdatedOn = GetMetaValue("citation_online_date");
 
             }
 

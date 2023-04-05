@@ -1460,7 +1460,7 @@ public static partial class ExampleExecuter
                 // ★ articles from j-stage DOI
                 var accessor = new JStage_DOI_ArticleAPIAccessor()
                 {
-                    DOI = "10.11273/jssc1994.5.129"
+                    DOI = "10.3130/aijs.80.703"
                 };
                 research.PullArticleInfo(accessor).Wait();
 

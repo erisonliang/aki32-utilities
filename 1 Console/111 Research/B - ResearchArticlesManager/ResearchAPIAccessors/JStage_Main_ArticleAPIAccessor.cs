@@ -173,7 +173,7 @@ public class JStage_Main_ArticleAPIAccessor : IResearchAPIAccessor
                 article.JStage_Authors_English = entity.Element(ExpandAtom("author"))?.Element(ExpandAtom("en"))?.Elements(ExpandAtom("name"))?.Select(e => e?.Value ?? "")?.ToArray();
                 article.JStage_Authors_Japanese = entity.Element(ExpandAtom("author"))?.Element(ExpandAtom("ja"))?.Elements(ExpandAtom("name"))?.Select(e => e?.Value ?? "")?.ToArray();
 
-                article.JStage_JournalCode = entity.Element(ExpandAtom("cdjournal"))?.Value;
+                article.JStage_MaterialCode = entity.Element(ExpandAtom("cdjournal"))?.Value;
 
                 article.JStage_MaterialTitle_English = entity.Element(ExpandAtom("material_title"))?.Element(ExpandAtom("en"))?.Value;
                 article.JStage_MaterialTitle_Japanese = entity.Element(ExpandAtom("material_title"))?.Element(ExpandAtom("ja"))?.Value;
@@ -198,12 +198,8 @@ public class JStage_Main_ArticleAPIAccessor : IResearchAPIAccessor
                 article.JStage_SystemCode = entity.Element(ExpandAtom("systemcode"))?.Value;
                 article.JStage_SystemName = entity.Element(ExpandAtom("systemname"))?.Value;
 
-                //article.JStage_ArticleTitle = entity.Element(ExpandXml("title"))?.Value;
-
-                //article.JStage_Link = entity.Element(ExpandXml("link"))?.Value;
-                article.JStage_Id = entity.Element(ExpandAtom("id"))?.Value;
                 article.JStage_UpdatedOn = entity.Element(ExpandAtom("updated"))?.Value;
-
+            
             }
 
             yield return article;

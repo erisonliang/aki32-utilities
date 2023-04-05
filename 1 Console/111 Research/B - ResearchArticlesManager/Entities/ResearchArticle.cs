@@ -562,7 +562,7 @@ public class ResearchArticle : IComparable
     public string? JStage_Link_English { get; set; }
     public string? JStage_Link_Japanese { get; set; }
 
-    public string? JStage_JournalCode { get; set; }
+    public string? JStage_MaterialCode { get; set; }
 
     public string? JStage_MaterialTitle_English { get; set; }
     public string? JStage_MaterialTitle_Japanese { get; set; }
@@ -579,7 +579,6 @@ public class ResearchArticle : IComparable
     public string? JStage_SystemCode { get; set; }
     public string? JStage_SystemName { get; set; }
 
-    public string? JStage_Id { get; set; }
     public string? JStage_UpdatedOn { get; set; }
 
 
@@ -1136,7 +1135,8 @@ public class ResearchArticle : IComparable
             // id
             yield return nameof(AOI);
             yield return nameof(DOI);
-            yield return nameof(JStage_Id);
+            yield return nameof(JStage_Link_Japanese);
+            yield return nameof(JStage_Link_English);
 
             // title
             yield return nameof(JStage_ArticleTitle_Japanese);
