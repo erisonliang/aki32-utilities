@@ -10,7 +10,7 @@ public partial class Program
         Console.WriteLine();
 
 
-        UtilConfig.ReadEnvConfig(new FileInfo(@"C:\Users\aki32\Dropbox\PC\★ PC間共有\MyEnvConfig.json"));
+        UtilConfig.ReadEnvConfig(new FileInfo(@"C:\Users\aki32\Dropbox\PC\★ PC間共有\Programming\MyEnvConfig.json"));
         ExampleExecuter.All();
 
 

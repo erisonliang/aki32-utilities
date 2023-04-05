@@ -20,7 +20,8 @@ public partial class MainWindowViewModel : ViewModel
 
         try
         {
-            UtilConfig.ReadEnvConfig(new FileInfo(@"C:\Users\aki32\Dropbox\PC\★ PC間共有\MyEnvConfig.json"));
+            // Set API keys
+            UtilConfig.ReadEnvConfig(new FileInfo(@"C:\Users\aki32\Dropbox\PC\★ PC間共有\Programming\MyEnvConfig.json"));
         }
         catch (Exception)
         {

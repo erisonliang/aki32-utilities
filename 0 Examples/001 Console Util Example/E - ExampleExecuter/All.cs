@@ -1437,10 +1437,10 @@ public static partial class ExampleExecuter
             // A - ResearchManager
             {
 
-                //var databaseDir = new DirectoryInfo($@"{Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory)}\ResearchArticleDB");
+                var databaseDir = new DirectoryInfo($@"{Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory)}\ResearchArticleDB");
 
-                //var research = new ResearchArticlesManager(databaseDir);
-                //research.OpenDatabase();
+                var research = new ResearchArticlesManager(databaseDir);
+                research.OpenDatabase();
 
                 ////// ★ articles from j-stage
                 ////var accessor = new JStageArticleAPIAccessor()
@@ -1451,6 +1451,13 @@ public static partial class ExampleExecuter
                 ////    //Start = 1,
                 ////};
                 ////research.PullArticleInfo(accessor).Wait();
+
+                // ★ articles from j-stage DOI
+                var accessor = new JStageArticleAPIAccessor_DOI()
+                {
+                    DOI = "10.11273/jssc1994.5.129"
+                };
+                research.PullArticleInfo(accessor).Wait();
 
                 ////// ★ articles from cinii
                 ////var accessor = new CiNiiArticleAPIAccessor()

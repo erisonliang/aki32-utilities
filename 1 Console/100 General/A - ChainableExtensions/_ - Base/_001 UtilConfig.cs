@@ -39,9 +39,10 @@ public static class UtilConfig
     /// Read json file as environment variables. Json format is as follows
     /// <code>
     /// [
-    ///    {"key" : "1", "value" : "Tanaka"},
-    ///    {"key" : "2", "value" : "Nakata"},
-    ///    {"key" : "3", "value" : "Katana"}  
+    ///    {"key" : "GetHub_Username", "value" : "aki32"},
+    ///    {"key" : "GetHub_Password", "value" : "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"},
+    ///    {"key" : "OpenAI_SecretKey", "value" : "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"}  
+    ///    {"key" : "SomeService_APIKey", "value" : "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"}  
     /// ]
     /// </code>
     /// </summary>
@@ -55,7 +56,6 @@ public static class UtilConfig
             var envs = input.ReadObjectFromLocalJson<JArray>();
             foreach (var env in envs)
                 Environment.SetEnvironmentVariable(env["key"]!.ToString(), env["value"]!.ToString(), EnvironmentVariableTarget.Process);
-
         }
         catch (Exception)
         {
