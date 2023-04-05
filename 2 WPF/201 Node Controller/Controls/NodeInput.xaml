@@ -48,6 +48,7 @@
                     Visibility="{TemplateBinding CanConnect, Converter={StaticResource BooleanToVisibilityConverter}}"
                     ToolTip="{TemplateBinding ToolTip}"
                     ToolTipService.InitialShowDelay="10"
+                    ToolTipService.Placement="Left"
                     >
                     <Grid
                         Width="{x:Static local:ControlSize.ConnectorSize}"

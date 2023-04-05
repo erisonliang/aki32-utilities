@@ -54,8 +54,9 @@
                     DockPanel.Dock="Right"
                     Tag="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:NodeOutputContent}}}"                           
                     Visibility="{TemplateBinding CanConnect, Converter={StaticResource BooleanToVisibilityConverter}}"
-                    ToolTip="{TemplateBinding Content}"
+                    ToolTip="{TemplateBinding ToolTip}"
                     ToolTipService.InitialShowDelay="10"
+                    ToolTipService.Placement="Right"
                     >
                     <Grid
                         Width="{x:Static local:ControlSize.ConnectorSize}"

@@ -43,7 +43,7 @@
                         VerticalAlignment="Stretch"
                         HorizontalAlignment="Stretch"
                         Content="{TemplateBinding DataContext}"
-                        ToolTip="{TemplateBinding }"
+                        ToolTip="{TemplateBinding DataContext}"
                         ContentTemplate="{TemplateBinding HeaderContentTemplate}"/>
                 </Border>
                 <Grid>
