@@ -224,15 +224,28 @@ public class ResearchArticle : IComparable
     [CsvIgnore]
     public string? ReferenceErrorReasonString = "";
     [CsvIgnore]
-    public bool IsLastReferenceStringFromManual = false;
+    public bool IsLastReferenceStringFromTemplateGeneration = false;
     [CsvIgnore]
     public string ReferenceStringFormat = "{Authors}: {ArticleTitle}, {MaterialTitle}, {MaterialVolume}, {MaterialSubVolume}, pp.{StartingPage}-{EndingPage}, {PublishedYearAndMonth}";
+    [CsvIgnore]
+    public string? ReferenceString_FromUnstructured
+    {
+        get
+        {
+            return null
+               // 非構造
+               ?? CrossRef_UnstructuredRefString.NullIfNullOrEmpty()
+               ?? JStage_UnstructuredRefString.NullIfNullOrEmpty()
+               ?? null
+               ;
+        }
+    }
     public string? ReferenceString
     {
         get
         {
             ReferenceErrorReasonString = "";
-            IsLastReferenceStringFromManual = false;
+            IsLastReferenceStringFromTemplateGeneration = false;
 
             string ReferenceStringManually()
             {
@@ -365,7 +378,7 @@ public class ResearchArticle : IComparable
                 }
 
                 if (!string.IsNullOrEmpty(s))
-                    IsLastReferenceStringFromManual = true;
+                    IsLastReferenceStringFromTemplateGeneration = true;
 
                 return s;
             }
@@ -374,9 +387,8 @@ public class ResearchArticle : IComparable
                // 生成
                ?? ReferenceStringManually().NullIfNullOrEmpty()
 
-               // 自動
-               ?? CrossRef_UnstructuredRefString.NullIfNullOrEmpty()
-               ?? JStage_UnstructuredRefString.NullIfNullOrEmpty()
+               // 非構造
+               ?? ReferenceString_FromUnstructured.NullIfNullOrEmpty()
 
                // 生成失敗理由
                ?? ReferenceErrorReasonString.NullIfNullOrEmpty()
@@ -997,10 +1009,10 @@ public class ResearchArticle : IComparable
 
         try
         {
-            var refString = ReferenceString;
+            var refString = ReferenceString_FromUnstructured;
 
-            if (refString is null || refString == ReferenceErrorReasonString)
-                throw new Exception("文献文字列がないため，推測が出来ません。");
+            if (string.IsNullOrEmpty(refString))
+                throw new Exception("推測に有効な文献文字列がないため，推測が出来ません。");
 
             // ★ cross ref
             if (refString.Contains("(in Japanese)"))

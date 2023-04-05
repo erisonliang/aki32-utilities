@@ -1125,7 +1125,7 @@
                                         <TextBlock.ToolTip>
                                             <TextBlock
                                                 TextAlignment="Left"
-                                                Text="release"
+                                                Text="公開日。&#10;ハイフン区切りにすることで年月日が認識されます。"
                                                 >
                                             </TextBlock>
                                         </TextBlock.ToolTip>

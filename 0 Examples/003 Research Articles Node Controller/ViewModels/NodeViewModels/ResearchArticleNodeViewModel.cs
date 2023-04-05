@@ -49,11 +49,11 @@ public class ResearchArticleNodeViewModel : DefaultNodeViewModel
     {
         get
         {
-            // ErrorReason 存在してるけど ErrorReason じゃないものが返って来た時にオススメ。
+            // 自動生成されたものでなければ，まだ情報追加の余地があるからオススメ。
             _ = Article.ReferenceString;
-            if (!Article.IsLastReferenceStringFromManual)
-                return true;
-            return false;
+            if (Article.IsLastReferenceStringFromTemplateGeneration)
+                return false;
+            return true;
         }
     }
     public bool RecommendOpenPDF
@@ -312,6 +312,7 @@ public class ResearchArticleNodeViewModel : DefaultNodeViewModel
                 Article.Manual_PublishedDate = value!.Replace("/", "-").Replace(".", "-");
         }
     }
+
     public string MaterialTitle
     {
         get => Article.MaterialTitle ?? "";
