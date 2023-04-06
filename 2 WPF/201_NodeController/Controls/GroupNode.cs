@@ -35,6 +35,8 @@ public class GroupNode : NodeBase
         typeof(GroupNode),
         new FrameworkPropertyMetadata(new Point(0, 0), FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, InterlockPositionPropertyChanged));
 
+    public double WindowDragThreshold => BorderSize * 2;
+    public double WindowDiagonallyDragThreshold => BorderSize * 5;
     public double BorderSize
     {
         get => (double)GetValue(BorderSizeProperty);
@@ -351,72 +353,82 @@ public class GroupNode : NodeBase
     void UpdateMouseCursor(MouseEventArgs e)
     {
         var pos = e.GetPosition(this);
-        if (pos.X < BorderSize)
-        {
-            // left
 
-            // cursor is inside left vertical border.
-            if (pos.Y < BorderSize)
+        //edge
+        {
+            var isEdgeLeft = pos.X < WindowDiagonallyDragThreshold;
+            var isEdgeRight = pos.X > ActualWidth - WindowDiagonallyDragThreshold;
+            var isEdgeTop = pos.Y < WindowDiagonallyDragThreshold;
+            var isEdgeBottom = pos.Y > ActualHeight - WindowDiagonallyDragThreshold;
+
+            if (isEdgeLeft)
             {
-                // top
-                _IsDraggingToResizeType = DragResizeType.LeftTop;
-                Mouse.SetCursor(Cursors.SizeNWSE);
+                if (isEdgeTop)
+                {
+                    _IsDraggingToResizeType = DragResizeType.LeftTop;
+                    Mouse.SetCursor(Cursors.SizeNWSE);
+                    return;
+                }
+                if (isEdgeBottom)
+                {
+                    _IsDraggingToResizeType = DragResizeType.LeftBottom;
+                    Mouse.SetCursor(Cursors.SizeNESW);
+                    return;
+                }
             }
-            else if (pos.Y > ActualHeight - BorderSize)
+            if (isEdgeRight)
             {
-                // bottom
-                _IsDraggingToResizeType = DragResizeType.LeftBottom;
-                Mouse.SetCursor(Cursors.SizeNESW);
+                if (isEdgeTop)
+                {
+                    _IsDraggingToResizeType = DragResizeType.RightTop;
+                    Mouse.SetCursor(Cursors.SizeNESW);
+                    return;
+                }
+                if (isEdgeBottom)
+                {
+                    _IsDraggingToResizeType = DragResizeType.RightBottom;
+                    Mouse.SetCursor(Cursors.SizeNWSE);
+                    return;
+                }
             }
-            else
+        }
+
+        // normal
+        {
+            var isLeft = pos.X < WindowDragThreshold;
+            var isRight = pos.X > ActualWidth - WindowDragThreshold;
+            var isTop = pos.Y < WindowDragThreshold;
+            var isBottom = pos.Y > ActualHeight - WindowDragThreshold;
+
+            if (isLeft)
             {
-                // left
                 _IsDraggingToResizeType = DragResizeType.Left;
                 Mouse.SetCursor(Cursors.SizeWE);
+                return;
             }
-        }
-        else if (pos.X > ActualWidth - BorderSize)
-        {
-            // right
-
-            // cursor is inside right vertical border.
-            if (pos.Y < BorderSize)
+            if (isRight)
             {
-                // top
-                _IsDraggingToResizeType = DragResizeType.RightTop;
-                Mouse.SetCursor(Cursors.SizeNESW);
-            }
-            else if (pos.Y > ActualHeight - BorderSize)
-            {
-                // bottom
-                _IsDraggingToResizeType = DragResizeType.RightBottom;
-                Mouse.SetCursor(Cursors.SizeNWSE);
-            }
-            else
-            {
-                // right
                 _IsDraggingToResizeType = DragResizeType.Right;
                 Mouse.SetCursor(Cursors.SizeWE);
+                return;
             }
-        }
-        else
-        {
-            // middle
-            if (pos.Y < BorderSize)
+            if (isTop)
             {
                 _IsDraggingToResizeType = DragResizeType.Top;
                 Mouse.SetCursor(Cursors.SizeNS);
+                return;
             }
-            else if (pos.Y > ActualHeight - BorderSize)
+            if (isBottom)
             {
                 _IsDraggingToResizeType = DragResizeType.Bottom;
                 Mouse.SetCursor(Cursors.SizeNS);
+                return;
             }
-            else
-            {
-                _IsDraggingToResizeType = DragResizeType.None;
-            }
+
+            //center
+            _IsDraggingToResizeType = DragResizeType.None;
         }
+
     }
 
     void Group_SizeChanged(object sender, SizeChangedEventArgs e)

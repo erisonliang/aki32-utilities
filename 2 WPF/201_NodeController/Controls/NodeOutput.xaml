@@ -9,7 +9,7 @@
     <Style TargetType="{x:Type local:NodeOutputContent}">
         <Setter Property="StrokeThickness" Value="2"/>
         <Setter Property="Stroke" Value="#FF666666"/>
-        <Setter Property="Fill" Value="WhiteSmoke"/>
+        <Setter Property="Fill" Value="#FFEEEEEE"/>
         <!--<Setter Property="Fill" Value="#FF080808"/>-->
         <Setter Property="MinWidth" Value="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType={x:Type local:NodeOutput}}}"/>
         <Style.Triggers>
@@ -92,7 +92,7 @@
                         >
                         <ContentPresenter.Content>
                             <Path 
-                                Margin="0,0,-30,0" 
+                                Margin="0,1,-30,0" 
                                 Fill="Transparent"
                                 Stroke="Red"
                                 StrokeThickness="2"

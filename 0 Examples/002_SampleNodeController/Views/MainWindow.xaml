@@ -54,8 +54,8 @@
             <Setter Property="InputLayout" Value="Center"/>
             <Setter Property="Outputs" Value="{Binding Outputs}"/>
             <Setter Property="OutputLayout" Value="Center"/>
-            <Setter Property="InputMargin" Value="5,1,5,1"/>
-            <Setter Property="OutputMargin" Value="4,0,4,10"/>
+            <Setter Property="InputMargin" Value="0,5,0,5"/>
+            <Setter Property="OutputMargin" Value="0,5,0,5"/>
             <Setter Property="InputStyle" Value="{StaticResource NodeInputStyle}"/>
             <Setter Property="OutputStyle" Value="{StaticResource NodeOutputStyle}"/>
             <Setter Property="SizeChangedCommand" Value="{Binding SizeChangedCommand}"/>
@@ -144,11 +144,13 @@
             <Setter Property="HeaderContentTemplate">
                 <Setter.Value>
                     <DataTemplate>
-                        <StackPanel Background="#FF666666">
-                            <StackPanel HorizontalAlignment="Center">
-                                <Label Content="{Binding Name}"/>
+                        <Border CornerRadius="10,10,0,0" Background="#FF666666">
+                            <StackPanel>
+                                <StackPanel HorizontalAlignment="Center">
+                                    <Label Content="{Binding Name}"/>
+                                </StackPanel>
                             </StackPanel>
-                        </StackPanel>
+                        </Border>
                     </DataTemplate>
                 </Setter.Value>
             </Setter>
