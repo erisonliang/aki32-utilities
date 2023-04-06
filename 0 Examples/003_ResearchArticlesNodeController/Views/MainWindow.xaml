@@ -374,6 +374,15 @@
                         ToolTip="ノード接続を削除できない状態にします。"
                         />
 
+                    <CheckBox
+                        Margin="0,4,4,4"
+                        Height="24"
+                        Content="物理演算"
+                        IsChecked="{Binding IsDynamicNodeSpacingAvailable}" 
+                        VerticalContentAlignment="Center" 
+                        ToolTip="ノードの距離を，物理演算によって自動で調整します。"
+                        />
+
                     <TextBlock VerticalAlignment="Center" Text="|" Margin="7,0,3,5" FontSize="25" FontWeight="Thin" Foreground="Gray"/>
 
                     <TextBlock
