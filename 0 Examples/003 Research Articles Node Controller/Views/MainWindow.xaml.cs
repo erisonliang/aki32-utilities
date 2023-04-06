@@ -20,7 +20,7 @@ public partial class MainWindow : Window
         // message
         Console.SetOut(new ListBoxTextWriter(ListView_Console));
         UtilConfig.ConsoleOutput_Preprocess = false;
-        ((INotifyCollectionChanged)ListView_Console.Items).CollectionChanged += async (_, _) =>
+        ((INotifyCollectionChanged)ListView_Console.Items).CollectionChanged += (_, _) =>
         {
             ListView_Console.SelectedIndex = ListView_Console.Items.Count - 1;
             ListView_Console.ScrollIntoView(ListView_Console.SelectedItem);
