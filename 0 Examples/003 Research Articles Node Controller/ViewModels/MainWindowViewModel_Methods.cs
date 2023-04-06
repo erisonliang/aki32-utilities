@@ -1501,6 +1501,12 @@ public partial class MainWindowViewModel : ViewModel
         }
     }
 
+    // ★★★★★★★★★★★★★★★ 右パネル内 → 設定
+
+    void InsertToFormat(object a)
+    {
+
+    }
 
 
     // ★★★★★★★★★★★★★★★ not using

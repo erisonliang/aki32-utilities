@@ -224,7 +224,7 @@ public class ResearchArticle : IComparable
     [CsvIgnore]
     public bool IsLastReferenceStringFromTemplateGeneration = false;
     [CsvIgnore]
-    public string ReferenceStringFormat = "{Authors}: {ArticleTitle}, {MaterialTitle}, {MaterialVolume}, {MaterialSubVolume}, pp.{StartingPage}-{EndingPage}, {PublishedYearAndMonth}";
+    public static string ReferenceStringFormat { get; set; } = "{Authors}: {ArticleTitle}, {MaterialTitle}, {MaterialVolume}, {MaterialSubVolume}, pp.{StartingPage}-{EndingPage}, {PublishedYearAndMonth}";
     [CsvIgnore]
     public string? ReferenceString_FromUnstructured
     {

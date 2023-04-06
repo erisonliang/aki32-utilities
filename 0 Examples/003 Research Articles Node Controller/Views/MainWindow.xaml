@@ -189,7 +189,7 @@
                                 </Grid>
                             </StackPanel>
                         </Border>
-                        
+
                     </DataTemplate>
                 </Setter.Value>
             </Setter>
@@ -316,10 +316,10 @@
             <ColumnDefinition Width="600"/>
         </Grid.ColumnDefinitions>
 
+        <!-- ヘッダー -->
         <Grid 
             Grid.Row="0"
             Grid.Column="0"
-            Grid.ColumnSpan="2"
             Height="35" 
             >
 
@@ -408,6 +408,7 @@
 
         </Grid>
 
+        <!-- ノードグラフ -->
         <Grid
             Grid.Row="1" 
             Grid.Column="0"
@@ -463,8 +464,10 @@
 
         </Grid>
 
+        <!-- 右パネル -->
         <Grid 
-            Grid.Row="1" 
+            Grid.Row="0"
+            Grid.RowSpan="2"
             Grid.Column="2"
             >
 
@@ -483,8 +486,18 @@
             <TabControl 
                 x:Name="TabControl_RightPanel"
                 Grid.Row="0"
+                mah:HeaderedControlHelper.HeaderFontSize="13"
                 >
-                <TabItem Header="選択中の文献" x:Name="TabItem_SelectingNode">
+                <TabItem x:Name="TabItem_SelectingNode">
+                    <TabItem.Header>
+                        <Grid Height="27">
+                            <TextBlock
+                                FontSize="13"
+                                Text=" 📄 選択中の文献 "
+                                VerticalAlignment="Center"
+                                />
+                        </Grid>
+                    </TabItem.Header>
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="auto"/>
@@ -625,7 +638,7 @@
                                                 <Grid Margin="0,0,3,0">
                                                     <mah:ProgressRing Visibility="{Binding IsOpenPDFBusy, Converter={StaticResource BooleanToVisibilityConverter}}" Style="{StaticResource ProgressRingStyle}" Margin="0,0,3.5,0"/>
                                                     <Grid Visibility="{Binding IsOpenPDFBusy, Converter={StaticResource InverseBooleanToVisibility}}">
-                                                        <TextBlock Text="📑" Visibility="{Binding IsOpenPDFDone, Converter={StaticResource InverseBooleanToVisibility}}"/>
+                                                        <TextBlock Text="📄" Visibility="{Binding IsOpenPDFDone, Converter={StaticResource InverseBooleanToVisibility}}"/>
                                                         <TextBlock Text="✔️" Visibility="{Binding IsOpenPDFDone, Converter={StaticResource BooleanToVisibilityConverter}}" Foreground="Green"/>
                                                     </Grid>
                                                 </Grid>
@@ -780,7 +793,7 @@
                                                 <Grid Margin="0,0,3,0">
                                                     <mah:ProgressRing Visibility="{Binding IsManuallyAddPDFBusy, Converter={StaticResource BooleanToVisibilityConverter}}" Style="{StaticResource ProgressRingStyle}" Margin="0,0,3.5,0"/>
                                                     <Grid Visibility="{Binding IsManuallyAddPDFBusy, Converter={StaticResource InverseBooleanToVisibility}}">
-                                                        <TextBlock Text="📑" Visibility="{Binding IsManuallyAddPDFDone, Converter={StaticResource InverseBooleanToVisibility}}"/>
+                                                        <TextBlock Text="📄" Visibility="{Binding IsManuallyAddPDFDone, Converter={StaticResource InverseBooleanToVisibility}}"/>
                                                         <TextBlock Text="✔️" Visibility="{Binding IsManuallyAddPDFDone, Converter={StaticResource BooleanToVisibilityConverter}}" Foreground="Green"/>
                                                     </Grid>
                                                 </Grid>
@@ -1489,7 +1502,7 @@
 
                     </Grid>
                 </TabItem>
-                <TabItem Header="検索" x:Name="TabItem_Search">
+                <TabItem Header=" 🔎 検索 " x:Name="TabItem_Search">
                     <ScrollViewer
                         HorizontalScrollBarVisibility="Disabled">
                         <StackPanel Margin="4">
@@ -2084,6 +2097,83 @@
                         </StackPanel>
                     </ScrollViewer>
                 </TabItem>
+                <TabItem Header=" 🔧 設定" x:Name="TabItem_Setting">
+                    <ScrollViewer
+                        HorizontalScrollBarVisibility="Disabled">
+                        <StackPanel Margin="4">
+
+                            <Grid Height="10"/>
+                            <Grid Margin="4">
+                                <TextBlock
+                                    Text="文献文字列"
+                                    FontSize="20"
+                                    HorizontalAlignment="Left"
+                                    >
+                                </TextBlock>
+                            </Grid>
+
+                            <Grid Margin="4">
+                                <TextBlock
+                                    Text="フォーマット：" 
+                                    Width="70" 
+                                    HorizontalAlignment="Left"
+                                    TextAlignment="Right"
+                                    ToolTipService.InitialShowDelay="10" 
+                                    >
+                                    <TextBlock.ToolTip>
+                                        <TextBlock
+                                            TextAlignment="Left"
+                                            Text="文献文字列生成フォーマット"
+                                            >
+                                        </TextBlock>
+                                    </TextBlock.ToolTip>
+                                </TextBlock>
+                                <TextBox 
+                                    Margin="70,0,0,0" 
+                                    Text="（未実装）"
+                                    TextWrapping="Wrap" AcceptsReturn="False"
+                                    />
+                            </Grid>
+                            <Grid Margin="4">
+                                <StackPanel
+                                        Orientation="Horizontal"
+                                        Margin="70,0,0,0"
+                                        >
+
+                                    <Button
+                                        Margin="0,4,4,4"
+                                        Command="{Binding InsertToFormatCommand}"
+                                        Style="{StaticResource ButtonTextStyle}"
+                                        Content="テスト"
+                                        />
+                                    <Button
+                                        Margin="0,4,4,4"
+                                        Command="{Binding InsertToFormatCommand}"
+                                        Style="{StaticResource ButtonTextStyle}"
+                                        Content="テスト"
+                                        />
+                                    <Button
+                                        Margin="0,4,4,4"
+                                        Command="{Binding InsertToFormatCommand, ConverterParameter=ss}"
+                                        Style="{StaticResource ButtonTextStyle}"
+                                        Content="テスト"
+                                        />
+
+                                </StackPanel>
+                            </Grid>
+
+
+
+
+
+
+                            <!--research-->
+
+
+                        </StackPanel>
+                    </ScrollViewer>
+                </TabItem>
+
             </TabControl>
 
             <Grid Margin="4" Grid.Row="2">
@@ -2105,7 +2195,8 @@
 
         <GridSplitter 
             Grid.Column="1"
-            Grid.Row="1"
+            Grid.Row="0"
+            Grid.RowSpan="2"
             HorizontalAlignment="Stretch"
             />
 

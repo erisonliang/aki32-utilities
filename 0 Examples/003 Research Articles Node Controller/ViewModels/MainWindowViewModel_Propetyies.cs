@@ -255,6 +255,12 @@ public partial class MainWindowViewModel : ViewModel
     ViewModelCommandHandler _InternetSearch_CrossRef_C_Command = new();
 
 
+    // ★★★★★★★★★★★★★★★ 右パネル内 → 設定InsertToFormat
+
+    public ListenerCommand<object> InsertToFormatCommand => _InsertToFormatCommand.Get(InsertToFormat);
+    ViewModelCommandHandler<object> _InsertToFormatCommand = new();
+
+
     // ★★★★★★★★★★★★★★★ 
 
 }
