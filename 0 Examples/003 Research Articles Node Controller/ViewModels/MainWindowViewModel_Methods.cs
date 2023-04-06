@@ -57,6 +57,13 @@ public partial class MainWindowViewModel : ViewModel
 
     }
 
+    async Task Test()
+    {
+        MoveCanvasToTargetArticle(NodeViewModels.FirstOrDefault());
+
+
+    }
+
     void UpdateIsLockedAllNodeLinksProperty(bool value)
     {
         _IsLockedAllNodeLinks = value;
@@ -95,8 +102,8 @@ public partial class MainWindowViewModel : ViewModel
         var posOnCanvas = Mouse.GetPosition(ParentView.NodeGraph.Canvas);
         var posOnContextMenu = Mouse.GetPosition(ParentView.Resources["NodeGraphContextMenu"] as IInputElement);
 
-        var offsetPosOnCanvasX = posOnCanvas.X - Offset.X - posOnContextMenu.X / Scale;
-        var offsetPosOnCanvasY = posOnCanvas.Y - Offset.Y - posOnContextMenu.Y / Scale;
+        var offsetPosOnCanvasX = posOnCanvas.X - CanvasOffset.X - posOnContextMenu.X / Scale;
+        var offsetPosOnCanvasY = posOnCanvas.Y - CanvasOffset.Y - posOnContextMenu.Y / Scale;
         var addingPosition = new Point(offsetPosOnCanvasX, offsetPosOnCanvasY);
 
         AddNewArticleNode(addingPosition);
@@ -1629,13 +1636,17 @@ public partial class MainWindowViewModel : ViewModel
 
         MoveCanvasToTargetArticle(targetArticleNode);
     }
-    void MoveCanvasToTargetArticle(ResearchArticleNodeViewModel? targetArticleNode)
+    void MoveCanvasToTargetArticle(DefaultNodeViewModel? targetNode)
     {
-        if (targetArticleNode == null)
+        if (targetNode == null)
             return;
 
-        var targetArticleNodePosition = targetArticleNode.Position;
-        Offset = new Point(-targetArticleNodePosition.X, -targetArticleNodePosition.Y);
+        var targetArticleNodePosition = targetNode.Position;
+        CanvasOffset = new Point(-targetArticleNodePosition.X, -targetArticleNodePosition.Y);
+    }
+    void MoveCanvasToPosition(int x = 0, int y = 0)
+    {
+        CanvasOffset = new Point(-x, -y);
     }
 
 

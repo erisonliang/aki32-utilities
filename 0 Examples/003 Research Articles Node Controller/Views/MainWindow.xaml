@@ -10,7 +10,7 @@
         xmlns:mah="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
         xmlns:converters="clr-namespace:Aki32Utilities.UsageExamples.ResearchArticlesNodeController.Converters"
         mc:Ignorable="d"
-        Title="Research Articles Node Controll" 
+        Title="論文管理" 
         d:Height="1300"
         d:Width="1300"
         >
@@ -103,11 +103,13 @@
         </Style>
 
         <ContextMenu x:Key="NodeGraphContextMenu">
+            <MenuItem Header="----- 文献管理 -----"/>
             <MenuItem Header="新規文献を追加" Command="{Binding AddNodeCommand}"/>
-            <MenuItem Header="文献を整列" Command="{Binding RearrangeNodesAlignLeftCommand}"/>
             <MenuItem Header="選択中の文献を全て削除" Command="{Binding RemoveSelectingNodesCommand}"/>
-            <MenuItem Header="-------------------------------"/>
             <MenuItem Header="一時的な文献データを全て削除" Command="{Binding RemoveTempNodesCommand}"/>
+            <MenuItem Header="----- 整列 -----"/>
+            <MenuItem Header="文献を整列" Command="{Binding RearrangeNodesAlignLeftCommand}"/>
+            <MenuItem Header="---------------"/>
         </ContextMenu>
 
         <Style x:Key="NodeInputStyle" TargetType="{x:Type ctrl:NodeInputContent}" BasedOn="{StaticResource {x:Type ctrl:NodeInputContent}}">
@@ -348,6 +350,14 @@
                         </StackPanel>
                     </Button>
 
+                    <Button
+                        Margin="0,4,4,4"
+                        Command="{Binding TestCommand}"
+                        Style="{StaticResource ButtonTextStyle}"
+                        Content="テスト"
+                        >
+                    </Button>
+
                     <TextBlock VerticalAlignment="Center" Text="|" Margin="7,0,3,5" FontSize="25" FontWeight="Thin" Foreground="Gray"/>
 
                     <CheckBox
@@ -408,7 +418,7 @@
                 x:Name="NodeGraph"
                 MoveWithMouse="Right"
                 Scale="{Binding Scale}"
-                Offset="{Binding Offset}"
+                Offset="{Binding CanvasOffset}"
                 ItemsSource="{Binding NodeViewModels}"
                 ItemContainerStyle="{StaticResource DefaultNodeStyle}"
                 NodeLinks="{Binding NodeLinkViewModels}"

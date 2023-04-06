@@ -26,6 +26,7 @@ public partial class MainWindowViewModel : ViewModel
         catch (Exception)
         {
         }
+
     }
 
     private void InitResearchArticlesManager()

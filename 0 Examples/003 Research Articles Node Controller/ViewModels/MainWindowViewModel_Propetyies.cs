@@ -31,7 +31,7 @@ public partial class MainWindowViewModel : ViewModel
     // ★★★★★★★★★★★★★★★ props
 
     public double Scale { get; set; } = 1d;
-    public Point Offset { get; set; } = new Point(0, 0);
+    public Point CanvasOffset { get; set; } = new Point(0, 0);
 
     public static ResearchArticlesManager ResearchArticlesManager { get; set; }
 
@@ -42,6 +42,9 @@ public partial class MainWindowViewModel : ViewModel
     public bool IsSaveDone { get; set; } = false;
     public ViewModelCommand SaveCommand => _SaveCommand.Get(async () => await Save());
     ViewModelCommandHandler _SaveCommand = new();
+
+    public ViewModelCommand TestCommand => _TestCommand.Get(async () => await Test());
+    ViewModelCommandHandler _TestCommand = new();
 
     public RangeSelectionMode[] RangeSelectionModes { get; } = Enum.GetValues(typeof(RangeSelectionMode)).OfType<RangeSelectionMode>().ToArray();
     public RangeSelectionMode SelectedRangeSelectionMode { get; set; } = RangeSelectionMode.包含;

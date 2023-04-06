@@ -3,6 +3,7 @@ using Aki32Utilities.UsageExamples.ResearchArticlesNodeController.ViewModels;
 using Aki32Utilities.ConsoleAppUtilities.General;
 using Aki32Utilities.WPFAppUtilities.General;
 using System.Collections.Specialized;
+using XPlot.Plotly;
 
 namespace Aki32Utilities.UsageExamples.ResearchArticlesNodeController.Views;
 public partial class MainWindow : Window
@@ -25,7 +26,18 @@ public partial class MainWindow : Window
             ListView_Console.ScrollIntoView(ListView_Console.SelectedItem);
         };
 
-        //
+        // ensure node links are drawn correctly
+        Loaded += async (_, _) =>
+        {
+            try
+            {
+                await Task.Delay(10);
+                NodeGraph.Offset = new Point(1, 1);
+            }
+            catch (Exception)
+            {
+            }
+        };
 
 
         //
@@ -34,4 +46,6 @@ public partial class MainWindow : Window
         //
 
     }
+
+
 }
