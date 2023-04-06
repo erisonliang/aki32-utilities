@@ -1,8 +1,4 @@
-﻿
-
-using System.Text;
-
-using DocumentFormat.OpenXml.Bibliography;
+﻿using System.Text;
 
 namespace Aki32Utilities.ConsoleAppUtilities.General;
 public static partial class ChainableExtensions

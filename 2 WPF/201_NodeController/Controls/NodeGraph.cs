@@ -829,33 +829,38 @@ public class NodeGraph : MultiSelector
 
     void NodeCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
     {
-        CollectionChanged<DefaultNode>(e.Action, e.OldItems, e.NewItems, RemoveNodesFromCanvas, RemoveNodesFromCanvas, AddNodesToCanvas);
+        CollectionChanged<DefaultNode>(sender, e, RemoveNodesFromCanvas, RemoveNodesFromCanvas, AddNodesToCanvas);
     }
 
     void GroupNodeCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
     {
-        CollectionChanged<GroupNode>(e.Action, e.OldItems, e.NewItems, RemoveGroupNodesFromCanvas, RemoveGroupNodesFromCanvas, AddGroupNodesToCanvas);
+        CollectionChanged<GroupNode>(sender, e, RemoveGroupNodesFromCanvas, RemoveGroupNodesFromCanvas, AddGroupNodesToCanvas);
     }
 
     void NodeLinkCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
     {
-        CollectionChanged<NodeLink>(e.Action, e.OldItems, e.NewItems, RemoveNodeLinksFromCanvas, RemoveNodeLinksFromCanvas, AddNodeLinksToCanvas);
+        CollectionChanged<NodeLink>(sender, e, RemoveNodeLinksFromCanvas, RemoveNodeLinksFromCanvas, AddNodeLinksToCanvas);
     }
 
     void CollectionChanged<T>(
-        NotifyCollectionChangedAction action,
-        IList oldItems,
-        IList newItems,
+        object sender,
+        NotifyCollectionChangedEventArgs e,
         Action<object[]> removeItemWithDataContext,
         Action<T[]> removeItemDirectly,
-        Action<object[]> addItemWithDataContext) where T : UIElement, ICanvasObject
+        Action<object[]> addItemWithDataContext
+        ) where T : UIElement, ICanvasObject
     {
+        NotifyCollectionChangedAction action = e.Action;
+        IList? oldItems = e.OldItems;
+        IList? newItems = e.NewItems;
+
         switch (action)
         {
             case NotifyCollectionChangedAction.Reset:
                 if (Canvas != null)
                 {
                     removeItemDirectly(Canvas.Children.OfType<T>().ToArray());
+                    addItemWithDataContext(((IList)sender).OfType<object>().ToArray());
                 }
                 break;
             case NotifyCollectionChangedAction.Move:

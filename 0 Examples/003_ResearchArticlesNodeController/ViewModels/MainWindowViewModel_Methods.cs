@@ -48,7 +48,7 @@ public partial class MainWindowViewModel : ViewModel
         catch (Exception ex)
         {
             Console.WriteLine($"❌ 保存失敗：{ex.Message}");
-            MessageBox.Show($"失敗しました。\r\nﾒｯｾｰｼﾞ: {ex.Message}", "保存", MessageBoxButton.OK, MessageBoxImage.Error);
+            //MessageBox.Show($"失敗しました。\r\nﾒｯｾｰｼﾞ: {ex.Message}", "保存", MessageBoxButton.OK, MessageBoxImage.Error);
         }
         finally
         {
@@ -59,9 +59,8 @@ public partial class MainWindowViewModel : ViewModel
 
     async Task Test()
     {
-        MoveCanvasToTargetArticle(NodeViewModels.FirstOrDefault());
-
-
+        RedrawResearchArticlesManager();
+        //MoveCanvasToTargetArticle(NodeViewModels.FirstOrDefault());
     }
 
     void UpdateIsLockedAllNodeLinksProperty(bool value)
@@ -126,6 +125,13 @@ public partial class MainWindowViewModel : ViewModel
         var saveTask = Save();
     }
 
+    void RearrangeNodesChronologicallyAlignLeft()
+    {
+        var rearrangingNodes = new List<DefaultNodeViewModel>(_NodeViewModels);
+        OrderByGroup(ref rearrangingNodes);
+        var basePosition = new Point(NODE_MARGIN_LEFT, NODE_MARGIN_TOP);
+        RearrangeNodesChronologicallyAlignLeft(rearrangingNodes, basePosition, true);
+    }
     void RearrangeNodesAlignLeft()
     {
         var rearrangingNodes = new List<DefaultNodeViewModel>(_NodeViewModels);
@@ -357,6 +363,11 @@ public partial class MainWindowViewModel : ViewModel
             ProcessOne(noOutputNode);
 
     }
+    void RearrangeNodesChronologicallyAlignLeft(List<DefaultNodeViewModel> rearrangingNodes, Point basePosition, bool toLowerDirection)
+    {
+        RearrangeNodesAlignLeft(rearrangingNodes, basePosition, toLowerDirection);
+        throw new NotImplementedException("年代で並べ替えるの，未実装");
+    }
     IEnumerable<DefaultNodeViewModel> GetChildrenNodes(DefaultNodeViewModel targetNode, IEnumerable<DefaultNodeViewModel> fromThisList = null)
     {
         var childrenNodes = new List<DefaultNodeViewModel>();
@@ -556,6 +567,8 @@ public partial class MainWindowViewModel : ViewModel
             if (pulledArticles is null || pulledArticles.Count == 0)
                 throw new Exception($"CrossRef および J-Stage がこの文献に対応していない，もしくは引用関係が存在しない資料である可能性があります。");
 
+            RedrawResearchArticlesManager();
+
 
             // 全てに対して GPT予測！？？
             var pulledCount = pulledArticles.Count;
@@ -564,7 +577,8 @@ public partial class MainWindowViewModel : ViewModel
             {
                 var currentFriendlyIndex = 0;
                 var failCount = 0;
-                foreach (var pulledArticle in pulledArticles)
+
+                foreach (var targetArticle in pulledArticles)
                 {
                     currentFriendlyIndex++;
 
@@ -572,11 +586,25 @@ public partial class MainWindowViewModel : ViewModel
 
                     try
                     {
-                        var result = await pulledArticle.TryPredictMetaInfo_ChatGPT();
-                        if (!result)
-                            throw new Exception("推測に失敗しました。");
+                        if (ResearchArticlesManager.ArticleDatabase.Contains(targetArticle))
+                        {
+                            var predictResult = await targetArticle.TryPredictMetaInfo_ChatGPT();
+                            if (!predictResult)
+                                throw new Exception("推測に失敗しました。");
 
-                        Console.WriteLine($"成功。(成功:{currentFriendlyIndex - failCount}/{currentFriendlyIndex}件)");
+                            var mergeResult = ResearchArticlesManager.MergeIfMergeable(targetArticle);
+                            if (mergeResult is not null)
+                                Console.WriteLine("同一の文献を発見したため，マージしました。");
+
+                        }
+                        else
+                        {
+                            // 既にマージされたものの可能性が高い。成功扱い。
+                            Console.WriteLine("既に他の文献にマージされた文献です。");
+                        }
+
+                        Console.WriteLine($"成功。(成功 {currentFriendlyIndex - failCount}件，失敗 {failCount}件，残り {pulledCount - currentFriendlyIndex}件)");
+                        RedrawResearchArticlesManager();
                     }
                     catch (Exception ex)
                     {
@@ -589,7 +617,6 @@ public partial class MainWindowViewModel : ViewModel
             }
 
             RedrawResearchArticlesManager();
-            MoveCanvasToTargetArticle(SelectingNodeViewModel);
             SelectedEmphasizePropertyItem = ViewModels.EmphasizePropertyItems.一時ﾃﾞｰﾀ;
             var saveTask = Save();
 
@@ -673,11 +700,15 @@ public partial class MainWindowViewModel : ViewModel
                 throw new Exception("文献が選択されていません。");
 
             // ChatGPTによる推定
-            var result = await SelectingNodeViewModel.Article.TryPredictMetaInfo_ChatGPT();
-            if (!result)
+            var targetArticle = SelectingNodeViewModel.Article;
+            var predictResult = await targetArticle.TryPredictMetaInfo_ChatGPT();
+            if (!predictResult)
                 throw new Exception("推測に失敗しました。");
 
-            SelectingNodeViewModel.NotifyArticleUpdated();
+            var mergeResult = ResearchArticlesManager.MergeIfMergeable(targetArticle);
+            if (mergeResult is not null)
+                Console.WriteLine("同一の文献を発見したため，マージしました。");
+
             var saveTask = Save();
 
             var successAnimationTask = Task.Run(async () =>
