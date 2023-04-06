@@ -155,7 +155,7 @@ public partial class ResearchArticlesManager
 
             // multiple matches
             if (warnMultipleMatches && matchedArticles!.Count > 1)
-                throw new InvalidDataException($"{matchedArticles!.Count} articles matched to {mergingArticle.ArticleTitle}");
+                throw new InvalidDataException($"Expected only 1 article matched but {matchedArticles!.Count} matched to {mergingArticle.ArticleTitle}");
 
             // merge/update
             if (matchedArticles!.Any() && !forceAdd)
