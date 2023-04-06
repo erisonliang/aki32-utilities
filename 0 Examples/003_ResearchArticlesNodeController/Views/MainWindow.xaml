@@ -104,13 +104,15 @@
         </Style>
 
         <ContextMenu x:Key="NodeGraphContextMenu">
-            <MenuItem Header="----- 文献管理 -----"/>
+            <MenuItem Header="★ 文献管理" IsHitTestVisible="False"/>
             <MenuItem Header="新規文献を追加" Command="{Binding AddNodeCommand}"/>
             <MenuItem Header="選択中の文献を全て削除" Command="{Binding RemoveSelectingNodesCommand}"/>
             <MenuItem Header="一時的な文献データを全て削除" Command="{Binding RemoveTempNodesCommand}"/>
-            <MenuItem Header="----- 整列 -----"/>
+            <MenuItem Header="★ 整列" IsHitTestVisible="False"/>
             <MenuItem Header="文献を整列" Command="{Binding RearrangeNodesAlignLeftCommand}"/>
-            <MenuItem Header="---------------"/>
+            <MenuItem Header="★ ーーーーー" IsHitTestVisible="False"/>
+            <MenuItem Header="" IsHitTestVisible="False"/>
+            <MenuItem Header="" IsHitTestVisible="False"/>
         </ContextMenu>
 
         <Style x:Key="NodeInputStyle" TargetType="{x:Type graph:NodeInputContent}" BasedOn="{StaticResource {x:Type graph:NodeInputContent}}">
