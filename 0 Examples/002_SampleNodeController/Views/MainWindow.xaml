@@ -1,0 +1,238 @@
+﻿<Window x:Class="Aki32Utilities.UsageExamples.SampleNodeController.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="clr-namespace:Aki32Utilities.UsageExamples.SampleNodeController.ViewModels"
+        xmlns:graph="clr-namespace:Aki32Utilities.WPFAppUtilities.NodeController.Controls;assembly=201_NodeController"
+        mc:Ignorable="d"
+        Title="Research Articles Node Controll" Height="600" Width="1000">
+
+    <Window.DataContext>
+        <vm:MainWindowViewModel/>
+    </Window.DataContext>
+
+    <Window.Resources>
+
+        <ContextMenu x:Key="NodeGraphContextMenu">
+            <MenuItem Header="AddNode" Command="{Binding AddNodeCommand}"/>
+            <MenuItem Header="AddGroupNode" Command="{Binding AddGroupNodeCommand}"/>
+            <MenuItem Header="RemoveNodes" Command="{Binding RemoveNodesCommand}"/>
+        </ContextMenu>
+
+        <Style x:Key="NodeInputStyle" TargetType="{x:Type graph:NodeInputContent}" BasedOn="{StaticResource {x:Type graph:NodeInputContent}}">
+            <Setter Property="Guid" Value="{Binding Guid, Mode=OneWay}"/>
+            <Setter Property="Content" Value="{Binding Label}"/>
+            <Setter Property="ToolTip" Value="{Binding ToolTip}"/>
+            <Setter Property="IsEnabled" Value="{Binding IsEnable}"/>
+            <Setter Property="AllowToConnectMultiple" Value="{Binding AllowToConnectMultiple}"/>
+        </Style>
+
+        <Style x:Key="NodeOutputStyle" TargetType="{x:Type graph:NodeOutputContent}" BasedOn="{StaticResource {x:Type graph:NodeOutputContent}}">
+            <Setter Property="Guid" Value="{Binding Guid, Mode=OneWay}"/>
+            <Setter Property="Content" Value="{Binding Label}"/>
+            <Setter Property="ToolTip" Value="{Binding ToolTip}"/>
+            <Setter Property="IsEnabled" Value="{Binding IsEnable}"/>
+        </Style>
+
+        <Style x:Key="NodeLinkStyle" TargetType="{x:Type graph:NodeLink}" BasedOn="{StaticResource {x:Type graph:NodeLink}}">
+            <Setter Property="Guid" Value="{Binding Guid, Mode=OneWay}"/>
+            <Setter Property="OutputConnectorGuid" Value="{Binding OutputConnectorGuid, Mode=OneWay}"/>
+            <Setter Property="InputConnectorGuid" Value="{Binding InputConnectorGuid, Mode=OneWay}"/>
+            <Setter Property="IsLocked" Value="{Binding IsLocked, Mode=OneWay}"/>
+            <Setter Property="IsSelected" Value="{Binding IsSelected}"/>
+            <!--dont need to specify Mode=TwoWay because link is set default two way property.-->
+        </Style>
+
+        <Style x:Key="DefaultNodeStyle" TargetType="{x:Type graph:DefaultNode}" BasedOn="{StaticResource {x:Type graph:DefaultNode}}">
+            <Setter Property="Guid" Value="{Binding Guid, Mode=OneWay}"/>
+            <!--disconnect position binding if you specify Mode=OneWay, because it will change binding position instance in view control.-->
+            <Setter Property="Position" Value="{Binding Position}"/>
+            <Setter Property="IsSelected" Value="{Binding IsSelected}"/>
+            <Setter Property="Inputs" Value="{Binding Inputs}"/>
+            <Setter Property="InputLayout" Value="Center"/>
+            <Setter Property="Outputs" Value="{Binding Outputs}"/>
+            <Setter Property="OutputLayout" Value="Center"/>
+            <Setter Property="InputMargin" Value="5,1,5,1"/>
+            <Setter Property="OutputMargin" Value="4,0,4,10"/>
+            <Setter Property="InputStyle" Value="{StaticResource NodeInputStyle}"/>
+            <Setter Property="OutputStyle" Value="{StaticResource NodeOutputStyle}"/>
+            <Setter Property="SizeChangedCommand" Value="{Binding SizeChangedCommand}"/>
+            <Setter Property="HeaderContentTemplate">
+                <Setter.Value>
+                    <DataTemplate>
+                        <Border CornerRadius="11,11,0,0" Background="#FF666666">
+                            <StackPanel>
+                                <Grid>
+                                    <StackPanel HorizontalAlignment="Center">
+                                        <Label Content="{Binding Name}"/>
+                                    </StackPanel>
+                                    <StackPanel HorizontalAlignment="Left">
+                                        <Label Content="★"/>
+                                    </StackPanel>
+                                </Grid>
+                            </StackPanel>
+                        </Border>
+                    </DataTemplate>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="ContentTemplate">
+                <Setter.Value>
+                    <DataTemplate>
+
+                        <!-- グリッド内に表示する情報 -->
+                        <StackPanel TextBlock.Foreground="White">
+
+                            <Grid MinWidth="300" MaxWidth="500" Margin="5">
+
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="5"/>
+                                    <ColumnDefinition Width="3*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+
+                                <TextBlock Grid.Row="0" Grid.Column="0" Text="幅:" HorizontalAlignment="Right"/>
+                                <TextBlock Grid.Row="0" Grid.Column="2" Text="{Binding Width}"/>
+
+                                <TextBlock Grid.Row="1" Grid.Column="0" Text="高さ:" HorizontalAlignment="Right"/>
+                                <TextBlock Grid.Row="1" Grid.Column="2" Text="{Binding Height}"/>
+
+                                <TextBlock Grid.Row="2" Grid.Column="0" Text="メモ:" HorizontalAlignment="Right"/>
+                                <TextBox Grid.Row="2" Grid.Column="2" Text="{Binding Memo}" AcceptsReturn="True" TextWrapping="Wrap"/>
+                                <TextBlock Grid.Row="3" Grid.Column="2" Text="{Binding Memo}" TextWrapping="Wrap"/>
+
+                                <Button Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="3" Content="PDFを表示"/>
+
+
+
+
+
+
+
+
+
+
+                            </Grid>
+
+                        </StackPanel>
+                    </DataTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="GroupNodeStyle" TargetType="{x:Type graph:GroupNode}" BasedOn="{StaticResource {x:Type graph:GroupNode}}">
+            <Setter Property="Guid" Value="{Binding Guid, Mode=OneWay}"/>
+            <!--disconnect position binding if you specify Mode=OneWay, because it will change binding position instance in view control.-->
+            <Setter Property="Position" Value="{Binding Position}"/>
+            <Setter Property="InnerPosition" Value="{Binding InnerPosition}"/>
+            <Setter Property="InterlockPosition" Value="{Binding InterlockPosition}"/>
+            <Setter Property="InnerWidth" Value="{Binding InnerWidth}"/>
+            <Setter Property="InnerHeight" Value="{Binding InnerHeight}"/>
+            <Setter Property="Comment" Value="{Binding Comment}"/>
+            <Setter Property="CommentSize" Value="24"/>
+            <Setter Property="IsSelected" Value="{Binding IsSelected}"/>
+            <Setter Property="SizeChangedCommand" Value="{Binding SizeChangedCommand}"/>
+            <Setter Property="HeaderContentTemplate">
+                <Setter.Value>
+                    <DataTemplate>
+                        <StackPanel Background="#FF666666">
+                            <StackPanel HorizontalAlignment="Center">
+                                <Label Content="{Binding Name}"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </DataTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+    </Window.Resources>
+
+    <Grid>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="64"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0">
+
+            <DockPanel LastChildFill="False">
+                <Button Margin="4" Height="24" Content="AddTestNodeLink" Command="{Binding AddTestNodeLinkCommand}"/>
+                <Button Margin="4" Height="24" Content="MoveTestNode" Command="{Binding MoveTestNodesCommand}"/>
+                <Button Margin="4" Height="24" Content="ClearNodes" Command="{Binding ClearNodesCommand}"/>
+                <Button Margin="4" Height="24" Content="ClearNodeLinks" Command="{Binding ClearNodeLinksCommand}"/>
+                <Button Margin="4" Height="24" Content="MoveGroupNode" Command="{Binding MoveGroupNodeCommand}"/>
+                <Button Margin="4" Height="24" Content="ChangeGroupInnerSize" Command="{Binding ChangeGroupInnerSizeCommand}"/>
+                <Button Margin="4" Height="24" Content="ChangeGroupInnerPosition" Command="{Binding ChangeGroupInnerPositionCommand}"/>
+                <Button Margin="4" Height="24" Content="ResetScale" Command="{Binding ResetScaleCommand}"/>
+            </DockPanel>
+
+            <DockPanel>
+
+                <!-- コピペ用に残す。 -->
+                <ComboBox Margin="4" Height="24" ItemsSource="{Binding GroupIntersectTypes, Mode=OneTime}" SelectedItem="{Binding SelectedGroupIntersectType}" ToolTip="group intersection type."/>
+                <ComboBox Margin="4" Height="24" ItemsSource="{Binding RangeSelectionModes, Mode=OneTime}" SelectedItem="{Binding SelectedRangeSelectionMode}" ToolTip="range selection mode."/>
+                <CheckBox Margin="4" Height="24" Content="IsLockedAllNodeLinks" IsChecked="{Binding IsLockedAllNodeLinks}" VerticalContentAlignment="Center"/>
+                <CheckBox Margin="4" Height="24" Content="IsEnableAllNodeConnectors" IsChecked="{Binding IsEnableAllNodeConnectors}" VerticalContentAlignment="Center"/>
+            </DockPanel>
+
+        </StackPanel>
+
+        <graph:NodeGraph
+            Grid.Row="3"
+            x:Name="NodeGraph"
+            MoveWithMouse="Right"
+            Scale="{Binding Scale}"
+            ItemsSource="{Binding NodeViewModels}"
+            ItemContainerStyle="{StaticResource DefaultNodeStyle}"
+            NodeLinks="{Binding NodeLinkViewModels}"
+            NodeLinkStyle="{StaticResource NodeLinkStyle}"
+            GroupNodes="{Binding GroupNodeViewModels}"
+            GroupNodeStyle="{StaticResource GroupNodeStyle}"
+            PreviewConnectLinkCommand="{Binding PreviewConnectLinkCommand}"
+            ConnectedLinkCommand="{Binding ConnectedLinkCommand}"
+            DisconnectedLinkCommand="{Binding DisconnectedLinkCommand}"
+            AllowToOverrideConnection="False"
+            ClipToBounds="True"
+            ContextMenu="{StaticResource NodeGraphContextMenu}">
+
+            <graph:NodeGraph.Style>
+                <Style TargetType="{x:Type graph:NodeGraph}" BasedOn="{StaticResource {x:Type graph:NodeGraph}}">
+                    <Style.Triggers>
+                        <!--Group intersect -->
+                        <DataTrigger Binding="{Binding SelectedGroupIntersectType}" Value="{x:Static vm:GroupIntersectType.CursorPointVMDefine}">
+                            <Setter Property="GroupIntersectType" Value="{x:Static graph:GroupIntersectType.CursorPoint}"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding SelectedGroupIntersectType}" Value="{x:Static vm:GroupIntersectType.BoundingBoxVMDefine}">
+                            <Setter Property="GroupIntersectType" Value="{x:Static graph:GroupIntersectType.BoundingBox}"/>
+                        </DataTrigger>
+
+                        <!--Range selection mode-->
+                        <DataTrigger Binding="{Binding SelectedRangeSelectionMode}" Value="{x:Static vm:RangeSelectionMode.ContainVMDefine}">
+                            <Setter Property="RangeSelectionMode" Value="{x:Static graph:RangeSelectionMode.Contain}"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding SelectedRangeSelectionMode}" Value="{x:Static vm:RangeSelectionMode.IntersectVMDefine}">
+                            <Setter Property="RangeSelectionMode" Value="{x:Static graph:RangeSelectionMode.Intersect}"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </graph:NodeGraph.Style>
+
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="SelectionChanged">
+                    <i:InvokeCommandAction Command="{Binding SelectionChangedCommand}" CommandParameter="{Binding SelectedItems, ElementName=NodeGraph}"/>
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+        </graph:NodeGraph>
+
+    </Grid>
+</Window>

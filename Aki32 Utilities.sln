@@ -11,23 +11,23 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "0 Examples", "0 Examples", 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3 WFA", "3 WFA", "{CEA023E0-4DF9-4B7E-A9BA-296A2522BD9A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "201 Node Controller", "2 WPF\201 Node Controller\201 Node Controller.csproj", "{50F91BAF-531E-4395-804B-7B37996EBD5F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "201_NodeController", "2 WPF\201_NodeController\201_NodeController.csproj", "{50F91BAF-531E-4395-804B-7B37996EBD5F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "003 Research Articles Node Controller", "0 Examples\003 Research Articles Node Controller\003 Research Articles Node Controller.csproj", "{D9FD5569-FC75-43E9-AA25-EE5928E92D72}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "003_ResearchArticlesNodeController", "0 Examples\003_ResearchArticlesNodeController\003_ResearchArticlesNodeController.csproj", "{D9FD5569-FC75-43E9-AA25-EE5928E92D72}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "002 Sample Node Controller", "0 Examples\002 Sample Node Controller\002 Sample Node Controller.csproj", "{18530E25-C62D-4736-9748-D84C2B49C3A1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "002_SampleNodeController", "0 Examples\002_SampleNodeController\002_SampleNodeController.csproj", "{18530E25-C62D-4736-9748-D84C2B49C3A1}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "100 General", "1 Console\100 General\100 General.csproj", "{3BD89421-B1E1-490F-AFEF-34B703F8D603}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "100_General", "1 Console\100_General\100_General.csproj", "{3BD89421-B1E1-490F-AFEF-34B703F8D603}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "110 Structural Engineering", "1 Console\110 Structural Eng\110 Structural Engineering.csproj", "{1A8FA3C8-0045-4D07-AE9D-FB084F8DCD66}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "110_StructuralEngineering", "1 Console\110_StructuralEng\110_StructuralEngineering.csproj", "{1A8FA3C8-0045-4D07-AE9D-FB084F8DCD66}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "101 AI", "1 Console\101 AI\101 AI.csproj", "{2617BDC2-FDE5-4187-82F5-353A7BFF3F85}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "101_AI", "1 Console\101_AI\101_AI.csproj", "{2617BDC2-FDE5-4187-82F5-353A7BFF3F85}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "111 Research", "1 Console\111 Research\111 Research.csproj", "{35578693-A05F-45BA-B1CC-43C1145A8A7A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "111_Research", "1 Console\111_Research\111_Research.csproj", "{35578693-A05F-45BA-B1CC-43C1145A8A7A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "001 Console Util Example", "0 Examples\001 Console Util Example\001 Console Util Example.csproj", "{851670C0-014A-4716-8D0E-A41694D8B983}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "001_Console Util Example", "0 Examples\001_ConsoleUtilExample\001_Console Util Example.csproj", "{851670C0-014A-4716-8D0E-A41694D8B983}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "200 General", "2 WPF\200 General\200 General.csproj", "{5D9A4B05-EF3C-41C6-8970-B444CA609595}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "200_General", "2 WPF\200_General\200_General.csproj", "{5D9A4B05-EF3C-41C6-8970-B444CA609595}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

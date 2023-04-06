@@ -1,0 +1,72 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net6.0</TargetFramework>
+    <RootNamespace>Aki32Utilities</RootNamespace>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <AssemblyName>001_ConsoleUtilExample</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="# Referring dlls\**" />
+    <Compile Remove="# TestModel\**" />
+    <Compile Remove="Aki32 Utilities\**" />
+    <EmbeddedResource Remove="# Referring dlls\**" />
+    <EmbeddedResource Remove="# TestModel\**" />
+    <EmbeddedResource Remove="Aki32 Utilities\**" />
+    <None Remove="# Referring dlls\**" />
+    <None Remove="# TestModel\**" />
+    <None Remove="Aki32 Utilities\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove=".gitattributes" />
+    <None Remove=".gitignore" />
+    <None Remove="LICENSE.md" />
+    <None Remove="README.md" />
+    <None Remove="This Repo on GitHub.url" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="HomographySharp" Version="3.2.1" />
+    <PackageReference Include="iTextSharp" Version="5.5.13.3" />
+    <PackageReference Include="LibGit2Sharp" Version="0.26.2" />
+    <PackageReference Include="MathNet.Numerics" Version="5.0.0" />
+    <PackageReference Include="OpenCvSharp4.Windows" Version="4.6.0.20220608" />
+    <PackageReference Include="XPlot.Plotly" Version="4.0.6" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\1 Console\100 General\100_General.csproj" />
+    <ProjectReference Include="..\..\1 Console\100_General\100_General.csproj" />
+    <ProjectReference Include="..\..\1 Console\101 AI\101_AI.csproj" />
+    <ProjectReference Include="..\..\1 Console\101_AI\101_AI.csproj" />
+    <ProjectReference Include="..\..\1 Console\110 Structural Eng\110_StructuralEngineering.csproj" />
+    <ProjectReference Include="..\..\1 Console\110_StructuralEng\110_StructuralEngineering.csproj" />
+    <ProjectReference Include="..\..\1 Console\111 Research\111_Research.csproj" />
+    <ProjectReference Include="..\..\1 Console\111_Research\111_Research.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Properties\Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="# ExampleModel\111 - Research\A - ResearchManager\%40Private\" />
+    <Folder Include="# ExampleModel\M - MiniApps\M001 Books2PDF\" />
+  </ItemGroup>
+
+</Project>
