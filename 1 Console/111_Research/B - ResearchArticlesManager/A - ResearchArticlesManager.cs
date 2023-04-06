@@ -143,38 +143,27 @@ public partial class ResearchArticlesManager
         // add all first
         ArticleDatabase.AddRange(mergingArticles);
 
-        // if mergeable, merge
+        // if mergeable, merge all
         foreach (var mergingArticle in mergingArticles)
         {
-            var matchedArticles = ArticleDatabase
-                .Where(a => a.CompareTo(mergingArticle) == 0)
-                .Where(a => a != mergingArticle)
-                .ToList();
-
-            // multiple matches
-            if (warnMultipleMatches && matchedArticles!.Count > 1)
-                throw new InvalidDataException($"Expected only 1 article matched but {matchedArticles!.Count} matched to {mergingArticle.ArticleTitle}");
-
             // merge/update
-            if (matchedArticles!.Any() && !forceAdd)
+            if (!forceAdd)
             {
-                var currentLeftArticle = mergingArticle;
-
-                foreach (var matchedArticle in matchedArticles)
+                var mergeResult = MergeIfMergeable(mergingArticle, warnMultipleMatches);
+                if (mergeResult is not null)
                 {
-                    MergeArticles(matchedArticle, currentLeftArticle);
-                    currentLeftArticle = matchedArticle;
+                    if (UtilConfig.ConsoleOutput_Contents)
+                        Console.WriteLine($"@@@ {mergeResult!.ArticleTitle}");
+                    
+                    mergedArticles.Add(mergeResult!);
                     updatedCount++;
+                    articleDatabaseUpdated = true;
+                    
+                    continue;
                 }
-
-                mergedArticles.Add(currentLeftArticle);
-                articleDatabaseUpdated = true;
-                if (UtilConfig.ConsoleOutput_Contents)
-                    Console.WriteLine($"@@@ {currentLeftArticle!.ArticleTitle}");
             }
 
             // add new
-            else
             {
                 if (UtilConfig.ConsoleOutput_Contents)
                     Console.WriteLine($"+++ {mergingArticle!.ArticleTitle}");
@@ -193,6 +182,46 @@ public partial class ResearchArticlesManager
         Console.WriteLine();
 
         return mergedArticles;
+    }
+
+    /// <summary>
+    /// merge target article if there is matched articles in database
+    /// </summary>
+    /// <param name="mergingArticle"></param>
+    /// <param name="asTempArticles"></param>
+    /// <param name="warnMultipleMatches"></param>
+    /// <param name="forceAdd"></param>
+    /// <param name="save"></param>
+    /// <returns>Return result articles if merged; otherwise, null</returns>
+    /// <exception cref="InvalidDataException"></exception>
+    public ResearchArticle? MergeIfMergeable(ResearchArticle mergingArticle,
+        bool warnMultipleMatches = false
+        )
+    {
+        var matchedArticles = ArticleDatabase
+             .Where(a => a.CompareTo(mergingArticle) == 0)
+             .Where(a => a != mergingArticle)
+             .ToList();
+
+        // multiple matches
+        if (warnMultipleMatches && matchedArticles!.Count > 1)
+            throw new InvalidDataException($"Expected only 1 article matched but {matchedArticles!.Count} matched to {mergingArticle.ArticleTitle}");
+
+        // merge/update
+        if (matchedArticles!.Any())
+        {
+            var currentLeftArticle = mergingArticle;
+
+            foreach (var matchedArticle in matchedArticles)
+            {
+                MergeArticles(matchedArticle, currentLeftArticle);
+                currentLeftArticle = matchedArticle;
+            }
+
+            return currentLeftArticle;
+        }
+
+        return null;
     }
 
     /// <summary>
