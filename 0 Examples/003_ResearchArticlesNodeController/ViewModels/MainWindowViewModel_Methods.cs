@@ -1013,10 +1013,7 @@ public partial class MainWindowViewModel : ViewModel
         try
         {
             IsUndefinedButton1Busy = true;
-
             await Task.Delay(2222);
-            //throw new NotImplementedException("申し訳ありません。\r\n未実装です…。");
-
             var successAnimationTask = Task.Run(async () =>
             {
                 IsUndefinedButton1Done = true;
@@ -1027,7 +1024,6 @@ public partial class MainWindowViewModel : ViewModel
         }
         catch (Exception ex)
         {
-            //MessageBox.Show($"失敗しました。\r\nﾒｯｾｰｼﾞ: {ex.Message}", "AIにまとめてもらう", MessageBoxButton.OK, MessageBoxImage.Error);
         }
         finally
         {
