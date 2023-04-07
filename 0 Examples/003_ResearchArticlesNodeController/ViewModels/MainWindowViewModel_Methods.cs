@@ -217,8 +217,16 @@ public partial class MainWindowViewModel : ViewModel
     {
         var horizontalCoef = 1;
         var verticalCoef = toLowerDirection ? 1 : -1;
-        var InputConnectorNodeGuids = _NodeLinkViewModels.Select(link => link.InputConnectorNodeGuid).ToArray();
-        var OutputConnectorNodeGuids = _NodeLinkViewModels.Select(link => link.OutputConnectorNodeGuid).ToArray();
+
+
+        // ★★★★★ 整列対象の要素に関連するリンクのみに対して実行。
+        var rearrangingNodeGuids = rearrangingNodes.Select(node => node.Guid).ToArray();
+        var targetLinkLinks = _NodeLinkViewModels.Where(link => rearrangingNodeGuids.Contains(link.InputConnectorNodeGuid) && rearrangingNodeGuids.Contains(link.OutputConnectorNodeGuid)).ToArray();
+        var allInputConnectorNodeGuids = targetLinkLinks.Select(link => link.InputConnectorNodeGuid).ToArray();
+        var InputConnectorNodeGuids = rearrangingNodes.Select(node => node.Guid).Where(guid => allInputConnectorNodeGuids.Contains(guid)).ToArray();
+        var allOutputConnectorNodeGuids = targetLinkLinks.Select(link => link.OutputConnectorNodeGuid).ToArray();
+        var OutputConnectorNodeGuids = rearrangingNodes.Select(node => node.Guid).Where(guid => allOutputConnectorNodeGuids.Contains(guid)).ToArray();
+
 
         // ★★★★★ 用いる変数のリセット
         foreach (var rearrangingNode in rearrangingNodes)
@@ -298,8 +306,16 @@ public partial class MainWindowViewModel : ViewModel
     {
         var horizontalCoef = -1;
         var verticalCoef = toLowerDirection ? 1 : -1;
-        var InputConnectorNodeGuids = _NodeLinkViewModels.Select(link => link.InputConnectorNodeGuid).ToArray();
-        var OutputConnectorNodeGuids = _NodeLinkViewModels.Select(link => link.OutputConnectorNodeGuid).ToArray();
+
+
+        // ★★★★★ 整列対象の要素に関連するリンクのみに対して実行。
+        var rearrangingNodeGuids = rearrangingNodes.Select(node => node.Guid).ToArray();
+        var targetLinkLinks = _NodeLinkViewModels.Where(link => rearrangingNodeGuids.Contains(link.InputConnectorNodeGuid) && rearrangingNodeGuids.Contains(link.OutputConnectorNodeGuid)).ToArray();
+        var allInputConnectorNodeGuids = targetLinkLinks.Select(link => link.InputConnectorNodeGuid).ToArray();
+        var InputConnectorNodeGuids = rearrangingNodes.Select(node => node.Guid).Where(guid => allInputConnectorNodeGuids.Contains(guid)).ToArray();
+        var allOutputConnectorNodeGuids = targetLinkLinks.Select(link => link.OutputConnectorNodeGuid).ToArray();
+        var OutputConnectorNodeGuids = rearrangingNodes.Select(node => node.Guid).Where(guid => allOutputConnectorNodeGuids.Contains(guid)).ToArray();
+
 
         // ★★★★★ 用いる変数のリセット
         foreach (var rearrangingNode in rearrangingNodes)
