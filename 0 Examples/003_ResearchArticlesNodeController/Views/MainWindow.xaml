@@ -1508,6 +1508,30 @@
                                     </TextBlock>
                                 </Grid>
 
+                                <Grid Margin="4">
+                                    <TextBlock
+                                        Text="作成日：" 
+                                        Width="70"
+                                        HorizontalAlignment="Left"
+                                        TextAlignment="Right"
+                                        ToolTipService.InitialShowDelay="10" 
+                                        >
+                                        <TextBlock.ToolTip>
+                                            <TextBlock
+                                                TextAlignment="Left"
+                                                Text="JStage_UnstructuredRefString"
+                                                >
+                                            </TextBlock>
+                                        </TextBlock.ToolTip>
+                                    </TextBlock>
+                                    <TextBlock 
+                                        Text="{Binding SelectingNodeViewModel.Article.Manual_CreatedDate}" 
+                                        Margin="70,0,0,0" 
+                                        TextWrapping="Wrap"
+                                        >
+                                    </TextBlock>
+                                </Grid>
+
 
 
 
