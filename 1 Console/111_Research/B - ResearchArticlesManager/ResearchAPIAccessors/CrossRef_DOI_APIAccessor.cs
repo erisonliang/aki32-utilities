@@ -71,7 +71,18 @@ public class CrossRef_DOI_APIAccessor : IResearchAPIAccessor
             addingMainArticle.OnlineISSN = (json?["message"]?["issn-type"] as JArray)?.FirstOrDefault(i => (dynamic)i?["type"]?.ToString()! == "electronic")?["value"]?.ToString();
 
             var publishedDateArray = (json?["message"]?["published"]?["date-parts"] as JArray)?.FirstOrDefault();
-            addingMainArticle.CrossRef_PublishedDate = (publishedDateArray == null) ? null : string.Join('/', publishedDateArray!.AsEnumerable());
+            addingMainArticle.CrossRef_PublishedDate = (publishedDateArray == null) ? null : string.Join('-', publishedDateArray!.AsEnumerable());
+
+            string? pageString = json?["message"]?["page"]?.ToString();
+            if (pageString is not null)
+            {
+                var pageArray = pageString.Split(',', StringSplitOptions.TrimEntries);
+                if (pageArray.Length >= 1)
+                    addingMainArticle.CrossRef_StartingPage = pageArray[0];
+                if (pageArray.Length >= 2)
+                    addingMainArticle.CrossRef_EndingPage = pageArray[1];
+            }
+
 
             // add references
             if (json?["message"]?["reference"] is JArray references)
@@ -79,12 +90,24 @@ public class CrossRef_DOI_APIAccessor : IResearchAPIAccessor
                 foreach (var reference in references)
                 {
                     // Create and add referred article
-                    var addingSubArticle = new ResearchArticle
+                    var addingSubArticle = new ResearchArticle();
                     {
-                        DataFrom_CrossRef_SimpleRef = true,
-                        DOI = reference?["DOI"]?.ToString(),
-                        CrossRef_UnstructuredRefString = ResearchArticle.CleanUp_UnstructuredRefString(reference?["unstructured"]?.ToString())
-                    };
+                        addingSubArticle.DataFrom_CrossRef_SimpleRef = true;
+
+                        addingSubArticle.DOI = reference?["DOI"]?.ToString();
+
+                        addingMainArticle.CrossRef_ArticleTitle = reference?["series-title"]?.ToString();
+                        addingSubArticle.CrossRef_Authors_Simple = reference?["author"]?.ToString().Split(',', StringSplitOptions.TrimEntries); // 1人分しかくれない？？
+
+                        addingMainArticle.CrossRef_MaterialTitle = reference?["journal-title"]?.ToString();
+                        addingSubArticle.CrossRef_MaterialVolume = reference?["volume"]?.ToString();
+
+                        addingMainArticle.CrossRef_PublishedYear = reference?["year"]?.ToString();
+                        addingSubArticle.CrossRef_StartingPage = reference?["first-page"]?.ToString();
+                        addingSubArticle.CrossRef_EndingPage = reference?["last-page"]?.ToString();
+
+                        addingSubArticle.CrossRef_UnstructuredRefString = ResearchArticle.CleanUp_UnstructuredRefString(reference?["unstructured"]?.ToString());
+                    }
                     addingMainArticle.AddArticleReference(addingSubArticle);
 
                     yield return addingSubArticle;

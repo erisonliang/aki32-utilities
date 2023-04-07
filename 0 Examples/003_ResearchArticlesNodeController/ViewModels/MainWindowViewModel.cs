@@ -44,55 +44,40 @@ public partial class MainWindowViewModel : ViewModel
     {
         _NodeLinkViewModels.Clear();
 
-        // nodes 
+        // ★★★★★ nodes 
         {
-            // all
-            {
-                //_NodeViewModels.Clear();
+            // ★ all
+            //_NodeViewModels.Clear();
+            //foreach (var article in ResearchArticlesManager.ArticleDatabase)
+            //    _NodeViewModels.Add(new ResearchArticleNodeViewModel() { NodeName = "文献", Article = article, Position = new Point(0, 0) });
 
-                //foreach (var article in ResearchArticlesManager.ArticleDatabase)
-                //    _NodeViewModels.Add(new ResearchArticleNodeViewModel() { NodeName = "文献", Article = article, Position = new Point(0, 0) });
 
-                ////var nodeViewModels = ResearchArticlesManager
-                ////    .ArticleDatabase
-                ////    .Select(article => new ResearchArticleNodeViewModel() { NodeName = "文献", Article = article, Position = new Point(0, 0) })
-                ////    .ToArray();
+            // ★ only changed nodes
+            // データベースに存在しないのに存在してるノードを全削除
+            var removed = 0;
+            for (int i = _NodeViewModels.Count - 1; i >= 0; i--)
+                if (_NodeViewModels[i] is ResearchArticleNodeViewModel node)
+                    if (!ResearchArticlesManager.ArticleDatabase.Contains(node.Article))
+                    {
+                        _NodeViewModels.RemoveAt(i);
+                        removed++;
+                    }
 
-                ////_NodeViewModels.AddRange(
-                ////    ResearchArticlesManager
-                ////    .ArticleDatabase
-                ////    .Select(article => new ResearchArticleNodeViewModel() { NodeName = "文献", Article = article, Position = new Point(0, 0) })
-                ////    );
-            }
+            // データベースに存在してるのにノードが存在してない場合，全追加
+            var nodeArticles = _NodeViewModels
+                .Where(n => n is ResearchArticleNodeViewModel)
+                .Cast<ResearchArticleNodeViewModel>()
+                .Select(x => x.Article);
 
-            // only changed nodes
-            {
-                // データベースに存在しないのに存在してるノードを全削除
-                var removed = 0;
-                for (int i = _NodeViewModels.Count - 1; i >= 0; i--)
-                    if (_NodeViewModels[i] is ResearchArticleNodeViewModel node)
-                        if (!ResearchArticlesManager.ArticleDatabase.Contains(node.Article))
-                        {
-                            _NodeViewModels.RemoveAt(i);
-                            removed++;
-                        }
+            var diffs = ResearchArticlesManager.ArticleDatabase.Except(nodeArticles).ToList();
 
-                // データベースに存在してるのにノードが存在してない場合，全追加
-                var nodeArticles = _NodeViewModels
-                    .Where(n => n is ResearchArticleNodeViewModel)
-                    .Cast<ResearchArticleNodeViewModel>()
-                    .Select(x => x.Article);
+            foreach (var addingArticle in diffs)
+                _NodeViewModels.Add(new ResearchArticleNodeViewModel() { NodeName = "文献", Article = addingArticle, Position = new Point(0, 0) });
 
-                var diffs = ResearchArticlesManager.ArticleDatabase.Except(nodeArticles).ToList();
-
-                foreach (var addingArticle in diffs)
-                    _NodeViewModels.Add(new ResearchArticleNodeViewModel() { NodeName = "文献", Article = addingArticle, Position = new Point(0, 0) });
-
-                Console.WriteLine($"nodes updated: added {diffs.Count}, removed {removed}");
-            }
+            Console.WriteLine($"nodes updated: added {diffs.Count}, removed {removed}");
         }
 
-        // all links
+        // ★★★★★ all links
         foreach (var article in ResearchArticlesManager.ArticleDatabase)
         {
             if (article.ReferenceAOIs == null || !article.ReferenceAOIs.Any())

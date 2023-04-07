@@ -635,7 +635,7 @@ public partial class MainWindowViewModel : ViewModel
 
                 RearrangeNodesAlignRight(nodes, basePosition, true);
             };
-            InternetSearchPostProcess(pulledArticles, true, rearrangeNodesAction);
+            InternetSearchPostProcess(pulledArticles, false, rearrangeNodesAction);
             selectedNode.NotifyArticleUpdated();
 
             // 全てに対して GPT予測！？？
@@ -664,15 +664,10 @@ public partial class MainWindowViewModel : ViewModel
                                 throw new Exception("推測に失敗しました。");
 
                             mergeResult = ResearchArticlesManager.MergeIfMergeable(targetArticle);
+                            RedrawResearchArticleNodes();
                             if (mergeResult is null)
-                            {
-                                GetNodeFromArticle(targetArticle)?.NotifyArticleUpdated();
-                            }
-                            else
-                            {
                                 Console.WriteLine("同一の文献を発見したため，マージしました。");
-                                GetNodeFromArticle(mergeResult)?.NotifyArticleUpdated();
-                            }
+
                         }
                         else
                         {
@@ -691,7 +686,10 @@ public partial class MainWindowViewModel : ViewModel
                     {
                         var targetArticleNode = GetNodeFromArticle(mergeResult ?? targetArticle);
                         if (targetArticleNode is not null)
+                        {
+                            targetArticleNode.NotifyArticleUpdated();
                             targetArticleNode.IsNodeBusy = false;
+                        }
                     }
                 }
 
@@ -780,6 +778,7 @@ public partial class MainWindowViewModel : ViewModel
         if (IsPullAIMetaInfoBusy)
             return;
         ResearchArticleNodeViewModel selectedNode = null;
+        ResearchArticle? mergeResult = null;
 
         try
         {
@@ -793,16 +792,9 @@ public partial class MainWindowViewModel : ViewModel
             if (!predictResult)
                 throw new Exception("推測に失敗しました。");
 
-            var mergeResult = ResearchArticlesManager.MergeIfMergeable(selectedArticle);
-            if (mergeResult is null)
-            {
-                selectedNode.NotifyArticleUpdated();
-            }
-            else
-            {
+            mergeResult = ResearchArticlesManager.MergeIfMergeable(selectedArticle);
+            if (mergeResult is not null)
                 Console.WriteLine("同一の文献を発見したため，マージしました。");
-                GetNodeFromArticle(mergeResult)?.NotifyArticleUpdated();
-            }
 
             var saveTask = Save();
 
@@ -821,8 +813,12 @@ public partial class MainWindowViewModel : ViewModel
         finally
         {
             IsPullAIMetaInfoBusy = false;
-            if (selectedNode is not null)
-                selectedNode.IsNodeBusy = false;
+            var targetArticleNode = mergeResult is not null ? GetNodeFromArticle(mergeResult) : selectedNode;
+            if (targetArticleNode is not null)
+            {
+                targetArticleNode.NotifyArticleUpdated();
+                targetArticleNode.IsNodeBusy = false;
+            }
         }
     }
 
@@ -1570,9 +1566,8 @@ public partial class MainWindowViewModel : ViewModel
     {
         // プルして再描画した後に，一時データになってるやつだけ右上に固めるように動かす。
         var pulledArticles = await ResearchArticlesManager.PullArticleInfo(accessor, asTempArticles: true, save: false);
-        InternetSearchPostProcess(pulledArticles);
+        InternetSearchPostProcess(pulledArticles, true, null);
     }
-
     void InternetSearchPostProcess(List<ResearchArticle>? pulledArticles, bool moveToFirstItem = true, Action<List<DefaultNodeViewModel>>? rearrangeNodesActionOverwrite = null)
     {
         if (pulledArticles is null || pulledArticles.Count == 0)

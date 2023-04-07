@@ -60,6 +60,7 @@ public class ResearchArticle : IComparable
                 ?? JStage_Authors_English
 
                 // 最終手段。
+                ?? CrossRef_Authors_Simple // 1人分しかくれない…？
                 // ?? ((CrossRef_UnstructuredRefString.NullIfNullOrEmpty() == null) ? null : new string[] { CrossRef_UnstructuredRefString!.Shorten(UNSTRUCTURED_REF_STRING_RANGE) })
                 ?? null
                 ;
@@ -178,10 +179,12 @@ public class ResearchArticle : IComparable
                 ?? Manual_PublishedDate.NullIfNullOrEmpty()
                 ?? CrossRef_PublishedDate.NullIfNullOrEmpty()
                 ?? CiNii_PublishedDate.NullIfNullOrEmpty()
+                ?? JStage_PublishedDate.NullIfNullOrEmpty()
 
                 // 優先度低め
                 ?? NDLSearch_PublishedDate.NullIfNullOrEmpty() // 超長い形式になる可能性あり
                 ?? JStage_PublishedYear.NullIfNullOrEmpty() // 年数しか来ない
+                ?? CrossRef_PublishedYear.NullIfNullOrEmpty() // 年数しか来ない
 
                 // 最終手段。
                 ?? null
@@ -480,6 +483,8 @@ public class ResearchArticle : IComparable
     [UseExceptionalBinaryEitherMerging]
     public bool? DataFrom_AI_PredictFromRefString { get; set; } = false;
 
+    public string Private_CreatedDate { get; set; } = DateTime.Today.ToLongDateString();
+
     /// <summary>
     /// Aki32 Object Identifier
     /// All object has its own AOI.
@@ -522,8 +527,6 @@ public class ResearchArticle : IComparable
     public string? Manual_EndingPage { get; set; }
 
     public string? Manual_PublishedDate { get; set; }
-    public string Manual_CreatedDate { get; set; } = DateTime.Today.ToLongDateString();
-
 
 
     // ★★★★★ memo info
@@ -564,9 +567,17 @@ public class ResearchArticle : IComparable
 
     public string? CrossRef_ArticleTitle { get; set; }
     public string[]? CrossRef_Authors { get; set; }
+    public string[]? CrossRef_Authors_Simple { get; set; }
+
+    public string? CrossRef_MaterialTitle { get; set; }
+    public string? CrossRef_MaterialVolume { get; set; }
+
+    public string? CrossRef_PublishedDate { get; set; }
+    public string? CrossRef_PublishedYear { get; set; }
+    public string? CrossRef_StartingPage { get; set; }
+    public string? CrossRef_EndingPage { get; set; }
 
     public string? CrossRef_UnstructuredRefString { get; set; }
-    public string? CrossRef_PublishedDate { get; set; }
 
 
     // ★★★★★ mainly from J-Stage
@@ -577,31 +588,27 @@ public class ResearchArticle : IComparable
     public string[]? JStage_Authors_English { get; set; }
     public string[]? JStage_Authors_Japanese { get; set; }
 
-
     public string? JStage_Link_English { get; set; }
     public string? JStage_Link_Japanese { get; set; }
 
-    public string? JStage_MaterialCode { get; set; }
-
     public string? JStage_MaterialTitle_English { get; set; }
     public string? JStage_MaterialTitle_Japanese { get; set; }
-
-    public string? JStage_PublishedYear { get; set; }
-
     public string? JStage_MaterialVolume { get; set; }
     public string? JStage_MaterialSubVolume { get; set; }
+    public string? JStage_MaterialCode { get; set; }
+
+    public string? JStage_PublishedDate { get; set; }
+    public string? JStage_PublishedYear { get; set; }
     public string? JStage_StartingPage { get; set; }
     public string? JStage_EndingPage { get; set; }
 
-    public string? JStage_JOI { get; set; }
-
     public string? JStage_SystemCode { get; set; }
     public string? JStage_SystemName { get; set; }
+    public string? JStage_JOI { get; set; }
 
     public string? JStage_UpdatedOn { get; set; }
 
     public string? JStage_UnstructuredRefString { get; set; }
-
 
 
     // ★★★★★ from CiNii
@@ -609,16 +616,16 @@ public class ResearchArticle : IComparable
     public string? CiNii_ArticleTitle { get; set; }
     public string[]? CiNii_Authors { get; set; }
 
-    public string? CiNii_Description { get; set; }
-
-    public string? CiNii_Link { get; set; }
+    public string? CiNii_MaterialVolume { get; set; }
+    //public string? CiNii_MaterialSubVolume { get; set; }
 
     public string? CiNii_Publisher { get; set; }
     public string? CiNii_PublicationName { get; set; }
     public string? CiNii_PublishedDate { get; set; }
 
-    public string? CiNii_MaterialVolume { get; set; }
-    //public string? CiNii_MaterialSubVolume { get; set; }
+    public string? CiNii_Description { get; set; }
+    public string? CiNii_Link { get; set; }
+
     public string? CiNii_Number { get; set; }
     public string? CiNii_StartingPage { get; set; }
     public string? CiNii_EndingPage { get; set; }
@@ -629,16 +636,16 @@ public class ResearchArticle : IComparable
     public string? NDLSearch_ArticleTitle { get; set; }
     public string[]? NDLSearch_Authors { get; set; }
 
-    public string? NDLSearch_Description { get; set; }
-
-    public string? NDLSearch_Link { get; set; }
+    public string? NDLSearch_MaterialVolume { get; set; }
+    //public string? NDLSearch_MaterialSubVolume { get; set; }
 
     public string? NDLSearch_Publisher { get; set; }
     public string? NDLSearch_PublicationName { get; set; }
     public string? NDLSearch_PublishedDate { get; set; }
 
-    public string? NDLSearch_MaterialVolume { get; set; }
-    //public string? NDLSearch_MaterialSubVolume { get; set; }
+    public string? NDLSearch_Description { get; set; }
+    public string? NDLSearch_Link { get; set; }
+
     public string? NDLSearch_Number { get; set; }
     public string? NDLSearch_StartingPage { get; set; }
     public string? NDLSearch_EndingPage { get; set; }
