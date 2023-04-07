@@ -61,8 +61,11 @@ public partial class MainWindowViewModel : ViewModel
     {
         //ResearchArticlesManager.ArticleDatabase.Add(new ResearchArticle { Manual_ArticleTitle = DateTime.Now.ToLongTimeString() });
         //ResearchArticlesManager.ArticleDatabase.RemoveAt(3);
-        
+
+        //ResearchArticlesManager.MergeIfMergeableForAll(false);
+
         RedrawResearchArticleNodes();
+
         
         //MoveCanvasToTargetArticle(NodeViewModels.FirstOrDefault());
     }

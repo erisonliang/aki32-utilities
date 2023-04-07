@@ -1,5 +1,9 @@
 ﻿using Aki32Utilities.ConsoleAppUtilities.General;
 
+using LibGit2Sharp;
+
+using Org.BouncyCastle.Crypto.Prng;
+
 namespace Aki32Utilities.ConsoleAppUtilities.Research;
 public partial class ResearchArticlesManager
 {
@@ -154,11 +158,11 @@ public partial class ResearchArticlesManager
                 {
                     if (UtilConfig.ConsoleOutput_Contents)
                         Console.WriteLine($"@@@ {mergeResult!.ArticleTitle}");
-                    
+
                     mergedArticles.Add(mergeResult!);
                     updatedCount++;
                     articleDatabaseUpdated = true;
-                    
+
                     continue;
                 }
             }
@@ -185,13 +189,10 @@ public partial class ResearchArticlesManager
     }
 
     /// <summary>
-    /// merge target article if there is matched articles in database
+    /// merge target article if there are matched articles in database
     /// </summary>
     /// <param name="mergingArticle"></param>
-    /// <param name="asTempArticles"></param>
     /// <param name="warnMultipleMatches"></param>
-    /// <param name="forceAdd"></param>
-    /// <param name="save"></param>
     /// <returns>Return result articles if merged; otherwise, null</returns>
     /// <exception cref="InvalidDataException"></exception>
     public ResearchArticle? MergeIfMergeable(ResearchArticle mergingArticle,
@@ -223,6 +224,34 @@ public partial class ResearchArticlesManager
 
         return null;
     }
+
+    /// <summary>
+    /// merge all articles in database if there are matched articles.
+    /// </summary>
+    /// <param name="warnMultipleMatches"></param>
+    /// <returns>Return result articles if merged; otherwise, null</returns>
+    /// <exception cref="InvalidDataException"></exception>
+    public List<ResearchArticle> MergeIfMergeableForAll(bool warnMultipleMatches = false)
+    {
+        var results = new List<ResearchArticle>();
+
+        for (int i = ArticleDatabase.Count - 1; i >= 0; i--)
+        {
+            if (ArticleDatabase.Count >= i)
+                continue;
+
+            var targetArticle = ArticleDatabase[i];
+            var result = MergeIfMergeable(targetArticle, warnMultipleMatches);
+            if (result is not null)
+            {
+                i--;
+                results.Add(result);
+            }
+        }
+
+        return results;
+    }
+
 
     /// <summary>
     /// merge articles in ArticleDatabase
