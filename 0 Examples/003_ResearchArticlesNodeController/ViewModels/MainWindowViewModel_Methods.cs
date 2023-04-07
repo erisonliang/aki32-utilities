@@ -120,18 +120,11 @@ public partial class MainWindowViewModel : ViewModel
     void AddNewArticleNode(Point addingPosition)
     {
         // 作って，新しいNodeも作ってあてがう。
-        var newArticle = ResearchArticle.CreateManually(new ResearchArticle_ManualInitInfo
-        {
-            //Manual_ArticleTitle = "■ 未入力",
-            //Manual_Authors = new string[] { "■ 未入力" },
-            //Manual_PublishedDate = "■ 未入力",
-            //Memo = "■ 未入力",
-        });
-
+        var newArticle = ResearchArticle.CreateManually(new ResearchArticle_ManualInitInfo { });
         newArticle.Manual_ArticleTitle = $"新しい文献 {newArticle.Friendly_AOI}";
 
         ResearchArticlesManager.MergeArticleInfo(new List<ResearchArticle> { newArticle }, forceAdd: true, save: false);
-        var addingNode = new ResearchArticleNodeViewModel() { Article = newArticle, NodeName = "ResearchArticle" };
+        var addingNode = new ResearchArticleNodeViewModel() { NodeName = "文献", Article = newArticle };
         _NodeViewModels.Add(addingNode);
         addingNode.Position = addingPosition;
         var saveTask = Save();
@@ -335,7 +328,6 @@ public partial class MainWindowViewModel : ViewModel
             noConnectionNode.Position = new Point(
                 basePosition.X + horizontalCoef * 0 * NODE_HORIZONTAL_SPAN,
                 basePosition.Y + verticalCoef * i * NODE_VERTICAL_SPAN);
-
         }
 
 
@@ -1540,7 +1532,6 @@ public partial class MainWindowViewModel : ViewModel
             MoveCanvasToTargetArticleNode(pulledTempArticleNodes!.FirstOrDefault());
 
         SelectedEmphasizePropertyItem = ViewModels.EmphasizePropertyItems.一時ﾃﾞｰﾀ;
-
     }
 
 
