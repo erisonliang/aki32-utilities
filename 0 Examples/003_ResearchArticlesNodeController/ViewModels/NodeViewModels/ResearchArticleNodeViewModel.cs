@@ -32,6 +32,8 @@ public class ResearchArticleNodeViewModel : DefaultNodeViewModel
     {
         get
         {
+            if (string.IsNullOrEmpty(Article.DOI))
+                return false;
             if ((Article.DataFrom_CrossRef_DOI ?? false) || (Article.DataFrom_JStage_DOI ?? false))
                 return false;
             return true;
