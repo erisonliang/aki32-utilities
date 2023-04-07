@@ -505,6 +505,16 @@ public partial class MainWindowViewModel : ViewModel
         RedrawResearchArticleNodes();
     }
 
+    void AcceptSelectingArticleNodes()
+    {
+        _NodeViewModels
+            .Where(node => node.IsSelected)
+            .Where(node => node is ResearchArticleNodeViewModel)
+            .Cast<ResearchArticleNodeViewModel>()
+            .ForEach(n => n.IsTemp = false);
+
+        var saveTask = Save();
+    }
 
     // ★★★★★★★★★★★★★★★ Node Controller 内
 

@@ -80,14 +80,17 @@ public partial class MainWindowViewModel : ViewModel
     public ViewModelCommand RearrangeNodesAlignRightCommand => _RearrangeNodesAlignRightCommand.Get(RearrangeNodesAlignRight);
     ViewModelCommandHandler _RearrangeNodesAlignRightCommand = new();
     
-    public ViewModelCommand RemoveSelectingNodesCommand => _RemoveSelectingNodesCommand.Get(RemoveSelectingArticleNodes);
-    ViewModelCommandHandler _RemoveSelectingNodesCommand = new();
+    public ViewModelCommand RemoveSelectingArticleNodesCommand => _RemoveSelectingArticleNodesCommand.Get(RemoveSelectingArticleNodes);
+    ViewModelCommandHandler _RemoveSelectingArticleNodesCommand = new();
 
     public ViewModelCommand RemoveTempArticleNodesCommand => _RemoveTempArticleNodesCommand.Get(RemoveTempArticleNodes);
     ViewModelCommandHandler _RemoveTempArticleNodesCommand = new();
 
     public ViewModelCommand MergeIfMergeableForAllCommand => _MergeIfMergeableForAllCommand.Get(MergeIfMergeableForAll);
     ViewModelCommandHandler _MergeIfMergeableForAllCommand = new();
+
+    public ViewModelCommand AcceptSelectingArticleNodesCommand => _AcceptSelectingArticleNodesCommand.Get(AcceptSelectingArticleNodes);
+    ViewModelCommandHandler _AcceptSelectingArticleNodesCommand = new();
 
 
     // ★★★★★★★★★★★★★★★ Node Controller 内
