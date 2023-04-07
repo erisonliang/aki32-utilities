@@ -119,11 +119,13 @@ public partial class MainWindowViewModel : ViewModel
         // 作って，新しいNodeも作ってあてがう。
         var newArticle = ResearchArticle.CreateManually(new ResearchArticle_ManualInitInfo
         {
-            Manual_ArticleTitle = "■ 未入力",
-            Manual_Authors = new string[] { "■ 未入力" },
-            Manual_PublishedDate = "■ 未入力",
-            Memo = "■ 未入力",
+            //Manual_ArticleTitle = "■ 未入力",
+            //Manual_Authors = new string[] { "■ 未入力" },
+            //Manual_PublishedDate = "■ 未入力",
+            //Memo = "■ 未入力",
         });
+
+        newArticle.Manual_ArticleTitle = $"新しい文献 {newArticle.Friendly_AOI}";
 
         ResearchArticlesManager.MergeArticleInfo(new List<ResearchArticle> { newArticle }, forceAdd: true, save: false);
         var addingNode = new ResearchArticleNodeViewModel() { Article = newArticle, NodeName = "ResearchArticle" };
