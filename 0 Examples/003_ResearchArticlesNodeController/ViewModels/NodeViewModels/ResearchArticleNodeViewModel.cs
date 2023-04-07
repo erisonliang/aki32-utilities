@@ -23,7 +23,12 @@ public class ResearchArticleNodeViewModel : DefaultNodeViewModel
         )]
     private int NotifyArticleUpdatedBridge { get; set; } = 0;
 
+
+    // ★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★
+
     public string NodeName { get; set; }
+
+    public bool IsNodeBusy { get; set; } = false;
 
 
     // ★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★

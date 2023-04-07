@@ -71,15 +71,6 @@ public partial class MainWindowViewModel : ViewModel
     public ViewModelCommand AddNodeCommand => _AddNodeCommand.Get(AddNewArticleNode);
     ViewModelCommandHandler _AddNodeCommand = new();
 
-    public ViewModelCommand RearrangeNodesChronologicallyAlignLeftCommand => _RearrangeNodesChronologicallyAlignLeftCommand.Get(RearrangeNodesChronologicallyAlignLeft);
-    ViewModelCommandHandler _RearrangeNodesChronologicallyAlignLeftCommand = new();
-
-    public ViewModelCommand RearrangeNodesAlignLeftCommand => _RearrangeNodesAlignLeftCommand.Get(RearrangeNodesAlignLeft);
-    ViewModelCommandHandler _RearrangeNodesAlignLeftCommand = new();
-
-    public ViewModelCommand RearrangeNodesAlignRightCommand => _RearrangeNodesAlignRightCommand.Get(RearrangeNodesAlignRight);
-    ViewModelCommandHandler _RearrangeNodesAlignRightCommand = new();
-    
     public ViewModelCommand RemoveSelectingArticleNodesCommand => _RemoveSelectingArticleNodesCommand.Get(RemoveSelectingArticleNodes);
     ViewModelCommandHandler _RemoveSelectingArticleNodesCommand = new();
 
@@ -91,6 +82,16 @@ public partial class MainWindowViewModel : ViewModel
 
     public ViewModelCommand AcceptSelectingArticleNodesCommand => _AcceptSelectingArticleNodesCommand.Get(AcceptSelectingArticleNodes);
     ViewModelCommandHandler _AcceptSelectingArticleNodesCommand = new();
+
+
+    public ViewModelCommand RearrangeNodesAlignLeftCommand => _RearrangeNodesAlignLeftCommand.Get(RearrangeNodesAlignLeft);
+    ViewModelCommandHandler _RearrangeNodesAlignLeftCommand = new();
+
+    public ViewModelCommand RearrangeNodesAlignRightCommand => _RearrangeNodesAlignRightCommand.Get(RearrangeNodesAlignRight);
+    ViewModelCommandHandler _RearrangeNodesAlignRightCommand = new();
+
+    public ViewModelCommand RearrangeNodesChronologicallyAlignLeftCommand => _RearrangeNodesChronologicallyAlignLeftCommand.Get(RearrangeNodesChronologicallyAlignLeft);
+    ViewModelCommandHandler _RearrangeNodesChronologicallyAlignLeftCommand = new();
 
 
     // ★★★★★★★★★★★★★★★ Node Controller 内

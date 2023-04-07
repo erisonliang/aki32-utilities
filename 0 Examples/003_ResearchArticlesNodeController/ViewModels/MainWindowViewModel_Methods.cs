@@ -8,6 +8,7 @@ using System.Windows.Input;
 using Aki32Utilities.ConsoleAppUtilities.General;
 using Microsoft.Win32;
 using System.IO;
+using static System.ComponentModel.Design.ObjectSelectorEditor;
 
 namespace Aki32Utilities.UsageExamples.ResearchArticlesNodeController.ViewModels;
 public partial class MainWindowViewModel : ViewModel
@@ -60,7 +61,6 @@ public partial class MainWindowViewModel : ViewModel
         }
 
     }
-
     async Task Test()
     {
         //ResearchArticlesManager.ArticleDatabase.Add(new ResearchArticle { Manual_ArticleTitle = DateTime.Now.ToLongTimeString() });
@@ -516,6 +516,7 @@ public partial class MainWindowViewModel : ViewModel
         var saveTask = Save();
     }
 
+
     // ★★★★★★★★★★★★★★★ Node Controller 内
 
     void SelectionChanged(IList list)
@@ -577,12 +578,13 @@ public partial class MainWindowViewModel : ViewModel
     {
         if (IsPullReferenceInfoBusy)
             return;
+        ResearchArticleNodeViewModel selectedNode = null;
 
         try
         {
+            selectedNode = SelectedNodeViewModel ?? throw new Exception("文献が選択されていません。");
+            selectedNode.IsNodeBusy = true;
             IsPullReferenceInfoBusy = true;
-
-            var selectedNode = SelectedNodeViewModel ?? throw new Exception("文献が選択されていません。");
 
             if (string.IsNullOrEmpty(selectedNode.Article.DOI))
                 throw new Exception("DOIがない文献はこの機能を使うことができません。");
@@ -644,11 +646,14 @@ public partial class MainWindowViewModel : ViewModel
                 var currentFriendlyIndex = 0;
                 var failCount = 0;
 
+                GetNodesFromArticles(pulledArticles).ForEach(n => n.IsNodeBusy = true);
+
                 foreach (var targetArticle in pulledArticles)
                 {
                     currentFriendlyIndex++;
 
                     Console.WriteLine($"{currentFriendlyIndex}/{pulledCount}件を処理中…");
+                    ResearchArticle? mergeResult = null;
 
                     try
                     {
@@ -658,7 +663,7 @@ public partial class MainWindowViewModel : ViewModel
                             if (!predictResult)
                                 throw new Exception("推測に失敗しました。");
 
-                            var mergeResult = ResearchArticlesManager.MergeIfMergeable(targetArticle);
+                            mergeResult = ResearchArticlesManager.MergeIfMergeable(targetArticle);
                             if (mergeResult is null)
                             {
                                 GetNodeFromArticle(targetArticle)?.NotifyArticleUpdated();
@@ -681,6 +686,12 @@ public partial class MainWindowViewModel : ViewModel
                     {
                         failCount++;
                         Console.WriteLine($"失敗。(成功: {currentFriendlyIndex - failCount}/{currentFriendlyIndex}件) ﾒｯｾｰｼﾞ: {ex.Message}");
+                    }
+                    finally
+                    {
+                        var targetArticleNode = GetNodeFromArticle(mergeResult ?? targetArticle);
+                        if (targetArticleNode is not null)
+                            targetArticleNode.IsNodeBusy = false;
                     }
                 }
 
@@ -705,6 +716,8 @@ public partial class MainWindowViewModel : ViewModel
         finally
         {
             IsPullReferenceInfoBusy = false;
+            if (selectedNode is not null)
+                selectedNode.IsNodeBusy = false;
         }
     }
 
@@ -712,12 +725,13 @@ public partial class MainWindowViewModel : ViewModel
     {
         if (IsPullNormalMetaInfoBusy)
             return;
+        ResearchArticleNodeViewModel selectedNode = null;
 
         try
         {
+            selectedNode = SelectedNodeViewModel ?? throw new Exception("文献が選択されていません。");
+            selectedNode.IsNodeBusy = true;
             IsPullNormalMetaInfoBusy = true;
-
-            var selectedNode = SelectedNodeViewModel ?? throw new Exception("文献が選択されていません。");
 
             // 対象のサイトからの情報
             // TODO
@@ -756,6 +770,8 @@ public partial class MainWindowViewModel : ViewModel
         finally
         {
             IsPullNormalMetaInfoBusy = false;
+            if (selectedNode is not null)
+                selectedNode.IsNodeBusy = false;
         }
     }
 
@@ -763,12 +779,13 @@ public partial class MainWindowViewModel : ViewModel
     {
         if (IsPullAIMetaInfoBusy)
             return;
+        ResearchArticleNodeViewModel selectedNode = null;
 
         try
         {
+            selectedNode = SelectedNodeViewModel ?? throw new Exception("文献が選択されていません。");
+            selectedNode.IsNodeBusy = true;
             IsPullAIMetaInfoBusy = true;
-
-            var selectedNode = SelectedNodeViewModel ?? throw new Exception("文献が選択されていません。");
 
             // ChatGPTによる推定
             var selectedArticle = selectedNode.Article;
@@ -804,6 +821,8 @@ public partial class MainWindowViewModel : ViewModel
         finally
         {
             IsPullAIMetaInfoBusy = false;
+            if (selectedNode is not null)
+                selectedNode.IsNodeBusy = false;
         }
     }
 
@@ -811,12 +830,13 @@ public partial class MainWindowViewModel : ViewModel
     {
         if (IsOpenPDFBusy)
             return;
+        ResearchArticleNodeViewModel selectedNode = null;
 
         try
         {
+            selectedNode = SelectedNodeViewModel ?? throw new Exception("文献が選択されていません。");
+            selectedNode.IsNodeBusy = true;
             IsOpenPDFBusy = true;
-
-            var selectedNode = SelectedNodeViewModel ?? throw new Exception("文献が選択されていません。");
 
             var result = await selectedNode.Article.TryOpenPDF(ResearchArticlesManager.PDFsDirectory);
             if (!result.download)
@@ -839,6 +859,8 @@ public partial class MainWindowViewModel : ViewModel
         finally
         {
             IsOpenPDFBusy = false;
+            if (selectedNode is not null)
+                selectedNode.IsNodeBusy = false;
         }
     }
 
@@ -846,12 +868,13 @@ public partial class MainWindowViewModel : ViewModel
     {
         if (IsOpenDOIWebSiteBusy)
             return;
+        ResearchArticleNodeViewModel selectedNode = null;
 
         try
         {
+            selectedNode = SelectedNodeViewModel ?? throw new Exception("文献が選択されていません。");
+            selectedNode.IsNodeBusy = true;
             IsOpenDOIWebSiteBusy = true;
-
-            var selectedNode = SelectedNodeViewModel ?? throw new Exception("文献が選択されていません。");
 
             var result = selectedNode.Article.TryOpenDOILink();
             if (!result)
@@ -872,6 +895,8 @@ public partial class MainWindowViewModel : ViewModel
         finally
         {
             IsOpenDOIWebSiteBusy = false;
+            if (selectedNode is not null)
+                selectedNode.IsNodeBusy = false;
         }
     }
 
@@ -879,9 +904,12 @@ public partial class MainWindowViewModel : ViewModel
     {
         if (IsExecuteAllBusy)
             return;
+        ResearchArticleNodeViewModel selectedNode = null;
 
         try
         {
+            selectedNode = SelectedNodeViewModel ?? throw new Exception("文献が選択されていません。");
+            selectedNode.IsNodeBusy = true;
             IsExecuteAllBusy = true;
 
             throw new NotImplementedException("申し訳ありません。\r\n未実装です…。");
@@ -901,6 +929,8 @@ public partial class MainWindowViewModel : ViewModel
         finally
         {
             IsExecuteAllBusy = false;
+            if (selectedNode is not null)
+                selectedNode.IsNodeBusy = false;
         }
     }
 
@@ -908,12 +938,13 @@ public partial class MainWindowViewModel : ViewModel
     {
         if (IsAISummaryBusy)
             return;
+        ResearchArticleNodeViewModel selectedNode = null;
 
         try
         {
+            selectedNode = SelectedNodeViewModel ?? throw new Exception("文献が選択されていません。");
+            selectedNode.IsNodeBusy = true;
             IsAISummaryBusy = true;
-
-            throw new NotImplementedException("申し訳ありません。\r\n未実装です…。");
 
             var successAnimationTask = Task.Run(async () =>
             {
@@ -930,6 +961,8 @@ public partial class MainWindowViewModel : ViewModel
         finally
         {
             IsAISummaryBusy = false;
+            if (selectedNode is not null)
+                selectedNode.IsNodeBusy = false;
         }
     }
 
@@ -937,12 +970,13 @@ public partial class MainWindowViewModel : ViewModel
     {
         if (IsManuallyAddPDFBusy)
             return;
+        ResearchArticleNodeViewModel selectedNode = null;
 
         try
         {
+            selectedNode = SelectedNodeViewModel ?? throw new Exception("文献が選択されていません。");
+            selectedNode.IsNodeBusy = true;
             IsManuallyAddPDFBusy = true;
-
-            var selectedNode = SelectedNodeViewModel ?? throw new Exception("文献が選択されていません。");
 
             //
             var dialog = new OpenFileDialog
@@ -971,18 +1005,21 @@ public partial class MainWindowViewModel : ViewModel
         finally
         {
             IsManuallyAddPDFBusy = false;
+            if (selectedNode is not null)
+                selectedNode.IsNodeBusy = false;
         }
     }
     public void Button_ManuallyAddPDF_Drop(object sender, DragEventArgs e)
     {
         if (IsManuallyAddPDFBusy)
             return;
+        ResearchArticleNodeViewModel selectedNode = null;
 
         try
         {
+            selectedNode = SelectedNodeViewModel ?? throw new Exception("文献が選択されていません。");
+            selectedNode.IsNodeBusy = true;
             IsManuallyAddPDFBusy = true;
-
-            var selectedNode = SelectedNodeViewModel ?? throw new Exception("文献が選択されていません。");
 
             //
             if (!e.Data.GetDataPresent(DataFormats.FileDrop))
@@ -1017,6 +1054,8 @@ public partial class MainWindowViewModel : ViewModel
         finally
         {
             IsManuallyAddPDFBusy = false;
+            if (selectedNode is not null)
+                selectedNode.IsNodeBusy = false;
         }
     }
     private void ManuallyAddPDF_FromFileInfo(FileInfo addingPDFFile)
@@ -1049,11 +1088,18 @@ public partial class MainWindowViewModel : ViewModel
     {
         if (IsUndefinedButton1Busy)
             return;
+        ResearchArticleNodeViewModel selectedNode = null;
 
         try
         {
+            selectedNode = SelectedNodeViewModel ?? throw new Exception("文献が選択されていません。");
+            selectedNode.IsNodeBusy = true;
             IsUndefinedButton1Busy = true;
+
+
             await Task.Delay(2222);
+
+
             var successAnimationTask = Task.Run(async () =>
             {
                 IsUndefinedButton1Done = true;
@@ -1068,6 +1114,8 @@ public partial class MainWindowViewModel : ViewModel
         finally
         {
             IsUndefinedButton1Busy = false;
+            if (selectedNode is not null)
+                selectedNode.IsNodeBusy = false;
         }
     }
 
@@ -1556,6 +1604,8 @@ public partial class MainWindowViewModel : ViewModel
 
     void InsertToFormat(object a)
     {
+        // ボタン押したらフォーマット挿入！
+
 
     }
 

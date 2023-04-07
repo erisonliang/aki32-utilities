@@ -42,6 +42,7 @@
         <Brush x:Key="IsCat1Color">white</Brush>
         <Brush x:Key="IsCat2Color">HotPink</Brush>
         <Brush x:Key="IsCat3Color">Purple</Brush>
+        <Brush x:Key="IsBusyHeaderColor">WhiteSmoke</Brush>
 
         <Brush x:Key="temp1">Pink</Brush>
         <Brush x:Key="temp2">DeepPink</Brush>
@@ -163,14 +164,33 @@
                     <DataTemplate>
                         <Border 
                             Background="{Binding ArticleHeaderColor}"
-                            CornerRadius="11,11,0,0"
                             Margin="-0.1"
+                            CornerRadius="11,11,0,0"
+                            ClipToBounds="True"
                             >
+                            <Border.OpacityMask>
+                                <VisualBrush>
+                                    <VisualBrush.Visual>
+                                        <Border 
+                                            Background="Black"
+                                            SnapsToDevicePixels="True"
+                                            CornerRadius="{Binding CornerRadius, RelativeSource={RelativeSource AncestorType=Border}}"
+                                            Width="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType=Border}}"
+                                            Height="{Binding ActualHeight, RelativeSource={RelativeSource AncestorType=Border}}"
+                                            />
+                                    </VisualBrush.Visual>
+                                </VisualBrush>
+                            </Border.OpacityMask>
                             <StackPanel>
                                 <Grid>
-                                    <StackPanel HorizontalAlignment="Center">
-                                        <!--<Label Content="{Binding Name}"/>-->
-                                    </StackPanel>
+                                    <ProgressBar 
+                                        IsIndeterminate="True" 
+                                        Foreground="{StaticResource IsBusyHeaderColor}"
+                                        Visibility="{Binding IsNodeBusy, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                        Background="Transparent"
+                                        BorderThickness="0"
+                                        Padding="0"
+                                        />
                                     <StackPanel 
                                         HorizontalAlignment="Left"
                                         Orientation="Horizontal"
@@ -206,80 +226,87 @@
                     <DataTemplate>
 
                         <!-- グリッド内に表示する情報 -->
-                        <StackPanel
-                            Orientation="Vertical"
+                        <Grid
                             Width="300"
                             Margin="3"
-                            TextBlock.Foreground="White"
                             >
+                            
+                            <StackPanel
+                                Orientation="Vertical"
+                                TextBlock.Foreground="White"
+                                >
 
-                            <Grid Margin="3">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="40"/>
-                                    <ColumnDefinition Width="6"/>
-                                    <ColumnDefinition Width="*"/>
-                                </Grid.ColumnDefinitions>
+                                <Grid Margin="3">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="40"/>
+                                        <ColumnDefinition Width="6"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
 
-                                <TextBlock 
-                                    Grid.Column="0"
-                                    Text="著者:" 
-                                    HorizontalAlignment="Right"
-                                    VerticalAlignment="Center"
-                                    />
-                                <TextBlock 
-                                    Grid.Column="2"
-                                    Text="{Binding TopAuthor,Mode=OneWay}"
-                                    FontSize="{StaticResource NodeContentFontSize}"
-                                    VerticalAlignment="Center"
-                                    />
+                                    <TextBlock 
+                                        Grid.Column="0"
+                                        Text="著者:" 
+                                        HorizontalAlignment="Right"
+                                        VerticalAlignment="Center"
+                                        />
+                                    <TextBlock 
+                                        Grid.Column="2"
+                                        Text="{Binding TopAuthor,Mode=OneWay}"
+                                        FontSize="{StaticResource NodeContentFontSize}"
+                                        VerticalAlignment="Center"
+                                        />
 
-                            </Grid>
+                                </Grid>
 
-                            <Grid Margin="3">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="40"/>
-                                    <ColumnDefinition Width="6"/>
-                                    <ColumnDefinition Width="*"/>
-                                </Grid.ColumnDefinitions>
+                                <Grid Margin="3">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="40"/>
+                                        <ColumnDefinition Width="6"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
 
-                                <TextBlock 
-                                    Grid.Column="0"
-                                    Text="公開:" 
-                                    HorizontalAlignment="Right"
-                                    VerticalAlignment="Center"
-                                    />
-                                <TextBlock 
-                                    Grid.Column="2"
-                                    Text="{Binding PublishedOn}"
-                                    FontSize="{StaticResource NodeContentFontSize}"
-                                    VerticalAlignment="Center"
-                                    />
+                                    <TextBlock 
+                                        Grid.Column="0"
+                                        Text="公開:" 
+                                        HorizontalAlignment="Right"
+                                        VerticalAlignment="Center"
+                                        />
+                                    <TextBlock 
+                                        Grid.Column="2"
+                                        Text="{Binding PublishedOn}"
+                                        FontSize="{StaticResource NodeContentFontSize}"
+                                        VerticalAlignment="Center"
+                                        />
 
-                            </Grid>
+                                </Grid>
 
-                            <Grid Margin="3">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="40"/>
-                                    <ColumnDefinition Width="6"/>
-                                    <ColumnDefinition Width="*"/>
-                                </Grid.ColumnDefinitions>
+                                <Grid Margin="3">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="40"/>
+                                        <ColumnDefinition Width="6"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
 
-                                <TextBlock 
-                                    Grid.Column="0" 
-                                    Text="タイトル:" 
-                                    HorizontalAlignment="Right"
-                                    />
-                                <TextBlock
-                                    Grid.Column="2" 
-                                    Text="{Binding ArticleTitle}"
-                                    TextWrapping="Wrap"
-                                    />
+                                    <TextBlock 
+                                        Grid.Column="0" 
+                                        Text="タイトル:" 
+                                        HorizontalAlignment="Right"
+                                        />
+                                    <TextBlock
+                                        Grid.Column="2" 
+                                        Text="{Binding ArticleTitle}"
+                                        TextWrapping="Wrap"
+                                        />
 
-                            </Grid>
+                                </Grid>
 
-                            <Grid Margin="4"/>
+                                <Grid Margin="4"/>
 
-                        </StackPanel>
+                            </StackPanel>
+
+                        </Grid>
+
+
                     </DataTemplate>
                 </Setter.Value>
             </Setter>
@@ -311,7 +338,7 @@
                 </Setter.Value>
             </Setter>
         </Style>
-        
+
     </Window.Resources>
 
     <Grid>
