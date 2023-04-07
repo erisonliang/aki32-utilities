@@ -17,7 +17,11 @@ public partial class MainWindowViewModel : ViewModel
 
     void NotifyResearchArticlesPropertiesChanged()
     {
-        var articleNodes = _NodeViewModels.Select(n => (n is ResearchArticleNodeViewModel run) ? run : null).Where(run => run != null);
+        var articleNodes = _NodeViewModels
+            .Select(n => (n is ResearchArticleNodeViewModel run) ? run : null)
+            .Where(run => run != null)
+            ;
+
         foreach (var articleNode in articleNodes)
             articleNode!.NotifyArticleUpdated();
 
@@ -376,6 +380,22 @@ public partial class MainWindowViewModel : ViewModel
         RearrangeNodesAlignLeft(rearrangingNodes, basePosition, toLowerDirection);
         throw new NotImplementedException("年代で並べ替えるの，未実装");
     }
+    void RearrangeNodesToEdge(List<DefaultNodeViewModel>? rearrangingNodes, bool isLeft = true, bool isTop = true)
+    {
+        if (rearrangingNodes is null)
+            return;
+
+        var NodesMinX = _NodeViewModels.Min(n => n.Position.X);
+        var NodesMaxX = _NodeViewModels.Max(n => n.Position.X);
+        var NodesMinY = _NodeViewModels.Min(n => n.Position.Y);
+        var NodesMaxY = _NodeViewModels.Max(n => n.Position.Y);
+
+        double X = isLeft ? NodesMinX - NODE_HORIZONTAL_SPAN : NodesMaxX + NODE_HORIZONTAL_SPAN;
+        double Y = isTop ? NodesMinY - NODE_VERTICAL_SPAN : NodesMaxY + NODE_VERTICAL_SPAN;
+        Point basePosition = new(X, Y);
+
+        RearrangeNodesAlignLeft(rearrangingNodes, basePosition, !isTop);
+    }
     IEnumerable<DefaultNodeViewModel> GetChildrenNodes(DefaultNodeViewModel targetNode, IEnumerable<DefaultNodeViewModel> fromThisList = null)
     {
         var childrenNodes = new List<DefaultNodeViewModel>();
@@ -682,7 +702,6 @@ public partial class MainWindowViewModel : ViewModel
             }
 
             RedrawResearchArticleNodes();
-            MoveCanvasToTargetArticle(SelectingNodeViewModel);
             SelectedEmphasizePropertyItem = ViewModels.EmphasizePropertyItems.一時ﾃﾞｰﾀ;
             var saveTask = Save();
 
@@ -984,8 +1003,6 @@ public partial class MainWindowViewModel : ViewModel
         //
         MessageBox.Show($"追加に成功しました。", "PDF手動追加", MessageBoxButton.OK, MessageBoxImage.Information);
 
-
-
     }
 
     async Task UndefinedButton1()
@@ -1024,7 +1041,6 @@ public partial class MainWindowViewModel : ViewModel
     async Task OpenLocalSearch()
     {
         ParentView.TabControl_RightPanel.SelectedItem = ParentView.TabItem_Search;
-        //ParentView.TextBox_LocalSearch.Text = "";
         await Task.Delay(10);
         ParentView.TextBox_LocalSearch.Focus();
     }
@@ -1065,15 +1081,8 @@ public partial class MainWindowViewModel : ViewModel
 
             }
 
-            var pulledArticles = await ResearchArticlesManager.PullArticleInfo(accessor, asTempArticles: true, save: false);
-            if (pulledArticles.Count == 0)
-                throw new Exception("マッチするデータがありませんでした。");
-
-            RedrawResearchArticleNodes();
-            MoveCanvasToTargetArticle(pulledArticles.FirstOrDefault());
-            SelectedEmphasizePropertyItem = ViewModels.EmphasizePropertyItems.一時ﾃﾞｰﾀ;
+            await InternetSearchPullProcess(accessor);
             var saveTask = Save();
-
             var successAnimationTask = Task.Run(async () =>
             {
                 IsInternetSearch_CiNii_A_Done = true;
@@ -1128,15 +1137,8 @@ public partial class MainWindowViewModel : ViewModel
 
             }
 
-            var pulledArticles = await ResearchArticlesManager.PullArticleInfo(accessor, asTempArticles: true, save: false);
-            if (pulledArticles.Count == 0)
-                throw new Exception("マッチするデータがありませんでした。");
-
-            RedrawResearchArticleNodes();
-            MoveCanvasToTargetArticle(pulledArticles.FirstOrDefault());
-            SelectedEmphasizePropertyItem = ViewModels.EmphasizePropertyItems.一時ﾃﾞｰﾀ;
+            await InternetSearchPullProcess(accessor);
             var saveTask = Save();
-
             var successAnimationTask = Task.Run(async () =>
             {
                 IsInternetSearch_NDLSearch_A_Done = true;
@@ -1207,15 +1209,8 @@ public partial class MainWindowViewModel : ViewModel
 
             }
 
-            var pulledArticles = await ResearchArticlesManager.PullArticleInfo(accessor, asTempArticles: true, save: false);
-            if (pulledArticles.Count == 0)
-                throw new Exception("マッチするデータがありませんでした。");
-
-            RedrawResearchArticleNodes();
-            MoveCanvasToTargetArticle(pulledArticles.FirstOrDefault());
-            SelectedEmphasizePropertyItem = ViewModels.EmphasizePropertyItems.一時ﾃﾞｰﾀ;
+            await InternetSearchPullProcess(accessor);
             var saveTask = Save();
-
             var successAnimationTask = Task.Run(async () =>
             {
                 IsInternetSearch_JStage_B_Done = true;
@@ -1287,15 +1282,8 @@ public partial class MainWindowViewModel : ViewModel
 
             }
 
-            var pulledArticles = await ResearchArticlesManager.PullArticleInfo(accessor, asTempArticles: true, save: false);
-            if (pulledArticles.Count == 0)
-                throw new Exception("マッチするデータがありませんでした。");
-
-            RedrawResearchArticleNodes();
-            MoveCanvasToTargetArticle(pulledArticles.FirstOrDefault());
-            SelectedEmphasizePropertyItem = ViewModels.EmphasizePropertyItems.一時ﾃﾞｰﾀ;
+            await InternetSearchPullProcess(accessor);
             var saveTask = Save();
-
             var successAnimationTask = Task.Run(async () =>
             {
                 IsInternetSearch_CiNii_B_Done = true;
@@ -1368,15 +1356,8 @@ public partial class MainWindowViewModel : ViewModel
 
             }
 
-            var pulledArticles = await ResearchArticlesManager.PullArticleInfo(accessor, asTempArticles: true, save: false);
-            if (pulledArticles.Count == 0)
-                throw new Exception("マッチするデータがありませんでした。");
-
-            RedrawResearchArticleNodes();
-            MoveCanvasToTargetArticle(pulledArticles.FirstOrDefault());
-            SelectedEmphasizePropertyItem = ViewModels.EmphasizePropertyItems.一時ﾃﾞｰﾀ;
+            await InternetSearchPullProcess(accessor);
             var saveTask = Save();
-
             var successAnimationTask = Task.Run(async () =>
             {
                 IsInternetSearch_NDLSearch_B_Done = true;
@@ -1411,15 +1392,8 @@ public partial class MainWindowViewModel : ViewModel
                 accessor.DOI = InternetSearch_DOI;
             }
 
-            var pulledArticles = await ResearchArticlesManager.PullArticleInfo(accessor, asTempArticles: true, save: false);
-            if (pulledArticles.Count == 0)
-                throw new Exception("マッチするデータがありませんでした。");
-
-            RedrawResearchArticleNodes();
-            MoveCanvasToTargetArticle(pulledArticles.FirstOrDefault());
-            SelectedEmphasizePropertyItem = ViewModels.EmphasizePropertyItems.一時ﾃﾞｰﾀ;
+            await InternetSearchPullProcess(accessor);
             var saveTask = Save();
-
             var successAnimationTask = Task.Run(async () =>
             {
                 IsInternetSearch_JStage_C_Done = true;
@@ -1453,15 +1427,8 @@ public partial class MainWindowViewModel : ViewModel
                 accessor.DOI = InternetSearch_DOI;
             }
 
-            var pulledArticles = await ResearchArticlesManager.PullArticleInfo(accessor, asTempArticles: true, save: false);
-            if (pulledArticles.Count == 0)
-                throw new Exception("マッチするデータがありませんでした。");
-
-            RedrawResearchArticleNodes();
-            MoveCanvasToTargetArticle(pulledArticles.FirstOrDefault());
-            SelectedEmphasizePropertyItem = ViewModels.EmphasizePropertyItems.一時ﾃﾞｰﾀ;
+            await InternetSearchPullProcess(accessor);
             var saveTask = Save();
-
             var successAnimationTask = Task.Run(async () =>
             {
                 IsInternetSearch_CiNii_C_Done = true;
@@ -1495,13 +1462,7 @@ public partial class MainWindowViewModel : ViewModel
                 accessor.DOI = InternetSearch_DOI;
             }
 
-            var pulledArticles = await ResearchArticlesManager.PullArticleInfo(accessor, asTempArticles: true, save: false);
-            if (pulledArticles.Count == 0)
-                throw new Exception("マッチするデータがありませんでした。");
-
-            RedrawResearchArticleNodes();
-            MoveCanvasToTargetArticle(pulledArticles.FirstOrDefault());
-            SelectedEmphasizePropertyItem = ViewModels.EmphasizePropertyItems.一時ﾃﾞｰﾀ;
+            await InternetSearchPullProcess(accessor);
             var saveTask = Save();
         }
         catch (Exception ex)
@@ -1516,6 +1477,31 @@ public partial class MainWindowViewModel : ViewModel
             if (!IsInternetSearch_CrossRef_C_Busy)
                 IsInternetSearch_CrossRef_C_Done = false;
         }
+    }
+
+    async Task InternetSearchPullProcess(IResearchAPIAccessor accessor)
+    {
+        // プルして再描画した後に，一時データになってるやつだけ右上に固めるように動かす。
+        var pulledArticles = await ResearchArticlesManager.PullArticleInfo(accessor, asTempArticles: true, save: false);
+
+        if (pulledArticles.Count == 0)
+            throw new Exception("マッチするデータがありませんでした。");
+
+        RedrawResearchArticleNodes();
+
+        var pulledTempArticles = pulledArticles
+            .Where(n => n.Private_Temporary ?? false)
+            .ToList();
+
+        var nodes = GetNodesFromArticles(pulledTempArticles!)
+            ?.Cast<DefaultNodeViewModel>()
+            ?.ToList();
+
+        RearrangeNodesToEdge(nodes);
+
+        MoveCanvasToTargetArticleNode(nodes!.FirstOrDefault());
+
+        SelectedEmphasizePropertyItem = ViewModels.EmphasizePropertyItems.一時ﾃﾞｰﾀ;
     }
 
     // ★★★★★★★★★★★★★★★ 右パネル内 → 設定
@@ -1573,27 +1559,45 @@ public partial class MainWindowViewModel : ViewModel
 
     // ★★★★★★★★★★★★★★★ utils
 
-    void MoveCanvasToTargetArticle(ResearchArticle? targetArticle)
+    ResearchArticleNodeViewModel? GetNodeFromArticle(ResearchArticle? targetArticle)
     {
-        if (targetArticle == null)
-            return;
+        if (targetArticle is null)
+            return null;
 
         var targetArticleNode = _NodeViewModels
             .Where(n => n is ResearchArticleNodeViewModel)
             .Cast<ResearchArticleNodeViewModel>()
             .FirstOrDefault(n => n.Article == targetArticle);
 
-        MoveCanvasToTargetArticle(targetArticleNode);
+        return targetArticleNode;
     }
-    void MoveCanvasToTargetArticle(DefaultNodeViewModel? targetNode)
+    List<ResearchArticleNodeViewModel> GetNodesFromArticles(List<ResearchArticle> targetArticles)
+    {
+        var targetArticleNodes = _NodeViewModels
+            .Where(n => n is ResearchArticleNodeViewModel)
+            .Cast<ResearchArticleNodeViewModel>()
+            .Where(n => targetArticles.Contains(n.Article))
+            .ToList()
+            ;
+
+        return targetArticleNodes;
+    }
+
+    void MoveCanvasToTargetArticle(ResearchArticle? targetArticle)
+    {
+        var targetArticleNode = GetNodeFromArticle(targetArticle);
+        MoveCanvasToTargetArticleNode(targetArticleNode);
+    }
+    void MoveCanvasToTargetArticleNode(DefaultNodeViewModel? targetNode)
     {
         if (targetNode == null)
             return;
 
         var targetArticleNodePosition = targetNode.Position;
-        CanvasOffset = new Point(-targetArticleNodePosition.X, -targetArticleNodePosition.Y);
+
+        MoveCanvasToPosition(targetArticleNodePosition.X, targetArticleNodePosition.Y);
     }
-    void MoveCanvasToPosition(int x = 0, int y = 0)
+    void MoveCanvasToPosition(double x = 0, double y = 0)
     {
         CanvasOffset = new Point(-x, -y);
     }
