@@ -6,6 +6,7 @@ using Aki32Utilities.ConsoleAppUtilities.General;
 using System.IO;
 using System.Diagnostics;
 using System.Collections.ObjectModel;
+using Microsoft.VisualBasic;
 
 namespace Aki32Utilities.UsageExamples.ResearchArticlesNodeController.ViewModels;
 public partial class MainWindowViewModel : ViewModel
@@ -36,21 +37,19 @@ public partial class MainWindowViewModel : ViewModel
         ResearchArticlesManager = new ResearchArticlesManager(databaseDir);
         ResearchArticlesManager.OpenDatabase();
         RedrawResearchArticlesManager();
+        RearrangeNodesAlignLeft();
     }
 
     private void RedrawResearchArticlesManager()
     {
-        var starttime = DateTime.Now;
-
         _NodeLinkViewModels.Clear();
-        _NodeViewModels.Clear();
-
-        Debug.WriteLine(DateTime.Now - starttime);
 
         // nodes 
         {
             // all
             {
+                //_NodeViewModels.Clear();
+
                 //foreach (var article in ResearchArticlesManager.ArticleDatabase)
                 //    _NodeViewModels.Add(new ResearchArticleNodeViewModel() { NodeName = "ResearchArticle", Article = article, Position = new Point(0, 0) });
 
@@ -68,25 +67,25 @@ public partial class MainWindowViewModel : ViewModel
 
             // only changed nodes
             {
-                // TODO
-                throw new NotImplementedException();
-
                 // データベースに存在しないのに存在してるノードを全削除
-
-
-
+                for (int i = _NodeViewModels.Count - 1; i >= 0; i--)
+                    if (_NodeViewModels[i] is ResearchArticleNodeViewModel node)
+                        if (!ResearchArticlesManager.ArticleDatabase.Contains(node.Article))
+                            _NodeViewModels.RemoveAt(i);
 
                 // データベースに存在してるのにノードが存在してない場合，全追加
+                var nodeArticles = _NodeViewModels
+                    .Where(n => n is ResearchArticleNodeViewModel)
+                    .Cast<ResearchArticleNodeViewModel>()
+                    .Select(x => x.Article);
 
+                var diffs = ResearchArticlesManager.ArticleDatabase.Except(nodeArticles).ToList();
 
-
-
+                foreach (var addingArticle in diffs)
+                    _NodeViewModels.Add(new ResearchArticleNodeViewModel() { NodeName = "ResearchArticle", Article = addingArticle, Position = new Point(0, 0) });
 
             }
         }
-
-
-        Debug.WriteLine(DateTime.Now - starttime);
 
         // all links
         foreach (var article in ResearchArticlesManager.ArticleDatabase)
@@ -118,15 +117,6 @@ public partial class MainWindowViewModel : ViewModel
                 _NodeLinkViewModels.Add(nodeLink);
             }
         }
-
-        //_NodeViewModels.AddRange(nodeViewModels);
-
-        Debug.WriteLine(DateTime.Now - starttime);
-
-        RearrangeNodesAlignLeft();
-        ParentView?.UpdateLayout();
-
-        Debug.WriteLine(DateTime.Now - starttime);
 
     }
 

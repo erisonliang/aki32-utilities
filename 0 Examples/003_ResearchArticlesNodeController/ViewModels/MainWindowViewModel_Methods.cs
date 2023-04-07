@@ -59,6 +59,9 @@ public partial class MainWindowViewModel : ViewModel
 
     async Task Test()
     {
+        //ResearchArticlesManager.ArticleDatabase.Add(new ResearchArticle { Manual_ArticleTitle = DateTime.Now.ToLongTimeString() });
+        //ResearchArticlesManager.ArticleDatabase.RemoveAt(3);
+
         RedrawResearchArticlesManager();
         //MoveCanvasToTargetArticle(NodeViewModels.FirstOrDefault());
     }
