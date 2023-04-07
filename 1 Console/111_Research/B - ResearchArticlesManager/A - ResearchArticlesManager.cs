@@ -237,7 +237,7 @@ public partial class ResearchArticlesManager
 
         for (int i = ArticleDatabase.Count - 1; i >= 0; i--)
         {
-            if (ArticleDatabase.Count >= i)
+            if (ArticleDatabase.Count <= i)
                 continue;
 
             var targetArticle = ArticleDatabase[i];
