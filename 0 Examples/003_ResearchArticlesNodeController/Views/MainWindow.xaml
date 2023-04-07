@@ -23,8 +23,10 @@
     <Window.InputBindings>
         <KeyBinding Gesture="Ctrl+S" Command="{Binding SaveCommand}"/>
         <KeyBinding Gesture="Ctrl+R" Command="{Binding RearrangeNodesAlignLeftCommand}"/>
+        <KeyBinding Gesture="Ctrl+Shift+R" Command="{Binding RearrangeNodesChronologicallyAlignLeftCommand}"/>
         <KeyBinding Gesture="Ctrl+F" Command="{Binding OpenSearchTabCommand}"/>
         <KeyBinding Gesture="Delete" Command="{Binding RemoveSelectingNodesCommand}"/>
+        <KeyBinding Gesture="Ctrl+Shift+M" Command="{Binding MergeIfMergeableForAllCommand}"/>
     </Window.InputBindings>
 
     <Window.Resources>
@@ -105,14 +107,16 @@
 
         <ContextMenu x:Key="NodeGraphContextMenu">
             <MenuItem Header="★ 文献管理" IsHitTestVisible="False"/>
-            <MenuItem Header="新規文献を追加" Command="{Binding AddNodeCommand}"/>
-            <MenuItem Header="選択中の文献を全て削除" Command="{Binding RemoveSelectingNodesCommand}"/>
-            <MenuItem Header="一時的な文献データを全て削除" Command="{Binding RemoveTempNodesCommand}"/>
+            <MenuItem Header="　 新規文献を追加 *" InputGestureText="Ctrl+N" Command="{Binding AddNodeCommand}"/>
+            <MenuItem Header="　 選択中の文献を全て削除" InputGestureText="Delete"  Command="{Binding RemoveSelectingNodesCommand}"/>
+            <MenuItem Header="　 一時的な文献データを全て削除" InputGestureText=""  Command="{Binding RemoveTempArticleNodesCommand}"/>
+            <MenuItem Header="　 マージ可能な文献を全てマージ" InputGestureText="Ctrl+Shift+M"  Command="{Binding MergeIfMergeableForAllCommand}"/>
             <MenuItem Header="★ 整列" IsHitTestVisible="False"/>
-            <MenuItem Header="文献を整列" Command="{Binding RearrangeNodesAlignLeftCommand}"/>
+            <MenuItem Header="　 文献を整列 (単純)" InputGestureText="Ctrl+R" Command="{Binding RearrangeNodesAlignLeftCommand}"/>
+            <MenuItem Header="　 文献を整列 (年代順)" InputGestureText="Ctrl+Shift+R" Command="{Binding RearrangeNodesChronologicallyAlignLeftCommand}"/>
             <MenuItem Header="★ ーーーーー" IsHitTestVisible="False"/>
-            <MenuItem Header="" IsHitTestVisible="False"/>
-            <MenuItem Header="" IsHitTestVisible="False"/>
+            <MenuItem Header="　 " IsHitTestVisible="False"/>
+            <MenuItem Header="　 * = よく使うコマンド" IsHitTestVisible="False" HorizontalAlignment="Right" HorizontalContentAlignment="Right"/>
         </ContextMenu>
 
         <Style x:Key="NodeInputStyle" TargetType="{x:Type graph:NodeInputContent}" BasedOn="{StaticResource {x:Type graph:NodeInputContent}}">

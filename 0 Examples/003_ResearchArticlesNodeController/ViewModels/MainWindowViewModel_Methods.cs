@@ -66,7 +66,7 @@ public partial class MainWindowViewModel : ViewModel
 
         RedrawResearchArticleNodes();
 
-        
+
         //MoveCanvasToTargetArticle(NodeViewModels.FirstOrDefault());
     }
 
@@ -429,6 +429,7 @@ public partial class MainWindowViewModel : ViewModel
 
         var saveTask = Save();
     }
+
     void RemoveTempArticleNodes()
     {
         var removingNodes = _NodeViewModels
@@ -449,6 +450,7 @@ public partial class MainWindowViewModel : ViewModel
 
         var saveTask = Save();
     }
+
     void RemoveArticleNodes(ResearchArticleNodeViewModel[] removingNodes)
     {
         // remove from node controller
@@ -467,6 +469,13 @@ public partial class MainWindowViewModel : ViewModel
 
         // remove from database
         ResearchArticlesManager.RemoveArticleInfo(removingNodes.Select(n => n.Article).ToList(), save: false);
+    }
+
+    void MergeIfMergeableForAll()
+    {
+        ResearchArticlesManager.MergeIfMergeableForAll(false);
+        var saveTask = Save();
+        RedrawResearchArticleNodes();
     }
 
 

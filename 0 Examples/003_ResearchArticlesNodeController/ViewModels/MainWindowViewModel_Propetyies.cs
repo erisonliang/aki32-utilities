@@ -71,17 +71,23 @@ public partial class MainWindowViewModel : ViewModel
     public ViewModelCommand AddNodeCommand => _AddNodeCommand.Get(AddNewArticleNode);
     ViewModelCommandHandler _AddNodeCommand = new();
 
+    public ViewModelCommand RearrangeNodesChronologicallyAlignLeftCommand => _RearrangeNodesChronologicallyAlignLeftCommand.Get(RearrangeNodesChronologicallyAlignLeft);
+    ViewModelCommandHandler _RearrangeNodesChronologicallyAlignLeftCommand = new();
+
     public ViewModelCommand RearrangeNodesAlignLeftCommand => _RearrangeNodesAlignLeftCommand.Get(RearrangeNodesAlignLeft);
     ViewModelCommandHandler _RearrangeNodesAlignLeftCommand = new();
 
     public ViewModelCommand RearrangeNodesAlignRightCommand => _RearrangeNodesAlignRightCommand.Get(RearrangeNodesAlignRight);
     ViewModelCommandHandler _RearrangeNodesAlignRightCommand = new();
-
+    
     public ViewModelCommand RemoveSelectingNodesCommand => _RemoveSelectingNodesCommand.Get(RemoveSelectingArticleNodes);
     ViewModelCommandHandler _RemoveSelectingNodesCommand = new();
 
-    public ViewModelCommand RemoveTempNodesCommand => _RemoveTempNodesCommand.Get(RemoveTempArticleNodes);
-    ViewModelCommandHandler _RemoveTempNodesCommand = new();
+    public ViewModelCommand RemoveTempArticleNodesCommand => _RemoveTempArticleNodesCommand.Get(RemoveTempArticleNodes);
+    ViewModelCommandHandler _RemoveTempArticleNodesCommand = new();
+
+    public ViewModelCommand MergeIfMergeableForAllCommand => _MergeIfMergeableForAllCommand.Get(MergeIfMergeableForAll);
+    ViewModelCommandHandler _MergeIfMergeableForAllCommand = new();
 
 
     // ★★★★★★★★★★★★★★★ Node Controller 内
