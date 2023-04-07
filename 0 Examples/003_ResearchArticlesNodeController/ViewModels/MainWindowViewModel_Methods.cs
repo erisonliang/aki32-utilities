@@ -386,7 +386,7 @@ public partial class MainWindowViewModel : ViewModel
     void RearrangeNodesChronologicallyAlignLeft(List<DefaultNodeViewModel> rearrangingNodes, Point basePosition, bool toLowerDirection)
     {
         RearrangeNodesAlignLeft(rearrangingNodes, basePosition, toLowerDirection);
-        throw new NotImplementedException("年代で並べ替えるの，未実装");
+        MessageBox.Show($"申し訳ありません。\r\n未実装です…。", "", MessageBoxButton.OK, MessageBoxImage.Error);
     }
     void RearrangeNodesToEdge(List<DefaultNodeViewModel>? rearrangingNodes, bool isLeft = true, bool isTop = true)
     {
