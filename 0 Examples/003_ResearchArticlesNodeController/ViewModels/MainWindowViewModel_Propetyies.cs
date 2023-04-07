@@ -92,7 +92,7 @@ public partial class MainWindowViewModel : ViewModel
 
     // ★★★★★★★★★★★★★★★ Node Controller 内
 
-    public ResearchArticleNodeViewModel? SelectingNodeViewModel { get; set; } = null;
+    public ResearchArticleNodeViewModel? SelectedNodeViewModel { get; set; } = null;
 
     public ListenerCommand<PreviewConnectLinkOperationEventArgs> PreviewConnectLinkCommand => _PreviewConnectLinkCommand.Get(PreviewConnect);
     ViewModelCommandHandler<PreviewConnectLinkOperationEventArgs> _PreviewConnectLinkCommand = new();

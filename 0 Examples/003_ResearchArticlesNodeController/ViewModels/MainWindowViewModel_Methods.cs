@@ -511,22 +511,22 @@ public partial class MainWindowViewModel : ViewModel
     void SelectionChanged(IList list)
     {
         var hitArticleNodeFlag = false;
-        SelectingNodeViewModel = null;
+        SelectedNodeViewModel = null;
 
         foreach (var item in list)
         {
             if (item is ResearchArticleNodeViewModel articleNode)
             {
                 if (hitArticleNodeFlag)
-                    SelectingNodeViewModel = null;
+                    SelectedNodeViewModel = null;
                 else
-                    SelectingNodeViewModel = articleNode;
+                    SelectedNodeViewModel = articleNode;
 
                 hitArticleNodeFlag = true;
             }
         }
 
-        if (SelectingNodeViewModel is not null)
+        if (SelectedNodeViewModel is not null)
             ParentView.TabControl_RightPanel.SelectedItem = ParentView.TabItem_SelectingNode;
 
     }
@@ -572,9 +572,9 @@ public partial class MainWindowViewModel : ViewModel
         {
             IsPullReferenceInfoBusy = true;
 
-            var selectingNode = SelectingNodeViewModel ?? throw new Exception("文献が選択されていません。");
+            var selectedNode = SelectedNodeViewModel ?? throw new Exception("文献が選択されていません。");
 
-            if (string.IsNullOrEmpty(selectingNode.Article.DOI))
+            if (string.IsNullOrEmpty(selectedNode.Article.DOI))
                 throw new Exception("DOIがない文献はこの機能を使うことができません。");
 
             var pulledArticles = new List<ResearchArticle>();
@@ -582,8 +582,8 @@ public partial class MainWindowViewModel : ViewModel
             // access until match any
             var accessorInfos = new Dictionary<string, IResearchAPIAccessor>()
             {
-                { "CrossRef", new CrossRef_DOI_APIAccessor() { DOI = selectingNode.Article.DOI! } },
-                { "J-Stage", new JStage_DOI_ArticleAPIAccessor() { DOI = selectingNode.Article.DOI! } },
+                { "CrossRef", new CrossRef_DOI_APIAccessor() { DOI = selectedNode.Article.DOI! } },
+                { "J-Stage", new JStage_DOI_ArticleAPIAccessor() { DOI = selectedNode.Article.DOI! } },
             };
             foreach (var accessorInfo in accessorInfos)
             {
@@ -614,11 +614,11 @@ public partial class MainWindowViewModel : ViewModel
             // ノードを，対象のやつの左側に，下方向に追加列挙！
             var rearrangeNodesAction = (List<DefaultNodeViewModel> pulledTempArticleNodes) =>
             {
-                var selectingNodePosition = selectingNode.Position;
-                Point basePosition = new(selectingNodePosition.X - NODE_HORIZONTAL_SPAN, selectingNodePosition.Y);
+                var selectedNodePosition = selectedNode.Position;
+                Point basePosition = new(selectedNodePosition.X - NODE_HORIZONTAL_SPAN, selectedNodePosition.Y);
 
                 var nodes = pulledTempArticleNodes
-                .Where(n => n != selectingNode)
+                .Where(n => n != selectedNode)
                 .ToList();
 
                 RearrangeNodesAlignRight(nodes, basePosition, true);
@@ -706,7 +706,7 @@ public partial class MainWindowViewModel : ViewModel
         {
             IsPullNormalMetaInfoBusy = true;
 
-            var selectingNode = SelectingNodeViewModel ?? throw new Exception("文献が選択されていません。");
+            var selectedNode = SelectedNodeViewModel ?? throw new Exception("文献が選択されていません。");
 
             // 対象のサイトからの情報
             // TODO
@@ -714,7 +714,7 @@ public partial class MainWindowViewModel : ViewModel
             {
                 var accessor = new CrossRef_DOI_APIAccessor()
                 {
-                    DOI = selectingNode.Article.DOI!,
+                    DOI = selectedNode.Article.DOI!,
                 };
 
                 var pulledArticles = await ResearchArticlesManager.PullArticleInfo(accessor, asTempArticles: true, save: false);
@@ -724,6 +724,8 @@ public partial class MainWindowViewModel : ViewModel
 
             RedrawResearchArticleNodes();
             SelectedEmphasizePropertyItem = ViewModels.EmphasizePropertyItems.一時ﾃﾞｰﾀ;
+            selectedNode.NotifyArticleUpdated();
+
             var saveTask = Save();
 
             var successAnimationTask = Task.Run(async () =>
@@ -753,10 +755,10 @@ public partial class MainWindowViewModel : ViewModel
         {
             IsPullAIMetaInfoBusy = true;
 
-            var selectingNode = SelectingNodeViewModel ?? throw new Exception("文献が選択されていません。");
+            var selectedNode = SelectedNodeViewModel ?? throw new Exception("文献が選択されていません。");
 
             // ChatGPTによる推定
-            var selectedArticle = selectingNode.Article;
+            var selectedArticle = selectedNode.Article;
             var predictResult = await selectedArticle.TryPredictMetaInfo_ChatGPT();
             if (!predictResult)
                 throw new Exception("推測に失敗しました。");
@@ -764,6 +766,8 @@ public partial class MainWindowViewModel : ViewModel
             var mergeResult = ResearchArticlesManager.MergeIfMergeable(selectedArticle);
             if (mergeResult is not null)
                 Console.WriteLine("同一の文献を発見したため，マージしました。");
+
+            selectedNode.NotifyArticleUpdated();
 
             var saveTask = Save();
 
@@ -794,9 +798,9 @@ public partial class MainWindowViewModel : ViewModel
         {
             IsOpenPDFBusy = true;
 
-            var selectingNode = SelectingNodeViewModel ?? throw new Exception("文献が選択されていません。");
+            var selectedNode = SelectedNodeViewModel ?? throw new Exception("文献が選択されていません。");
 
-            var result = await selectingNode.Article.TryOpenPDF(ResearchArticlesManager.PDFsDirectory);
+            var result = await selectedNode.Article.TryOpenPDF(ResearchArticlesManager.PDFsDirectory);
             if (!result.download)
                 throw new Exception("PDFのダウンロードに失敗しました。\r\nこの情報提供元に対応していない可能性があります。");
             if (!result.download)
@@ -829,9 +833,9 @@ public partial class MainWindowViewModel : ViewModel
         {
             IsOpenDOIWebSiteBusy = true;
 
-            var selectingNode = SelectingNodeViewModel ?? throw new Exception("文献が選択されていません。");
+            var selectedNode = SelectedNodeViewModel ?? throw new Exception("文献が選択されていません。");
 
-            var result = selectingNode.Article.TryOpenDOILink();
+            var result = selectedNode.Article.TryOpenDOILink();
             if (!result)
                 throw new Exception("DOIを保持していない文献の可能性があります。");
 
@@ -920,7 +924,7 @@ public partial class MainWindowViewModel : ViewModel
         {
             IsManuallyAddPDFBusy = true;
 
-            var selectingNode = SelectingNodeViewModel ?? throw new Exception("文献が選択されていません。");
+            var selectedNode = SelectedNodeViewModel ?? throw new Exception("文献が選択されていません。");
 
             //
             var dialog = new OpenFileDialog
@@ -960,7 +964,7 @@ public partial class MainWindowViewModel : ViewModel
         {
             IsManuallyAddPDFBusy = true;
 
-            var selectingNode = SelectingNodeViewModel ?? throw new Exception("文献が選択されていません。");
+            var selectedNode = SelectedNodeViewModel ?? throw new Exception("文献が選択されていません。");
 
             //
             if (!e.Data.GetDataPresent(DataFormats.FileDrop))
@@ -1000,9 +1004,9 @@ public partial class MainWindowViewModel : ViewModel
     private void ManuallyAddPDF_FromFileInfo(FileInfo addingPDFFile)
     {
         //
-        var selectingNode = SelectingNodeViewModel ?? throw new Exception("文献が選択されていません。");
+        var selectedNode = SelectedNodeViewModel ?? throw new Exception("文献が選択されていません。");
 
-        if (selectingNode.Article.TryFindPDF(ResearchArticlesManager.PDFsDirectory))
+        if (selectedNode.Article.TryFindPDF(ResearchArticlesManager.PDFsDirectory))
         {
             var result_ForceOverwrite = MessageBox.Show($"この文献には既にPDFが存在していて，上書きしようとしています。\r\n本当によろしいですか？", "PDF手動追加", MessageBoxButton.OKCancel, MessageBoxImage.Warning);
             if (result_ForceOverwrite is not MessageBoxResult.OK)
@@ -1014,7 +1018,7 @@ public partial class MainWindowViewModel : ViewModel
         var deleteOriginalPdfFile = result_DeleteOriginal is MessageBoxResult.OK;
 
         //
-        selectingNode.Article.AddPDFManually(ResearchArticlesManager.PDFsDirectory,
+        selectedNode.Article.AddPDFManually(ResearchArticlesManager.PDFsDirectory,
             addingPDFFile, deleteOriginalPdfFile,
             forceOverwriteExistingPDF: true);
 

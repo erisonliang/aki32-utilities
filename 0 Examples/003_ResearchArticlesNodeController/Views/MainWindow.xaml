@@ -558,7 +558,7 @@
                                             Margin="3"
                                             Style="{StaticResource ButtonTextStretchStyle}"
                                             Command="{Binding PullReferenceInfoCommand}"
-                                            Foreground="{Binding SelectingNodeViewModel.RecommendPullReferenceInfo, Converter={StaticResource BooleanToForegroundBrushConverter}}"
+                                            Foreground="{Binding SelectedNodeViewModel.RecommendPullReferenceInfo, Converter={StaticResource BooleanToForegroundBrushConverter}}"
                                             ToolTip="オンラインから引用関係をダウンロードして，追記します。&#10;&#10;※ 既に十分なデータが揃っている場合，薄い表示になります。"
                                             ToolTipService.InitialShowDelay="10" 
                                             >
@@ -579,7 +579,7 @@
                                             Margin="3"
                                             Style="{StaticResource ButtonTextStretchStyle}"
                                             Command="{Binding PullNormalMetaInfoCommand}"
-                                            Foreground="{Binding SelectingNodeViewModel.RecommendPullNormalMetaInfo, Converter={StaticResource BooleanToForegroundBrushConverter}}"
+                                            Foreground="{Binding SelectedNodeViewModel.RecommendPullNormalMetaInfo, Converter={StaticResource BooleanToForegroundBrushConverter}}"
                                             ToolTip="オンラインからメタ情報をダウンロードして，追記します。&#10;&#10;※ 既に十分なデータが揃っている場合，薄い表示になります。"
                                             ToolTipService.InitialShowDelay="10" 
                                             >
@@ -600,7 +600,7 @@
                                             Margin="3"
                                             Style="{StaticResource ButtonTextStretchStyle}"
                                             Command="{Binding PullAIMetaInfoCommand}"
-                                            Foreground="{Binding SelectingNodeViewModel.RecommendPullAIMetaInfo, Converter={StaticResource BooleanToForegroundBrushConverter}}"
+                                            Foreground="{Binding SelectedNodeViewModel.RecommendPullAIMetaInfo, Converter={StaticResource BooleanToForegroundBrushConverter}}"
                                             ToolTip="文献文字列からメタ情報を推測して，追記します。&#10;（ChatGPTを有効化することで利用可能）&#10;&#10;※ 既に十分なデータが揃っている場合，薄い表示になります。"
                                             ToolTipService.InitialShowDelay="10" 
                                             >
@@ -648,7 +648,7 @@
                                             Margin="3"
                                             Style="{StaticResource ButtonTextStretchStyle}"
                                             Command="{Binding OpenPDFCommand}"
-                                            Foreground="{Binding SelectingNodeViewModel.RecommendOpenPDF, Converter={StaticResource BooleanToForegroundBrushConverter}}"
+                                            Foreground="{Binding SelectedNodeViewModel.RecommendOpenPDF, Converter={StaticResource BooleanToForegroundBrushConverter}}"
                                             ToolTip="PDFを表示します。&#10;もしローカルに存在しない場合は，自動でダウンロードします。&#10;&#10;※ PDFが入手できる状態でない場合，薄い表示になります。"
                                             ToolTipService.InitialShowDelay="10" 
                                             >
@@ -669,7 +669,7 @@
                                             Margin="3"
                                             Style="{StaticResource ButtonTextStretchStyle}"
                                             Command="{Binding OpenDOIWebSiteCommand}"
-                                            Foreground="{Binding SelectingNodeViewModel.RecommendOpenDOIWebSite, Converter={StaticResource BooleanToForegroundBrushConverter}}"
+                                            Foreground="{Binding SelectedNodeViewModel.RecommendOpenDOIWebSite, Converter={StaticResource BooleanToForegroundBrushConverter}}"
                                             ToolTip="紐づけられたWebサイトをブラウザで表示します。&#10;&#10;※Webにアクセスできる状態でない場合，薄い表示になります。"
                                             ToolTipService.InitialShowDelay="10" 
                                             >
@@ -717,7 +717,7 @@
                                             Margin="3"
                                             Style="{StaticResource ButtonTextStretchStyle}"
                                             Command="{Binding ExecuteAllCommand}"
-                                            Foreground="{Binding SelectingNodeViewModel.RecommendExecuteAll, Converter={StaticResource BooleanToForegroundBrushConverter}}"
+                                            Foreground="{Binding SelectedNodeViewModel.RecommendExecuteAll, Converter={StaticResource BooleanToForegroundBrushConverter}}"
                                             ToolTipService.InitialShowDelay="10" 
                                             >
                                             <Button.ToolTip>
@@ -753,7 +753,7 @@
                                             Margin="3"
                                             Style="{StaticResource ButtonTextStretchStyle}"
                                             Command="{Binding AISummaryCommand}"
-                                            Foreground="{Binding SelectingNodeViewModel.RecommendAISummary, Converter={StaticResource BooleanToForegroundBrushConverter}}"
+                                            Foreground="{Binding SelectedNodeViewModel.RecommendAISummary, Converter={StaticResource BooleanToForegroundBrushConverter}}"
                                             ToolTip="AIに論文を読んでもらって，まとめ文章を作成してもらいます。&#10;（DocsBotを有効化することで利用可能）&#10;&#10;※ 未実装です。&#10;※ 既に十分なデータが揃っている場合，薄い表示になります。"
                                             ToolTipService.InitialShowDelay="10" 
                                             >
@@ -802,7 +802,7 @@
                                             Name="Button_ManuallyAddPDF"
                                             Style="{StaticResource ButtonTextStretchStyle}"
                                             Command="{Binding ManuallyAddPDFCommand}"
-                                            Foreground="{Binding SelectingNodeViewModel.RecommendManuallyAddPDF, Converter={StaticResource BooleanToForegroundBrushConverter}}"
+                                            Foreground="{Binding SelectedNodeViewModel.RecommendManuallyAddPDF, Converter={StaticResource BooleanToForegroundBrushConverter}}"
                                             ToolTip="PDFをデータベースに手動で追加します。&#10;PDFファイルをここにドロップすることもできます。&#10;&#10;※ 既に十分なデータが揃っている場合，薄い表示になります。"
                                             ToolTipService.InitialShowDelay="10" 
                                             AllowDrop="True"
@@ -851,7 +851,7 @@
                                             Style="{StaticResource ButtonTextStretchStyle}"
                                             Command="{Binding IsUndefinedButton1Command}"
                                             ToolTip="キープ&#10;&#10;※ 未実装です。&#10;※ 既に十分なデータが揃っている場合，薄い表示になります。"
-                                            Foreground="{Binding SelectingNodeViewModel.RecommendKeep, Converter={StaticResource BooleanToForegroundBrushConverter}}"
+                                            Foreground="{Binding SelectedNodeViewModel.RecommendKeep, Converter={StaticResource BooleanToForegroundBrushConverter}}"
                                             >
                                             <StackPanel Orientation="Horizontal">
                                                 <Grid Margin="0,0,3,0">
@@ -919,7 +919,7 @@
                                         <ToggleButton
                                             Margin="3"
                                             Style="{StaticResource ToggleButtonTextStyle}"
-                                            IsChecked="{Binding SelectingNodeViewModel.IsFavorite}"
+                                            IsChecked="{Binding SelectedNodeViewModel.IsFavorite}"
                                             ToolTip=""
                                             >
                                             <StackPanel Orientation="Horizontal">
@@ -931,7 +931,7 @@
                                         <ToggleButton
                                             Margin="3"
                                             Style="{StaticResource ToggleButtonTextStyle}"
-                                            IsChecked="{Binding SelectingNodeViewModel.IsRead}"
+                                            IsChecked="{Binding SelectedNodeViewModel.IsRead}"
                                             ToolTip=""
                                             >
                                             <StackPanel Orientation="Horizontal">
@@ -943,7 +943,7 @@
                                         <ToggleButton
                                             Margin="3"
                                             Style="{StaticResource ToggleButtonTextStyle}"
-                                            IsChecked="{Binding SelectingNodeViewModel.IsTemp}"
+                                            IsChecked="{Binding SelectedNodeViewModel.IsTemp}"
                                             ToolTip=""
                                             >
                                             <StackPanel Orientation="Horizontal">
@@ -955,7 +955,7 @@
                                         <ToggleButton
                                             Margin="3"
                                             Style="{StaticResource ToggleButtonTextStyle}"
-                                            IsChecked="{Binding SelectingNodeViewModel.IsLocalSearchMatched, Mode=OneWay}"
+                                            IsChecked="{Binding SelectedNodeViewModel.IsLocalSearchMatched, Mode=OneWay}"
                                             IsHitTestVisible="False"
                                             ToolTip=""
                                             IsEnabled="False"
@@ -969,7 +969,7 @@
                                         <ToggleButton
                                             Margin="3"
                                             Style="{StaticResource ToggleButtonTextStyle}"
-                                            IsChecked="{Binding SelectingNodeViewModel.IsCategory1}"
+                                            IsChecked="{Binding SelectedNodeViewModel.IsCategory1}"
                                             ToolTip=""
                                             >
                                             <StackPanel Orientation="Horizontal">
@@ -981,7 +981,7 @@
                                         <ToggleButton
                                             Margin="3"
                                             Style="{StaticResource ToggleButtonTextStyle}"
-                                            IsChecked="{Binding SelectingNodeViewModel.IsCategory2}"
+                                            IsChecked="{Binding SelectedNodeViewModel.IsCategory2}"
                                             ToolTip=""
                                             >
                                             <StackPanel Orientation="Horizontal">
@@ -993,7 +993,7 @@
                                         <ToggleButton
                                             Margin="3"
                                             Style="{StaticResource ToggleButtonTextStyle}"
-                                            IsChecked="{Binding SelectingNodeViewModel.IsCategory3}"
+                                            IsChecked="{Binding SelectedNodeViewModel.IsCategory3}"
                                             ToolTip=""
                                             >
                                             <StackPanel Orientation="Horizontal">
@@ -1036,7 +1036,7 @@
                                     </TextBlock>
                                     <TextBox 
                                         Margin="70,0,0,0" 
-                                        Text="{Binding SelectingNodeViewModel.Authors, UpdateSourceTrigger=LostFocus}" 
+                                        Text="{Binding SelectedNodeViewModel.Authors, UpdateSourceTrigger=LostFocus}" 
                                         TextWrapping="Wrap" AcceptsReturn="False"
                                         />
                                 </Grid>
@@ -1059,7 +1059,7 @@
                                     </TextBlock>
                                     <TextBox 
                                         Margin="70,0,0,0" 
-                                        Text="{Binding SelectingNodeViewModel.ArticleTitle, UpdateSourceTrigger=PropertyChanged}" 
+                                        Text="{Binding SelectedNodeViewModel.ArticleTitle, UpdateSourceTrigger=PropertyChanged}" 
                                         TextWrapping="Wrap" AcceptsReturn="False"
                                         />
                                 </Grid>
@@ -1082,7 +1082,7 @@
                                     </TextBlock>
                                     <TextBox 
                                         Margin="70,0,0,0" 
-                                        Text="{Binding SelectingNodeViewModel.Article.Memo}" 
+                                        Text="{Binding SelectedNodeViewModel.Article.Memo}" 
                                         TextWrapping="Wrap" AcceptsReturn="True"
                                         />
                                 </Grid>
@@ -1106,7 +1106,7 @@
                                     </TextBlock>
                                     <TextBox 
                                         Margin="100,0,0,0" 
-                                        Text="{Binding SelectingNodeViewModel.Article.Memo_Motivation}" 
+                                        Text="{Binding SelectedNodeViewModel.Article.Memo_Motivation}" 
                                         TextWrapping="Wrap" AcceptsReturn="True"
                                         />
                                 </Grid>
@@ -1132,7 +1132,7 @@
                                     </TextBlock>
                                     <TextBox 
                                         Margin="100,0,0,0" 
-                                        Text="{Binding SelectingNodeViewModel.Article.Memo_Method}" 
+                                        Text="{Binding SelectedNodeViewModel.Article.Memo_Method}" 
                                         TextWrapping="Wrap" AcceptsReturn="True"
                                         />
                                 </Grid>
@@ -1156,7 +1156,7 @@
                                     </TextBlock>
                                     <TextBox 
                                         Margin="100,0,0,0" 
-                                        Text="{Binding SelectingNodeViewModel.Article.Memo_Insights}" 
+                                        Text="{Binding SelectedNodeViewModel.Article.Memo_Insights}" 
                                         TextWrapping="Wrap" AcceptsReturn="True"
                                         />
                                 </Grid>
@@ -1179,7 +1179,7 @@
                                     </TextBlock>
                                     <TextBox 
                                         Margin="100,0,0,0" 
-                                        Text="{Binding SelectingNodeViewModel.Article.Memo_Contribution}" 
+                                        Text="{Binding SelectedNodeViewModel.Article.Memo_Contribution}" 
                                         TextWrapping="Wrap" AcceptsReturn="True"
                                         />
                                 </Grid>
@@ -1205,7 +1205,7 @@
                                     </TextBlock>
                                     <TextBox 
                                         Margin="70,0,0,0" 
-                                        Text="{Binding SelectingNodeViewModel.PublishedOn, UpdateSourceTrigger=PropertyChanged}" 
+                                        Text="{Binding SelectedNodeViewModel.PublishedOn, UpdateSourceTrigger=PropertyChanged}" 
                                         TextWrapping="NoWrap" AcceptsReturn="False"
                                         />
                                 </Grid>
@@ -1228,7 +1228,7 @@
                                     </TextBlock>
                                     <TextBox 
                                         Margin="70,0,0,0" 
-                                        Text="{Binding SelectingNodeViewModel.MaterialTitle, UpdateSourceTrigger=PropertyChanged}" 
+                                        Text="{Binding SelectedNodeViewModel.MaterialTitle, UpdateSourceTrigger=PropertyChanged}" 
                                         TextWrapping="NoWrap" AcceptsReturn="False"
                                         />
                                 </Grid>
@@ -1265,7 +1265,7 @@
                                     </TextBlock>
                                     <TextBox 
                                         Grid.Column="2"
-                                        Text="{Binding SelectingNodeViewModel.MaterialVolume, UpdateSourceTrigger=PropertyChanged}" 
+                                        Text="{Binding SelectedNodeViewModel.MaterialVolume, UpdateSourceTrigger=PropertyChanged}" 
                                         TextWrapping="NoWrap" AcceptsReturn="False"
                                         />
 
@@ -1287,7 +1287,7 @@
                                     </TextBlock>
                                     <TextBox 
                                         Grid.Column="4"
-                                        Text="{Binding SelectingNodeViewModel.MaterialSubVolume, UpdateSourceTrigger=PropertyChanged}" 
+                                        Text="{Binding SelectedNodeViewModel.MaterialSubVolume, UpdateSourceTrigger=PropertyChanged}" 
                                         TextWrapping="NoWrap" AcceptsReturn="False"
                                         />
 
@@ -1310,7 +1310,7 @@
 
                                     <TextBox 
                                         Grid.Column="6"
-                                        Text="{Binding SelectingNodeViewModel.StartingPage, UpdateSourceTrigger=PropertyChanged}" 
+                                        Text="{Binding SelectedNodeViewModel.StartingPage, UpdateSourceTrigger=PropertyChanged}" 
                                         TextWrapping="NoWrap" AcceptsReturn="False"
                                         />
 
@@ -1332,7 +1332,7 @@
                                     </TextBlock>
                                     <TextBox 
                                         Grid.Column="8"
-                                        Text="{Binding SelectingNodeViewModel.EndingPage, UpdateSourceTrigger=PropertyChanged}" 
+                                        Text="{Binding SelectedNodeViewModel.EndingPage, UpdateSourceTrigger=PropertyChanged}" 
                                         TextWrapping="NoWrap" AcceptsReturn="False"
                                         />
 
@@ -1359,7 +1359,7 @@
                                     </TextBlock>
                                     <TextBox 
                                         Margin="70,0,0,0" 
-                                        Text="{Binding SelectingNodeViewModel.Article.DOI, UpdateSourceTrigger=PropertyChanged}" 
+                                        Text="{Binding SelectedNodeViewModel.Article.DOI, UpdateSourceTrigger=PropertyChanged}" 
                                         TextWrapping="NoWrap" AcceptsReturn="False"
                                         />
                                 </Grid>
@@ -1394,9 +1394,9 @@
                                             </TextBlock>
                                         </StackPanel.ToolTip>
 
-                                        <TextBlock Text="{Binding SelectingNodeViewModel.Article.AOI}"/>
+                                        <TextBlock Text="{Binding SelectedNodeViewModel.Article.AOI}"/>
                                         <TextBlock Text=" ( "/>
-                                        <TextBlock Text="{Binding SelectingNodeViewModel.Article.Friendly_AOI}"/>
+                                        <TextBlock Text="{Binding SelectedNodeViewModel.Article.Friendly_AOI}"/>
                                         <TextBlock Text=" )"/>
                                     </StackPanel>
 
@@ -1419,7 +1419,7 @@
                                         </TextBlock.ToolTip>
                                     </TextBlock>
                                     <TextBlock 
-                                        Text="{Binding SelectingNodeViewModel.DataFrom}" 
+                                        Text="{Binding SelectedNodeViewModel.DataFrom}" 
                                         Margin="70,0,0,0" 
                                         TextWrapping="Wrap"
                                         />
@@ -1442,7 +1442,7 @@
                                         </TextBlock.ToolTip>
                                     </TextBlock>
                                     <TextBlock 
-                                        Text="{Binding SelectingNodeViewModel.Article.ReferenceString}" 
+                                        Text="{Binding SelectedNodeViewModel.Article.ReferenceString}" 
                                         Margin="70,0,0,0" 
                                         TextWrapping="Wrap"
                                         ToolTipService.InitialShowDelay="10" 
@@ -1477,7 +1477,7 @@
                                         </TextBlock.ToolTip>
                                     </TextBlock>
                                     <TextBlock 
-                                        Text="{Binding SelectingNodeViewModel.Article.CrossRef_UnstructuredRefString}" 
+                                        Text="{Binding SelectedNodeViewModel.Article.CrossRef_UnstructuredRefString}" 
                                         Margin="70,0,0,0" 
                                         TextWrapping="Wrap"
                                         >
@@ -1501,7 +1501,7 @@
                                         </TextBlock.ToolTip>
                                     </TextBlock>
                                     <TextBlock 
-                                        Text="{Binding SelectingNodeViewModel.Article.JStage_UnstructuredRefString}" 
+                                        Text="{Binding SelectedNodeViewModel.Article.JStage_UnstructuredRefString}" 
                                         Margin="70,0,0,0" 
                                         TextWrapping="Wrap"
                                         >
@@ -1525,7 +1525,7 @@
                                         </TextBlock.ToolTip>
                                     </TextBlock>
                                     <TextBlock 
-                                        Text="{Binding SelectingNodeViewModel.Article.Manual_CreatedDate}" 
+                                        Text="{Binding SelectedNodeViewModel.Article.Manual_CreatedDate}" 
                                         Margin="70,0,0,0" 
                                         TextWrapping="Wrap"
                                         >
