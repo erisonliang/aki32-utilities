@@ -177,7 +177,7 @@
                                         >
                                         <!--<Label Content="■"/>-->
                                         <Label Content="📄" Padding="0" VerticalAlignment="Center" Foreground="#FF080808"/>
-                                        <Label Content="文献" Padding="2,0,0,0" VerticalAlignment="Center" FontWeight="Bold" Foreground="#FF080808"/>
+                                        <Label Content="{Binding NodeName}" Padding="2,0,0,0" VerticalAlignment="Center" FontWeight="Bold" Foreground="#FF080808"/>
                                     </StackPanel>
                                     <StackPanel
                                         HorizontalAlignment="Right"
