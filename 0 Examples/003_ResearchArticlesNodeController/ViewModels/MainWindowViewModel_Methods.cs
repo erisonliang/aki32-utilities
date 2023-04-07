@@ -736,12 +736,12 @@ public partial class MainWindowViewModel : ViewModel
                 throw new Exception("文献が選択されていません。");
 
             // ChatGPTによる推定
-            var targetArticle = SelectingNodeViewModel.Article;
-            var predictResult = await targetArticle.TryPredictMetaInfo_ChatGPT();
+            var selectedArticle = SelectingNodeViewModel.Article;
+            var predictResult = await selectedArticle.TryPredictMetaInfo_ChatGPT();
             if (!predictResult)
                 throw new Exception("推測に失敗しました。");
 
-            var mergeResult = ResearchArticlesManager.MergeIfMergeable(targetArticle);
+            var mergeResult = ResearchArticlesManager.MergeIfMergeable(selectedArticle);
             if (mergeResult is not null)
                 Console.WriteLine("同一の文献を発見したため，マージしました。");
 
@@ -1460,6 +1460,13 @@ public partial class MainWindowViewModel : ViewModel
 
             await InternetSearchPullProcess(accessor);
             var saveTask = Save();
+            var successAnimationTask = Task.Run(async () =>
+            {
+                IsInternetSearch_CrossRef_C_Done = true;
+                await Task.Delay(2222);
+                if (!IsInternetSearch_CrossRef_C_Busy)
+                    IsInternetSearch_CrossRef_C_Done = false;
+            });
         }
         catch (Exception ex)
         {
@@ -1468,10 +1475,6 @@ public partial class MainWindowViewModel : ViewModel
         finally
         {
             IsInternetSearch_CrossRef_C_Busy = false;
-            IsInternetSearch_CrossRef_C_Done = true;
-            await Task.Delay(2222);
-            if (!IsInternetSearch_CrossRef_C_Busy)
-                IsInternetSearch_CrossRef_C_Done = false;
         }
     }
 
