@@ -604,8 +604,7 @@ public partial class MainWindowViewModel : ViewModel
             if (pulledArticles is null || pulledArticles.Count == 0)
                 throw new Exception($"CrossRef および J-Stage がこの文献に対応していない，もしくは引用関係が存在しない資料である可能性があります。");
 
-            RedrawResearchArticleNodes();
-
+            InternetSearchPostProcess(pulledArticles, true, false);
 
             // 全てに対して GPT予測！？？
             var pulledCount = pulledArticles.Count;
@@ -630,9 +629,15 @@ public partial class MainWindowViewModel : ViewModel
                                 throw new Exception("推測に失敗しました。");
 
                             var mergeResult = ResearchArticlesManager.MergeIfMergeable(targetArticle);
-                            if (mergeResult is not null)
+                            if (mergeResult is null)
+                            {
+                                GetNodeFromArticle(targetArticle)?.NotifyArticleUpdated();
+                            }
+                            else
+                            {
                                 Console.WriteLine("同一の文献を発見したため，マージしました。");
-
+                                GetNodeFromArticle(mergeResult)?.NotifyArticleUpdated();
+                            }
                         }
                         else
                         {
@@ -641,7 +646,6 @@ public partial class MainWindowViewModel : ViewModel
                         }
 
                         Console.WriteLine($"成功。(成功 {currentFriendlyIndex - failCount}件，失敗 {failCount}件，残り {pulledCount - currentFriendlyIndex}件)");
-                        RedrawResearchArticleNodes();
                     }
                     catch (Exception ex)
                     {
@@ -653,7 +657,6 @@ public partial class MainWindowViewModel : ViewModel
                 Console.WriteLine($"★ メタ情報の収集が完了しました。(成功: {pulledCount - failCount}/{pulledCount}件)");
             }
 
-            RedrawResearchArticleNodes();
             SelectedEmphasizePropertyItem = ViewModels.EmphasizePropertyItems.一時ﾃﾞｰﾀ;
             var saveTask = Save();
 
@@ -1482,8 +1485,12 @@ public partial class MainWindowViewModel : ViewModel
     {
         // プルして再描画した後に，一時データになってるやつだけ右上に固めるように動かす。
         var pulledArticles = await ResearchArticlesManager.PullArticleInfo(accessor, asTempArticles: true, save: false);
+        InternetSearchPostProcess(pulledArticles);
+    }
 
-        if (pulledArticles.Count == 0)
+    void InternetSearchPostProcess(List<ResearchArticle>? pulledArticles, bool useRearrangeNodesAlignRight = false, bool moveToFirstItem = true)
+    {
+        if (pulledArticles is null || pulledArticles.Count == 0)
             throw new Exception("マッチするデータがありませんでした。");
 
         RedrawResearchArticleNodes();
@@ -1496,12 +1503,26 @@ public partial class MainWindowViewModel : ViewModel
             ?.Cast<DefaultNodeViewModel>()
             ?.ToList();
 
-        RearrangeNodesToEdge(nodes);
+        if (useRearrangeNodesAlignRight)
+        {
+            // TODO
+            //throw new NotImplementedException("TODO");
 
-        MoveCanvasToTargetArticleNode(nodes!.FirstOrDefault());
+
+
+
+
+        }
+        else
+            RearrangeNodesToEdge(nodes);
+
+        if (moveToFirstItem)
+            MoveCanvasToTargetArticleNode(nodes!.FirstOrDefault());
 
         SelectedEmphasizePropertyItem = ViewModels.EmphasizePropertyItems.一時ﾃﾞｰﾀ;
+
     }
+
 
     // ★★★★★★★★★★★★★★★ 右パネル内 → 設定
 
