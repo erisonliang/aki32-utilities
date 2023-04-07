@@ -83,6 +83,9 @@ public partial class MainWindowViewModel : ViewModel
     public ViewModelCommand AcceptSelectingArticleNodesCommand => _AcceptSelectingArticleNodesCommand.Get(AcceptSelectingArticleNodes);
     ViewModelCommandHandler _AcceptSelectingArticleNodesCommand = new();
 
+    public ViewModelCommand MergeSelectingTwoArticleNodesCommand => _MergeSelectingTwoArticleNodesCommand.Get(MergeSelectingTwoArticleNodes);
+    ViewModelCommandHandler _MergeSelectingTwoArticleNodesCommand = new();
+
 
     public ViewModelCommand RearrangeNodesAlignLeftCommand => _RearrangeNodesAlignLeftCommand.Get(RearrangeNodesAlignLeft);
     ViewModelCommandHandler _RearrangeNodesAlignLeftCommand = new();

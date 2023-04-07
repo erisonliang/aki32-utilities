@@ -516,6 +516,26 @@ public partial class MainWindowViewModel : ViewModel
         var saveTask = Save();
     }
 
+    void MergeSelectingTwoArticleNodes()
+    {
+        var selectingNodes = _NodeViewModels
+          .Where(node => node.IsSelected)
+          .Where(node => node is ResearchArticleNodeViewModel)
+          .Cast<ResearchArticleNodeViewModel>()
+          .ToArray();
+
+        if (selectingNodes.Length != 2)
+        {
+            MessageBox.Show($"呼び出すには，ちょうど2つ文献を選択してください。", "2つの文献をマージ", MessageBoxButton.OK, MessageBoxImage.Warning);
+            return;
+        }
+
+        ResearchArticlesManager.MergeArticles(selectingNodes[0].Article, selectingNodes[1].Article);
+        selectingNodes[0].NotifyArticleUpdated();
+        RedrawResearchArticleNodes();
+
+        var saveTask = Save();
+    }
 
     // ★★★★★★★★★★★★★★★ Node Controller 内
 
