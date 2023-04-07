@@ -604,7 +604,19 @@ public partial class MainWindowViewModel : ViewModel
             if (pulledArticles is null || pulledArticles.Count == 0)
                 throw new Exception($"CrossRef および J-Stage がこの文献に対応していない，もしくは引用関係が存在しない資料である可能性があります。");
 
-            InternetSearchPostProcess(pulledArticles, true, false);
+            var rearrangeNodesAction = (List<DefaultNodeViewModel> pulledTempArticleNodes) =>
+            {
+                // 対象のやつの左側に，下方向に列挙。
+                var selectingNodePosition = SelectingNodeViewModel.Position;
+                Point basePosition = new(selectingNodePosition.X - NODE_HORIZONTAL_SPAN, selectingNodePosition.Y);
+
+                var nodes = pulledTempArticleNodes
+                .Where(n => n != SelectingNodeViewModel)
+                .ToList();
+
+                RearrangeNodesAlignRight(nodes, basePosition, true);
+            };
+            InternetSearchPostProcess(pulledArticles, true, rearrangeNodesAction);
 
             // 全てに対して GPT予測！？？
             var pulledCount = pulledArticles.Count;
@@ -1488,7 +1500,7 @@ public partial class MainWindowViewModel : ViewModel
         InternetSearchPostProcess(pulledArticles);
     }
 
-    void InternetSearchPostProcess(List<ResearchArticle>? pulledArticles, bool useRearrangeNodesAlignRight = false, bool moveToFirstItem = true)
+    void InternetSearchPostProcess(List<ResearchArticle>? pulledArticles, bool moveToFirstItem = true, Action<List<DefaultNodeViewModel>>? rearrangeNodesActionOverwrite = null)
     {
         if (pulledArticles is null || pulledArticles.Count == 0)
             throw new Exception("マッチするデータがありませんでした。");
@@ -1499,25 +1511,17 @@ public partial class MainWindowViewModel : ViewModel
             .Where(n => n.Private_Temporary ?? false)
             .ToList();
 
-        var nodes = GetNodesFromArticles(pulledTempArticles!)
+        var pulledTempArticleNodes = GetNodesFromArticles(pulledTempArticles!)
             ?.Cast<DefaultNodeViewModel>()
             ?.ToList();
 
-        if (useRearrangeNodesAlignRight)
-        {
-            // TODO
-            //throw new NotImplementedException("TODO");
-
-
-
-
-
-        }
+        if (rearrangeNodesActionOverwrite is not null)
+            rearrangeNodesActionOverwrite(pulledTempArticleNodes!);
         else
-            RearrangeNodesToEdge(nodes);
+            RearrangeNodesToEdge(pulledTempArticleNodes, false, true);
 
         if (moveToFirstItem)
-            MoveCanvasToTargetArticleNode(nodes!.FirstOrDefault());
+            MoveCanvasToTargetArticleNode(pulledTempArticleNodes!.FirstOrDefault());
 
         SelectedEmphasizePropertyItem = ViewModels.EmphasizePropertyItems.一時ﾃﾞｰﾀ;
 
