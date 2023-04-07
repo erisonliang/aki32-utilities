@@ -61,8 +61,9 @@ public partial class MainWindowViewModel : ViewModel
     {
         //ResearchArticlesManager.ArticleDatabase.Add(new ResearchArticle { Manual_ArticleTitle = DateTime.Now.ToLongTimeString() });
         //ResearchArticlesManager.ArticleDatabase.RemoveAt(3);
-
-        RedrawResearchArticlesManager();
+        
+        RedrawResearchArticleNodes();
+        
         //MoveCanvasToTargetArticle(NodeViewModels.FirstOrDefault());
     }
 
@@ -570,7 +571,7 @@ public partial class MainWindowViewModel : ViewModel
             if (pulledArticles is null || pulledArticles.Count == 0)
                 throw new Exception($"CrossRef および J-Stage がこの文献に対応していない，もしくは引用関係が存在しない資料である可能性があります。");
 
-            RedrawResearchArticlesManager();
+            RedrawResearchArticleNodes();
 
 
             // 全てに対して GPT予測！？？
@@ -607,7 +608,7 @@ public partial class MainWindowViewModel : ViewModel
                         }
 
                         Console.WriteLine($"成功。(成功 {currentFriendlyIndex - failCount}件，失敗 {failCount}件，残り {pulledCount - currentFriendlyIndex}件)");
-                        RedrawResearchArticlesManager();
+                        RedrawResearchArticleNodes();
                     }
                     catch (Exception ex)
                     {
@@ -619,7 +620,7 @@ public partial class MainWindowViewModel : ViewModel
                 Console.WriteLine($"★ メタ情報の収集が完了しました。(成功: {pulledCount - failCount}/{pulledCount}件)");
             }
 
-            RedrawResearchArticlesManager();
+            RedrawResearchArticleNodes();
             SelectedEmphasizePropertyItem = ViewModels.EmphasizePropertyItems.一時ﾃﾞｰﾀ;
             var saveTask = Save();
 
@@ -667,7 +668,7 @@ public partial class MainWindowViewModel : ViewModel
                     throw new Exception("マッチするデータがありませんでした。");
             }
 
-            RedrawResearchArticlesManager();
+            RedrawResearchArticleNodes();
             MoveCanvasToTargetArticle(SelectingNodeViewModel);
             SelectedEmphasizePropertyItem = ViewModels.EmphasizePropertyItems.一時ﾃﾞｰﾀ;
             var saveTask = Save();
@@ -1086,7 +1087,7 @@ public partial class MainWindowViewModel : ViewModel
             if (pulledArticles.Count == 0)
                 throw new Exception("マッチするデータがありませんでした。");
 
-            RedrawResearchArticlesManager();
+            RedrawResearchArticleNodes();
             MoveCanvasToTargetArticle(pulledArticles.FirstOrDefault());
             SelectedEmphasizePropertyItem = ViewModels.EmphasizePropertyItems.一時ﾃﾞｰﾀ;
             var saveTask = Save();
@@ -1149,7 +1150,7 @@ public partial class MainWindowViewModel : ViewModel
             if (pulledArticles.Count == 0)
                 throw new Exception("マッチするデータがありませんでした。");
 
-            RedrawResearchArticlesManager();
+            RedrawResearchArticleNodes();
             MoveCanvasToTargetArticle(pulledArticles.FirstOrDefault());
             SelectedEmphasizePropertyItem = ViewModels.EmphasizePropertyItems.一時ﾃﾞｰﾀ;
             var saveTask = Save();
@@ -1228,7 +1229,7 @@ public partial class MainWindowViewModel : ViewModel
             if (pulledArticles.Count == 0)
                 throw new Exception("マッチするデータがありませんでした。");
 
-            RedrawResearchArticlesManager();
+            RedrawResearchArticleNodes();
             MoveCanvasToTargetArticle(pulledArticles.FirstOrDefault());
             SelectedEmphasizePropertyItem = ViewModels.EmphasizePropertyItems.一時ﾃﾞｰﾀ;
             var saveTask = Save();
@@ -1308,7 +1309,7 @@ public partial class MainWindowViewModel : ViewModel
             if (pulledArticles.Count == 0)
                 throw new Exception("マッチするデータがありませんでした。");
 
-            RedrawResearchArticlesManager();
+            RedrawResearchArticleNodes();
             MoveCanvasToTargetArticle(pulledArticles.FirstOrDefault());
             SelectedEmphasizePropertyItem = ViewModels.EmphasizePropertyItems.一時ﾃﾞｰﾀ;
             var saveTask = Save();
@@ -1389,7 +1390,7 @@ public partial class MainWindowViewModel : ViewModel
             if (pulledArticles.Count == 0)
                 throw new Exception("マッチするデータがありませんでした。");
 
-            RedrawResearchArticlesManager();
+            RedrawResearchArticleNodes();
             MoveCanvasToTargetArticle(pulledArticles.FirstOrDefault());
             SelectedEmphasizePropertyItem = ViewModels.EmphasizePropertyItems.一時ﾃﾞｰﾀ;
             var saveTask = Save();
@@ -1432,7 +1433,7 @@ public partial class MainWindowViewModel : ViewModel
             if (pulledArticles.Count == 0)
                 throw new Exception("マッチするデータがありませんでした。");
 
-            RedrawResearchArticlesManager();
+            RedrawResearchArticleNodes();
             MoveCanvasToTargetArticle(pulledArticles.FirstOrDefault());
             SelectedEmphasizePropertyItem = ViewModels.EmphasizePropertyItems.一時ﾃﾞｰﾀ;
             var saveTask = Save();
@@ -1474,7 +1475,7 @@ public partial class MainWindowViewModel : ViewModel
             if (pulledArticles.Count == 0)
                 throw new Exception("マッチするデータがありませんでした。");
 
-            RedrawResearchArticlesManager();
+            RedrawResearchArticleNodes();
             MoveCanvasToTargetArticle(pulledArticles.FirstOrDefault());
             SelectedEmphasizePropertyItem = ViewModels.EmphasizePropertyItems.一時ﾃﾞｰﾀ;
             var saveTask = Save();
@@ -1516,7 +1517,7 @@ public partial class MainWindowViewModel : ViewModel
             if (pulledArticles.Count == 0)
                 throw new Exception("マッチするデータがありませんでした。");
 
-            RedrawResearchArticlesManager();
+            RedrawResearchArticleNodes();
             MoveCanvasToTargetArticle(pulledArticles.FirstOrDefault());
             SelectedEmphasizePropertyItem = ViewModels.EmphasizePropertyItems.一時ﾃﾞｰﾀ;
             var saveTask = Save();
