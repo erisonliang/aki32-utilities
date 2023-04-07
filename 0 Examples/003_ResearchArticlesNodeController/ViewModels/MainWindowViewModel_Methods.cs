@@ -66,7 +66,6 @@ public partial class MainWindowViewModel : ViewModel
 
         RedrawResearchArticleNodes();
 
-
         //MoveCanvasToTargetArticle(NodeViewModels.FirstOrDefault());
     }
 
@@ -1022,37 +1021,6 @@ public partial class MainWindowViewModel : ViewModel
 
     // ★★★★★★★★★★★★★★★ 右パネル内 → 検索
 
-    void aaa()
-    {
-
-        ////// ★ articles from cinii
-        ////var accessor = new CiNiiArticleAPIAccessor()
-        ////{
-        ////    RecordCount = 5,
-        ////    ISSN = ISSN.Architecture_Structure,
-        ////    SearchFreeWord = "小振幅"
-        ////};
-        ////research.PullArticleInfo(accessor);
-
-
-        ////// ★ article from crossref
-        ////var accessor = new CrossRefAPIAccessor()
-        ////{
-        ////    DOI = "10.3130/aijs.87.822"
-        ////};
-        ////research.PullArticleInfo(accessor);
-
-
-        ////// ★ articles from ndl search
-        ////var accessor = new NDLSearchAPIAccessor()
-        ////{
-        ////    RecordCount = 5,
-        ////    SearchFreeWord = "空間情報を表現するグラフ構造",
-        ////};
-        ////research.PullArticleInfo(accessor);
-
-    }
-
     async Task OpenLocalSearch()
     {
         ParentView.TabControl_RightPanel.SelectedItem = ParentView.TabItem_Search;
@@ -1565,78 +1533,10 @@ public partial class MainWindowViewModel : ViewModel
         // コピペ用に残しとく
         MessageBox.Show("NotImplemented");
 
-        // articles from j-stage
-        {
-            //var builder = new JStageArticleUriBuilder()
-            //{
-            //    Pubyearfrom = 2022,
-            //    Issn = ISSN.Architecture_Structure,
-            //    Count = 1000,
-            //    //Start = 1,
-            //};
-            //research.PullArticleInfo(builder);
-
-        }
-
-        // articles from cinii
-        {
-            //var builder = new CiNiiArticleUriBuilder()
-            //{
-            //    Count = 5,
-            //    ISSN = ISSN.Architecture_Structure,
-            //    FreeWord = "小振幅"
-            //};
-            //research.PullArticleInfo(builder);
-
-        }
-
-        // article from crossref
-        {
-            //var builder = new CrossRefArticleUriBuilder()
-            //{
-            //    DOI = "10.3130/aijs.87.822"
-            //};
-            //research.PullArticleInfo(builder);
-
-        }
-
-        // display
-        {
-            //research.SaveDatabase(true);
-            //research.ArticleDatabase.First(x => x.DOI == "10.3130/aijs.87.822").TryOpenPDF(research.PDFsDirectory);
-        }
-
-        // void AddTestNodeLink()
-        {
-            if (_NodeViewModels.Count < 2)
-            {
-                return;
-            }
-            var nodeLink = new NodeLinkViewModel
-            {
-                OutputConnectorNodeGuid = _NodeViewModels[0].Guid,
-                OutputConnectorGuid = _NodeViewModels[0].Outputs.ElementAt(0).Guid,
-                InputConnectorNodeGuid = _NodeViewModels[1].Guid,
-                InputConnectorGuid = _NodeViewModels[1].Inputs.ElementAt(0).Guid,
-            };
-            _NodeLinkViewModels.Add(nodeLink);
-        }
-
         // void MoveTestNodes()
         {
             if (_NodeLinkViewModels.Any())
                 _NodeViewModels[0].Position = new Point(0, 0);
-        }
-
-        //void ClearNodes()
-        {
-            _NodeLinkViewModels.Clear();
-            _NodeViewModels.Clear();
-        }
-
-        //void ClearNodeLinks()
-        {
-            _NodeLinkViewModels.Clear();
         }
 
         //void MoveGroupNode()
@@ -1657,11 +1557,6 @@ public partial class MainWindowViewModel : ViewModel
 
     }
 
-    void ResetScale()
-    {
-        Scale = 1.0f;
-    }
-
     void NodesMoved(EndMoveNodesOperationEventArgs param)
     {
     }
@@ -1669,12 +1564,11 @@ public partial class MainWindowViewModel : ViewModel
 
     // ★★★★★★★★★★★★★★★ auto
 
-
     void PreviewConnect(PreviewConnectLinkOperationEventArgs args)
     {
         var inputNode = NodeViewModels.First(arg => arg.Guid == args.ConnectToEndNodeGuid);
         var inputConnector = inputNode.FindConnector(args.ConnectToEndConnectorGuid);
-        args.CanConnect = inputConnector.Label == "Limited Input" == false;
+        //args.CanConnect = inputConnector.Label == "Limited Input" == false;
     }
 
     // ★★★★★★★★★★★★★★★ utils
