@@ -624,6 +624,7 @@ public partial class MainWindowViewModel : ViewModel
                 RearrangeNodesAlignRight(nodes, basePosition, true);
             };
             InternetSearchPostProcess(pulledArticles, true, rearrangeNodesAction);
+            selectedNode.NotifyArticleUpdated();
 
             // 全てに対して GPT予測！？？
             var pulledCount = pulledArticles.Count;
@@ -724,6 +725,8 @@ public partial class MainWindowViewModel : ViewModel
 
             RedrawResearchArticleNodes();
             SelectedEmphasizePropertyItem = ViewModels.EmphasizePropertyItems.一時ﾃﾞｰﾀ;
+
+
             selectedNode.NotifyArticleUpdated();
 
             var saveTask = Save();
@@ -764,10 +767,15 @@ public partial class MainWindowViewModel : ViewModel
                 throw new Exception("推測に失敗しました。");
 
             var mergeResult = ResearchArticlesManager.MergeIfMergeable(selectedArticle);
-            if (mergeResult is not null)
+            if (mergeResult is null)
+            {
+                selectedNode.NotifyArticleUpdated();
+            }
+            else
+            {
                 Console.WriteLine("同一の文献を発見したため，マージしました。");
-
-            selectedNode.NotifyArticleUpdated();
+                GetNodeFromArticle(mergeResult)?.NotifyArticleUpdated();
+            }
 
             var saveTask = Save();
 
