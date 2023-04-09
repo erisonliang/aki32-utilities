@@ -51,7 +51,7 @@ public class ResearchArticleNodeViewModel : DefaultNodeViewModel
             // 自動生成されたものでない非構造データがあれば，まだ情報追加の余地があるからオススメする。
             _ = Article.ReferenceString;
             if (Article.IsLastReferenceStringFromTemplateGeneration)
-            return false;
+                return false;
             if (!string.IsNullOrEmpty(Article.ReferenceErrorReasonString))
                 return false;
 
@@ -66,10 +66,17 @@ public class ResearchArticleNodeViewModel : DefaultNodeViewModel
     {
         get
         {
-            // 自動生成されたものでなければ，まだ情報追加の余地があるからオススメ。
+            // 一回でもAI推定した過去があればもう希望無しとする。
+            if (Article.DataFrom_AI_PredictFromRefString ?? false)
+                return false;
+
+            // 自動生成されたものでない非構造データがあれば，まだ情報追加の余地があるからオススメする。
             _ = Article.ReferenceString;
             if (Article.IsLastReferenceStringFromTemplateGeneration)
                 return false;
+            if (!string.IsNullOrEmpty(Article.ReferenceErrorReasonString))
+                return false;
+
             return true;
         }
     }

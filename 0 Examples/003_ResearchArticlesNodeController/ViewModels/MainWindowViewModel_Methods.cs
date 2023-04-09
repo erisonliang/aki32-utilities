@@ -664,53 +664,42 @@ public partial class MainWindowViewModel : ViewModel
             var result_UseGPT = MessageBox.Show($"取得に成功した {pulledCount} 件の文献に対して，AIによるメタ情報推定を行いますか？", "引用関係を取得", MessageBoxButton.OKCancel, MessageBoxImage.Information);
             if (result_UseGPT == MessageBoxResult.OK)
             {
-                var currentFriendlyIndex = 0;
                 var failCount = 0;
 
                 GetNodesFromArticles(pulledArticles).ForEach(n => n.IsNodeBusy = true);
 
+                // 一旦GPTから全て推測。
+                Parallel.ForEach(pulledArticles, async targetArticle =>
+                {
+                    var predictResult = await targetArticle.TryPredictMetaInfo_ChatGPT();
+                    if (!predictResult)
+                        failCount++;
+                });
+
+                // 全て可能な限りマージ！
                 foreach (var targetArticle in pulledArticles)
                 {
-                    currentFriendlyIndex++;
-
-                    Console.WriteLine($"{currentFriendlyIndex}/{pulledCount}件を処理中…");
                     ResearchArticle? mergeResult = null;
 
-                    try
+                    if (ResearchArticlesManager.ArticleDatabase.Contains(targetArticle))
                     {
-                        if (ResearchArticlesManager.ArticleDatabase.Contains(targetArticle))
+                        mergeResult = ResearchArticlesManager.MergeIfMergeable(targetArticle);
+                        if (mergeResult is not null)
                         {
-                            var predictResult = await targetArticle.TryPredictMetaInfo_ChatGPT();
-                            if (!predictResult)
-                                throw new Exception("推測に失敗しました。");
-
-                            mergeResult = ResearchArticlesManager.MergeIfMergeable(targetArticle);
                             RedrawResearchArticleNodes();
-                            if (mergeResult is not null)
-                                Console.WriteLine("同一の文献を発見したため，マージしました。");
-
+                            Console.WriteLine("同一の文献を発見したため，マージしました。");
                         }
-                        else
-                        {
-                            // 既にマージされたものの可能性が高い。成功扱い。
-                            Console.WriteLine("既に他の文献にマージされた文献です。");
-                        }
-
-                        Console.WriteLine($"成功。(成功 {currentFriendlyIndex - failCount}件，失敗 {failCount}件，残り {pulledCount - currentFriendlyIndex}件)");
                     }
-                    catch (Exception ex)
+                    else
                     {
-                        failCount++;
-                        Console.WriteLine($"失敗。(成功: {currentFriendlyIndex - failCount}/{currentFriendlyIndex}件) ﾒｯｾｰｼﾞ: {ex.Message}");
+                        // 既にマージされたものの可能性が高い。スルー。
                     }
-                    finally
+
+                    var targetArticleNode = GetNodeFromArticle(mergeResult ?? targetArticle);
+                    if (targetArticleNode is not null)
                     {
-                        var targetArticleNode = GetNodeFromArticle(mergeResult ?? targetArticle);
-                        if (targetArticleNode is not null)
-                        {
-                            targetArticleNode.NotifyArticleUpdated();
-                            targetArticleNode.IsNodeBusy = false;
-                        }
+                        targetArticleNode.NotifyArticleUpdated();
+                        targetArticleNode.IsNodeBusy = false;
                     }
                 }
 
@@ -758,15 +747,15 @@ public partial class MainWindowViewModel : ViewModel
                 var dataSources = selectedNode.Article.GetAvailableDataSources();
 
 
-            // TODO
+                // TODO
                 // 情報提供元の候補から次々とダウンロードしてみる。
                 foreach (var dataSource in dataSources)
-            {
+                {
                     var siteName = dataSource.Key;
                     var accessor = dataSource.Value;
 
                     try
-                {
+                    {
                         Console.WriteLine($"★ {siteName} にアクセス中…");
 
                         var fetchedArticles = await ResearchArticlesManager.FetchArticleInfo(accessor);
@@ -774,7 +763,7 @@ public partial class MainWindowViewModel : ViewModel
                         // この文献に一致するデータのみ抽出。
                         fetchedTargetArticle = fetchedArticles.FirstOrDefault(fa => selectedNode.Article.CompareTo(fa) == 0);
                         if (fetchedTargetArticle is null)
-                    throw new Exception("マッチするデータがありませんでした。");
+                            throw new Exception("マッチするデータがありませんでした。");
 
                         // 情報をマージ！
                         ResearchArticlesManager.MergeArticleInfo(new List<ResearchArticle> { fetchedTargetArticle }, asTempArticles: true, save: false);
