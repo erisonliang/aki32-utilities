@@ -1154,7 +1154,11 @@ public partial class MainWindowViewModel : ViewModel
 
     void RefreshSelectedArticleInfo()
     {
+        if (SelectedNodeViewModel is null)
+            return;
+        
         SelectedNodeViewModel?.NotifyArticleUpdated();
+        Console.WriteLine("選択中の文献の情報を手動で更新");
     }
 
 
