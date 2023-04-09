@@ -878,7 +878,7 @@
                                         <Button
                                             Margin="3"
                                             Style="{StaticResource ButtonTextStretchStyle}"
-                                            Command="{Binding IsUndefinedButton1Command}"
+                                            Command="{Binding UndefinedButton1Command}"
                                             ToolTip="キープ&#10;&#10;※ 未実装です。&#10;※ 既に十分なデータが揃っている場合，薄い表示になります。"
                                             Foreground="{Binding SelectedNodeViewModel.RecommendKeep, Converter={StaticResource BooleanToForegroundBrushConverter}}"
                                             >
@@ -1570,6 +1570,18 @@
                             </StackPanel>
 
                         </ScrollViewer>
+
+                        <Button
+                            Style="{StaticResource ButtonTextStyle}"
+                            Command="{Binding RefreshSelectedArticleInfoCommand}"
+                            Content="↺"
+                            FontSize="15"
+                            Background="#01FFFFFF"
+                            Grid.Row="1"
+                            Margin="0,0,25,10"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Bottom"
+                            />
 
                     </Grid>
                 </TabItem>

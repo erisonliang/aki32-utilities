@@ -1152,6 +1152,11 @@ public partial class MainWindowViewModel : ViewModel
         }
     }
 
+    void RefreshSelectedArticleInfo()
+    {
+        SelectedNodeViewModel?.NotifyArticleUpdated();
+    }
+
 
     // ★★★★★★★★★★★★★★★ 右パネル内 → 検索
 

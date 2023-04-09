@@ -189,8 +189,11 @@ public partial class MainWindowViewModel : ViewModel
 
     public bool IsUndefinedButton1Busy { get; set; } = false;
     public bool IsUndefinedButton1Done { get; set; } = false;
-    public ViewModelCommand IsUndefinedButton1Command => _IsUndefinedButton1Command.Get(async () => await UndefinedButton1());
-    ViewModelCommandHandler _IsUndefinedButton1Command = new();
+    public ViewModelCommand UndefinedButton1Command => _UndefinedButton1Command.Get(async () => await UndefinedButton1());
+    ViewModelCommandHandler _UndefinedButton1Command = new();
+
+    public ViewModelCommand RefreshSelectedArticleInfoCommand => _RefreshSelectedArticleInfoCommand.Get(RefreshSelectedArticleInfo);
+    ViewModelCommandHandler _RefreshSelectedArticleInfoCommand = new();
 
 
     // ★★★★★★★★★★★★★★★ 右パネル内 → 検索
