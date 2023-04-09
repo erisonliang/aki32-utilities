@@ -93,6 +93,7 @@ public class ResearchArticle : IComparable
 
                 // 日本語
                 ?? JStage_MaterialTitle_Japanese.NullIfNullOrEmpty()
+                ?? CrossRef_MaterialTitle.NullIfNullOrEmpty()
 
                 // 英語は後回し
                 ?? JStage_MaterialTitle_English.NullIfNullOrEmpty()
@@ -112,6 +113,7 @@ public class ResearchArticle : IComparable
                 ?? JStage_MaterialVolume.NullIfNullOrEmpty()
                 ?? NDLSearch_MaterialVolume.NullIfNullOrEmpty()
                 ?? CiNii_MaterialVolume.NullIfNullOrEmpty()
+                ?? CrossRef_MaterialVolume.NullIfNullOrEmpty()
 
                 // 最終手段。
                 ?? null
@@ -128,6 +130,7 @@ public class ResearchArticle : IComparable
                 ?? JStage_MaterialSubVolume.NullIfNullOrEmpty()
                 //?? NDLSearch_MaterialSubVolume.NullIfNullOrEmpty()
                 //?? CiNii_MaterialSubVolume.NullIfNullOrEmpty()
+                //?? CrossRef_MaterialSubVolume.NullIfNullOrEmpty()
 
                 // 最終手段。
                 ?? null
@@ -144,6 +147,7 @@ public class ResearchArticle : IComparable
                 ?? JStage_StartingPage.NullIfNullOrEmpty()
                 ?? NDLSearch_StartingPage.NullIfNullOrEmpty()
                 ?? CiNii_StartingPage.NullIfNullOrEmpty()
+                ?? CrossRef_StartingPage.NullIfNullOrEmpty()
 
                 // 最終手段。
                 ?? null
@@ -160,6 +164,7 @@ public class ResearchArticle : IComparable
                 ?? JStage_EndingPage.NullIfNullOrEmpty()
                 ?? NDLSearch_EndingPage.NullIfNullOrEmpty()
                 ?? CiNii_EndingPage.NullIfNullOrEmpty()
+                ?? CrossRef_EndingPage.NullIfNullOrEmpty()
 
                 // 最終手段。
                 ?? null
@@ -180,6 +185,7 @@ public class ResearchArticle : IComparable
                 ?? CrossRef_PublishedDate.NullIfNullOrEmpty()
                 ?? CiNii_PublishedDate.NullIfNullOrEmpty()
                 ?? JStage_PublishedDate.NullIfNullOrEmpty()
+                ?? CrossRef_PublishedDate.NullIfNullOrEmpty()
 
                 // 優先度低め
                 ?? NDLSearch_PublishedDate.NullIfNullOrEmpty() // 超長い形式になる可能性あり
