@@ -1554,7 +1554,7 @@
                                         </TextBlock.ToolTip>
                                     </TextBlock>
                                     <TextBlock 
-                                        Text="{Binding SelectedNodeViewModel.Article.Manual_CreatedDate}" 
+                                        Text="{Binding SelectedNodeViewModel.Article.Private_CreatedDate}" 
                                         Margin="70,0,0,0" 
                                         TextWrapping="Wrap"
                                         >
