@@ -96,13 +96,13 @@ public class CrossRef_DOI_APIAccessor : IResearchAPIAccessor
 
                         addingSubArticle.DOI = reference?["DOI"]?.ToString();
 
-                        addingMainArticle.CrossRef_ArticleTitle = reference?["series-title"]?.ToString();
+                        addingSubArticle.CrossRef_ArticleTitle = reference?["series-title"]?.ToString();
                         addingSubArticle.CrossRef_Authors_Simple = reference?["author"]?.ToString().Split(',', StringSplitOptions.TrimEntries); // 1人分しかくれない？？
 
-                        addingMainArticle.CrossRef_MaterialTitle = reference?["journal-title"]?.ToString();
+                        addingSubArticle.CrossRef_MaterialTitle = reference?["journal-title"]?.ToString();
                         addingSubArticle.CrossRef_MaterialVolume = reference?["volume"]?.ToString();
 
-                        addingMainArticle.CrossRef_PublishedYear = reference?["year"]?.ToString();
+                        addingSubArticle.CrossRef_PublishedYear = reference?["year"]?.ToString();
                         addingSubArticle.CrossRef_StartingPage = reference?["first-page"]?.ToString();
                         addingSubArticle.CrossRef_EndingPage = reference?["last-page"]?.ToString();
 
