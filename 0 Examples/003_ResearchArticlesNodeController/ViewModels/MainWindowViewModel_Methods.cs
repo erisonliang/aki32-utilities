@@ -685,7 +685,7 @@ public partial class MainWindowViewModel : ViewModel
 
                             mergeResult = ResearchArticlesManager.MergeIfMergeable(targetArticle);
                             RedrawResearchArticleNodes();
-                            if (mergeResult is null)
+                            if (mergeResult is not null)
                                 Console.WriteLine("同一の文献を発見したため，マージしました。");
 
                         }
