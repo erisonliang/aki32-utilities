@@ -231,7 +231,7 @@ public class ResearchArticle : IComparable
     [CsvIgnore]
     public string? ReferenceErrorReasonString = "";
     [CsvIgnore]
-    public bool IsLastReferenceStringFromTemplateGeneration = false;
+    public bool IsLastReferenceStringFromFormatGeneration = false;
     [CsvIgnore]
     public static string ReferenceStringFormat { get; set; } = "{Authors}: {ArticleTitle}, {MaterialTitle}, {MaterialVolume}, {MaterialSubVolume}, pp.{StartingPage}-{EndingPage}, {PublishedYearAndMonth}";
     [CsvIgnore]
@@ -252,7 +252,7 @@ public class ResearchArticle : IComparable
         get
         {
             ReferenceErrorReasonString = "";
-            IsLastReferenceStringFromTemplateGeneration = false;
+            IsLastReferenceStringFromFormatGeneration = false;
 
             string? ReferenceStringManually()
             {
@@ -385,7 +385,7 @@ public class ResearchArticle : IComparable
                 }
 
                 if (!string.IsNullOrEmpty(s))
-                    IsLastReferenceStringFromTemplateGeneration = true;
+                    IsLastReferenceStringFromFormatGeneration = true;
 
                 return s;
             }
@@ -946,13 +946,15 @@ public class ResearchArticle : IComparable
         // まだ手に入れてないデータ取得元のうち可能性のあるものを列挙。
         if (!string.IsNullOrEmpty(DOI))
         {
-            results.Add("CrossRef", new CrossRef_DOI_APIAccessor() { DOI = DOI! });
-            results.Add("J-Stage", new JStage_DOI_ArticleAPIAccessor() { DOI = DOI! });
+            if (DataFrom_CrossRef_DOI ?? false)
+                results.Add("CrossRef", new CrossRef_DOI_APIAccessor() { DOI = DOI! });
+            if (DataFrom_JStage_DOI ?? false)
+                results.Add("J-Stage", new JStage_DOI_ArticleAPIAccessor() { DOI = DOI! });
         }
 
-
-
-        //TODO
+        
+        
+        // TODO 条件どんどん追加！！
 
 
 

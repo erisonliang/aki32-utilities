@@ -50,9 +50,7 @@ public class ResearchArticleNodeViewModel : DefaultNodeViewModel
         {
             // 自動生成されたものでない非構造データがあれば，まだ情報追加の余地があるからオススメする。
             _ = Article.ReferenceString;
-            if (Article.IsLastReferenceStringFromTemplateGeneration)
-                return false;
-            if (!string.IsNullOrEmpty(Article.ReferenceErrorReasonString))
+            if (Article.IsLastReferenceStringFromFormatGeneration)
                 return false;
 
             // もし情報提供元の候補が無ければ，諦める。
@@ -72,9 +70,7 @@ public class ResearchArticleNodeViewModel : DefaultNodeViewModel
 
             // 自動生成されたものでない非構造データがあれば，まだ情報追加の余地があるからオススメする。
             _ = Article.ReferenceString;
-            if (Article.IsLastReferenceStringFromTemplateGeneration)
-                return false;
-            if (!string.IsNullOrEmpty(Article.ReferenceErrorReasonString))
+            if (Article.IsLastReferenceStringFromFormatGeneration)
                 return false;
 
             return true;
