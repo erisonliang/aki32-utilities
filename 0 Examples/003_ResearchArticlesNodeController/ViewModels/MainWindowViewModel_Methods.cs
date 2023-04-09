@@ -537,6 +537,7 @@ public partial class MainWindowViewModel : ViewModel
         var saveTask = Save();
     }
 
+
     // ★★★★★★★★★★★★★★★ Node Controller 内
 
     void SelectionChanged(IList list)
@@ -751,23 +752,50 @@ public partial class MainWindowViewModel : ViewModel
             selectedNode.IsNodeBusy = true;
             IsPullNormalMetaInfoBusy = true;
 
-            // 対象のサイトからの情報
-            // TODO
-            throw new NotImplementedException("申し訳ありません。\r\n未実装です…。");
+            //throw new NotImplementedException("申し訳ありません。\r\n未実装です…。");
             {
-                var accessor = new CrossRef_DOI_APIAccessor()
-                {
-                    DOI = selectedNode.Article.DOI!,
-                };
+                ResearchArticle? fetchedTargetArticle = null;
+                var dataSources = selectedNode.Article.GetAvailableDataSources();
 
-                var pulledArticles = await ResearchArticlesManager.PullArticleInfo(accessor, asTempArticles: true, save: false);
-                if (pulledArticles.Count == 0)
+
+            // TODO
+                // 情報提供元の候補から次々とダウンロードしてみる。
+                foreach (var dataSource in dataSources)
+            {
+                    var siteName = dataSource.Key;
+                    var accessor = dataSource.Value;
+
+                    try
+                {
+                        Console.WriteLine($"★ {siteName} にアクセス中…");
+
+                        var fetchedArticles = await ResearchArticlesManager.FetchArticleInfo(accessor);
+
+                        // この文献に一致するデータのみ抽出。
+                        fetchedTargetArticle = fetchedArticles.FirstOrDefault(fa => selectedNode.Article.CompareTo(fa) == 0);
+                        if (fetchedTargetArticle is null)
                     throw new Exception("マッチするデータがありませんでした。");
+
+                        // 情報をマージ！
+                        ResearchArticlesManager.MergeArticleInfo(new List<ResearchArticle> { fetchedTargetArticle }, asTempArticles: true, save: false);
+                        selectedNode.NotifyArticleUpdated();
+                    }
+                    catch (Exception ex1)
+                    {
+                        Console.WriteLine($"{ex1}\r\n{siteName} がこの文献に対応していない可能性があります。");
+                    }
+
+                    // 1つでもダウンロード成功したら，今回は終了。いや，RecommendPullNormalMetaInfoが無くなるまでずっと！
+                    //if (fetchedTargetArticle is not null)
+                    //    break;
+
+                }
+
+                Console.WriteLine("処理終了");
             }
 
             RedrawResearchArticleNodes();
             SelectedEmphasizePropertyItem = ViewModels.EmphasizePropertyItems.一時ﾃﾞｰﾀ;
-
 
             selectedNode.NotifyArticleUpdated();
 

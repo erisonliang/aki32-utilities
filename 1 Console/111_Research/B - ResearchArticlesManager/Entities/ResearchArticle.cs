@@ -936,6 +936,29 @@ public class ResearchArticle : IComparable
 
     }
 
+    /// <summary>
+    /// return available data source 
+    /// </summary>
+    public Dictionary<string, IResearchAPIAccessor> GetAvailableDataSources()
+    {
+        var results = new Dictionary<string, IResearchAPIAccessor>();
+
+        // まだ手に入れてないデータ取得元のうち可能性のあるものを列挙。
+        if (!string.IsNullOrEmpty(DOI))
+        {
+            results.Add("CrossRef", new CrossRef_DOI_APIAccessor() { DOI = DOI! });
+            results.Add("J-Stage", new JStage_DOI_ArticleAPIAccessor() { DOI = DOI! });
+        }
+
+
+
+        //TODO
+
+
+
+        return results;
+    }
+
 
     // ★★★★★★★★★★★★★★★ method (practical use)
 

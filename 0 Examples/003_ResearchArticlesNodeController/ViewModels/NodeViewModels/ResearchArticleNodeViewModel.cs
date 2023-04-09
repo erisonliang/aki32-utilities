@@ -48,8 +48,18 @@ public class ResearchArticleNodeViewModel : DefaultNodeViewModel
     {
         get
         {
-            // TODO
+            // 自動生成されたものでない非構造データがあれば，まだ情報追加の余地があるからオススメする。
+            _ = Article.ReferenceString;
+            if (Article.IsLastReferenceStringFromTemplateGeneration)
             return false;
+            if (!string.IsNullOrEmpty(Article.ReferenceErrorReasonString))
+                return false;
+
+            // もし情報提供元の候補が無ければ，諦める。
+            if (Article.GetAvailableDataSources().Count == 0)
+                return false;
+
+            return true;
         }
     }
     public bool RecommendPullAIMetaInfo
