@@ -7,6 +7,9 @@ using System.IO;
 using System.Diagnostics;
 using System.Collections.ObjectModel;
 using Microsoft.VisualBasic;
+using System.Windows.Threading;
+using Aki32Utilities.WPFAppUtilities.NodeController.Extensions;
+using Org.BouncyCastle.Asn1.Esf;
 
 namespace Aki32Utilities.UsageExamples.ResearchArticlesNodeController.ViewModels;
 public partial class MainWindowViewModel : ViewModel
@@ -30,6 +33,100 @@ public partial class MainWindowViewModel : ViewModel
         {
         }
 
+        DynamicNodeDistancingTimer.Elapsed += DynamicNodeDistancingTimer_Elapsed;
+        DynamicNodeDistancingTimer.Start();
+    }
+
+    private void DynamicNodeDistancingTimer_Elapsed(object? sender, System.Timers.ElapsedEventArgs e)
+    {
+        try
+        {
+            if (!IsDynamicNodeDistancingAvailable)
+                return;
+
+            var w_global_Links = 1;
+            var w_global_OverWrap = 5;
+            var w_global_NodeRadius = 1.1;
+
+
+            _NodeViewModels.ForEach(node =>
+            {
+                if (node.IsSelected)
+                    return;
+
+                // ★★★★★ ノード情報抽出
+
+                // ★★★★★ 
+
+                var addX = 0d;
+                var addY = 0d;
+
+
+                // ★★★★★ 相乗効果
+                foreach (var otherNode in _NodeViewModels)
+                {
+                    // ★ 前処理
+                    if (otherNode == node)
+                        continue;
+
+
+
+                    // ★ 引用関係がつながってたら，引き合う。
+
+                    addX += 0;
+                    addY += 0;
+
+
+                    // ★ 重なってたら，外の方向に力をかける。
+                    // 重なりを精密に計算！矩形が重なってたら，重心同士を反発させる。
+                    // 同心円状に遅くなる性質上，横方向の動きが遅い。でも仕方ないか。
+                    var nodeV = node.Center.Sub(otherNode.Center).ToVector();
+                    var threX = (node.Width + otherNode.Width) / 2;
+                    var threY = (node.Height + otherNode.Height) / 2;
+                    var overWrapX = threX - Math.Abs(nodeV.X) / w_global_NodeRadius;
+                    var overWrapY = threY - Math.Abs(nodeV.Y) / w_global_NodeRadius;
+                    var dir = nodeV.NormalizeTo();
+                    if (overWrapX > 0 && overWrapY > 0)
+                    {
+                        var threR = node.Radius + otherNode.Radius;
+                        var overWrap = threR - nodeV.Length / w_global_NodeRadius;
+                        if (overWrapX > 0)
+                            addX += dir.X * overWrap / threR * w_global_OverWrap;
+                        if (overWrapY > 0)
+                            addY += dir.Y * overWrap / threR * w_global_OverWrap;
+                    }
+
+                    
+                    // ★
+
+                }
+
+                // ★★★★★ 定数動かす。
+
+                addX += 0;
+                addY += 0;
+
+
+                // ★★★★★ 速度をメモしておいて，加速を一定以上にしないように制御。
+
+                addX += 0;
+                addY += 0;
+
+
+                // ★★★★★ 上書き！
+                node.Position = new Point(node.Position.X + addX, node.Position.Y + addY);
+
+            });
+
+
+            //ParentView.Dispatcher.Invoke(() =>
+            //{
+            //    //Console.WriteLine(DateTime.Now);
+            //});
+        }
+        catch (Exception ex)
+        {
+        }
     }
 
     private void InitResearchArticlesManager()

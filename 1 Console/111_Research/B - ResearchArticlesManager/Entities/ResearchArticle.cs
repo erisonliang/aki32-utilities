@@ -954,7 +954,10 @@ public class ResearchArticle : IComparable
 
         
         
+
         // TODO 条件どんどん追加！！
+
+
 
 
 

@@ -27,6 +27,8 @@ public partial class MainWindowViewModel : ViewModel
 
     internal MainWindow ParentView;
 
+    private System.Timers.Timer DynamicNodeDistancingTimer = new System.Timers.Timer(10);
+
 
     // ★★★★★★★★★★★★★★★ props
 
@@ -49,7 +51,7 @@ public partial class MainWindowViewModel : ViewModel
     public RangeSelectionMode[] RangeSelectionModes { get; } = Enum.GetValues(typeof(RangeSelectionMode)).OfType<RangeSelectionMode>().ToArray();
     public RangeSelectionMode SelectedRangeSelectionMode { get; set; } = RangeSelectionMode.包含;
 
-    public bool IsDynamicNodeSpacingAvailable { get; set; } = false;
+    public bool IsDynamicNodeDistancingAvailable { get; set; } = false;
 
     public bool IsLockedAllNodeLinks
     {

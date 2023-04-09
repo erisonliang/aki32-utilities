@@ -411,7 +411,7 @@
                         Margin="0,4,4,4"
                         Height="24"
                         Content="物理演算"
-                        IsChecked="{Binding IsDynamicNodeSpacingAvailable}" 
+                        IsChecked="{Binding IsDynamicNodeDistancingAvailable}" 
                         VerticalContentAlignment="Center" 
                         ToolTip="ノードの距離を，物理演算によって自動で調整します。"
                         />
