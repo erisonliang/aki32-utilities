@@ -61,7 +61,7 @@ public class ResearchArticle : IComparable
 
                 // 最終手段。
                 ?? CrossRef_Authors_Simple // 1人分しかくれない…？
-                // ?? ((CrossRef_UnstructuredRefString.NullIfNullOrEmpty() == null) ? null : new string[] { CrossRef_UnstructuredRefString!.Shorten(UNSTRUCTURED_REF_STRING_RANGE) })
+                                           // ?? ((CrossRef_UnstructuredRefString.NullIfNullOrEmpty() == null) ? null : new string[] { CrossRef_UnstructuredRefString!.Shorten(UNSTRUCTURED_REF_STRING_RANGE) })
                 ?? null
                 ;
         }
