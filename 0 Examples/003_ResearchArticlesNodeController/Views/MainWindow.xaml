@@ -231,7 +231,7 @@
                             Width="300"
                             Margin="3"
                             >
-                            
+
                             <StackPanel
                                 Orientation="Vertical"
                                 TextBlock.Foreground="White"
@@ -1635,6 +1635,19 @@
                                     HorizontalAlignment="Left"
                                     >
                                 </TextBlock>
+                                <TextBlock
+                                    HorizontalAlignment="Right"
+                                    VerticalAlignment="Center"
+                                    ToolTipService.InitialShowDelay="20"
+                                    ToolTip="新しい情報提供元を新たに追加するように依頼していただくことが可能です。
+                                    &#10;
+                                    &#10;※ 手間賃として，前払いで手数料を請求させていただきます。
+                                    &#10;※ サイトによってはAPIが提供されていない等の理由で対応できない場合があります。予めご了承ください。"
+                                    >
+                                    <Span>
+                                        <Hyperlink NavigateUri="aki32.work@gmail.com">※ 情報提供元の追加依頼</Hyperlink>
+                                    </Span>
+                                </TextBlock>
                             </Grid>
 
                             <Grid Margin="4">
@@ -1658,7 +1671,7 @@
                                     <TextBlock.ToolTip>
                                         <TextBlock
                                             TextAlignment="Left"
-                                            Text="authors"
+                                            Text="フリーワード。&#10;長すぎるとエラーになる場合が多いです。"
                                             >
                                         </TextBlock>
                                     </TextBlock.ToolTip>
@@ -1695,7 +1708,7 @@
                                     <TextBlock.ToolTip>
                                         <TextBlock
                                             TextAlignment="Left"
-                                            Text="release"
+                                            Text="公開年が何年以降のものを検索するか指定できます。"
                                             >
                                         </TextBlock>
                                     </TextBlock.ToolTip>
@@ -1717,7 +1730,7 @@
                                     <TextBlock.ToolTip>
                                         <TextBlock
                                             TextAlignment="Left"
-                                            Text="release"
+                                            Text="公開年が何年以前のものを検索するか指定できます。"
                                             >
                                         </TextBlock>
                                     </TextBlock.ToolTip>
@@ -1740,7 +1753,7 @@
                                     <TextBlock.ToolTip>
                                         <TextBlock
                                             TextAlignment="Left"
-                                            Text="release"
+                                            Text="検索のデータの最大数を指定します。"
                                             >
                                         </TextBlock>
                                     </TextBlock.ToolTip>
@@ -1818,7 +1831,7 @@
                                     <TextBlock.ToolTip>
                                         <TextBlock
                                             TextAlignment="Left"
-                                            Text="authors"
+                                            Text="著者"
                                             >
                                         </TextBlock>
                                     </TextBlock.ToolTip>
@@ -1840,7 +1853,7 @@
                                     <TextBlock.ToolTip>
                                         <TextBlock
                                             TextAlignment="Left"
-                                            Text="title"
+                                            Text="タイトル"
                                             >
                                         </TextBlock>
                                     </TextBlock.ToolTip>
@@ -1863,7 +1876,7 @@
                                     <TextBlock.ToolTip>
                                         <TextBlock
                                             TextAlignment="Left"
-                                            Text="release"
+                                            Text="ジャーナル名"
                                             >
                                         </TextBlock>
                                     </TextBlock.ToolTip>
@@ -1900,7 +1913,7 @@
                                     <TextBlock.ToolTip>
                                         <TextBlock
                                             TextAlignment="Left"
-                                            Text="release"
+                                            Text="ジャーナル巻数"
                                             >
                                         </TextBlock>
                                     </TextBlock.ToolTip>
@@ -1922,7 +1935,7 @@
                                     <TextBlock.ToolTip>
                                         <TextBlock
                                             TextAlignment="Left"
-                                            Text="release"
+                                            Text="公開年が何年以降のものを検索するか指定できます。"
                                             >
                                         </TextBlock>
                                     </TextBlock.ToolTip>
@@ -1944,7 +1957,7 @@
                                     <TextBlock.ToolTip>
                                         <TextBlock
                                             TextAlignment="Left"
-                                            Text="release"
+                                            Text="公開年が何年以前のものを検索するか指定できます。"
                                             >
                                         </TextBlock>
                                     </TextBlock.ToolTip>
@@ -1967,7 +1980,7 @@
                                     <TextBlock.ToolTip>
                                         <TextBlock
                                             TextAlignment="Left"
-                                            Text="release"
+                                            Text="検索のデータの最大数を指定します。"
                                             >
                                         </TextBlock>
                                     </TextBlock.ToolTip>
@@ -1991,7 +2004,7 @@
                                     <TextBlock.ToolTip>
                                         <TextBlock
                                             TextAlignment="Left"
-                                            Text="memo"
+                                            Text="キーワード"
                                             >
                                         </TextBlock>
                                     </TextBlock.ToolTip>
@@ -2086,7 +2099,7 @@
                                     <TextBlock.ToolTip>
                                         <TextBlock
                                             TextAlignment="Left"
-                                            Text="doi"
+                                            Text="DOI"
                                             >
                                         </TextBlock>
                                     </TextBlock.ToolTip>
