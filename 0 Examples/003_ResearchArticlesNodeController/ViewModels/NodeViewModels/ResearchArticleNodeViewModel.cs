@@ -17,9 +17,9 @@ public class ResearchArticleNodeViewModel : DefaultNodeViewModel
 
     public ResearchArticle Article { get; set; } = new();
 
-    [AlsoNotifyFor(nameof(NodeName), nameof(ArticleTitle), nameof(Authors), nameof(TopAuthor), nameof(PublishedOn), nameof(DataFrom),
+    [AlsoNotifyFor(nameof(NodeName), nameof(Article),
         nameof(ArticleHeaderColor), nameof(IsFavorite), nameof(IsRead), nameof(IsTemp), nameof(IsLocalSearchMatched), nameof(IsCategory1), nameof(IsCategory2), nameof(IsCategory3),
-        nameof(Article)
+        nameof(Authors), nameof(ArticleTitle), nameof(TopAuthor), nameof(PublishedOn), nameof(DataFrom)
         )]
     private int NotifyArticleUpdatedBridge { get; set; } = 0;
 
