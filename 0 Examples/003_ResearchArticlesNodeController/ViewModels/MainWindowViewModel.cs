@@ -57,7 +57,7 @@ public partial class MainWindowViewModel : ViewModel
                 // ★★★★★ ノード情報抽出
 
                 // ★★★★★ 
-
+                // TODO
                 var addX = 0d;
                 var addY = 0d;
 
@@ -70,11 +70,11 @@ public partial class MainWindowViewModel : ViewModel
                         continue;
 
 
-
                     // ★ 引用関係がつながってたら，引き合う。
-
+                    // TODO
                     addX += 0;
                     addY += 0;
+
 
 
                     // ★ 重なってたら，外の方向に力をかける。
@@ -102,13 +102,13 @@ public partial class MainWindowViewModel : ViewModel
                 }
 
                 // ★★★★★ 定数動かす。
-
+                // TODO
                 addX += 0;
                 addY += 0;
 
 
                 // ★★★★★ 速度をメモしておいて，加速を一定以上にしないように制御。
-
+                // TODO
                 addX += 0;
                 addY += 0;
 
