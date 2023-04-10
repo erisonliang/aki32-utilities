@@ -13,6 +13,8 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Threading;
+using System.Windows.Controls.Ribbon;
+using System.Xml.Linq;
 
 namespace Aki32Utilities.WPFAppUtilities.NodeController.Controls;
 
@@ -66,12 +68,11 @@ public class NodeGraph : MultiSelector
 
     // ★★★★★ for dynamics
 
-    private int DynamicNodeDistancingInterval = 33; // 30Hz: 33, 60Hz: 16
-
-    private double w_global_LinkAttractionStrength => 0.005 * DynamicNodeDistancingInterval;
+    private const int DynamicNodeDistancingInterval = 33; // 30Hz: 33, 60Hz: 16
+    private double w_global_LinkAttractionStrength = 0.005 * DynamicNodeDistancingInterval;
     private double w_global_LinkAttractionGravitySourceRadius = 10;
-    private double w_global_LeftGravityStrength => 0.001 * DynamicNodeDistancingInterval;
-    private double w_global_RepulsionStrength => 2.0 * DynamicNodeDistancingInterval;
+    private double w_global_LeftGravityStrength = 0.001 * DynamicNodeDistancingInterval;
+    private double w_global_RepulsionStrength = 2.0 * DynamicNodeDistancingInterval;
     private double w_global_RepulsionEffectRadius = 1.2;
 
     private readonly bool executeNodeRepulsions = true;
@@ -1164,14 +1165,13 @@ public class NodeGraph : MultiSelector
 
             foreach (var node in nodes)
             {
+                // ★★★★★ 前処理
                 if (node.IsSelected)
-                    return;
-
-                // ★★★★★ ノード情報抽出
-                var outputSideLinks = links.Where(link => link.Output.Node == node).ToArray();
+                    continue;
 
                 var addX = 0d;
                 var addY = 0d;
+
 
                 // ★★★★★ 相乗効果
                 foreach (var otherNode in nodes)
@@ -1187,48 +1187,25 @@ public class NodeGraph : MultiSelector
                         var nodeV = node.Center.Sub(otherNode.Center).ToVector();
                         var threX = (node.ActualWidth + otherNode.ActualWidth) / 2;
                         var threY = (node.ActualHeight + otherNode.ActualHeight) / 2;
-                        var overWrapX = threX - Math.Abs(nodeV.X) / w_global_RepulsionEffectRadius;
                         var overWrapY = threY - Math.Abs(nodeV.Y) / w_global_RepulsionEffectRadius;
-                        if (overWrapX > 0 && overWrapY > 0)
+                        if (overWrapY > 0)
                         {
-                            var dir = nodeV.GetNormalized();
-                            var theta_OverWrap = nodeV.GetTheta();
-
-                            var w_OverWrapX = overWrapX / threX;
-                            var w_OverWrapY = overWrapY / threY;
-                            var w_OverWrapXY = Math.Min(w_OverWrapX, w_OverWrapY);
-                            addX += dir.X * w_OverWrapXY * w_global_RepulsionStrength;
-                            addY += dir.Y * w_OverWrapXY * w_global_RepulsionStrength;
+                            var overWrapX = threX - Math.Abs(nodeV.X) / w_global_RepulsionEffectRadius;
+                            if (overWrapX > 0)
+                            {
+                                var w_OverWrapX = overWrapX / threX;
+                                var w_OverWrapY = overWrapY / threY;
+                                var w_OverWrapXY = Math.Min(w_OverWrapX, w_OverWrapY);
+                                var dir = nodeV.GetNormalized();
+                                addX += dir.X * w_OverWrapXY * w_global_RepulsionStrength;
+                                addY += dir.Y * w_OverWrapXY * w_global_RepulsionStrength;
+                            }
+                        }
+                        else if (nodeV.Y<0)
+                        {
+                            break;
                         }
                     }
-
-                    // ★ リンクがつながってたら，引き合う。
-                    if (executeLinkAttractions)
-                    {
-                        // 方向はどうでも良くて，大事なのは距離。
-                        // output寄り（子に寄せてく！）
-                        if (outputSideLinks.Any(link => link.Input.Node == otherNode))
-                        {
-                            var nodeV = node.Center.Sub(otherNode.Center).ToVector();
-
-                            var targetDistance = otherNode.Radius * w_global_LinkAttractionGravitySourceRadius;
-
-                            var attractionR = (nodeV.Length - targetDistance) * w_global_LinkAttractionStrength;
-                            var attractionX = (Math.Abs(nodeV.X) - targetDistance) * w_global_LeftGravityStrength;
-
-                            var dir = nodeV.GetNormalized();
-
-                            // 右側にある場合，じわじわ左に進める。
-                            if (dir.X < targetDistance)
-                                addX += attractionX;
-
-                            addX -= dir.X * attractionR;
-                            addY -= dir.Y * attractionR;
-                        }
-                    }
-
-                    // ★
-
                 }
 
 
@@ -1237,6 +1214,51 @@ public class NodeGraph : MultiSelector
                     node.Position = new Point(node.Position.X + addX, node.Position.Y + addY);
 
             }
+            if (executeLinkAttractions)
+            {
+                // ★★★★★ ノード情報抽出
+                var outputSideNodes = links.Select(link => link.Output.Node);
+                var inputSideNodes = links.Select(link => link.Input.Node);
+
+                foreach (var link in links)
+                {
+                    // ★★★★★ 前処理
+                    var outputSideNode = link.Output.Node;
+                    var inputSideNode = link.Input.Node;
+                    if (outputSideNode.IsSelected)
+                        continue;
+                    if (inputSideNode == outputSideNode)
+                        continue;
+
+                    var addX = 0d;
+                    var addY = 0d;
+
+
+                    // ★★★★★ 相乗効果
+
+                    var nodeV = outputSideNode.Center.Sub(inputSideNode.Center).ToVector();
+                    var targetDistance = inputSideNode.Radius * w_global_LinkAttractionGravitySourceRadius;
+                    var attractionR = (nodeV.Length - targetDistance) * w_global_LinkAttractionStrength;
+                    var dir = nodeV.GetNormalized();
+
+                    // 右側にある場合，じわじわ左に進める。
+                    if (dir.X < targetDistance)
+                    {
+                        var attractionX = (Math.Abs(nodeV.X) - targetDistance) * w_global_LeftGravityStrength;
+                        addX += attractionX;
+                    }
+
+                    addX -= dir.X * attractionR;
+                    addY -= dir.Y * attractionR;
+
+
+                    // ★★★★★ 上書き！
+                    if (addX != 0 || addY != 0)
+                        outputSideNode.Position = new Point(outputSideNode.Position.X + addX, outputSideNode.Position.Y + addY);
+
+                }
+            }
+
         }
         catch (Exception ex)
         {
