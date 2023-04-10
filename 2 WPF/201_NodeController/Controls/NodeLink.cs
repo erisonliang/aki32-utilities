@@ -383,7 +383,7 @@ public class NodeLink : Shape, ICanvasObject, ISelectableObject
         var pen = new Pen(Brushes.Green, 2);
 
         var axis = new Vector(1, 0);
-        var startToEnd = (end.ToVector() - start.ToVector()).NormalizeTo();
+        var startToEnd = (end.ToVector() - start.ToVector()).GetNormalized();
 
         var k = 1 - Math.Pow(Math.Max(0, axis.DotProduct(startToEnd)), 10.0);
         var bias = start.X > end.X ? Math.Abs(start.X - end.X) * 0.25 : 0;

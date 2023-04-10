@@ -67,6 +67,19 @@ public class NodeGraph : MultiSelector
 
     private DispatcherTimer DynamicNodeDistancingTimer;
 
+    // ★★★★★ for dynamics
+
+    private int DynamicNodeDistancingInterval = 33; // 30Hz: 33, 60Hz: 16
+
+    private double w_global_LinkAttractionStrength => 0.005 * DynamicNodeDistancingInterval;
+    private double w_global_LinkAttractionGravitySourceRadius = 10;
+    private double w_global_LeftGravityStrength => 0.001 * DynamicNodeDistancingInterval;
+    private double w_global_RepulsionStrength => 2.0 * DynamicNodeDistancingInterval;
+    private double w_global_RepulsionEffectRadius = 1.2;
+
+    private bool executeRepulsion = true;
+    private bool executeLinkAttraction = true;
+
 
     // ★★★★★★★★★★★★★★★ props
 
@@ -152,7 +165,7 @@ public class NodeGraph : MultiSelector
                 if (DynamicNodeDistancingTimer is null)
                 {
                     DynamicNodeDistancingTimer = new DispatcherTimer();
-                    DynamicNodeDistancingTimer.Interval = TimeSpan.FromMilliseconds(10);
+                    DynamicNodeDistancingTimer.Interval = TimeSpan.FromMilliseconds(DynamicNodeDistancingInterval);
                     DynamicNodeDistancingTimer.Tick += DynamicNodeDistancingTimer_Elapsed;
                 }
 
@@ -1152,15 +1165,6 @@ public class NodeGraph : MultiSelector
             var nodes = Canvas.Children.OfType<DefaultNode>().ToList();
             var links = Canvas.Children.OfType<NodeLink>().ToArray();
 
-            var w_global_LinkAttractionStrength = 0.040;
-            var w_global_LinkAttractionGravitySourceRadius = 10.0;
-            var w_global_LeftGravityStrength = 0.005;
-            var w_global_RepulsionStrength = 10;
-            var w_global_RepulsionEffectRadius = 1.1;
-
-            var executeRepulsion = true;
-            var executeLinkAttraction = true;
-
             nodes.ForEach(node =>
             {
                 if (node.IsSelected)
@@ -1172,7 +1176,6 @@ public class NodeGraph : MultiSelector
                 var addX = 0d;
                 var addY = 0d;
 
-
                 // ★★★★★ 相乗効果
                 foreach (var otherNode in nodes)
                 {
@@ -1183,7 +1186,6 @@ public class NodeGraph : MultiSelector
 
                     // ★ 重なってたら，外の方向に力をかける。
                     // 重なりを精密に計算！矩形が重なってたら，重心同士を反発させる。
-                    // 同心円状に遅くなる性質上，横方向の動きが遅い。でも仕方ないか。
                     if (executeRepulsion)
                     {
                         var nodeV = node.Center.Sub(otherNode.Center).ToVector();
@@ -1191,20 +1193,36 @@ public class NodeGraph : MultiSelector
                         var threY = (node.ActualHeight + otherNode.ActualHeight) / 2;
                         var overWrapX = threX - Math.Abs(nodeV.X) / w_global_RepulsionEffectRadius;
                         var overWrapY = threY - Math.Abs(nodeV.Y) / w_global_RepulsionEffectRadius;
-                        var dir = nodeV.NormalizeTo();
                         if (overWrapX > 0 && overWrapY > 0)
                         {
+                            var dir = nodeV.GetNormalized();
+                            var theta_OverWrap = nodeV.GetTheta();
+
                             var w_OverWrapX = overWrapX / threX;
                             var w_OverWrapY = overWrapY / threY;
-                            //var threR = node.Radius + otherNode.Radius;
-                            //var overWrapR = threR - nodeV.Length / w_global_NodeRadius;
-                            //var w_OverWrapR = overWrapR / threR;
                             var w_OverWrapXY = Math.Min(w_OverWrapX, w_OverWrapY);
+                            addX += dir.X * w_OverWrapXY * w_global_RepulsionStrength;
+                            addY += dir.Y * w_OverWrapXY * w_global_RepulsionStrength;
 
-                            if (overWrapX > 0)
-                                addX += dir.X * w_OverWrapXY * w_global_RepulsionStrength;
-                            if (overWrapY > 0)
-                                addY += dir.Y * w_OverWrapXY * w_global_RepulsionStrength;
+                            // これで接触面を計算出来る
+                            //var theta_180 = Math.PI;
+                            //var theta_1 = node.EdgeTheta;
+                            //var theta_2 = theta_180 - node.EdgeTheta;
+                            //var theta_3 = theta_1 + theta_180;
+                            //var theta_4 = theta_2 + theta_180;
+                            //// nodeがX方向に被ってる
+                            //if (theta_OverWrap < theta_1 || theta_OverWrap > theta_4 || (theta_OverWrap > theta_2 && theta_OverWrap < theta_3))
+                            //{
+                            //    // 半分以上被ってたら垂直抗力のみ。
+                            //    // 半分以下なら，
+                            //    addX += dir.X * w_OverWrapX * w_global_RepulsionStrength;
+                            //}
+                            //// nodeがY方向に被ってる
+                            //else
+                            //{
+                            //    addY += dir.Y * w_OverWrapY * w_global_RepulsionStrength;
+                            //}
+
                         }
                     }
 
@@ -1222,7 +1240,7 @@ public class NodeGraph : MultiSelector
                             var attractionR = (nodeV.Length - targetDistance) * w_global_LinkAttractionStrength;
                             var attractionX = (Math.Abs(nodeV.X) - targetDistance) * w_global_LeftGravityStrength;
 
-                            var dir = nodeV.NormalizeTo();
+                            var dir = nodeV.GetNormalized();
 
                             // 右側にある場合，じわじわ左に進める。
                             if (dir.X < targetDistance)

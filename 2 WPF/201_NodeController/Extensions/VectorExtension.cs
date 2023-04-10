@@ -8,11 +8,17 @@ public static class VectorExtension
         return a.X * b.X + a.Y * b.Y;
     }
 
-    public static Vector NormalizeTo(this Vector v)
+    public static Vector GetNormalized(this Vector v)
     {
         var temp = v;
         temp.Normalize();
 
         return temp;
     }
+
+    public static double GetTheta(this Vector v)
+    {
+        return Math.Atan2(v.Y, v.X);
+    }
+
 }
