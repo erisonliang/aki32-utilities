@@ -1,6 +1,5 @@
 ﻿using Aki32Utilities.WPFAppUtilities.NodeController.Extensions;
 
-using System;
 using System.Data;
 using System.Windows;
 using System.Windows.Controls;
