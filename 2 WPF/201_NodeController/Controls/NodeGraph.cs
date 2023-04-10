@@ -1162,7 +1162,7 @@ public class NodeGraph : MultiSelector
             var nodes = Canvas.Children.OfType<DefaultNode>().OrderBy(node => node.Position.Y).ToList();
             var links = Canvas.Children.OfType<NodeLink>().ToArray();
 
-            nodes.ForEach(node =>
+            foreach (var node in nodes)
             {
                 if (node.IsSelected)
                     return;
@@ -1236,9 +1236,7 @@ public class NodeGraph : MultiSelector
                 if (addX != 0 || addY != 0)
                     node.Position = new Point(node.Position.X + addX, node.Position.Y + addY);
 
-            });
-
-            //Console.WriteLine(DateTime.Now);
+            }
         }
         catch (Exception ex)
         {
