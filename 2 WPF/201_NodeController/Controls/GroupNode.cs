@@ -1,6 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -336,18 +334,14 @@ public class GroupNode : NodeBase
     {
         base.OnMouseEnter(e);
         if (IsDraggingToResize == false)
-        {
             UpdateMouseCursor(e);
-        }
     }
 
     protected override void OnMouseMove(MouseEventArgs e)
     {
         base.OnMouseMove(e);
         if (IsDraggingToResize == false)
-        {
             UpdateMouseCursor(e);
-        }
     }
 
     void UpdateMouseCursor(MouseEventArgs e)
@@ -486,21 +480,15 @@ public class GroupNode : NodeBase
     static void InterlockPositionPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
         var groupNode = d as GroupNode;
-        if (groupNode._InternalPositionUpdating)
-        {
+        if (groupNode!._InternalPositionUpdating)
             return;
-        }
 
         var move = groupNode.InterlockPosition - groupNode.Position;
 
         var otherNodes = groupNode.Canvas.Children.OfType<NodeBase>().Where(arg => arg != groupNode).ToArray();
         foreach (var node in otherNodes)
-        {
             if (groupNode.IsInsideCompletely(node.GetBoundingBox()))
-            {
-                node.Position = node.Position + move;
-            }
-        }
+                node.Position += move;
 
         groupNode.Position = groupNode.InterlockPosition;
     }
@@ -509,9 +497,7 @@ public class GroupNode : NodeBase
     {
         var groupNode = d as GroupNode;
         if (groupNode._InternalPositionUpdating)
-        {
             return;
-        }
 
         var x = groupNode.InnerPosition.X - groupNode.BorderSize;
         var y = groupNode.InnerPosition.Y - (groupNode._GroupNodeHeader.ActualHeight + groupNode.BorderSize);
@@ -521,15 +507,13 @@ public class GroupNode : NodeBase
     static void InnerWidthPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
         var groupNode = d as GroupNode;
-
-        groupNode.UpdateWidthFromInnerWidth();
+        groupNode!.UpdateWidthFromInnerWidth();
     }
 
     static void InnerHeightPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
         var groupNode = d as GroupNode;
-
-        groupNode.UpdateHeightFromInnerHeight();
+        groupNode!.UpdateHeightFromInnerHeight();
     }
 }
 
