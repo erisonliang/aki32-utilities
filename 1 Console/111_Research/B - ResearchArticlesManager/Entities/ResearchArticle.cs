@@ -952,8 +952,8 @@ public class ResearchArticle : IComparable
                 results.Add("J-Stage", new JStage_DOI_ArticleAPIAccessor() { DOI = DOI! });
         }
 
-        
-        
+
+
 
         // TODO 条件どんどん追加！！
 

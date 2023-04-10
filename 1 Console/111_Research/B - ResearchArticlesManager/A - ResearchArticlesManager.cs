@@ -215,7 +215,14 @@ public partial class ResearchArticlesManager
 
             foreach (var matchedArticle in matchedArticles)
             {
-                MergeArticles(matchedArticle, currentLeftArticle);
+                try
+                {
+                    MergeArticles(matchedArticle, currentLeftArticle);
+                }
+                catch (Exception)
+                {
+                    return mergingArticle == currentLeftArticle ? null : currentLeftArticle;
+                }
                 currentLeftArticle = matchedArticle;
             }
 
