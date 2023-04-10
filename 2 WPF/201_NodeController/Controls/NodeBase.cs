@@ -1,5 +1,4 @@
-﻿using System;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Media;
@@ -8,6 +7,17 @@ namespace Aki32Utilities.WPFAppUtilities.NodeController.Controls;
 
 public abstract class NodeBase : ContentControl, ICanvasObject, ISelectableObject, IDisposable
 {
+
+    // ★★★★★★★★★★★★★★★ fields
+
+    public Point DragStartPosition { get; private set; } = new Point(0, 0);
+
+    internal EventHandler BeginSelectionChanged { get; set; } = null;
+    internal EventHandler EndSelectionChanged { get; set; } = null;
+
+
+    // ★★★★★★★★★★★★★★★ props
+
     public Guid Guid
     {
         get => (Guid)GetValue(GuidProperty);
@@ -41,15 +51,17 @@ public abstract class NodeBase : ContentControl, ICanvasObject, ISelectableObjec
         typeof(NodeBase),
         new FrameworkPropertyMetadata(new Point(0, 0), FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, PositionPropertyChanged));
 
-    public Point DragStartPosition { get; private set; } = new Point(0, 0);
-
-    internal EventHandler BeginSelectionChanged { get; set; } = null;
-    internal EventHandler EndSelectionChanged { get; set; } = null;
-
     protected Canvas Canvas { get; } = null;
     protected Point Offset { get; private set; } = new Point(0, 0);
     protected TranslateTransform Translate { get; private set; } = new TranslateTransform(0, 0);
 
+
+    // ★★★★★ for dynamic
+
+
+
+
+    // ★★★★★★★★★★★★★★★ inits
 
     internal NodeBase(Canvas canvas, Point offset)
     {
@@ -64,6 +76,9 @@ public abstract class NodeBase : ContentControl, ICanvasObject, ISelectableObjec
 
         RenderTransform = transformGroup;
     }
+
+
+    // ★★★★★★★★★★★★★★★ methods
 
     internal Rect GetBoundingBox()
     {
@@ -130,6 +145,9 @@ public abstract class NodeBase : ContentControl, ICanvasObject, ISelectableObjec
         OnUpdateTranslation();
     }
 
+
+    // ★★★★★★★★★★★★★★★ events
+
     static void IsSelectedPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
         var node = (NodeBase)d;
@@ -151,4 +169,8 @@ public abstract class NodeBase : ContentControl, ICanvasObject, ISelectableObjec
 
     protected abstract void OnDisposing();
     protected abstract void OnUpdateTranslation();
+
+
+    // ★★★★★★★★★★★★★★★ 
+
 }
