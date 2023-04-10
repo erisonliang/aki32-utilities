@@ -1153,7 +1153,7 @@ public class NodeGraph : MultiSelector
             //var nodeOutput = FindConnectorContentInNodes<NodeOutputContent>(nodes, nodeLink.OutputConnectorGuid);
 
             var w_global_Links = 1;
-            var w_global_OverWrap = 5;
+            var w_global_OverWrap = 4;
             var w_global_NodeRadius = 1.1;
 
             nodes.ForEach(node =>
@@ -1195,12 +1195,17 @@ public class NodeGraph : MultiSelector
                     var dir = nodeV.NormalizeTo();
                     if (overWrapX > 0 && overWrapY > 0)
                     {
-                        var threR = node.Radius + otherNode.Radius;
-                        var overWrap = threR - nodeV.Length / w_global_NodeRadius;
+                        var w_OverWrapX = overWrapX / threX;
+                        var w_OverWrapY = overWrapY / threY;
+                        //var threR = node.Radius + otherNode.Radius;
+                        //var overWrapR = threR - nodeV.Length / w_global_NodeRadius;
+                        //var w_OverWrapR = overWrapR / threR;
+                        var w_OverWrapXY = Math.Max(w_OverWrapX, w_OverWrapY);
+
                         if (overWrapX > 0)
-                            addX += dir.X * overWrap / threR * w_global_OverWrap;
+                            addX += dir.X * w_OverWrapXY * w_global_OverWrap;
                         if (overWrapY > 0)
-                            addY += dir.Y * overWrap / threR * w_global_OverWrap;
+                            addY += dir.Y * w_OverWrapXY * w_global_OverWrap;
                     }
 
 
