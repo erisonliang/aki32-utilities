@@ -38,7 +38,7 @@ public class NodeOutputContent : NodeConnectorContent
             return false;
 
         // check for circulation connecting.
-        var nodeLinks = connector.Node.EnumrateConnectedNodeLinks();
+        var nodeLinks = connector.Node.EnumerateConnectedNodeLinks();
         foreach (var nodeLink in nodeLinks)
             if (nodeLink.Input?.Node == Node)
                 return false;

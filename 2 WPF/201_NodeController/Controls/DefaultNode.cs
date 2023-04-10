@@ -192,7 +192,7 @@ public class DefaultNode : NodeBase
         _NodeOutput.Initialize();
     }
 
-    internal NodeLink[] EnumrateConnectedNodeLinks()
+    internal NodeLink[] EnumerateConnectedNodeLinks()
     {
         var inputNodeLinks = _NodeInput.EnumerateConnectedNodeLinks();
         var outputNodeLinks = _NodeOutput.EnumerateConnectedNodeLinks();
