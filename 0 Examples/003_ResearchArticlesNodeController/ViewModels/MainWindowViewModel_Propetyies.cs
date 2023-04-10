@@ -27,14 +27,12 @@ public partial class MainWindowViewModel : ViewModel
 
     internal MainWindow ParentView;
 
-    private System.Timers.Timer DynamicNodeDistancingTimer = new System.Timers.Timer(10);
-
 
     // ★★★★★★★★★★★★★★★ props
 
     public double Scale { get; set; } = 1d;
     public Point CanvasOffset { get; set; } = new Point(0, 0);
-
+    
     public static ResearchArticlesManager ResearchArticlesManager { get; set; }
 
 
@@ -56,14 +54,35 @@ public partial class MainWindowViewModel : ViewModel
     public bool IsLockedAllNodeLinks
     {
         get => _IsLockedAllNodeLinks;
-        set => UpdateIsLockedAllNodeLinksProperty(value);
+        set
+        {
+            _IsLockedAllNodeLinks = value;
+
+            foreach (var nodeLink in _NodeLinkViewModels)
+                nodeLink.IsLocked = _IsLockedAllNodeLinks;
+
+            RaisePropertyChanged(nameof(IsLockedAllNodeLinks));
+        }
     }
     bool _IsLockedAllNodeLinks = false;
 
     public bool IsEnableAllNodeConnectors
     {
         get => _IsEnableAllNodeConnectors;
-        set => UpdateIsEnableAllNodeConnectorsProperty(value);
+        set
+        {
+            _IsEnableAllNodeConnectors = value;
+
+            foreach (var node in _NodeViewModels)
+            {
+                foreach (var input in node.Inputs)
+                    input.IsEnable = _IsEnableAllNodeConnectors;
+                foreach (var output in node.Outputs)
+                    output.IsEnable = _IsEnableAllNodeConnectors;
+            }
+
+            RaisePropertyChanged(nameof(IsEnableAllNodeConnectors));
+        }
     }
     bool _IsEnableAllNodeConnectors = false;
 

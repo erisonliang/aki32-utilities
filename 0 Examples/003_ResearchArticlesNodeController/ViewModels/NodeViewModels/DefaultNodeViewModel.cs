@@ -44,9 +44,6 @@ public abstract class DefaultNodeViewModel : ViewModel, INodeViewModel
 
     public abstract NodeConnectorViewModel FindConnector(Guid guid);
 
-    public Point Center => new(Position.X + Width, Position.Y + Height);
-    public double Radius => Math.Max(Height, Width) / 2;
-
 
     // ★★★★★★★★★★★★★★★ 
 

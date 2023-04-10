@@ -412,7 +412,7 @@
                         Height="24"
                         Content="物理演算"
                         IsChecked="{Binding IsDynamicNodeDistancingAvailable}" 
-                        VerticalContentAlignment="Center" 
+                        VerticalContentAlignment="Center"
                         ToolTip="ノードの距離を，物理演算によって自動で調整します。"
                         />
 
@@ -467,6 +467,7 @@
                 MoveWithMouse="Right"
                 Scale="{Binding Scale}"
                 Offset="{Binding CanvasOffset}"
+                IsDynamicNodeDistancingAvailable="{Binding IsDynamicNodeDistancingAvailable}"
                 ItemsSource="{Binding NodeViewModels}"
                 ItemContainerStyle="{StaticResource DefaultNodeStyle}"
                 NodeLinks="{Binding NodeLinkViewModels}"
@@ -478,7 +479,8 @@
                 DisconnectedLinkCommand="{Binding DisconnectedLinkCommand}"
                 AllowToOverrideConnection="False"
                 ClipToBounds="True"
-                ContextMenu="{StaticResource NodeGraphContextMenu}">
+                ContextMenu="{StaticResource NodeGraphContextMenu}"
+                >
 
                 <graph:NodeGraph.Style>
                     <Style TargetType="{x:Type graph:NodeGraph}" BasedOn="{StaticResource {x:Type graph:NodeGraph}}">

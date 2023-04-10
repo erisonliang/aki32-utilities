@@ -58,7 +58,8 @@ public abstract class NodeBase : ContentControl, ICanvasObject, ISelectableObjec
 
     // ★★★★★ for dynamic
 
-
+    public Point Center => new(Position.X + ActualWidth, Position.Y + ActualHeight);
+    public double Radius => Math.Max(ActualHeight, ActualWidth) / 2;
 
 
     // ★★★★★★★★★★★★★★★ inits

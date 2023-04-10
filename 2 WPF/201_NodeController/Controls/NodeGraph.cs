@@ -12,6 +12,8 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
+using System.Runtime.CompilerServices;
+using System.Windows.Threading;
 
 namespace Aki32Utilities.WPFAppUtilities.NodeController.Controls;
 
@@ -29,6 +31,43 @@ public enum RangeSelectionMode
 
 public class NodeGraph : MultiSelector
 {
+
+    // ★★★★★★★★★★★★★★★ fields
+
+    bool _IsStartDraggingNode = false;
+    bool _PressedKeyToMove = false;
+    bool _PressedMouseToMove = false;
+    bool _PressedMouseToSelect = false;
+    bool _PressedRightBotton = false;
+    bool _IsRangeSelecting = false;
+    bool _IsSelectionChanging = false;
+
+    const double DEADLENGTH_FOR_DRAGGING_MOVE = 4.0;
+
+    NodeLink _ReconnectGhostNodeLink = null;
+    GroupNode _DraggingToResizeGroupNode = null;
+    DraggingNodeLinkParam _DraggingNodeLinkParam = null;
+
+    Point _DragStartPointToMoveNode = new Point();
+    Point _DragStartPointToMoveOffset = new Point();
+    Point _CaptureOffset = new Point();
+
+    Point _DragStartPointToSelect = new Point();
+
+    readonly List<NodeBase> _DraggingNodes = new List<NodeBase>();
+    readonly HashSet<NodeConnectorContent> _PreviewedConnectors = new HashSet<NodeConnectorContent>();
+
+    readonly List<object> _DelayToBindNodeVMs = new List<object>();
+    readonly List<object> _DelayToBindNodeLinkVMs = new List<object>();
+    readonly List<object> _DelayToBindGroupNodeVMs = new List<object>();
+
+    readonly RangeSelector _RangeSelector = new RangeSelector();
+
+    private DispatcherTimer DynamicNodeDistancingTimer;
+
+
+    // ★★★★★★★★★★★★★★★ props
+
     public Canvas Canvas { get; private set; } = null;
 
     public Key MoveWithKey
@@ -86,6 +125,52 @@ public class NodeGraph : MultiSelector
     }
     public static readonly DependencyProperty OffsetProperty =
         DependencyProperty.Register(nameof(Offset), typeof(Point), typeof(NodeGraph), new FrameworkPropertyMetadata(new Point(0, 0), FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, OffsetPropertyChanged));
+
+    public bool IsDynamicNodeDistancingAvailable
+    {
+        get
+        {
+            try
+            {
+                var a = GetValue(IsDynamicNodeDistancingAvailableProperty);
+                return (bool)a;
+            }
+            catch (Exception eee)
+            {
+                return false;
+            }
+        }
+
+        set
+        {
+            try
+            {
+                SetValue(IsDynamicNodeDistancingAvailableProperty, value);
+
+                if (DynamicNodeDistancingTimer is null)
+                {
+                    DynamicNodeDistancingTimer = new DispatcherTimer();
+                    DynamicNodeDistancingTimer.Interval = TimeSpan.FromMilliseconds(10);
+                    DynamicNodeDistancingTimer.Tick += DynamicNodeDistancingTimer_Elapsed;
+                }
+
+                if (value)
+                    DynamicNodeDistancingTimer.Start();
+                else
+                    DynamicNodeDistancingTimer.Stop();
+
+            }
+            catch (Exception eeee)
+            {
+            }
+        }
+
+
+        //get => (bool)GetValue(IsDynamicNodeDistancingAvailableProperty);
+        //set => SetValue(IsDynamicNodeDistancingAvailableProperty, value);
+    }
+    public static readonly DependencyProperty IsDynamicNodeDistancingAvailableProperty =
+        DependencyProperty.Register(nameof(IsDynamicNodeDistancingAvailable), typeof(bool), typeof(NodeGraph), new FrameworkPropertyMetadata(false, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, IsDynamicNodeDistancingAvailablePropertyChanged));
 
     public ICommand PreviewConnectLinkCommand
     {
@@ -209,46 +294,16 @@ public class NodeGraph : MultiSelector
     Style NodeLinkAnimationStyle => _NodeLinkAnimationStyle.Get("__NodeLinkAnimationStyle__");
     ResourceInstance<Style> _NodeLinkAnimationStyle = new ResourceInstance<Style>();
 
-    bool _IsStartDraggingNode = false;
-    bool _PressedKeyToMove = false;
-    bool _PressedMouseToMove = false;
-    bool _PressedMouseToSelect = false;
-    bool _PressedRightBotton = false;
-    bool _IsRangeSelecting = false;
-    bool _IsSelectionChanging = false;
 
-    const double DEADLENGTH_FOR_DRAGGING_MOVE = 4.0;
+    // ★★★★★★★★★★★★★★★ inits
 
-    class DraggingNodeLinkParam
+    static NodeGraph()
     {
-        public NodeLink NodeLink { get; } = null;
-        public NodeConnectorContent StartConnector { get; } = null;
-
-        public DraggingNodeLinkParam(NodeLink nodeLink, NodeConnectorContent connector)
-        {
-            NodeLink = nodeLink;
-            StartConnector = connector;
-        }
+        DefaultStyleKeyProperty.OverrideMetadata(typeof(NodeGraph), new FrameworkPropertyMetadata(typeof(NodeGraph)));
     }
 
-    NodeLink _ReconnectGhostNodeLink = null;
-    GroupNode _DraggingToResizeGroupNode = null;
-    DraggingNodeLinkParam _DraggingNodeLinkParam = null;
 
-    Point _DragStartPointToMoveNode = new Point();
-    Point _DragStartPointToMoveOffset = new Point();
-    Point _CaptureOffset = new Point();
-
-    Point _DragStartPointToSelect = new Point();
-
-    readonly List<NodeBase> _DraggingNodes = new List<NodeBase>();
-    readonly HashSet<NodeConnectorContent> _PreviewedConnectors = new HashSet<NodeConnectorContent>();
-
-    readonly List<object> _DelayToBindNodeVMs = new List<object>();
-    readonly List<object> _DelayToBindNodeLinkVMs = new List<object>();
-    readonly List<object> _DelayToBindGroupNodeVMs = new List<object>();
-
-    readonly RangeSelector _RangeSelector = new RangeSelector();
+    // ★★★★★★★★★★★★★★★ events
 
     static void OffsetPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
@@ -271,6 +326,13 @@ public class NodeGraph : MultiSelector
         }
     }
 
+    static void IsDynamicNodeDistancingAvailablePropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+    {
+        // ensure prop is renewed
+        var nodeGraph = (NodeGraph)d;
+        nodeGraph.IsDynamicNodeDistancingAvailable = (bool)e.NewValue;
+    }
+
     static void NodeLinkStylePropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
         if (e.NewValue != null)
@@ -282,12 +344,8 @@ public class NodeGraph : MultiSelector
             // because override style doesn't know Name of BeginStoryboardName.
             // so cannot find to remove element, so need to RegisterName that name and should be remove element here.
             foreach (var trigger in nodeGraph.NodeLinkAnimationStyle.Triggers)
-            {
                 foreach (var beginStoryboard in trigger.EnterActions.OfType<BeginStoryboard>())
-                {
                     nodeLinkStyle.RegisterName(beginStoryboard.Name, beginStoryboard);
-                }
-            }
             nodeLinkStyle.Seal();
         }
     }
@@ -370,10 +428,8 @@ public class NodeGraph : MultiSelector
         NodeInputContent.AllowToOverrideConnection = (bool)e.NewValue;
     }
 
-    static NodeGraph()
-    {
-        DefaultStyleKeyProperty.OverrideMetadata(typeof(NodeGraph), new FrameworkPropertyMetadata(typeof(NodeGraph)));
-    }
+
+    // ★★★★★★★★★★★★★★★ events
 
     public Point GetDragNodePosition(MouseEventArgs e)
     {
@@ -879,6 +935,306 @@ public class NodeGraph : MultiSelector
         }
     }
 
+    void NodeLink_MouseDown(object sender, MouseButtonEventArgs e)
+    {
+        if ((Keyboard.GetKeyStates(Key.LeftCtrl) & KeyStates.Down) != 0)
+        {
+            // it will select as multiple.
+            return;
+        }
+
+        _PressedRightBotton = e.RightButton == MouseButtonState.Pressed;
+
+        if (e.LeftButton != MouseButtonState.Pressed)
+        {
+            e.Handled = true;
+            return;
+        }
+
+        var nodeLink = (NodeLink)sender;
+        if (nodeLink.IsLocked)
+        {
+            e.Handled = true;
+            return;
+        }
+        _DraggingNodeLinkParam = new DraggingNodeLinkParam(nodeLink, nodeLink.StartConnector);
+
+        _ReconnectGhostNodeLink = nodeLink.CreateGhost();
+        _ReconnectGhostNodeLink.Style = NodeLinkStyle ?? NodeLinkAnimationStyle;
+
+        Canvas.Children.Add(_ReconnectGhostNodeLink);
+
+        Cursor = Cursors.Cross;
+
+        nodeLink.ReleaseEndPoint();
+
+        e.Handled = true;
+    }
+
+    void NodeLink_MouseUp(object sender, MouseButtonEventArgs e)
+    {
+        if ((Keyboard.GetKeyStates(Key.LeftCtrl) & KeyStates.Down) == 0 || _IsStartDraggingNode || _IsRangeSelecting)
+        {
+            // nothing process here if not key down ctrl or other conditions.
+            return;
+        }
+
+        UpdateNodeSelectionItem((NodeLink)sender);
+    }
+
+    void Node_MouseUp(object sender, MouseButtonEventArgs e)
+    {
+        _PressedMouseToSelect = false;
+
+        if (_PressedRightBotton)
+        {
+            _PressedRightBotton = false;
+            return;
+        }
+
+        Cursor = Cursors.Arrow;
+
+        _DraggingToResizeGroupNode?.ReleaseToResizeDragging();
+        _DraggingToResizeGroupNode = null;
+
+        if (_IsStartDraggingNode || _IsRangeSelecting)
+        {
+            _IsStartDraggingNode = false;
+
+            ClearRangeSelecting();
+
+            // mouse cursor must be on the node when dragged nodes.
+            NodesDragged(e);
+
+            // clear intersects with group node color.
+            foreach (var groupNode in Canvas.Children.OfType<GroupNode>())
+            {
+                groupNode.ChangeInnerColor(false);
+            }
+
+            e.Handled = true;
+            return;
+        }
+
+        _DraggingNodes.Clear();
+
+        NodeLinkDragged((FrameworkElement)e.OriginalSource);
+
+        UpdateNodeSelectionItem((NodeBase)sender);
+
+        e.Handled = true;
+    }
+
+    void Node_MouseDown(object sender, MouseButtonEventArgs e)
+    {
+        _PressedRightBotton = e.RightButton == MouseButtonState.Pressed;
+
+        if (sender is GroupNode groupNode)
+        {
+            groupNode.CaptureToResizeDragging();
+
+            if (groupNode.IsDraggingToResize)
+            {
+                _DraggingToResizeGroupNode = groupNode;
+                e.Handled = true;
+
+                return;
+            }
+        }
+
+        var originalSender = e.OriginalSource as FrameworkElement;
+        if (originalSender?.Tag is NodeConnectorContent connector)
+        {
+            // clicked on the connector
+            var posOnCanvas = connector.GetContentPosition(Canvas);
+
+            var nodeLink = new NodeLink(connector, posOnCanvas.X, posOnCanvas.Y, Canvas, Scale, Offset)
+            {
+                DataContext = null,
+            };
+
+            nodeLink.Style = NodeLinkStyle ?? NodeLinkAnimationStyle;
+
+            _DraggingNodeLinkParam = new DraggingNodeLinkParam(nodeLink, connector);
+            Canvas.Children.Add(_DraggingNodeLinkParam.NodeLink);
+
+            Cursor = Cursors.Cross;
+        }
+        else if (IsOffsetMoveWithMouse(e) == false)
+        {
+            // clicked on the Node
+            StartToMoveDraggingNode(e.GetPosition(Canvas), (NodeBase)e.Source);
+        }
+
+        e.Handled = true;
+    }
+
+    void Node_BeginSelectionChanged(object sender, EventArgs e)
+    {
+        BeginSelectionChanging();
+    }
+
+    void Node_EndSelectionChanged(object sender, EventArgs e)
+    {
+        UpdateSelectedItems((NodeBase)sender);
+
+        EndSelectionChanging();
+    }
+
+    bool IsOffsetMoveWithMouse(MouseButtonEventArgs e)
+    {
+        switch (MoveWithMouse)
+        {
+            case MouseButton.Left:
+                return e.LeftButton == MouseButtonState.Pressed;
+            case MouseButton.Middle:
+                return e.MiddleButton == MouseButtonState.Pressed;
+            case MouseButton.Right:
+                return e.RightButton == MouseButtonState.Pressed;
+            default:
+                throw new InvalidCastException();
+        }
+    }
+
+    void NodesDragged(MouseButtonEventArgs e)
+    {
+        if (_DraggingNodes.Count == 0)
+        {
+            return;
+        }
+        var args = new EndMoveNodesOperationEventArgs(_DraggingNodes.Select(arg => arg.Guid).ToArray());
+        EndMoveNodesCommand?.Execute(args);
+
+        // expand the group node area size if node within group.
+        var groupNodes = Canvas.Children.OfType<GroupNode>().Where(arg => _DraggingNodes.Contains(arg) == false).ToArray();
+
+        var isInsideAtLeastOneNode = false;
+        switch (GroupIntersectType)
+        {
+            case GroupIntersectType.CursorPoint:
+                {
+                    var cursor_bb = new Rect(e.GetPosition(Canvas).Sub(Offset), new Size(1, 1));
+                    isInsideAtLeastOneNode = groupNodes.Any(arg => cursor_bb.IntersectsWith(arg.GetBoundingBox()));
+                    break;
+                }
+            case GroupIntersectType.BoundingBox:
+                {
+                    var groupBoundingBoxes = groupNodes.Select(arg => arg.GetInnerBoundingBox()).ToArray();
+                    isInsideAtLeastOneNode = _DraggingNodes.Any(arg => groupBoundingBoxes.Any(bb => bb.IntersectsWith(arg.GetBoundingBox())));
+                    break;
+                }
+        }
+
+        if (isInsideAtLeastOneNode)
+        {
+            var min_x = _DraggingNodes.Min(arg => arg.Position.X);
+            var min_y = _DraggingNodes.Min(arg => arg.Position.Y);
+            var max_x = _DraggingNodes.Max(arg => arg.ActualWidth + arg.Position.X);
+            var max_y = _DraggingNodes.Max(arg => arg.ActualHeight + arg.Position.Y);
+            var rect = new Rect(min_x, min_y, max_x - min_x, max_y - min_y);
+
+            // collect target of expand groups.
+            var targetGroupNodes = groupNodes.Where(arg => rect.IntersectsWith(arg.GetInnerBoundingBox())).ToArray();
+            foreach (var targetGroupNode in targetGroupNodes)
+            {
+                targetGroupNode.ExpandSize(rect);
+            }
+        }
+        _DraggingNodes.Clear();
+    }
+
+    void DynamicNodeDistancingTimer_Elapsed(object? sender, EventArgs e)
+    {
+        try
+        {
+            var nodes = Canvas.Children.OfType<DefaultNode>().ToList();
+            //var links = Canvas.Children.OfType<NodeLink>().ToArray();
+            //var nodeInput = FindConnectorContentInNodes<NodeInputContent>(nodes, nodeLink.InputConnectorGuid);
+            //var nodeOutput = FindConnectorContentInNodes<NodeOutputContent>(nodes, nodeLink.OutputConnectorGuid);
+
+            var w_global_Links = 1;
+            var w_global_OverWrap = 5;
+            var w_global_NodeRadius = 1.1;
+
+            nodes.ForEach(node =>
+            {
+                if (node.IsSelected)
+                    return;
+
+                // ★★★★★ ノード情報抽出
+
+                // ★★★★★ 
+                // TODO
+                var addX = 0d;
+                var addY = 0d;
+
+
+                // ★★★★★ 相乗効果
+                foreach (var otherNode in nodes)
+                {
+                    // ★ 前処理
+                    if (otherNode == node)
+                        continue;
+
+
+                    // ★ リンクがつながってたら，引き合う。
+                    // TODO
+                    addX += 0;
+                    addY += 0;
+
+
+
+                    // ★ 重なってたら，外の方向に力をかける。
+                    // 重なりを精密に計算！矩形が重なってたら，重心同士を反発させる。
+                    // 同心円状に遅くなる性質上，横方向の動きが遅い。でも仕方ないか。
+                    var nodeV = node.Center.Sub(otherNode.Center).ToVector();
+                    var threX = (node.ActualWidth + otherNode.ActualWidth) / 2;
+                    var threY = (node.ActualHeight + otherNode.ActualHeight) / 2;
+                    var overWrapX = threX - Math.Abs(nodeV.X) / w_global_NodeRadius;
+                    var overWrapY = threY - Math.Abs(nodeV.Y) / w_global_NodeRadius;
+                    var dir = nodeV.NormalizeTo();
+                    if (overWrapX > 0 && overWrapY > 0)
+                    {
+                        var threR = node.Radius + otherNode.Radius;
+                        var overWrap = threR - nodeV.Length / w_global_NodeRadius;
+                        if (overWrapX > 0)
+                            addX += dir.X * overWrap / threR * w_global_OverWrap;
+                        if (overWrapY > 0)
+                            addY += dir.Y * overWrap / threR * w_global_OverWrap;
+                    }
+
+
+                    // ★
+
+                }
+
+                // ★★★★★ 定数動かす。
+                // TODO
+                addX += 0;
+                addY += 0;
+
+
+                // ★★★★★ 速度をメモしておいて，加速を一定以上にしないように制御。
+                // TODO
+                addX += 0;
+                addY += 0;
+
+
+                // ★★★★★ 上書き！
+                node.Position = new Point(node.Position.X + addX, node.Position.Y + addY);
+
+            });
+
+            //Console.WriteLine(DateTime.Now);
+        }
+        catch (Exception ex)
+        {
+        }
+    }
+
+
+    // ★★★★★★★★★★★★★★★ methods
+
     void RemoveNodeLinksFromCanvas(object[] removeVMs)
     {
         var removeNodeLinks = new List<NodeLink>();
@@ -1109,152 +1465,6 @@ public class NodeGraph : MultiSelector
         node.MouseDown -= Node_MouseDown;
     }
 
-    void NodeLink_MouseDown(object sender, MouseButtonEventArgs e)
-    {
-        if ((Keyboard.GetKeyStates(Key.LeftCtrl) & KeyStates.Down) != 0)
-        {
-            // it will select as multiple.
-            return;
-        }
-
-        _PressedRightBotton = e.RightButton == MouseButtonState.Pressed;
-
-        if (e.LeftButton != MouseButtonState.Pressed)
-        {
-            e.Handled = true;
-            return;
-        }
-
-        var nodeLink = (NodeLink)sender;
-        if (nodeLink.IsLocked)
-        {
-            e.Handled = true;
-            return;
-        }
-        _DraggingNodeLinkParam = new DraggingNodeLinkParam(nodeLink, nodeLink.StartConnector);
-
-        _ReconnectGhostNodeLink = nodeLink.CreateGhost();
-        _ReconnectGhostNodeLink.Style = NodeLinkStyle ?? NodeLinkAnimationStyle;
-
-        Canvas.Children.Add(_ReconnectGhostNodeLink);
-
-        Cursor = Cursors.Cross;
-
-        nodeLink.ReleaseEndPoint();
-
-        e.Handled = true;
-    }
-
-    void NodeLink_MouseUp(object sender, MouseButtonEventArgs e)
-    {
-        if ((Keyboard.GetKeyStates(Key.LeftCtrl) & KeyStates.Down) == 0 || _IsStartDraggingNode || _IsRangeSelecting)
-        {
-            // nothing process here if not key down ctrl or other conditions.
-            return;
-        }
-
-        UpdateNodeSelectionItem((NodeLink)sender);
-    }
-
-    void Node_MouseUp(object sender, MouseButtonEventArgs e)
-    {
-        _PressedMouseToSelect = false;
-
-        if (_PressedRightBotton)
-        {
-            _PressedRightBotton = false;
-            return;
-        }
-
-        Cursor = Cursors.Arrow;
-
-        _DraggingToResizeGroupNode?.ReleaseToResizeDragging();
-        _DraggingToResizeGroupNode = null;
-
-        if (_IsStartDraggingNode || _IsRangeSelecting)
-        {
-            _IsStartDraggingNode = false;
-
-            ClearRangeSelecting();
-
-            // mouse cursor must be on the node when dragged nodes.
-            NodesDragged(e);
-
-            // clear intersects with group node color.
-            foreach (var groupNode in Canvas.Children.OfType<GroupNode>())
-            {
-                groupNode.ChangeInnerColor(false);
-            }
-
-            e.Handled = true;
-            return;
-        }
-
-        _DraggingNodes.Clear();
-
-        NodeLinkDragged((FrameworkElement)e.OriginalSource);
-
-        UpdateNodeSelectionItem((NodeBase)sender);
-
-        e.Handled = true;
-    }
-
-    void Node_MouseDown(object sender, MouseButtonEventArgs e)
-    {
-        _PressedRightBotton = e.RightButton == MouseButtonState.Pressed;
-
-        if (sender is GroupNode groupNode)
-        {
-            groupNode.CaptureToResizeDragging();
-
-            if (groupNode.IsDraggingToResize)
-            {
-                _DraggingToResizeGroupNode = groupNode;
-                e.Handled = true;
-
-                return;
-            }
-        }
-
-        var originalSender = e.OriginalSource as FrameworkElement;
-        if (originalSender?.Tag is NodeConnectorContent connector)
-        {
-            // clicked on the connector
-            var posOnCanvas = connector.GetContentPosition(Canvas);
-
-            var nodeLink = new NodeLink(connector, posOnCanvas.X, posOnCanvas.Y, Canvas, Scale, Offset)
-            {
-                DataContext = null,
-            };
-
-            nodeLink.Style = NodeLinkStyle ?? NodeLinkAnimationStyle;
-
-            _DraggingNodeLinkParam = new DraggingNodeLinkParam(nodeLink, connector);
-            Canvas.Children.Add(_DraggingNodeLinkParam.NodeLink);
-
-            Cursor = Cursors.Cross;
-        }
-        else if (IsOffsetMoveWithMouse(e) == false)
-        {
-            // clicked on the Node
-            StartToMoveDraggingNode(e.GetPosition(Canvas), (NodeBase)e.Source);
-        }
-
-        e.Handled = true;
-    }
-
-    void Node_BeginSelectionChanged(object sender, EventArgs e)
-    {
-        BeginSelectionChanging();
-    }
-
-    void Node_EndSelectionChanged(object sender, EventArgs e)
-    {
-        UpdateSelectedItems((NodeBase)sender);
-
-        EndSelectionChanging();
-    }
-
     void BeginSelectionChanging()
     {
         if (_IsSelectionChanging == false)
@@ -1313,21 +1523,6 @@ public class NodeGraph : MultiSelector
         Cursor = Cursors.SizeAll;
     }
 
-    bool IsOffsetMoveWithMouse(MouseButtonEventArgs e)
-    {
-        switch (MoveWithMouse)
-        {
-            case MouseButton.Left:
-                return e.LeftButton == MouseButtonState.Pressed;
-            case MouseButton.Middle:
-                return e.MiddleButton == MouseButtonState.Pressed;
-            case MouseButton.Right:
-                return e.RightButton == MouseButtonState.Pressed;
-            default:
-                throw new InvalidCastException();
-        }
-    }
-
     void UpdateSelectedItems<T>(T item) where T : ISelectableObject
     {
         if (SelectedItems.Contains(item.DataContext))
@@ -1346,52 +1541,6 @@ public class NodeGraph : MultiSelector
         }
     }
 
-    void NodesDragged(MouseButtonEventArgs e)
-    {
-        if (_DraggingNodes.Count == 0)
-        {
-            return;
-        }
-        var args = new EndMoveNodesOperationEventArgs(_DraggingNodes.Select(arg => arg.Guid).ToArray());
-        EndMoveNodesCommand?.Execute(args);
-
-        // expand the group node area size if node within group.
-        var groupNodes = Canvas.Children.OfType<GroupNode>().Where(arg => _DraggingNodes.Contains(arg) == false).ToArray();
-
-        var isInsideAtLeastOneNode = false;
-        switch (GroupIntersectType)
-        {
-            case GroupIntersectType.CursorPoint:
-                {
-                    var cursor_bb = new Rect(e.GetPosition(Canvas).Sub(Offset), new Size(1, 1));
-                    isInsideAtLeastOneNode = groupNodes.Any(arg => cursor_bb.IntersectsWith(arg.GetBoundingBox()));
-                    break;
-                }
-            case GroupIntersectType.BoundingBox:
-                {
-                    var groupBoundingBoxes = groupNodes.Select(arg => arg.GetInnerBoundingBox()).ToArray();
-                    isInsideAtLeastOneNode = _DraggingNodes.Any(arg => groupBoundingBoxes.Any(bb => bb.IntersectsWith(arg.GetBoundingBox())));
-                    break;
-                }
-        }
-
-        if (isInsideAtLeastOneNode)
-        {
-            var min_x = _DraggingNodes.Min(arg => arg.Position.X);
-            var min_y = _DraggingNodes.Min(arg => arg.Position.Y);
-            var max_x = _DraggingNodes.Max(arg => arg.ActualWidth + arg.Position.X);
-            var max_y = _DraggingNodes.Max(arg => arg.ActualHeight + arg.Position.Y);
-            var rect = new Rect(min_x, min_y, max_x - min_x, max_y - min_y);
-
-            // collect target of expand groups.
-            var targetGroupNodes = groupNodes.Where(arg => rect.IntersectsWith(arg.GetInnerBoundingBox())).ToArray();
-            foreach (var targetGroupNode in targetGroupNodes)
-            {
-                targetGroupNode.ExpandSize(rect);
-            }
-        }
-        _DraggingNodes.Clear();
-    }
     void StartRangeSelecting()
     {
         if (_IsRangeSelecting)
@@ -1542,4 +1691,23 @@ public class NodeGraph : MultiSelector
 
         _DraggingNodeLinkParam = null;
     }
+
+
+    // ★★★★★★★★★★★★★★★ classes
+
+    class DraggingNodeLinkParam
+    {
+        public NodeLink NodeLink { get; } = null;
+        public NodeConnectorContent StartConnector { get; } = null;
+
+        public DraggingNodeLinkParam(NodeLink nodeLink, NodeConnectorContent connector)
+        {
+            NodeLink = nodeLink;
+            StartConnector = connector;
+        }
+    }
+
+
+    // ★★★★★★★★★★★★★★★ 
+
 }

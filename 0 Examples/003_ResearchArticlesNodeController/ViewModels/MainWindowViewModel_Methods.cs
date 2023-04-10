@@ -73,36 +73,6 @@ public partial class MainWindowViewModel : ViewModel
         //MoveCanvasToTargetArticle(NodeViewModels.FirstOrDefault());
     }
 
-    void UpdateIsLockedAllNodeLinksProperty(bool value)
-    {
-        _IsLockedAllNodeLinks = value;
-
-        foreach (var nodeLink in _NodeLinkViewModels)
-        {
-            nodeLink.IsLocked = _IsLockedAllNodeLinks;
-        }
-
-        RaisePropertyChanged(nameof(IsLockedAllNodeLinks));
-    }
-    void UpdateIsEnableAllNodeConnectorsProperty(bool value)
-    {
-        _IsEnableAllNodeConnectors = value;
-
-        foreach (var node in _NodeViewModels)
-        {
-            foreach (var input in node.Inputs)
-            {
-                input.IsEnable = _IsEnableAllNodeConnectors;
-            }
-            foreach (var output in node.Outputs)
-            {
-                output.IsEnable = _IsEnableAllNodeConnectors;
-            }
-        }
-
-        RaisePropertyChanged(nameof(IsEnableAllNodeConnectors));
-    }
-
 
     // ★★★★★★★★★★★★★★★ 右クリック
 
