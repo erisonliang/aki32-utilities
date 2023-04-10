@@ -40,7 +40,7 @@ public partial class MainWindowViewModel : ViewModel
         ResearchArticlesManager = new ResearchArticlesManager(databaseDir);
         ResearchArticlesManager.OpenDatabase();
         RedrawResearchArticleNodes();
-        RearrangeNodesAlignLeft();
+        RearrangeNodesAlignRight();
     }
 
     private void RedrawResearchArticleNodes()

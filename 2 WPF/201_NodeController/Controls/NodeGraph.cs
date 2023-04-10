@@ -14,6 +14,8 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Runtime.CompilerServices;
 using System.Windows.Threading;
+using System.Xml.Linq;
+using System.Threading;
 
 namespace Aki32Utilities.WPFAppUtilities.NodeController.Controls;
 
@@ -1148,13 +1150,16 @@ public class NodeGraph : MultiSelector
         try
         {
             var nodes = Canvas.Children.OfType<DefaultNode>().ToList();
-            //var links = Canvas.Children.OfType<NodeLink>().ToArray();
-            //var nodeInput = FindConnectorContentInNodes<NodeInputContent>(nodes, nodeLink.InputConnectorGuid);
-            //var nodeOutput = FindConnectorContentInNodes<NodeOutputContent>(nodes, nodeLink.OutputConnectorGuid);
+            var links = Canvas.Children.OfType<NodeLink>().ToArray();
 
-            var w_global_Links = 1;
-            var w_global_OverWrap = 4;
-            var w_global_NodeRadius = 1.1;
+            var w_global_LinkAttractionStrength = 0.040;
+            var w_global_LinkAttractionGravitySourceRadius = 10.0;
+            var w_global_LeftGravityStrength = 0.005;
+            var w_global_RepulsionStrength = 10;
+            var w_global_RepulsionEffectRadius = 1.1;
+
+            var executeRepulsion = true;
+            var executeLinkAttraction = true;
 
             nodes.ForEach(node =>
             {
@@ -1162,9 +1167,8 @@ public class NodeGraph : MultiSelector
                     return;
 
                 // ★★★★★ ノード情報抽出
+                var outputSideLinks = links.Where(link => link.Output.Node == node).ToArray();
 
-                // ★★★★★ 
-                // TODO
                 var addX = 0d;
                 var addY = 0d;
 
@@ -1177,37 +1181,57 @@ public class NodeGraph : MultiSelector
                         continue;
 
 
-                    // ★ リンクがつながってたら，引き合う。
-                    // TODO
-                    addX += 0;
-                    addY += 0;
-
-
-
                     // ★ 重なってたら，外の方向に力をかける。
                     // 重なりを精密に計算！矩形が重なってたら，重心同士を反発させる。
                     // 同心円状に遅くなる性質上，横方向の動きが遅い。でも仕方ないか。
-                    var nodeV = node.Center.Sub(otherNode.Center).ToVector();
-                    var threX = (node.ActualWidth + otherNode.ActualWidth) / 2;
-                    var threY = (node.ActualHeight + otherNode.ActualHeight) / 2;
-                    var overWrapX = threX - Math.Abs(nodeV.X) / w_global_NodeRadius;
-                    var overWrapY = threY - Math.Abs(nodeV.Y) / w_global_NodeRadius;
-                    var dir = nodeV.NormalizeTo();
-                    if (overWrapX > 0 && overWrapY > 0)
+                    if (executeRepulsion)
                     {
-                        var w_OverWrapX = overWrapX / threX;
-                        var w_OverWrapY = overWrapY / threY;
-                        //var threR = node.Radius + otherNode.Radius;
-                        //var overWrapR = threR - nodeV.Length / w_global_NodeRadius;
-                        //var w_OverWrapR = overWrapR / threR;
-                        var w_OverWrapXY = Math.Max(w_OverWrapX, w_OverWrapY);
+                        var nodeV = node.Center.Sub(otherNode.Center).ToVector();
+                        var threX = (node.ActualWidth + otherNode.ActualWidth) / 2;
+                        var threY = (node.ActualHeight + otherNode.ActualHeight) / 2;
+                        var overWrapX = threX - Math.Abs(nodeV.X) / w_global_RepulsionEffectRadius;
+                        var overWrapY = threY - Math.Abs(nodeV.Y) / w_global_RepulsionEffectRadius;
+                        var dir = nodeV.NormalizeTo();
+                        if (overWrapX > 0 && overWrapY > 0)
+                        {
+                            var w_OverWrapX = overWrapX / threX;
+                            var w_OverWrapY = overWrapY / threY;
+                            //var threR = node.Radius + otherNode.Radius;
+                            //var overWrapR = threR - nodeV.Length / w_global_NodeRadius;
+                            //var w_OverWrapR = overWrapR / threR;
+                            var w_OverWrapXY = Math.Min(w_OverWrapX, w_OverWrapY);
 
-                        if (overWrapX > 0)
-                            addX += dir.X * w_OverWrapXY * w_global_OverWrap;
-                        if (overWrapY > 0)
-                            addY += dir.Y * w_OverWrapXY * w_global_OverWrap;
+                            if (overWrapX > 0)
+                                addX += dir.X * w_OverWrapXY * w_global_RepulsionStrength;
+                            if (overWrapY > 0)
+                                addY += dir.Y * w_OverWrapXY * w_global_RepulsionStrength;
+                        }
                     }
 
+                    // ★ リンクがつながってたら，引き合う。
+                    if (executeLinkAttraction)
+                    {
+                        // 方向はどうでも良くて，大事なのは距離。
+                        // output寄り（子に寄せてく！）
+                        if (outputSideLinks.Any(link => link.Input.Node == otherNode))
+                        {
+                            var nodeV = node.Center.Sub(otherNode.Center).ToVector();
+
+                            var targetDistance = otherNode.Radius * w_global_LinkAttractionGravitySourceRadius;
+
+                            var attractionR = (nodeV.Length - targetDistance) * w_global_LinkAttractionStrength;
+                            var attractionX = (Math.Abs(nodeV.X) - targetDistance) * w_global_LeftGravityStrength;
+
+                            var dir = nodeV.NormalizeTo();
+
+                            // 右側にある場合，じわじわ左に進める。
+                            if (dir.X < targetDistance)
+                                addX += attractionX;
+
+                            addX -= dir.X * attractionR;
+                            addY -= dir.Y * attractionR;
+                        }
+                    }
 
                     // ★
 
