@@ -12,10 +12,7 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
-using System.Runtime.CompilerServices;
 using System.Windows.Threading;
-using System.Xml.Linq;
-using System.Threading;
 
 namespace Aki32Utilities.WPFAppUtilities.NodeController.Controls;
 
@@ -40,7 +37,7 @@ public class NodeGraph : MultiSelector
     bool _PressedKeyToMove = false;
     bool _PressedMouseToMove = false;
     bool _PressedMouseToSelect = false;
-    bool _PressedRightBotton = false;
+    bool _PressedRightButton = false;
     bool _IsRangeSelecting = false;
     bool _IsSelectionChanging = false;
 
@@ -50,22 +47,22 @@ public class NodeGraph : MultiSelector
     GroupNode _DraggingToResizeGroupNode = null;
     DraggingNodeLinkParam _DraggingNodeLinkParam = null;
 
-    Point _DragStartPointToMoveNode = new Point();
-    Point _DragStartPointToMoveOffset = new Point();
-    Point _CaptureOffset = new Point();
+    Point _DragStartPointToMoveNode = new();
+    Point _DragStartPointToMoveOffset = new();
+    Point _CaptureOffset = new();
 
-    Point _DragStartPointToSelect = new Point();
+    Point _DragStartPointToSelect = new();
 
-    readonly List<NodeBase> _DraggingNodes = new List<NodeBase>();
-    readonly HashSet<NodeConnectorContent> _PreviewedConnectors = new HashSet<NodeConnectorContent>();
+    readonly List<NodeBase> _DraggingNodes = new();
+    readonly HashSet<NodeConnectorContent> _PreviewedConnectors = new();
 
-    readonly List<object> _DelayToBindNodeVMs = new List<object>();
-    readonly List<object> _DelayToBindNodeLinkVMs = new List<object>();
-    readonly List<object> _DelayToBindGroupNodeVMs = new List<object>();
+    readonly List<object> _DelayToBindNodeVMs = new();
+    readonly List<object> _DelayToBindNodeLinkVMs = new();
+    readonly List<object> _DelayToBindGroupNodeVMs = new();
 
-    readonly RangeSelector _RangeSelector = new RangeSelector();
-
+    readonly RangeSelector _RangeSelector = new();
     private DispatcherTimer DynamicNodeDistancingTimer;
+
 
     // ★★★★★ for dynamics
 
@@ -77,8 +74,8 @@ public class NodeGraph : MultiSelector
     private double w_global_RepulsionStrength => 2.0 * DynamicNodeDistancingInterval;
     private double w_global_RepulsionEffectRadius = 1.2;
 
-    private bool executeRepulsion = true;
-    private bool executeLinkAttraction = true;
+    private readonly bool executeNodeRepulsions = true;
+    private readonly bool executeLinkAttractions = true;
 
 
     // ★★★★★★★★★★★★★★★ props
@@ -301,13 +298,13 @@ public class NodeGraph : MultiSelector
 
 
     ControlTemplate NodeTemplate => _NodeTemplate.Get("__NodeTemplate__");
-    ResourceInstance<ControlTemplate> _NodeTemplate = new ResourceInstance<ControlTemplate>();
+    ResourceInstance<ControlTemplate> _NodeTemplate = new();
 
     ControlTemplate GroupNodeTemplate => _GroupNodeTemplate.Get("__GroupNodeTemplate__");
-    ResourceInstance<ControlTemplate> _GroupNodeTemplate = new ResourceInstance<ControlTemplate>();
+    ResourceInstance<ControlTemplate> _GroupNodeTemplate = new();
 
     Style NodeLinkAnimationStyle => _NodeLinkAnimationStyle.Get("__NodeLinkAnimationStyle__");
-    ResourceInstance<Style> _NodeLinkAnimationStyle = new ResourceInstance<Style>();
+    ResourceInstance<Style> _NodeLinkAnimationStyle = new();
 
 
     // ★★★★★★★★★★★★★★★ inits
@@ -709,7 +706,7 @@ public class NodeGraph : MultiSelector
 
     protected override void OnMouseDown(MouseButtonEventArgs e)
     {
-        _PressedRightBotton = e.RightButton == MouseButtonState.Pressed;
+        _PressedRightButton = e.RightButton == MouseButtonState.Pressed;
 
         base.OnMouseDown(e);
 
@@ -743,7 +740,7 @@ public class NodeGraph : MultiSelector
     {
         base.OnMouseUp(e);
 
-        _PressedRightBotton = false;
+        _PressedRightButton = false;
 
         // dragged to offset node graph?
         e.Handled = _PressedMouseToMove ? Offset != _CaptureOffset : false;
@@ -788,7 +785,7 @@ public class NodeGraph : MultiSelector
 
         _PressedMouseToSelect = false;
         _PressedMouseToMove = false;
-        _PressedRightBotton = false;
+        _PressedRightButton = false;
         _IsStartDraggingNode = false;
         _DraggingNodeLinkParam = null;
         _DraggingNodes.Clear();
@@ -802,7 +799,7 @@ public class NodeGraph : MultiSelector
 
         _PressedMouseToSelect = false;
         _PressedMouseToMove = false;
-        _PressedRightBotton = false;
+        _PressedRightButton = false;
         _IsStartDraggingNode = false;
         if (_DraggingNodeLinkParam != null)
         {
@@ -958,7 +955,7 @@ public class NodeGraph : MultiSelector
             return;
         }
 
-        _PressedRightBotton = e.RightButton == MouseButtonState.Pressed;
+        _PressedRightButton = e.RightButton == MouseButtonState.Pressed;
 
         if (e.LeftButton != MouseButtonState.Pressed)
         {
@@ -1001,9 +998,9 @@ public class NodeGraph : MultiSelector
     {
         _PressedMouseToSelect = false;
 
-        if (_PressedRightBotton)
+        if (_PressedRightButton)
         {
-            _PressedRightBotton = false;
+            _PressedRightButton = false;
             return;
         }
 
@@ -1042,7 +1039,7 @@ public class NodeGraph : MultiSelector
 
     void Node_MouseDown(object sender, MouseButtonEventArgs e)
     {
-        _PressedRightBotton = e.RightButton == MouseButtonState.Pressed;
+        _PressedRightButton = e.RightButton == MouseButtonState.Pressed;
 
         if (sender is GroupNode groupNode)
         {
@@ -1162,7 +1159,7 @@ public class NodeGraph : MultiSelector
     {
         try
         {
-            var nodes = Canvas.Children.OfType<DefaultNode>().ToList();
+            var nodes = Canvas.Children.OfType<DefaultNode>().OrderBy(node => node.Position.Y).ToList();
             var links = Canvas.Children.OfType<NodeLink>().ToArray();
 
             nodes.ForEach(node =>
@@ -1183,10 +1180,9 @@ public class NodeGraph : MultiSelector
                     if (otherNode == node)
                         continue;
 
-
                     // ★ 重なってたら，外の方向に力をかける。
                     // 重なりを精密に計算！矩形が重なってたら，重心同士を反発させる。
-                    if (executeRepulsion)
+                    if (executeNodeRepulsions)
                     {
                         var nodeV = node.Center.Sub(otherNode.Center).ToVector();
                         var threX = (node.ActualWidth + otherNode.ActualWidth) / 2;
@@ -1203,31 +1199,11 @@ public class NodeGraph : MultiSelector
                             var w_OverWrapXY = Math.Min(w_OverWrapX, w_OverWrapY);
                             addX += dir.X * w_OverWrapXY * w_global_RepulsionStrength;
                             addY += dir.Y * w_OverWrapXY * w_global_RepulsionStrength;
-
-                            // これで接触面を計算出来る
-                            //var theta_180 = Math.PI;
-                            //var theta_1 = node.EdgeTheta;
-                            //var theta_2 = theta_180 - node.EdgeTheta;
-                            //var theta_3 = theta_1 + theta_180;
-                            //var theta_4 = theta_2 + theta_180;
-                            //// nodeがX方向に被ってる
-                            //if (theta_OverWrap < theta_1 || theta_OverWrap > theta_4 || (theta_OverWrap > theta_2 && theta_OverWrap < theta_3))
-                            //{
-                            //    // 半分以上被ってたら垂直抗力のみ。
-                            //    // 半分以下なら，
-                            //    addX += dir.X * w_OverWrapX * w_global_RepulsionStrength;
-                            //}
-                            //// nodeがY方向に被ってる
-                            //else
-                            //{
-                            //    addY += dir.Y * w_OverWrapY * w_global_RepulsionStrength;
-                            //}
-
                         }
                     }
 
                     // ★ リンクがつながってたら，引き合う。
-                    if (executeLinkAttraction)
+                    if (executeLinkAttractions)
                     {
                         // 方向はどうでも良くて，大事なのは距離。
                         // output寄り（子に寄せてく！）
@@ -1255,20 +1231,10 @@ public class NodeGraph : MultiSelector
 
                 }
 
-                // ★★★★★ 定数動かす。
-                // TODO
-                addX += 0;
-                addY += 0;
-
-
-                // ★★★★★ 速度をメモしておいて，加速を一定以上にしないように制御。
-                // TODO
-                addX += 0;
-                addY += 0;
-
 
                 // ★★★★★ 上書き！
-                node.Position = new Point(node.Position.X + addX, node.Position.Y + addY);
+                if (addX != 0 || addY != 0)
+                    node.Position = new Point(node.Position.X + addX, node.Position.Y + addY);
 
             });
 
