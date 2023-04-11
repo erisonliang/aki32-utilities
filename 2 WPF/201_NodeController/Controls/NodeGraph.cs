@@ -66,8 +66,10 @@ public class NodeGraph : MultiSelector
 
     private const int DynamicNodeDistancingInterval = 33; // 30Hz: 33, 60Hz: 16
     private double w_global_LinkAttractionStrength(int multiplier) => 0.005 * DynamicNodeDistancingInterval * multiplier;
-    private double w_global_LinkAttractionGravitySourceRadius = 10;
-    private double w_global_LeftGravityStrength(int multiplier) => 0.001 * DynamicNodeDistancingInterval * multiplier;
+    private double w_global_LinkAttractionGravitySourceRadiusAffection = 0.45;
+    private double w_global_LinkAttractionGravitySourceRadiusBias = 2.5;
+    //private double w_global_LinkAttractionGravitySourceRadius = 10;
+    private double w_global_LeftGravityStrength(int multiplier) => 0.0001 * DynamicNodeDistancingInterval * multiplier;
     private double w_global_RepulsionStrength(int multiplier) => 3.0 * DynamicNodeDistancingInterval * multiplier;
     private double w_global_RepulsionEffectRadius = 1.2;
 
@@ -1261,16 +1263,25 @@ public class NodeGraph : MultiSelector
                             continue;
                         targetOutputNode ??= outputSideNode;
 
-                        // ★ 引力
+                        // ★ 定数決め（重そうだから消したい）
+                        var linkCount_InputNode = links.Count(link => link.Input.Node == inputSideNode);
+                        var w_global_LinkAttractionGravitySourceRadiusMax = w_global_LinkAttractionGravitySourceRadiusAffection * linkCount_InputNode + w_global_LinkAttractionGravitySourceRadiusBias;
+
+                        // ★ 引力（範囲効かせて受け付ける。）
                         var nodeV = outputSideNode.Center.Sub(inputSideNode.Center).ToVector();
-                        var targetDistance = inputSideNode.Radius * w_global_LinkAttractionGravitySourceRadius;
-                        var attractionR = (nodeV.Length - targetDistance) * w_global_LinkAttractionStrength(multiplier);
-                        var dir = nodeV.GetNormalized();
+                        var targetMaxDistance = inputSideNode.Radius * w_global_LinkAttractionGravitySourceRadiusMax;
+                        var targetMinDistance = targetMaxDistance * 0.5;
+                        var attractionR = 0d;
+                        if (nodeV.Length > targetMaxDistance)
+                            attractionR = (nodeV.Length - targetMaxDistance) * w_global_LinkAttractionStrength(multiplier);
+                        else if (nodeV.Length < targetMinDistance)
+                            attractionR = (nodeV.Length - targetMinDistance) * w_global_LinkAttractionStrength(multiplier);
 
                         // ★ 右側にある場合，じわじわ左に進める。
-                        if (dir.X < targetDistance)
+                        var dir = nodeV.GetNormalized();
+                        if (nodeV.X < targetMaxDistance)
                         {
-                            var attractionX = (Math.Abs(nodeV.X) - targetDistance) * w_global_LeftGravityStrength(multiplier);
+                            var attractionX = (Math.Abs(nodeV.X) - targetMaxDistance) * w_global_LeftGravityStrength(multiplier);
                             addX += attractionX;
                         }
 
