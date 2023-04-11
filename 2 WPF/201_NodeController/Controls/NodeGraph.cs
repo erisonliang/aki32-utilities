@@ -3,9 +3,7 @@ using Aki32Utilities.WPFAppUtilities.NodeController.Utilities;
 using Aki32Utilities.WPFAppUtilities.NodeController.Operation;
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -66,7 +64,7 @@ public class NodeGraph : MultiSelector
 
     // ★★★★★ for dynamics
 
-    private const int DynamicNodeDistancingInterval = 16; // 30Hz: 33, 60Hz: 16
+    private const int DynamicNodeDistancingInterval = 33; // 30Hz: 33, 60Hz: 16
     private double w_global_LinkAttractionStrength(int multiplier) => 0.005 * DynamicNodeDistancingInterval * multiplier;
     private double w_global_LinkAttractionGravitySourceRadius = 10;
     private double w_global_LeftGravityStrength(int multiplier) => 0.001 * DynamicNodeDistancingInterval * multiplier;
@@ -1162,13 +1160,10 @@ public class NodeGraph : MultiSelector
         {
             isDynamicNodeDistancingBusy = true;
 
-            var nodes = Canvas.Children.OfType<DefaultNode>().OrderBy(node => node.Position.Y).ToArray();
-            var links = Canvas.Children.OfType<NodeLink>().ToArray();
-
             // ノードごとの処理
             if (executeNodeRepulsions)
             {
-                var totalCount = 0;
+                var nodes = Canvas.Children.OfType<DefaultNode>().OrderBy(node => node.Position.Y).ToArray();
 
                 for (int i = 0; i < nodes.Length; i++)
                 {
@@ -1188,8 +1183,6 @@ public class NodeGraph : MultiSelector
                         // ★ 前処理
                         if (i == j)
                             throw new Exception("noooooo");
-
-                        totalCount++;
 
                         var otherNode = nodes[j];
 
@@ -1237,33 +1230,38 @@ public class NodeGraph : MultiSelector
                         targetNode.Position = new Point(targetNode.Position.X + addX, targetNode.Position.Y + addY);
 
                 }
-
-                Console.WriteLine(totalCount);
             }
 
             // リンクごとの処理
             if (executeLinkAttractions)
             {
+                var links = Canvas.Children.OfType<NodeLink>().ToArray();
+                var links_OutputNodeGroups = links.GroupBy(link => link.Output.Node).ToArray();
+
                 // ★★★★★ ノード情報抽出
                 var outputSideNodes = links.Select(link => link.Output.Node);
                 var inputSideNodes = links.Select(link => link.Input.Node);
 
-                foreach (var link in links)
+                foreach (var links_OutputNodeGroup in links_OutputNodeGroups)
                 {
-                    // ★ 前処理
-                    var outputSideNode = link.Output.Node;
-                    var inputSideNode = link.Input.Node;
-                    if (outputSideNode.IsSelected)
-                        continue;
-                    if (inputSideNode == outputSideNode)
-                        continue;
-
                     var addX = 0d;
                     var addY = 0d;
-
+                    DefaultNode targetOutputNode = null;
 
                     // ★★★★★ リンクによる引力
+                    foreach (var link in links_OutputNodeGroup)
                     {
+                        // ★ 前処理
+                        var outputSideNode = link.Output.Node;
+                        var inputSideNode = link.Input.Node;
+
+                        if (outputSideNode.IsSelected)
+                            break;
+                        if (inputSideNode == outputSideNode)
+                            continue;
+                        targetOutputNode ??= outputSideNode;
+
+                        // ★ 引力
                         var nodeV = outputSideNode.Center.Sub(inputSideNode.Center).ToVector();
                         var targetDistance = inputSideNode.Radius * w_global_LinkAttractionGravitySourceRadius;
                         var attractionR = (nodeV.Length - targetDistance) * w_global_LinkAttractionStrength(multiplier);
@@ -1282,7 +1280,7 @@ public class NodeGraph : MultiSelector
 
                     // ★★★★★ 上書き！
                     if (addX != 0 || addY != 0)
-                        outputSideNode.Position = new Point(outputSideNode.Position.X + addX, outputSideNode.Position.Y + addY);
+                        targetOutputNode.Position = new Point(targetOutputNode.Position.X + addX, targetOutputNode.Position.Y + addY);
 
                 }
             }
