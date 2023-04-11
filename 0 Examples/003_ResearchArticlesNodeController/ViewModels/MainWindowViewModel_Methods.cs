@@ -123,6 +123,9 @@ public partial class MainWindowViewModel : ViewModel
     }
     void OrderByGroup(ref List<DefaultNodeViewModel> targetNodes)
     {
+        if (targetNodes.Count==0)
+            return;
+      
         var InputConnectorNodeGuids = _NodeLinkViewModels.Select(link => link.InputConnectorNodeGuid).ToArray();
         var OutputConnectorNodeGuids = _NodeLinkViewModels.Select(link => link.OutputConnectorNodeGuid).ToArray();
 
