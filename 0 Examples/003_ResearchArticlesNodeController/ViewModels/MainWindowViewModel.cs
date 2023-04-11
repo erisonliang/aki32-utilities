@@ -4,12 +4,6 @@ using Aki32Utilities.ViewModels.NodeViewModels;
 using Aki32Utilities.ConsoleAppUtilities.Research;
 using Aki32Utilities.ConsoleAppUtilities.General;
 using System.IO;
-using System.Diagnostics;
-using System.Collections.ObjectModel;
-using Microsoft.VisualBasic;
-using System.Windows.Threading;
-using Aki32Utilities.WPFAppUtilities.NodeController.Extensions;
-using Org.BouncyCastle.Asn1.Esf;
 
 namespace Aki32Utilities.UsageExamples.ResearchArticlesNodeController.ViewModels;
 public partial class MainWindowViewModel : ViewModel
@@ -23,7 +17,8 @@ public partial class MainWindowViewModel : ViewModel
 
         IsLockedAllNodeLinks = true;
         IsEnableAllNodeConnectors = true;
-        IsDynamicNodeDistancingAvailable = false;
+        ExecuteDynamicLinkAttractions = false;
+        ExecuteDynamicNodeRepulsions = false;
 
         try
         {

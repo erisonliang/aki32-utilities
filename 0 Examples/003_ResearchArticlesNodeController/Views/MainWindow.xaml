@@ -358,25 +358,26 @@
         <Grid 
             Grid.Row="0"
             Grid.Column="0"
-            Height="35" 
             >
 
-            <ScrollViewer 
-                HorizontalScrollBarVisibility="Auto" 
-                VerticalScrollBarVisibility="Disabled"
+            <Menu
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Center" 
+                VerticalContentAlignment="Center"
+                Height="35"
+                Margin="0"
+                Padding="3,0,0,0"
                 >
 
-                <StackPanel
-                    Orientation="Horizontal"
-                    Margin="4,0,0,0"
-                    >
+                <Menu.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel/>
+                    </ItemsPanelTemplate>
+                </Menu.ItemsPanel>
 
-                    <Button
-                        Margin="0,4,4,4"
-                        Command="{Binding SaveCommand}"
-                        Style="{StaticResource ButtonTextStyle}"
-                        >
-                        <StackPanel Orientation="Horizontal">
+                <MenuItem Height="35" Command="{Binding SaveCommand}">
+                    <MenuItem.Header>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                             <Grid>
                                 <mah:ProgressRing Visibility="{Binding IsSaveBusy, Converter={StaticResource BooleanToVisibilityConverter}}" Style="{StaticResource ProgressRingStyle}" Margin="0,0,3.5,0"/>
                                 <Grid Visibility="{Binding IsSaveBusy, Converter={StaticResource InverseBooleanToVisibility}}">
@@ -386,72 +387,41 @@
                             </Grid>
                             <TextBlock Text=" 保存 "/>
                         </StackPanel>
-                    </Button>
+                    </MenuItem.Header>
+                </MenuItem>
 
-                    <Button
-                        Margin="0,4,4,4"
-                        Command="{Binding TestCommand}"
-                        Style="{StaticResource ButtonTextStyle}"
-                        Content="テスト"
-                        >
-                    </Button>
+                <MenuItem Height="35" Header="テスト" Command="{Binding TestCommand}"/>
 
-                    <TextBlock VerticalAlignment="Center" Text="|" Margin="7,0,3,5" FontSize="25" FontWeight="Thin" Foreground="Gray"/>
-
-                    <CheckBox
-                        Margin="0,4,4,4"
-                        Height="24"
-                        Content="ノード接続保護"
-                        IsChecked="{Binding IsLockedAllNodeLinks}" 
-                        VerticalContentAlignment="Center" 
-                        ToolTip="ノード接続を削除できない状態にします。"
-                        />
-
-                    <CheckBox
-                        Margin="0,4,4,4"
-                        Height="24"
-                        Content="物理演算"
-                        IsChecked="{Binding IsDynamicNodeDistancingAvailable}" 
-                        VerticalContentAlignment="Center"
-                        ToolTip="ノードの距離を，物理演算によって自動で調整します。"
-                        />
-
-                    <TextBlock VerticalAlignment="Center" Text="|" Margin="7,0,3,5" FontSize="25" FontWeight="Thin" Foreground="Gray"/>
-
-                    <TextBlock
-                        VerticalAlignment="Center" 
-                        Text="選択：" 
-                        />
-
-                    <ComboBox
-                        Margin="0,4,4,4"
-                        Height="24" 
-                        ItemsSource="{Binding RangeSelectionModes, Mode=OneTime}" 
-                        SelectedItem="{Binding SelectedRangeSelectionMode}" 
-                        ToolTip="範囲選択モード"
-                        />
-
-                    <TextBlock VerticalAlignment="Center" Text="|" Margin="7,0,3,5" FontSize="25" FontWeight="Thin" Foreground="Gray"/>
-
-                    <TextBlock
-                        VerticalAlignment="Center" 
-                        Text="強調：" 
-                        />
-
-                    <ComboBox
-                        Margin="0,4,4,4"
-                        Height="24" 
-                        ItemsSource="{Binding EmphasizePropertyItems, Mode=OneTime}" 
-                        SelectedItem="{Binding SelectedEmphasizePropertyItem}" 
-                        ToolTip="強調表示対象"
-                        />
-
-                    <TextBlock VerticalAlignment="Center" Text="|" Margin="7,0,3,5" FontSize="25" FontWeight="Thin" Foreground="Gray"/>
+                <!-- ============================================================================ -->
+                <TextBlock VerticalAlignment="Center" Text="|" Margin="0,0,0,5" FontSize="25" FontWeight="Thin" Foreground="Gray"/>
 
 
-                </StackPanel>
+                <MenuItem Height="35" Command="{Binding SaveCommand}" IsHitTestVisible="True">
+                    <MenuItem.Header>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
 
-            </ScrollViewer>
+                            <TextBlock
+                                VerticalAlignment="Center" 
+                                Text="強調表示：" 
+                                />
+
+                            <ComboBox
+                                Margin="0,4,4,4"
+                                Height="24" 
+                                ItemsSource="{Binding EmphasizePropertyItems, Mode=OneTime}" 
+                                SelectedItem="{Binding SelectedEmphasizePropertyItem}" 
+                                ToolTip="強調表示対象"
+                                />
+
+                        </StackPanel>
+                    </MenuItem.Header>
+                </MenuItem>
+
+
+                <!-- ============================================================================ -->
+                <TextBlock VerticalAlignment="Center" Text="|" Margin="0,0,0,5" FontSize="25" FontWeight="Thin" Foreground="Gray"/>
+
+            </Menu>
 
         </Grid>
 
@@ -467,8 +437,8 @@
                 MoveWithMouse="Right"
                 Scale="{Binding Scale}"
                 Offset="{Binding CanvasOffset}"
-                ExecuteDynamicLinkAttractions="{Binding IsDynamicNodeDistancingAvailable}"
-                ExecuteDynamicNodeRepulsions="{Binding IsDynamicNodeDistancingAvailable}"
+                ExecuteDynamicNodeRepulsions="{Binding ExecuteDynamicNodeRepulsions}"
+                ExecuteDynamicLinkAttractions="{Binding ExecuteDynamicLinkAttractions}"
                 ItemsSource="{Binding NodeViewModels}"
                 ItemContainerStyle="{StaticResource DefaultNodeStyle}"
                 NodeLinks="{Binding NodeLinkViewModels}"
@@ -2201,10 +2171,11 @@
                         HorizontalScrollBarVisibility="Disabled">
                         <StackPanel Margin="4">
 
+                            <!--=========================================================================-->
                             <Grid Height="10"/>
                             <Grid Margin="4">
                                 <TextBlock
-                                    Text="文献文字列"
+                                    Text="文献"
                                     FontSize="20"
                                     HorizontalAlignment="Left"
                                     >
@@ -2213,8 +2184,8 @@
 
                             <Grid Margin="4">
                                 <TextBlock
-                                    Text="フォーマット：" 
-                                    Width="70" 
+                                    Text="文献文字列：" 
+                                    Width="100" 
                                     HorizontalAlignment="Left"
                                     TextAlignment="Right"
                                     ToolTipService.InitialShowDelay="10" 
@@ -2228,7 +2199,7 @@
                                     </TextBlock.ToolTip>
                                 </TextBlock>
                                 <TextBox 
-                                    Margin="70,0,0,0" 
+                                    Margin="100,0,0,0" 
                                     Text="{Binding Path=(research:ResearchArticle.ReferenceStringFormat)}"
                                     TextWrapping="Wrap" AcceptsReturn="False"
                                     />
@@ -2236,7 +2207,7 @@
                             <Grid Margin="4">
                                 <StackPanel
                                         Orientation="Horizontal"
-                                        Margin="70,0,0,0"
+                                        Margin="100,0,0,0"
                                         >
 
                                     <Button
@@ -2261,12 +2232,115 @@
                                 </StackPanel>
                             </Grid>
 
+                            <!--=========================================================================-->
+                            <Grid Height="10"/>
+                            <Grid Margin="4">
+                                <TextBlock
+                                    Text="ノードグラフ操作"
+                                    FontSize="20"
+                                    HorizontalAlignment="Left"
+                                    >
+                                </TextBlock>
+                            </Grid>
+
+                            <Grid Margin="4">
+                                <TextBlock
+                                    Text="ノード接続保護：" 
+                                    Width="100" 
+                                    HorizontalAlignment="Left"
+                                    VerticalAlignment="Center"
+                                    TextAlignment="Right"
+                                    ToolTipService.InitialShowDelay="10" 
+                                    >
+                                    <TextBlock.ToolTip>
+                                        <TextBlock
+                                            TextAlignment="Left"
+                                            Text="ノード接続を削除できない状態にします。"
+                                            >
+                                        </TextBlock>
+                                    </TextBlock.ToolTip>
+                                </TextBlock>
+                                <CheckBox
+                                    Margin="100,0,0,0" 
+                                    Content=""
+                                    IsChecked="{Binding IsLockedAllNodeLinks}" 
+                                    VerticalContentAlignment="Center" 
+                                    ToolTip="ノード接続を削除できない状態にします。"
+                                    />
+                            </Grid>
+
+                            <Grid Margin="4">
+                                <TextBlock
+                                    Text="物理演算：" 
+                                    Width="100"
+                                    HorizontalAlignment="Left"
+                                    VerticalAlignment="Center"
+                                    TextAlignment="Right"
+                                    ToolTipService.InitialShowDelay="10" 
+                                    >
+                                    <TextBlock.ToolTip>
+                                        <TextBlock
+                                            TextAlignment="Left"
+                                            Text="ノード接続を削除できない状態にします。"
+                                            >
+                                        </TextBlock>
+                                    </TextBlock.ToolTip>
+                                </TextBlock>
+
+                                <StackPanel
+                                    Orientation="Horizontal"
+                                    Margin="100,0,0,0"
+                                    >
+                                    <CheckBox
+                                        Margin="0,0,10,0"
+                                        Content="ノードの重なりによる斥力"
+                                        IsChecked="{Binding ExecuteDynamicNodeRepulsions}" 
+                                        VerticalContentAlignment="Center"
+                                        ToolTip="ノードの距離を，物理演算によって自動で調整します。"
+                                        />
+                                    <CheckBox
+                                        Margin="0,0,10,0"
+                                        Content="リンクによる引力"
+                                        IsChecked="{Binding ExecuteDynamicLinkAttractions}" 
+                                        VerticalContentAlignment="Center"
+                                        ToolTip="ノードの距離を，物理演算によって自動で調整します。"
+                                        />
+
+                                </StackPanel>
+                            </Grid>
+
+                            <Grid Margin="4">
+                                <TextBlock
+                                    Text="選択：" 
+                                    Width="100"
+                                    HorizontalAlignment="Left"
+                                    VerticalAlignment="Center"
+                                    TextAlignment="Right"
+                                    ToolTipService.InitialShowDelay="10" 
+                                    >
+                                    <TextBlock.ToolTip>
+                                        <TextBlock
+                                            TextAlignment="Left"
+                                            Text="ノード接続を削除できない状態にします。"
+                                            >
+                                        </TextBlock>
+                                    </TextBlock.ToolTip>
+                                </TextBlock>
+
+                                <ComboBox
+                                    Margin="100,0,0,0"
+                                    HorizontalAlignment="Left"
+                                    VerticalAlignment="Center"
+                                    ItemsSource="{Binding RangeSelectionModes, Mode=OneTime}" 
+                                    SelectedItem="{Binding SelectedRangeSelectionMode}" 
+                                    ToolTip="範囲選択モード"
+                                    />
+                            </Grid>
 
 
 
 
 
-                            <!--research-->
 
 
                         </StackPanel>
