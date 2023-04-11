@@ -68,7 +68,7 @@ public class NodeGraph : MultiSelector
     private double w_global_LinkAttractionStrength(int multiplier) => 0.005 * DynamicNodeDistancingInterval * multiplier;
     private double w_global_LinkAttractionGravitySourceRadius = 10;
     private double w_global_LeftGravityStrength(int multiplier) => 0.001 * DynamicNodeDistancingInterval * multiplier;
-    private double w_global_RepulsionStrength(int multiplier) => 2.0 * DynamicNodeDistancingInterval * multiplier;
+    private double w_global_RepulsionStrength(int multiplier) => 3.0 * DynamicNodeDistancingInterval * multiplier;
     private double w_global_RepulsionEffectRadius = 1.2;
 
     private bool executeNodeRepulsions = false;
