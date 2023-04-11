@@ -1146,9 +1146,9 @@ public static partial class ExampleExecuter
                     //var output = baseDir_101_E001.GetChildFileInfo($@"output.txt");
 
                     //var whisper = new WhisperCppWrapper(
-                    //    designatedModelDir: new DirectoryInfo(@"C:\Users\aki32\Dropbox\PC\★ PC間共有\Programming\WhisperCpp"),
-                    //    designatedMainExecuterFile: new FileInfo(@"C:\Users\aki32\Dropbox\PC\★ PC間共有\Programming\WhisperCpp\main.exe"),
-                    //    designatedWhisperDllFile: new FileInfo(@"C:\Users\aki32\Dropbox\PC\★ PC間共有\Programming\WhisperCpp\whisper.dll")
+                    //    designatedModelDir: new DirectoryInfo(@"C:\Users\aki32\Dropbox\Codes\# SharedData\WhisperCpp"),
+                    //    designatedMainExecuterFile: new FileInfo(@"C:\Users\aki32\Dropbox\Codes\# SharedData\WhisperCpp\main.exe"),
+                    //    designatedWhisperDllFile: new FileInfo(@"C:\Users\aki32\Dropbox\Codes\# SharedData\WhisperCpp\whisper.dll")
                     //    );
 
                     //whisper.ExecuteWhisper(input, output,
