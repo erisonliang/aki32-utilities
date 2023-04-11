@@ -375,6 +375,14 @@
                     </ItemsPanelTemplate>
                 </Menu.ItemsPanel>
 
+
+                <!-- ============================================================================ -->
+                <MenuItem IsHitTestVisible="False">
+                    <MenuItem.Header>
+                        <TextBlock VerticalAlignment="Center" Text="|" Margin="0,0,0,5" FontSize="25" FontWeight="Thin" Foreground="Gray"/>
+                    </MenuItem.Header>
+                </MenuItem>
+
                 <MenuItem Height="35" Command="{Binding SaveCommand}">
                     <MenuItem.Header>
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
@@ -392,11 +400,15 @@
 
                 <MenuItem Height="35" Header="テスト" Command="{Binding TestCommand}"/>
 
+                
                 <!-- ============================================================================ -->
-                <TextBlock VerticalAlignment="Center" Text="|" Margin="0,0,0,5" FontSize="25" FontWeight="Thin" Foreground="Gray"/>
+                <MenuItem IsHitTestVisible="False">
+                    <MenuItem.Header>
+                        <TextBlock VerticalAlignment="Center" Text="|" Margin="0,0,0,5" FontSize="25" FontWeight="Thin" Foreground="Gray"/>
+                    </MenuItem.Header>
+                </MenuItem>
 
-
-                <MenuItem Height="35" Command="{Binding SaveCommand}" IsHitTestVisible="True">
+                <MenuItem Height="35" Command="{Binding SaveCommand}">
                     <MenuItem.Header>
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
 
@@ -417,9 +429,16 @@
                     </MenuItem.Header>
                 </MenuItem>
 
+            
+                <!-- ============================================================================ -->
+                <MenuItem IsHitTestVisible="False">
+                    <MenuItem.Header>
+                        <TextBlock VerticalAlignment="Center" Text="|" Margin="0,0,0,5" FontSize="25" FontWeight="Thin" Foreground="Gray"/>
+                    </MenuItem.Header>
+                </MenuItem>
+
 
                 <!-- ============================================================================ -->
-                <TextBlock VerticalAlignment="Center" Text="|" Margin="0,0,0,5" FontSize="25" FontWeight="Thin" Foreground="Gray"/>
 
             </Menu>
 
