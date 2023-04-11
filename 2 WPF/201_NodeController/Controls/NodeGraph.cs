@@ -13,8 +13,6 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Threading;
-using System.Windows.Controls.Ribbon;
-using System.Xml.Linq;
 
 namespace Aki32Utilities.WPFAppUtilities.NodeController.Controls;
 
@@ -63,20 +61,20 @@ public class NodeGraph : MultiSelector
     readonly List<object> _DelayToBindGroupNodeVMs = new();
 
     readonly RangeSelector _RangeSelector = new();
-    private DispatcherTimer DynamicNodeDistancingTimer;
+    private DispatcherTimer DynamicNodeDistancingTimer = null;
 
 
     // ★★★★★ for dynamics
 
-    private const int DynamicNodeDistancingInterval = 33; // 30Hz: 33, 60Hz: 16
+    private const int DynamicNodeDistancingInterval = 16; // 30Hz: 33, 60Hz: 16
     private double w_global_LinkAttractionStrength(int multiplier) => 0.005 * DynamicNodeDistancingInterval * multiplier;
     private double w_global_LinkAttractionGravitySourceRadius = 10;
     private double w_global_LeftGravityStrength(int multiplier) => 0.001 * DynamicNodeDistancingInterval * multiplier;
     private double w_global_RepulsionStrength(int multiplier) => 2.0 * DynamicNodeDistancingInterval * multiplier;
     private double w_global_RepulsionEffectRadius = 1.2;
 
-    private readonly bool executeNodeRepulsions = true;
-    private readonly bool executeLinkAttractions = true;
+    private bool executeNodeRepulsions = false;
+    private bool executeLinkAttractions = false;
 
     private bool isDynamicNodeDistancingBusy = false;
     private int dynamicNodeDistancingStackCount = 0;
@@ -142,51 +140,21 @@ public class NodeGraph : MultiSelector
     public static readonly DependencyProperty OffsetProperty =
         DependencyProperty.Register(nameof(Offset), typeof(Point), typeof(NodeGraph), new FrameworkPropertyMetadata(new Point(0, 0), FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, OffsetPropertyChanged));
 
-    public bool IsDynamicNodeDistancingAvailable
+    public bool ExecuteDynamicNodeRepulsions
     {
-        get
-        {
-            try
-            {
-                var a = GetValue(IsDynamicNodeDistancingAvailableProperty);
-                return (bool)a;
-            }
-            catch (Exception eee)
-            {
-                return false;
-            }
-        }
-
-        set
-        {
-            try
-            {
-                SetValue(IsDynamicNodeDistancingAvailableProperty, value);
-
-                if (DynamicNodeDistancingTimer is null)
-                {
-                    DynamicNodeDistancingTimer = new DispatcherTimer();
-                    DynamicNodeDistancingTimer.Interval = TimeSpan.FromMilliseconds(DynamicNodeDistancingInterval);
-                    DynamicNodeDistancingTimer.Tick += DynamicNodeDistancingTimer_Elapsed;
-                }
-
-                if (value)
-                    DynamicNodeDistancingTimer.Start();
-                else
-                    DynamicNodeDistancingTimer.Stop();
-
-            }
-            catch (Exception eeee)
-            {
-            }
-        }
-
-
-        //get => (bool)GetValue(IsDynamicNodeDistancingAvailableProperty);
-        //set => SetValue(IsDynamicNodeDistancingAvailableProperty, value);
+        get => (bool)GetValue(ExecuteDynamicNodeRepulsionsProperty);
+        set => SetValue(ExecuteDynamicNodeRepulsionsProperty, value);
     }
-    public static readonly DependencyProperty IsDynamicNodeDistancingAvailableProperty =
-        DependencyProperty.Register(nameof(IsDynamicNodeDistancingAvailable), typeof(bool), typeof(NodeGraph), new FrameworkPropertyMetadata(false, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, IsDynamicNodeDistancingAvailablePropertyChanged));
+    public static readonly DependencyProperty ExecuteDynamicNodeRepulsionsProperty =
+        DependencyProperty.Register(nameof(ExecuteDynamicNodeRepulsions), typeof(bool), typeof(NodeGraph), new FrameworkPropertyMetadata(false, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, ExecuteDynamicNodeRepulsionsPropertyChanged));
+
+    public bool ExecuteDynamicLinkAttractions
+    {
+        get => (bool)GetValue(ExecuteDynamicLinkAttractionsProperty);
+        set => SetValue(ExecuteDynamicLinkAttractionsProperty, value);
+    }
+    public static readonly DependencyProperty ExecuteDynamicLinkAttractionsProperty =
+        DependencyProperty.Register(nameof(ExecuteDynamicLinkAttractions), typeof(bool), typeof(NodeGraph), new FrameworkPropertyMetadata(false, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, ExecuteDynamicLinkAttractionsPropertyChanged));
 
     public ICommand PreviewConnectLinkCommand
     {
@@ -342,11 +310,32 @@ public class NodeGraph : MultiSelector
         }
     }
 
-    static void IsDynamicNodeDistancingAvailablePropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+    static void ExecuteDynamicNodeRepulsionsPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
         // ensure prop is renewed
         var nodeGraph = (NodeGraph)d;
-        nodeGraph.IsDynamicNodeDistancingAvailable = (bool)e.NewValue;
+        nodeGraph.ExecuteDynamicNodeRepulsions = (bool)e.NewValue;
+        nodeGraph.executeNodeRepulsions = (bool)e.NewValue;
+        ActivateDynamicNodeDistancingTimerIfNull(nodeGraph);
+    }
+    static void ExecuteDynamicLinkAttractionsPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+    {
+        // ensure prop is renewed
+        var nodeGraph = (NodeGraph)d;
+        nodeGraph.ExecuteDynamicLinkAttractions = (bool)e.NewValue;
+        nodeGraph.executeLinkAttractions = (bool)e.NewValue;
+        ActivateDynamicNodeDistancingTimerIfNull(nodeGraph);
+    }
+    private static void ActivateDynamicNodeDistancingTimerIfNull(NodeGraph nodeGraph)
+    {
+        var timer = nodeGraph.DynamicNodeDistancingTimer;
+        if (timer is null)
+        {
+            timer = new();
+            timer.Interval = TimeSpan.FromMilliseconds(DynamicNodeDistancingInterval);
+            timer.Tick += nodeGraph.DynamicNodeDistancingTimer_Elapsed;
+            timer.Start();
+        }
     }
 
     static void NodeLinkStylePropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -1249,7 +1238,7 @@ public class NodeGraph : MultiSelector
 
                 }
 
-                //Console.WriteLine(totalCount);
+                Console.WriteLine(totalCount);
             }
 
             // リンクごとの処理
