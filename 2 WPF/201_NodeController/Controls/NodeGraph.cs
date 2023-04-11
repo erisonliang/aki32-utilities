@@ -69,14 +69,17 @@ public class NodeGraph : MultiSelector
     // ★★★★★ for dynamics
 
     private const int DynamicNodeDistancingInterval = 33; // 30Hz: 33, 60Hz: 16
-    private double w_global_LinkAttractionStrength = 0.005 * DynamicNodeDistancingInterval;
+    private double w_global_LinkAttractionStrength(int multiplier) => 0.005 * DynamicNodeDistancingInterval * multiplier;
     private double w_global_LinkAttractionGravitySourceRadius = 10;
-    private double w_global_LeftGravityStrength = 0.001 * DynamicNodeDistancingInterval;
-    private double w_global_RepulsionStrength = 2.0 * DynamicNodeDistancingInterval;
+    private double w_global_LeftGravityStrength(int multiplier) => 0.001 * DynamicNodeDistancingInterval * multiplier;
+    private double w_global_RepulsionStrength(int multiplier) => 2.0 * DynamicNodeDistancingInterval * multiplier;
     private double w_global_RepulsionEffectRadius = 1.2;
 
     private readonly bool executeNodeRepulsions = true;
     private readonly bool executeLinkAttractions = true;
+
+    private bool isDynamicNodeDistancingBusy = false;
+    private int dynamicNodeDistancingStackCount = 0;
 
 
     // ★★★★★★★★★★★★★★★ props
@@ -1158,9 +1161,19 @@ public class NodeGraph : MultiSelector
 
     void DynamicNodeDistancingTimer_Elapsed(object? sender, EventArgs e)
     {
+        dynamicNodeDistancingStackCount++;
+
+        if (isDynamicNodeDistancingBusy)
+            return;
+
+        var multiplier = dynamicNodeDistancingStackCount;
+        dynamicNodeDistancingStackCount = 0;
+
         try
         {
-            var nodes = Canvas.Children.OfType<DefaultNode>().OrderBy(node => node.Position.Y).ToList();
+            isDynamicNodeDistancingBusy = true;
+
+              var nodes = Canvas.Children.OfType<DefaultNode>().OrderBy(node => node.Position.Y).ToList();
             var links = Canvas.Children.OfType<NodeLink>().ToArray();
 
             foreach (var node in nodes)
@@ -1197,11 +1210,11 @@ public class NodeGraph : MultiSelector
                                 var w_OverWrapY = overWrapY / threY;
                                 var w_OverWrapXY = Math.Min(w_OverWrapX, w_OverWrapY);
                                 var dir = nodeV.GetNormalized();
-                                addX += dir.X * w_OverWrapXY * w_global_RepulsionStrength;
-                                addY += dir.Y * w_OverWrapXY * w_global_RepulsionStrength;
+                                addX += dir.X * w_OverWrapXY * w_global_RepulsionStrength(multiplier);
+                                addY += dir.Y * w_OverWrapXY * w_global_RepulsionStrength(multiplier);
                             }
                         }
-                        else if (nodeV.Y<0)
+                        else if (nodeV.Y < 0)
                         {
                             break;
                         }
@@ -1238,13 +1251,13 @@ public class NodeGraph : MultiSelector
 
                     var nodeV = outputSideNode.Center.Sub(inputSideNode.Center).ToVector();
                     var targetDistance = inputSideNode.Radius * w_global_LinkAttractionGravitySourceRadius;
-                    var attractionR = (nodeV.Length - targetDistance) * w_global_LinkAttractionStrength;
+                    var attractionR = (nodeV.Length - targetDistance) * w_global_LinkAttractionStrength(multiplier);
                     var dir = nodeV.GetNormalized();
 
                     // 右側にある場合，じわじわ左に進める。
                     if (dir.X < targetDistance)
                     {
-                        var attractionX = (Math.Abs(nodeV.X) - targetDistance) * w_global_LeftGravityStrength;
+                        var attractionX = (Math.Abs(nodeV.X) - targetDistance) * w_global_LeftGravityStrength(multiplier);
                         addX += attractionX;
                     }
 
@@ -1262,6 +1275,10 @@ public class NodeGraph : MultiSelector
         }
         catch (Exception ex)
         {
+        }
+        finally
+        {
+            isDynamicNodeDistancingBusy = false;
         }
     }
 
