@@ -1173,33 +1173,41 @@ public class NodeGraph : MultiSelector
         {
             isDynamicNodeDistancingBusy = true;
 
-              var nodes = Canvas.Children.OfType<DefaultNode>().OrderBy(node => node.Position.Y).ToList();
+            var nodes = Canvas.Children.OfType<DefaultNode>().OrderBy(node => node.Position.Y).ToArray();
             var links = Canvas.Children.OfType<NodeLink>().ToArray();
 
-            foreach (var node in nodes)
+            // ノードごとの処理
+            if (executeNodeRepulsions)
             {
-                // ★★★★★ 前処理
-                if (node.IsSelected)
-                    continue;
+                var totalCount = 0;
 
-                var addX = 0d;
-                var addY = 0d;
-
-
-                // ★★★★★ 相乗効果
-                foreach (var otherNode in nodes)
+                for (int i = 0; i < nodes.Length; i++)
                 {
+                    var targetNode = nodes[i];
+
                     // ★ 前処理
-                    if (otherNode == node)
+                    if (targetNode.IsSelected)
                         continue;
 
-                    // ★ 重なってたら，外の方向に力をかける。
-                    // 重なりを精密に計算！矩形が重なってたら，重心同士を反発させる。
-                    if (executeNodeRepulsions)
+                    var addX = 0d;
+                    var addY = 0d;
+
+
+                    // ★★★★★ ノードの重なりによる斥力。
+                    bool executeOne(int j, bool topOut)
                     {
-                        var nodeV = node.Center.Sub(otherNode.Center).ToVector();
-                        var threX = (node.ActualWidth + otherNode.ActualWidth) / 2;
-                        var threY = (node.ActualHeight + otherNode.ActualHeight) / 2;
+                        // ★ 前処理
+                        if (i == j)
+                            throw new Exception("noooooo");
+
+                        totalCount++;
+
+                        var otherNode = nodes[j];
+
+                        // ★ 重なりを精密に計算！矩形が重なってたら，重心同士を反発させる。
+                        var nodeV = targetNode.Center.Sub(otherNode.Center).ToVector();
+                        var threX = (targetNode.ActualWidth + otherNode.ActualWidth) / 2;
+                        var threY = (targetNode.ActualHeight + otherNode.ActualHeight) / 2;
                         var overWrapY = threY - Math.Abs(nodeV.Y) / w_global_RepulsionEffectRadius;
                         if (overWrapY > 0)
                         {
@@ -1214,19 +1222,37 @@ public class NodeGraph : MultiSelector
                                 addY += dir.Y * w_OverWrapXY * w_global_RepulsionStrength(multiplier);
                             }
                         }
-                        else if (nodeV.Y < 0)
-                        {
-                            break;
-                        }
+
+                        // 離脱
+                        else if (topOut && nodeV.Y < 0)
+                            return false;
+                        else if (nodeV.Y > 0)
+                            return false;
+
+                        return true;
                     }
+
+                    for (int j = i + 1; j < nodes.Length; j++)
+                    {
+                        if (!executeOne(j, true))
+                            break;
+                    }
+                    for (int j = i - 1; j >= 0; j--)
+                    {
+                        if (!executeOne(j, false))
+                            break;
+                    }
+
+                    // ★★★★★ 上書き！
+                    if (addX != 0 || addY != 0)
+                        targetNode.Position = new Point(targetNode.Position.X + addX, targetNode.Position.Y + addY);
+
                 }
 
-
-                // ★★★★★ 上書き！
-                if (addX != 0 || addY != 0)
-                    node.Position = new Point(node.Position.X + addX, node.Position.Y + addY);
-
+                //Console.WriteLine(totalCount);
             }
+
+            // リンクごとの処理
             if (executeLinkAttractions)
             {
                 // ★★★★★ ノード情報抽出
@@ -1235,7 +1261,7 @@ public class NodeGraph : MultiSelector
 
                 foreach (var link in links)
                 {
-                    // ★★★★★ 前処理
+                    // ★ 前処理
                     var outputSideNode = link.Output.Node;
                     var inputSideNode = link.Input.Node;
                     if (outputSideNode.IsSelected)
@@ -1247,23 +1273,23 @@ public class NodeGraph : MultiSelector
                     var addY = 0d;
 
 
-                    // ★★★★★ 相乗効果
-
-                    var nodeV = outputSideNode.Center.Sub(inputSideNode.Center).ToVector();
-                    var targetDistance = inputSideNode.Radius * w_global_LinkAttractionGravitySourceRadius;
-                    var attractionR = (nodeV.Length - targetDistance) * w_global_LinkAttractionStrength(multiplier);
-                    var dir = nodeV.GetNormalized();
-
-                    // 右側にある場合，じわじわ左に進める。
-                    if (dir.X < targetDistance)
+                    // ★★★★★ リンクによる引力
                     {
-                        var attractionX = (Math.Abs(nodeV.X) - targetDistance) * w_global_LeftGravityStrength(multiplier);
-                        addX += attractionX;
+                        var nodeV = outputSideNode.Center.Sub(inputSideNode.Center).ToVector();
+                        var targetDistance = inputSideNode.Radius * w_global_LinkAttractionGravitySourceRadius;
+                        var attractionR = (nodeV.Length - targetDistance) * w_global_LinkAttractionStrength(multiplier);
+                        var dir = nodeV.GetNormalized();
+
+                        // ★ 右側にある場合，じわじわ左に進める。
+                        if (dir.X < targetDistance)
+                        {
+                            var attractionX = (Math.Abs(nodeV.X) - targetDistance) * w_global_LeftGravityStrength(multiplier);
+                            addX += attractionX;
+                        }
+
+                        addX -= dir.X * attractionR;
+                        addY -= dir.Y * attractionR;
                     }
-
-                    addX -= dir.X * attractionR;
-                    addY -= dir.Y * attractionR;
-
 
                     // ★★★★★ 上書き！
                     if (addX != 0 || addY != 0)
