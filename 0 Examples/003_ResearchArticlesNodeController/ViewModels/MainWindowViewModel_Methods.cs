@@ -178,6 +178,7 @@ public partial class MainWindowViewModel : ViewModel
     }
     void RearrangeNodesAlignLeft(List<DefaultNodeViewModel> rearrangingNodes, Point basePosition, bool toLowerDirection)
     {
+        var nothing = 15;
         var horizontalCoef = 1;
         var verticalCoef = toLowerDirection ? 1 : -1;
 
@@ -207,9 +208,8 @@ public partial class MainWindowViewModel : ViewModel
             var noConnectionNode = noConnectionNodes[i];
             rearrangingNodes.Remove(noConnectionNode);
             noConnectionNode.Position = new Point(
-                basePosition.X + horizontalCoef * 0 * NODE_HORIZONTAL_SPAN,
-                basePosition.Y + verticalCoef * i * NODE_VERTICAL_SPAN);
-
+                   basePosition.X - horizontalCoef * (i / nothing) * NODE_HORIZONTAL_SPAN,
+                   basePosition.Y + verticalCoef * (i % nothing) * NODE_VERTICAL_SPAN);
         }
 
 
@@ -267,6 +267,7 @@ public partial class MainWindowViewModel : ViewModel
     }
     void RearrangeNodesAlignRight(List<DefaultNodeViewModel> rearrangingNodes, Point basePosition, bool toLowerDirection)
     {
+        var nothing = 15;
         var horizontalCoef = -1;
         var verticalCoef = toLowerDirection ? 1 : -1;
 
@@ -296,8 +297,8 @@ public partial class MainWindowViewModel : ViewModel
             var noConnectionNode = noConnectionNodes[i];
             rearrangingNodes.Remove(noConnectionNode);
             noConnectionNode.Position = new Point(
-                basePosition.X + horizontalCoef * 0 * NODE_HORIZONTAL_SPAN,
-                basePosition.Y + verticalCoef * i * NODE_VERTICAL_SPAN);
+                basePosition.X - horizontalCoef * (i / nothing) * NODE_HORIZONTAL_SPAN,
+                basePosition.Y + verticalCoef * (i % nothing) * NODE_VERTICAL_SPAN);
         }
 
 
