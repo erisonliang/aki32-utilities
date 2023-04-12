@@ -1248,7 +1248,7 @@
                                         <TextBlock.ToolTip>
                                             <TextBlock
                                                 TextAlignment="Left"
-                                                Text="release"
+                                                Text="ジャーナル名を記載します。&#10;ない場合，代わりにWebサイトへのリンクを貼ることもできます。"
                                                 >
                                             </TextBlock>
                                         </TextBlock.ToolTip>
