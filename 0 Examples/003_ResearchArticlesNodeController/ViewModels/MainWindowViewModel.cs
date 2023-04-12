@@ -72,7 +72,7 @@ public partial class MainWindowViewModel : ViewModel
             foreach (var addingArticle in diffs)
                 _NodeViewModels.Add(new ResearchArticleNodeViewModel() { NodeName = "文献", Article = addingArticle, Position = new Point(0, 0) });
 
-            Console.WriteLine($"nodes updated: added {diffs.Count}, removed {removed}");
+            Console.WriteLine($"Nodes UI updated (added {diffs.Count}, removed {removed})");
         }
 
         // ★★★★★ all links
