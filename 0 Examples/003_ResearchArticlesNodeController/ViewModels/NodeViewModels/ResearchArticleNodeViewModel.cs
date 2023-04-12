@@ -234,13 +234,7 @@ public class ResearchArticleNodeViewModel : DefaultNodeViewModel
             switch (MainWindowViewModel._SelectedEmphasizePropertyItem)
             {
                 case EmphasizePropertyItems.デフォルト:
-                    {
-                        if (IsGrouping)
-                            return Brushes.Yellow;
-                        if (IsWeb)
-                            return Brushes.LightBlue;
-
-                    }
+                    // 下で追加する。
                     break;
                 case EmphasizePropertyItems.なし:
                     break;
@@ -286,6 +280,15 @@ public class ResearchArticleNodeViewModel : DefaultNodeViewModel
                     break;
                 default:
                     throw new NotImplementedException();
+            }
+
+            // 「なし」でなければ，基本的な情報は追加しておく。
+            if (MainWindowViewModel._SelectedEmphasizePropertyItem != EmphasizePropertyItems.なし)
+            {
+                if (IsGrouping)
+                    return Brushes.Yellow;
+                if (IsWeb)
+                    return Brushes.LightBlue;
             }
 
             return new SolidColorBrush(Color.FromArgb(0xFF, 0x66, 0x66, 0x66));
