@@ -26,17 +26,7 @@ public class ResearchArticleNodeViewModel : DefaultNodeViewModel
 
     // ★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★
 
-    [AlsoNotifyFor(nameof(NodeTypeName))]
     public string NodeName { get; set; }
-    public string NodeTypeName
-    {
-        get
-        {
-            if (IsGrouping)
-                return "グループ";
-            return NodeName;
-        }
-    }
 
     public bool IsNodeBusy { get; set; } = false;
 
@@ -78,7 +68,10 @@ public class ResearchArticleNodeViewModel : DefaultNodeViewModel
             if (Article.DataFrom_AI_PredictFromRefString ?? false)
                 return false;
 
+
             // 自動生成されたものでない非構造データがあれば，まだ情報追加の余地があるからオススメする。
+            if (string.IsNullOrEmpty(Article.ReferenceString_FromUnstructured))
+                return false;
             _ = Article.ReferenceString;
             if (Article.IsLastReferenceStringFromFormatGeneration)
                 return false;
@@ -299,7 +292,7 @@ public class ResearchArticleNodeViewModel : DefaultNodeViewModel
                 Article.Private_WillRead = value;
         }
     }
-    [AlsoNotifyFor(nameof(ArticleHeaderColor), nameof(NodeTypeName))]
+    [AlsoNotifyFor(nameof(ArticleHeaderColor))]
     public bool IsGrouping
     {
         get => Article.Private_IsGrouping ?? false;
