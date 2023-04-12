@@ -152,7 +152,7 @@ public partial class MainWindowViewModel : ViewModel
     ObservableCollection<GroupNodeViewModel> _GroupNodeViewModels = new();
 
     public EmphasizePropertyItems[] EmphasizePropertyItems { get; } = Enum.GetValues(typeof(EmphasizePropertyItems)).OfType<EmphasizePropertyItems>().ToArray();
-    public static EmphasizePropertyItems _SelectedEmphasizePropertyItem = ViewModels.EmphasizePropertyItems.なし;
+    public static EmphasizePropertyItems _SelectedEmphasizePropertyItem = ViewModels.EmphasizePropertyItems.デフォルト;
     public EmphasizePropertyItems SelectedEmphasizePropertyItem
     {
         get

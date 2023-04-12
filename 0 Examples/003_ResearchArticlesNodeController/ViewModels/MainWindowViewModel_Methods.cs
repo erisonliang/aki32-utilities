@@ -705,7 +705,7 @@ public partial class MainWindowViewModel : ViewModel
                 Console.WriteLine($"★ メタ情報の収集が完了しました。(成功: {pulledCount - failCount}/{pulledCount}件)");
             }
 
-            SelectedEmphasizePropertyItem = ViewModels.EmphasizePropertyItems.一時ﾃﾞｰﾀ;
+            SelectedEmphasizePropertyItem = ViewModels.EmphasizePropertyItems.一時データ;
             var saveTask = Save();
 
             var successAnimationTask = Task.Run(async () =>
@@ -783,7 +783,7 @@ public partial class MainWindowViewModel : ViewModel
             }
 
             RedrawResearchArticleNodes();
-            SelectedEmphasizePropertyItem = ViewModels.EmphasizePropertyItems.一時ﾃﾞｰﾀ;
+            SelectedEmphasizePropertyItem = ViewModels.EmphasizePropertyItems.一時データ;
 
             selectedNode.NotifyArticleUpdated();
 
@@ -1638,7 +1638,7 @@ public partial class MainWindowViewModel : ViewModel
         if (moveToFirstItem)
             MoveCanvasToTargetArticleNode(pulledTempArticleNodes!.FirstOrDefault());
 
-        SelectedEmphasizePropertyItem = ViewModels.EmphasizePropertyItems.一時ﾃﾞｰﾀ;
+        SelectedEmphasizePropertyItem = ViewModels.EmphasizePropertyItems.一時データ;
     }
 
 

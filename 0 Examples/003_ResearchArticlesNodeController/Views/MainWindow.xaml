@@ -40,6 +40,7 @@
         <Brush x:Key="IsReadColor">YellowGreen</Brush>
         <Brush x:Key="WillReadColor">LightGreen</Brush>
         <Brush x:Key="IsGroupingColor">Yellow</Brush>
+        <Brush x:Key="IsWebColor">LightBlue</Brush>
         <Brush x:Key="IsLocalSearchMatchedColor">Aqua</Brush>
         <Brush x:Key="IsTempColor">DarkOrange</Brush>
         <Brush x:Key="IsCat1Color">white</Brush>
@@ -201,22 +202,12 @@
                                         HorizontalAlignment="Left"
                                         Orientation="Horizontal"
                                         Margin="5,0,2,0"
-                                        Visibility="{Binding IsGrouping, Converter={StaticResource InverseBooleanToVisibility}}"
                                         >
                                         <!--<Label Content="■"/>-->
-                                        <Label Content="📄" Padding="0" VerticalAlignment="Center" Foreground="#FF080808"/>
-                                        <Label Content="{Binding NodeName}" Padding="2,0,0,0" VerticalAlignment="Center" FontWeight="Bold" Foreground="#FF080808"/>
+                                        <Label Content="{Binding NodeHeaderIcon}" Padding="0" VerticalAlignment="Center" Foreground="#FF080808"/>
+                                        <Label Content="{Binding NodeHeaderString}" Padding="2,0,0,0" VerticalAlignment="Center" FontWeight="Bold" Foreground="#FF080808"/>
                                     </StackPanel>
-                                    <StackPanel 
-                                        HorizontalAlignment="Left"
-                                        Orientation="Horizontal"
-                                        Margin="5,0,2,0"
-                                        Visibility="{Binding IsGrouping, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                        >
-                                        <!--<Label Content="■"/>-->
-                                        <Label Content="🧊" Padding="0" VerticalAlignment="Center" Foreground="#FF080808"/>
-                                        <Label Content="グループ" Padding="2,0,0,0" VerticalAlignment="Center" FontWeight="Bold" Foreground="#FF080808"/>
-                                    </StackPanel>
+                                   
                                     <StackPanel
                                         HorizontalAlignment="Right"
                                         Orientation="Horizontal"
@@ -228,6 +219,7 @@
                                         <Label Margin="0,0,3,0" Padding="0" Content="●" FontSize="20" Foreground="{StaticResource WillReadColor}" Visibility="{Binding WillRead, Converter={StaticResource BooleanToVisibilityConverter}}"/>
                                         <Label Margin="0,0,3,0" Padding="0" Content="●" FontSize="20" Foreground="{StaticResource IsTempColor}" Visibility="{Binding IsTemp, Converter={StaticResource BooleanToVisibilityConverter}}"/>
                                         <Label Margin="0,0,3,0" Padding="0" Content="●" FontSize="20" Foreground="{StaticResource IsGroupingColor}" Visibility="{Binding IsGrouping, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                        <Label Margin="0,0,3,0" Padding="0" Content="●" FontSize="20" Foreground="{StaticResource IsWebColor}" Visibility="{Binding IsWeb, Converter={StaticResource BooleanToVisibilityConverter}}"/>
                                         <Label Margin="0,0,3,0" Padding="0" Content="●" FontSize="20" Foreground="{StaticResource IsLocalSearchMatchedColor}" Visibility="{Binding IsLocalSearchMatched, Converter={StaticResource BooleanToVisibilityConverter}}"/>
                                         <Label Margin="0,0,3,0" Padding="0" Content="●" FontSize="20" Foreground="{StaticResource IsCat1Color}" Visibility="{Binding IsCategory1, Converter={StaticResource BooleanToVisibilityConverter}}"/>
                                         <Label Margin="0,0,3,0" Padding="0" Content="●" FontSize="20" Foreground="{StaticResource IsCat2Color}" Visibility="{Binding IsCategory2, Converter={StaticResource BooleanToVisibilityConverter}}"/>
@@ -253,7 +245,7 @@
                             <StackPanel
                                 Orientation="Vertical"
                                 TextBlock.Foreground="White"
-                                Visibility="{Binding IsGrouping, Converter={StaticResource InverseBooleanToVisibility}}"
+                                Visibility="{Binding IsGroupingOrWeb, Converter={StaticResource InverseBooleanToVisibility}}"
                                 >
 
                                 <Grid Margin="3">
@@ -327,7 +319,7 @@
                             <StackPanel
                                 Orientation="Vertical"
                                 TextBlock.Foreground="White"
-                                Visibility="{Binding IsGrouping, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                Visibility="{Binding IsGroupingOrWeb, Converter={StaticResource BooleanToVisibilityConverter}}"
                                 >
 
                                 <TextBlock
@@ -342,9 +334,8 @@
                                 <Grid Margin="4"/>
 
                             </StackPanel>
-
+                            
                         </Grid>
-
 
                     </DataTemplate>
                 </Setter.Value>
@@ -974,6 +965,18 @@
                                         <StackPanel Orientation="Horizontal">
                                             <TextBlock Text="●" Foreground="{StaticResource IsGroupingColor}" Margin="0,0,2,0"/>
                                             <TextBlock Text="ｸﾞﾙｰﾌﾟ"/>
+                                        </StackPanel>
+                                    </ToggleButton>
+
+                                    <ToggleButton
+                                        Margin="3"
+                                        Style="{StaticResource ToggleButtonTextStyle}"
+                                        IsChecked="{Binding SelectedNodeViewModel.IsWeb}"
+                                        ToolTip=""
+                                        >
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="●" Foreground="{StaticResource IsWebColor}" Margin="0,0,2,0"/>
+                                            <TextBlock Text="ｳｪﾌﾞ"/>
                                         </StackPanel>
                                     </ToggleButton>
 

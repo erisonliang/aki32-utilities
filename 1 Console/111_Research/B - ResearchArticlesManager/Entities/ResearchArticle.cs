@@ -492,6 +492,11 @@ public class ResearchArticle : IComparable
     /// </summary>
     [UseExceptionalBinaryEitherMerging]
     public bool? Private_IsGrouping { get; set; } = false;
+    /// <summary>
+    /// ﾌﾟﾘｾｯﾄ: Web
+    /// </summary>
+    [UseExceptionalBinaryEitherMerging]
+    public bool? Private_IsWeb { get; set; } = false;
 
     [UseExceptionalBinaryEitherMerging]
     public bool? Private_IsCategory1 { get; set; } = false;

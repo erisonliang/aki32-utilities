@@ -125,14 +125,16 @@ public enum RangeSelectionMode
 
 public enum EmphasizePropertyItems
 {
+    デフォルト,
     なし,
     お気に入り,
     既読,
     積読,
     検索結果,
-    ｸﾞﾙｰﾌﾟ,
-    一時ﾃﾞｰﾀ,
-    ﾒﾓ1,
-    ﾒﾓ2,
-    ﾒﾓ3,
+    グループ,
+    ウェブ,
+    一時データ,
+    メモ1,
+    メモ2,
+    メモ3,
 }

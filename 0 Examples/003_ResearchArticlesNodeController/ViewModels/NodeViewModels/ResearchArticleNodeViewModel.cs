@@ -27,6 +27,28 @@ public class ResearchArticleNodeViewModel : DefaultNodeViewModel
     // ★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★
 
     public string NodeName { get; set; }
+    public string NodeHeaderIcon
+    {
+        get
+        {
+            if (IsGrouping)
+                return $"🧊";
+            if (IsWeb)
+                return $"🌐";
+            return $"📄";
+        }
+    }
+    public string NodeHeaderString
+    {
+        get
+        {
+            if (IsGrouping)
+                return $"グループ";
+            if (IsWeb)
+                return $"Web";
+            return $"{NodeName}";
+        }
+    }
 
     public bool IsNodeBusy { get; set; } = false;
 
@@ -209,11 +231,17 @@ public class ResearchArticleNodeViewModel : DefaultNodeViewModel
     {
         get
         {
-            if (IsGrouping)
-                return Brushes.Yellow;
-
             switch (MainWindowViewModel._SelectedEmphasizePropertyItem)
             {
+                case EmphasizePropertyItems.デフォルト:
+                    {
+                        if (IsGrouping)
+                            return Brushes.Yellow;
+                        if (IsWeb)
+                            return Brushes.LightBlue;
+
+                    }
+                    break;
                 case EmphasizePropertyItems.なし:
                     break;
                 case EmphasizePropertyItems.お気に入り:
@@ -228,27 +256,31 @@ public class ResearchArticleNodeViewModel : DefaultNodeViewModel
                     if (WillRead)
                         return Brushes.LightGreen;
                     break;
-                case EmphasizePropertyItems.一時ﾃﾞｰﾀ:
+                case EmphasizePropertyItems.一時データ:
                     if (IsTemp)
                         return Brushes.DarkOrange;
                     break;
-                case EmphasizePropertyItems.ｸﾞﾙｰﾌﾟ:
+                case EmphasizePropertyItems.グループ:
                     if (IsGrouping)
                         return Brushes.Yellow;
+                    break;
+                case EmphasizePropertyItems.ウェブ:
+                    if (IsWeb)
+                        return Brushes.LightBlue;
                     break;
                 case EmphasizePropertyItems.検索結果:
                     if (IsLocalSearchMatched)
                         return Brushes.Aqua;
                     break;
-                case EmphasizePropertyItems.ﾒﾓ1:
+                case EmphasizePropertyItems.メモ1:
                     if (IsCategory1)
                         return Brushes.White;
                     break;
-                case EmphasizePropertyItems.ﾒﾓ2:
+                case EmphasizePropertyItems.メモ2:
                     if (IsCategory2)
                         return Brushes.Pink;
                     break;
-                case EmphasizePropertyItems.ﾒﾓ3:
+                case EmphasizePropertyItems.メモ3:
                     if (IsCategory3)
                         return Brushes.Purple;
                     break;
@@ -292,7 +324,7 @@ public class ResearchArticleNodeViewModel : DefaultNodeViewModel
                 Article.Private_WillRead = value;
         }
     }
-    [AlsoNotifyFor(nameof(ArticleHeaderColor))]
+    [AlsoNotifyFor(nameof(ArticleHeaderColor), nameof(IsGroupingOrWeb))]
     public bool IsGrouping
     {
         get => Article.Private_IsGrouping ?? false;
@@ -303,6 +335,18 @@ public class ResearchArticleNodeViewModel : DefaultNodeViewModel
                 Article.Private_IsGrouping = value;
         }
     }
+    [AlsoNotifyFor(nameof(ArticleHeaderColor), nameof(IsGroupingOrWeb))]
+    public bool IsWeb
+    {
+        get => Article.Private_IsWeb ?? false;
+        set
+        {
+            var temp = Article.Private_IsWeb;
+            if (RaisePropertyChangedIfSet(ref temp, value))
+                Article.Private_IsWeb = value;
+        }
+    }
+    public bool IsGroupingOrWeb => IsGrouping || IsWeb;
     [AlsoNotifyFor(nameof(ArticleHeaderColor))]
     public bool IsTemp
     {
