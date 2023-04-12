@@ -87,7 +87,7 @@ public partial class MainWindowViewModel : ViewModel
 
         AddNewArticleNode(addingPosition);
     }
-    void AddNewArticleNode(Point addingPosition)
+    void AddNewArticleNode(Point addingPosition, bool selectNode = true)
     {
         // 作って，新しいNodeも作ってあてがう。
         var newArticle = ResearchArticle.CreateManually(new ResearchArticle_ManualInitInfo { });
@@ -97,6 +97,11 @@ public partial class MainWindowViewModel : ViewModel
         var addingNode = new ResearchArticleNodeViewModel() { NodeName = "文献", Article = newArticle };
         _NodeViewModels.Add(addingNode);
         addingNode.Position = addingPosition;
+        if (selectNode)
+        {
+            _NodeViewModels.ForEach(n => n.IsSelected = false);
+            addingNode.IsSelected = true;
+        }
         var saveTask = Save();
     }
 
@@ -123,9 +128,9 @@ public partial class MainWindowViewModel : ViewModel
     }
     void OrderByGroup(ref List<DefaultNodeViewModel> targetNodes)
     {
-        if (targetNodes.Count==0)
+        if (targetNodes.Count == 0)
             return;
-      
+
         var InputConnectorNodeGuids = _NodeLinkViewModels.Select(link => link.InputConnectorNodeGuid).ToArray();
         var OutputConnectorNodeGuids = _NodeLinkViewModels.Select(link => link.OutputConnectorNodeGuid).ToArray();
 
@@ -1130,7 +1135,7 @@ public partial class MainWindowViewModel : ViewModel
     {
         if (SelectedNodeViewModel is null)
             return;
-        
+
         SelectedNodeViewModel?.NotifyArticleUpdated();
         Console.WriteLine("選択中の文献の情報を手動で更新");
     }
