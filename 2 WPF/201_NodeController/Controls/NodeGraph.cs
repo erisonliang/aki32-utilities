@@ -68,7 +68,7 @@ public class NodeGraph : MultiSelector
     private double w_global_LinkAttractionStrength(int multiplier) => 0.005 * DynamicNodeDistancingInterval * multiplier;
     private double w_global_LinkAttractionGravitySourceRadiusAffection = 0.45;
     private double w_global_LinkAttractionGravitySourceRadiusBias = 2.5;
-    private double w_global_LeftGravityStrength(int multiplier) => 0.0001 * DynamicNodeDistancingInterval * multiplier;
+    private double w_global_LeftGravityStrength(int multiplier) => 0.001 * DynamicNodeDistancingInterval * multiplier;
     private double w_global_RepulsionStrength(int multiplier) => 3.0 * DynamicNodeDistancingInterval * multiplier;
     private double w_global_RepulsionEffectRadius = 1.2;
 
@@ -1278,9 +1278,9 @@ public class NodeGraph : MultiSelector
 
                         // ★ 右側にある場合，じわじわ左に進める。
                         var dir = nodeV.GetNormalized();
-                        if (nodeV.X < targetMaxDistance)
+                        if (-targetMaxDistance < nodeV.X)
                         {
-                            var attractionX = (Math.Abs(nodeV.X) - targetMaxDistance) * w_global_LeftGravityStrength(multiplier);
+                            var attractionX = (-nodeV.X - targetMaxDistance) * w_global_LeftGravityStrength(multiplier);
                             addX += attractionX;
                         }
 

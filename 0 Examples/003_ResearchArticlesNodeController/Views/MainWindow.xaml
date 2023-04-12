@@ -323,6 +323,7 @@
                                     TextWrapping="Wrap"
                                     FontSize="{StaticResource NodeContentFontSize}"
                                     VerticalAlignment="Center"
+                                    TextAlignment="Center"
                                     />
 
                                 <Grid Margin="4"/>
