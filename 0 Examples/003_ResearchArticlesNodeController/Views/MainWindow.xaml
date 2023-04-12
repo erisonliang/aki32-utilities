@@ -200,10 +200,21 @@
                                         HorizontalAlignment="Left"
                                         Orientation="Horizontal"
                                         Margin="5,0,2,0"
+                                        Visibility="{Binding IsGrouping, Converter={StaticResource InverseBooleanToVisibility}}"
                                         >
                                         <!--<Label Content="■"/>-->
                                         <Label Content="📄" Padding="0" VerticalAlignment="Center" Foreground="#FF080808"/>
-                                        <Label Content="{Binding NodeTypeName}" Padding="2,0,0,0" VerticalAlignment="Center" FontWeight="Bold" Foreground="#FF080808"/>
+                                        <Label Content="{Binding NodeName}" Padding="2,0,0,0" VerticalAlignment="Center" FontWeight="Bold" Foreground="#FF080808"/>
+                                    </StackPanel>
+                                    <StackPanel 
+                                        HorizontalAlignment="Left"
+                                        Orientation="Horizontal"
+                                        Margin="5,0,2,0"
+                                        Visibility="{Binding IsGrouping, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                        >
+                                        <!--<Label Content="■"/>-->
+                                        <Label Content="🧊" Padding="0" VerticalAlignment="Center" Foreground="#FF080808"/>
+                                        <Label Content="グループ" Padding="2,0,0,0" VerticalAlignment="Center" FontWeight="Bold" Foreground="#FF080808"/>
                                     </StackPanel>
                                     <StackPanel
                                         HorizontalAlignment="Right"
