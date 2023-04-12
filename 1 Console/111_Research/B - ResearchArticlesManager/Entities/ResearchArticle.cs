@@ -918,9 +918,15 @@ public class ResearchArticle : IComparable
             {
                 var mergingArticleInfoProp = prop.GetValue(mergingArticle);
 
-                if (prop.PropertyType == typeof(string))
+                if (mergingArticleInfoProp is string mergingArticleInfoPropString)
                 {
-                    if (mergingArticleInfoProp?.ToString().NullIfNullOrEmpty() != null)
+                    if (mergingArticleInfoPropString.NullIfNullOrEmpty() != null)
+                        prop.SetValue(this, mergingArticleInfoProp);
+
+                }
+                else if (mergingArticleInfoProp is string[] mergingArticleInfoPropStringArray)
+                {
+                    if (mergingArticleInfoPropStringArray != null && mergingArticleInfoPropStringArray.Length > 0)
                         prop.SetValue(this, mergingArticleInfoProp);
 
                 }
