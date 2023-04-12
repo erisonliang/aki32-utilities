@@ -49,9 +49,10 @@ public partial class MainWindowViewModel : ViewModel
     public RangeSelectionMode[] RangeSelectionModes { get; } = Enum.GetValues(typeof(RangeSelectionMode)).OfType<RangeSelectionMode>().ToArray();
     public RangeSelectionMode SelectedRangeSelectionMode { get; set; } = RangeSelectionMode.包含;
 
-    public bool ExecuteDynamicLinkAttractions { get; set; } = false;
     public bool ExecuteDynamicNodeRepulsions { get; set; } = false;
-    
+    public bool ExecuteDynamicLinkAttractions { get; set; } = false;
+    public bool ExecuteDynamicOriginalPointAttractions { get; set; } = false;
+
     public bool IsLockedAllNodeLinks
     {
         get => _IsLockedAllNodeLinks;

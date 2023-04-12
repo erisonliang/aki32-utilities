@@ -487,6 +487,7 @@
                 Offset="{Binding CanvasOffset}"
                 ExecuteDynamicNodeRepulsions="{Binding ExecuteDynamicNodeRepulsions}"
                 ExecuteDynamicLinkAttractions="{Binding ExecuteDynamicLinkAttractions}"
+                ExecuteDynamicOriginalPointAttractions="{Binding ExecuteDynamicOriginalPointAttractions}"
                 ItemsSource="{Binding NodeViewModels}"
                 ItemContainerStyle="{StaticResource DefaultNodeStyle}"
                 NodeLinks="{Binding NodeLinkViewModels}"
@@ -2327,6 +2328,13 @@
                                         Margin="0,0,10,0"
                                         Content="リンクによる引力"
                                         IsChecked="{Binding ExecuteDynamicLinkAttractions}" 
+                                        VerticalContentAlignment="Center"
+                                        ToolTip="ノードの距離を，物理演算によって自動で調整します。"
+                                        />
+                                    <CheckBox
+                                        Margin="0,0,10,0"
+                                        Content="原点への引力"
+                                        IsChecked="{Binding ExecuteDynamicOriginalPointAttractions}" 
                                         VerticalContentAlignment="Center"
                                         ToolTip="ノードの距離を，物理演算によって自動で調整します。"
                                         />

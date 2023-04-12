@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Threading;
+using System.IO.Packaging;
 
 namespace Aki32Utilities.WPFAppUtilities.NodeController.Controls;
 
@@ -76,8 +77,11 @@ public class NodeGraph : MultiSelector
     private const double w_global_RepulsionEffectRadius = 1.2;
     private static double w_global_RepulsionStrength(int multiplier) => 3.5 * DynamicNodeDistancingInterval * multiplier;
 
-    private bool executeNodeRepulsions = false;
-    private bool executeLinkAttractions = false;
+    private const double w_global_OriginalPointAttractionRatio = 0.01;
+
+    private bool executeDynamicNodeRepulsions = false;
+    private bool executeDynamicLinkAttractions = false;
+    private bool executeDynamicOriginalPointAttractions = false;
 
     private bool isDynamicNodeDistancingBusy = false;
     private int dynamicNodeDistancingStackCount = 0;
@@ -158,6 +162,14 @@ public class NodeGraph : MultiSelector
     }
     public static readonly DependencyProperty ExecuteDynamicLinkAttractionsProperty =
         DependencyProperty.Register(nameof(ExecuteDynamicLinkAttractions), typeof(bool), typeof(NodeGraph), new FrameworkPropertyMetadata(false, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, ExecuteDynamicLinkAttractionsPropertyChanged));
+
+    public bool ExecuteDynamicOriginalPointAttractions
+    {
+        get => (bool)GetValue(ExecuteDynamicOriginalPointAttractionsProperty);
+        set => SetValue(ExecuteDynamicOriginalPointAttractionsProperty, value);
+    }
+    public static readonly DependencyProperty ExecuteDynamicOriginalPointAttractionsProperty =
+        DependencyProperty.Register(nameof(ExecuteDynamicOriginalPointAttractions), typeof(bool), typeof(NodeGraph), new FrameworkPropertyMetadata(false, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, ExecuteDynamicOriginalPointAttractionsPropertyChanged));
 
     public ICommand PreviewConnectLinkCommand
     {
@@ -318,7 +330,7 @@ public class NodeGraph : MultiSelector
         // ensure prop is renewed
         var nodeGraph = (NodeGraph)d;
         nodeGraph.ExecuteDynamicNodeRepulsions = (bool)e.NewValue;
-        nodeGraph.executeNodeRepulsions = (bool)e.NewValue;
+        nodeGraph.executeDynamicNodeRepulsions = (bool)e.NewValue;
         ActivateDynamicNodeDistancingTimerIfNull(nodeGraph);
     }
     static void ExecuteDynamicLinkAttractionsPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -326,7 +338,15 @@ public class NodeGraph : MultiSelector
         // ensure prop is renewed
         var nodeGraph = (NodeGraph)d;
         nodeGraph.ExecuteDynamicLinkAttractions = (bool)e.NewValue;
-        nodeGraph.executeLinkAttractions = (bool)e.NewValue;
+        nodeGraph.executeDynamicLinkAttractions = (bool)e.NewValue;
+        ActivateDynamicNodeDistancingTimerIfNull(nodeGraph);
+    }
+    static void ExecuteDynamicOriginalPointAttractionsPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+    {
+        // ensure prop is renewed
+        var nodeGraph = (NodeGraph)d;
+        nodeGraph.ExecuteDynamicOriginalPointAttractions = (bool)e.NewValue;
+        nodeGraph.executeDynamicOriginalPointAttractions = (bool)e.NewValue;
         ActivateDynamicNodeDistancingTimerIfNull(nodeGraph);
     }
     private static void ActivateDynamicNodeDistancingTimerIfNull(NodeGraph nodeGraph)
@@ -1165,8 +1185,8 @@ public class NodeGraph : MultiSelector
         {
             isDynamicNodeDistancingBusy = true;
 
-            // ノードごとの処理
-            if (executeNodeRepulsions)
+            // ★★★★★ ノードの重なりによる斥力。
+            if (executeDynamicNodeRepulsions)
             {
                 var nodes = Canvas.Children.OfType<DefaultNode>().OrderBy(node => node.Position.Y).ToArray();
 
@@ -1237,8 +1257,8 @@ public class NodeGraph : MultiSelector
                 }
             }
 
-            // リンクごとの処理
-            if (executeLinkAttractions)
+            // ★★★★★ リンクによる引力
+            if (executeDynamicLinkAttractions)
             {
                 var links = Canvas.Children.OfType<NodeLink>().ToArray();
                 var links_OutputNodeGroups = links.GroupBy(link => link.Output.Node).ToArray();
@@ -1291,6 +1311,29 @@ public class NodeGraph : MultiSelector
                     // ★★★★★ 上書き！
                     if (addX != 0 || addY != 0)
                         targetOutputNode.Position = new Point(targetOutputNode.Position.X + addX, targetOutputNode.Position.Y + addY);
+
+                }
+            }
+
+            // ★★★★★ 原点による引力。
+            if (executeDynamicOriginalPointAttractions)
+            {
+                var nodes = Canvas.Children.OfType<DefaultNode>().ToArray();
+
+                foreach (var targetNode in nodes)
+                {
+                    // ★ 前処理
+                    if (targetNode.IsSelected)
+                        continue;
+
+
+                    // ★★★★★ 原点による引力。
+                    var addX = -targetNode.Position.X * w_global_OriginalPointAttractionRatio;
+                    var addY = -targetNode.Position.Y * w_global_OriginalPointAttractionRatio;
+
+                    // ★★★★★ 上書き！
+                    if (addX != 0 || addY != 0)
+                        targetNode.Position = new Point(targetNode.Position.X + addX, targetNode.Position.Y + addY);
 
                 }
             }
