@@ -189,6 +189,18 @@ public partial class ResearchArticlesManager
     }
 
     /// <summary>
+    /// duplicate article
+    /// </summary>
+    /// <param name="duplicatingArticle"></param>
+    /// <returns></returns>
+    public ResearchArticle Duplicate(ResearchArticle duplicatingArticle)
+    {
+        var addingArticle = duplicatingArticle.Clone();
+        ArticleDatabase.Add(addingArticle);
+        return addingArticle;
+    }
+
+    /// <summary>
     /// merge target article if there are matched articles in database
     /// </summary>
     /// <param name="mergingArticle"></param>

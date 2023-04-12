@@ -983,7 +983,6 @@ public class ResearchArticle : IComparable
                         prop.SetValue(this, mergingArticleInfoProp);
 
                 }
-
             }
         }
 
@@ -1289,6 +1288,36 @@ public class ResearchArticle : IComparable
         return (result == 0) ? (GetHashCode() - comparingArticle.GetHashCode()) : result;
     }
 
+    public ResearchArticle Clone()
+    {
+        var newArticle = (ResearchArticle)MemberwiseClone();
+
+        var props = typeof(ResearchArticle)
+            .GetProperties()
+            .Where(p => p.CanWrite)
+            ;
+
+        foreach (var prop in props)
+        {
+            var currentValue = prop.GetValue(this);
+
+            if (currentValue is string[] currentValueStringArray)
+            {
+                if (currentValueStringArray is not null)
+                {
+                    var newArticleProp = new List<string>();
+                    foreach (var currentValueStringArrayItem in currentValueStringArray)
+                        newArticleProp.Add(new string(currentValueStringArrayItem));
+                    prop.SetValue(newArticle, newArticleProp.ToArray());
+                }
+            }
+        }
+
+        newArticle.AOI = Ulid.NewUlid().ToString();
+        newArticle.Private_CreatedDate = DateTime.Now.ToLongDateString();
+
+        return newArticle;
+    }
 
     // ★★★★★★★★★★★★★★★ attributes
 

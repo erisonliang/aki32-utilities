@@ -108,6 +108,9 @@ public partial class MainWindowViewModel : ViewModel
     public ViewModelCommand MergeSelectingTwoArticleNodesCommand => _MergeSelectingTwoArticleNodesCommand.Get(MergeSelectingTwoArticleNodes);
     ViewModelCommandHandler _MergeSelectingTwoArticleNodesCommand = new();
 
+    public ViewModelCommand DuplicateSelectingArticleNodeCommand => _DuplicateSelectingArticleNodeCommand.Get(DuplicateSelectingArticleNode);
+    ViewModelCommandHandler _DuplicateSelectingArticleNodeCommand = new();
+
 
     public ViewModelCommand RearrangeNodesAlignLeftCommand => _RearrangeNodesAlignLeftCommand.Get(RearrangeNodesAlignLeft);
     ViewModelCommandHandler _RearrangeNodesAlignLeftCommand = new();

@@ -488,8 +488,7 @@ public partial class MainWindowViewModel : ViewModel
     {
         _NodeViewModels
             .Where(node => node.IsSelected)
-            .Where(node => node is ResearchArticleNodeViewModel)
-            .Cast<ResearchArticleNodeViewModel>()
+            .OfType<ResearchArticleNodeViewModel>()
             .ForEach(n => n.IsTemp = false);
 
         var saveTask = Save();
@@ -498,10 +497,9 @@ public partial class MainWindowViewModel : ViewModel
     void MergeSelectingTwoArticleNodes()
     {
         var selectingNodes = _NodeViewModels
-          .Where(node => node.IsSelected)
-          .Where(node => node is ResearchArticleNodeViewModel)
-          .Cast<ResearchArticleNodeViewModel>()
-          .ToArray();
+            .Where(node => node.IsSelected)
+            .OfType<ResearchArticleNodeViewModel>()
+            .ToArray();
 
         if (selectingNodes.Length != 2)
         {
@@ -512,6 +510,28 @@ public partial class MainWindowViewModel : ViewModel
         ResearchArticlesManager.MergeArticles(selectingNodes[0].Article, selectingNodes[1].Article);
         selectingNodes[0].NotifyArticleUpdated();
         RedrawResearchArticleNodes();
+
+        var saveTask = Save();
+    }
+
+    void DuplicateSelectingArticleNode()
+    {
+        var selectingNodes = _NodeViewModels
+            .Where(node => node.IsSelected)
+            .OfType<ResearchArticleNodeViewModel>()
+            .ToArray();
+
+        if (selectingNodes.Length != 1)
+        {
+            MessageBox.Show($"呼び出すには，文献を１つのみ選択してください。", "1つの文献を複製", MessageBoxButton.OK, MessageBoxImage.Warning);
+            return;
+        }
+
+        var selectingNode = selectingNodes[0];
+        var addedArticle = ResearchArticlesManager.Duplicate(selectingNode.Article);
+        RedrawResearchArticleNodes();
+        var addedNode = GetNodeFromArticle(addedArticle);
+        addedNode!.Position = new Point(selectingNode.Position.X, selectingNode.Position.Y + NODE_VERTICAL_SPAN);
 
         var saveTask = Save();
     }
