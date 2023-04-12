@@ -31,6 +31,7 @@ public partial class MainWindow : Window
         {
             try
             {
+                childViewModel.InitResearchArticlesManager();
                 await Task.Delay(10);
                 NodeGraph.Offset = new Point(1, 1);
             }

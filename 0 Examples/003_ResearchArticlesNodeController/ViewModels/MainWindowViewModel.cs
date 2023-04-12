@@ -13,8 +13,6 @@ public partial class MainWindowViewModel : ViewModel
 
     public MainWindowViewModel()
     {
-        InitResearchArticlesManager();
-
         IsLockedAllNodeLinks = true;
         IsEnableAllNodeConnectors = true;
         ExecuteDynamicLinkAttractions = false;
@@ -30,7 +28,7 @@ public partial class MainWindowViewModel : ViewModel
         }
     }
 
-    private void InitResearchArticlesManager()
+    internal void InitResearchArticlesManager()
     {
         ResearchArticlesManager = new ResearchArticlesManager(databaseDir);
         ResearchArticlesManager.OpenDatabase();
