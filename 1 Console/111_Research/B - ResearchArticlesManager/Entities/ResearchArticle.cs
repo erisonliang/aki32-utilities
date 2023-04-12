@@ -243,6 +243,7 @@ public class ResearchArticle : IComparable
                // 非構造
                ?? CrossRef_UnstructuredRefString.NullIfNullOrEmpty()
                ?? JStage_UnstructuredRefString.NullIfNullOrEmpty()
+               ?? Memo_UnstructuredRefString.NullIfNullOrEmpty()
                ?? null
                ;
         }
@@ -557,6 +558,18 @@ public class ResearchArticle : IComparable
     // ★★★★★ memo info
 
     public string? Memo { get; set; }
+    [CsvIgnore]
+    public string? Memo_UnstructuredRefString
+    {
+        get
+        {
+            if (Memo is null)
+                return null;
+            if (Memo.StartsWith("@@@"))
+                return Memo.Replace("@@@", "");
+            return null;
+        }
+    }
 
     /// <summary>
     /// 【Motivation: 研究の出発点】
