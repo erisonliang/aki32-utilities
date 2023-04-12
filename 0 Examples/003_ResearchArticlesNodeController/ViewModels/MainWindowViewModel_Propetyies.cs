@@ -20,8 +20,8 @@ public partial class MainWindowViewModel : ViewModel
 
     const int NODE_MARGIN_LEFT = 0;
     const int NODE_MARGIN_TOP = 0;
-    const int NODE_VERTICAL_SPAN = 250;
-    const int NODE_HORIZONTAL_SPAN = 600; //500
+    const int NODE_VERTICAL_SPAN = 200; //250;
+    const int NODE_HORIZONTAL_SPAN = 555; //500
 
     public static DirectoryInfo databaseDir = new($@"{Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory)}\ResearchArticleDB");
 
