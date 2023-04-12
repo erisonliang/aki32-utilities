@@ -23,6 +23,7 @@
     <Window.InputBindings>
         <KeyBinding Gesture="Ctrl+S" Command="{Binding SaveCommand}"/>
         <KeyBinding Gesture="Ctrl+R" Command="{Binding RearrangeNodesAlignLeftCommand}"/>
+        <KeyBinding Gesture="Ctrl+N" Command="{Binding AddNodeCommand}"/>
         <KeyBinding Gesture="Ctrl+Shift+R" Command="{Binding RearrangeNodesChronologicallyAlignLeftCommand}"/>
         <KeyBinding Gesture="Ctrl+F" Command="{Binding OpenSearchTabCommand}"/>
         <KeyBinding Gesture="Delete" Command="{Binding RemoveSelectingArticleNodesCommand}"/>
