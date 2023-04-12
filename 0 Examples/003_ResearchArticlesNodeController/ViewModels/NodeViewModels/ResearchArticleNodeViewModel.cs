@@ -232,7 +232,7 @@ public class ResearchArticleNodeViewModel : DefaultNodeViewModel
                         return Brushes.YellowGreen;
                     break;
                 case EmphasizePropertyItems.積読:
-                    if (IsRead)
+                    if (WillRead)
                         return Brushes.LightGreen;
                     break;
                 case EmphasizePropertyItems.一時ﾃﾞｰﾀ:
