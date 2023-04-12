@@ -80,8 +80,10 @@ public class ResearchArticleNodeViewModel : DefaultNodeViewModel
     {
         get
         {
+            // PDFあるなら開けるからOK
             if (Article.TryFindPDF(MainWindowViewModel.ResearchArticlesManager.PDFsDirectory))
-                return false;
+                return true;
+            // ないなら，ダウンロード出来ないと話にならないからオススメできない。
             if (string.IsNullOrEmpty(Article.PDF_Link))
                 return false;
             return true;
