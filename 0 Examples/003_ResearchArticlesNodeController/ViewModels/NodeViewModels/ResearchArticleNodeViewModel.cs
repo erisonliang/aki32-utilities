@@ -18,7 +18,7 @@ public class ResearchArticleNodeViewModel : DefaultNodeViewModel
     public ResearchArticle Article { get; set; } = new();
 
     [AlsoNotifyFor(nameof(NodeName), nameof(Article),
-        nameof(ArticleHeaderColor), nameof(IsFavorite), nameof(IsRead), nameof(IsTemp), nameof(IsLocalSearchMatched), nameof(IsCategory1), nameof(IsCategory2), nameof(IsCategory3),
+        nameof(ArticleHeaderColor), nameof(IsFavorite), nameof(IsRead), nameof(WillRead), nameof(IsGrouping), nameof(IsTemp), nameof(IsLocalSearchMatched), nameof(IsCategory1), nameof(IsCategory2), nameof(IsCategory3),
         nameof(Authors), nameof(ArticleTitle), nameof(TopAuthor), nameof(PublishedOn), nameof(DataFrom)
         )]
     private int NotifyArticleUpdatedBridge { get; set; } = 0;
@@ -26,7 +26,17 @@ public class ResearchArticleNodeViewModel : DefaultNodeViewModel
 
     // ★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★
 
+    [AlsoNotifyFor(nameof(NodeTypeName))]
     public string NodeName { get; set; }
+    public string NodeTypeName
+    {
+        get
+        {
+            if (IsGrouping)
+                return "グループ";
+            return NodeName;
+        }
+    }
 
     public bool IsNodeBusy { get; set; } = false;
 
@@ -206,6 +216,9 @@ public class ResearchArticleNodeViewModel : DefaultNodeViewModel
     {
         get
         {
+            if (IsGrouping)
+                return Brushes.Yellow;
+
             switch (MainWindowViewModel._SelectedEmphasizePropertyItem)
             {
                 case EmphasizePropertyItems.なし:
@@ -216,15 +229,23 @@ public class ResearchArticleNodeViewModel : DefaultNodeViewModel
                     break;
                 case EmphasizePropertyItems.既読:
                     if (IsRead)
-                        return Brushes.LightGreen;
+                        return Brushes.YellowGreen;
                     break;
-                case EmphasizePropertyItems.検索結果:
-                    if (IsLocalSearchMatched)
-                        return Brushes.Aqua;
+                case EmphasizePropertyItems.積読:
+                    if (IsRead)
+                        return Brushes.LightGreen;
                     break;
                 case EmphasizePropertyItems.一時ﾃﾞｰﾀ:
                     if (IsTemp)
                         return Brushes.DarkOrange;
+                    break;
+                case EmphasizePropertyItems.ｸﾞﾙｰﾌﾟ:
+                    if (IsGrouping)
+                        return Brushes.Yellow;
+                    break;
+                case EmphasizePropertyItems.検索結果:
+                    if (IsLocalSearchMatched)
+                        return Brushes.Aqua;
                     break;
                 case EmphasizePropertyItems.ﾒﾓ1:
                     if (IsCategory1)
@@ -265,6 +286,28 @@ public class ResearchArticleNodeViewModel : DefaultNodeViewModel
             var temp = Article.Private_Read;
             if (RaisePropertyChangedIfSet(ref temp, value))
                 Article.Private_Read = value;
+        }
+    }
+    [AlsoNotifyFor(nameof(ArticleHeaderColor))]
+    public bool WillRead
+    {
+        get => Article.Private_WillRead ?? false;
+        set
+        {
+            var temp = Article.Private_WillRead;
+            if (RaisePropertyChangedIfSet(ref temp, value))
+                Article.Private_WillRead = value;
+        }
+    }
+    [AlsoNotifyFor(nameof(ArticleHeaderColor), nameof(NodeTypeName))]
+    public bool IsGrouping
+    {
+        get => Article.Private_IsGrouping ?? false;
+        set
+        {
+            var temp = Article.Private_IsGrouping;
+            if (RaisePropertyChangedIfSet(ref temp, value))
+                Article.Private_IsGrouping = value;
         }
     }
     [AlsoNotifyFor(nameof(ArticleHeaderColor))]

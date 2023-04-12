@@ -459,16 +459,35 @@ public class ResearchArticle : IComparable
     [UseExceptionalBinaryBothMerging]
     public bool? Private_Temporary { get; set; } = false;
 
+    /// <summary>
+    /// ﾌﾟﾘｾｯﾄ: お気に入り
+    /// </summary>
     [UseExceptionalBinaryEitherMerging]
     public bool? Private_Favorite { get; set; } = false;
+    /// <summary>
+    /// ﾌﾟﾘｾｯﾄ: 既読
+    /// </summary>
     [UseExceptionalBinaryEitherMerging]
     public bool? Private_Read { get; set; } = false;
+    /// <summary>
+    /// ﾌﾟﾘｾｯﾄ: 積読
+    /// </summary>
+    [UseExceptionalBinaryEitherMerging]
+    public bool? Private_WillRead { get; set; } = false;
+    /// <summary>
+    /// ﾌﾟﾘｾｯﾄ: グループ
+    /// </summary>
+    [UseExceptionalBinaryEitherMerging]
+    public bool? Private_IsGrouping { get; set; } = false;
+
     [UseExceptionalBinaryEitherMerging]
     public bool? Private_IsCategory1 { get; set; } = false;
     [UseExceptionalBinaryEitherMerging]
     public bool? Private_IsCategory2 { get; set; } = false;
     [UseExceptionalBinaryEitherMerging]
     public bool? Private_IsCategory3 { get; set; } = false;
+    [UseExceptionalBinaryEitherMerging]
+    public bool? Private_IsCategory4 { get; set; } = false;
 
     [UseExceptionalBinaryEitherMerging]
     public bool? DataFrom_Manual { get; set; } = false;

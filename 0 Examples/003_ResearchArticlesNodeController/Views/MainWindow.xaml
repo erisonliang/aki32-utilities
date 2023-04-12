@@ -36,7 +36,9 @@
         <sys:Double x:Key="NodeContentFontSize">24.0</sys:Double>
 
         <Brush x:Key="IsFavoriteColor">#E95B6B</Brush>
-        <Brush x:Key="IsReadColor">LightGreen</Brush>
+        <Brush x:Key="IsReadColor">YellowGreen</Brush>
+        <Brush x:Key="WillReadColor">LightGreen</Brush>
+        <Brush x:Key="IsGroupingColor">Yellow</Brush>
         <Brush x:Key="IsLocalSearchMatchedColor">Aqua</Brush>
         <Brush x:Key="IsTempColor">DarkOrange</Brush>
         <Brush x:Key="IsCat1Color">white</Brush>
@@ -48,6 +50,7 @@
         <Brush x:Key="temp2">DeepPink</Brush>
         <Brush x:Key="temp3">MediumPurple</Brush>
         <Brush x:Key="temp4">Purple</Brush>
+        <Brush x:Key="temp5">Gray</Brush>
 
         <Style x:Key="ToggleButtonTextStyle" TargetType="ToggleButton">
             <Setter Property="HorizontalContentAlignment" Value="Center"/>
@@ -199,7 +202,7 @@
                                         >
                                         <!--<Label Content="■"/>-->
                                         <Label Content="📄" Padding="0" VerticalAlignment="Center" Foreground="#FF080808"/>
-                                        <Label Content="{Binding NodeName}" Padding="2,0,0,0" VerticalAlignment="Center" FontWeight="Bold" Foreground="#FF080808"/>
+                                        <Label Content="{Binding NodeTypeName}" Padding="2,0,0,0" VerticalAlignment="Center" FontWeight="Bold" Foreground="#FF080808"/>
                                     </StackPanel>
                                     <StackPanel
                                         HorizontalAlignment="Right"
@@ -209,7 +212,9 @@
                                         <Label Margin="0,0,3,0" Padding="0" Content="●" FontSize="20" Foreground="Transparent" Visibility="Visible"/>
                                         <Label Margin="0,0,3,0" Padding="0" Content="●" FontSize="20" Foreground="{StaticResource IsFavoriteColor}" Visibility="{Binding IsFavorite, Converter={StaticResource BooleanToVisibilityConverter}}"/>
                                         <Label Margin="0,0,3,0" Padding="0" Content="●" FontSize="20" Foreground="{StaticResource IsReadColor}" Visibility="{Binding IsRead, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                        <Label Margin="0,0,3,0" Padding="0" Content="●" FontSize="20" Foreground="{StaticResource WillReadColor}" Visibility="{Binding WillRead, Converter={StaticResource BooleanToVisibilityConverter}}"/>
                                         <Label Margin="0,0,3,0" Padding="0" Content="●" FontSize="20" Foreground="{StaticResource IsTempColor}" Visibility="{Binding IsTemp, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                        <Label Margin="0,0,3,0" Padding="0" Content="●" FontSize="20" Foreground="{StaticResource IsGroupingColor}" Visibility="{Binding IsGrouping, Converter={StaticResource BooleanToVisibilityConverter}}"/>
                                         <Label Margin="0,0,3,0" Padding="0" Content="●" FontSize="20" Foreground="{StaticResource IsLocalSearchMatchedColor}" Visibility="{Binding IsLocalSearchMatched, Converter={StaticResource BooleanToVisibilityConverter}}"/>
                                         <Label Margin="0,0,3,0" Padding="0" Content="●" FontSize="20" Foreground="{StaticResource IsCat1Color}" Visibility="{Binding IsCategory1, Converter={StaticResource BooleanToVisibilityConverter}}"/>
                                         <Label Margin="0,0,3,0" Padding="0" Content="●" FontSize="20" Foreground="{StaticResource IsCat2Color}" Visibility="{Binding IsCategory2, Converter={StaticResource BooleanToVisibilityConverter}}"/>
@@ -235,6 +240,7 @@
                             <StackPanel
                                 Orientation="Vertical"
                                 TextBlock.Foreground="White"
+                                Visibility="{Binding IsGrouping, Converter={StaticResource InverseBooleanToVisibility}}"
                                 >
 
                                 <Grid Margin="3">
@@ -300,6 +306,24 @@
                                         />
 
                                 </Grid>
+
+                                <Grid Margin="4"/>
+
+                            </StackPanel>
+
+                            <StackPanel
+                                Orientation="Vertical"
+                                TextBlock.Foreground="White"
+                                Visibility="{Binding IsGrouping, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                >
+
+                                <TextBlock
+                                    Margin="10"
+                                    Text="{Binding ArticleTitle}"
+                                    TextWrapping="Wrap"
+                                    FontSize="{StaticResource NodeContentFontSize}"
+                                    VerticalAlignment="Center"
+                                    />
 
                                 <Grid Margin="4"/>
 
@@ -400,7 +424,7 @@
 
                 <MenuItem Height="35" Header="テスト" Command="{Binding TestCommand}"/>
 
-                
+
                 <!-- ============================================================================ -->
                 <MenuItem IsHitTestVisible="False">
                     <MenuItem.Header>
@@ -429,7 +453,7 @@
                     </MenuItem.Header>
                 </MenuItem>
 
-            
+
                 <!-- ============================================================================ -->
                 <MenuItem IsHitTestVisible="False">
                     <MenuItem.Header>
@@ -550,7 +574,7 @@
                                 <TextBlock
                                     Text="情報収集：" 
                                     Width="70"
-                                    VerticalAlignment="Center"
+                                    Margin="0,7,0,0"
                                     HorizontalAlignment="Left"
                                     TextAlignment="Right"
                                     ToolTipService.InitialShowDelay="10" 
@@ -639,7 +663,7 @@
                                 <TextBlock
                                     Text="表示：" 
                                     Width="70"
-                                    VerticalAlignment="Center"
+                                    Margin="0,7,0,0"
                                     HorizontalAlignment="Left"
                                     TextAlignment="Right"
                                     ToolTipService.InitialShowDelay="10" 
@@ -707,7 +731,7 @@
                                 <TextBlock
                                     Text="自動化：" 
                                     Width="70"
-                                    VerticalAlignment="Center"
+                                    Margin="0,7,0,0"
                                     HorizontalAlignment="Left"
                                     TextAlignment="Right"
                                     ToolTipService.InitialShowDelay="10" 
@@ -790,7 +814,7 @@
                                 <TextBlock
                                     Text="その他：" 
                                     Width="70"
-                                    VerticalAlignment="Center"
+                                    Margin="0,7,0,0"
                                     HorizontalAlignment="Left"
                                     TextAlignment="Right"
                                     ToolTipService.InitialShowDelay="10" 
@@ -861,7 +885,7 @@
                                 <TextBlock
                                     Text="タグ：" 
                                     Width="70"
-                                    VerticalAlignment="Center"
+                                    Margin="0,7,0,0"
                                     HorizontalAlignment="Left"
                                     TextAlignment="Right"
                                     ToolTipService.InitialShowDelay="10" 
@@ -906,12 +930,36 @@
                                     <ToggleButton
                                         Margin="3"
                                         Style="{StaticResource ToggleButtonTextStyle}"
+                                        IsChecked="{Binding SelectedNodeViewModel.WillRead}"
+                                        ToolTip=""
+                                        >
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="●" Foreground="{StaticResource WillReadColor}" Margin="0,0,2,0"/>
+                                            <TextBlock Text="積読"/>
+                                        </StackPanel>
+                                    </ToggleButton>
+
+                                    <ToggleButton
+                                        Margin="3"
+                                        Style="{StaticResource ToggleButtonTextStyle}"
                                         IsChecked="{Binding SelectedNodeViewModel.IsTemp}"
                                         ToolTip=""
                                         >
                                         <StackPanel Orientation="Horizontal">
                                             <TextBlock Text="●" Foreground="{StaticResource IsTempColor}" Margin="0,0,2,0"/>
                                             <TextBlock Text="一時ﾃﾞｰﾀ"/>
+                                        </StackPanel>
+                                    </ToggleButton>
+
+                                    <ToggleButton
+                                        Margin="3"
+                                        Style="{StaticResource ToggleButtonTextStyle}"
+                                        IsChecked="{Binding SelectedNodeViewModel.IsGrouping}"
+                                        ToolTip=""
+                                        >
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="●" Foreground="{StaticResource IsGroupingColor}" Margin="0,0,2,0"/>
+                                            <TextBlock Text="ｸﾞﾙｰﾌﾟ"/>
                                         </StackPanel>
                                     </ToggleButton>
 
