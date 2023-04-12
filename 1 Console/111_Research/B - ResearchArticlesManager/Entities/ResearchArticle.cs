@@ -416,10 +416,22 @@ public class ResearchArticle : IComparable
 
     // ★★★★★ shared links (*main common info)
 
-    public string? DOI_Link => (string.IsNullOrEmpty(DOI)) ? null : $"https://dx.doi.org/{DOI}";
+    public string? Web_Link
+    {
+        get
+        {
+            if (!string.IsNullOrEmpty(DOI))
+                return $"https://dx.doi.org/{DOI}";
 
-    [CsvIgnore]
-    public string? CrossRefAPI_Link => (string.IsNullOrEmpty(DOI)) ? null : $"https://api.crossref.org/v1/works/{DOI}";
+            if (!string.IsNullOrEmpty(MaterialTitle))
+            {
+                if (MaterialTitle.StartsWith("http://") || MaterialTitle.StartsWith("https://"))
+                    return MaterialTitle.Trim();
+            }
+
+            return null;
+        }
+    }
 
     /// <summary>
     /// online PDF link
@@ -545,6 +557,9 @@ public class ResearchArticle : IComparable
         }
     }
 
+    /// <summary>
+    /// Material Title. This is also can be URL
+    /// </summary>
     public string? Manual_MaterialTitle { get; set; }
     public string? Manual_MaterialVolume { get; set; }
     public string? Manual_MaterialSubVolume { get; set; }
@@ -1060,7 +1075,7 @@ public class ResearchArticle : IComparable
         return File.Exists(outputFilePath);
     }
 
-    public bool TryOpenDOILink()
+    public bool TryOpenWebLink()
     {
         UtilPreprocessors.PreprocessBasic();
 
@@ -1068,7 +1083,7 @@ public class ResearchArticle : IComparable
         {
             var p = Process.Start(new ProcessStartInfo
             {
-                FileName = DOI_Link!,
+                FileName = Web_Link!,
                 UseShellExecute = true,
             });
             return true;

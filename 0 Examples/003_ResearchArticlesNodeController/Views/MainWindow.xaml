@@ -718,17 +718,17 @@
                                     <Button
                                         Margin="3"
                                         Style="{StaticResource ButtonTextStretchStyle}"
-                                        Command="{Binding OpenDOIWebSiteCommand}"
-                                        Foreground="{Binding SelectedNodeViewModel.RecommendOpenDOIWebSite, Converter={StaticResource BooleanToForegroundBrushConverter}}"
+                                        Command="{Binding OpenWebSiteCommand}"
+                                        Foreground="{Binding SelectedNodeViewModel.RecommendOpenWebSite, Converter={StaticResource BooleanToForegroundBrushConverter}}"
                                         ToolTip="紐づけられたWebサイトをブラウザで表示します。&#10;&#10;※Webにアクセスできる状態でない場合，薄い表示になります。"
                                         ToolTipService.InitialShowDelay="10" 
                                         >
                                         <StackPanel Orientation="Horizontal">
                                             <Grid Margin="0,0,3,0">
-                                                <mah:ProgressRing Visibility="{Binding IsOpenDOIWebSiteBusy, Converter={StaticResource BooleanToVisibilityConverter}}" Style="{StaticResource ProgressRingStyle}" Margin="0,0,3.5,0"/>
-                                                <Grid Visibility="{Binding IsOpenDOIWebSiteBusy, Converter={StaticResource InverseBooleanToVisibility}}">
-                                                    <TextBlock Text="🌐" Visibility="{Binding IsOpenDOIWebSiteDone, Converter={StaticResource InverseBooleanToVisibility}}"/>
-                                                    <TextBlock Text="✔️" Visibility="{Binding IsOpenDOIWebSiteDone, Converter={StaticResource BooleanToVisibilityConverter}}" Foreground="Green"/>
+                                                <mah:ProgressRing Visibility="{Binding IsOpenWebSiteBusy, Converter={StaticResource BooleanToVisibilityConverter}}" Style="{StaticResource ProgressRingStyle}" Margin="0,0,3.5,0"/>
+                                                <Grid Visibility="{Binding IsOpenWebSiteBusy, Converter={StaticResource InverseBooleanToVisibility}}">
+                                                    <TextBlock Text="🌐" Visibility="{Binding IsOpenWebSiteDone, Converter={StaticResource InverseBooleanToVisibility}}"/>
+                                                    <TextBlock Text="✔️" Visibility="{Binding IsOpenWebSiteDone, Converter={StaticResource BooleanToVisibilityConverter}}" Foreground="Green"/>
                                                 </Grid>
                                             </Grid>
                                             <TextBlock Text="Webサイトを表示 "/>

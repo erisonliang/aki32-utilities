@@ -876,9 +876,9 @@ public partial class MainWindowViewModel : ViewModel
         }
     }
 
-    void OpenDOIWebSite()
+    void OpenWebSite()
     {
-        if (IsOpenDOIWebSiteBusy)
+        if (IsOpenWebSiteBusy)
             return;
         ResearchArticleNodeViewModel selectedNode = null;
 
@@ -886,18 +886,18 @@ public partial class MainWindowViewModel : ViewModel
         {
             selectedNode = SelectedNodeViewModel ?? throw new Exception("文献が選択されていません。");
             selectedNode.IsNodeBusy = true;
-            IsOpenDOIWebSiteBusy = true;
+            IsOpenWebSiteBusy = true;
 
-            var result = selectedNode.Article.TryOpenDOILink();
+            var result = selectedNode.Article.TryOpenWebLink();
             if (!result)
                 throw new Exception("DOIを保持していない文献の可能性があります。");
 
             var successAnimationTask = Task.Run(async () =>
             {
-                IsOpenDOIWebSiteDone = true;
+                IsOpenWebSiteDone = true;
                 await Task.Delay(2222);
-                if (!IsOpenDOIWebSiteBusy)
-                    IsOpenDOIWebSiteDone = false;
+                if (!IsOpenWebSiteBusy)
+                    IsOpenWebSiteDone = false;
             });
         }
         catch (Exception ex)
@@ -906,7 +906,7 @@ public partial class MainWindowViewModel : ViewModel
         }
         finally
         {
-            IsOpenDOIWebSiteBusy = false;
+            IsOpenWebSiteBusy = false;
             if (selectedNode is not null)
                 selectedNode.IsNodeBusy = false;
         }
@@ -1001,6 +1001,7 @@ public partial class MainWindowViewModel : ViewModel
             //
             var addingPDFFile = new FileInfo(dialog.FileName);
             ManuallyAddPDF_FromFileInfo(addingPDFFile);
+            selectedNode.NotifyArticleUpdated();
 
             var successAnimationTask = Task.Run(async () =>
             {
@@ -1050,6 +1051,7 @@ public partial class MainWindowViewModel : ViewModel
             //
             var addingPDFFile = new FileInfo(droppedFileName);
             ManuallyAddPDF_FromFileInfo(addingPDFFile);
+            selectedNode.NotifyArticleUpdated();
 
             var successAnimationTask = Task.Run(async () =>
             {

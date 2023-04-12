@@ -189,10 +189,10 @@ public partial class MainWindowViewModel : ViewModel
     public ViewModelCommand OpenPDFCommand => _OpenPDFCommand.Get(async () => await OpenPDF());
     ViewModelCommandHandler _OpenPDFCommand = new();
 
-    public bool IsOpenDOIWebSiteBusy { get; set; } = false;
-    public bool IsOpenDOIWebSiteDone { get; set; } = false;
-    public ViewModelCommand OpenDOIWebSiteCommand => _OpenDOIWebSiteCommand.Get(OpenDOIWebSite);
-    ViewModelCommandHandler _OpenDOIWebSiteCommand = new();
+    public bool IsOpenWebSiteBusy { get; set; } = false;
+    public bool IsOpenWebSiteDone { get; set; } = false;
+    public ViewModelCommand OpenWebSiteCommand => _OpenWebSiteCommand.Get(OpenWebSite);
+    ViewModelCommandHandler _OpenWebSiteCommand = new();
 
     public bool IsExecuteAllBusy { get; set; } = false;
     public bool IsExecuteAllDone { get; set; } = false;

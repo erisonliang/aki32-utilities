@@ -92,11 +92,11 @@ public class ResearchArticleNodeViewModel : DefaultNodeViewModel
             return true;
         }
     }
-    public bool RecommendOpenDOIWebSite
+    public bool RecommendOpenWebSite
     {
         get
         {
-            if (string.IsNullOrEmpty(Article.DOI_Link))
+            if (string.IsNullOrEmpty(Article.Web_Link))
                 return false;
             return true;
         }
