@@ -39,13 +39,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\1 Console\100 General\100_General.csproj" />
     <ProjectReference Include="..\..\1 Console\100_General\100_General.csproj" />
-    <ProjectReference Include="..\..\1 Console\101 AI\101_AI.csproj" />
     <ProjectReference Include="..\..\1 Console\101_AI\101_AI.csproj" />
-    <ProjectReference Include="..\..\1 Console\110 Structural Eng\110_StructuralEngineering.csproj" />
     <ProjectReference Include="..\..\1 Console\110_StructuralEng\110_StructuralEngineering.csproj" />
-    <ProjectReference Include="..\..\1 Console\111 Research\111_Research.csproj" />
     <ProjectReference Include="..\..\1 Console\111_Research\111_Research.csproj" />
   </ItemGroup>
 
