@@ -244,7 +244,7 @@ public class ResearchArticleNodeViewModel : DefaultNodeViewModel
                     break;
                 case EmphasizePropertyItems.既読:
                     if (IsRead)
-                        return Brushes.YellowGreen;
+                        return new SolidColorBrush(Color.FromArgb(0xFF, 0x64, 0xB6, 0x90));
                     break;
                 case EmphasizePropertyItems.積読:
                     if (WillRead)
@@ -252,11 +252,11 @@ public class ResearchArticleNodeViewModel : DefaultNodeViewModel
                     break;
                 case EmphasizePropertyItems.一時データ:
                     if (IsTemp)
-                        return Brushes.DarkOrange;
+                        return new SolidColorBrush(Color.FromArgb(0xFF, 0xEE, 0x81, 0x31));
                     break;
                 case EmphasizePropertyItems.グループ:
                     if (IsGrouping)
-                        return Brushes.Yellow;
+                        return new SolidColorBrush(Color.FromArgb(0xFF, 0xF8, 0xD5, 0x48));
                     break;
                 case EmphasizePropertyItems.ウェブ:
                     if (IsWeb)
@@ -272,11 +272,11 @@ public class ResearchArticleNodeViewModel : DefaultNodeViewModel
                     break;
                 case EmphasizePropertyItems.メモ2:
                     if (IsCategory2)
-                        return Brushes.Pink;
+                        return new SolidColorBrush(Color.FromArgb(0xFF, 0xEE, 0xA3, 0xA9));
                     break;
                 case EmphasizePropertyItems.メモ3:
                     if (IsCategory3)
-                        return Brushes.Purple;
+                        return new SolidColorBrush(Color.FromArgb(0xFF, 0x73, 0x57, 0xF6));
                     break;
                 default:
                     throw new NotImplementedException();
@@ -286,7 +286,7 @@ public class ResearchArticleNodeViewModel : DefaultNodeViewModel
             if (MainWindowViewModel._SelectedEmphasizePropertyItem != EmphasizePropertyItems.なし)
             {
                 if (IsGrouping)
-                    return Brushes.Yellow;
+                    return new SolidColorBrush(Color.FromArgb(0xFF, 0xF8, 0xD5, 0x48));
                 if (IsWeb)
                     return Brushes.LightBlue;
             }

@@ -37,22 +37,27 @@
         <sys:Double x:Key="NodeContentFontSize">24.0</sys:Double>
 
         <Brush x:Key="IsFavoriteColor">#E95B6B</Brush>
-        <Brush x:Key="IsReadColor">YellowGreen</Brush>
+        <Brush x:Key="IsReadColor">#64B690</Brush>
         <Brush x:Key="WillReadColor">LightGreen</Brush>
-        <Brush x:Key="IsGroupingColor">Yellow</Brush>
+        <Brush x:Key="IsGroupingColor">#F8D548</Brush>
         <Brush x:Key="IsWebColor">LightBlue</Brush>
         <Brush x:Key="IsLocalSearchMatchedColor">Aqua</Brush>
-        <Brush x:Key="IsTempColor">DarkOrange</Brush>
+        <Brush x:Key="IsTempColor">#EE8131</Brush>
         <Brush x:Key="IsCat1Color">white</Brush>
-        <Brush x:Key="IsCat2Color">HotPink</Brush>
-        <Brush x:Key="IsCat3Color">Purple</Brush>
+        <Brush x:Key="IsCat2Color">#EEA3A9</Brush>
+        <Brush x:Key="IsCat3Color">#7357F6</Brush>
+        <Brush x:Key="IsCat4Color">Purple</Brush>
         <Brush x:Key="IsBusyHeaderColor">WhiteSmoke</Brush>
 
-        <Brush x:Key="temp1">Pink</Brush>
+        <Brush x:Key="temp1">Pink</Brush> 
         <Brush x:Key="temp2">DeepPink</Brush>
         <Brush x:Key="temp3">MediumPurple</Brush>
         <Brush x:Key="temp4">Purple</Brush>
         <Brush x:Key="temp5">Gray</Brush>
+        <Brush x:Key="temp6">HotPink</Brush>
+        <Brush x:Key="temp7">Gray</Brush>
+        <Brush x:Key="temp8">#4A98E9</Brush>
+        <Brush x:Key="temp9">#E5387F</Brush>
 
         <Style x:Key="ToggleButtonTextStyle" TargetType="ToggleButton">
             <Setter Property="HorizontalContentAlignment" Value="Center"/>
