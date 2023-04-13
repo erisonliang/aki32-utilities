@@ -8,7 +8,6 @@ using System.Windows.Input;
 using Aki32Utilities.ConsoleAppUtilities.General;
 using Microsoft.Win32;
 using System.IO;
-using static System.ComponentModel.Design.ObjectSelectorEditor;
 
 namespace Aki32Utilities.UsageExamples.ResearchArticlesNodeController.ViewModels;
 public partial class MainWindowViewModel : ViewModel
@@ -108,7 +107,6 @@ public partial class MainWindowViewModel : ViewModel
     void RearrangeNodesChronologicallyAlignLeft()
     {
         var rearrangingNodes = new List<DefaultNodeViewModel>(_NodeViewModels);
-        OrderByGroup(ref rearrangingNodes);
         var basePosition = new Point(NODE_MARGIN_LEFT, NODE_MARGIN_TOP);
         RearrangeNodesChronologicallyAlignLeft(rearrangingNodes, basePosition, true);
     }
@@ -144,11 +142,14 @@ public partial class MainWindowViewModel : ViewModel
         // ★★★★★ 最初にinputNodeにもoutputNodeにも何もない人に番号を振る。
         {
             var currentTargetNodes = targetNodes.Where(node => node.__InnerMemo < 0);
-            var nextGroupNum = targetNodes.Max(node => node.__InnerMemo) + 1;
+            //var nextGroupNum = targetNodes.Max(node => node.__InnerMemo) + 1;
 
             var noConnectionNodes = currentTargetNodes.Where(n => !InputConnectorNodeGuids.Contains(n.Guid) && !OutputConnectorNodeGuids.Contains(n.Guid)).ToArray();
             foreach (var noConnectionNode in noConnectionNodes)
-                noConnectionNode.__InnerMemo = nextGroupNum++;
+            {
+                noConnectionNode.__InnerMemo = 0;
+                //noConnectionNode.__InnerMemo = nextGroupNum++;
+            }
         }
 
 
@@ -184,20 +185,58 @@ public partial class MainWindowViewModel : ViewModel
         targetNodes = targetNodes.OrderBy(node => node.__InnerMemo).ToList();
 
     }
-    void RearrangeNodesAlignLeft(List<DefaultNodeViewModel> rearrangingNodes, Point basePosition, bool toLowerDirection)
+    void RearrangeNodesAlignLeft(List<DefaultNodeViewModel> rearrangingNodes, Point basePosition, bool toLowerDirection,
+        bool isGroupHorizontallyAligned = true,
+        int noConnectionNodeVerticalCount = 15
+        )
     {
-        var nothing = 15;
         var horizontalCoef = 1;
         var verticalCoef = toLowerDirection ? 1 : -1;
 
+        // ★★★★★ まずグルーピング
+        OrderByGroup(ref rearrangingNodes);
 
-        // ★★★★★ 整列対象の要素に関連するリンクのみに対して実行。
-        var rearrangingNodeGuids = rearrangingNodes.Select(node => node.Guid).ToArray();
-        var targetLinkLinks = _NodeLinkViewModels.Where(link => rearrangingNodeGuids.Contains(link.InputConnectorNodeGuid) && rearrangingNodeGuids.Contains(link.OutputConnectorNodeGuid)).ToArray();
-        var allInputConnectorNodeGuids = targetLinkLinks.Select(link => link.InputConnectorNodeGuid).ToArray();
-        var InputConnectorNodeGuids = rearrangingNodes.Select(node => node.Guid).Where(guid => allInputConnectorNodeGuids.Contains(guid)).ToArray();
-        var allOutputConnectorNodeGuids = targetLinkLinks.Select(link => link.OutputConnectorNodeGuid).ToArray();
-        var OutputConnectorNodeGuids = rearrangingNodes.Select(node => node.Guid).Where(guid => allOutputConnectorNodeGuids.Contains(guid)).ToArray();
+
+        // ★★★★★ 必要なものをリストアップ（整列対象の要素に関連するリンクのみに対して実行）
+        var rearrangingNodeGuids = rearrangingNodes
+            .Select(node => node.Guid)
+            .ToArray();
+        var targetLinks = _NodeLinkViewModels
+            .Where(link => rearrangingNodeGuids.Contains(link.InputConnectorNodeGuid) && rearrangingNodeGuids.Contains(link.OutputConnectorNodeGuid))
+            .ToArray();
+
+        var globalInputConnectorNodeGuids = targetLinks
+            .Select(link => link.InputConnectorNodeGuid)
+            .ToArray();
+        var allInputConnectorNodeGuids = rearrangingNodes
+            .Select(node => node.Guid)
+            .Where(guid => globalInputConnectorNodeGuids.Contains(guid))
+            .ToArray();
+
+        var globalOutputConnectorNodeGuids = targetLinks
+            .Select(link => link.OutputConnectorNodeGuid)
+            .ToArray();
+        var allOutputConnectorNodeGuids = rearrangingNodes
+            .Select(node => node.Guid)
+            .Where(guid => globalOutputConnectorNodeGuids.Contains(guid))
+            .ToArray();
+
+        var allNoInputNodes = rearrangingNodes
+            .Where(n => !allInputConnectorNodeGuids.Contains(n.Guid))
+            .ToList();
+        var allWithInputNodes = rearrangingNodes
+            .Except(allNoInputNodes)
+            .ToList();
+        var allNoConnectionNodes = allNoInputNodes
+            .Where(n => !allOutputConnectorNodeGuids.Contains(n.Guid))
+            .ToArray();
+        var allWithConnectionNodes = rearrangingNodes
+            .Except(allNoConnectionNodes)
+            .ToList();
+        var allNoInputWithConnectionNodeGroups = allWithConnectionNodes
+            .Intersect(allNoInputNodes)
+            .GroupBy(n => n.__InnerMemo)
+            .ToArray();
 
 
         // ★★★★★ 用いる変数のリセット
@@ -207,78 +246,90 @@ public partial class MainWindowViewModel : ViewModel
             rearrangingNode.Position = new Point(0, 0);
         }
 
-
         // ★★★★★ 最初にinputNodeにもoutputNodeにも何もない人をかき集めて問答無用で並べておく。
-        var noConnectionNodes = rearrangingNodes.Where(n => !InputConnectorNodeGuids.Contains(n.Guid) && !OutputConnectorNodeGuids.Contains(n.Guid)).ToArray();
-
-        for (int i = 0; i < noConnectionNodes.Length; i++)
+        for (int i = 0; i < allNoConnectionNodes.Length; i++)
         {
-            var noConnectionNode = noConnectionNodes[i];
-            rearrangingNodes.Remove(noConnectionNode);
+            var noConnectionNode = allNoConnectionNodes[i];
             noConnectionNode.Position = new Point(
-                   basePosition.X - horizontalCoef * (i / nothing) * NODE_HORIZONTAL_SPAN,
-                   basePosition.Y + verticalCoef * (i % nothing) * NODE_VERTICAL_SPAN);
+                   basePosition.X - horizontalCoef * (i / noConnectionNodeVerticalCount) * NODE_HORIZONTAL_SPAN,
+                   basePosition.Y + verticalCoef * (i % noConnectionNodeVerticalCount) * NODE_VERTICAL_SPAN);
         }
 
-
-        // ★★★★★ 水平方向の座標候補を算出。
-        var noInputNodes = rearrangingNodes.Where(n => !InputConnectorNodeGuids.Contains(n.Guid)).ToList();
-        var withInputNodes = rearrangingNodes.Where(n => InputConnectorNodeGuids.Contains(n.Guid)).ToList();
-
-        // ★ inputNodeに何もないNodeを1とする。
-        for (int i = 0; i < noInputNodes.Count; i++)
-            noInputNodes[i].__InnerMemo = 1;
-
-        // ★ そいつらを最初の親として，全てのNodeに対して，一番経路の長いものを算定する。
-        var parentNodeQueue = new Queue<DefaultNodeViewModel>(noInputNodes);
-
-        while (parentNodeQueue.Count > 0)
-        {
-            var parentNode = parentNodeQueue.Dequeue();
-            var childrenNodes = GetChildrenNodes(parentNode, withInputNodes);
-            foreach (var childNode in childrenNodes)
-            {
-                childNode.__InnerMemo = Math.Max(childNode.__InnerMemo, parentNode.__InnerMemo + 1);
-                parentNodeQueue.Enqueue(childNode);
-            }
-        }
-
-
-        // ★★★★★ どんどん右に接続していく。深さ優先で。最深まで達したら次の列に進む。
-
+        // ★★★★★ グループごとに右にどんどん接続！
         var currentVerticalIndex = 0;
-
-        void ProcessOne(DefaultNodeViewModel parentNode)
+        var nextPositionNum = 0;
+        foreach (var noInputNodeGroup in allNoInputWithConnectionNodeGroups)
         {
-            parentNode.Position = new Point(
-                basePosition.X + horizontalCoef * parentNode.__InnerMemo * NODE_HORIZONTAL_SPAN,
-                basePosition.Y + verticalCoef * currentVerticalIndex * NODE_VERTICAL_SPAN);
-
-            var childrenNodes = GetChildrenNodes(parentNode, withInputNodes);
-            if (childrenNodes.Any())
+            // ★ 初期処理
+            var noInputNodes = noInputNodeGroup.ToArray();
+            if (isGroupHorizontallyAligned)
             {
-                foreach (var childNode in childrenNodes)
-                {
-                    ProcessOne(childNode);
-                    withInputNodes.Remove(childNode);
-                }
+                currentVerticalIndex = 0;
+                nextPositionNum = allWithConnectionNodes.Max(node => node.__InnerMemo) + 1;
             }
             else
             {
-                currentVerticalIndex++;
+                nextPositionNum = 1;
             }
+
+            // ★ inputNodeに何もないNodeを次の値とする。
+            for (int i = 0; i < noInputNodes.Length; i++)
+                noInputNodes[i].__InnerMemo = nextPositionNum;
+
+            // ★ そいつらを最初の親として，全てのNodeに対して，一番経路の長いものを算定する。
+            var parentNodeQueue = new Queue<DefaultNodeViewModel>(noInputNodes);
+
+            while (parentNodeQueue.Count > 0)
+            {
+                var parentNode = parentNodeQueue.Dequeue();
+                var childrenNodes = GetChildrenNodes(parentNode, allWithInputNodes);
+                foreach (var childNode in childrenNodes)
+                {
+                    childNode.__InnerMemo = Math.Max(childNode.__InnerMemo, parentNode.__InnerMemo + 1);
+                    parentNodeQueue.Enqueue(childNode);
+                }
+            }
+
+            // ★ どんどん右に接続していく。深さ優先で。最深まで達したら次の列に進む。
+            void ProcessOne(DefaultNodeViewModel parentNode)
+            {
+                parentNode.Position = new Point(
+              basePosition.X + horizontalCoef * parentNode.__InnerMemo * NODE_HORIZONTAL_SPAN,
+              basePosition.Y + verticalCoef * currentVerticalIndex * NODE_VERTICAL_SPAN);
+
+                var childrenNodes = GetChildrenNodes(parentNode, allWithInputNodes);
+                if (childrenNodes.Any())
+                {
+                    foreach (var childNode in childrenNodes)
+                    {
+                        ProcessOne(childNode);
+                        allWithInputNodes.Remove(childNode);
+                    }
+                }
+                else
+                {
+                    currentVerticalIndex++;
+                }
+            }
+
+            foreach (var noInputNode in noInputNodes)
+                ProcessOne(noInputNode);
+
         }
 
-        foreach (var noInputNode in noInputNodes)
-            ProcessOne(noInputNode);
-
     }
-    void RearrangeNodesAlignRight(List<DefaultNodeViewModel> rearrangingNodes, Point basePosition, bool toLowerDirection)
+    void RearrangeNodesAlignRight(List<DefaultNodeViewModel> rearrangingNodes, Point basePosition, bool toLowerDirection,
+        bool isGroupHorizontallyAligned = false,
+        int noConnectionNodeVerticalCount = 15
+        )
     {
-        var nothing = 15;
+        // FIXME: RearrangeNodesAlignLeftと合わせたい。
+        if (isGroupHorizontallyAligned)
+            throw new NotImplementedException("未実装です…。");
+
         var horizontalCoef = -1;
         var verticalCoef = toLowerDirection ? 1 : -1;
-
+        
 
         // ★★★★★ 整列対象の要素に関連するリンクのみに対して実行。
         var rearrangingNodeGuids = rearrangingNodes.Select(node => node.Guid).ToArray();
@@ -305,8 +356,8 @@ public partial class MainWindowViewModel : ViewModel
             var noConnectionNode = noConnectionNodes[i];
             rearrangingNodes.Remove(noConnectionNode);
             noConnectionNode.Position = new Point(
-                basePosition.X - horizontalCoef * (i / nothing) * NODE_HORIZONTAL_SPAN,
-                basePosition.Y + verticalCoef * (i % nothing) * NODE_VERTICAL_SPAN);
+                basePosition.X - horizontalCoef * (i / noConnectionNodeVerticalCount) * NODE_HORIZONTAL_SPAN,
+                basePosition.Y + verticalCoef * (i % noConnectionNodeVerticalCount) * NODE_VERTICAL_SPAN);
         }
 
 
