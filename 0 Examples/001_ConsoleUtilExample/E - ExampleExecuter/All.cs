@@ -34,7 +34,6 @@ using Org.BouncyCastle.Crypto.Macs;
 using NumSharp.Utilities;
 using DocumentFormat.OpenXml.Office2013.Excel;
 using MathNet.Numerics;
-using MathNet.Symbolics;
 
 namespace Aki32Utilities.UsageExamples.ConsoleAppUtilities;
 public static partial class ExampleExecuter
