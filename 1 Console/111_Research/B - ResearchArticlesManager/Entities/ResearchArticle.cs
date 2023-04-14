@@ -1136,7 +1136,12 @@ public class ResearchArticle : IComparable
 
             // ★ cross ref
             if (refString.Contains("(in Japanese)"))
-                refString = refString.Split("(in Japanese)", StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.RemoveEmptyEntries).Last();
+            {
+                // 日本語部分のみを抽出。なぜか超短い時があるからそういうのは排除。
+                var newCandidate = refString.Split("(in Japanese)", StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.RemoveEmptyEntries).Last();
+                if (newCandidate.Length > 5)
+                    refString = newCandidate;
+            }
 
             // ★ chat gpt
             var s = $@"以下の論文の参考資料の文字列から、フォーマットを埋める形で情報を抜き出してください。日本語がある場合は日本語にして、日本語がない場合は英語としてください。著者リストは「,」区切りでリストアップしてください。情報が無い場合は「※不明」としてください。
