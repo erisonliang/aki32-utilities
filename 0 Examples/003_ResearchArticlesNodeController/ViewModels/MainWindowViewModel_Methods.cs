@@ -329,7 +329,7 @@ public partial class MainWindowViewModel : ViewModel
 
         var horizontalCoef = -1;
         var verticalCoef = toLowerDirection ? 1 : -1;
-        
+
 
         // ★★★★★ 整列対象の要素に関連するリンクのみに対して実行。
         var rearrangingNodeGuids = rearrangingNodes.Select(node => node.Guid).ToArray();
@@ -1213,6 +1213,23 @@ public partial class MainWindowViewModel : ViewModel
         Console.WriteLine("選択中の文献の情報を手動で更新");
     }
 
+    void AddMemoTemplateString()
+    {
+        if (SelectedNodeViewModel is null)
+            return;
+
+        if (string.IsNullOrWhiteSpace(SelectedNodeViewModel.Article.Memo))
+        {
+            SelectedNodeViewModel.Article.Memo = MemoTemplateString;
+        }
+        else
+        {
+            SelectedNodeViewModel.Article.Memo += $"\r\n\r\n";
+            SelectedNodeViewModel.Article.Memo += MemoTemplateString;
+        }
+
+        SelectedNodeViewModel?.NotifyArticleUpdated();
+    }
 
     // ★★★★★★★★★★★★★★★ 右パネル内 → 検索
 

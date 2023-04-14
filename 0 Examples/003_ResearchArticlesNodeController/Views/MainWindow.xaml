@@ -49,7 +49,7 @@
         <Brush x:Key="IsCat4Color">Purple</Brush>
         <Brush x:Key="IsBusyHeaderColor">WhiteSmoke</Brush>
 
-        <Brush x:Key="temp1">Pink</Brush> 
+        <Brush x:Key="temp1">Pink</Brush>
         <Brush x:Key="temp2">DeepPink</Brush>
         <Brush x:Key="temp3">MediumPurple</Brush>
         <Brush x:Key="temp4">Purple</Brush>
@@ -212,7 +212,7 @@
                                         <Label Content="{Binding NodeHeaderIcon}" Padding="0" VerticalAlignment="Center" Foreground="#FF080808"/>
                                         <Label Content="{Binding NodeHeaderString}" Padding="2,0,0,0" VerticalAlignment="Center" FontWeight="Bold" Foreground="#FF080808"/>
                                     </StackPanel>
-                                   
+
                                     <StackPanel
                                         HorizontalAlignment="Right"
                                         Orientation="Horizontal"
@@ -339,7 +339,7 @@
                                 <Grid Margin="4"/>
 
                             </StackPanel>
-                            
+
                         </Grid>
 
                     </DataTemplate>
@@ -1100,121 +1100,50 @@
                                 <Grid Margin="4">
                                     <TextBlock
                                         Text="メモ：" 
-                                        Width="70" 
+                                        Width="70"
+                                        MinHeight="60"
                                         HorizontalAlignment="Left"
                                         TextAlignment="Right"
-                                        ToolTipService.InitialShowDelay="10" 
+                                        ToolTipService.InitialShowDelay="10"
                                         >
                                         <TextBlock.ToolTip>
-                                            <TextBlock
-                                                TextAlignment="Left"
-                                                Text="memo"
-                                                >
-                                            </TextBlock>
+                                            <StackPanel>
+                                                <TextBlock
+                                                    TextAlignment="Left"
+                                                    Text="基本的には，文献に関するメモを記載する場所です。&#10;例外として，「@@XXXX」と入力した状態で「メタ情報を推測」を実行することで，XXXXの部分が推測に利用されるようになります。"
+                                                    />
+                                                <TextBlock
+                                                    TextAlignment="Left"
+                                                    Text=""
+                                                    />
+                                            </StackPanel>
                                         </TextBlock.ToolTip>
                                     </TextBlock>
+
                                     <TextBox 
                                         Margin="70,0,0,0" 
                                         Text="{Binding SelectedNodeViewModel.Article.Memo}" 
                                         TextWrapping="Wrap" AcceptsReturn="True"
                                         />
-                                </Grid>
 
-                                <Grid Margin="4">
-                                    <TextBlock
-                                        Text="研究の出発点：" 
-                                        Width="100" 
-                                        HorizontalAlignment="Left"
-                                        TextAlignment="Right"
-                                        ToolTipService.InitialShowDelay="10" 
+                                    <Button
+                                        HorizontalAlignment="right"
+                                        VerticalAlignment="Bottom"
+                                        Margin="5"
+                                        Style="{StaticResource ButtonTextStyle}"
+                                        Command="{Binding AddMemoTemplateStringCommand}"
+                                        Content="ﾃﾝﾌﾟﾚ挿入"
                                         >
-                                        <TextBlock.ToolTip>
-                                            <TextBlock
-                                                TextAlignment="Left"
-                                                Text="【Motivation: 研究の出発点】
-    &#10; - どんな課題や問題点を解決しようとしたのか？
-    &#10; - 既存の研究で足りないところはどこだったのか？">
-                                            </TextBlock>
-                                        </TextBlock.ToolTip>
-                                    </TextBlock>
-                                    <TextBox 
-                                        Margin="100,0,0,0" 
-                                        Text="{Binding SelectedNodeViewModel.Article.Memo_Motivation}" 
-                                        TextWrapping="Wrap" AcceptsReturn="True"
-                                        />
-                                </Grid>
+                                        <Button.ToolTip>
+                                            <StackPanel>
+                                                <TextBlock
+                                                    TextAlignment="Left"
+                                                    Text="{Binding MemoTemplateString}"
+                                                    />
+                                            </StackPanel>
+                                        </Button.ToolTip>
+                                    </Button>
 
-                                <Grid Margin="4">
-                                    <TextBlock
-                                        Text="研究手法：" 
-                                        Width="100" 
-                                        HorizontalAlignment="Left"
-                                        TextAlignment="Right"
-                                        ToolTipService.InitialShowDelay="10" 
-                                        >
-                                        <TextBlock.ToolTip>
-                                            <TextBlock
-                                                TextAlignment="Left"
-                                                Text="【Method: 研究手法】
-    &#10; - どんなシステムを作ったか？なぜそのシステム設計でよいと仮定したか？
-    &#10; - どんなアルゴリズムを作ったか？なぜそのアルゴリズム設計でよいと仮定したか？
-    &#10; - どんな調査をしたか？なぜその調査計画でよいと仮定したか？
-    &#10; - どんな実験をしたか？なぜその実験設計でよいと仮定したか？">
-                                            </TextBlock>
-                                        </TextBlock.ToolTip>
-                                    </TextBlock>
-                                    <TextBox 
-                                        Margin="100,0,0,0" 
-                                        Text="{Binding SelectedNodeViewModel.Article.Memo_Method}" 
-                                        TextWrapping="Wrap" AcceptsReturn="True"
-                                        />
-                                </Grid>
-
-                                <Grid Margin="4">
-                                    <TextBlock
-                                        Text="結果と知見：" 
-                                        Width="100" 
-                                        HorizontalAlignment="Left"
-                                        TextAlignment="Right"
-                                        ToolTipService.InitialShowDelay="10" 
-                                        >
-                                        <TextBlock.ToolTip>
-                                            <TextBlock
-                                                TextAlignment="Left"
-                                                Text="【Insights: 結果と知見】
-    &#10; - どんな結果が得られたのか？どんな条件だと上手くいって，どんな場合は上手くいかなかったのか？
-    &#10; - 新しくわかった知見はなにか？他のアプリケーションやシステムでも使えそうな知見は何か？">
-                                            </TextBlock>
-                                        </TextBlock.ToolTip>
-                                    </TextBlock>
-                                    <TextBox 
-                                        Margin="100,0,0,0" 
-                                        Text="{Binding SelectedNodeViewModel.Article.Memo_Insights}" 
-                                        TextWrapping="Wrap" AcceptsReturn="True"
-                                        />
-                                </Grid>
-
-                                <Grid Margin="4">
-                                    <TextBlock
-                                        Text="貢献を一行で：" 
-                                        Width="100" 
-                                        HorizontalAlignment="Left"
-                                        TextAlignment="Right"
-                                        ToolTipService.InitialShowDelay="10" 
-                                        >
-                                        <TextBlock.ToolTip>
-                                            <TextBlock
-                                                TextAlignment="Left"
-                                                Text="【Contribution Summary: 貢献を一行で】
-    &#10; - 「【Author】は，【Motivation】という課題解決のために【Method】を行い，【Insight】がわかった。」">
-                                            </TextBlock>
-                                        </TextBlock.ToolTip>
-                                    </TextBlock>
-                                    <TextBox 
-                                        Margin="100,0,0,0" 
-                                        Text="{Binding SelectedNodeViewModel.Article.Memo_Contribution}" 
-                                        TextWrapping="Wrap" AcceptsReturn="True"
-                                        />
                                 </Grid>
 
                                 <!-- ========================================== -->

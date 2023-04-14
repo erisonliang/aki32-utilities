@@ -32,7 +32,7 @@ public partial class MainWindowViewModel : ViewModel
 
     public double Scale { get; set; } = 1d;
     public Point CanvasOffset { get; set; } = new Point(0, 0);
-    
+
     public static ResearchArticlesManager ResearchArticlesManager { get; set; }
 
 
@@ -220,6 +220,48 @@ public partial class MainWindowViewModel : ViewModel
 
     public ViewModelCommand RefreshSelectedArticleInfoCommand => _RefreshSelectedArticleInfoCommand.Get(RefreshSelectedArticleInfo);
     ViewModelCommandHandler _RefreshSelectedArticleInfoCommand = new();
+
+    public string MemoTemplateString => @"【テンプレート】
+
+【Motivation: 研究の出発点】
+ - どんな課題や問題点を解決しようとしたのか？
+ - 既存の研究で足りないところはどこだったのか？
+
+【Method: 研究手法】
+ - どんなシステムを作ったか？なぜそのシステム設計でよいと仮定したか？
+ - どんなアルゴリズムを作ったか？なぜそのアルゴリズム設計でよいと仮定したか？
+ - どんな調査をしたか？なぜその調査計画でよいと仮定したか？
+ - どんな実験をしたか？なぜその実験設計でよいと仮定したか？
+
+【Insights: 結果と知見】
+ - どんな結果が得られたのか？どんな条件だと上手くいって，どんな場合は上手くいかなかったのか？
+ - 新しくわかった知見はなにか？他のアプリケーションやシステムでも使えそうな知見は何か？
+
+【Contribution Summary: 貢献を一行で】
+ - 「【Author】は，【Motivation】という課題解決のために【Method】を行い，【Insight】がわかった．」
+
+
+
+【Keyword: キーワード】
+- この論文から得られた，検索に使えそうな新しいキーワードはなにか？
+- どんな言葉を使って自分のアイデアに近い概念を表現しているか？
+
+【Unknown: 残った課題】
+- どんなことがまだ知られていないか，あるいは解決していないか？
+
+【Reflection: 考察】
+- この論文は自分のアイデアとどこまで似ているか？
+- この論文の中で自分の研究に生かせそうなところはどこか？
+- もう一度読むことが必要そうか？
+- 自分の論文を書くときに引用する確率が高そうか？無関係，あまりなさそう，あるかも，ほぼ絶対，くらいの4段階でつけるとよい。
+
+【Reference: 関連研究】
+- 関連研究に挙げられている論文の中で近いもの＆読んでいないものはどれか？
+
+";
+
+    public ViewModelCommand AddMemoTemplateStringCommand => _AddMemoTemplateStringCommand.Get(AddMemoTemplateString);
+    ViewModelCommandHandler _AddMemoTemplateStringCommand = new();
 
 
     // ★★★★★★★★★★★★★★★ 右パネル内 → 検索
