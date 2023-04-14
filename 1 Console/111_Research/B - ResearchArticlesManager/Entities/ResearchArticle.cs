@@ -586,8 +586,8 @@ public class ResearchArticle : IComparable
         {
             if (Memo is null)
                 return null;
-            if (Memo.StartsWith("@@@"))
-                return Memo.Replace("@@@", "");
+            if (Memo.Contains("@@@"))
+                return Memo.Split("@@@").Last();
             return null;
         }
     }
