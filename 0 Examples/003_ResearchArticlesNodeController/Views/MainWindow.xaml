@@ -385,7 +385,7 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="7"/>
-            <ColumnDefinition Width="600"/>
+            <ColumnDefinition Width="777"/>
         </Grid.ColumnDefinitions>
 
         <!-- ヘッダー -->
@@ -561,7 +561,7 @@
                 x:Name="TabControl_RightPanel"
                 Grid.Row="0"
                 mah:HeaderedControlHelper.HeaderFontSize="13"
-                FontSize="13"
+                FontSize="14.5"
                 >
                 <TabItem x:Name="TabItem_SelectingNode">
                     <TabItem.Header>
