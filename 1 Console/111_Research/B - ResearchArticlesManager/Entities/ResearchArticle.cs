@@ -1241,7 +1241,7 @@ public class ResearchArticle : IComparable
             DataFrom_AI_PredictFromRefString = true;
             Console.WriteLine($"推測に成功。(約 {openAI.lastPriceInYen:F3} 円)");
 
-            var usedRefString = $"@@@{refString}";
+            var usedRefString = $"★★★★★ 推測結果確認\r\n@@@{refString}";
             if (Memo is null || string.IsNullOrWhiteSpace(Memo.Replace("\r", "").Replace("\n", "")))
                 Memo = usedRefString;
             else
