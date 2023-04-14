@@ -4,6 +4,7 @@ using Aki32Utilities.ConsoleAppUtilities.General;
 using Aki32Utilities.WPFAppUtilities.General;
 using System.Collections.Specialized;
 using XPlot.Plotly;
+using System.Windows.Controls;
 
 namespace Aki32Utilities.UsageExamples.ResearchArticlesNodeController.Views;
 public partial class MainWindow : Window
@@ -40,12 +41,39 @@ public partial class MainWindow : Window
             }
         };
 
-        //
-
+        // click to copy Text prop
+        TextBlock_ReferenceString.MouseDown += TextBlock_MouseDown_ToCopyText;
+        TextBlock_CrossRef_UnstructuredRefString.MouseDown += TextBlock_MouseDown_ToCopyText;
+        TextBlock_JStage_UnstructuredRefString.MouseDown += TextBlock_MouseDown_ToCopyText;
+        StackPanel_AOI.MouseDown += StackPanel_MouseDown_ToCopyTagText;
 
         //
 
     }
 
+    private void TextBlock_MouseDown_ToCopyText(object sender, System.Windows.Input.MouseButtonEventArgs e)
+    {
+        try
+        {
+            var senderTextBlock = (TextBlock)sender;
+            var text = senderTextBlock.Tag is string tagText ? tagText : senderTextBlock.Text;
+            Clipboard.SetText(text);
+            Console.WriteLine("✓ コピーしました");
+        }
+        catch (Exception)
+        {
+        }
+    }
 
+    private void StackPanel_MouseDown_ToCopyTagText(object sender, System.Windows.Input.MouseButtonEventArgs e)
+    {
+        try
+        {
+            Clipboard.SetText(((StackPanel)sender).Tag.ToString());
+            Console.WriteLine("✓ コピーしました");
+        }
+        catch (Exception)
+        {
+        }
+    }
 }

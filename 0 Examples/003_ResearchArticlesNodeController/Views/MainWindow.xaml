@@ -1101,7 +1101,6 @@
                                     <TextBlock
                                         Text="メモ：" 
                                         Width="70"
-                                        MinHeight="60"
                                         HorizontalAlignment="Left"
                                         TextAlignment="Right"
                                         ToolTipService.InitialShowDelay="10"
@@ -1121,13 +1120,15 @@
                                     </TextBlock>
 
                                     <TextBox 
-                                        Margin="70,0,0,0" 
+                                        Margin="70,0,0,0"
+                                        Padding="0,0,0,30"
+                                        MinHeight="100"
                                         Text="{Binding SelectedNodeViewModel.Article.Memo}" 
                                         TextWrapping="Wrap" AcceptsReturn="True"
                                         />
 
                                     <Button
-                                        HorizontalAlignment="right"
+                                        HorizontalAlignment="Right"
                                         VerticalAlignment="Bottom"
                                         Margin="5"
                                         Style="{StaticResource ButtonTextStyle}"
@@ -1337,21 +1338,23 @@
                                         <TextBlock.ToolTip>
                                             <TextBlock
                                                 TextAlignment="Left"
-                                                Text="AOI"
+                                                Text="AOI ( 簡易AOI )"
                                                 >
                                             </TextBlock>
                                         </TextBlock.ToolTip>
                                     </TextBlock>
 
                                     <StackPanel
+                                        x:Name="StackPanel_AOI"
                                         Margin="70,0,0,0" 
                                         Orientation="Horizontal"
                                         ToolTipService.InitialShowDelay="10" 
+                                        Tag="{Binding SelectedNodeViewModel.Article.Friendly_AOI}"
                                         >
                                         <StackPanel.ToolTip>
                                             <TextBlock
                                                 TextAlignment="Left"
-                                                Text="AOI ( 簡易AOI )&#10;クリックして簡易AOIをコピー"
+                                                Text="クリックして簡易AOIをコピー"
                                                 >
                                             </TextBlock>
                                         </StackPanel.ToolTip>
@@ -1393,17 +1396,18 @@
                                         Width="70" 
                                         HorizontalAlignment="Left"
                                         TextAlignment="Right"
-                                        ToolTipService.InitialShowDelay="10" 
+                                        ToolTipService.InitialShowDelay="10"
                                         >
                                         <TextBlock.ToolTip>
                                             <TextBlock
                                                 TextAlignment="Left"
-                                                Text="文献文字列&#10;クリックしてコピー"
+                                                Text="文献文字列"
                                                 >
                                             </TextBlock>
                                         </TextBlock.ToolTip>
                                     </TextBlock>
                                     <TextBlock 
+                                        x:Name="TextBlock_ReferenceString"
                                         Text="{Binding SelectedNodeViewModel.Article.ReferenceString}" 
                                         Margin="70,0,0,0" 
                                         TextWrapping="Wrap"
@@ -1412,7 +1416,7 @@
                                         <TextBlock.ToolTip>
                                             <TextBlock
                                                 TextAlignment="Left"
-                                                Text="文献文字列&#10;クリックしてコピー"
+                                                Text="クリックしてコピー"
                                                 >
                                             </TextBlock>
                                         </TextBlock.ToolTip>
@@ -1439,10 +1443,19 @@
                                         </TextBlock.ToolTip>
                                     </TextBlock>
                                     <TextBlock 
+                                        x:Name="TextBlock_CrossRef_UnstructuredRefString"
                                         Text="{Binding SelectedNodeViewModel.Article.CrossRef_UnstructuredRefString}" 
                                         Margin="70,0,0,0" 
                                         TextWrapping="Wrap"
+                                        ToolTipService.InitialShowDelay="10" 
                                         >
+                                        <TextBlock.ToolTip>
+                                            <TextBlock
+                                                TextAlignment="Left"
+                                                Text="クリックしてコピー"
+                                                >
+                                            </TextBlock>
+                                        </TextBlock.ToolTip>
                                     </TextBlock>
                                 </Grid>
 
@@ -1463,10 +1476,19 @@
                                         </TextBlock.ToolTip>
                                     </TextBlock>
                                     <TextBlock 
+                                        x:Name="TextBlock_JStage_UnstructuredRefString"
                                         Text="{Binding SelectedNodeViewModel.Article.JStage_UnstructuredRefString}" 
                                         Margin="70,0,0,0" 
                                         TextWrapping="Wrap"
+                                        ToolTipService.InitialShowDelay="10" 
                                         >
+                                        <TextBlock.ToolTip>
+                                            <TextBlock
+                                                TextAlignment="Left"
+                                                Text="クリックしてコピー"
+                                                >
+                                            </TextBlock>
+                                        </TextBlock.ToolTip>
                                     </TextBlock>
                                 </Grid>
 
@@ -1481,7 +1503,7 @@
                                         <TextBlock.ToolTip>
                                             <TextBlock
                                                 TextAlignment="Left"
-                                                Text="JStage_UnstructuredRefString"
+                                                Text="インスタンス作成日"
                                                 >
                                             </TextBlock>
                                         </TextBlock.ToolTip>
@@ -1493,10 +1515,6 @@
                                         >
                                     </TextBlock>
                                 </Grid>
-
-
-
-
 
 
 
