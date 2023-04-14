@@ -1216,6 +1216,12 @@ public class ResearchArticle : IComparable
             DataFrom_AI_PredictFromRefString = true;
             Console.WriteLine($"推測に成功。(約 {openAI.lastPriceInYen:F3} 円)");
 
+            var usedRefString = $"@@@{refString}";
+            if (string.IsNullOrWhiteSpace(Memo))
+                Memo = usedRefString;
+            else
+                Memo += $"\r\n\r\n{usedRefString}";
+
             return true;
         }
         catch (Exception ex)

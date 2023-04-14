@@ -883,6 +883,8 @@ public partial class MainWindowViewModel : ViewModel
             if (mergeResult is not null)
                 Console.WriteLine("同一の文献を発見したため，マージしました。");
 
+            selectedNode?.NotifyArticleUpdated();
+
             var saveTask = Save();
 
             var successAnimationTask = Task.Run(async () =>
