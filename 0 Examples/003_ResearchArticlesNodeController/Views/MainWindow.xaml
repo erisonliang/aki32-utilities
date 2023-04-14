@@ -1124,7 +1124,7 @@
                                         Margin="70,0,0,0"
                                         Padding="0,0,0,30"
                                         MinHeight="100"
-                                        Text="{Binding SelectedNodeViewModel.Article.Memo}" 
+                                        Text="{Binding SelectedNodeViewModel.Article.Memo, UpdateSourceTrigger=PropertyChanged}" 
                                         TextWrapping="Wrap" AcceptsReturn="True"
                                         />
 
