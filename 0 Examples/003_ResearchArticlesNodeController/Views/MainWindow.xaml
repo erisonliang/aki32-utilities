@@ -1070,6 +1070,7 @@
                                     </TextBlock>
                                     <TextBox 
                                         Margin="70,0,0,0" 
+                                        Padding="1"
                                         Text="{Binding SelectedNodeViewModel.Authors, UpdateSourceTrigger=LostFocus}" 
                                         TextWrapping="Wrap" AcceptsReturn="False"
                                         />
@@ -1093,6 +1094,7 @@
                                     </TextBlock>
                                     <TextBox 
                                         Margin="70,0,0,0" 
+                                        Padding="1"
                                         Text="{Binding SelectedNodeViewModel.ArticleTitle, UpdateSourceTrigger=PropertyChanged}" 
                                         TextWrapping="Wrap" AcceptsReturn="False"
                                         />
@@ -1105,25 +1107,20 @@
                                         HorizontalAlignment="Left"
                                         TextAlignment="Right"
                                         ToolTipService.InitialShowDelay="10"
+                                        ToolTipService.Placement="Left"
                                         >
                                         <TextBlock.ToolTip>
-                                            <StackPanel>
-                                                <TextBlock
-                                                    TextAlignment="Left"
-                                                    Text="基本的には，文献に関するメモを記載する場所です。&#10;例外として，「@@XXXX」と入力した状態で「メタ情報を推測」を実行することで，XXXXの部分が推測に利用されるようになります。"
-                                                    />
-                                                <TextBlock
-                                                    TextAlignment="Left"
-                                                    Text=""
-                                                    />
-                                            </StackPanel>
+                                            <TextBlock
+                                                TextAlignment="Left"
+                                                Text="基本的には，文献に関するメモを記載する場所です。&#10;例外として，「@@XXXX」と入力した状態で「メタ情報を推測」を実行することで，XXXXの部分が推測に利用されるようになります。"
+                                                />
                                         </TextBlock.ToolTip>
                                     </TextBlock>
 
                                     <TextBox 
                                         Margin="70,0,0,0"
-                                        Padding="0,0,0,30"
                                         MinHeight="100"
+                                        Padding="1"
                                         Text="{Binding SelectedNodeViewModel.Article.Memo, UpdateSourceTrigger=PropertyChanged}" 
                                         TextWrapping="Wrap" AcceptsReturn="True"
                                         />
@@ -1134,10 +1131,15 @@
                                         Margin="5"
                                         Style="{StaticResource ButtonTextStyle}"
                                         Command="{Binding AddMemoTemplateStringCommand}"
-                                        Content="ﾃﾝﾌﾟﾚ挿入"
+                                        Content="！"
+                                        ToolTipService.InitialShowDelay="10"
                                         >
                                         <Button.ToolTip>
                                             <StackPanel>
+                                                <TextBlock
+                                                    TextAlignment="Left"
+                                                    Text="クリックでテンプレートを挿入！"
+                                                    />
                                                 <TextBlock
                                                     TextAlignment="Left"
                                                     Text="{Binding MemoTemplateString}"

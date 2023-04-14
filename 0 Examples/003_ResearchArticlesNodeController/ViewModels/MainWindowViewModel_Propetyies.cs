@@ -224,7 +224,7 @@ public partial class MainWindowViewModel : ViewModel
     public string MemoTemplateString => @"★★★★★ 読んだメモ
 
 ★ まとめ
-■■という課題解決のために■■を行い，■■がわかった。
+著者らは，■■という問題解決のために，■■を行い，■■を把握した。
 
 ★ 問題提起
 
@@ -243,7 +243,7 @@ public partial class MainWindowViewModel : ViewModel
     public string MemoTemplateLongString => @"★★★★★ 読んだメモ
 
 ★ まとめ
-・■■は，■■という課題解決のために■■を行い，■■がわかった。
+著者らは，■■という問題解決のために，■■を行い，■■を把握した。
 
 ★ 問題提起
 ・解消したい既知の問題点，既往研究で不足しているところ。
