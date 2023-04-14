@@ -42,6 +42,7 @@ public static partial class ChainableExtensions
                 // While " count is odd number, merge next line
                 while (line.Count(c => c == '"') % 2 == 1)
                 {
+                    line += "\r\n";
                     line += sr.ReadLine()!;
                 }
 
