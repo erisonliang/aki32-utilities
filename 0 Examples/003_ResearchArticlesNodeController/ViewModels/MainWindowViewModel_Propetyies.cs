@@ -346,6 +346,21 @@ public partial class MainWindowViewModel : ViewModel
     public ListenerCommand<object> InsertToFormatCommand => _InsertToFormatCommand.Get(InsertToFormat);
     ViewModelCommandHandler<object> _InsertToFormatCommand = new();
 
+    private string _SidePanelFontSize = "13";
+    public string SidePanelFontSize
+    {
+        get
+        {
+            return _SidePanelFontSize;
+        }
+        set
+        {
+            _SidePanelFontSize = value.ToString();
+            if (double.TryParse(value, out double valueDouble))
+                ParentView.TabControl_RightPanel.FontSize = valueDouble;
+        }
+    }
+
 
     // ★★★★★★★★★★★★★★★ 
 

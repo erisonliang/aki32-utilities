@@ -561,6 +561,7 @@
                 x:Name="TabControl_RightPanel"
                 Grid.Row="0"
                 mah:HeaderedControlHelper.HeaderFontSize="13"
+                FontSize="13"
                 >
                 <TabItem x:Name="TabItem_SelectingNode">
                     <TabItem.Header>
@@ -2151,6 +2152,45 @@
 
                             <!--=========================================================================-->
                             <Grid Height="10"/>
+
+                            <Grid Margin="4">
+                                <TextBlock
+                                    Text="アプリ"
+                                    FontSize="20"
+                                    HorizontalAlignment="Left"
+                                    >
+                                </TextBlock>
+                            </Grid>
+
+                            <Grid Margin="4">
+                                <TextBlock
+                                    Text="フォントサイズ：" 
+                                    Width="100" 
+                                    HorizontalAlignment="Left"
+                                    TextAlignment="Right"
+                                    ToolTipService.InitialShowDelay="10" 
+                                    >
+                                    <TextBlock.ToolTip>
+                                        <TextBlock
+                                            TextAlignment="Left"
+                                            Text="文献文字列生成フォーマット"
+                                            >
+                                        </TextBlock>
+                                    </TextBlock.ToolTip>
+                                </TextBlock>
+                                <mah:NumericUpDown
+                                    Margin="100,0,0,0" 
+                                    HorizontalAlignment="Left"
+                                    Width="100"
+                                    Value="{Binding FontSize, ElementName=TabControl_RightPanel, Mode=TwoWay}"
+                                    Minimum="5"
+                                    Maximum="100"
+                                    />
+                            </Grid>
+
+                            <!--=========================================================================-->
+                            <Grid Height="10"/>
+
                             <Grid Margin="4">
                                 <TextBlock
                                     Text="文献"
@@ -2212,6 +2252,7 @@
 
                             <!--=========================================================================-->
                             <Grid Height="10"/>
+
                             <Grid Margin="4">
                                 <TextBlock
                                     Text="ノードグラフ操作"
@@ -2321,11 +2362,9 @@
                                     ToolTip="範囲選択モード"
                                     />
                             </Grid>
-
-
-
-
-
+                            
+                            <!--=========================================================================-->
+                            <Grid Height="10"/>
 
 
                         </StackPanel>
