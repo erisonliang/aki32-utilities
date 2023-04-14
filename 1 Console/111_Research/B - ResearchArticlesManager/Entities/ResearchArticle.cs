@@ -577,6 +577,7 @@ public class ResearchArticle : IComparable
 
     // ★★★★★ memo info
 
+    [UseExceptionalMerging]
     public string? Memo { get; set; }
     [CsvIgnore]
     public string? Memo_UnstructuredRefString
@@ -911,6 +912,25 @@ public class ResearchArticle : IComparable
             }
         }
 
+        // メモは，被りなく両方から持ってくる。
+        {
+            if (Memo.IsNullOrWhiteSpaceOrNewLine())
+            {
+                Memo = mergingArticle.Memo;
+            }
+            else
+            {
+                if (mergingArticle.Memo.IsNullOrWhiteSpaceOrNewLine())
+                {
+                }
+                else
+                {
+                    Memo += "\r\n\r\n↑↑↑ マージ前 ↑↑↑ ↓↓↓ マージ後 ↓↓↓\r\n\r\n";
+                    Memo += mergingArticle.Memo;
+                }
+            }
+        }
+
         // UseExceptionalBinaryBothMergingAttribute付きは，両方に印ついてるなら採用。
         {
             var andMixingBinaryProps = typeof(ResearchArticle)
@@ -1217,7 +1237,7 @@ public class ResearchArticle : IComparable
             Console.WriteLine($"推測に成功。(約 {openAI.lastPriceInYen:F3} 円)");
 
             var usedRefString = $"@@@{refString}";
-            if (string.IsNullOrWhiteSpace(Memo))
+            if (Memo is null || string.IsNullOrWhiteSpace(Memo.Replace("\r", "").Replace("\n", "")))
                 Memo = usedRefString;
             else
                 Memo += $"\r\n\r\n{usedRefString}";
