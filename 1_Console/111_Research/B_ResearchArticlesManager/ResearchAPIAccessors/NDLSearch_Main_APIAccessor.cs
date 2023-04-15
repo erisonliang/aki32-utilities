@@ -3,6 +3,7 @@
 using Aki32Utilities.ConsoleAppUtilities.General;
 
 namespace Aki32Utilities.ConsoleAppUtilities.Research;
+/// <see cref="https://iss.ndl.go.jp/information/api/riyou/"/>
 public class NDLSearch_Main_APIAccessor : IResearchAPIAccessor
 {
 

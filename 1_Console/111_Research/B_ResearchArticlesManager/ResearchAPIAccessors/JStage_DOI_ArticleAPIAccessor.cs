@@ -3,6 +3,7 @@ using System.Text.RegularExpressions;
 using HtmlAgilityPack;
 
 namespace Aki32Utilities.ConsoleAppUtilities.Research;
+/// <see cref="https://www.jstage.jst.go.jp/"/>
 public class JStage_DOI_ArticleAPIAccessor : IResearchAPIAccessor
 {
 

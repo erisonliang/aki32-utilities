@@ -3,6 +3,7 @@
 using Newtonsoft.Json.Linq;
 
 namespace Aki32Utilities.ConsoleAppUtilities.Research;
+/// <see cref="https://www.crossref.org/"/>
 public class CrossRef_DOI_APIAccessor : IResearchAPIAccessor
 {
 

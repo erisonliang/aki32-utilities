@@ -3,9 +3,7 @@
 using Newtonsoft.Json.Linq;
 
 namespace Aki32Utilities.ConsoleAppUtilities.Research;
-/// <summary>
-/// https://support.nii.ac.jp/ja/cir/r_opensearch
-/// </summary>
+/// <see cref="https://support.nii.ac.jp/ja/cir/r_opensearch"/>
 public class CiNii_Main_ArticleAPIAccessor : IResearchAPIAccessor
 {
 

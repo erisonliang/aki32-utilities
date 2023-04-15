@@ -1,6 +1,7 @@
 ﻿using System.Xml.Linq;
 
 namespace Aki32Utilities.ConsoleAppUtilities.Research;
+/// <see cref="https://www.jstage.jst.go.jp/static/files/ja/manual_api.pdf"/>
 public class JStage_Main_ArticleAPIAccessor : IResearchAPIAccessor
 {
 
