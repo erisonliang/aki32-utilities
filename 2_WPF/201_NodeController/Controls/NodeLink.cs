@@ -8,7 +8,6 @@ using System.Windows.Media;
 using System.Windows.Shapes;
 
 namespace Aki32Utilities.WPFAppUtilities.NodeController.Controls;
-
 public class NodeLink : Shape, ICanvasObject, ISelectableObject
 {
     public Guid Guid

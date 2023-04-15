@@ -9,7 +9,7 @@
     </Storyboard>
 
     <Style x:Key="__NodeLinkAnimationStyle__" TargetType="{x:Type local:NodeLink}">
-        <Style.Triggers>            
+        <Style.Triggers>
             <MultiTrigger>
                 <MultiTrigger.Conditions>
                     <Condition Property="IsMouseOver" Value="True"/>
@@ -22,7 +22,7 @@
                 <MultiTrigger.ExitActions>
                     <RemoveStoryboard BeginStoryboardName="__NodeLinkAnimation__"/>
                 </MultiTrigger.ExitActions>
-                
+
                 <MultiTrigger.EnterActions>
                     <BeginStoryboard Name="__NodeLinkAnimation__" Storyboard="{StaticResource NodeLinkMouseOver}"/>
                 </MultiTrigger.EnterActions>
@@ -42,5 +42,5 @@
             </Trigger>
         </Style.Triggers>
     </Style>
-    
+
 </ResourceDictionary>

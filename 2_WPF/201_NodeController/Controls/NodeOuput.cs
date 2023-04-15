@@ -4,7 +4,6 @@ using System.Windows;
 using System.Windows.Controls;
 
 namespace Aki32Utilities.WPFAppUtilities.NodeController.Controls;
-
 public class NodeOutputContent : NodeConnectorContent
 {
     protected override FrameworkElement ConnectorControl => _ConnectorControl;

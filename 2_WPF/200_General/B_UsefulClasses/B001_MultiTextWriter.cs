@@ -1,5 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.IO;
+﻿using System.IO;
 using System.Text;
 using System.Windows.Controls;
 using System.Windows.Markup;

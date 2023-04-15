@@ -4,7 +4,6 @@ using System.Windows;
 using System.Windows.Controls;
 
 namespace Aki32Utilities.WPFAppUtilities.NodeController.Controls;
-
 public class NodeInputContent : NodeConnectorContent
 {
     public bool AllowToConnectMultiple

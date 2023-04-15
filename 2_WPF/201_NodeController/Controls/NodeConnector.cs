@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -9,7 +6,6 @@ using System.Windows.Data;
 using System.Windows.Media;
 
 namespace Aki32Utilities.WPFAppUtilities.NodeController.Controls;
-
 public abstract class NodeConnectorContent : ContentControl, IDisposable
 {
     public Guid Guid

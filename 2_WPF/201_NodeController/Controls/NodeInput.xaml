@@ -19,7 +19,7 @@
                 </MultiTrigger.Conditions>
                 <Setter Property="Stroke" Value="Aqua"/>
             </MultiTrigger>
-            
+
             <Trigger Property="IsEnabled" Value="False">
                 <Setter Property="Fill" Value="#55888888"/>
                 <Setter Property="Stroke" Value="#55888888"/>
@@ -69,7 +69,7 @@
                             IsHitTestVisible="False"
                             />
                     </Grid>
-                 
+
                 </DockPanel>
                 <DockPanel 
                     HorizontalAlignment="Center"

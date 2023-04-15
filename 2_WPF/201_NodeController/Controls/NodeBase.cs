@@ -4,7 +4,6 @@ using System.Windows.Data;
 using System.Windows.Media;
 
 namespace Aki32Utilities.WPFAppUtilities.NodeController.Controls;
-
 public abstract class NodeBase : ContentControl, ICanvasObject, ISelectableObject, IDisposable
 {
 
@@ -60,7 +59,7 @@ public abstract class NodeBase : ContentControl, ICanvasObject, ISelectableObjec
 
     public Point Center => new(Position.X + ActualWidth / 2, Position.Y + ActualHeight / 2);
     public double Radius => Math.Max(ActualHeight, ActualWidth) / 2;
-    public double EdgeTheta => Math.Atan2(ActualHeight,ActualWidth);
+    public double EdgeTheta => Math.Atan2(ActualHeight, ActualWidth);
 
 
     // ★★★★★★★★★★★★★★★ inits

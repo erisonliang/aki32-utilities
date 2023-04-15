@@ -1,7 +1,6 @@
 ﻿using System.Windows;
 
 namespace Aki32Utilities.WPFAppUtilities.NodeController.Controls;
-
 internal interface ISelectableObject
 {
     bool IsSelected { get; set; }

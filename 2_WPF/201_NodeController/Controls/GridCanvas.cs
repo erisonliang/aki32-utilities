@@ -1,10 +1,8 @@
-﻿using System;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 
 namespace Aki32Utilities.WPFAppUtilities.NodeController.Controls;
-
 /// <summary>
 /// Infinity grid rendering canvas.
 /// </summary>

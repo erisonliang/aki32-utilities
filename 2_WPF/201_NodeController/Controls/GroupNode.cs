@@ -4,7 +4,6 @@ using System.Windows.Input;
 using System.Windows.Media;
 
 namespace Aki32Utilities.WPFAppUtilities.NodeController.Controls;
-
 public class GroupNode : NodeBase
 {
     public DataTemplate HeaderContentTemplate
