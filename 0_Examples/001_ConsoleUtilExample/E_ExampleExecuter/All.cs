@@ -48,13 +48,13 @@ public static partial class ExampleExecuter
 
         }
 
-        // 100 - General
+        // 100_General
         {
-            var baseDir_100 = BASE_DIR.GetChildDirectoryInfo($@"100 - General");
+            var baseDir_100 = BASE_DIR.GetChildDirectoryInfo($@"100_General");
 
-            // A - ChainableExtensions
+            // A_ChainableExtensions
             {
-                var baseDir_100_A = baseDir_100.GetChildDirectoryInfo($@"A - ChainableExtensions");
+                var baseDir_100_A = baseDir_100.GetChildDirectoryInfo($@"A_ChainableExtensions");
 
                 // 2202 To2DArray, ToJaggedArray
                 {
@@ -567,9 +567,9 @@ public static partial class ExampleExecuter
 
             }
 
-            // B - UsefulClasses
+            // B_UsefulClasses
             {
-                var baseDir_100_B = baseDir_100.GetChildDirectoryInfo($@"B - UsefulClasses");
+                var baseDir_100_B = baseDir_100.GetChildDirectoryInfo($@"B_UsefulClasses");
 
                 // B004 ConsoleExtension
                 {
@@ -629,13 +629,13 @@ public static partial class ExampleExecuter
 
             }
 
-            // C - AwesomeModels
+            // C_AwesomeModels
             {
-                var baseDir_100_C = baseDir_100.GetChildDirectoryInfo($@"C - AwesomeModels");
+                var baseDir_100_C = baseDir_100.GetChildDirectoryInfo($@"C_AwesomeModels");
 
-                // A - TimeHistoryModel
+                // A_TimeHistoryModel
                 {
-                    var baseDir_C_A = baseDir_100_C.GetChildDirectoryInfo($@"A - TimeHistoryModel");
+                    var baseDir_C_A = baseDir_100_C.GetChildDirectoryInfo($@"A_TimeHistoryModel");
 
                     // ★ TimeHistory
                     {
@@ -672,9 +672,9 @@ public static partial class ExampleExecuter
 
             }
 
-            // D - ExternalAPIControllers
+            // D_ExternalAPIControllers
             {
-                var baseDir_100_D = baseDir_100.GetChildDirectoryInfo($@"D - ExternalAPIControllers");
+                var baseDir_100_D = baseDir_100.GetChildDirectoryInfo($@"D_ExternalAPIControllers");
 
                 // D001 LINEController
                 {
@@ -748,7 +748,7 @@ public static partial class ExampleExecuter
                         //};
 
                         //prompt.WriteLine(@"");
-                        //prompt.WriteLine(@"cd ..\..\..\# TestModel\A - Extensions\E007 DistortImage");
+                        //prompt.WriteLine(@"cd ..\..\..\# TestModel\A_Extensions\E007 DistortImage");
                         //prompt.WriteLine(@"");
                         //prompt.WriteLine(@"lnn");
                         //prompt.WriteLine(@"");
@@ -764,7 +764,7 @@ public static partial class ExampleExecuter
 
                         //var commands = new string[] {
                         //   @"",
-                        //   @"cd ..\..\..\# TestModel\A - Extensions\E007 DistortImage",
+                        //   @"cd ..\..\..\# TestModel\A_Extensions\E007 DistortImage",
                         //   @"",
                         //   @"lnn",
                         //   @"",
@@ -783,9 +783,9 @@ public static partial class ExampleExecuter
 
             }
 
-            // E - Wrappers
+            // E_Wrappers
             {
-                var baseDir_100_E = baseDir_100.GetChildDirectoryInfo($@"E - Wrappers");
+                var baseDir_100_E = baseDir_100.GetChildDirectoryInfo($@"E_Wrappers");
 
 
                 // E001 NumpyWrapper
@@ -834,8 +834,8 @@ public static partial class ExampleExecuter
                         //var n = 5;
 
                         //// ★★★★★
-                        //var XX = EnumerableExtension.Range_WithStep(0, n - 1, 1).ToArray();
-                        //var YY = EnumerableExtension.Range_WithStep(0, n - 1, 1).ToArray();
+                        //var XX = EnumerableExtension.Range_WithStep(0, n-1, 1).ToArray();
+                        //var YY = EnumerableExtension.Range_WithStep(0, n-1, 1).ToArray();
                         //var ZZ = Enumerable.SelectMany(XX, x => YY, (x, y) => (x + 1) * y).ToArray().ReShape(n, n);
 
                         //// ★★★★★ bar3d
@@ -874,10 +874,10 @@ public static partial class ExampleExecuter
                         //var ZZ = Enumerable
                         //    .SelectMany(XX, x => YY, (x, y) =>
                         //    {
-                        //        var Z1 = Math.Exp(-Math.Pow(x, 2) - Math.Pow(y, 2));
-                        //        var Z2 = Math.Exp(-Math.Pow(x - 1.2, 2) - Math.Pow(y - 0.7, 2));
-                        //        var Z3 = Math.Exp(-Math.Pow(x + 0.5, 2) - Math.Pow(y + 1.4, 2));
-                        //        return (Z1 - Z2 - Z3) * 2;
+                        //        var Z1 = Math.Exp(-Math.Pow(x, 2)-Math.Pow(y, 2));
+                        //        var Z2 = Math.Exp(-Math.Pow(x-1.2, 2)-Math.Pow(y-0.7, 2));
+                        //        var Z3 = Math.Exp(-Math.Pow(x + 0.5, 2)-Math.Pow(y + 1.4, 2));
+                        //        return (Z1-Z2-Z3) * 2;
                         //    })
                         //    .ReShape(n, n);
 
@@ -1060,13 +1060,13 @@ public static partial class ExampleExecuter
 
         }
 
-        // 101 - AI
+        // 101_AI
         {
-            var baseDir_101 = BASE_DIR.GetChildDirectoryInfo($@"101 - AI");
+            var baseDir_101 = BASE_DIR.GetChildDirectoryInfo($@"101_AI");
 
-            // A - ChainableExtensions
+            // A_ChainableExtensions
             {
-                var baseDir_101_A = baseDir_101.GetChildDirectoryInfo($@"A - ChainableExtensions");
+                var baseDir_101_A = baseDir_101.GetChildDirectoryInfo($@"A_ChainableExtensions");
 
                 // BB ImageToImage
                 {
@@ -1090,17 +1090,17 @@ public static partial class ExampleExecuter
                 }
             }
 
-            // B - UsefulClasses
+            // B_UsefulClasses
             {
-                var baseDir_101_B = baseDir_101.GetChildDirectoryInfo($@"B - UsefulClasses");
+                var baseDir_101_B = baseDir_101.GetChildDirectoryInfo($@"B_UsefulClasses");
 
 
 
             }
 
-            // C - AwesomeModels
+            // C_AwesomeModels
             {
-                var baseDir_101_C = baseDir_101.GetChildDirectoryInfo($@"C - AwesomeModels");
+                var baseDir_101_C = baseDir_101.GetChildDirectoryInfo($@"C_AwesomeModels");
 
                 //
                 {
@@ -1108,9 +1108,9 @@ public static partial class ExampleExecuter
 
             }
 
-            // D - ExternalAPIControllers
+            // D_ExternalAPIControllers
             {
-                var baseDir_101_D = baseDir_101.GetChildDirectoryInfo($@"D - ExternalAPIControllers");
+                var baseDir_101_D = baseDir_101.GetChildDirectoryInfo($@"D_ExternalAPIControllers");
 
                 // D001 OpenAIController
                 {
@@ -1156,9 +1156,9 @@ public static partial class ExampleExecuter
 
             }
 
-            // E - Wrappers
+            // E_Wrappers
             {
-                var baseDir_101_E = baseDir_101.GetChildDirectoryInfo($@"E - Wrappers");
+                var baseDir_101_E = baseDir_101.GetChildDirectoryInfo($@"E_Wrappers");
 
                 // E001 WhisperCppWrapper
                 {
@@ -1181,11 +1181,11 @@ public static partial class ExampleExecuter
                 }
             }
 
-            // X - CheatSheet
+            // X_CheatSheet
             {
-                var baseDir_101_X = baseDir_101.GetChildDirectoryInfo($@"X - CheatSheet");
+                var baseDir_101_X = baseDir_101.GetChildDirectoryInfo($@"X_CheatSheet");
 
-                // A001 - CheatSheet - MLNetExampleSummary
+                // A001_CheatSheet_MLNetExampleSummary
                 {
                     //var baseDir_101_X_A001 = baseDir_101_X.GetChildDirectoryInfo($@"A001 MLNetExampleSummary");
 
@@ -1199,13 +1199,13 @@ public static partial class ExampleExecuter
 
         }
 
-        // 110 - StructuralEngineering
+        // 110_StructuralEngineering
         {
-            var baseDir_110 = BASE_DIR.GetChildDirectoryInfo($@"110 - StructuralEngineering");
+            var baseDir_110 = BASE_DIR.GetChildDirectoryInfo($@"110_StructuralEngineering");
 
-            // A - ChainableExtensions
+            // A_ChainableExtensions
             {
-                var baseDir_110_A = baseDir_110.GetChildDirectoryInfo($@"A - ChainableExtensions");
+                var baseDir_110_A = baseDir_110.GetChildDirectoryInfo($@"A_ChainableExtensions");
 
                 // B001 RainflowCycleCounting
                 {
@@ -1248,9 +1248,9 @@ public static partial class ExampleExecuter
 
             }
 
-            // C - AwesomeModels
+            // C_AwesomeModels
             {
-                var baseDir_110_C = baseDir_110.GetChildDirectoryInfo(@$"C - AwesomeModels");
+                var baseDir_110_C = baseDir_110.GetChildDirectoryInfo(@$"C_AwesomeModels");
 
                 // B001 ElastoplasticAnalysis
                 {
@@ -1410,9 +1410,9 @@ public static partial class ExampleExecuter
                 }
             }
 
-            // X - SoftwareHelpers
+            // X_SoftwareHelpers
             {
-                var baseDir_110_X = baseDir_110.GetChildDirectoryInfo(@$"X - SoftwareHelpers");
+                var baseDir_110_X = baseDir_110.GetChildDirectoryInfo(@$"X_SoftwareHelpers");
 
                 // X001 SNAPHelper
                 {
@@ -1456,11 +1456,11 @@ public static partial class ExampleExecuter
 
         }
 
-        // 111 - Research
+        // 111_Research
         {
-            var baseDir_101 = BASE_DIR.GetChildDirectoryInfo($@"111 - Research");
+            var baseDir_101 = BASE_DIR.GetChildDirectoryInfo($@"111_Research");
 
-            // A - ResearchManager
+            // A_ResearchManager
             {
 
                 //var databaseDir = new DirectoryInfo($@"{Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory)}\ResearchArticleDB");
@@ -1531,9 +1531,9 @@ public static partial class ExampleExecuter
 
         }
 
-        // M - MiniApps
+        // M_MiniApps
         {
-            var baseDir_M = BASE_DIR.GetChildDirectoryInfo($@"M - MiniApps");
+            var baseDir_M = BASE_DIR.GetChildDirectoryInfo($@"M_MiniApps");
 
             // M001 Books2PDF
             {
