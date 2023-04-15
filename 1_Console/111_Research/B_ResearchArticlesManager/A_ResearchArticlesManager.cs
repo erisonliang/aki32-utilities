@@ -1,9 +1,5 @@
 ﻿using Aki32Utilities.ConsoleAppUtilities.General;
 
-using LibGit2Sharp;
-
-using Org.BouncyCastle.Crypto.Prng;
-
 namespace Aki32Utilities.ConsoleAppUtilities.Research;
 public partial class ResearchArticlesManager
 {

@@ -1,17 +1,6 @@
 ﻿using System.Diagnostics;
-using System.Linq;
-using System.Reflection;
 
 using Aki32Utilities.ConsoleAppUtilities.General;
-
-using DocumentFormat.OpenXml.Spreadsheet;
-using DocumentFormat.OpenXml.Wordprocessing;
-
-using Microsoft.FSharp.Core;
-
-using NAudio.Wave;
-
-using OpenCvSharp.Dnn;
 
 namespace Aki32Utilities.ConsoleAppUtilities.StructuralEngineering;
 public static class SNAPHelper

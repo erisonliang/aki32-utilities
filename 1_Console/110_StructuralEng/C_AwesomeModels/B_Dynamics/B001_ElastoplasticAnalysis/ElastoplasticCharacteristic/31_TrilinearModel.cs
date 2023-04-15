@@ -1,7 +1,6 @@
 ﻿
 
 namespace Aki32Utilities.ConsoleAppUtilities.StructuralEngineering;
-
 /// <summary>
 /// Normal Trilinear Model with Kinematic Hardening (移動硬化)
 /// </summary>
@@ -61,7 +60,7 @@ public class TrilinearModel : ElastoplasticCharacteristicBase
         var HitX = (K1 * TempX - TempF + dir * (Fy2 - K3 * Xy2)) / (K1 - K3);
         var HitF = TempF + K1 * (HitX - TempX);
         var f2c = K2 * (NextX - HitX) + HitF;
-        
+
         var f3 = K3 * (NextX - dir * Xy2) + dir * Fy2;
 
         // max, min

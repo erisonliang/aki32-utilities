@@ -1,7 +1,6 @@
 ﻿
 
 namespace Aki32Utilities.ConsoleAppUtilities.StructuralEngineering;
-
 /// <summary>
 /// Bilinear Model where K2=0
 /// </summary>

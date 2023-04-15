@@ -1,7 +1,6 @@
 ﻿
 
 namespace Aki32Utilities.ConsoleAppUtilities.StructuralEngineering;
-
 [Obsolete]
 /// <summary>
 /// バイリニアと同じ感じで作ったトリリニア。

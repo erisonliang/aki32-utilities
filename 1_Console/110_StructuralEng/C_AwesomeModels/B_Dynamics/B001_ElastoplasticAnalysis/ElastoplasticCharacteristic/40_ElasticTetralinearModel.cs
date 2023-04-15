@@ -1,7 +1,6 @@
 ﻿
 
 namespace Aki32Utilities.ConsoleAppUtilities.StructuralEngineering;
-
 /// <summary>
 /// Elastic Tetralinear Model
 /// Follows skelton curve when restoring

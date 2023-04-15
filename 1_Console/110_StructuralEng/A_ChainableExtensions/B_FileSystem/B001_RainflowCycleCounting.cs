@@ -77,7 +77,7 @@ public static partial class ChainableExtensions
         inputDir.Loop(outputDir,
             ProcessOne,
             maxDegreeOfParallelism: maxDegreeOfParallelism,
-            searchRegexen: General.ChainableExtensions.GetRegexen_CsvFiles(csv:true)
+            searchRegexen: General.ChainableExtensions.GetRegexen_CsvFiles(csv: true)
             );
 
 

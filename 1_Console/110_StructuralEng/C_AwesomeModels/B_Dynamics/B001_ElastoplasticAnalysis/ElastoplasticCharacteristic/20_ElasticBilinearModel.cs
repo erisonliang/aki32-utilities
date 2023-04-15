@@ -1,9 +1,6 @@
 ﻿
 
-using DocumentFormat.OpenXml.Wordprocessing;
-
 namespace Aki32Utilities.ConsoleAppUtilities.StructuralEngineering;
-
 /// <summary>
 /// Elastic Bilinear Model
 /// Follows skelton curve when restoring

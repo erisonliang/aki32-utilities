@@ -1,15 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-
-using Aki32Utilities.ConsoleAppUtilities.General;
-
-using DocumentFormat.OpenXml.Presentation;
+﻿using Aki32Utilities.ConsoleAppUtilities.General;
 
 namespace Aki32Utilities.ConsoleAppUtilities.Research;
 public static partial class ChainableExtensions

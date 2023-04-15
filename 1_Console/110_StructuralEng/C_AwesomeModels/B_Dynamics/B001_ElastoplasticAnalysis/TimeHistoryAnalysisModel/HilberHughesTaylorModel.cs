@@ -42,7 +42,7 @@ public class HilberHughesTaylorModel : ITimeHistoryAnalysisModel
             // simple calc
 
             throw new NotImplementedException();
-        
+
         }
         else
         {

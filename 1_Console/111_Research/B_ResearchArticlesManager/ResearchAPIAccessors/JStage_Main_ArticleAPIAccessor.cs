@@ -1,5 +1,4 @@
 ﻿using System.Xml.Linq;
-using System;
 
 namespace Aki32Utilities.ConsoleAppUtilities.Research;
 public class JStage_Main_ArticleAPIAccessor : IResearchAPIAccessor
@@ -197,7 +196,7 @@ public class JStage_Main_ArticleAPIAccessor : IResearchAPIAccessor
                 article.JStage_SystemName = entity.Element(ExpandAtom("systemname"))?.Value;
 
                 article.JStage_UpdatedOn = entity.Element(ExpandAtom("updated"))?.Value;
-            
+
             }
 
             yield return article;

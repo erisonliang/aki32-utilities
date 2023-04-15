@@ -1,13 +1,12 @@
 ﻿
 
 namespace Aki32Utilities.ConsoleAppUtilities.StructuralEngineering;
-
 /// <summary>
 /// Elastic Model
 /// </summary>
 public class ElasticModel : ElastoplasticCharacteristicBase
 {
-    
+
     // ★★★★★★★★★★★★★★★ props
 
 
@@ -30,7 +29,7 @@ public class ElasticModel : ElastoplasticCharacteristicBase
 
         NextX = targetX;
         NextF = targetX * K1;
-        
+
         return NextF;
     }
 

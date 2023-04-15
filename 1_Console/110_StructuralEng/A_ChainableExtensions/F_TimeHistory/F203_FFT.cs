@@ -29,7 +29,8 @@ public static partial class ChainableExtensions
             }
             Np--;
 
-            if (Np == 0) return;
+            if (Np == 0)
+                return;
             int N = (int)Math.Pow(2, Np); // サンプル数
 
             var complexVoice = inputHistoryClone[targetIndex]

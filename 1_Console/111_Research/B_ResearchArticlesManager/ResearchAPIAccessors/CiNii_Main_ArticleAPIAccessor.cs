@@ -1,6 +1,4 @@
-﻿
-
-using Aki32Utilities.ConsoleAppUtilities.General;
+﻿using Aki32Utilities.ConsoleAppUtilities.General;
 
 using Newtonsoft.Json.Linq;
 
