@@ -172,7 +172,8 @@ public static partial class ChainableExtensions
     {
         // main
         var outputFile = inputFile.GetRenamedFileInfo(newFileNameWithoutExtension, replaceSets);
-        inputFile.MoveTo(outputFile);
+        if (inputFile.FullName != outputFile.FullName)
+            inputFile.MoveTo(outputFile);
 
 
         // post process

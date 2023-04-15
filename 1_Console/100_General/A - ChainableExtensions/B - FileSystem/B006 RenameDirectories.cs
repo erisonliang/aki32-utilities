@@ -117,8 +117,8 @@ public static partial class ChainableExtensions
     {
         // main
         var outputDir = inputDir.GetRenamedDirInfo(newDirName, replaceSets);
-        inputDir.MoveTo(outputDir);
-
+        if (inputDir.FullName != outputDir.FullName)
+            inputDir.MoveTo(outputDir);
 
         // post process
         return outputDir!;
