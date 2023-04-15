@@ -1,10 +1,4 @@
 ﻿using Aki32Utilities.ConsoleAppUtilities.General;
-using Aki32Utilities.Properties;
-
-using DocumentFormat.OpenXml.Drawing.Diagrams;
-using DocumentFormat.OpenXml.Wordprocessing;
-
-using NAudio.Wave;
 
 using System.Diagnostics;
 

@@ -1,8 +1,6 @@
 ﻿using System.Data;
 using System.Drawing;
 
-using Microsoft.ML.Data;
-
 namespace Aki32Utilities.ConsoleAppUtilities.AI.CheatSheet;
 public class I004_YoloOutput
 {

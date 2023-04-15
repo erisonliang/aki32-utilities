@@ -1,6 +1,4 @@
-﻿using Aki32Utilities.ConsoleAppUtilities.General;
-
-using Microsoft.ML;
+﻿
 
 namespace Aki32Utilities.ConsoleAppUtilities.AI.CheatSheet;
 /// <summary>

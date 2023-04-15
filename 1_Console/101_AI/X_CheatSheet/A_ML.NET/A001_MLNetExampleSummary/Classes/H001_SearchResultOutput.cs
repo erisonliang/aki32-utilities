@@ -1,4 +1,5 @@
 ﻿
+
 namespace Aki32Utilities.ConsoleAppUtilities.AI.CheatSheet;
 public class H001_SearchResultOutput
 {

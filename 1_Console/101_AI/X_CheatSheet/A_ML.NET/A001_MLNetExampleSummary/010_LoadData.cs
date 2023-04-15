@@ -1,7 +1,5 @@
 ﻿using Aki32Utilities.ConsoleAppUtilities.General;
 
-using DocumentFormat.OpenXml.Vml;
-
 using Microsoft.ML;
 using Microsoft.ML.Data;
 

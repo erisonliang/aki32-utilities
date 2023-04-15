@@ -152,7 +152,8 @@ public partial class MLNetExampleSummary : MLNetHandler
                     ConnectNode(Context.Transforms.NormalizeMeanVariance(outputColumnName: nameof(D001_TaxiFareInput.TripTime)));
                     ConnectNode(Context.Transforms.NormalizeMeanVariance(outputColumnName: nameof(D001_TaxiFareInput.TripDistance)));
                     ConnectNode(Context.Transforms.Concatenate("Features",
-                        "VendorIdEncoded", "RateCodeEncoded", "PaymentTypeEncoded", nameof(D001_TaxiFareInput.PassengerCount), nameof(D001_TaxiFareInput.TripTime), nameof(D001_TaxiFareInput.TripDistance))); ;
+                        "VendorIdEncoded", "RateCodeEncoded", "PaymentTypeEncoded", nameof(D001_TaxiFareInput.PassengerCount), nameof(D001_TaxiFareInput.TripTime), nameof(D001_TaxiFareInput.TripDistance)));
+                    ;
 
                     ConnectNode(Context.Regression.Trainers.Sdca(labelColumnName: "Label", featureColumnName: "Features"));
 

@@ -6,7 +6,7 @@ public class A004_HeartSample
     internal static readonly List<A004_HeartInput> heartDataList = new List<A004_HeartInput>()
     {
         new A004_HeartInput()
-        { 
+        {
             Age = 36.0f,
             Sex = 1.0f,
             Cp = 4.0f,

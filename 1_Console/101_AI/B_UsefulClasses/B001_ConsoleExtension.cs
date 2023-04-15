@@ -38,7 +38,7 @@ public static class ConsoleExtension
         Console.WriteLine(@$"=======================================================");
         Console.WriteLine(@$"{metricsObject.GetType()}");
         Console.WriteLine($@"-------------------------------------------------------");
-        
+
         if (false)
         {
         }
