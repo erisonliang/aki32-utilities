@@ -45,6 +45,15 @@ public static partial class ExampleExecuter
         // TEST
         {
 
+            //var dirs = new List<DirectoryInfo>()
+            //{
+            //    new DirectoryInfo(@"C:\Users\aki32\Dropbox\Codes\# Projects\# Utilities\0_Examples"),
+            //    new DirectoryInfo(@"C:\Users\aki32\Dropbox\Codes\# Projects\# Utilities\1_Console"),
+            //    new DirectoryInfo(@"C:\Users\aki32\Dropbox\Codes\# Projects\# Utilities\2_WPF"),
+            //};
+            //foreach (var dir in dirs)
+            //    dir.RenameDirs("*", new (string from, string to)[] { (" - ", "_") }, true);
+
 
         }
 
