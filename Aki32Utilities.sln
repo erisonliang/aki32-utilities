@@ -3,31 +3,31 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.2.32526.322
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2 WPF", "2 WPF", "{6B224D67-E18F-4B9A-8286-E075E2C665C0}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2_WPF", "2_WPF", "{6B224D67-E18F-4B9A-8286-E075E2C665C0}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1 Console", "1 Console", "{12CA4997-7908-4FE0-982F-2FC56A7CC832}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1_Console", "1_Console", "{12CA4997-7908-4FE0-982F-2FC56A7CC832}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "0 Examples", "0 Examples", "{290C3C10-EFB9-4571-B388-926637C9E111}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "0_Examples", "0_Examples", "{290C3C10-EFB9-4571-B388-926637C9E111}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3 WFA", "3 WFA", "{CEA023E0-4DF9-4B7E-A9BA-296A2522BD9A}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3_WFA", "3_WFA", "{CEA023E0-4DF9-4B7E-A9BA-296A2522BD9A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "201_NodeController", "2 WPF\201_NodeController\201_NodeController.csproj", "{50F91BAF-531E-4395-804B-7B37996EBD5F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "201_NodeController", "2_WPF\201_NodeController\201_NodeController.csproj", "{50F91BAF-531E-4395-804B-7B37996EBD5F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "003_ResearchArticlesNodeController", "0 Examples\003_ResearchArticlesNodeController\003_ResearchArticlesNodeController.csproj", "{D9FD5569-FC75-43E9-AA25-EE5928E92D72}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "003_ResearchArticlesNodeController", "0_Examples\003_ResearchArticlesNodeController\003_ResearchArticlesNodeController.csproj", "{D9FD5569-FC75-43E9-AA25-EE5928E92D72}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "002_SampleNodeController", "0 Examples\002_SampleNodeController\002_SampleNodeController.csproj", "{18530E25-C62D-4736-9748-D84C2B49C3A1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "002_SampleNodeController", "0_Examples\002_SampleNodeController\002_SampleNodeController.csproj", "{18530E25-C62D-4736-9748-D84C2B49C3A1}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "100_General", "1 Console\100_General\100_General.csproj", "{3BD89421-B1E1-490F-AFEF-34B703F8D603}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "100_General", "1_Console\100_General\100_General.csproj", "{3BD89421-B1E1-490F-AFEF-34B703F8D603}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "110_StructuralEngineering", "1 Console\110_StructuralEng\110_StructuralEngineering.csproj", "{1A8FA3C8-0045-4D07-AE9D-FB084F8DCD66}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "110_StructuralEngineering", "1_Console\110_StructuralEng\110_StructuralEngineering.csproj", "{1A8FA3C8-0045-4D07-AE9D-FB084F8DCD66}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "101_AI", "1 Console\101_AI\101_AI.csproj", "{2617BDC2-FDE5-4187-82F5-353A7BFF3F85}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "101_AI", "1_Console\101_AI\101_AI.csproj", "{2617BDC2-FDE5-4187-82F5-353A7BFF3F85}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "111_Research", "1 Console\111_Research\111_Research.csproj", "{35578693-A05F-45BA-B1CC-43C1145A8A7A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "111_Research", "1_Console\111_Research\111_Research.csproj", "{35578693-A05F-45BA-B1CC-43C1145A8A7A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "001_Console Util Example", "0 Examples\001_ConsoleUtilExample\001_Console Util Example.csproj", "{851670C0-014A-4716-8D0E-A41694D8B983}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "001_ConsoleUtilExample", "0_Examples\001_ConsoleUtilExample\001_ConsoleUtilExample.csproj", "{851670C0-014A-4716-8D0E-A41694D8B983}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "200_General", "2 WPF\200_General\200_General.csproj", "{5D9A4B05-EF3C-41C6-8970-B444CA609595}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "200_General", "2_WPF\200_General\200_General.csproj", "{5D9A4B05-EF3C-41C6-8970-B444CA609595}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
