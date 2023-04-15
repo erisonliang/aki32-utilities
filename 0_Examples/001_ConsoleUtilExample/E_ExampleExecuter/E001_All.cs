@@ -1187,13 +1187,13 @@ public static partial class ExampleExecuter
 
                 // A001_CheatSheet_MLNetExampleSummary
                 {
-                    var baseDir_101_X_A001 = baseDir_101_X.GetChildDirectoryInfo($@"A001_MLNetExampleSummary");
-                    var baseDir_101_X_A001_Private = baseDir_101_X_A001.GetChildDirectoryInfo($@"@Private");
+                    //var baseDir_101_X_A001 = baseDir_101_X.GetChildDirectoryInfo($@"A001_MLNetExampleSummary");
+                    //var baseDir_101_X_A001_Private = baseDir_101_X_A001.GetChildDirectoryInfo($@"@Private");
 
-                    var runner = new MLNetExampleSummary(MLNetExampleScenario.C777_Recommendation_Auto_MovieRecommender, baseDir_101_X_A001_Private);
-                    //runner.ExperimentTime_InSeconds = 60;
-                    //runner.RunPrediction();
-                    runner.RunAll();
+                    //var runner = new MLNetExampleSummary(MLNetExampleScenario.B003_MultiClassClassification_MNIST, baseDir_101_X_A001_Private);
+                    ////runner.ExperimentTime_InSeconds = 60;
+                    ////runner.RunPrediction();
+                    //runner.RunAll();
 
                 }
             }
