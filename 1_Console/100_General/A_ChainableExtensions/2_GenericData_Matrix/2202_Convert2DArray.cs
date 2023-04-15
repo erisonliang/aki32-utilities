@@ -1,7 +1,5 @@
 ﻿
 
-using MathNet.Numerics.LinearAlgebra;
-
 namespace Aki32Utilities.ConsoleAppUtilities.General;
 public static partial class ChainableExtensions
 {
@@ -38,7 +36,7 @@ public static partial class ChainableExtensions
         // post process
         return outputData;
     }
- 
+
     /// <summary>
     /// Convert to Jagged Array
     /// </summary>

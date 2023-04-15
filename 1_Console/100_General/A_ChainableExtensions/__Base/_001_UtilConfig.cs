@@ -1,6 +1,4 @@
-﻿using System.Text;
-
-using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json.Linq;
 
 namespace Aki32Utilities.ConsoleAppUtilities.General;
 public static class UtilConfig

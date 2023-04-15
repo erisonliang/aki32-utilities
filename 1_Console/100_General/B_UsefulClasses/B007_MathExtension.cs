@@ -1,7 +1,6 @@
 ﻿
 
 namespace Aki32Utilities.ConsoleAppUtilities.General;
-
 /// <summary>
 /// Mainly, syntax sugar of device IO OS commands.
 /// </summary>

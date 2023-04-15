@@ -51,8 +51,10 @@ public static partial class ChainableExtensions
             if (i0 >= 0)
             {
                 int ii0 = line.IndexOf("/", i0 + searchWord.Length);
-                if (ii0 < 0) { ii0 = line.IndexOf(" ", i0 + searchWord.Length); }
-                if (ii0 < 0) { ii0 = line.IndexOf(">>", i0 + searchWord.Length); }
+                if (ii0 < 0)
+                { ii0 = line.IndexOf(" ", i0 + searchWord.Length); }
+                if (ii0 < 0)
+                { ii0 = line.IndexOf(">>", i0 + searchWord.Length); }
                 if (ii0 >= 0)
                 {
                     line = line.Substring(i0, ii0 - i0);

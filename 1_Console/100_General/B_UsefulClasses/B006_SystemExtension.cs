@@ -1,11 +1,6 @@
-﻿using System.Drawing;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
-
-using OpenCvSharp.Internal;
+﻿
 
 namespace Aki32Utilities.ConsoleAppUtilities.General;
-
 /// <summary>
 /// Mainly, syntax sugar of device IO OS commands.
 /// </summary>

@@ -1,4 +1,5 @@
 ﻿
+
 namespace Aki32Utilities.ConsoleAppUtilities.General;
 public class ConsoleExtension
 {

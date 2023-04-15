@@ -1,6 +1,4 @@
-﻿using System.Data;
-using System.IO.Compression;
-using System.Security.Cryptography;
+﻿using System.Security.Cryptography;
 using System.Text;
 
 namespace Aki32Utilities.ConsoleAppUtilities.General;

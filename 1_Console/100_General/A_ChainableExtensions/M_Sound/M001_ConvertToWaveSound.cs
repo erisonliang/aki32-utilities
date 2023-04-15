@@ -1,7 +1,6 @@
 ﻿using MediaToolkit;
 using MediaToolkit.Model;
 
-using NAudio.Dmo;
 using NAudio.Wave;
 
 namespace Aki32Utilities.ConsoleAppUtilities.General;

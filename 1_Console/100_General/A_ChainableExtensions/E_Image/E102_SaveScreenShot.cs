@@ -70,8 +70,10 @@ public static partial class ChainableExtensions
         var ul = upperLeftCoordinate;
         var br = bottomRightCoordinate;
 
-        if (br.X - ul.X < 0) (br.X, ul.X) = (ul.X, br.X);
-        if (br.Y - ul.Y < 0) (br.Y, ul.Y) = (ul.Y, br.Y);
+        if (br.X - ul.X < 0)
+            (br.X, ul.X) = (ul.X, br.X);
+        if (br.Y - ul.Y < 0)
+            (br.Y, ul.Y) = (ul.Y, br.Y);
         using var outputBitmap = new Bitmap(br.X - ul.X, br.Y - ul.Y);
         using var g = Graphics.FromImage(outputBitmap);
         g.CopyFromScreen(ul, new Point(0, 0), outputBitmap.Size);

@@ -1,6 +1,4 @@
-﻿using System.Numerics;
-
-using MathNet.Numerics.LinearAlgebra;
+﻿
 
 namespace Aki32Utilities.ConsoleAppUtilities.General;
 public static partial class ChainableExtensions

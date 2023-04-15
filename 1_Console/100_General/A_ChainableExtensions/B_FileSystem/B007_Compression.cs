@@ -1,10 +1,8 @@
-﻿using System;
-using System.IO.Compression;
+﻿using System.IO.Compression;
 using System.Text;
 
 using Aspose.Zip.Rar;
 
-using ICSharpCode.SharpZipLib.GZip;
 using ICSharpCode.SharpZipLib.Tar;
 
 namespace Aki32Utilities.ConsoleAppUtilities.General;

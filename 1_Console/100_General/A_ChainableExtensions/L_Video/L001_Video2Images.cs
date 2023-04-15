@@ -1,9 +1,4 @@
 ﻿using OpenCvSharp;
-using Aki32Utilities.ConsoleAppUtilities.General;
-using System.Runtime.CompilerServices;
-using DocumentFormat.OpenXml.ExtendedProperties;
-using static System.Runtime.CompilerServices.RuntimeHelpers;
-using OpenCvSharp.XImgProc;
 
 namespace Aki32Utilities.ConsoleAppUtilities.General;
 public static partial class ChainableExtensions

@@ -1,4 +1,4 @@
-﻿using System.Text;
+﻿
 
 namespace Aki32Utilities.ConsoleAppUtilities.General;
 public static partial class ChainableExtensions
@@ -18,8 +18,10 @@ public static partial class ChainableExtensions
     /// <param name="action">The action to execute on each element</param>
     public static void ForEach<T>(this IEnumerable<T> source, Action<T> action)
     {
-        if (source == null) throw new ArgumentNullException(nameof(source));
-        if (action == null) throw new ArgumentNullException(nameof(action));
+        if (source == null)
+            throw new ArgumentNullException(nameof(source));
+        if (action == null)
+            throw new ArgumentNullException(nameof(action));
 
         foreach (var element in source)
             action(element);
@@ -39,8 +41,10 @@ public static partial class ChainableExtensions
     /// of the action represents the index of the source element.</param>
     public static void ForEach<T>(this IEnumerable<T> source, Action<T, int> action)
     {
-        if (source == null) throw new ArgumentNullException(nameof(source));
-        if (action == null) throw new ArgumentNullException(nameof(action));
+        if (source == null)
+            throw new ArgumentNullException(nameof(source));
+        if (action == null)
+            throw new ArgumentNullException(nameof(action));
 
         var index = 0;
         foreach (var element in source)

@@ -1,7 +1,5 @@
 ﻿
 
-using System.Net;
-
 namespace Aki32Utilities.ConsoleAppUtilities.General;
 public static partial class ChainableExtensions
 {

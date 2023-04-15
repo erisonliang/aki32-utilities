@@ -1,7 +1,5 @@
-﻿using System.Runtime.CompilerServices;
-using Aki32Utilities.ConsoleAppUtilities.General;
-using System.Text;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
+
 using System.Xml.Serialization;
 
 namespace Aki32Utilities.ConsoleAppUtilities.General;

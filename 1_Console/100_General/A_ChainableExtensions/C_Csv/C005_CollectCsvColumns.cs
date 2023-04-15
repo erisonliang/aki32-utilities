@@ -1,8 +1,4 @@
-﻿using Aki32Utilities.ConsoleAppUtilities.General;
-
-using ClosedXML.Excel;
-
-using System.Text;
+﻿
 
 namespace Aki32Utilities.ConsoleAppUtilities.General;
 public static partial class ChainableExtensions

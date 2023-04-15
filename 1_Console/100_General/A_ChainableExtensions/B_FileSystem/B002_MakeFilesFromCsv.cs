@@ -1,4 +1,4 @@
-﻿using System.Text;
+﻿
 
 namespace Aki32Utilities.ConsoleAppUtilities.General;
 public static partial class ChainableExtensions
@@ -25,7 +25,8 @@ public static partial class ChainableExtensions
         {
             var targetName = line[0];
 
-            if (string.IsNullOrEmpty(targetName)) continue;
+            if (string.IsNullOrEmpty(targetName))
+                continue;
 
             try
             {
@@ -63,7 +64,8 @@ public static partial class ChainableExtensions
         {
             var targetName = line[0];
 
-            if (string.IsNullOrEmpty(targetName)) continue;
+            if (string.IsNullOrEmpty(targetName))
+                continue;
 
             try
             {

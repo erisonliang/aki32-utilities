@@ -1,11 +1,7 @@
 ﻿using System.Drawing;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
-using OpenCvSharp.Internal;
-
 namespace Aki32Utilities.ConsoleAppUtilities.General;
-
 /// <summary>
 /// Mainly, syntax sugar of device IO OS commands.
 /// </summary>
@@ -20,19 +16,26 @@ public class IODeviceExtension
 
         var button = IODeviceButton.Keyboard;
 
-        if (withCtrl) _ = keybd_event(VIRTUAL_KEY_CTRL, 0, (uint)GetInputEventCode(button, IODeviceButtonEvent.Down), (UIntPtr)0);
-        if (withShift) _ = keybd_event(VIRTUAL_KEY_SHIFT, 0, (uint)GetInputEventCode(button, IODeviceButtonEvent.Down), (UIntPtr)0);
-        if (withAlt) _ = keybd_event(VIRTUAL_KEY_ALT, 0, (uint)GetInputEventCode(button, IODeviceButtonEvent.Down), (UIntPtr)0);
+        if (withCtrl)
+            _ = keybd_event(VIRTUAL_KEY_CTRL, 0, (uint)GetInputEventCode(button, IODeviceButtonEvent.Down), (UIntPtr)0);
+        if (withShift)
+            _ = keybd_event(VIRTUAL_KEY_SHIFT, 0, (uint)GetInputEventCode(button, IODeviceButtonEvent.Down), (UIntPtr)0);
+        if (withAlt)
+            _ = keybd_event(VIRTUAL_KEY_ALT, 0, (uint)GetInputEventCode(button, IODeviceButtonEvent.Down), (UIntPtr)0);
 
         // for safety
-        if (withCtrl | withShift | withAlt) Thread.Sleep(10);
+        if (withCtrl | withShift | withAlt)
+            Thread.Sleep(10);
 
         _ = keybd_event(sendingKey, 0, (uint)GetInputEventCode(button, IODeviceButtonEvent.Down), (UIntPtr)0);
         _ = keybd_event(sendingKey, 0, (uint)GetInputEventCode(button, IODeviceButtonEvent.Up), (UIntPtr)0);
 
-        if (withCtrl) _ = keybd_event(VIRTUAL_KEY_CTRL, 0, (uint)GetInputEventCode(button, IODeviceButtonEvent.Up), (UIntPtr)0);
-        if (withShift) _ = keybd_event(VIRTUAL_KEY_SHIFT, 0, (uint)GetInputEventCode(button, IODeviceButtonEvent.Up), (UIntPtr)0);
-        if (withAlt) _ = keybd_event(VIRTUAL_KEY_ALT, 0, (uint)GetInputEventCode(button, IODeviceButtonEvent.Up), (UIntPtr)0);
+        if (withCtrl)
+            _ = keybd_event(VIRTUAL_KEY_CTRL, 0, (uint)GetInputEventCode(button, IODeviceButtonEvent.Up), (UIntPtr)0);
+        if (withShift)
+            _ = keybd_event(VIRTUAL_KEY_SHIFT, 0, (uint)GetInputEventCode(button, IODeviceButtonEvent.Up), (UIntPtr)0);
+        if (withAlt)
+            _ = keybd_event(VIRTUAL_KEY_ALT, 0, (uint)GetInputEventCode(button, IODeviceButtonEvent.Up), (UIntPtr)0);
 
     }
     public static void SendKey(ConsoleKey sendingKey, bool withCtrl = false, bool withShift = false, bool withAlt = false)
@@ -234,15 +237,20 @@ public class IODeviceExtension
     public static extern uint keybd_event(byte bVk, byte bScan, uint dwFlags, UIntPtr dwExtraInfo);
     private static char CorrectKey(char c)
     {
-        if ('0' <= c && c <= '9') return c;
+        if ('0' <= c && c <= '9')
+            return c;
 
-        if ('A' <= c && c <= 'Z') return c;
+        if ('A' <= c && c <= 'Z')
+            return c;
 
-        if (c == ' ') return c;
+        if (c == ' ')
+            return c;
 
-        if (c == '\t') return c;
+        if (c == '\t')
+            return c;
 
-        if ('a' <= c && c <= 'z') return char.ToUpperInvariant(c);
+        if ('a' <= c && c <= 'z')
+            return char.ToUpperInvariant(c);
 
         // それら以外の場合はＮＧ
         return ' ';

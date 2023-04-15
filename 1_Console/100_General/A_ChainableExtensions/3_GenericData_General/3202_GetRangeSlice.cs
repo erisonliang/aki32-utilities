@@ -1,8 +1,4 @@
-﻿using System.Numerics;
-
-using iTextSharp.text.pdf.codec.wmf;
-
-using MathNet.Numerics.LinearAlgebra;
+﻿
 
 namespace Aki32Utilities.ConsoleAppUtilities.General;
 public static partial class ChainableExtensions

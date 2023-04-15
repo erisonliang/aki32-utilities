@@ -1,17 +1,4 @@
-﻿using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Xml.Linq;
-
-using DocumentFormat.OpenXml.Office2013.PowerPoint.Roaming;
-using DocumentFormat.OpenXml.Spreadsheet;
-using DocumentFormat.OpenXml.Wordprocessing;
-
-using MathNet.Numerics;
-
-using OpenCvSharp;
-
-using Org.BouncyCastle.Asn1.Gnu;
+﻿using System.Text;
 
 using XPlot.Plotly;
 
