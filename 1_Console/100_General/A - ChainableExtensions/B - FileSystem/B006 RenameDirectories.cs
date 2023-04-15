@@ -18,6 +18,8 @@ public static partial class ChainableExtensions
         // preprocess
         UtilPreprocessors.PreprocessBasic(true);
         UtilConfig.StopTemporary_ConsoleOutput_Preprocess();
+        if (!UtilPreprocessors.ConfirmIfExecute())
+            return inputDir;
 
         using var progress = new ProgressManager(1);
         if (recursive)

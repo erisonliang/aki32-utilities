@@ -74,6 +74,19 @@ public static class UtilPreprocessors
         Encoding.RegisterProvider(CodePagesEncodingProvider.Instance); // to handle Shift-JIS
     }
 
+    public static bool ConfirmIfExecute(
+        [CallerMemberName] string methodName = ""
+        )
+    {
+        // ConsoleOut
+        ConsoleExtension.WriteLineWithColor($"\r\nTrying to call strong {methodName} method. Are you sure? Enter \"yes\" to execute.", ConsoleColor.DarkYellow);
+        var input = Console.ReadLine();
+        if (input == "yes")
+            return true;
+        return false;
+    }
+
+
     /// <summary>
     /// For creating new output dir name
     /// </summary>
