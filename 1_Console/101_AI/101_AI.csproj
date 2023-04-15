@@ -11,13 +11,13 @@
 
   <ItemGroup>
     <Compile Remove="# Referring dlls\**" />
-    <Compile Remove="A - ChainableExtensions\B - UsefulClasses\**" />
+    <Compile Remove="A_ChainableExtensions\B - UsefulClasses\**" />
     <Compile Remove="Aki32 Utilities\**" />
     <EmbeddedResource Remove="# Referring dlls\**" />
-    <EmbeddedResource Remove="A - ChainableExtensions\B - UsefulClasses\**" />
+    <EmbeddedResource Remove="A_ChainableExtensions\B - UsefulClasses\**" />
     <EmbeddedResource Remove="Aki32 Utilities\**" />
     <None Remove="# Referring dlls\**" />
-    <None Remove="A - ChainableExtensions\B - UsefulClasses\**" />
+    <None Remove="A_ChainableExtensions\B - UsefulClasses\**" />
     <None Remove="Aki32 Utilities\**" />
   </ItemGroup>
 
