@@ -257,7 +257,7 @@ public static partial class ChainableExtensions
         )
     {
         // preprocess
-        outputFile ??= new FileInfo(Path.GetTempFileName().GetExtensionChangedPath(".png"));
+        outputFile ??= new FileInfo(Path.GetTempFileName().GetExtensionChangedFilePath(".png"));
         UtilPreprocessors.PreprocessOutFile(ref outputFile!, null!, "heatmap.png");
 
         var reshaped = inputData.ReShape();

@@ -179,9 +179,29 @@ public static partial class ExampleExecuter
                 {
                     //var input = baseDir_100_A.GetChildDirectoryInfo($@"B005 RenameFiles\input");
                     //var output = baseDir_100_A.GetChildDirectoryInfo($@"B005 RenameFiles\output");
+                    //if (output.Exists)
+                    //    output.Delete(true);
                     //input.CopyTo(output);
+
                     //// auto
                     //output.RenameFiles();
+                    ////// append
+                    ////output.RenameFiles_Append("xxx*xxx");
+                    ////// replace
+                    ////output.RenameFiles_Replace(("ABC", "abc"), ("XYZ", "xyz"));
+                }
+
+                // B006 RenameDirs
+                {
+                    //var input = baseDir_100_A.GetChildDirectoryInfo($@"B006 RenameDirs\input");
+                    //var output = baseDir_100_A.GetChildDirectoryInfo($@"B006 RenameDirs\output");
+                    //if (output.Exists)
+                    //    output.Delete(true);
+                    //input.CopyTo(output);
+
+                    //// auto
+                    //output.RenameDirs("*", Array.Empty<(string from, string to)>(), true);
+                    ////output.RenameDirs("*", new (string from, string to)[] { ("ABC", "") }, true);
                     ////// append
                     ////output.RenameFiles_Append("xxx*xxx");
                     ////// replace
