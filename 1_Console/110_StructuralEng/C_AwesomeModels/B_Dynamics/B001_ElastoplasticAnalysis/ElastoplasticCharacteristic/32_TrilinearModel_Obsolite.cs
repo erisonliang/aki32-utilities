@@ -1,7 +1,7 @@
 ﻿
 
 namespace Aki32Utilities.ConsoleAppUtilities.StructuralEngineering;
-[Obsolete]
+[Obsolete("TrilinearModel_Obsolete is obsolete. Use TrilinearModel instead.")]
 /// <summary>
 /// バイリニアと同じ感じで作ったトリリニア。
 /// なんか考え方が違うっポイ
