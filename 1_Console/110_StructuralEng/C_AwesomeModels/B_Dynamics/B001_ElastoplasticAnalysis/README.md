@@ -12,8 +12,7 @@ Elastoplastic analysis algorithms
 
 ## 🌟 Figures
 
-<img name="0" src="https://user-images.githubusercontent.com/49830756/232279255-7706912a-d981-4127-a6c9-d28491f8e290.jpg" width="666">
-
+<img name="" src="https://github.com/aki32/aki32-utilities/raw/main/9_Assets/110_EP_Overview.jpg" width="666">
 
 
 
