@@ -33,17 +33,24 @@ git submodule update --init --recursive
 
 You can now handle files with beautiful method chain!!!
 
+### 🎇 Example
+
 ```C#
-new DirectoryInfo(@"C:\Input")
-  .CollectFiles(null, @"D7B17.csv") // Target beam end
+new DirectoryInfo(@"C:\input")
+  .CollectFiles(null, searchRegexen: $@"{eq}B\d*\.csv$")
   .RenameFiles()
-  .ExtractCsvColumns_Loop(null, new int[] { 0, 6 }, 6, "t, mu")
-  .Rainflow_Loop(null, 4, 1 / 3d)
+  .ExtractCsvColumnsForMany_Loop(null, 6,
+    ("i", new int[] { 0, 2 }, "t,μ"),
+    ("j", new int[] { 0, 3 }, "t,μ"))
+  .Rainflow_Loop(4, 1 / 3d)
   .CollectCsvColumns(null, 3)
-  .RenameFile("BeamEdgeHistoryWithRainflow")
-  .MoveTo(new DirectoryInfo(@"C:\Result"))
+  .RenameFile($"damage")
+  .MoveTo(new DirectoryInfo(@"C:\result"))
+  .Csvs2ExcelSheets(null)
   ;
 ```
+
+<img name="" src="https://github.com/aki32/aki32-utilities/raw/main/9_Assets/100_Overview.jpg" width="666">
 
 
 
