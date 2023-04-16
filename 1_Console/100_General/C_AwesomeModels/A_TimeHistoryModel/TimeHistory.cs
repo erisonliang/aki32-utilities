@@ -2,6 +2,8 @@
 
 using XPlot.Plotly;
 
+using static Aki32Utilities.ConsoleAppUtilities.General.TimeHistoryBase;
+
 namespace Aki32Utilities.ConsoleAppUtilities.General;
 /// <summary>
 /// Time history data table with its columns and rows dynamically and automatically expands
@@ -9,7 +11,7 @@ namespace Aki32Utilities.ConsoleAppUtilities.General;
 /// <remarks>
 /// decided not to use IClonable
 /// </remarks>
-public class TimeHistory
+public class TimeHistory : TimeHistoryBase
 {
 
     // ★★★★★★★★★★★★★★★ props
@@ -481,181 +483,88 @@ public class TimeHistory
 
     public double[] t
     {
-        get
-        {
-            return this["t"];
-        }
-        set
-        {
-            this["t"] = value;
-        }
+        get => this[PresetIndex.t];
+        set => this[PresetIndex.t] = value;
     }
     public double[] x
     {
-        get
-        {
-            return this["x"];
-        }
-        set
-        {
-            this["x"] = value;
-        }
+        get => this[PresetIndex.x];
+        set => this[PresetIndex.x] = value;
     }
     public double[] xt
     {
-        get
-        {
-            return this["xt"];
-        }
-        set
-        {
-            this["xt"] = value;
-        }
+        get => this[PresetIndex.xt];
+        set => this[PresetIndex.xt] = value;
     }
     public double[] xtt
     {
-        get
-        {
-            return this["xtt"];
-        }
-        set
-        {
-            this["xtt"] = value;
-        }
+        get => this[PresetIndex.xtt];
+        set => this[PresetIndex.xtt] = value;
     }
     public double[] y
     {
-        get
-        {
-            return this["y"];
-        }
-        set
-        {
-            this["y"] = value;
-        }
+
+        get => this[PresetIndex.y];
+        set => this[PresetIndex.y] = value;
     }
     public double[] yt
     {
-        get
-        {
-            return this["yt"];
-        }
-        set
-        {
-            this["yt"] = value;
-        }
+
+        get => this[PresetIndex.yt];
+        set => this[PresetIndex.yt] = value;
     }
     public double[] ytt
     {
-        get
-        {
-            return this["ytt"];
-        }
-        set
-        {
-            this["ytt"] = value;
-        }
+        get => this[PresetIndex.ytt];
+        set => this[PresetIndex.ytt] = value;
     }
     public double[] xtt_plus_ytt
     {
-        get
-        {
-            return this["xtt+ytt"];
-        }
-        set
-        {
-            this["xtt+ytt"] = value;
-        }
+
+        get => this[PresetIndex.xtt_plus_ytt];
+        set => this[PresetIndex.xtt_plus_ytt] = value;
     }
     public double[] f
     {
-        get
-        {
-            return this["f"];
-        }
-        set
-        {
-            this["f"] = value;
-        }
+        get => this[PresetIndex.f];
+        set => this[PresetIndex.f] = value;
     }
     public double[] memo
     {
-        get
-        {
-            return this["memo"];
-        }
-        set
-        {
-            this["memo"] = value;
-        }
+        get => this[PresetIndex.memo];
+        set => this[PresetIndex.memo] = value;
     }
 
     public double[] a
     {
-        get
-        {
-            return this["a"];
-        }
-        set
-        {
-            this["a"] = value;
-        }
+        get => this[PresetIndex.a];
+        set => this[PresetIndex.a] = value;
     }
     public double[] v
     {
-        get
-        {
-            return this["v"];
-        }
-        set
-        {
-            this["v"] = value;
-        }
+        get => this[PresetIndex.v];
+        set => this[PresetIndex.v] = value;
     }
     public double[] mu
     {
-        get
-        {
-            return this["mu"];
-        }
-        set
-        {
-            this["mu"] = value;
-        }
+        get => this[PresetIndex.mu];
+        set => this[PresetIndex.mu] = value;
     }
 
     public double[] Sd
     {
-        get
-        {
-            return this["Sd"];
-        }
-        set
-        {
-            this["Sd"] = value;
-        }
+        get => this[PresetIndex.Sd];
+        set => this[PresetIndex.Sd] = value;
     }
     public double[] Sv
     {
-        get
-        {
-            return this["Sv"];
-        }
-        set
-        {
-            this["Sv"] = value;
-        }
+        get => this[PresetIndex.Sv];
+        set => this[PresetIndex.Sv] = value;
     }
     public double[] Sa
     {
-        get
-        {
-            return this["Sa"];
-        }
-        set
-        {
-            this["Sa"] = value;
-        }
+        get => this[PresetIndex.Sa];
+        set => this[PresetIndex.Sa] = value;
     }
 
     #endregion
