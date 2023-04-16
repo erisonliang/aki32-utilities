@@ -65,7 +65,7 @@ public class NewmarkBetaModel : ITimeHistoryAnalysisModel
         {
             // converging calc
             // 1, let var a1
-            // 2, calc newmark to get x1
+            // 2, calc newmark to get x1 from a1
             // 3, calc epModel to get a2
             // 4, converge a1 and a2 with repeating step 1-3 with changing a1
 
