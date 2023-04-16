@@ -56,7 +56,7 @@ public class CloughModel : ElastoplasticCharacteristicBase
         if (dir * CurrentF > 0) // (dir > 0 && CurrentF > 0) || (dir < 0 && CurrentF < 0)
         {
             // fc
-            if (NextX > CurrentX)
+            if (dX > 0)
                 fc = CalcF_FromPoints(CurrentX, CurrentF, MaxX, MaxF, NextX);
             else
                 fc = CalcF_FromPoints(CurrentX, CurrentF, MinX, MinF, NextX);
@@ -66,7 +66,7 @@ public class CloughModel : ElastoplasticCharacteristicBase
             // fc0
             var HitX = CurrentX + (-CurrentF / K1);
 
-            if (NextX > CurrentX)
+            if (dX > 0)
                 fc = CalcF_FromPoints(HitX, 0, MaxX, MaxF, NextX);
             else
                 fc = CalcF_FromPoints(HitX, 0, MinX, MinF, NextX);
