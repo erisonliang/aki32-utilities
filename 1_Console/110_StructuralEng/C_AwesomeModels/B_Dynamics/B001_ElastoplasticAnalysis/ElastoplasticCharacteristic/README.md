@@ -30,7 +30,7 @@ Any commitment to enhance this repo will be welcomed!
 
 ## ❗Japanese 日本語
 
-復元力特性ののアルゴリズムのコード集です。
+復元力特性のアルゴリズムのコード集です。
 
 
 
