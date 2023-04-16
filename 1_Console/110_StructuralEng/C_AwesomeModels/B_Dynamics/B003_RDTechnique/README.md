@@ -11,28 +11,9 @@ Code for RD Technique written in Python and C#.
 
 Method for assuming biuldings' attenuation constant from microtremor.
 
-Take it easy. It's super simple.
-
 * https://www.jstage.jst.go.jp/article/aijsx/454/0/454_KJ00004086057/_pdf
 
-more reference to be added...
 
-
-
-<br>
-
-## 🌟 Requirements
-
-### 🗯 For Python Code
-
-1. Jupyter Environment
-
-
-<br>
-
-### 🗯 For C# Code
-
-1. Visual Studio (or any substitutional softwares)
 
 
 <br>
@@ -40,6 +21,8 @@ more reference to be added...
 ## 🌟 Notice
 
 Any commitment to enhance this repo will be welcomed!
+
+
 
 
 <br>
