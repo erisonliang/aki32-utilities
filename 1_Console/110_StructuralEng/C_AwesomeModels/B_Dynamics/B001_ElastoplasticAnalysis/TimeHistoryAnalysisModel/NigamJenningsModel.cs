@@ -97,8 +97,7 @@ public class NigamJenningsModel : ITimeHistoryAnalysisModel
                     (2 * h / w3 / TimeStep + 1 / w2) * (wd * sin + h * w * cos)
                 )
                 +
-
-                    1 / w2 / TimeStep
+                1 / w2 / TimeStep
                 ;
 
             var b22 =
