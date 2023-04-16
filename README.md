@@ -78,12 +78,14 @@ Model for handling time history data set (such as time-displacement relationship
 
 <br>
 
-## 🌟 AI (Artificial Intelligence)
+## 🌟 AI
 
 Project for handling AI.
 
-Mainly using ML.NET for Machine Learning.
 
+### 🎇 MLNetHandler
+
+Summary of ML.NET 
 
 
 
@@ -99,12 +101,23 @@ Project for structural engineering
 
 
 
+
 <br>
 
 ## 🌟 Research
 
 Project for handling research papers
 
+
+
+
+
+
+<br>
+
+## 🌟 NodeController
+
+Project for handling node graph
 
 
 
@@ -124,9 +137,7 @@ Any commitment to enhance this repo will be welcomed!
 ## ❗Japanese 日本語
 
 C# の便利機能を実装した C# ソリューションです！
-
 基本機能に加えて，構造計算やAIなども随時実装しています。
-
 なかなか便利ですのでぜひお試しください！
 
 
