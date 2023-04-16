@@ -43,7 +43,7 @@ public static partial class ChainableExtensions
             resultList.Add(addingLine.ToArray());
         }
 
-        resultList.ToArray().SaveCsv_Rows(outputFile!, header);
+        resultList.ToArray().SaveAsCsv_Rows(outputFile!, header);
         GC.Collect();
 
         // post process

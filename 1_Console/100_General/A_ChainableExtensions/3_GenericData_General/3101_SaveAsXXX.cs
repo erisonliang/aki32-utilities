@@ -100,10 +100,56 @@ public static partial class ChainableExtensions
             csvGrid.Add(csvLine.ToArray());
         }
 
-        csvGrid.ToArray().SaveCsv_Rows(outputFile);
+        csvGrid.ToArray().SaveAsCsv_Rows(outputFile);
 
         return outputFile!;
     }
 
+    /// <summary>
+    /// save csv from a list of rows
+    /// </summary>
+    /// <param name="inputFile_Rows"></param>
+    /// <param name="outputFile"></param>
+    /// <param name="header"></param>
+    /// <returns></returns>
+    public static FileInfo SaveAsCsv_Rows<T>(this T[][] inputFile_Rows, FileInfo outputFile, string? header = null)
+    {
+        // preprocess
+        UtilPreprocessors.PreprocessBasic(false);
+
+
+        // main
+        using var sw = new StreamWriter(outputFile.FullName, false, Encoding.GetEncoding("SHIFT_JIS"));
+
+        if (!string.IsNullOrEmpty(header))
+            sw.WriteLine(header);
+
+        foreach (var row in inputFile_Rows)
+        {
+            var correctedLine = row
+                .Select(x => x?.ToString() ?? "")
+                .Select(x => x.Replace("\"", "\"\""))
+                .Select(x => x.Any(x => x == ',' || x == '\"' || x == '\\' || x == '\n' || x == '\r') ? $"\"{x}\"" : x);
+            sw.WriteLine(string.Join(',', correctedLine));
+        }
+
+
+        // post process
+        return outputFile!;
+    }
+
+    /// <summary>
+    /// save csv from a list of columns
+    /// </summary>
+    /// <param name="inputFile_Columns"></param>
+    /// <param name="outputFile"></param>
+    /// <param name="header"></param>
+    /// <returns></returns>
+    public static FileInfo SaveAsCsv_Columns<T>(this T[][] inputFile_Columns, FileInfo outputFile, string? header = null)
+    {
+        // main
+        var inputFile_Rows = inputFile_Columns.Transpose();
+        return inputFile_Rows!.SaveAsCsv_Rows(outputFile, header);
+    }
 
 }

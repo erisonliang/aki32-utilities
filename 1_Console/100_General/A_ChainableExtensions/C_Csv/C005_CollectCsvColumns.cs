@@ -75,7 +75,7 @@ public static partial class ChainableExtensions
         }
 
         // save
-        resultColumnList.SaveCsv_Columns(outputFile);
+        resultColumnList.SaveAsCsv_Columns(outputFile);
 
 
         // post process

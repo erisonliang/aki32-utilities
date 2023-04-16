@@ -36,7 +36,7 @@ public static partial class ChainableExtensions
 
             csvCells
                 .ConvertToJaggedArray()
-                .SaveCsv_Rows(outputFile);
+                .SaveAsCsv_Rows(outputFile);
 
         }
 

@@ -20,7 +20,7 @@ public static partial class ChainableExtensions
 
         // main
         var csv = ReadCsv_Rows(inputFile);
-        csv.SaveCsv_Columns(outputFile!);
+        csv.SaveAsCsv_Columns(outputFile!);
 
 
         // post process
