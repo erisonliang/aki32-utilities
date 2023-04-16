@@ -1,15 +1,8 @@
-# 💖 aki32-utilities
+# 💖 csharp-utilities
 
 ## ❗Abstract
 
-My windows and C# utilities written in C#
- 
-I'm trying to migrate all of my work to this repo eventually.
-
-
-
-
-
+C# utilities
 
 
 
@@ -130,7 +123,9 @@ Any commitment to enhance this repo will be welcomed!
 
 ## ❗Japanese 日本語
 
-Windows および C# の便利機能を実装した C# ソリューションです！
+C# の便利機能を実装した C# ソリューションです！
+
+基本機能に加えて，構造計算やAIなども随時実装しています。
 
 なかなか便利ですのでぜひお試しください！
 
