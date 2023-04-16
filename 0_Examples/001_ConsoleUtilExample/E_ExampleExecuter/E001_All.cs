@@ -245,8 +245,8 @@ public static partial class ExampleExecuter
 
                 // B009_DrawGraph
                 {
-                    baseDir_100_A.GetChildFileInfo($@"B009_DrawGraph\input1.csv")
-                        .DrawGraph_OnPlotly("t", "v", TimeHistory.ChartType.Line);
+                    //baseDir_100_A.GetChildFileInfo($@"B009_DrawGraph\input1.csv")
+                    //    .DrawGraph_OnPlotly("t", "v", TimeHistory.ChartType.Line);
 
 
                     //baseDir_100_A.GetChildFileInfo($@"B009_DrawGraph\input1.csv")
@@ -640,31 +640,31 @@ public static partial class ExampleExecuter
                     // ★ TimeHistory
                     {
 
-                        //var th = new TimeHistory();
-                        //th["A"] = new double[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
-                        //th["B"] = new double[] { 10, 11, 12, 13, 14, 15, 16, 17, 18, 19 };
-                        //th["C"] = new double[] { 20, 21, 22, 23, 24, 25, 26, 27, 28, 29 };
-                        //th["D"] = new double[] { 30, 31, 32, 33, 34, 35, 36, 37, 38, 39 };
+                        var th = new TimeHistory();
+                        th.t = new double[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+                        th["B"] = new double[] { 10, 11, 12, 13, 14, 15, 16, 17, 18, 19 };
+                        th["C"] = new double[] { 20, 21, 22, 23, 24, 25, 26, 27, 28, 29 };
+                        th["D"] = new double[] { 30, 31, 32, 33, 34, 35, 36, 37, 38, 39 };
 
-                        //th.WriteToConsole();
-                        //th.DrawLineGraph("A", "C");
-                        //th.DropColumn("C");
-                        //th.WriteToConsole();
-                        //th.DropStep(4);
-                        //th.WriteToConsole();
-                        //var ths = th.GetStep(5);
-                        //ths.WriteToConsole();
+                        th.WriteToConsole();
+                        th.DrawGraph_OnPlotly("t", "C");
+                        th.DropColumn("C");
+                        th.WriteToConsole();
+                        th.DropStep(4);
+                        th.WriteToConsole();
+                        var ths = th.GetStep(5);
+                        ths.WriteToConsole();
 
-                        //var ts = new TimeHistoryStep();
-                        //ts["E"] = 3;
-                        //ts.WriteToConsole();
+                        var ts = new TimeHistoryStep();
+                        ts["E"] = 3;
+                        ts.WriteToConsole();
 
-                        ////TimeHistory
-                        ////    .FromCsv(input, "t", "v")
-                        ////    .RenameColumn("v", "x")
-                        ////    .WriteToConsole(5)
-                        ////    .DrawLineGraph("x")
-                        ////    ;
+                        //TimeHistory
+                        //    .FromCsv(input, "t", "v")
+                        //    .RenameColumn("v", "x")
+                        //    .WriteToConsole(5)
+                        //    .DrawLineGraph("x")
+                        //    ;
 
                     }
 
