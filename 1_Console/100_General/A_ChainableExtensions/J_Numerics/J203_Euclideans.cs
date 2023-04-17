@@ -37,18 +37,16 @@ public static partial class ChainableExtensions
         if (adjacentPolyIndex0 == -1 || adjacentPolyIndex0 == adjacentPolyIndex1)
             throw new InvalidDataException("Polygon and triangle must share their 2 points");
 
+        var triIndex0 = triPoints.FindIndex(p => p == polyPoints[adjacentPolyIndex0]);
+        var triIndex1 = triPoints.FindIndex(p => p == polyPoints[adjacentPolyIndex1]);
+        var triIndex = new int[] { 0, 1, 2 }.Except(new int[] { triIndex0, triIndex1 }).First();
+        var addingPoint = triPoints[triIndex];
+
+        // If indexes next to each other OR first and last
         if (adjacentPolyIndex1 - adjacentPolyIndex0 == 1)
-        {
-            var adjacentTriIndex = triPoints.FindIndex(p => p == polyPoints[adjacentPolyIndex0]);
-            var insertingPoint = triPoints[(adjacentTriIndex + 1) % 3];
-            polyPoints.Insert(adjacentPolyIndex1, insertingPoint);
-        }
+            polyPoints.Insert(adjacentPolyIndex1, addingPoint);
         else
-        {
-            var adjacentTriIndex = triPoints.FindIndex(p => p == polyPoints[adjacentPolyIndex1]);
-            var addingPoint = triPoints[(adjacentTriIndex + 1) % 3];
             polyPoints.Add(addingPoint);
-        }
 
         return new PolyLine2D(polyPoints);
     }
