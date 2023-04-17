@@ -49,8 +49,7 @@ public class DelaunayTriangulationExecuter
             for (int j = currentTriangles.Count - 1; j >= 0; j--)
             {
                 var tri = currentTriangles[j];
-                var outerCircle = tri.GetOuterCircle(); // [f1]
-                if (outerCircle.IsPointInCircle(addingPoint)) // [f2]
+                if (tri.GetOuterCircle().IsPointInCircle(addingPoint))  // [f1] [f2]
                     mergingTriangles.Add(tri);
             }
 
