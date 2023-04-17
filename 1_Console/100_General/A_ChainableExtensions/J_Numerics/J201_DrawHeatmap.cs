@@ -246,19 +246,20 @@ public static partial class ChainableExtensions
     /// <param name="outputFile">when null, automatically set to temporary file</param>
     /// <param name="minValue"></param>
     /// <param name="maxValue"></param>
-    /// <param name="targetImageWidth">set desired image width to this. 300 by default</param>
-    /// <param name="targetCellSize">number of cell pixels for one data</param>
+    /// <param name="outputExtension">when outputFile is null, you can designate output file extension here. Must include "."</param>
+    /// <param name="preview"></param>
     /// <returns></returns>
     public static FileInfo DrawHeatmapAsPyPlotImage(this double[,] inputData,
         FileInfo? outputFile = null,
         double? minValue = null,
         double? maxValue = null,
+        string outputExtension = ".png",
         bool preview = false
         )
     {
         // preprocess
-        outputFile ??= new FileInfo(Path.GetTempFileName().GetExtensionChangedFilePath(".png"));
-        UtilPreprocessors.PreprocessOutFile(ref outputFile!, null!, "heatmap.png");
+        outputFile ??= new FileInfo(Path.GetTempFileName().GetExtensionChangedFilePath(outputExtension));
+        UtilPreprocessors.PreprocessOutFile(ref outputFile!, null!, $"heatmap{outputExtension}");
 
         var reshaped = inputData.ReShape();
         minValue ??= reshaped.Min();

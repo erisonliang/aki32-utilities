@@ -95,7 +95,7 @@ public static partial class ExampleExecuter
                     //i2d_Reshaped.DrawHeatmapToConsole();
                     //i2d_Reshaped.DrawHeatmapAsSimpleImage().ShowImage_OnThread(false);
                     //PythonController.Initialize();
-                    //i2d_Reshaped.DrawHeatmapAsPyPlotImage(preview: true);
+                    //i2d_Reshaped.DrawHeatmapAsPyPlotImage(preview: true , outputExtension:".svg");
                     //Console.WriteLine();
 
                     //var i2d_Reshaped_Reshaped = i2d_Reshaped.ReShape();
