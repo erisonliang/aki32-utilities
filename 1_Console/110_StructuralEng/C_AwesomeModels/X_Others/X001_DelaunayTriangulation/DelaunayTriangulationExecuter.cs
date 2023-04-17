@@ -40,7 +40,7 @@ public class DelaunayTriangulationExecuter
             new Triangle2D(additionalPoints[2], additionalPoints[3], additionalPoints[0]),
         };
 
-        // 足したやつ以外の全ての点に対して，順に計算。
+        // 足したやつ以外の全ての点を，順番に足していって処理。
         for (int i = 0; i < currentPoints.Count - 4; i++)
         {
             var addingPoint = currentPoints[i];
@@ -65,7 +65,7 @@ public class DelaunayTriangulationExecuter
             ReMesh(currentPolyLine, addingPoint); // [f4]
         }
 
-        // 最後に4点の関連要素を全て削除。
+        // 最初に追加した4点の関連要素を全て削除して返す。
         return currentTriangles
             .Where(t => !t.Points.Any(p => additionalPoints.Contains(p)))
             .ToArray();
