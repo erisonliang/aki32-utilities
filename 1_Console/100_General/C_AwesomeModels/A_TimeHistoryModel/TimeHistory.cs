@@ -2,8 +2,6 @@
 
 using XPlot.Plotly;
 
-using static Aki32Utilities.ConsoleAppUtilities.General.TimeHistoryBase;
-
 namespace Aki32Utilities.ConsoleAppUtilities.General;
 /// <summary>
 /// Time history data table with its columns and rows dynamically and automatically expands
