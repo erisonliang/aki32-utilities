@@ -1,7 +1,7 @@
 # 💖 ElastoplasticCharacteristic (StructuralEngineering)
 
 ## 🌟 Abstract
-Materials'-elastoplastic-characteristic algorithms
+Material-elastoplastic-characteristic algorithms
 
 
 
