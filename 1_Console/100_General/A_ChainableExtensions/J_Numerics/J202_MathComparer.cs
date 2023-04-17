@@ -7,7 +7,7 @@ public static partial class ChainableExtensions
     // ★★★★★★★★★★★★★★★ chainable
 
     /// <summary>
-    /// Compare Points
+    /// Compare Points forcibly
     /// </summary>
     /// <param name="target0"></param>
     /// <param name="target1"></param>
@@ -28,8 +28,6 @@ public static partial class ChainableExtensions
             return 1;
         return -1;
     }
-
-
 
 
     // ★★★★★★★★★★★★★★★ 

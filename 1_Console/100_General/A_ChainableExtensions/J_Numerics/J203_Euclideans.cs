@@ -51,6 +51,47 @@ public static partial class ChainableExtensions
         return new PolyLine2D(polyPoints);
     }
 
+    public static Line2D[] GetLines(this PolyLine2D polyline, bool ordered = false)
+    {
+        var lines = new List<Line2D>();
+        void AddItem(Point2D target0, Point2D target1)
+        {
+            bool reverse;
+            if (ordered)
+                reverse = target0.Compare(target1) < 0;
+            else
+                reverse = false;
+
+            if (reverse)
+                lines.Add(new Line2D(target1, target0));
+            else
+                lines.Add(new Line2D(target0, target1));
+
+        }
+
+        var points = polyline.Vertices.ToArray();
+        for (int i = 0; i < points.Length - 1; i++)
+            AddItem(points[i], points[i + 1]);
+        AddItem(points.Last(), points.First());
+
+        return lines.ToArray();
+    }
+
+
+    // ★★★★★★★★★★★★★★★ chainable (sub)
+
+    public static Line2D[] GetDistinctedLines(this Triangle2D[] triangles)
+    {
+        var lineEdges = new List<Line2D>();
+        foreach (var triangle in triangles)
+            lineEdges.AddRange(triangle.GetLines(ordered: true));
+
+        return lineEdges
+            .Distinct()
+            .ToArray();
+
+    }
+
 
     // ★★★★★★★★★★★★★★★ 
 

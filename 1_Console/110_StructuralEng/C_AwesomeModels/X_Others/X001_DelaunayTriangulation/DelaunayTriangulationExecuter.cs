@@ -14,20 +14,6 @@ public class DelaunayTriangulationExecuter
 
     // ★★★★★★★★★★★★★★★ methods
 
-    public Line2D[] ExecuteToLines(Point2D[] points)
-    {
-        var triangles = Execute(points);
-
-        var lineEdges = new List<Line2D>();
-        foreach (var triangle in triangles)
-            lineEdges.AddRange(triangle.GetLines(ordered: true));
-
-        return lineEdges
-            .Distinct()
-            .ToArray();
-
-    }
-
     public Triangle2D[] Execute(Point2D[] points)
     {
         currentPoints = points.ToList();

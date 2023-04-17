@@ -18,29 +18,6 @@ public class Triangle2D : PolyLine2D
     public Point2D P2 => Vertices.ElementAt(2);
     public List<Point2D> Points => Vertices.ToList();
 
-    public Line2D[] GetLines(bool ordered = false)
-    {
-        var lines = new List<Line2D>();
-        void AddItem(Point2D target0, Point2D target1)
-        {
-            bool reverse;
-            if (ordered)
-                reverse = target0.Compare(target1) < 0;
-            else
-                reverse = false;
-
-            if (reverse)
-                lines.Add(new Line2D(target1, target0));
-            else
-                lines.Add(new Line2D(target0, target1));
-
-        }
-        AddItem(P0, P1);
-        AddItem(P1, P2);
-        AddItem(P2, P0);
-        return lines.ToArray();
-    }
-
     ///<summary>
     /// Find outer circle 
     /// </summary>

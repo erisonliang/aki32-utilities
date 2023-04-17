@@ -1437,7 +1437,7 @@ public static partial class ExampleExecuter
                     //    Console.WriteLine(tri.ToString().ReplaceUnwantedCharacters());
 
                     //Console.WriteLine("=======================");
-                    //var lines = delaunay.ExecuteToLines(points);
+                    //var lines = tris.GetDistinctedLines();
                     //foreach (var line in lines)
                     //    Console.WriteLine(line.ToString().ReplaceUnwantedCharacters());
 
