@@ -34,6 +34,8 @@ using Org.BouncyCastle.Crypto.Macs;
 using NumSharp.Utilities;
 using DocumentFormat.OpenXml.Office2013.Excel;
 using MathNet.Numerics;
+using MathNet.Spatial.Euclidean;
+using System.Globalization;
 
 namespace Aki32Utilities.UsageExamples.ConsoleAppUtilities;
 public static partial class ExampleExecuter
@@ -1411,6 +1413,36 @@ public static partial class ExampleExecuter
                     //Console.WriteLine($"result h = {att}");
 
                 }
+
+                // X001_DelaunayTriangulation
+                {
+                    //UtilPreprocessors.PreprocessBasic();
+
+                    //var delaunay = new DelaunayTriangulationExecuter();
+                    //var points = new Point2D[]
+                    //{
+                    //    new Point2D(1,2),
+                    //    new Point2D(3,4),
+                    //    new Point2D(4,1),
+                    //    new Point2D(5,3),
+                    //    new Point2D(6,2),
+                    //};
+
+                    //foreach (var point in points)
+                    //    Console.WriteLine(point.ToString().ReplaceUnwantedCharacters());
+
+                    //Console.WriteLine("=======================");
+                    //var tris = delaunay.Execute(points);
+                    //foreach (var tri in tris)
+                    //    Console.WriteLine(tri.ToString().ReplaceUnwantedCharacters());
+
+                    //Console.WriteLine("=======================");
+                    //var lines = delaunay.ExecuteToLines(points);
+                    //foreach (var line in lines)
+                    //    Console.WriteLine(line.ToString().ReplaceUnwantedCharacters());
+
+                }
+
             }
 
             // X_SoftwareHelpers
