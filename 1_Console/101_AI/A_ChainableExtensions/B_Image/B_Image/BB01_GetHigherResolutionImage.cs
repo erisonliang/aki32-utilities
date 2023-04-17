@@ -18,7 +18,7 @@ public static partial class ChainableExtensions
     {
         // preprocess
         if (inputDir.FullName.ContainsJapanese())
-            throw new FormatException("try not include Japanese characters in path");
+            throw new FormatException("Try not to include non-alphanumeric characters in path");
         if (!PythonController.Activated)
             throw new Exception("Required to call PythonController.Initialize() first");
         UtilPreprocessors.PreprocessOutDir(ref outputDir, inputDir!);
