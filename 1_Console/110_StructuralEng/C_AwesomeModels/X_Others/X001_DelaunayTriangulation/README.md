@@ -1,7 +1,7 @@
 # 💖 DelaunayTriangulationExecuter (StructuralEngineering)
 
 ## 🌟 Abstract
-Delaunay Triangulation algorithm
+Delaunay Triangulation algorithm executer
 
 
 
