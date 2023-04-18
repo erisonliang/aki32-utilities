@@ -42,7 +42,7 @@ public class DelaunayTriangulationExecuter
             new Triangle2D(additionalPoints[2], additionalPoints[3], additionalPoints[0]),
         };
 
-        // 足したやつ以外の全ての点を，順番に足していって処理。
+        // 最初に追加したやつ以外の全ての点を順番に追加しながら処理。
         for (int i = 0; i < currentPoints.Count - 4; i++)
         {
             var addingPoint = currentPoints[i];
