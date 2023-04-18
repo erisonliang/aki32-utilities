@@ -1,5 +1,6 @@
 ﻿using System.Drawing;
 using System.Runtime.InteropServices;
+using System.Timers;
 
 namespace Aki32Utilities.ConsoleAppUtilities.General;
 /// <summary>
@@ -157,6 +158,58 @@ public class IODeviceExtension
         MouseClick(button);
     }
 
+    public static void SenKeyIntermittently(int interval, string inputString, ConsoleKey terminateKey = ConsoleKey.Escape)
+    {
+        // preprocess
+        int counter = 0;
+        if (string.IsNullOrEmpty(inputString))
+        {
+            Console.WriteLine("※ 入力文字には何か1文字を入力してください。");
+            return;
+        }
+        if (inputString.Length / interval > 200)
+        {
+            Console.WriteLine($"※ 入力には1文字あたり200msほど時間がかかるため，{nameof(interval)}を増やすか{nameof(inputString)}の文字数を減らしてください。");
+            return;
+        }
+
+
+        // main
+        ConsoleExtension.WriteLineWithColor($"\r\nIntermittent input started. Focus this window and press {terminateKey} to terminate.", ConsoleColor.Blue);
+        var timer = new System.Timers.Timer(interval);
+        timer.Elapsed += (_, _) =>
+        {
+            ConsoleExtension.ClearCurrentConsoleLine();
+            Console.Write($"SendKeys called. Total count: {++counter} ");
+            SendKeys(inputString);
+            GC.Collect();
+        };
+        timer.Start();
+
+        while (true)
+        {
+            if (Console.KeyAvailable)
+            {
+                var key = Console.ReadKey();
+                if (key.Key == ConsoleKey.Enter)
+                    break;
+                if (key.Key == terminateKey)
+                {
+                    timer.Stop();
+                    ConsoleExtension.ClearCurrentConsoleLine();
+                    ConsoleExtension.WriteLineWithColor($"Terminate key ({terminateKey}) was pressed", ConsoleColor.Green);
+                    break;
+                }
+            }
+
+            Thread.Sleep(100);
+        }
+
+
+        // post process
+        Console.WriteLine();
+
+    }
 
     // ★★★★★★★★★★★★★★★ background processes
 

@@ -615,6 +615,9 @@ public static partial class ExampleExecuter
                     //IODeviceExtension.SendKey(ConsoleKey.E, withAlt: true); // Alt+E
                     //IODeviceExtension.SendKey(ConsoleKey.Spacebar, withShift: true, withAlt: true); // Alt Shift Space
 
+                    //// ★ Intermittent Keyboard Input
+                    //IODeviceExtension.SenKeyIntermittently(1000, "XXXX");
+
                     //// ★ Get Mouse Cursor Position 
                     //Console.WriteLine($"Move mouse cursor and press enter to decide");
                     //Console.CursorVisible = false;
