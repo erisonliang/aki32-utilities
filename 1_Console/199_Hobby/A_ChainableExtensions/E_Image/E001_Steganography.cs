@@ -17,7 +17,9 @@ public static partial class ChainableExtensions
     /// <param name="outputFile">when null, automatically set</param>
     /// <param name="bits">Using bits per color</param>
     /// <returns></returns>
-    public static FileInfo SteganographyEncryptImage(this FileInfo inputImageFileToShow, FileInfo inputImageFileToHide, FileInfo? outputFile, int bits = 2, bool resizeHidingImageWhenTooBig = true)
+    public static FileInfo SteganographyEncryptImage(this FileInfo inputImageFileToShow, FileInfo inputImageFileToHide, FileInfo? outputFile,
+        int bits = 2,
+        bool resizeHidingImageWhenTooBig = true)
     {
         // preprocess
         UtilPreprocessors.PreprocessOutFile(ref outputFile, inputImageFileToShow.Directory!, inputImageFileToShow.Name);
@@ -33,7 +35,7 @@ public static partial class ChainableExtensions
                 inputImageToHide = inputImageToHide.ResizeImage(new Size((int)(inputImageToHide.Width / ratio), (int)(inputImageToHide.Height / ratio)));
         }
         var outputImage = SteganographyEncryptImage((Bitmap)inputImageToShow, (Bitmap)inputImageToHide, bits, resizeHidingImageWhenTooBig);
-        outputImage.Save(outputFile!.FullName, ImageFormat.Png);
+        outputImage.Save(outputFile!.FullName, ImageFormat.Png); // have to be png or bmp!
         inputImageToHide.Dispose();
         GC.Collect();
 
