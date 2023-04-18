@@ -1,4 +1,4 @@
-﻿using Aki32Utilities.UsageExamples.ResearchArticlesNodeController.ViewModels;
+﻿using Aki32Utilities.Apps.ResearchArticlesNodeController.ViewModels;
 
 using Livet;
 

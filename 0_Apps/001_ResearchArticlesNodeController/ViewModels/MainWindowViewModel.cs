@@ -5,7 +5,7 @@ using Aki32Utilities.ConsoleAppUtilities.Research;
 using Aki32Utilities.ConsoleAppUtilities.General;
 using System.IO;
 
-namespace Aki32Utilities.UsageExamples.ResearchArticlesNodeController.ViewModels;
+namespace Aki32Utilities.Apps.ResearchArticlesNodeController.ViewModels;
 public partial class MainWindowViewModel : ViewModel
 {
 

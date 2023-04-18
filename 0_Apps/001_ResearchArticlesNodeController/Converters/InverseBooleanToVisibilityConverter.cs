@@ -2,7 +2,7 @@
 using System.Windows.Data;
 using System.Windows.Media;
 
-namespace Aki32Utilities.UsageExamples.ResearchArticlesNodeController.Converters;
+namespace Aki32Utilities.Apps.ResearchArticlesNodeController.Converters;
 public class BooleanToForegroundBrushConverter : IValueConverter
 {
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)

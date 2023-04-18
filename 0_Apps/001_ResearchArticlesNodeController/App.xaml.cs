@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace Aki32Utilities.UsageExamples.ResearchArticlesNodeController;
+namespace Aki32Utilities.Apps.ResearchArticlesNodeController;
 public partial class App : Application
 {
 }

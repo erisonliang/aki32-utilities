@@ -1,6 +1,6 @@
 ﻿using Livet;
 
-namespace Aki32Utilities.UsageExamples.ResearchArticlesNodeController.ViewModels;
+namespace Aki32Utilities.Apps.ResearchArticlesNodeController.ViewModels;
 
 public interface NodeConnectorViewModel
 {

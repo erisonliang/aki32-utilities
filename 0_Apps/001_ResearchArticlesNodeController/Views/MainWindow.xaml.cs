@@ -1,12 +1,12 @@
 ﻿using System.Windows;
-using Aki32Utilities.UsageExamples.ResearchArticlesNodeController.ViewModels;
+using Aki32Utilities.Apps.ResearchArticlesNodeController.ViewModels;
 using Aki32Utilities.ConsoleAppUtilities.General;
 using Aki32Utilities.WPFAppUtilities.General;
 using System.Collections.Specialized;
 using XPlot.Plotly;
 using System.Windows.Controls;
 
-namespace Aki32Utilities.UsageExamples.ResearchArticlesNodeController.Views;
+namespace Aki32Utilities.Apps.ResearchArticlesNodeController.Views;
 public partial class MainWindow : Window
 {
     public MainWindow()

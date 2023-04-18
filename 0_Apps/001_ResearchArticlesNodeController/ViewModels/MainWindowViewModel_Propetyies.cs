@@ -8,10 +8,10 @@ using System.Windows;
 using Aki32Utilities.ViewModels.NodeViewModels;
 using Aki32Utilities.ConsoleAppUtilities.Research;
 using System.IO;
-using Aki32Utilities.UsageExamples.ResearchArticlesNodeController.Views;
+using Aki32Utilities.Apps.ResearchArticlesNodeController.Views;
 using PropertyChanged;
 
-namespace Aki32Utilities.UsageExamples.ResearchArticlesNodeController.ViewModels;
+namespace Aki32Utilities.Apps.ResearchArticlesNodeController.ViewModels;
 [AddINotifyPropertyChangedInterface]
 public partial class MainWindowViewModel : ViewModel
 {

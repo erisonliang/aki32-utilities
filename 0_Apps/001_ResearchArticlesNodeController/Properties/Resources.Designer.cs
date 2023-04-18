@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Aki32Utilities.UsageExamples.ResearchArticlesNodeController.Properties
+namespace Aki32Utilities.Apps.ResearchArticlesNodeController.Properties
 {
 
 
@@ -44,7 +44,7 @@ namespace Aki32Utilities.UsageExamples.ResearchArticlesNodeController.Properties
             {
                 if ((resourceMan == null))
                 {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Aki32Utilities.UsageExamples.ResearchArticlesNodeController.Properties.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Aki32Utilities.Apps.ResearchArticlesNodeController.Properties.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
