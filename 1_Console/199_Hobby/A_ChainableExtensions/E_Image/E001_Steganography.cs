@@ -25,9 +25,16 @@ public static partial class ChainableExtensions
 
         // main
         using var inputImageToShow = inputImageFileToShow.GetImageFromFile();
-        using var inputImageToHide = inputImageFileToHide.GetImageFromFile();
+        var inputImageToHide = inputImageFileToHide.GetImageFromFile();
+        if (resizeHidingImageWhenTooBig)
+        {
+            var ratio = Math.Max((double)inputImageToHide.Width / inputImageToShow.Width, (double)inputImageToHide.Height / inputImageToShow.Height);
+            if (ratio > 1)
+                inputImageToHide = inputImageToHide.ResizeImage(new Size((int)(inputImageToHide.Width / ratio), (int)(inputImageToHide.Height / ratio)));
+        }
         var outputImage = SteganographyEncryptImage((Bitmap)inputImageToShow, (Bitmap)inputImageToHide, bits, resizeHidingImageWhenTooBig);
         outputImage.Save(outputFile!.FullName, ImageFormat.Png);
+        inputImageToHide.Dispose();
         GC.Collect();
 
 

@@ -1570,23 +1570,23 @@ public static partial class ExampleExecuter
 
                 // E001_Steganography
                 {
-                    var baseDir_199_A_E001 = baseDir_199.GetChildDirectoryInfo($@"E001_Steganography").CreateAndPipe();
+                    //var baseDir_199_A_E001 = baseDir_199.GetChildDirectoryInfo($@"E001_Steganography").CreateAndPipe();
 
-                    var input1_show = baseDir_199_A_E001.GetChildFileInfo($@"input1_show.png");
+                    //var input1_show = baseDir_199_A_E001.GetChildFileInfo($@"input1_show.png");
 
-                    var input2_hide = baseDir_199_A_E001.GetChildFileInfo($@"input2_hide.png");
-                    var input2_encrypted = baseDir_199_A_E001.GetChildFileInfo($@"input2_encrypted.png");
-                    var input2_decrypted = baseDir_199_A_E001.GetChildFileInfo($@"input2_decrypted.png");
-                    input1_show.SteganographyEncryptImage(input2_hide, input2_encrypted);
-                    input2_encrypted.SteganographyDecryptImage(input2_decrypted);
+                    //var input2_hide = baseDir_199_A_E001.GetChildFileInfo($@"input2_hide.png");
+                    //var input2_encrypted = baseDir_199_A_E001.GetChildFileInfo($@"input2_encrypted.png");
+                    //var input2_decrypted = baseDir_199_A_E001.GetChildFileInfo($@"input2_decrypted.png");
+                    //input1_show.SteganographyEncryptImage(input2_hide, input2_encrypted);
+                    //input2_encrypted.SteganographyDecryptImage(input2_decrypted);
 
-                    var input3_hide = baseDir_199_A_E001.GetChildFileInfo($@"input3_hide.png");
-                    var input3_encrypted = baseDir_199_A_E001.GetChildFileInfo($@"input3_encrypted.png");
-                    var input3_decrypted = baseDir_199_A_E001.GetChildFileInfo($@"input3_decrypted.png");
-                    input1_show.SteganographyEncryptImage(input3_hide, input3_encrypted);
-                    input3_encrypted.SteganographyDecryptImage(input3_decrypted);
+                    //var input3_hide = baseDir_199_A_E001.GetChildFileInfo($@"input3_hide.png");
+                    //var input3_encrypted = baseDir_199_A_E001.GetChildFileInfo($@"input3_encrypted.png");
+                    //var input3_decrypted = baseDir_199_A_E001.GetChildFileInfo($@"input3_decrypted.png");
+                    //input1_show.SteganographyEncryptImage(input3_hide, input3_encrypted);
+                    //input3_encrypted.SteganographyDecryptImage(input3_decrypted);
 
-                    baseDir_199_A_E001.OpenOnDefaultApp();
+                    //baseDir_199_A_E001.OpenOnDefaultApp();
 
                 }
             }
