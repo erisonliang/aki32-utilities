@@ -20,16 +20,16 @@ public class DelaunayTriangulationExecuter
 
         // 最初に環境を囲うように4点追加。
         var offset = 1;
-        var xmin = points.Min(p => p.X) - offset;
-        var xmax = points.Max(p => p.X) + offset;
-        var ymin = points.Min(p => p.Y) - offset;
-        var ymax = points.Max(p => p.Y) + offset;
+        var xMin = points.Min(p => p.X) - offset;
+        var xMax = points.Max(p => p.X) + offset;
+        var yMin = points.Min(p => p.Y) - offset;
+        var yMax = points.Max(p => p.Y) + offset;
         var additionalPoints = new List<Point2D>
         {
-            new Point2D(xmin, ymin),
-            new Point2D(xmax, ymin),
-            new Point2D(xmax, ymax),
-            new Point2D(xmin, ymax),
+            new Point2D(xMin, yMin),
+            new Point2D(xMax, yMin),
+            new Point2D(xMax, yMax),
+            new Point2D(xMin, yMax),
         };
         currentPoints.AddRange(additionalPoints);
 
@@ -74,14 +74,14 @@ public class DelaunayTriangulationExecuter
     /// <summary>
     /// Add meshes around "addingPoint"
     /// </summary>
-    /// <param name="targetTriangle"></param>
+    /// <param name="surroundingPolyline"></param>
     /// <param name="addingPoint"></param>
-    private void AddMeshesAroundAPoint(PolyLine2D? targetTriangle, Point2D addingPoint)
+    private void AddMeshesAroundAPoint(PolyLine2D? surroundingPolyline, Point2D addingPoint)
     {
-        if (targetTriangle is null)
+        if (surroundingPolyline is null)
             return;
 
-        var polyPoints = targetTriangle.Vertices.ToArray();
+        var polyPoints = surroundingPolyline.Vertices.ToArray();
         for (int i = 0; i < polyPoints.Length - 1; i++)
             currentTriangles.Add(new Triangle2D(addingPoint, polyPoints[i], polyPoints[i + 1]));
         currentTriangles.Add(new Triangle2D(addingPoint, polyPoints.Last(), polyPoints.First()));
