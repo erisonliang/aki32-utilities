@@ -2,8 +2,6 @@
 
 using MathNet.Spatial.Euclidean;
 
-using Org.BouncyCastle.Asn1.Cmp;
-
 namespace Aki32Utilities.ConsoleAppUtilities.StructuralEngineering;
 public class DelaunayTriangulationExecuter
 {
