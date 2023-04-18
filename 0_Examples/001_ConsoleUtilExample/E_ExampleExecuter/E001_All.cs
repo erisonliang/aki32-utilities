@@ -1419,15 +1419,8 @@ public static partial class ExampleExecuter
                     //UtilPreprocessors.PreprocessBasic();
 
                     //var delaunay = new DelaunayTriangulationExecuter();
-                    //var points = new Point2D[]
-                    //{
-                    //    new Point2D(1,2),
-                    //    new Point2D(3,4),
-                    //    new Point2D(4,1),
-                    //    new Point2D(5,3),
-                    //    new Point2D(6,2),
-                    //};
 
+                    //var points = DelaunayTriangulationExecuter.TestModel1;
                     //foreach (var point in points)
                     //    Console.WriteLine(point.ToString().ReplaceUnwantedCharacters());
 

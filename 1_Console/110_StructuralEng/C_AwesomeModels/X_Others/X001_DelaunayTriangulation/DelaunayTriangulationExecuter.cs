@@ -2,6 +2,8 @@
 
 using MathNet.Spatial.Euclidean;
 
+using Org.BouncyCastle.Asn1.Cmp;
+
 namespace Aki32Utilities.ConsoleAppUtilities.StructuralEngineering;
 public class DelaunayTriangulationExecuter
 {
@@ -94,6 +96,18 @@ public class DelaunayTriangulationExecuter
     }
 
 
+    // ★★★★★★★★★★★★★★★ tests
+
+    public static Point2D[] TestModel1 => new Point2D[]
+    {
+        new Point2D(1,2),
+        new Point2D(3,4),
+        new Point2D(4,1),
+        new Point2D(5,3),
+        new Point2D(6,2),
+    };
+
+    
     // ★★★★★★★★★★★★★★★ 
 
 }
