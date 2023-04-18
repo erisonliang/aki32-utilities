@@ -7,7 +7,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
-    <AssemblyName>002_SampleNodeController</AssemblyName>
+    <AssemblyName>002_NodeControllerExample</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
