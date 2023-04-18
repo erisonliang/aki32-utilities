@@ -37,6 +37,7 @@ using MathNet.Numerics;
 using MathNet.Spatial.Euclidean;
 using System.Globalization;
 using Aki32Utilities.ConsoleAppUtilities.Hobby;
+using ClosedXML.Excel;
 
 namespace Aki32Utilities.UsageExamples.ConsoleAppUtilities;
 public static partial class ExampleExecuter
@@ -485,6 +486,23 @@ public static partial class ExampleExecuter
                     //    .GetChildDirectoryInfo($@"E008_AddTextToImage")
                     //    .AddTextToImageProportionally_Loop(null, "%FN", new PointF(0.9f, 0.8f),
                     //    fontSizeRatio: 0.1, alignRight: true);
+                }
+
+                // E010_ConcatenateImage
+                {
+                    //var baseDir_100_A_E010 = baseDir_100_A.GetChildDirectoryInfo($@"E010_ConcatenateImage").CreateAndPipe();
+
+                    //var input1 = baseDir_100_A_E010.GetChildFileInfo($@"input1.png");
+                    //var input2 = baseDir_100_A_E010.GetChildFileInfo($@"input2.png");
+
+                    //var outputH = baseDir_100_A_E010.GetChildFileInfo($@"outputH.png");
+                    //var outputV = baseDir_100_A_E010.GetChildFileInfo($@"outputV.png");
+
+                    //input1.ConcatenateImage(input2, outputV, isVertical: true);
+                    //input1.ConcatenateImage(input2, outputH, isVertical: false);
+
+                    //baseDir_100_A_E010.OpenOnDefaultApp();
+
                 }
 
                 // E102_SaveScreenShot
