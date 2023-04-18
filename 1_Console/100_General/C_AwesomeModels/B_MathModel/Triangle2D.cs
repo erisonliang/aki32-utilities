@@ -22,9 +22,6 @@ public class Triangle2D : PolyLine2D
     /// Find outer circle 
     /// </summary>
     /// <see cref="https://issekinichou.wordpress.com/2021/05/16/3%E7%82%B9%E3%82%92%E9%80%9A%E3%82%8B%E5%86%86%EF%BC%882d%EF%BC%89/"/>
-    /// <param name="p0"></param>
-    /// <param name="p1"></param>
-    /// <param name="p2"></param>
     /// <returns></returns>
     public Circle2D GetOuterCircle()
     {
@@ -63,7 +60,7 @@ public class Triangle2D : PolyLine2D
         return $"{P0}, {P1}, {P2}";
     }
 
-    // ★★★★★★★★★★★★★★★
 
+    // ★★★★★★★★★★★★★★★
 
 }
