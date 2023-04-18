@@ -81,10 +81,10 @@ public class DelaunayTriangulationExecuter
         if (targetTriangle is null)
             return;
 
-        var polyoints = targetTriangle.Vertices.ToArray();
-        for (int i = 0; i < polyoints.Length - 1; i++)
-            currentTriangles.Add(new Triangle2D(addingPoint, polyoints[i], polyoints[i + 1]));
-        currentTriangles.Add(new Triangle2D(addingPoint, polyoints.Last(), polyoints.First()));
+        var polyPoints = targetTriangle.Vertices.ToArray();
+        for (int i = 0; i < polyPoints.Length - 1; i++)
+            currentTriangles.Add(new Triangle2D(addingPoint, polyPoints[i], polyPoints[i + 1]));
+        currentTriangles.Add(new Triangle2D(addingPoint, polyPoints.Last(), polyPoints.First()));
     
     }
 
