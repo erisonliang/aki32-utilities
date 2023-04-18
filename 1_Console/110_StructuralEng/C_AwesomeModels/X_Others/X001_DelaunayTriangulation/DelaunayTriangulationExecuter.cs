@@ -3,7 +3,7 @@
 using MathNet.Spatial.Euclidean;
 
 namespace Aki32Utilities.ConsoleAppUtilities.StructuralEngineering;
-public class DelaunayTriangulationExecuter
+public class MatrixDisplacementMethodBase
 {
 
     // ★★★★★★★★★★★★★★★ field
