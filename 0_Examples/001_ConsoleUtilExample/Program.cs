@@ -20,5 +20,4 @@ public partial class Program
 
         Console.ReadLine();
     }
-
 }

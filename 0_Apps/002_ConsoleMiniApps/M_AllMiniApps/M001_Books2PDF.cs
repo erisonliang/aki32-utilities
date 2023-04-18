@@ -2,7 +2,7 @@
 using Aki32Utilities.ConsoleAppUtilities.General;
 using General = Aki32Utilities.ConsoleAppUtilities.General;
 
-namespace Aki32Utilities.UsageExamples.ConsoleAppUtilities;
+namespace Aki32Utilities.Apps.ConsoleMiniApps;
 public partial class MiniApps
 {
 

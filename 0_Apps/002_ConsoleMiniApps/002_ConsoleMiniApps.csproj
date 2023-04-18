@@ -9,4 +9,17 @@
     <AssemblyName>002_ConsoleMiniApps</AssemblyName>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\1_Console\100_General\100_General.csproj" />
+    <ProjectReference Include="..\..\1_Console\101_AI\101_AI.csproj" />
+    <ProjectReference Include="..\..\1_Console\110_StructuralEng\110_StructuralEngineering.csproj" />
+    <ProjectReference Include="..\..\1_Console\111_Research\111_Research.csproj" />
+    <ProjectReference Include="..\..\1_Console\199_Hobby\199_Hobby.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="# MiniAppData\M_AllMiniApps\M001_Books2PDF\" />
+    <Folder Include="# MiniAppData\M_AllMiniApps\" />
+  </ItemGroup>
+
 </Project>

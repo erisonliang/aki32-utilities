@@ -1,10 +1,6 @@
-﻿using System.Drawing;
+﻿using Aki32Utilities.ConsoleAppUtilities.General;
 
-using Aki32Utilities.ConsoleAppUtilities.General;
-
-using General = Aki32Utilities.ConsoleAppUtilities.General;
-
-namespace Aki32Utilities.UsageExamples.ConsoleAppUtilities;
+namespace Aki32Utilities.Apps.ConsoleMiniApps;
 public partial class MiniApps
 {
     public enum CropBookPDFType
@@ -16,7 +12,7 @@ public partial class MiniApps
     /// <summary>
     /// Make 2in1 page pdf to 1in1 page pdf
     /// </summary>
-    public static void CropBookPDF(FileInfo inputFile,
+    public static void DividePDFPages(FileInfo inputFile,
         int DPI = 300,
         CropBookPDFType type = CropBookPDFType._2in1
         )

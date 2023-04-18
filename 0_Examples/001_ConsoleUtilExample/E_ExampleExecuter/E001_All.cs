@@ -1613,32 +1613,5 @@ public static partial class ExampleExecuter
             }
         }
 
-        // M_MiniApps
-        {
-            var baseDir_M = BASE_DIR.GetChildDirectoryInfo($@"M_MiniApps");
-
-            // M001_Books2PDF
-            {
-                //var outputDir = baseDir_M.GetChildDirectoryInfo($@"M001_Books2PDF");
-                //MiniApps.Books2PDF(outputDir, 10);
-
-            }
-
-            // M002_CropBookPDF
-            {
-                //var input = new FileInfo(@"C:\Users\aki32\Dropbox\Documents\13 読み物\0 アーカイブ\01 建築\04 構造\11 S\『日本材料学会編・疲労設計便覧1995』.pdf");
-                //MiniApps.CropBookPDF(input, DPI: 200);
-
-                ////var input = new DirectoryInfo(@"C:\Users\aki32\Dropbox\Documents\13 読み物\0 アーカイブ\01 建築\04 構造\11 S\output_PDF2Images_35A4F9\output_CropImageF_FA4F33");
-                //// input.Images2PDF(null);
-            }
-
-            //
-            {
-
-            }
-
-        }
-
     }
 }
