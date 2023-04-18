@@ -19,11 +19,11 @@ public class DelaunayTriangulationExecuter
         currentPoints = points.ToList();
 
         // 最初に環境を囲うように4点追加。
-        var additionalValue = 1;
-        var xmin = points.Min(p => p.X) - additionalValue;
-        var xmax = points.Max(p => p.X) + additionalValue;
-        var ymin = points.Min(p => p.Y) - additionalValue;
-        var ymax = points.Max(p => p.Y) + additionalValue;
+        var offset = 1;
+        var xmin = points.Min(p => p.X) - offset;
+        var xmax = points.Max(p => p.X) + offset;
+        var ymin = points.Min(p => p.Y) - offset;
+        var ymax = points.Max(p => p.Y) + offset;
         var additionalPoints = new List<Point2D>
         {
             new Point2D(xmin, ymin),
@@ -105,7 +105,7 @@ public class DelaunayTriangulationExecuter
         new Point2D(6,2),
     };
 
-    
+
     // ★★★★★★★★★★★★★★★ 
 
 }
