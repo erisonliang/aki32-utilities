@@ -7,15 +7,15 @@ public static partial class ChainableExtensions
     // ★★★★★★★★★★★★★★★ FileSystemInfo chain process
 
     /// <summary>
-    /// open selected file on default application
+    /// open selected file (or directory) on default application
     /// </summary>
-    /// <param name="inputFile"></param>
-    public static void OpenOnDefaultApp(this FileInfo inputFile, bool waitForExit = true, string? arguments = null)
+    /// <param name="inputFileOrDir"></param>
+    public static void OpenOnDefaultApp(this FileSystemInfo inputFileOrDir, bool waitForExit = true, string? arguments = null)
     {
         // main
         using var p = Process.Start(new ProcessStartInfo
         {
-            FileName = inputFile.FullName,
+            FileName = inputFileOrDir.FullName,
             Arguments = arguments,
             UseShellExecute = true,
         });
