@@ -61,7 +61,7 @@ public class DelaunayTriangulationExecuter
                 currentPolyLine = currentPolyLine.ConnectTriangle(mergingTriangle); // [f3]
             }
 
-            ReMesh(currentPolyLine, addingPoint); // [f4]
+            AddMeshesAroundAPoint(currentPolyLine, addingPoint); // [f4]
         }
 
         // 最初に追加した4点の関連要素を全て削除して返す。
@@ -72,25 +72,20 @@ public class DelaunayTriangulationExecuter
     }
 
     /// <summary>
-    /// Re-mesh
+    /// Add meshes around "addingPoint"
     /// </summary>
     /// <param name="targetTriangle"></param>
     /// <param name="addingPoint"></param>
-    private void ReMesh(PolyLine2D? targetTriangle, Point2D addingPoint)
+    private void AddMeshesAroundAPoint(PolyLine2D? targetTriangle, Point2D addingPoint)
     {
         if (targetTriangle is null)
             return;
 
         var polyoints = targetTriangle.Vertices.ToArray();
-        for (int i = 0; i < polyoints.Length; i++)
-        {
-            currentTriangles.Add(new Triangle2D(
-                addingPoint,
-                polyoints[i],
-                polyoints[(i + 1) % polyoints.Length]
-                ));
-
-        }
+        for (int i = 0; i < polyoints.Length - 1; i++)
+            currentTriangles.Add(new Triangle2D(addingPoint, polyoints[i], polyoints[i + 1]));
+        currentTriangles.Add(new Triangle2D(addingPoint, polyoints.Last(), polyoints.First()));
+    
     }
 
 
