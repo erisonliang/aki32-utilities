@@ -43,6 +43,7 @@
     <ProjectReference Include="..\..\1_Console\101_AI\101_AI.csproj" />
     <ProjectReference Include="..\..\1_Console\110_StructuralEng\110_StructuralEngineering.csproj" />
     <ProjectReference Include="..\..\1_Console\111_Research\111_Research.csproj" />
+    <ProjectReference Include="..\..\1_Console\199_Hobby\199_Hobby.csproj" />
   </ItemGroup>
 
   <ItemGroup>
