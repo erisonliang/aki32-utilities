@@ -38,6 +38,7 @@ using MathNet.Spatial.Euclidean;
 using System.Globalization;
 using Aki32Utilities.ConsoleAppUtilities.Hobby;
 using ClosedXML.Excel;
+using System.Xml.XPath;
 
 namespace Aki32Utilities.UsageExamples.ConsoleAppUtilities;
 public static partial class ExampleExecuter
@@ -1265,11 +1266,13 @@ public static partial class ExampleExecuter
 
                 // F203_FFT
                 {
-                    //baseDir_110_A
-                    //    .GetChildFileInfo($@"F203_FFT\input.csv")
-                    //    .GetTimeHistoryFromFile(new string[] { "t", "x" })
-                    //    .FFT("x").Result
-                    //    .SaveToCsv();
+                    baseDir_110_A.OpenOnDefaultApp();
+
+                    baseDir_110_A
+                        .GetChildFileInfo($@"F203_FFT\input.csv")
+                        .GetTimeHistoryFromFile(new string[] { "t", "x" })
+                        .FFT("x").Result
+                        .SaveToCsv();
 
                 }
 
@@ -1443,6 +1446,25 @@ public static partial class ExampleExecuter
                     //Console.WriteLine();
                     //Console.WriteLine($"result h = {att}");
 
+                }
+
+                // B004_Wavelet
+                {
+                    
+                    var baseDir_110_B004 = baseDir_110_C.GetChildDirectoryInfo(@$"B004_Wavelet").CreateAndPipe();
+                    baseDir_110_B004.OpenOnDefaultApp();
+                    var input = baseDir_110_B004.GetChildFileInfo("input.csv");
+                    var output = baseDir_110_B004.GetChildFileInfo("output.csv");
+                    var xs = input.GetTimeHistoryFromFile()["x"];
+
+                    var result = WaveletExecuter.Execute_DaubechiesWavelet(xs);
+                    result.SaveToCsv(output);
+
+                }
+
+                // B005_FFT
+                {
+                    // see A10_StructuralEngineering > A_ChainableExtensions > F203_FFT
                 }
 
                 // F001_MatrixDisplacementMethod

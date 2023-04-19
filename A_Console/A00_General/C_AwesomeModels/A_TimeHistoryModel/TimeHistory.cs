@@ -627,6 +627,9 @@ public class TimeHistory : TimeHistoryBase
 
     public TimeHistoryStep GetStep(int i)
     {
+        if (DataRowCount <= i)
+            CheckAllColumnsLength(i + 1);
+
         var step = new TimeHistoryStep()
         {
             inputDir = inputDir,
