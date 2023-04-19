@@ -13,11 +13,12 @@ Delaunay Triangulation algorithm executer
 
 ## 🌟 Figures
 
-<img name="" src="https://github.com/aki32/aki32-utilities/raw/main/9_Assets/110_Delaunay_Overview.jpg" width="666">
+<img name="" src="https://github.com/aki32/aki32-utilities/raw/main/9_Assets/A10_Delaunay_Overview.jpg" width="666">
 
 
-### 🎇 Example Model
-<img name="" src="https://github.com/aki32/aki32-utilities/raw/main/9_Assets/110_Delaunay_1.jpg" width="444">
+### 🎇 Example Model1
+
+<img name="" src="https://github.com/aki32/aki32-utilities/raw/main/9_Assets/A10_Delaunay_1.jpg" width="444">
 
 
 

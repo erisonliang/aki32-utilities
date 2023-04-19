@@ -1,4 +1,4 @@
-# ❤ Code for Rainflow Cycle Counting Method
+# 💖 RainflowCycleCounting (StructuralEngineering)
 
 ## 🌟 Abstract
 
@@ -18,29 +18,35 @@ Method for assuming steel's accumulated damage.
 more reference to be added...
 
 
-<br>
-
-## 🌟 Requirements
 
 
-### 🗯 For C# Code
 
-1. Visual Studio (or any substitutional softwares)
+## 🌟 Figures
+
+<img name="" src="https://github.com/aki32/aki32-utilities/raw/main/9_Assets/A10_Rainflow_Overview1.jpg" width="666">
+<img name="" src="https://github.com/aki32/aki32-utilities/raw/main/9_Assets/A10_Rainflow_Overview2.jpg" width="666">
+<img name="" src="https://github.com/aki32/aki32-utilities/raw/main/9_Assets/A10_Rainflow_Test1.jpg" width="666">
+<img name="" src="https://github.com/aki32/aki32-utilities/raw/main/9_Assets/A10_Rainflow_Test2.jpg" width="666">
+<img name="" src="https://github.com/aki32/aki32-utilities/raw/main/9_Assets/A10_Rainflow_Test3.jpg" width="666">
 
 
-<br>
 
-## 🌟 Notice
 
-Python version will be added soon.
+
+
+## ❗Notice
 
 Any commitment to enhance this repo will be welcomed!
 
 
+
+
 <br>
 
-## 🌟 Japanese 日本語
+## ❗Japanese 日本語
 
 レインフロー法を用いて、鋼材などの累積損傷を計算できるプログラムです。
 
-C# で記述しています。じき Python バージョンを作成予定です。
+
+
+<br>
