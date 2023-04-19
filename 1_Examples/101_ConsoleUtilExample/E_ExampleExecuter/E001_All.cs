@@ -1278,13 +1278,12 @@ public static partial class ExampleExecuter
 
                 // F204_Wavelet
                 {
-                    //baseDir_110_A.OpenOnDefaultApp();
-
-                    //baseDir_110_A
-                    //    .GetChildFileInfo($@"F203_FFT\input.csv")
-                    //    .GetTimeHistoryFromFile(new string[] { "t", "x" })
-                    //    .FFT("x")
-                    //    .SaveToCsv();
+                    baseDir_110_A.OpenOnDefaultApp();
+                    baseDir_110_A
+                        .GetChildFileInfo($@"F204_Wavelet\input.csv")
+                        .GetTimeHistoryFromFile(new string[] { "x" })
+                        .Wavelet("x")
+                        .SaveToCsv();
 
                 }
 
@@ -1462,16 +1461,7 @@ public static partial class ExampleExecuter
 
                 // B004_Wavelet
                 {
-                    
-                    var baseDir_110_B004 = baseDir_110_C.GetChildDirectoryInfo(@$"B004_Wavelet").CreateAndPipe();
-                    baseDir_110_B004.OpenOnDefaultApp();
-                    var input = baseDir_110_B004.GetChildFileInfo("input.csv");
-                    var output = baseDir_110_B004.GetChildFileInfo("output.csv");
-                    var xs = input.GetTimeHistoryFromFile()["x"];
-
-                    var result = WaveletExecuter.Execute_DaubechiesWavelet(xs);
-                    result.SaveToCsv(output);
-
+                    // see A10_StructuralEngineering > A_ChainableExtensions > F204_Wavelet
                 }
 
                 // B005_FFT
