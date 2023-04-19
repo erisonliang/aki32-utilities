@@ -1278,12 +1278,12 @@ public static partial class ExampleExecuter
 
                 // F204_Wavelet
                 {
-                    baseDir_110_A.OpenOnDefaultApp();
-                    baseDir_110_A
-                        .GetChildFileInfo($@"F204_Wavelet\input.csv")
-                        .GetTimeHistoryFromFile(new string[] { "x" })
-                        .Wavelet("x")
-                        .SaveToCsv();
+                    //baseDir_110_A.OpenOnDefaultApp();
+                    //baseDir_110_A
+                    //    .GetChildFileInfo($@"F204_Wavelet\input.csv")
+                    //    .GetTimeHistoryFromFile(new string[] { "x" })
+                    //    .Wavelet("x")
+                    //    .SaveToCsv();
 
                 }
 

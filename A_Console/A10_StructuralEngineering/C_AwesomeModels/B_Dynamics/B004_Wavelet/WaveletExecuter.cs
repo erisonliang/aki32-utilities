@@ -1,6 +1,4 @@
-﻿using System.Transactions;
-
-using Aki32Utilities.ConsoleAppUtilities.General;
+﻿using Aki32Utilities.ConsoleAppUtilities.General;
 
 using MathNet.Numerics.LinearAlgebra.Double;
 
