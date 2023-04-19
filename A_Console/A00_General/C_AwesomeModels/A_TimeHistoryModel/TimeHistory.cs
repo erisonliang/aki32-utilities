@@ -11,6 +11,11 @@ namespace Aki32Utilities.ConsoleAppUtilities.General;
 /// </remarks>
 public class TimeHistory : TimeHistoryBase
 {
+    // ★★★★★★★★★★★★★★★ field
+
+    public double IgnoreOutputValue = double.NaN;
+    public double PaddingValue = 0;
+
 
     // ★★★★★★★★★★★★★★★ props
 
@@ -32,7 +37,7 @@ public class TimeHistory : TimeHistoryBase
         {
             if (ContentsTable.ContainsKey(key))
                 return ContentsTable[key];
-            ContentsTable.Add(key, new double[DataRowCount]);
+            ContentsTable.Add(key, Enumerable.Repeat(PaddingValue, DataRowCount).ToArray());
             return ContentsTable[key];
         }
         set
@@ -122,7 +127,7 @@ public class TimeHistory : TimeHistoryBase
     }
 
     /// <summary>
-    /// Construct from excel.
+    /// Construct from string array.
     /// </summary>
     /// <param name="inputCsv">first row must be a header</param>
     /// <param name="overwriteHeaders"></param>
@@ -461,7 +466,9 @@ public class TimeHistory : TimeHistoryBase
             {
                 try
                 {
-                    sw.Write(ContentsTable[key][i]);
+                    var value = ContentsTable[key][i];
+                    if (!value.Equals(IgnoreOutputValue))
+                        sw.Write(value);
                 }
                 catch (Exception)
                 {
@@ -616,7 +623,7 @@ public class TimeHistory : TimeHistoryBase
                 continue;
 
             for (int i = 0; i < addingCount; i++)
-                value = value.Append(0);
+                value = value.Append(PaddingValue);
 
             ContentsTable[column] = value.ToArray();
         }

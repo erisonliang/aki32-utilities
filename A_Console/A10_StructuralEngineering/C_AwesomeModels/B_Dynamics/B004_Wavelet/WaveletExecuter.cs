@@ -39,6 +39,7 @@ public class WaveletExecuter
         var resultData = new double[totalLength];
 
         var resultHistory = new TimeHistory();
+        resultHistory.PaddingValue = double.NaN;
 
         // ★ main
         for (int level = 1; level <= maxLevel; level++)
