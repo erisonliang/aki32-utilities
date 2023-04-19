@@ -1,0 +1,11 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    >
+    
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="pack://application:,,,/B01_NodeController;component/Controls/DefaultNode.xaml"/>
+        <ResourceDictionary Source="pack://application:,,,/B01_NodeController;component/Controls/GroupNode.xaml"/>
+        <ResourceDictionary Source="pack://application:,,,/B01_NodeController;component/Controls/NodeLink.xaml"/>
+        <ResourceDictionary Source="pack://application:,,,/B01_NodeController;component/Controls/NodeGraph.xaml"/>
+    </ResourceDictionary.MergedDictionaries>
+    
+</ResourceDictionary>

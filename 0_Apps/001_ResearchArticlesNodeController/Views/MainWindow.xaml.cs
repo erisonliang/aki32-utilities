@@ -3,7 +3,6 @@ using Aki32Utilities.Apps.ResearchArticlesNodeController.ViewModels;
 using Aki32Utilities.ConsoleAppUtilities.General;
 using Aki32Utilities.WPFAppUtilities.General;
 using System.Collections.Specialized;
-using XPlot.Plotly;
 using System.Windows.Controls;
 
 namespace Aki32Utilities.Apps.ResearchArticlesNodeController.Views;

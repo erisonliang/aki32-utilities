@@ -1,0 +1,71 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Library</OutputType>
+    <TargetFramework>net6.0</TargetFramework>
+    <RootNamespace>Aki32Utilities</RootNamespace>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <AssemblyName>A00_General</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="# Referring dlls\**" />
+    <Compile Remove="Aki32 Utilities\**" />
+    <EmbeddedResource Remove="# Referring dlls\**" />
+    <EmbeddedResource Remove="Aki32 Utilities\**" />
+    <None Remove="# Referring dlls\**" />
+    <None Remove="Aki32 Utilities\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove=".gitattributes" />
+    <None Remove=".gitignore" />
+    <None Remove="LICENSE.md" />
+    <None Remove="README.md" />
+    <None Remove="This Repo on GitHub.url" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Argus.Audio.NAudio" Version="2022.11.30.1" />
+    <PackageReference Include="Aspose.Zip" Version="23.3.0" />
+    <PackageReference Include="ClosedXML" Version="0.95.4" />
+    <PackageReference Include="HomographySharp" Version="3.2.1" />
+    <PackageReference Include="IronPdf" Version="2023.2.4" />
+    <PackageReference Include="iTextSharp" Version="5.5.13.3" />
+    <PackageReference Include="LibGit2Sharp" Version="0.26.2" />
+    <PackageReference Include="MathNet.Numerics" Version="5.0.0" />
+    <PackageReference Include="MathNet.Spatial" Version="0.6.0" />
+    <PackageReference Include="MediaToolkit" Version="1.1.0.1" />
+    <PackageReference Include="NAudio" Version="2.1.0" />
+    <PackageReference Include="OpenCvSharp4.Windows" Version="4.6.0.20220608" />
+    <PackageReference Include="SharpZipLib" Version="1.4.1" />
+    <PackageReference Include="XPlot.Plotly" Version="4.0.6" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Python.Runtime">
+      <HintPath>Properties\Assets\Python.Runtime.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Properties\Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="A_ChainableExtensions\0_GenericData_Scalar\" />
+  </ItemGroup>
+
+</Project>

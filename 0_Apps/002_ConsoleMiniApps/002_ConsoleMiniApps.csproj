@@ -10,11 +10,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\1_Console\100_General\100_General.csproj" />
-    <ProjectReference Include="..\..\1_Console\101_AI\101_AI.csproj" />
-    <ProjectReference Include="..\..\1_Console\110_StructuralEng\110_StructuralEngineering.csproj" />
-    <ProjectReference Include="..\..\1_Console\111_Research\111_Research.csproj" />
-    <ProjectReference Include="..\..\1_Console\199_Hobby\199_Hobby.csproj" />
+    <ProjectReference Include="..\..\A_Console\A00_General\A00_General.csproj" />
+    <ProjectReference Include="..\..\A_Console\A01_AI\A01_AI.csproj" />
+    <ProjectReference Include="..\..\A_Console\A10_StructuralEngineering\A10_StructuralEngineering.csproj" />
+    <ProjectReference Include="..\..\A_Console\A11_Research\A11_Research.csproj" />
+    <ProjectReference Include="..\..\A_Console\AXX_Hobby\AXX_Hobby.csproj" />
   </ItemGroup>
 
   <ItemGroup>
