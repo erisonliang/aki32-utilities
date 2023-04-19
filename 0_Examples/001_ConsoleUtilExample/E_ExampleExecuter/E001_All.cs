@@ -1407,7 +1407,8 @@ public static partial class ExampleExecuter
 
                 // B002_RainflowCycleCounting
                 {
-                    //var inputCsv = baseDir_110_C.GetChildFileInfo($@"B002_RainflowCycleCounting\input3.csv");
+                    //var baseDir_110_C_B002 = baseDir_110_C.GetChildDirectoryInfo($@"B002_RainflowCycleCounting");
+                    //var inputCsv = baseDir_110_C_B002.GetChildFileInfo($@"input3.csv");
                     ////var inputCsv = new FileInfo(@"C:\Users\aki32\Desktop\anaAll_beam.csv");
 
                     //var rainflow = RainflowCalculator.FromCsv(inputCsv);
@@ -1419,7 +1420,8 @@ public static partial class ExampleExecuter
                 // B003_RDTechnique
                 {
                     //// Define IO paths
-                    //var input = baseDir_110_C.GetChildFileInfo($@"B003_RDTechnique\input.csv");
+                    //var baseDir_110_C_B003 = baseDir_110_C.GetChildDirectoryInfo($@"B003_RDTechnique");
+                    //var input = baseDir_110_C_B003.GetChildFileInfo($@"input.csv");
 
                     //// Read input csv
                     //var rd = RDTechniqueCalculator.FromCsv(input);
@@ -1433,6 +1435,25 @@ public static partial class ExampleExecuter
                     //var att = rd.CalcAttenuationConstant(4, true);
                     //Console.WriteLine();
                     //Console.WriteLine($"result h = {att}");
+
+                }
+
+                // F001_MatrixDisplacementMethod
+                {
+                    //// Define IO paths
+                    //var baseDir_110_C_F001 = baseDir_110_C.GetChildDirectoryInfo($@"F001_MatrixDisplacementMethod").CreateAndPipe();
+                    //var output1 = baseDir_110_C_F001.GetChildFileInfo($@"input1.png");
+                    //var output2 = baseDir_110_C_F001.GetChildFileInfo($@"input2.png");
+
+                    //baseDir_110_C_F001.OpenOnDefaultApp();
+
+                    //// build
+                    //var structure = MatrixDisplacementMethod.TestModel1;
+                    //structure.Draw_Frame().Save(output1.FullName);
+
+                    //// calc
+                    //structure.CalculateAll();
+                    //structure.Draw_M().Save(output2.FullName);
 
                 }
 

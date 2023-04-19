@@ -11,6 +11,7 @@ public partial class MatrixDisplacementMethod
 
         // ★★★★★★★★★★★★★★★ props
 
+        public MaterialType Material { get; set; }
         public double A { get; set; } //断面積
         public double E { get; set; } //ヤング係数
         //public double G { get; set; } //せん断弾性係数
@@ -31,8 +32,9 @@ public partial class MatrixDisplacementMethod
         /// <param name="E">ヤング係数</param>
         /// <param name="I">断面二次モーメント</param>
         /// <param name="Z">断面係数</param>
-        public CrossSection(double A, double E, double I, double? Z = null, string memo = "")
+        public CrossSection(MaterialType material, double A, double E, double I, double? Z = null,  string memo = "")
         {
+            this.Material = material;
             this.A = A;
             this.E = E;
             this.I = I;

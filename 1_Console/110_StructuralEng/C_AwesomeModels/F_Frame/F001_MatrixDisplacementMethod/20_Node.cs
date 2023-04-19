@@ -29,10 +29,10 @@ public partial class MatrixDisplacementMethod
 
         // ★★★★★★★★★★★★★★★ inits
 
-        public Node(Point2D point, Fix fix)
+        public Node(Point2D point, Fix fix = new())
         {
-            this.Point = point;
-            this.Fix = fix;
+            Point = point;
+            Fix = fix;
         }
 
 

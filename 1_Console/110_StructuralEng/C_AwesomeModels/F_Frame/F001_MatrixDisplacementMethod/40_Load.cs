@@ -1,4 +1,4 @@
-﻿
+﻿using MathNet.Spatial.Euclidean;
 
 namespace Aki32Utilities.ConsoleAppUtilities.StructuralEngineering;
 public partial class MatrixDisplacementMethod
@@ -11,14 +11,20 @@ public partial class MatrixDisplacementMethod
 
         // ★★★★★★★★★★★★★★★ props
 
-        public LoadType Type { get; set; } //荷重の種類
+        public LoadType Type { get; set; }
 
-        public double M { get; set; } //モーメント荷重の大きさ
+        /// <summary>
+        /// モーメント荷重の大きさ
+        /// </summary>
+        public double M { get; set; }
 
-        public double P1_H { get; set; } //集中荷重は"P1_"のほうのみ使う。
-        public double P2_H { get; set; } //分布荷重は４つとも使う。
+        //集中荷重は"P1_"のほうのみ使う。分布荷重は４つとも使う。
+        public double P1_H { get; set; }
+        public double P2_H { get; set; }
         public double P1_V { get; set; }
         public double P2_V { get; set; }
+        //public Vector2D P1 { get; set; }
+        //public Vector2D P2 { get; set; }
 
 
         // ★★★★★★★★★★★★★★★ inits

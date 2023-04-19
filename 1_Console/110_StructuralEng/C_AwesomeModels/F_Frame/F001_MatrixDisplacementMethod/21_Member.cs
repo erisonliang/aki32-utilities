@@ -1,4 +1,6 @@
-﻿using MathNet.Numerics.LinearAlgebra.Double;
+﻿using System.Collections.Generic;
+
+using MathNet.Numerics.LinearAlgebra.Double;
 
 namespace Aki32Utilities.ConsoleAppUtilities.StructuralEngineering;
 public partial class MatrixDisplacementMethod
@@ -11,7 +13,6 @@ public partial class MatrixDisplacementMethod
         // ★★★★★★★★★★★★★★★ props
 
         // ★★★★★ 入力情報
-        public MaterialType Material { get; set; }
         public CrossSection Section { get; set; }
         public Edge[] Edges { get; set; } = new Edge[2];
         public bool IsRealMember { get; set; } = true;
@@ -40,19 +41,32 @@ public partial class MatrixDisplacementMethod
         // ★★★★★★★★★★★★★★★ inits
 
         /// <summary>
+        /// 部材。両端は剛接合となります。
         /// </summary>
         /// <param name="section">断面形状</param>
-        /// <param name="material"></param>
+        /// <param name="Node1">第１端の節点番号</param>
+        /// <param name="Node2">第２端の節点番号</param>
+        /// <param name="nodes">全節点情報</param>
+        /// 
+        public Member(CrossSection section, int Node1, int Node2, List<Node> nodes) : this(section, Node1, Node2, false, false, nodes)
+        {
+
+        }
+
+        /// <summary>
+        /// 部材。
+        /// </summary>
+        /// <param name="section">断面形状</param>
         /// <param name="Node1">第１端の節点番号</param>
         /// <param name="Node2">第２端の節点番号</param>
         /// <param name="Node1IsPin">第１端はピンである</param>
         /// <param name="Node2IsPin">第２端はピンである</param>
-        /// <param name="Nodes">全節点情報</param>
-        public Member(CrossSection section, MaterialType material, int Node1, int Node2, bool Node1IsPin, bool Node2IsPin, List<Node> Nodes)
+        /// <param name="nodes">全節点情報</param>
+        /// 
+        public Member(CrossSection section, int Node1, int Node2, bool Node1IsPin, bool Node2IsPin, List<Node> nodes)
         {
             // ★★★★★ 既知の数値を代入
             Section = section;
-            Material = material;
             Loads = new List<Load>();
             Stress = new Stress();
             IsRealMember = true;
@@ -61,10 +75,10 @@ public partial class MatrixDisplacementMethod
             // ★★★★★ 節点の配置決め
 
             // 節点の座標割り出し
-            double X1 = Nodes[Node1].Point.X;
-            double Y1 = Nodes[Node1].Point.Y;
-            double X2 = Nodes[Node2].Point.X;
-            double Y2 = Nodes[Node2].Point.Y;
+            double X1 = nodes[Node1].Point.X;
+            double Y1 = nodes[Node1].Point.Y;
+            double X2 = nodes[Node2].Point.X;
+            double Y2 = nodes[Node2].Point.Y;
 
             // 部材長
             Length = Math.Sqrt(Math.Pow((X1 - X2), 2) + Math.Pow((Y1 - Y2), 2));
@@ -85,17 +99,17 @@ public partial class MatrixDisplacementMethod
             // 決定，代入
             Edges[0].Node = Node1;
             Edges[1].Node = Node2;
-            Edges[0].Node_Fix = Nodes[Node1].Fix;
-            Edges[1].Node_Fix = Nodes[Node2].Fix;
+            Edges[0].Node_Fix = nodes[Node1].Fix;
+            Edges[1].Node_Fix = nodes[Node2].Fix;
 
 
             // ★★★★★ 部材角算出
 
             // 節点の座標再割り出し
-            X1 = Nodes[Node1].Point.X;
-            Y1 = Nodes[Node1].Point.Y;
-            X2 = Nodes[Node2].Point.X;
-            Y2 = Nodes[Node2].Point.Y;
+            X1 = nodes[Node1].Point.X;
+            Y1 = nodes[Node1].Point.Y;
+            X2 = nodes[Node2].Point.X;
+            Y2 = nodes[Node2].Point.Y;
             // -90<Psi<=90
             if (Length == 0)
             {
@@ -271,7 +285,7 @@ public partial class MatrixDisplacementMethod
         {
             try
             {
-                switch (Material)
+                switch (Section.Material)
                 {
                     case MaterialType.Steel:
                         {

@@ -213,18 +213,18 @@ public partial class MatrixDisplacementMethod
                     for (int i = StartNode; i < StartNode + DistributedLoadDivision - 1; i++)
                     {
                         //中央に部材を追加
-                        var member0 = new Member(section0, MaterialType.Steel, i, i + 1, false, false, Nodes);
+                        var member0 = new Member(section0, i, i + 1, false, false, Nodes);
                         member0.IsRealMember = false;
                         Members.Add(member0);
                     }
 
                     //1端の部材を追加
-                    var member1 = new Member(section0, MaterialType.Steel, edge0.Node, StartNode + DistributedLoadDivision - 1, edge0.IsNodePin, false, Nodes);
+                    var member1 = new Member(section0, edge0.Node, StartNode + DistributedLoadDivision - 1, edge0.IsNodePin, false, Nodes);
                     member1.IsRealMember = false;
                     Members.Add(member1);
 
                     //2端の部材を追加
-                    var member2 = new Member(section0, MaterialType.Steel, edge1.Node, StartNode, edge1.IsNodePin, false, Nodes);
+                    var member2 = new Member(section0, edge1.Node, StartNode, edge1.IsNodePin, false, Nodes);
                     member2.IsRealMember = false;
                     Members.Add(member2);
 
@@ -263,19 +263,19 @@ public partial class MatrixDisplacementMethod
         /// 全てを解きます。
         /// </summary>
         /// <returns>実行結果</returns>
-        public bool Solve_All()
+        public bool CalculateAll()
         {
             return (
-                Solve_Frame() &&
-                Solve_Members() &&
-                Calc_Metrix());
+                CalculateFrame() &&
+                CalculateMembers() &&
+                CalculateMetrix());
         }
 
         /// <summary>
         /// 架構を解析します。
         /// </summary>
         /// <returns></returns>
-        public bool Solve_Frame()
+        public bool CalculateFrame()
         {
             // ★★★★★ 初期化
             WarningMessage = "";
@@ -441,7 +441,7 @@ public partial class MatrixDisplacementMethod
         /// 全部材を解析します。
         /// </summary>
         /// <returns>実行結果</returns>
-        public bool Solve_Members()
+        public bool CalculateMembers()
         {
             try
             {
@@ -459,7 +459,7 @@ public partial class MatrixDisplacementMethod
         /// デザコンに必要なデータを解析します。
         /// </summary>
         /// <returns>実行結果</returns>
-        public bool Calc_Metrix()
+        public bool CalculateMetrix()
         {
             try
             {
