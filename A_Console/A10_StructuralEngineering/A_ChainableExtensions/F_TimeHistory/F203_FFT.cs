@@ -3,8 +3,7 @@
 namespace Aki32Utilities.ConsoleAppUtilities.StructuralEngineering;
 public static partial class ChainableExtensions
 {
-
-    public static async Task<TimeHistory> FFT(this TimeHistory inputHistory, string targetIndex)
+    public static TimeHistory FFT(this TimeHistory inputHistory, string targetIndex)
     {
         // preprocess
         if (!inputHistory.Columns.Contains(targetIndex))
@@ -16,7 +15,7 @@ public static partial class ChainableExtensions
 
 
         // main
-        var resultHistory = await FFTExecuter.Execute(inputHistory.TimeStep, inputHistory[targetIndex]);
+        var resultHistory = FFTExecuter.Execute(inputHistory.TimeStep, inputHistory[targetIndex]);
 
 
         // post process
@@ -24,5 +23,4 @@ public static partial class ChainableExtensions
         resultHistory.Name = $"{inputHistory.Name}_FFT";
         return resultHistory;
     }
-
 }

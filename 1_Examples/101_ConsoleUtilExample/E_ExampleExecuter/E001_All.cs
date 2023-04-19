@@ -1266,13 +1266,25 @@ public static partial class ExampleExecuter
 
                 // F203_FFT
                 {
-                    baseDir_110_A.OpenOnDefaultApp();
+                    //baseDir_110_A.OpenOnDefaultApp();
 
-                    baseDir_110_A
-                        .GetChildFileInfo($@"F203_FFT\input.csv")
-                        .GetTimeHistoryFromFile(new string[] { "t", "x" })
-                        .FFT("x").Result
-                        .SaveToCsv();
+                    //baseDir_110_A
+                    //    .GetChildFileInfo($@"F203_FFT\input.csv")
+                    //    .GetTimeHistoryFromFile(new string[] { "t", "x" })
+                    //    .FFT("x")
+                    //    .SaveToCsv();
+
+                }
+
+                // F204_Wavelet
+                {
+                    //baseDir_110_A.OpenOnDefaultApp();
+
+                    //baseDir_110_A
+                    //    .GetChildFileInfo($@"F203_FFT\input.csv")
+                    //    .GetTimeHistoryFromFile(new string[] { "t", "x" })
+                    //    .FFT("x")
+                    //    .SaveToCsv();
 
                 }
 
