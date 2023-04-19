@@ -19,7 +19,7 @@ public static partial class ChainableExtensions
 
 
         // main
-        var rainflow = RainflowCalculator.FromCsv(inputFile);
+        var rainflow = new RainflowCalculator(inputFile);
         rainflow.CalcRainflow(C, beta, consoleOutput);
 
 

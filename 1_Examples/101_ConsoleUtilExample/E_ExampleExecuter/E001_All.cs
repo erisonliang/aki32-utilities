@@ -1407,14 +1407,23 @@ public static partial class ExampleExecuter
 
                 // B002_RainflowCycleCounting
                 {
-                    //var baseDir_110_C_B002 = baseDir_110_C.GetChildDirectoryInfo($@"B002_RainflowCycleCounting");
+                    var baseDir_110_C_B002 = baseDir_110_C.GetChildDirectoryInfo($@"B002_RainflowCycleCounting");
+                    
+                    var rainflow = RainflowCalculator.SampleModel1;
+                    rainflow.InputHistory.WriteToConsole();
+                    Console.WriteLine("============================");
+                    rainflow.CalcRainflow(4, 1 / 3d, false);
+                    rainflow.ResultHistory.WriteToConsole();
+
+
                     //var inputCsv = baseDir_110_C_B002.GetChildFileInfo($@"input3.csv");
-                    ////var inputCsv = new FileInfo(@"C:\Users\aki32\Desktop\anaAll_beam.csv");
+                    //var inputCsv = new FileInfo(@"C:\Users\aki32\Desktop\anaAll_beam.csv");
 
                     //var rainflow = RainflowCalculator.FromCsv(inputCsv);
                     //rainflow.CalcRainflow(4, 1 / 3d, false);
                     //rainflow.SaveResultHistoryToCsv();
                     //rainflow.SaveRainBranchesToCsv();
+
                 }
 
                 // B003_RDTechnique
@@ -1463,7 +1472,7 @@ public static partial class ExampleExecuter
 
                     //var delaunay = new DelaunayTriangulationExecuter();
 
-                    //var points = DelaunayTriangulationExecuter.TestModel1;
+                    //var points = DelaunayTriangulationExecuter.SampleModel1;
                     //foreach (var point in points)
                     //    Console.WriteLine(point.ToString().ReplaceUnwantedCharacters());
 

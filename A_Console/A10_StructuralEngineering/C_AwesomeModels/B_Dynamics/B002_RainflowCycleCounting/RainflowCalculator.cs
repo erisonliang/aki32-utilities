@@ -8,26 +8,39 @@ public class RainflowCalculator
 
     public TimeHistory InputHistory { get; set; }
     public TimeHistory ResultHistory { get; set; }
-    private RainBranches[] AllRainBranches { get; set; }
+    private RainBranchSet[] RainBranchSets { get; set; }
+    public List<RainBranch> RainBranches
+    {
+        get
+        {
+            var branches = new List<RainBranch>();
+            foreach (var RainBranches in RainBranchSets)
+                branches.AddRange(RainBranches.RainBranchList);
+            return branches;
+        }
+    }
     private double lastUsedC = 0d;
     private double lastUsedBeta = 0d;
+
 
     // ★★★★★★★★★★★★★★★ inits
 
     /// <summary>
-    /// Forbid public  instantiate
+    /// forbidden
     /// </summary>
-    private RainflowCalculator() { }
+    private RainflowCalculator()
+    {
+    }
 
     /// <summary>
-    /// Construct from csv
+    /// 
     /// </summary>
-    /// <param name="inputCsvPath"></param>
-    /// <exception cref="Exception"></exception>
-    public static RainflowCalculator FromCsv(FileInfo inputCsv)
+    /// <param name="inputTimeHistoryCsv"></param>
+    public RainflowCalculator(FileInfo inputTimeHistoryCsv)
     {
-        return new RainflowCalculator { InputHistory = TimeHistory.FromCsv(inputCsv, new string[] { "t", "mu" }) };
+        InputHistory = TimeHistory.FromCsv(inputTimeHistoryCsv, new string[] { "t", "mu" });
     }
+
 
     // ★★★★★★★★★★★★★★★ methods
 
@@ -38,15 +51,19 @@ public class RainflowCalculator
     /// <param name="beta">Damage-related coefficeint</param>
     public void CalcRainflow(double C, double beta, bool consoleOutput = false)
     {
+        // preprocess
+        if (InputHistory is null)
+            throw new InvalidOperationException("Must initialize \"InputHistory\" property with TimeHistory with \"t\" and \"mu\" columns first.");
+
         // init
         ResultHistory = InputHistory.Clone();
         ResultHistory.Name += "_Rainflow";
         lastUsedC = C;
         lastUsedBeta = beta;
-        AllRainBranches = new RainBranches[]
+        RainBranchSets = new RainBranchSet[]
         {
-            new RainBranches(true),
-            new RainBranches(false),
+            new RainBranchSet(true),
+            new RainBranchSet(false),
         };
 
 
@@ -62,11 +79,11 @@ public class RainflowCalculator
             currentStep["totalMu"] = 0;
             currentStep["totalDamage"] = 0;
 
-            foreach (var RainBranches in AllRainBranches)
+            foreach (var RainBranchSet in RainBranchSets)
             {
-                RainBranches.CalcNext(lastStep.mu, currentStep.mu, consoleOutput);
-                currentStep["totalMu"] += RainBranches.TotalMu;
-                currentStep["totalDamage"] += RainBranches.TotalDamage(C, beta);
+                RainBranchSet.CalcNext(lastStep.mu, currentStep.mu, consoleOutput);
+                currentStep["totalMu"] += RainBranchSet.TotalMu;
+                currentStep["totalDamage"] += RainBranchSet.TotalDamage(C, beta);
             }
 
             ResultHistory.SetStep(i, currentStep);
@@ -92,11 +109,7 @@ public class RainflowCalculator
         result.DropAllColumns();
         result.Name += "_RainflowBranches";
 
-        var branches = new List<RainBranch>();
-        foreach (var RainBranches in AllRainBranches)
-            branches.AddRange(RainBranches.RainBranchList);
-
-        branches = branches.OrderBy(x => x.TotalMuLength).ToList();
+        var branches = RainBranches.OrderBy(x => x.TotalMuLength).ToList();
 
         foreach (var branch in branches)
         {
@@ -108,6 +121,22 @@ public class RainflowCalculator
 
         return result.SaveToCsv(outputFile);
     }
+
+    // ★★★★★★★★★★★★★★★ samples
+
+    public static RainflowCalculator SampleModel1
+    {
+        get
+        {
+            var inputHistory = new TimeHistory();
+            inputHistory["t"] = new double[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 };
+            inputHistory["mu"] = new double[] { 0, 2, -1, 3, -3, 1, -2, -1, 0, 2, 3, 4, -4, 1, 0 };
+            return new RainflowCalculator { InputHistory = inputHistory };
+        }
+    }
+
+
+
 
 
     // ★★★★★★★★★★★★★★★

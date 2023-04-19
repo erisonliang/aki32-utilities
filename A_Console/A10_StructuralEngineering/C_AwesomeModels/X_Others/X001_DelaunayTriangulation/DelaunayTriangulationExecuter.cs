@@ -89,9 +89,9 @@ public class DelaunayTriangulationExecuter
     }
 
 
-    // ★★★★★★★★★★★★★★★ tests
+    // ★★★★★★★★★★★★★★★ samples
 
-    public static Point2D[] TestModel1 => new Point2D[]
+    public static Point2D[] SampleModel1 => new Point2D[]
     {
         new Point2D(1,2),
         new Point2D(3,4),

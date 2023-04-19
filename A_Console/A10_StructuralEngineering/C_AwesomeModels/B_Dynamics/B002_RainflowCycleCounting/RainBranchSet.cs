@@ -1,7 +1,7 @@
 ﻿
 
 namespace Aki32Utilities.ConsoleAppUtilities.StructuralEngineering;
-public class RainBranches
+public class RainBranchSet
 {
     public List<RainBranch> RainBranchList { get; init; }
 
@@ -13,7 +13,7 @@ public class RainBranches
     /// Constructor
     /// </summary>
     /// <param name="isTargetPositive"></param>
-    public RainBranches(bool isTargetPositive)
+    public RainBranchSet(bool isTargetPositive)
     {
         RainBranchList = new List<RainBranch>();
         IsTargetPositive = isTargetPositive;
