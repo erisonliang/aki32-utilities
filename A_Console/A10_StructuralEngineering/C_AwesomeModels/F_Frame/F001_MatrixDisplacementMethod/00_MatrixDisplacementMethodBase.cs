@@ -6,9 +6,9 @@ namespace Aki32Utilities.ConsoleAppUtilities.StructuralEngineering;
 public partial class MatrixDisplacementMethod
 {
 
-    // ★★★★★★★★★★★★★★★ tests
+    // ★★★★★★★★★★★★★★★ examples
 
-    public static Structure TestModel1
+    public static Structure ExampleModel1
     {
         get
         {

@@ -54,12 +54,19 @@ public partial class MatrixDisplacementMethod
         private const int Base_ALL = 5; //構造全体の余白に対する大きさの係数
         private const int Correction = 555; //数値が小さくてもきれいに見えるようにする係数
 
-        private const int Base_r = 25; //節点半径の大きさの係数
-        private const int Base_Thickness = 5; //部材・線の太さの係数
-        private const int Base_Letter = 50; //文字の大きさの係数
-        private const int Base_Fulcrum = 20; //支点の大きさの係数
-        private const int Base_Load = 100; //荷重表示の大きさの係数
-        private const int Base_M = 500; //各図の大きさの係数
+        private const int Base_r = 50; //節点半径の大きさの係数
+        private const int Base_Thickness = 20; //部材・線の太さの係数
+        private const int Base_Letter = 70; //文字の大きさの係数
+        private const int Base_Fulcrum = 40; //支点の大きさの係数
+        private const int Base_Load = 300; //荷重表示の大きさの係数
+        private const int Base_M = 700; //各図の大きさの係数
+
+        //private const int Base_r = 25; //節点半径の大きさの係数
+        //private const int Base_Thickness = 5; //部材・線の太さの係数
+        //private const int Base_Letter = 50; //文字の大きさの係数
+        //private const int Base_Fulcrum = 20; //支点の大きさの係数
+        //private const int Base_Load = 100; //荷重表示の大きさの係数
+        //private const int Base_M = 500; //各図の大きさの係数
 
         public bool DrawNodesNum; //節点番号を描写 
         public bool DrawMembersNum; //部材番号を描写

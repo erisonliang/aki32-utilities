@@ -30,15 +30,15 @@ Method for assuming biuldings' attenuation constant from microtremor.
 
 Input draft
 
-<img name="" src="https://github.com/aki32/aki32-utilities/raw/main/9_Assets/A10_MDM_TestModel1.jpg" width="666">
+<img name="" src="https://github.com/aki32/aki32-utilities/raw/main/9_Assets/A10_MDM_ExampleModel1-1.jpg" width="666">
 
 Frame output
 
-<img name="" src="https://github.com/aki32/aki32-utilities/raw/main/9_Assets/A10_MDM_TestModel2.png" width="666">
+<img name="" src="https://github.com/aki32/aki32-utilities/raw/main/9_Assets/A10_MDM_ExampleModel1-2.png" width="666">
 
 Bending moment diagram output
 
-<img name="" src="https://github.com/aki32/aki32-utilities/raw/main/9_Assets/A10_MDM_TestModel3.png" width="666">
+<img name="" src="https://github.com/aki32/aki32-utilities/raw/main/9_Assets/A10_MDM_ExampleModel1-3.png" width="666">
 
 
 

@@ -122,9 +122,9 @@ public class RainflowCalculator
         return result.SaveToCsv(outputFile);
     }
 
-    // ★★★★★★★★★★★★★★★ samples
+    // ★★★★★★★★★★★★★★★ examples
 
-    public static RainflowCalculator SampleModel1
+    public static RainflowCalculator ExampleModel1
     {
         get
         {

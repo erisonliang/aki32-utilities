@@ -1407,22 +1407,20 @@ public static partial class ExampleExecuter
 
                 // B002_RainflowCycleCounting
                 {
-                    var baseDir_110_C_B002 = baseDir_110_C.GetChildDirectoryInfo($@"B002_RainflowCycleCounting");
-                    
-                    var rainflow = RainflowCalculator.SampleModel1;
-                    rainflow.InputHistory.WriteToConsole();
-                    Console.WriteLine("============================");
-                    rainflow.CalcRainflow(4, 1 / 3d, false);
-                    rainflow.ResultHistory.WriteToConsole();
+                    //var baseDir_110_C_B002 = baseDir_110_C.GetChildDirectoryInfo($@"B002_RainflowCycleCounting");
+                    //baseDir_110_C_B002.OpenOnDefaultApp();
+                    //var inputCsv = baseDir_110_C_B002.GetChildFileInfo($@"input2.csv");
 
-
-                    //var inputCsv = baseDir_110_C_B002.GetChildFileInfo($@"input3.csv");
-                    //var inputCsv = new FileInfo(@"C:\Users\aki32\Desktop\anaAll_beam.csv");
-
-                    //var rainflow = RainflowCalculator.FromCsv(inputCsv);
+                    //var rainflow = new RainflowCalculator(inputCsv);
                     //rainflow.CalcRainflow(4, 1 / 3d, false);
                     //rainflow.SaveResultHistoryToCsv();
                     //rainflow.SaveRainBranchesToCsv();
+
+                    ////var rainflow = RainflowCalculator.ExampleModel1;
+                    ////rainflow.InputHistory.WriteToConsole();
+                    ////Console.WriteLine("============================");
+                    ////rainflow.CalcRainflow(4, 1 / 3d, false);
+                    ////rainflow.ResultHistory.WriteToConsole();
 
                 }
 
@@ -1453,11 +1451,10 @@ public static partial class ExampleExecuter
                     //var baseDir_110_C_F001 = baseDir_110_C.GetChildDirectoryInfo($@"F001_MatrixDisplacementMethod").CreateAndPipe();
                     //var output1 = baseDir_110_C_F001.GetChildFileInfo($@"input1.png");
                     //var output2 = baseDir_110_C_F001.GetChildFileInfo($@"input2.png");
-
                     //baseDir_110_C_F001.OpenOnDefaultApp();
 
                     //// build
-                    //var structure = MatrixDisplacementMethod.TestModel1;
+                    //var structure = MatrixDisplacementMethod.ExampleModel1;
                     //structure.Draw_Frame().Save(output1.FullName);
 
                     //// calc
@@ -1472,7 +1469,7 @@ public static partial class ExampleExecuter
 
                     //var delaunay = new DelaunayTriangulationExecuter();
 
-                    //var points = DelaunayTriangulationExecuter.SampleModel1;
+                    //var points = DelaunayTriangulationExecuter.ExampleModel1;
                     //foreach (var point in points)
                     //    Console.WriteLine(point.ToString().ReplaceUnwantedCharacters());
 
