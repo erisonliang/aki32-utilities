@@ -42,7 +42,7 @@ using ClosedXML.Excel;
 namespace Aki32Utilities.UsageExamples.ConsoleAppUtilities;
 public static partial class ExampleExecuter
 {
-    static readonly DirectoryInfo BASE_DIR = new($@"..\..\..\# Data\");
+    static readonly DirectoryInfo BASE_DIR = new($@"..\..\..\# SampleData\");
 
     public static void All()
     {

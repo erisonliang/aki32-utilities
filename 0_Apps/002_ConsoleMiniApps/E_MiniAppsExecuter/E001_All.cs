@@ -42,7 +42,7 @@ using ClosedXML.Excel;
 namespace Aki32Utilities.Apps.ConsoleMiniApps;
 public static partial class MiniAppsExecuter
 {
-    static readonly DirectoryInfo BASE_DIR = new($@"..\..\..\# MiniAppData\");
+    static readonly DirectoryInfo BASE_DIR = new($@"..\..\..\# SampleData\");
 
     public static void All()
     {

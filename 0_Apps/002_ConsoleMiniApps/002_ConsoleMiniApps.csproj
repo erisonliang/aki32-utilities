@@ -18,8 +18,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="# MiniAppData\M_AllMiniApps\M001_Books2PDF\" />
-    <Folder Include="# MiniAppData\M_AllMiniApps\" />
+    <Folder Include="# SampleData\M_AllMiniApps\M001_Books2PDF\" />
+    <Folder Include="# SampleData\M_AllMiniApps\" />
   </ItemGroup>
 
 </Project>
