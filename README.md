@@ -54,7 +54,7 @@ new DirectoryInfo(@"C:\input")
 
 
 
-### 🎇 In 100 General
+### 🎇 In A00 General
 
 <img name="" src="https://github.com/aki32/aki32-utilities/raw/main/9_Assets/A00_1.jpg" width="666">
 <img name="" src="https://github.com/aki32/aki32-utilities/raw/main/9_Assets/A0001.jpg" width="666">
@@ -79,7 +79,7 @@ new DirectoryInfo(@"C:\input")
 
 
 
-### 🎇 In 110 Structural Engineering
+### 🎇 In A10 Structural Engineering
 
 <img name="" src="https://github.com/aki32/aki32-utilities/raw/main/9_Assets/A10A1.jpg" width="666">
 <img name="" src="https://github.com/aki32/aki32-utilities/raw/main/9_Assets/A10B1.jpg" width="666">
