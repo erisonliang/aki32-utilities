@@ -22,22 +22,22 @@ C# utilities
   ┃   ┗━ 0AA_ResearchArticlesNodeController ... Handle research articles with node link GUI (using A11 and B01)
   ┃
   ┣━ 1_Examples
-  ┃   ┣━ 101_ConsoleUtilExample    ... Usage examples for A
-  ┃   ┣━ 102_NodeControllerExample ... Usage examples for B01
-  ┃   ┗━ 103_WFAControlExample     ... Usage examples for C01
+  ┃   ┣━ 101_ConsoleUtilExample             ... Usage examples for A
+  ┃   ┣━ 102_NodeControllerExample          ... Usage examples for B01
+  ┃   ┗━ 103_WFAControlExample              ... Usage examples for C01
   ┃
   ┣━ A_Console
-  ┃   ┣━ A00_General   ... C# utils
-  ┃   ┣━ A01_AI        ... Handle AI/ML models
-  ┃   ┣━ A10_Structure ... Many structural engineering calculation models
-  ┃   ┗━ A11_Research  ... Handle research articles
+  ┃   ┣━ A00_General                        ... C# utils
+  ┃   ┣━ A01_AI                             ... Handle AI/ML models
+  ┃   ┣━ A10_Structure                      ... Many structural engineering calculation models
+  ┃   ┗━ A11_Research                       ... Handle research articles
   ┃
-  ┣━ B_WPF                     (Windows Presentation Foundation)
-  ┃   ┣━ B00_General        ... WPF utils
-  ┃   ┗━ B01_NodeController ... Define node link graph
+  ┣━ B_WPF                                     (Windows Presentation Foundation)
+  ┃   ┣━ B00_General                        ... WPF utils
+  ┃   ┗━ B01_NodeController                 ... Define node link graph
   ┃
-  ┗━ C_WFA              (Windows Form Application)
-      ┗━ C01_Control ... Original user controls
+  ┗━ C_WFA                                     (Windows Form Application)
+      ┗━ C01_Control                        ... Original user controls
 
 </pre>
 
