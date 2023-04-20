@@ -4,7 +4,7 @@
 
 Elastoplastic analysis algorithms
 
-
+Currently we only have SDoF models.
 
 
 
