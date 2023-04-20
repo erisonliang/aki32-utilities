@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 using Aki32Utilities.ConsoleAppUtilities.General;
 using Aki32Utilities.ConsoleAppUtilities.AI;
-using Aki32Utilities.ConsoleAppUtilities.StructuralEngineering;
+using Aki32Utilities.ConsoleAppUtilities.Structure;
 using Aki32Utilities.ConsoleAppUtilities.Research;
 
 using ClosedXML;

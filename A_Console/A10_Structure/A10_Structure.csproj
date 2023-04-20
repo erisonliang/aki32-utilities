@@ -1,23 +1,23 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <OutputType>Exe</OutputType>
+    <OutputType>Library</OutputType>
     <TargetFramework>net6.0</TargetFramework>
     <RootNamespace>Aki32Utilities</RootNamespace>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <AssemblyName>10A_ConsoleUtilExample</AssemblyName>
+    <AssemblyName>A10_Structure</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
     <Compile Remove="# Referring dlls\**" />
-    <Compile Remove="# TestModel\**" />
+    <Compile Remove="# TestModel\FileUtil\**" />
     <Compile Remove="Aki32 Utilities\**" />
     <EmbeddedResource Remove="# Referring dlls\**" />
-    <EmbeddedResource Remove="# TestModel\**" />
+    <EmbeddedResource Remove="# TestModel\FileUtil\**" />
     <EmbeddedResource Remove="Aki32 Utilities\**" />
     <None Remove="# Referring dlls\**" />
-    <None Remove="# TestModel\**" />
+    <None Remove="# TestModel\FileUtil\**" />
     <None Remove="Aki32 Utilities\**" />
   </ItemGroup>
 
@@ -25,25 +25,17 @@
     <None Remove=".gitattributes" />
     <None Remove=".gitignore" />
     <None Remove="LICENSE.md" />
-    <None Remove="README.md" />
     <None Remove="This Repo on GitHub.url" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="ClosedXML" Version="0.95.4" />
     <PackageReference Include="HomographySharp" Version="3.2.1" />
     <PackageReference Include="iTextSharp" Version="5.5.13.3" />
     <PackageReference Include="LibGit2Sharp" Version="0.26.2" />
     <PackageReference Include="MathNet.Numerics" Version="5.0.0" />
     <PackageReference Include="OpenCvSharp4.Windows" Version="4.6.0.20220608" />
     <PackageReference Include="XPlot.Plotly" Version="4.0.6" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\A_Console\A00_General\A00_General.csproj" />
-    <ProjectReference Include="..\..\A_Console\A01_AI\A01_AI.csproj" />
-    <ProjectReference Include="..\..\A_Console\A10_Structure\A10_Structure.csproj" />
-    <ProjectReference Include="..\..\A_Console\A11_Research\A11_Research.csproj" />
-    <ProjectReference Include="..\..\A_Console\AXX_Hobby\AXX_Hobby.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -59,6 +51,10 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\A00_General\A00_General.csproj" />
   </ItemGroup>
 
 </Project>

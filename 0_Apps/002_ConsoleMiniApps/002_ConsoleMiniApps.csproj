@@ -12,7 +12,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\A_Console\A00_General\A00_General.csproj" />
     <ProjectReference Include="..\..\A_Console\A01_AI\A01_AI.csproj" />
-    <ProjectReference Include="..\..\A_Console\A10_StructuralEngineering\A10_StructuralEngineering.csproj" />
+    <ProjectReference Include="..\..\A_Console\A10_Structure\A10_StructureStructure.csproj" />
     <ProjectReference Include="..\..\A_Console\A11_Research\A11_Research.csproj" />
     <ProjectReference Include="..\..\A_Console\AXX_Hobby\AXX_Hobby.csproj" />
   </ItemGroup>

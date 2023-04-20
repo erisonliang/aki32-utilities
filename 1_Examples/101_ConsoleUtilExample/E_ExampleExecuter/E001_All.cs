@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 using Aki32Utilities.ConsoleAppUtilities.General;
 using Aki32Utilities.ConsoleAppUtilities.AI;
-using Aki32Utilities.ConsoleAppUtilities.StructuralEngineering;
+using Aki32Utilities.ConsoleAppUtilities.Structure;
 using Aki32Utilities.ConsoleAppUtilities.Research;
 
 using ClosedXML;
@@ -828,8 +828,8 @@ public static partial class ExampleExecuter
                     var baseDir_100_E002 = baseDir_100_E.GetChildDirectoryInfo($@"E002_PyPlotWrapper");
                     var output = baseDir_100_E002.GetChildDirectoryInfo($@"output");
 
-                    PythonController.Initialize();
-                    var pi = Math.PI;
+                    //PythonController.Initialize();
+                    //var pi = Math.PI;
 
 
                     // line
@@ -1227,9 +1227,9 @@ public static partial class ExampleExecuter
 
         }
 
-        // A10_StructuralEngineering
+        // A10_Structure
         {
-            var baseDir_110 = BASE_DIR.GetChildDirectoryInfo($@"A10_StructuralEngineering");
+            var baseDir_110 = BASE_DIR.GetChildDirectoryInfo($@"A10_Structure");
 
             // A_ChainableExtensions
             {
@@ -1461,12 +1461,12 @@ public static partial class ExampleExecuter
 
                 // B004_Wavelet
                 {
-                    // see A10_StructuralEngineering > A_ChainableExtensions > F204_Wavelet
+                    // see A10_Structure > A_ChainableExtensions > F204_Wavelet
                 }
 
                 // B005_FFT
                 {
-                    // see A10_StructuralEngineering > A_ChainableExtensions > F203_FFT
+                    // see A10_Structure > A_ChainableExtensions > F203_FFT
                 }
 
                 // F001_MatrixDisplacementMethod
