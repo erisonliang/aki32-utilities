@@ -16,7 +16,6 @@ public class DynamicsUtils
     /// <returns></returns>
     public static double[] MakeDataLengthPow2(double[] inputData, bool downSample, out int N)
     {
-        // 2の累乗にカットして複素数データに変換
         double len = inputData.Length;
         int Np = 0;
         while (len > 1)
