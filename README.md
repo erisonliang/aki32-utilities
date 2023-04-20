@@ -139,7 +139,7 @@ Model for handling time history data set (such as time-displacement relationship
 
 <br>
 
-## ❗Download
+## ❗Clone
 
 Since this repo has some git submodules, use following for correct cloning (* no submodules currently)
 
