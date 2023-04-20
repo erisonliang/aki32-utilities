@@ -1129,8 +1129,10 @@ public static partial class ExampleExecuter
             {
                 var baseDir_101_C = baseDir_101.GetChildDirectoryInfo($@"C_AwesomeModels");
 
-                //
+                // none
                 {
+
+
                 }
 
             }
@@ -1142,7 +1144,8 @@ public static partial class ExampleExecuter
                 // D001_OpenAIController
                 {
 
-                    //var baseDir_101_D_D001_= baseDir_101_D.GetChildDirectoryInfo($@"D001_OpenAIController");
+                    //var baseDir_101_D_D001 = baseDir_101_D.GetChildDirectoryInfo($@"D001_OpenAIController").CreateAndPipe();
+                    //baseDir_101_D_D001.OpenOnDefaultApp();
                     //var output = baseDir_101_D.GetChildDirectoryInfo($@"output");
 
                     ////var apiSecretKey = ""; // API SecretKey
@@ -1166,18 +1169,16 @@ public static partial class ExampleExecuter
                     ////    result[i].DownloadFile(GeneratedImageFile);
                     ////}
 
+                    ////// ★ whisper
+                    ////var input = baseDir_101_D_D001.GetChildFileInfo("input voice.m4a");
+                    ////var result = openAI.CallAudioTranscriptionsAsync(input).Result;
+                    ////Console.WriteLine(result);
 
-                    //// ★ whisper
-                    //var input = baseDir_101_D_D001.GetChildFileInfo("input voice.m4a");
-                    //var result = openAI.CallAudioTranscriptionsAsync(input).Result;
-                    //Console.WriteLine(result);
-
-
-                    ////// ★ chat gpt
-                    ////Console.Write("ChatGPTに送信：");s
-                    ////var input = Console.ReadLine();
-                    ////var result = openAI.CallChatAsync(input!).Result;
-                    ////Console.WriteLine(result[0]);
+                    //// ★ chat gpt
+                    //Console.Write("ChatGPTに送信：");
+                    //var input = Console.ReadLine();
+                    //var result = openAI.CallChatAsync(input!).Result;
+                    //Console.WriteLine(result[0]);
 
                 }
 

@@ -46,7 +46,7 @@ public class OpenAIController
     /// <param name="prompt">for example, "a white Siamese cat"</param>
     /// <param name="size">256x256, 512x512, or 1024x1024</param>
     /// <returns></returns>
-    public async Task<string> CallGetModelsAsync()
+    public async Task<string?> CallGetModelsAsync()
     {
         // content
         var data = new Dictionary<string, string>
@@ -63,7 +63,7 @@ public class OpenAIController
 
         lastPriceInYen = -1;
 
-        return response.ToString();
+        return response?.ToString();
     }
 
     /// <summary>
@@ -73,12 +73,21 @@ public class OpenAIController
     /// <param name="input">The input text to use as a starting point for the edit.</param>
     /// <param name="model">ID of the model to use. You can use the text-davinci-edit-001 or code-davinci-edit-001. model with this endpoint.</param>
     /// <returns></returns>
-    public async Task<string[]> CallEditTextAsync(string instruction, string input = "", string model = "text-davinci-edit-001")
+    public async Task<string[]> CallEditTextAsync(string instruction,
+        string input = "",
+        EditTextModel model = EditTextModel.DavinciEdit001)
     {
+        // model
+        var modelString = model switch
+        {
+            EditTextModel.DavinciEdit001 => "text-davinci-edit-001",
+            _ => throw new NotImplementedException("Selected model is not implemented."),
+        };
+
         // content
         var data = new Dictionary<string, object>
         {
-            { "model", model},
+            { "model", modelString},
             { "input", input},
             { "instruction", instruction },
             //{ "n", "1" },
@@ -98,6 +107,10 @@ public class OpenAIController
         return response["choices"]!.Select(x => x!["text"]!.ToString()).ToArray();
         //return response["choices"]![0]!["text"]!.ToString();
     }
+    public enum EditTextModel
+    {
+        DavinciEdit001,
+    }
 
     /// <summary>
     /// ChatGPT
@@ -105,15 +118,23 @@ public class OpenAIController
     /// <param name="input">The input text to use as a starting point for the edit.</param>
     /// <param name="model">ID of the model to use. You can use the "gpt-3.5-turbo" or "gpt-3.5-turbo-0301". model with this endpoint.</param>
     /// <returns></returns>
-    public async Task<string[]> CallChatAsync((string role, string message)[] input, string model = "gpt-3.5-turbo", int n = 1)
+    public async Task<string[]> CallChatAsync((string role, string message)[] input,
+        ChatModel model = ChatModel.GPT35Turbo,
+        int n = 1)
     {
-        // content
+        // model
+        var modelString = model switch
+        {
+            ChatModel.GPT35Turbo => "gpt-3.5-turbo",
+            _ => throw new NotImplementedException("Selected model is not implemented."),
+        };
 
+        // content
         var messages = input.Select(x => new Dictionary<string, string> { { "role", x.role }, { "content", x.message }, });
 
         var data = new Dictionary<string, object>
         {
-            { "model", model},
+            { "model", modelString},
             { "messages", messages},
             { "n", n },
             { "user", "aki32 utils"},
@@ -141,8 +162,11 @@ public class OpenAIController
 
         return response["choices"]!.Select(x => x!["message"]!["content"]!.ToString()).ToArray();
     }
-
-    public async Task<string[]> CallChatAsync(string input, string model = "gpt-3.5-turbo") => await CallChatAsync(new[] { ("user", input) }, model);
+    public async Task<string[]> CallChatAsync(string input, ChatModel model = ChatModel.GPT35Turbo) => await CallChatAsync(new[] { ("user", input) }, model);
+    public enum ChatModel
+    {
+        GPT35Turbo,
+    }
 
     /// <summary>
     /// generate image
@@ -150,14 +174,23 @@ public class OpenAIController
     /// <param name="prompt">for example, "a white Siamese cat"</param>
     /// <param name="size">256x256, 512x512, or 1024x1024</param>
     /// <returns></returns>
-    public async Task<Uri[]> CallGenerateImageAsync(string prompt, string size = "1024x1024", int n = 1)
+    public async Task<Uri[]> CallGenerateImageAsync(string prompt, ImageSize size = ImageSize.W1024xH1024, int n = 1)
     {
+        // size
+        var sizeString = size switch
+        {
+            ImageSize.W1024xH1024 => "1024x1024",
+            ImageSize.W512xH512 => "512x512",
+            ImageSize.W256xH256 => "256x256",
+            _ => throw new NotImplementedException("Selected size is not implemented."),
+        };
+
         // content
         var data = new Dictionary<string, object>
         {
             { "prompt", prompt},
             { "n", n },
-            { "size", size },
+            { "size", sizeString },
         };
         var jsonContent = JsonConvert.SerializeObject(data);
 
@@ -173,6 +206,12 @@ public class OpenAIController
 
         return (response["data"] as JArray)?.Select(x => new Uri(x["url"]?.ToString()!))?.ToArray()!;
     }
+    public enum ImageSize
+    {
+        W1024xH1024,
+        W512xH512,
+        W256xH256,
+    }
 
     /// <summary>
     /// whisper transcriptions
@@ -181,13 +220,22 @@ public class OpenAIController
     /// <param name="model">ID of the model to use. Only whisper-1 is currently available.</param>
     /// <param name="language">The language of the input audio. Supplying the input language in ISO-639-1 format will improve accuracy and latency.</param>
     /// <returns></returns>
-    public async Task<string> CallAudioTranscriptionsAsync(FileInfo inputAudioFile, string model = "whisper-1", string? language = null)
+    public async Task<string> CallAudioTranscriptionsAsync(FileInfo inputAudioFile,
+        AudioModel model = AudioModel.Whisper1,
+        string? language = null)
     {
+        // model
+        var modelString = model switch
+        {
+            AudioModel.Whisper1 => "whisper-1",
+            _ => throw new NotImplementedException("Selected model is not implemented."),
+        };
+
         // content
         //Path.GetFileName(filePath), "multipart/form-data");
         var httpContent = new MultipartFormDataContent();
         {
-            var audioFileContent = new StringContent(model);
+            var audioFileContent = new StringContent(modelString);
             httpContent.Add(audioFileContent, "model");
         }
         {
@@ -222,13 +270,20 @@ public class OpenAIController
     /// <param name="inputAudioFile">The audio file to translate, in one of these formats: mp3, mp4, mpeg, mpga, m4a, wav, or webm.</param>
     /// <param name="model">ID of the model to use. Only whisper-1 is currently available.</param>
     /// <returns></returns>
-    public async Task<string> CallAudioTranslationsAsync(FileInfo inputAudioFile, string model = "whisper-1")
+    public async Task<string> CallAudioTranslationsAsync(FileInfo inputAudioFile, AudioModel model = AudioModel.Whisper1)
     {
+        // model
+        var modelString = model switch
+        {
+            AudioModel.Whisper1 => "whisper-1",
+            _ => throw new NotImplementedException("Selected model is not implemented."),
+        };
+
         // content
         //Path.GetFileName(filePath), "multipart/form-data");
         var httpContent = new MultipartFormDataContent();
         {
-            var audioFileContent = new StringContent(model);
+            var audioFileContent = new StringContent(modelString);
             httpContent.Add(audioFileContent, "model");
         }
         {
@@ -248,6 +303,10 @@ public class OpenAIController
         lastPriceInYen = -1;
 
         return response["text"]!.ToString();
+    }
+    public enum AudioModel
+    {
+        Whisper1,
     }
 
 
