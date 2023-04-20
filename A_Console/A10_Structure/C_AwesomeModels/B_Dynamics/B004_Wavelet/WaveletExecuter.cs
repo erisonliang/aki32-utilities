@@ -6,6 +6,20 @@ namespace Aki32Utilities.ConsoleAppUtilities.Structure;
 public class WaveletExecuter
 {
     /// <summary>
+    /// Daubechies係数
+    /// </summary>
+    /// <see cref="https://en.wikipedia.org/wiki/Daubechies_wavelet#The_scaling_sequences_of_lowest_approximation_order"/>
+    private static DenseMatrix DaubechiesCoefficients => (DenseMatrix)(new DenseMatrix(10, 5, new double[]
+    {
+        1,1,0,0,0,0,0,0,0,0,
+        0.6830127,1.1830127,0.3169873,-0.1830127,0,0,0,0,0,0,
+        0.47046721,1.14111692,0.650365,-0.19093442,-0.12083221,0.0498175,0,0,0,0,
+        0.32580343,1.01094572,0.8922014,-0.03957503, -0.26450717,0.0436163,0.0465036,-0.01498699, 0,0,
+        0.22641898,0.85394354,1.02432694,0.19576696, -0.34265671,-0.04560113,0.10970265,-0.0088268, -0.01779187,4.72E-03
+    }) / Math.Sqrt(2));
+    private static int[] AcceptingD = new int[] { 2, 4, 6, 8, 10 };
+
+    /// <summary>
     /// DaubechiesWavelet変換。
     /// </summary>
     /// <see cref="https://truthfullscore.hatenablog.com/entry/2014/02/05/204055"/>
@@ -16,28 +30,16 @@ public class WaveletExecuter
         )
     {
         // ★ 諸元
-
-        // Daubechies係数
-        // https://en.wikipedia.org/wiki/Daubechies_wavelet#The_scaling_sequences_of_lowest_approximation_order
-        var acceptingD = new int[] { 2, 4, 6, 8, 10 };
-        var DaubechiesCoefficients = (DenseMatrix)(new DenseMatrix(10, 5, new double[]
-        {
-            1,1,0,0,0,0,0,0,0,0,
-            0.6830127,1.1830127,0.3169873,-0.1830127,0,0,0,0,0,0,
-            0.47046721,1.14111692,0.650365,-0.19093442,-0.12083221,0.0498175,0,0,0,0,
-            0.32580343,1.01094572,0.8922014,-0.03957503, -0.26450717,0.0436163,0.0465036,-0.01498699, 0,0,
-            0.22641898,0.85394354,1.02432694,0.19576696, -0.34265671,-0.04560113,0.10970265,-0.0088268, -0.01779187,4.72E-03
-        }) / Math.Sqrt(2));
-
-        if (!acceptingD.Contains(D))
-            throw new Exception($"D must be any of ({string.Join(", ", acceptingD)})");
-        int d = D / 2; // 次数
+        if (!AcceptingD.Contains(D))
+            throw new Exception($"D must be any of ({string.Join(", ", AcceptingD)})");
+        var usingDaubechiesCoefficients = DaubechiesCoefficients.Column(D / 2 - 1);
 
         var extendedInputData = DynamicsUtils.MakeDataLengthPow2(inputData, false, out int totalLength);
         var resultData = new double[totalLength];
 
         var resultHistory = new TimeHistory();
         resultHistory.PaddingValue = double.NaN;
+
 
         // ★ main
         for (int level = 1; level <= maxLevel; level++)
@@ -67,8 +69,8 @@ public class WaveletExecuter
                     }
 
                     //フィルタリング
-                    resultData[setApproximationIndex] += extendedInputData[getInputIndex] * DaubechiesCoefficients[d - 1, k];
-                    resultData[setDetailIndex] += extendedInputData[getInputIndex] * Math.Pow(-1.0, k) * DaubechiesCoefficients[d - 1, D - 1 - k];
+                    resultData[setApproximationIndex] += extendedInputData[getInputIndex] * usingDaubechiesCoefficients[k];
+                    resultData[setDetailIndex] += extendedInputData[getInputIndex] * Math.Pow(-1.0, k) * usingDaubechiesCoefficients[D - k - 1];
                 }
             }
 
