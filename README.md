@@ -74,39 +74,39 @@ new DirectoryInfo(@"C:\input")
   ;
 ```
 
-<img name="" src="https://github.com/aki32/aki32-utilities/raw/main/9_Assets/A00_Overview.jpg" width="666">
+<img name="" src="https://github.com/aki32/aki32-utilities/raw/main/9_Assets/Images/A00_Overview.jpg" width="666">
 
 
 
 ### 🎇 In A00 General
 
-<img name="" src="https://github.com/aki32/aki32-utilities/raw/main/9_Assets/A00_1.jpg" width="666">
-<img name="" src="https://github.com/aki32/aki32-utilities/raw/main/9_Assets/A0001.jpg" width="666">
-<img name="" src="https://github.com/aki32/aki32-utilities/raw/main/9_Assets/A0011.jpg" width="666">
-<img name="" src="https://github.com/aki32/aki32-utilities/raw/main/9_Assets/A0021.jpg" width="666">
-<img name="" src="https://github.com/aki32/aki32-utilities/raw/main/9_Assets/A0031.jpg" width="666">
-<img name="" src="https://github.com/aki32/aki32-utilities/raw/main/9_Assets/A00B1.jpg" width="666">
-<img name="" src="https://github.com/aki32/aki32-utilities/raw/main/9_Assets/A00B2.jpg" width="666">
-<img name="" src="https://github.com/aki32/aki32-utilities/raw/main/9_Assets/A00C1.jpg" width="666">
-<img name="" src="https://github.com/aki32/aki32-utilities/raw/main/9_Assets/A00D1.jpg" width="666">
-<img name="" src="https://github.com/aki32/aki32-utilities/raw/main/9_Assets/A00E1.jpg" width="666">
-<img name="" src="https://github.com/aki32/aki32-utilities/raw/main/9_Assets/A00E2.jpg" width="666">
-<img name="" src="https://github.com/aki32/aki32-utilities/raw/main/9_Assets/A00F1.jpg" width="666">
-<img name="" src="https://github.com/aki32/aki32-utilities/raw/main/9_Assets/A00G1.jpg" width="666">
-<img name="" src="https://github.com/aki32/aki32-utilities/raw/main/9_Assets/A00H1.jpg" width="666">
-<img name="" src="https://github.com/aki32/aki32-utilities/raw/main/9_Assets/A00I1.jpg" width="666">
-<img name="" src="https://github.com/aki32/aki32-utilities/raw/main/9_Assets/A00J1.jpg" width="666">
-<img name="" src="https://github.com/aki32/aki32-utilities/raw/main/9_Assets/A00K1.jpg" width="666">
-<img name="" src="https://github.com/aki32/aki32-utilities/raw/main/9_Assets/A00L1.jpg" width="666">
-<img name="" src="https://github.com/aki32/aki32-utilities/raw/main/9_Assets/A00M1.jpg" width="666">
-<img name="" src="https://github.com/aki32/aki32-utilities/raw/main/9_Assets/A00X1.jpg" width="666">
+<img name="" src="https://github.com/aki32/aki32-utilities/raw/main/9_Assets/Images/A00_1.jpg" width="666">
+<img name="" src="https://github.com/aki32/aki32-utilities/raw/main/9_Assets/Images/A0001.jpg" width="666">
+<img name="" src="https://github.com/aki32/aki32-utilities/raw/main/9_Assets/Images/A0011.jpg" width="666">
+<img name="" src="https://github.com/aki32/aki32-utilities/raw/main/9_Assets/Images/A0021.jpg" width="666">
+<img name="" src="https://github.com/aki32/aki32-utilities/raw/main/9_Assets/Images/A0031.jpg" width="666">
+<img name="" src="https://github.com/aki32/aki32-utilities/raw/main/9_Assets/Images/A00B1.jpg" width="666">
+<img name="" src="https://github.com/aki32/aki32-utilities/raw/main/9_Assets/Images/A00B2.jpg" width="666">
+<img name="" src="https://github.com/aki32/aki32-utilities/raw/main/9_Assets/Images/A00C1.jpg" width="666">
+<img name="" src="https://github.com/aki32/aki32-utilities/raw/main/9_Assets/Images/A00D1.jpg" width="666">
+<img name="" src="https://github.com/aki32/aki32-utilities/raw/main/9_Assets/Images/A00E1.jpg" width="666">
+<img name="" src="https://github.com/aki32/aki32-utilities/raw/main/9_Assets/Images/A00E2.jpg" width="666">
+<img name="" src="https://github.com/aki32/aki32-utilities/raw/main/9_Assets/Images/A00F1.jpg" width="666">
+<img name="" src="https://github.com/aki32/aki32-utilities/raw/main/9_Assets/Images/A00G1.jpg" width="666">
+<img name="" src="https://github.com/aki32/aki32-utilities/raw/main/9_Assets/Images/A00H1.jpg" width="666">
+<img name="" src="https://github.com/aki32/aki32-utilities/raw/main/9_Assets/Images/A00I1.jpg" width="666">
+<img name="" src="https://github.com/aki32/aki32-utilities/raw/main/9_Assets/Images/A00J1.jpg" width="666">
+<img name="" src="https://github.com/aki32/aki32-utilities/raw/main/9_Assets/Images/A00K1.jpg" width="666">
+<img name="" src="https://github.com/aki32/aki32-utilities/raw/main/9_Assets/Images/A00L1.jpg" width="666">
+<img name="" src="https://github.com/aki32/aki32-utilities/raw/main/9_Assets/Images/A00M1.jpg" width="666">
+<img name="" src="https://github.com/aki32/aki32-utilities/raw/main/9_Assets/Images/A00X1.jpg" width="666">
 
 
 
 ### 🎇 In A10 Structural Engineering
 
-<img name="" src="https://github.com/aki32/aki32-utilities/raw/main/9_Assets/A10A1.jpg" width="666">
-<img name="" src="https://github.com/aki32/aki32-utilities/raw/main/9_Assets/A10B1.jpg" width="666">
+<img name="" src="https://github.com/aki32/aki32-utilities/raw/main/9_Assets/Images/A10A1.jpg" width="666">
+<img name="" src="https://github.com/aki32/aki32-utilities/raw/main/9_Assets/Images/A10B1.jpg" width="666">
 
 
 

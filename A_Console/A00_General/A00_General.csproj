@@ -60,7 +60,6 @@
 
   <ItemGroup>
     <Folder Include="A_ChainableExtensions\0_GenericData_Scalar\" />
-    <Folder Include="E_Wrappers\" />
   </ItemGroup>
 
 </Project>

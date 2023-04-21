@@ -13,11 +13,11 @@ Material's elastoplastic characteristic algorithms
 
 ### 🎇 Models
 
-<img name="" src="https://github.com/aki32/aki32-utilities/raw/main/9_Assets/A10_EPC_Elastic.jpg" width="666">
-<img name="" src="https://github.com/aki32/aki32-utilities/raw/main/9_Assets/A10_EPC_PerfectElastoplastic.jpg" width="666">
-<img name="" src="https://github.com/aki32/aki32-utilities/raw/main/9_Assets/A10_EPC_Bilinear.jpg" width="666">
-<img name="" src="https://github.com/aki32/aki32-utilities/raw/main/9_Assets/A10_EPC_Trilinear.jpg" width="666">
-<img name="" src="https://github.com/aki32/aki32-utilities/raw/main/9_Assets/A10_EPC_Clough.jpg" width="666">
+<img name="" src="https://github.com/aki32/aki32-utilities/raw/main/9_Assets/Images/A10_EPC_Elastic.jpg" width="666">
+<img name="" src="https://github.com/aki32/aki32-utilities/raw/main/9_Assets/Images/A10_EPC_PerfectElastoplastic.jpg" width="666">
+<img name="" src="https://github.com/aki32/aki32-utilities/raw/main/9_Assets/Images/A10_EPC_Bilinear.jpg" width="666">
+<img name="" src="https://github.com/aki32/aki32-utilities/raw/main/9_Assets/Images/A10_EPC_Trilinear.jpg" width="666">
+<img name="" src="https://github.com/aki32/aki32-utilities/raw/main/9_Assets/Images/A10_EPC_Clough.jpg" width="666">
 
 
 
