@@ -11,12 +11,16 @@
 
   <ItemGroup>
     <Reference Include="Python.Runtime">
-      <HintPath>Properties\Assets\Python.Runtime.dll</HintPath>
+      <HintPath>..\..\9_Assets\dlls\Python.Runtime.dll</HintPath>
     </Reference>
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\A00_General\A00_General.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Properties\" />
   </ItemGroup>
 
 </Project>

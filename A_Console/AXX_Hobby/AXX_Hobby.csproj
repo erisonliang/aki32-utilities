@@ -13,4 +13,8 @@
     <ProjectReference Include="..\A00_General\A00_General.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Properties\" />
+  </ItemGroup>
+
 </Project>

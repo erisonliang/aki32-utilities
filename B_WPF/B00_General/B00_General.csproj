@@ -10,4 +10,8 @@
     <AssemblyName>B00_General</AssemblyName>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Folder Include="Properties\" />
+  </ItemGroup>
+
 </Project>
