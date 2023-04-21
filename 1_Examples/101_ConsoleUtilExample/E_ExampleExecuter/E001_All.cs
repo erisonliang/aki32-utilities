@@ -1266,21 +1266,21 @@ public static partial class ExampleExecuter
 
                 // E001_WhisperCppWrapper
                 {
-                    //var baseDir_A01_E001= baseDir_A01_E.GetChildDirectoryInfo($@"E001_WhisperCppWrapper");
-                    //var input = baseDir_A01_E001.GetChildFileInfo($@"input.m4a");
-                    //var output = baseDir_A01_E001.GetChildFileInfo($@"output.txt");
+                    var baseDir_A01_E001 = baseDir_A01_E.GetChildDirectoryInfo($@"E001_WhisperCppWrapper");
+                    var input = baseDir_A01_E001.GetChildFileInfo($@"input.m4a");
+                    var output = baseDir_A01_E001.GetChildFileInfo($@"output.txt");
 
-                    //var whisper = new WhisperCppWrapper(
-                    //    designatedModelDir: new DirectoryInfo(@"C:\Users\aki32\Dropbox\Codes\# SharedData\WhisperCpp"),
-                    //    designatedMainExecuterFile: new FileInfo(@"C:\Users\aki32\Dropbox\Codes\# SharedData\WhisperCpp\main.exe"),
-                    //    designatedWhisperDllFile: new FileInfo(@"C:\Users\aki32\Dropbox\Codes\# SharedData\WhisperCpp\whisper.dll")
-                    //    );
+                    var whisper = new WhisperCppWrapper(
+                        designatedModelDir: new DirectoryInfo(@"C:\Users\aki32\Dropbox\Codes\# SharedData\WhisperCpp"),
+                        designatedMainExecuterFile: new FileInfo(@"..\..\..\..\..\9_Assets\dlls\whisper.exe"),
+                        designatedWhisperDllFile: new FileInfo(@"..\..\..\..\..\9_Assets\dlls\whisper.dll")
+                        );
 
-                    //whisper.ExecuteWhisper(input, output,
-                    //    usingModel: WhisperCppWrapper.ModelType.Small,
-                    //    outputFormat: WhisperCppWrapper.OutputFormat.srt,
-                    //    usingThreadsCount: 16
-                    //    );
+                    whisper.ExecuteWhisper(input, output,
+                        usingModel: WhisperCppWrapper.ModelType.Small,
+                        outputFormat: WhisperCppWrapper.OutputFormat.srt,
+                        usingThreadsCount: 16
+                        );
 
                 }
 

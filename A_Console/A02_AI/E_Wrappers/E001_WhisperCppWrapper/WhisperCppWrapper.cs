@@ -27,18 +27,18 @@ public class WhisperCppWrapper
         DirectoryInfo designatedModelDir = null
         )
     {
-        // re-init
-        var stackFrame = new StackFrame(true);
-        string currentFilePath = stackFrame.GetFileName()!;
-        modelDir = designatedModelDir ?? new FileInfo(currentFilePath).Directory!.GetChildDirectoryInfo("WhisperCpp");
+        // models
+        modelDir = designatedModelDir
+            ?? new DirectoryInfo(Environment.GetFolderPath(Environment.SpecialFolder.Desktop)).GetChildDirectoryInfo("WhisperCpp");
+        if (!modelDir.Exists)
+            throw new Exception($"You need to download whisper models from here (https://huggingface.co/datasets/ggerganov/whisper.cpp/tree/main) and move to \"{modelDir}\".");
 
         // read whisper.cpp
-        var whisperCppDir = new FileInfo(currentFilePath).Directory!.GetChildDirectoryInfo("WhisperCpp");
-        mainExecuterFile = designatedMainExecuterFile ?? whisperCppDir.GetChildFileInfo("main.exe");
+        mainExecuterFile = designatedMainExecuterFile ?? modelDir.GetChildFileInfo("main.exe");
         if (!mainExecuterFile.Exists)
             throw new Exception($"※ You need to build this(https://github.com/ggerganov/whisper.cpp) and move \"main.exe\" to \"{mainExecuterFile}\".");
 
-        whisperDllFile = designatedWhisperDllFile ?? whisperCppDir.GetChildFileInfo("whisper.dll");
+        whisperDllFile = designatedWhisperDllFile ?? modelDir.GetChildFileInfo("whisper.dll");
         if (!whisperDllFile.Exists)
             throw new Exception($"※ You need to build this(https://github.com/ggerganov/whisper.cpp) and move \"whisper.dll\" to \"{whisperDllFile}\".");
 
