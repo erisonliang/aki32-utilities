@@ -6,7 +6,7 @@
     <RootNamespace>Aki32Utilities</RootNamespace>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <AssemblyName>A01_AI</AssemblyName>
+    <AssemblyName>A02_AI</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>

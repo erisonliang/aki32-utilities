@@ -1160,9 +1160,9 @@ public static partial class ExampleExecuter
 
         }
 
-        // A01_AI
+        // A02_AI
         {
-            var baseDir_A01 = BASE_DIR.GetChildDirectoryInfo($@"A01_AI");
+            var baseDir_A01 = BASE_DIR.GetChildDirectoryInfo($@"A02_AI");
 
             // A_ChainableExtensions
             {
@@ -1281,34 +1281,6 @@ public static partial class ExampleExecuter
                     //    outputFormat: WhisperCppWrapper.OutputFormat.srt,
                     //    usingThreadsCount: 16
                     //    );
-
-                }
-
-                // E002_SKLearnWrapper
-                {
-                    var baseDir_A01_E002 = baseDir_A01_E.GetChildDirectoryInfo($@"E002_SKLearnWrapper");
-                    //var input = baseDir_A01_E002.GetChildFileInfo($@"input.m4a");
-                    //var output = baseDir_A01_E002.GetChildFileInfo($@"output.txt");
-
-                    //PythonController.Initialize();
-
-                    //var kernel = 0;// SKLearnWrapper.GaussianProcess.ConstantKernel;
-                    //var x = new double[] { 1, 3, 5, 6, 7, 8 };
-                    //var y = x.Select(x => x * Math.Sin(x)).ToArray();
-                    //var predictX = EnumerableExtension.Range_WithStep(0, 10, 0.01).ToArray();
-
-                    //var gauss = new SKLearnWrapper.GaussianProcess();
-
-                    //var aaa = gauss.Fit(kernel, x, y, predictX);
-
-                    //PythonController.Shutdown();
-
-
-
-
-
-
-
 
                 }
 

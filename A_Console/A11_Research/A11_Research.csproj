@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Library</OutputType>
@@ -43,7 +43,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\A00_General\A00_General.csproj" />
-    <ProjectReference Include="..\A01_AI\A01_AI.csproj" />
+    <ProjectReference Include="..\A02_AI\A02_AI.csproj" />
   </ItemGroup>
 
   <ItemGroup>
