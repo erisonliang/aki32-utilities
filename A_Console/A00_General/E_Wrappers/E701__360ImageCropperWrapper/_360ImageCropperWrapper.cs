@@ -16,7 +16,7 @@ public class _360ImageCropperWrapper
         // re-init
         var stackFrame = new StackFrame(true);
         string currentFilePath = stackFrame.GetFileName()!;
-        var additionalPath1 = new FileInfo(currentFilePath).Directory!.FullName;
+        var additionalPath1 = new FileInfo(currentFilePath).Directory!.GetChildDirectoryInfo("_360ImageCropper").FullName;
 
         if (!PythonController.AdditionalPath.Contains(additionalPath1))
         {
