@@ -1,3 +1,3 @@
 ﻿
 
-namespace Aki32Utilities.ConsoleAppUtilities.Numerics;
+namespace Aki32Utilities.ConsoleAppUtilities.PythonAndNumerics;

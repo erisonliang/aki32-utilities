@@ -1,6 +1,6 @@
 ﻿using Aki32Utilities.ConsoleAppUtilities.General;
 
-namespace Aki32Utilities.ConsoleAppUtilities.Numerics;
+namespace Aki32Utilities.ConsoleAppUtilities.PythonAndNumerics;
 public class MathExtension
 {
 

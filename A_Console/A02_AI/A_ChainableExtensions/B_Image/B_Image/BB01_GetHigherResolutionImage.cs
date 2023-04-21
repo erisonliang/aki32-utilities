@@ -1,4 +1,5 @@
 ﻿using Aki32Utilities.ConsoleAppUtilities.General;
+using Aki32Utilities.ConsoleAppUtilities.PythonAndNumerics;
 
 namespace Aki32Utilities.ConsoleAppUtilities.AI;
 public static partial class ChainableExtensions

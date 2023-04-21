@@ -1,6 +1,6 @@
 ﻿using MathNet.Spatial.Euclidean;
 
-namespace Aki32Utilities.ConsoleAppUtilities.Numerics;
+namespace Aki32Utilities.ConsoleAppUtilities.PythonAndNumerics;
 public static partial class ChainableExtensions
 {
 

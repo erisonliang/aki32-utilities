@@ -44,12 +44,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="Python.Runtime">
-      <HintPath>Properties\Assets\Python.Runtime.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-
-  <ItemGroup>
     <Compile Update="Properties\Resources.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -66,6 +60,7 @@
 
   <ItemGroup>
     <Folder Include="A_ChainableExtensions\0_GenericData_Scalar\" />
+    <Folder Include="E_Wrappers\" />
   </ItemGroup>
 
 </Project>

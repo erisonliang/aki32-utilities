@@ -63,6 +63,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\A00_General\A00_General.csproj" />
+    <ProjectReference Include="..\A01_PythonAndNumerics\A01_PythonAndNumerics.csproj" />
   </ItemGroup>
 
   <ItemGroup>
