@@ -40,6 +40,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\A_Console\A00_General\A00_General.csproj" />
+    <ProjectReference Include="..\..\A_Console\A01_Math\A01_Math.csproj" />
     <ProjectReference Include="..\..\A_Console\A02_AI\A02_AI.csproj" />
     <ProjectReference Include="..\..\A_Console\A10_Structure\A10_Structure.csproj" />
     <ProjectReference Include="..\..\A_Console\A11_Research\A11_Research.csproj" />

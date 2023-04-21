@@ -9,4 +9,8 @@
     <AssemblyName>A01_Math</AssemblyName>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\A00_General\A00_General.csproj" />
+  </ItemGroup>
+
 </Project>
