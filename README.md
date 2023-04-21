@@ -29,7 +29,8 @@ All of my C# utilities
  ┃
  ┣━ A_Console
  ┃   ┣━ A00_General                        ... C# utils
- ┃   ┣━ A01_AI                             ... Handle AI/ML models
+ ┃   ┣━ A01_Math                           ... Handle math models
+ ┃   ┣━ A02_AI                             ... Handle AI/ML models
  ┃   ┣━ A10_Structure                      ... Many structural engineering calculation models
  ┃   ┗━ A11_Research                       ... Handle research articles
  ┃
