@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 
+using Aki32Utilities.ConsoleAppUtilities.AI;
 using Aki32Utilities.ConsoleAppUtilities.General;
 
 using ClosedXML;
