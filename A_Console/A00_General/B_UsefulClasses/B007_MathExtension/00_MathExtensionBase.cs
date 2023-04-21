@@ -1,11 +1,9 @@
-﻿
+﻿using Aki32Utilities.ConsoleAppUtilities.General;
 
 namespace Aki32Utilities.ConsoleAppUtilities.General;
-/// <summary>
-/// Mainly, syntax sugar of device IO OS commands.
-/// </summary>
-public class MathExtension
+public partial class MathExtension
 {
+
     // ★★★★★★★★★★★★★★★ for use
 
     public static T Between<T>(T min, T target, T max) where T : IComparable<T>
