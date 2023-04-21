@@ -20,6 +20,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="A_ChainableExtensions\1_Vector\" />
+    <Folder Include="A_ChainableExtensions\0_Scalar\" />
+    <Folder Include="A_ChainableExtensions\__Base\" />
+    <Folder Include="A_ChainableExtensions\3_General\" />
     <Folder Include="Properties\" />
   </ItemGroup>
 
