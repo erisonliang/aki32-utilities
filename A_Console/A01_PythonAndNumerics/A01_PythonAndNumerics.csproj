@@ -6,7 +6,7 @@
     <RootNamespace>Aki32Utilities</RootNamespace>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <AssemblyName>A01_Math</AssemblyName>
+    <AssemblyName>A01_PythonAndNumerics</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>

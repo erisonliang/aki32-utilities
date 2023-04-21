@@ -1,6 +1,6 @@
 ﻿using MathNet.Spatial.Euclidean;
 
-namespace Aki32Utilities.ConsoleAppUtilities.General;
+namespace Aki32Utilities.ConsoleAppUtilities.Numerics;
 public static partial class ChainableExtensions
 {
 
@@ -80,15 +80,13 @@ public static partial class ChainableExtensions
 
     // ★★★★★★★★★★★★★★★ chainable (sub)
 
-    public static Line2D[] GetDistinctedLines(this Triangle2D[] triangles)
+    public static Line2D[] GetAllLines(this Triangle2D[] triangles)
     {
-        var lineEdges = new List<Line2D>();
+        var lines = new List<Line2D>();
         foreach (var triangle in triangles)
-            lineEdges.AddRange(triangle.GetLines(ordered: true));
+            lines.AddRange(triangle.GetLines(ordered: true));
 
-        return lineEdges
-            .Distinct()
-            .ToArray();
+        return lines.Distinct().ToArray();
 
     }
 

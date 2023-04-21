@@ -1,4 +1,5 @@
 ﻿using Aki32Utilities.ConsoleAppUtilities.General;
+using Aki32Utilities.ConsoleAppUtilities.Numerics;
 
 using MathNet.Spatial.Euclidean;
 

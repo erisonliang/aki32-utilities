@@ -39,7 +39,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "C01_Control", "C_WFA\C01_Co
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "A02_AI", "A_Console\A02_AI\A02_AI.csproj", "{A68E48E2-7D7E-4A9C-B833-FBCF47C070C2}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "A01_Math", "A_Console\A01_Math\A01_Math.csproj", "{CA9879CD-7BCF-44DE-A9BF-A87960980C8D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "A01_PythonAndNumerics", "A_Console\A01_PythonAndNumerics\A01_PythonAndNumerics.csproj", "{CA9879CD-7BCF-44DE-A9BF-A87960980C8D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

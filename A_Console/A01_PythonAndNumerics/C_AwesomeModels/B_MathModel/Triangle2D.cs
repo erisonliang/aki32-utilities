@@ -1,6 +1,6 @@
 ﻿using MathNet.Spatial.Euclidean;
 
-namespace Aki32Utilities.ConsoleAppUtilities.General;
+namespace Aki32Utilities.ConsoleAppUtilities.Numerics;
 public class Triangle2D : PolyLine2D
 {
 
@@ -50,7 +50,7 @@ public class Triangle2D : PolyLine2D
         var n = Det(a, b, d) / Det(a, b, c);
 
         var center = new Point2D(-l / 2, -m / 2);
-        var radius = Math.Sqrt((l * l + m * m - 4 * n) / 4);
+        var radius = System.Math.Sqrt((l * l + m * m - 4 * n) / 4);
 
         return new Circle2D(center, radius);
     }
