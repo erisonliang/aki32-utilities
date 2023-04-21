@@ -4,6 +4,8 @@ namespace Aki32Utilities.ConsoleAppUtilities.General;
 public static partial class ChainableExtensions
 {
 
+    // ★★★★★★★★★★★★★★★ change dim
+
     /// <summary>
     /// re-shape array data
     /// </summary>
@@ -102,5 +104,35 @@ public static partial class ChainableExtensions
         // post process
         return result;
     }
+
+
+    // ★★★★★★★★★★★★★★★ same dim
+
+    /// <summary>
+    /// re-shape array data
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="inputData"></param>
+    /// <returns></returns>
+    public static T[,] ReShape<T>(this T[,] inputData, int dim0, int dim1)
+    {
+        // sugar
+        return inputData.ReShape().ReShape(dim0, dim1);
+    }
+
+    /// <summary>
+    /// re-shape array data
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="inputData"></param>
+    /// <returns></returns>
+    public static T[,,] ReShape<T>(this T[,,] inputData, int dim0, int dim1, int dim2)
+    {
+        // sugar
+        return inputData.ReShape().ReShape(dim0, dim1, dim2);
+    }
+
+
+    // ★★★★★★★★★★★★★★★
 
 }
