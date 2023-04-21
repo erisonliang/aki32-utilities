@@ -107,6 +107,7 @@ public static partial class PythonController
         if (!Activated)
             throw new Exception("Required to call PythonController.Initialize() first");
         return Py.Import(name);
+
     }
     public static int RunSimpleString(string code)
     {
@@ -115,7 +116,7 @@ public static partial class PythonController
         return PythonEngine.RunSimpleString(code);
     }
 
-    
+
     // ★★★★★★★★★★★★★★★ examples
 
     /// <summary>
@@ -123,17 +124,12 @@ public static partial class PythonController
     /// </summary>
     public static void PythonExample_WithStringInvoke()
     {
-        Console.WriteLine("=======================================");
-        Console.WriteLine("PythonExample_WithStringInvoke");
-        Console.WriteLine();
+        UtilPreprocessors.PreprocessBasic();
 
         RunSimpleString(@"
 import numpy as np
 print(f'np.cos(np.pi/4) = {np.cos(np.pi/4)}')
 ");
-
-        Console.WriteLine("=======================================");
-        Console.WriteLine();
 
     }
 
@@ -143,9 +139,7 @@ print(f'np.cos(np.pi/4) = {np.cos(np.pi/4)}')
     /// <param name="paths"></param>
     public static void PythonExample_WithDynamicInvoke()
     {
-        Console.WriteLine("=======================================");
-        Console.WriteLine("PythonExample_WithDynamicInvoke");
-        Console.WriteLine();
+        UtilPreprocessors.PreprocessBasic();
 
         //dynamic myMath = Py.Import("my_awesome_lib.my_math"); // ← "from my_awesome_lib import my_math"
         dynamic np = Import("numpy");
@@ -164,7 +158,6 @@ print(f'np.cos(np.pi/4) = {np.cos(np.pi/4)}')
         Console.WriteLine($"b.dtype = {b.dtype}");
         Console.WriteLine($"a * b = {a * b}");
 
-        Console.WriteLine("=======================================");
         Console.WriteLine();
 
     }

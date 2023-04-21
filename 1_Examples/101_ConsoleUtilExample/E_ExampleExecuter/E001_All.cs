@@ -815,27 +815,19 @@ public static partial class ExampleExecuter
                     //baseDir_A00_D004.OpenOnDefaultApp();
 
                     //var output = baseDir_A00_D004.GetChildDirectoryInfo($@"output");
-
-                    //PythonController.Initialize(
-                    //    pythonPath: @"C:\Python310",
-                    //    dllName: @"python310.dll",
-                    //    additionalPath: new List<string>
-                    //    {
-                    //        @"C:\Users\aki32\Dropbox\Codes\# Projects\研究\修士論文研究\2 Python Jupyter"
-                    //    }
-                    //    );
-
+                    //PythonController.PythonPath = @"C:\Python310";
+                    //PythonController.DllName = @"python310.dll";
+                    //PythonController.AdditionalPath = new List<string> { @"C:\Users\XXXX\YourPythonCodeDirectory" };
+                    //PythonController.Initialize();
 
                     //dynamic np = PythonController.Import("numpy");
                     //Console.WriteLine($"np.cos(np.pi/4) = {np.cos(np.pi / 4)}");
 
 
                     //PythonController.PythonExample_WithStringInvoke();
-                    ////PythonController.PythonExample_WithDynamicInvoke();
-                    ////PythonController.PythonExample_WithOwnLibraryInvoke();
+                    //PythonController.PythonExample_WithDynamicInvoke();
 
                     //PythonController.Shutdown();
-
 
                 }
 
@@ -1298,13 +1290,25 @@ public static partial class ExampleExecuter
                     //var input = baseDir_A01_E002.GetChildFileInfo($@"input.m4a");
                     //var output = baseDir_A01_E002.GetChildFileInfo($@"output.txt");
 
-                    var kernel = SKLearnWrapper.GaussianProcess.ConstantKernel;
-                    var x = new double[] { 1, 3, 5, 6, 7, 8 };
-                    var y = x.Select(x => x * Math.Sin(x)).ToArray();
-                    var predictX = EnumerableExtension.Range_WithStep(0, 10, 0.01).ToArray();
+                    //PythonController.Initialize();
 
-                    var gauss = SKLearnWrapper.GaussianProcess.Fit(kernel, x, y, predictX);
-                
+                    //var kernel = 0;// SKLearnWrapper.GaussianProcess.ConstantKernel;
+                    //var x = new double[] { 1, 3, 5, 6, 7, 8 };
+                    //var y = x.Select(x => x * Math.Sin(x)).ToArray();
+                    //var predictX = EnumerableExtension.Range_WithStep(0, 10, 0.01).ToArray();
+
+                    //var gauss = new SKLearnWrapper.GaussianProcess();
+
+                    //var aaa = gauss.Fit(kernel, x, y, predictX);
+
+                    //PythonController.Shutdown();
+
+
+
+
+
+
+
 
                 }
 
