@@ -6,7 +6,7 @@
     <RootNamespace>Aki32Utilities</RootNamespace>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <AssemblyName>10A_ConsoleUtilExample</AssemblyName>
+    <AssemblyName>101_ConsoleUtilExample</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
