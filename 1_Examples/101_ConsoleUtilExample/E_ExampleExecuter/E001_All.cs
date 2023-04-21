@@ -1274,7 +1274,7 @@ public static partial class ExampleExecuter
 
                 // E001_WhisperCppWrapper
                 {
-                    //var baseDir_A01_E001_= baseDir_A01_E.GetChildDirectoryInfo($@"E001_WhisperCppWrapper");
+                    //var baseDir_A01_E001= baseDir_A01_E.GetChildDirectoryInfo($@"E001_WhisperCppWrapper");
                     //var input = baseDir_A01_E001.GetChildFileInfo($@"input.m4a");
                     //var output = baseDir_A01_E001.GetChildFileInfo($@"output.txt");
 
@@ -1291,6 +1291,23 @@ public static partial class ExampleExecuter
                     //    );
 
                 }
+
+                // E002_SKLearnWrapper
+                {
+                    var baseDir_A01_E002 = baseDir_A01_E.GetChildDirectoryInfo($@"E002_SKLearnWrapper");
+                    //var input = baseDir_A01_E002.GetChildFileInfo($@"input.m4a");
+                    //var output = baseDir_A01_E002.GetChildFileInfo($@"output.txt");
+
+                    var kernel = SKLearnWrapper.GaussianProcess.ConstantKernel;
+                    var x = new double[] { 1, 3, 5, 6, 7, 8 };
+                    var y = x.Select(x => x * Math.Sin(x)).ToArray();
+                    var predictX = EnumerableExtension.Range_WithStep(0, 10, 0.01).ToArray();
+
+                    var gauss = SKLearnWrapper.GaussianProcess.Fit(kernel, x, y, predictX);
+                
+
+                }
+
             }
 
             // X_CheatSheet

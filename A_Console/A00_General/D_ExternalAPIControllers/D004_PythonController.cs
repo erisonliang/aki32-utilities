@@ -115,15 +115,8 @@ public static partial class PythonController
         return PythonEngine.RunSimpleString(code);
     }
 
-
-    // ★★★★★★★★★★★★★★★ methods
-
-    #region Basic Methods
-
-    #endregion
-
-
-    // ★★★★★★★★★★★★★★★ samples
+    
+    // ★★★★★★★★★★★★★★★ examples
 
     /// <summary>
     /// pythonコードを直接指定して実行

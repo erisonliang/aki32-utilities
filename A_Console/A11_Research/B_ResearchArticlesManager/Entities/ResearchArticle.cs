@@ -5,6 +5,8 @@ using Aki32Utilities.ConsoleAppUtilities.General;
 
 using ClosedXML;
 
+using ConsoleExtension = Aki32Utilities.ConsoleAppUtilities.General.ConsoleExtension;
+
 namespace Aki32Utilities.ConsoleAppUtilities.Research;
 public class ResearchArticle : IComparable
 {
