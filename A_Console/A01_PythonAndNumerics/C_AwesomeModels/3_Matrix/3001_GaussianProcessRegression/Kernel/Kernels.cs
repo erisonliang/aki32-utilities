@@ -93,8 +93,13 @@ public partial class GaussianProcessRegression
     /// </summary>
     public class GeneralKernel : IKernel
     {
+        // ★★★★★★★★★★★★★★★ props
+        
         public double LengthScale { get; set; }
         public double NoiseLambda { get; set; }
+
+
+        // ★★★★★★★★★★★★★★★ inits
 
         public GeneralKernel(double lengthScale, double noiseLambda)
         {
@@ -102,23 +107,40 @@ public partial class GaussianProcessRegression
             NoiseLambda = noiseLambda;
         }
 
-        private double CalcKernel(double x1, double x2, double l)
+
+        // ★★★★★★★★★★★★★★★ methods
+
+        private double CalcKernel(double x1, double x2)
         {
             var d = x1 - x2;
-            var to = -Math.Pow(d / l, 2) / 2;
+            var to = -Math.Pow(d / LengthScale, 2) / 2;
             return Math.Exp(to);
         }
 
-        private DenseVector CalcKernel(DenseVector rowVectorTest, DenseMatrix designMatrixTrain)
+        private DenseVector CalcKernel(DenseVector x1, double x2)
         {
-            return null;
+            var n1 = x1.Count;
+            var ks = new DenseVector(n1);
+            for (int i = 0; i < n1; i++)
+                ks[i] = CalcKernel(x1[i], x2);
+            return ks;
         }
 
-        private double dKernel_dl(double x1, double x2, double l)
+        private DenseMatrix CalcKernel(DenseVector x1, DenseVector x2)
+        {
+            var n1 = x1.Count;
+            var n2 = x2.Count;
+            var ks = new DenseMatrix(n1, n2);
+            for (int i = 0; i < n2; i++)
+                ks.SetColumn(i, CalcKernel(x1, x2[i]));
+            return ks;
+        }
+
+        private double dKernel_dl(double x1, double x2)
         {
             var d = x1 - x2;
-            var to = -Math.Pow(d / l, 2) / 2;
-            return -2 * to * Math.Exp(to) / Math.Pow(l, 3);
+            var to = -Math.Pow(d / LengthScale, 2) / 2;
+            return -2 * to * Math.Exp(to) / Math.Pow(LengthScale, 3);
         }
 
         /// <summary>
@@ -136,7 +158,7 @@ public partial class GaussianProcessRegression
             // kernel
             for (int i = 0; i < N; i++)
                 for (int j = 0; j < N; j++)
-                    K[i, j] = CalcKernel(X[i], X[j], LengthScale);
+                    K[i, j] = CalcKernel(X[i], X[j]);
 
             // noise
             for (int i = 0; i < N; i++)
@@ -157,16 +179,14 @@ public partial class GaussianProcessRegression
 
             for (int i = 0; i < predictN; i++)
             {
-                var k = new DenseVector(N);
-                for (int j = 0; j < N; j++)
-                    k[j] = CalcKernel(X[j], predictX[i], LengthScale);
+                var ks = CalcKernel(X, predictX[i]);
 
                 // 期待値 K * K^(-1)
-                mus[i] = k * KInvY;
+                mus[i] = ks * KInvY;
 
                 // 分散 k - (K x G^(-1)) ⊙ G
-                var v = KInv * k;
-                sigmas[i] = CalcKernel(predictX[i], predictX[i], LengthScale) + NoiseLambda - v * v;
+                var v = KInv * ks;
+                sigmas[i] = CalcKernel(predictX[i], predictX[i]) + NoiseLambda - v * v;
             }
 
             return (mus, sigmas);
@@ -188,8 +208,8 @@ public partial class GaussianProcessRegression
                 for (int i = 0; i < N; i++)
                     for (int j = 0; j < N; j++)
                     {
-                        K[i, j] = CalcKernel(X[i], X[j], l);
-                        dK[i, j] = dKernel_dl(X[i], X[j], l);
+                        K[i, j] = CalcKernel(X[i], X[j]);
+                        dK[i, j] = dKernel_dl(X[i], X[j]);
                     }
 
                 // noise
@@ -212,6 +232,9 @@ public partial class GaussianProcessRegression
                 l += tr * learning_rate;
             }
         }
+
+
+        // ★★★★★★★★★★★★★★★ 
 
     }
 
