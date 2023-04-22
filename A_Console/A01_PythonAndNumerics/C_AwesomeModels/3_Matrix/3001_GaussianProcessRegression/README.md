@@ -2,7 +2,7 @@
 
 ## 🌟 Abstract
 
-Code set for Template.
+Code set for Gaussian Process Regression.
 
 
 
@@ -55,11 +55,19 @@ Any commitment to enhance this repo will be welcomed!
 
 
 
+
+
+
+
 <br>
 
 ## ❗Japanese 日本語
 
-テンプレートのアルゴリズムやテンプレートプログラムのコード集です。
+ガウス回帰過程のコード集です。
+
+マイナーなカーネルやパラメーター最適化はまだ作成中ですが，メインのカーネルは実装済みです。
+
+
 
 
 
