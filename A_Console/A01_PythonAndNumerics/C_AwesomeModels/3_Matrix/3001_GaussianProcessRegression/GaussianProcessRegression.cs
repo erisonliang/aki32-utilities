@@ -1,4 +1,6 @@
-﻿using MathNet.Numerics.LinearAlgebra.Double;
+﻿using System.Text;
+
+using MathNet.Numerics.LinearAlgebra.Double;
 
 namespace Aki32Utilities.ConsoleAppUtilities.PythonAndNumerics;
 public partial class GaussianProcessRegression
@@ -25,16 +27,13 @@ public partial class GaussianProcessRegression
         //return (d * d * -t) * Math.Exp(d * d * -t);
     }
 
-    public (double[] predictY, double[] sigmas) FitAndPredict(double[] X, double[] Y, double[] predictX,
-        double l = 1,
-        double noiseLambda = 1 / 30d
-        )
+    public (double[] predictY, double[] sigmas) FitAndPredict(DefaultKernel kernel, double[] X, double[] Y, double[] predictX)
     {
         var _X = new DenseVector(X);
         var _Y = new DenseVector(Y);
         var _predictX = new DenseVector(predictX);
 
-        var _predictY = FitAndPredict(_X, _Y, _predictX, l, noiseLambda);
+        var _predictY = FitAndPredict(kernel, _X, _Y, _predictX);
 
         var mus = _predictY.predictY.ToArray();
         var sigmas = _predictY.sigmas.ToArray();
@@ -42,19 +41,13 @@ public partial class GaussianProcessRegression
         return (mus, sigmas);
     }
 
-    public (DenseVector predictY, DenseVector sigmas) FitAndPredict(DenseVector X, DenseVector Y, DenseVector predictX,
-        double l = 1,
-        double noiseLambda = 1 / 30d
-        )
+    public (DenseVector predictY, DenseVector sigmas) FitAndPredict(DefaultKernel kernel, DenseVector X, DenseVector Y, DenseVector predictX)
     {
-        var KInv = Fit(X, l, noiseLambda);
-        return Predict(X, Y, predictX, KInv, l, noiseLambda);
+        var KInv = Fit(kernel, X);
+        return Predict(kernel, X, Y, predictX, KInv);
     }
 
-    public DenseMatrix Fit(DenseVector X,
-        double l = 1,
-        double noiseLambda = 1 / 30d
-        )
+    public DenseMatrix Fit(DefaultKernel kernel, DenseVector X)
     {
         var N = X.Count;
 
@@ -64,11 +57,11 @@ public partial class GaussianProcessRegression
         // kernel
         for (int i = 0; i < N; i++)
             for (int j = 0; j < N; j++)
-                K[i, j] = Kernel(X[i], X[j], l);
+                K[i, j] = Kernel(X[i], X[j], kernel.LengthScale);
 
         // noise
         for (int i = 0; i < N; i++)
-            K[i, i] += noiseLambda;
+            K[i, i] += kernel.NoiseLambda;
 
         // K^(-1)
         var KInv = K.Inverse();
@@ -76,10 +69,7 @@ public partial class GaussianProcessRegression
         return (DenseMatrix)KInv;
     }
 
-    public (DenseVector predictY, DenseVector sigmas) Predict(DenseVector X, DenseVector Y, DenseVector predictX, DenseMatrix KInv,
-        double l = 1,
-        double noiseLambda = 1 / 30d
-        )
+    public (DenseVector predictY, DenseVector sigmas) Predict(DefaultKernel kernel, DenseVector X, DenseVector Y, DenseVector predictX, DenseMatrix KInv)
     {
         var N = X.Count;
 
@@ -92,21 +82,20 @@ public partial class GaussianProcessRegression
         {
             var k = new DenseVector(N);
             for (int j = 0; j < N; j++)
-                k[j] = Kernel(X[j], predictX[i], l);
+                k[j] = Kernel(X[j], predictX[i],kernel.LengthScale);
 
             // 期待値 K * K^(-1)
             mus[i] = k * Ans;
 
             // 分散 k - (K x G^(-1)) ⊙ G
             var v = KInv * k;
-            sigmas[i] = Kernel(predictX[i], predictX[i], l) + noiseLambda - v * v;
+            sigmas[i] = Kernel(predictX[i], predictX[i], kernel.LengthScale) + kernel.NoiseLambda - v * v;
         }
 
         return (mus, sigmas);
     }
 
-    public double GetOptimizedL(DenseVector X, DenseVector Y,
-        double noiseLambda = 1 / 30d,
+    public double GetOptimizedL(DefaultKernel kernel, DenseVector X, DenseVector Y,
         double tryCount = 100,
         double learning_rate = 0.05
         )
@@ -128,7 +117,7 @@ public partial class GaussianProcessRegression
 
             // noise
             for (int i = 0; i < N; i++)
-                K[i, i] += noiseLambda;
+                K[i, i] += kernel.NoiseLambda;
 
             // K^(-1)
             var KInv = K.Inverse();
@@ -143,7 +132,7 @@ public partial class GaussianProcessRegression
             double tr = 0;
             for (int i = 0; i < N; i++)
                 tr += mm[i, i];
-            l +=  tr * learning_rate;
+            l += tr * learning_rate;
         }
 
         return l;
