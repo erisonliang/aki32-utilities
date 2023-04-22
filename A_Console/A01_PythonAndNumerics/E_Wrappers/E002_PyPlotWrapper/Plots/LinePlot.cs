@@ -1,4 +1,4 @@
-﻿
+﻿using Aki32Utilities.ConsoleAppUtilities.General;
 
 namespace Aki32Utilities.ConsoleAppUtilities.PythonAndNumerics;
 public partial class PyPlotWrapper
@@ -100,7 +100,72 @@ public partial class PyPlotWrapper
 
         }
 
+
+        // ★★★★★★★★★★★★★★★ methods (static)
+
+        public static FileInfo DrawSimpleGraph(double[] X, double[] Y, FileInfo? outputImageFile = null, bool preview = true)
+        {
+            outputImageFile ??= new FileInfo(Path.GetTempFileName().GetExtensionChangedFilePath(".png"));
+
+            return new Figure
+            {
+                IsTightLayout = true,
+                SubPlot = new SubPlot()
+                {
+                    XLabel = "x",
+                    YLabel = "y",
+                    Title = "line",
+                    Plot = new LinePlot(X, Y) { Alpha = 0.6 },
+                }
+            }.Run(outputImageFile, preview);
+        }
+
+        public static FileInfo DrawSimpleGraph(double[] X, double[] Y, double[] Z, FileInfo? outputImageFile = null, bool preview = true)
+        {
+            outputImageFile ??= new FileInfo(Path.GetTempFileName().GetExtensionChangedFilePath(".png"));
+
+            return new Figure
+            {
+                IsTightLayout = true,
+                SubPlot = new SubPlot()
+                {
+                    XLabel = "x",
+                    YLabel = "y",
+                    ZLabel = "z",
+                    Title = "line",
+                    Plot = new LinePlot(X, Y, Z) { Alpha = 0.6 },
+                }
+            }.Run(outputImageFile, preview);
+        }
+
+        public static void RunExampleModel(FileInfo outputImageFile, bool preview = true)
+        {
+            var pi = Math.PI;
+            var n = 256;
+
+            var z = EnumerableExtension.Range_WithCount(-3 * pi, 3 * pi, n).ToArray();
+            var x = z.Select(z => Math.Cos(z)).ToArray();
+            var y = z.Select(z => Math.Sin(z)).ToArray();
+
+            new PyPlotWrapper.Figure
+            {
+                IsTightLayout = true,
+                SubPlot = new PyPlotWrapper.SubPlot()
+                {
+                    XLabel = "x",
+                    YLabel = "y",
+                    ZLabel = "z",
+                    Title = "helix",
+                    Plot = new PyPlotWrapper.LinePlot(x, y, z) { Alpha = 0.6 },
+                }
+            }.Run(outputImageFile, preview);
+        }
+
+
         // ★★★★★★★★★★★★★★★ 
+
+
+
 
     }
 }

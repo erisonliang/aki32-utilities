@@ -141,6 +141,58 @@ public partial class PyPlotWrapper
         }
 
 
+        // ★★★★★★★★★★★★★★★ methods (static)
+
+        public static FileInfo DrawSimpleGraph(double[] X, double[] Y, double[] Z, FileInfo? outputImageFile = null, bool preview = true)
+        {
+            outputImageFile ??= new FileInfo(Path.GetTempFileName().GetExtensionChangedFilePath(".png"));
+
+            return new Figure(true)
+            {
+                IsTightLayout = true,
+                SubPlot = new SubPlot(true)
+                {
+                    XLabel = "X",
+                    YLabel = "Y",
+                    ZLabel = "Z",
+                    Title = "bar3d",
+                    Plot = new Bar3DPlot(X, Y, 0.8, 0.8, Z, true)
+                    {
+                        Alpha = 0.5,
+                    }
+                }
+            }.Run(outputImageFile, preview);
+        }
+
+        public static void RunExampleModel(FileInfo outputImageFile, bool preview = true)
+        {
+            var pi = Math.PI;
+            var n = 5;
+
+            // ★★★★★
+            var XX = EnumerableExtension.Range_WithStep(0, n - 1, 1).ToArray();
+            var YY = EnumerableExtension.Range_WithStep(0, n - 1, 1).ToArray();
+            var ZZ = Enumerable.SelectMany(XX, x => YY, (x, y) => (x + 1) * y).ToArray().ReShape(n, n);
+
+            // ★★★★★ bar3d
+            new PyPlotWrapper.Figure(true)
+            {
+                IsTightLayout = true,
+                SubPlot = new PyPlotWrapper.SubPlot(true)
+                {
+                    XLabel = "X",
+                    YLabel = "Y",
+                    ZLabel = "Z",
+                    Title = "bar3d",
+                    Plot = new PyPlotWrapper.Bar3DPlot(XX, YY, 0.8, 0.8, ZZ, true)
+                    {
+                        Alpha = 0.5,
+                    }
+                }
+            }.Run(outputImageFile, preview);
+        }
+
+
         // ★★★★★★★★★★★★★★★ 
 
     }

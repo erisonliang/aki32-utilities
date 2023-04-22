@@ -1,5 +1,7 @@
 ﻿
 
+using Aki32Utilities.ConsoleAppUtilities.General;
+
 namespace Aki32Utilities.ConsoleAppUtilities.PythonAndNumerics;
 public partial class PyPlotWrapper
 {
@@ -61,6 +63,29 @@ public partial class PyPlotWrapper
                 rotation: Rotation
 
                 );
+        }
+
+
+        // ★★★★★★★★★★★★★★★ methods (static)
+
+        public static void RunExampleModel(FileInfo outputImageFile, bool preview = true)
+        {
+            new PyPlotWrapper.Figure
+            {
+                IsTightLayout = true,
+                SubPlot = new PyPlotWrapper.SubPlot()
+                {
+                    HasGrid = true,
+                    XLabel = "x",
+                    YLabel = "y",
+                    ZLabel = "z",
+                    Title = "text",
+                    Plot = new PyPlotWrapper.TextPlot(0.5, 0.5, "aiueoあいうえお")
+                    {
+                    },
+                }
+
+            }.Run(outputImageFile, preview);
         }
 
 

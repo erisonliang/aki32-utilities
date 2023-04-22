@@ -1,5 +1,11 @@
 ﻿
 
+using System;
+
+using Aki32Utilities.ConsoleAppUtilities.General;
+
+using DocumentFormat.OpenXml.Wordprocessing;
+
 namespace Aki32Utilities.ConsoleAppUtilities.PythonAndNumerics;
 public partial class PyPlotWrapper
 {
@@ -188,6 +194,99 @@ public partial class PyPlotWrapper
                     );
 
             }
+        }
+
+
+        // ★★★★★★★★★★★★★★★ methods (static)
+
+        public static FileInfo DrawSimpleGraph(double[] X, double[] Y, double[] dX, double[] dY, FileInfo? outputImageFile = null, bool preview = true)
+        {
+            outputImageFile ??= new FileInfo(Path.GetTempFileName().GetExtensionChangedFilePath(".png"));
+
+            return new Figure
+            {
+                IsTightLayout = true,
+                SubPlot = new SubPlot()
+                {
+                    XLim = (-8, 8),
+                    YLim = (-8, 8),
+                    HasGrid = true,
+                    XLabel = "x",
+                    YLabel = "y",
+                    ZLabel = "z",
+                    Title = "quiver",
+                    Plot = new QuiverPlot(X, Y, dX, dY)
+                    {
+                        Scale = 10,
+                    },
+                }
+
+            }.Run(outputImageFile, preview);
+        }
+
+        public static FileInfo DrawSimpleGraph(double[] X, double[] Y, double[] Z, double[] dX, double[] dY, double[] dZ, FileInfo? outputImageFile = null, bool preview = true)
+        {
+            outputImageFile ??= new FileInfo(Path.GetTempFileName().GetExtensionChangedFilePath(".png"));
+
+            return new Figure
+            {
+                IsTightLayout = true,
+                SubPlot = new SubPlot()
+                {
+                    XLim = (-8, 8),
+                    YLim = (-8, 8),
+                    HasGrid = true,
+                    XLabel = "x",
+                    YLabel = "y",
+                    ZLabel = "z",
+                    Title = "quiver",
+                    Plot = new QuiverPlot(X, Y, Z, dX, dY, dZ)
+                    {
+                        Scale = 10,
+                    },
+                }
+
+            }.Run(outputImageFile, preview);
+        }
+
+        public static void RunExampleModel(FileInfo outputImageFile, bool preview = true)
+        {
+            var pi = Math.PI;
+            var n = 10;
+
+            var X = EnumerableExtension.Range_WithCount(-5, 5, n).ToArray();
+            var Y = EnumerableExtension.Range_WithCount(-5, 5, n).ToArray();
+
+            var XYGrid = Enumerable.SelectMany(X, x => Y, (x, y) => (x, y));
+            var XGrid = XYGrid.Select(xy => xy.x).ToArray().ReShape(n, n);
+            var YGrid = XYGrid.Select(xy => xy.y).ToArray().ReShape(n, n);
+
+            var U = X.Select(x => 2 * x);
+            var V = Y.Select(y => 3 * y);
+
+            var UVGrid = Enumerable.SelectMany(U, u => V, (u, v) => (u, v));
+            var UGrid = UVGrid.Select(uv => uv.u).ToArray().ReShape(n, n);
+            var VGrid = UVGrid.Select(uv => uv.v).ToArray().ReShape(n, n);
+
+            new PyPlotWrapper.Figure
+            {
+                IsTightLayout = true,
+                SubPlot = new PyPlotWrapper.SubPlot()
+                {
+                    XLim = (-8, 8),
+                    YLim = (-8, 8),
+                    HasGrid = true,
+                    XLabel = "x",
+                    YLabel = "y",
+                    ZLabel = "z",
+                    Title = "quiver",
+                    Plot = new PyPlotWrapper.QuiverPlot(XGrid, YGrid, UGrid, VGrid)
+                    {
+                        Scale = 10,
+                    },
+                }
+
+            }.Run(outputImageFile, preview);
         }
 
 

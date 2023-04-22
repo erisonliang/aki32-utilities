@@ -1,5 +1,7 @@
 ﻿
 
+using Aki32Utilities.ConsoleAppUtilities.General;
+
 namespace Aki32Utilities.ConsoleAppUtilities.PythonAndNumerics;
 public partial class PyPlotWrapper
 {
@@ -93,7 +95,75 @@ public partial class PyPlotWrapper
 
         }
 
+        // ★★★★★★★★★★★★★★★ methods (static)
+
+        public static FileInfo DrawSimpleGraph(double[] X, double[] Y, double[,] Z, FileInfo? outputImageFile = null, bool preview = true)
+        {
+            outputImageFile ??= new FileInfo(Path.GetTempFileName().GetExtensionChangedFilePath(".png"));
+
+            return new PyPlotWrapper.Figure(true)
+            {
+                IsTightLayout = true,
+                SubPlot = new PyPlotWrapper.SubPlot(true)
+                {
+                    //ZLim=(-1,1),
+                    XLabel = "X",
+                    YLabel = "Y",
+                    ZLabel = "Z",
+                    Title = "surface",
+                    Plot = new SurfacePlot(X, Y, Z) { ColorMap = "cividis", Alpha = 0.5 },
+                }
+            }.Run(outputImageFile, preview);
+        }
+
+        public static void RunExampleModel(FileInfo outputImageFile, bool preview = true)
+        {
+            var pi = Math.PI;
+            var n = 50;
+
+            var XX = EnumerableExtension.Range_WithCount(-4, 4, n).ToArray();
+            var YY = EnumerableExtension.Range_WithCount(-4, 4, n).ToArray();
+            var ZZ = Enumerable
+                .SelectMany(XX, x => YY, (x, y) =>
+                {
+                    var Z1 = Math.Exp(-Math.Pow(x, 2) - Math.Pow(y, 2));
+                    var Z2 = Math.Exp(-Math.Pow(x - 1.2, 2) - Math.Pow(y - 0.7, 2));
+                    var Z3 = Math.Exp(-Math.Pow(x + 0.5, 2) - Math.Pow(y + 1.4, 2));
+                    return (Z1 - Z2 - Z3) * 2;
+                })
+                .ReShape(n, n);
+
+            new PyPlotWrapper.Figure(true)
+            {
+                IsTightLayout = true,
+                SubPlot = new PyPlotWrapper.SubPlot(true)
+                {
+                    //ZLim=(-1,1),
+                    XLabel = "X",
+                    YLabel = "Y",
+                    ZLabel = "Z",
+                    Title = "surface",
+                    Plots = new List<PyPlotWrapper.IPlot>
+                    {
+                        new PyPlotWrapper.ContourPlot(XX,YY,ZZ, false){Levels=20,ColorMap="cividis", ZOffset=XX.Min(), TargetHeightDirection="x", LineWidth=4},
+                        new PyPlotWrapper.ContourPlot(XX,YY,ZZ, false){Levels=20,ColorMap="cividis", ZOffset=YY.Max(), TargetHeightDirection="y", LineWidth=4},
+                        new PyPlotWrapper.ContourPlot(XX,YY,ZZ, false){Levels=20,ColorMap="cividis", ZOffset=ZZ.Min(), TargetHeightDirection="z", LineWidth=4},
+                        //new PyPlotWrapper.ContourPlot(XX,YY,ZZ, false){Levels=20,Colors="green", ZOffset=ZZ.Min(), ContourLabelFontSize__2D=20},
+
+                        //new PyPlotWrapper.WireFramePlot(XX,YY,ZZ){Color="black", LineWidth=3},
+                        new PyPlotWrapper.SurfacePlot(XX,YY,ZZ){ ColorMap="cividis", Alpha=0.5},
+
+                        //new PyPlotWrapper.ScatterPlot(XX,YY,ZZ){ ColorMap="green", MarkerSize=100},
+                    }
+                }
+            }.Run(outputImageFile, preview);
+
+        }
+
+
         // ★★★★★★★★★★★★★★★ 
+
+
 
     }
 }

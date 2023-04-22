@@ -1,5 +1,7 @@
 ﻿
 
+using Aki32Utilities.ConsoleAppUtilities.General;
+
 namespace Aki32Utilities.ConsoleAppUtilities.PythonAndNumerics;
 public partial class PyPlotWrapper
 {
@@ -96,6 +98,61 @@ public partial class PyPlotWrapper
                     );
 
         }
+
+        // ★★★★★★★★★★★★★★★ methods (static)
+
+        public static FileInfo DrawSimpleGraph(double[] X, double[] Y, double[,] Z, FileInfo? outputImageFile = null, bool preview = true)
+        {
+            outputImageFile ??= new FileInfo(Path.GetTempFileName().GetExtensionChangedFilePath(".png"));
+
+            return new Figure()
+            {
+                IsTightLayout = true,
+                SubPlot = new SubPlot()
+                {
+                    XLabel = "X",
+                    YLabel = "Y",
+                    Title = "continuous heatmap",
+                    HasGrid = false,
+                    Plot = new ContinuousHeatMapPlot(X, Y, Z)
+                    {
+                        ColorMap = "cividis",
+                    },
+                }
+            }.Run(outputImageFile, preview);
+        }
+
+        public static void RunExampleModel(FileInfo outputImageFile, bool preview = true)
+        {
+            var pi = Math.PI;
+            var n = 333;
+            var XX = EnumerableExtension.Range_WithCount(0, 5, n).ToArray();
+            var YY = EnumerableExtension.Range_WithCount(0, 5, n).ToArray();
+            var ZZ = Enumerable
+                .SelectMany(XX, x => YY, (x, y) =>
+                {
+                    return (x * y);
+                })
+                .ToArray().ReShape(n, n);
+
+            // ★★★★★ 
+            new PyPlotWrapper.Figure()
+            {
+                IsTightLayout = true,
+                SubPlot = new PyPlotWrapper.SubPlot()
+                {
+                    XLabel = "X",
+                    YLabel = "Y",
+                    Title = "continuous heatmap",
+                    HasGrid = false,
+                    Plot = new PyPlotWrapper.ContinuousHeatMapPlot(XX, YY, ZZ)
+                    {
+                        ColorMap = "cividis",
+                    },
+                }
+            }.Run(outputImageFile, preview);
+        }
+
 
         // ★★★★★★★★★★★★★★★ 
 

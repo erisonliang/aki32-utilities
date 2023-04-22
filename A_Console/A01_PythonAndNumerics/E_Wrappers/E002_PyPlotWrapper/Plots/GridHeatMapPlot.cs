@@ -1,5 +1,7 @@
 ﻿
 
+using Aki32Utilities.ConsoleAppUtilities.General;
+
 namespace Aki32Utilities.ConsoleAppUtilities.PythonAndNumerics;
 public partial class PyPlotWrapper
 {
@@ -115,6 +117,62 @@ public partial class PyPlotWrapper
                 ax.set_yticklabels(Y, minor: true);
 
         }
+
+
+        // ★★★★★★★★★★★★★★★ methods (static)
+
+        public static FileInfo DrawSimpleGraph(double[] X, double[] Y, double[,] Z, FileInfo? outputImageFile = null, bool preview = true)
+        {
+            outputImageFile ??= new FileInfo(Path.GetTempFileName().GetExtensionChangedFilePath(".png"));
+
+            return new Figure()
+            {
+                IsTightLayout = true,
+                SubPlot = new SubPlot()
+                {
+                    XLabel = "X",
+                    YLabel = "Y",
+                    Title = "grid heatmap",
+                    HasGrid = false,
+                    Plot = new GridHeatMapPlot(X, Y, Z)
+                    {
+                        ColorMap = "cividis",
+                    },
+                }
+            }.Run(outputImageFile, preview);
+        }
+
+        public static void RunExampleModel(FileInfo outputImageFile, bool preview = true)
+        {
+            var pi = Math.PI;
+            var n = 10;
+            var XX = EnumerableExtension.Range_WithStep(0, n - 1, 1).ToArray();
+            var YY = EnumerableExtension.Range_WithStep(0, n - 1, 1).ToArray();
+            var ZZ = Enumerable
+                .SelectMany(XX, x => YY, (x, y) =>
+                {
+                    return (x * y);
+                })
+                .ToArray().ReShape(n, n);
+
+            new PyPlotWrapper.Figure()
+            {
+                IsTightLayout = true,
+                SubPlot = new PyPlotWrapper.SubPlot()
+                {
+                    XLabel = "X",
+                    YLabel = "Y",
+                    Title = "grid heatmap",
+                    HasGrid = false,
+                    Plot = new PyPlotWrapper.GridHeatMapPlot(XX, YY, ZZ)
+                    {
+                        ColorMap = "cividis",
+                    },
+                }
+            }.Run(outputImageFile, preview);
+
+        }
+
 
         // ★★★★★★★★★★★★★★★ 
 
