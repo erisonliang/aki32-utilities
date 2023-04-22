@@ -1,100 +1,17 @@
 ﻿using System.Linq.Expressions;
 
-using DocumentFormat.OpenXml.Wordprocessing;
-
 using MathNet.Numerics.LinearAlgebra.Double;
-
-using XPlot.Plotly;
 
 namespace Aki32Utilities.ConsoleAppUtilities.PythonAndNumerics;
 public partial class GaussianProcessRegression
 {
-
-    // ★★★★★★★★★★★★★★★ kernels
-
-    public class IKernel
-    {
-
-        // ★★★★★★★★★★★★★★★ props
-
-        public DenseVector X { get; set; }
-        public DenseMatrix K { get; set; }
-        public DenseMatrix KInv { get; set; }
-        public DenseVector KInvY { get; set; }
-        public int N => X.Count;
-
-
-        // ★★★★★★★★★★★★★★★ methods
-
-
-
-        // ★★★★★★★★★★★★★★★ operators
-
-        public static CombinedKernel operator +(IKernel left, IKernel right)
-        {
-            return
-                new CombinedKernel
-                {
-                    LeftChild = left,
-                    RightChild = right,
-                    ChildKernelsOperator = ExpressionType.Add,
-                };
-        }
-        public static CombinedKernel operator *(IKernel left, IKernel right)
-        {
-            if (left is not ConstantKernel && right is not ConstantKernel)
-                throw new InvalidOperationException("Either of multiplying kernels have to be ConstantKernel!");
-
-            return
-                new CombinedKernel
-                {
-                    LeftChild = left,
-                    RightChild = right,
-                    ChildKernelsOperator = ExpressionType.Multiply,
-                };
-        }
-
-
-        // ★★★★★★★★★★★★★★★
-
-    }
-
-    /// <summary>
-    /// Multiple kernel combination
-    /// </summary>
-    /// <remarks>
-    /// sk-learnの使ってる組み合わせ11個：https://datachemeng.com/kernel_design_in_gpr/
-    /// </remarks>
-    public class CombinedKernel : IKernel
-    {
-
-        // ★★★★★★★★★★★★★★★ props
-
-        public IKernel? LeftChild { get; set; }
-        public IKernel? RightChild { get; set; }
-        public ExpressionType ChildKernelsOperator { get; set; }
-
-
-        // ★★★★★★★★★★★★★★★ methods
-
-
-
-
-
-
-
-
-        // ★★★★★★★★★★★★★★★
-
-    }
-
     /// <summary>
     /// ConstantKernel() * RBFKernel() + WhiteNoiseKernel()
     /// </summary>
     public class GeneralKernel : IKernel
     {
         // ★★★★★★★★★★★★★★★ props
-        
+
         public double LengthScale { get; set; }
         public double NoiseLambda { get; set; }
 
@@ -237,22 +154,4 @@ public partial class GaussianProcessRegression
         // ★★★★★★★★★★★★★★★ 
 
     }
-
-    public class ConstantKernel : IKernel
-    {
-    }
-
-    public class RBFKernel : IKernel
-    {
-        public double LengthScale { get; set; }
-    }
-
-    public class WhiteNoiseKernel : IKernel
-    {
-        public double NoiseLambda { get; set; }
-    }
-
-
-    // ★★★★★★★★★★★★★★★
-
 }
