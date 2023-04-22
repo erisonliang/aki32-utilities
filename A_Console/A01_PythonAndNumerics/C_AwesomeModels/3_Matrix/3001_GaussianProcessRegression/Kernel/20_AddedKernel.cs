@@ -48,7 +48,7 @@ public partial class GaussianProcessRegressionExecuter
 
         public override string ToString()
         {
-            return $"{LeftChild.ToString()} + {RightChild.ToString()}";
+            return $"{LeftChild.ToString()}+{RightChild.ToString()}";
         }
 
 
