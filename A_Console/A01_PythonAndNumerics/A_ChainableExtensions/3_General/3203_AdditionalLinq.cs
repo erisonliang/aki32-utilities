@@ -1,6 +1,6 @@
 ﻿
 
-namespace Aki32Utilities.ConsoleAppUtilities.General;
+namespace Aki32Utilities.ConsoleAppUtilities.PythonAndNumerics;
 public static partial class ChainableExtensions
 {
     // you can simply use ReShape for doing this
