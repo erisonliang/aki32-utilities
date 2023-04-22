@@ -3,19 +3,25 @@
 namespace Aki32Utilities.ConsoleAppUtilities.PythonAndNumerics;
 public partial class GaussianProcessRegression
 {
-    public class WhiteNoiseKernel : KernelBase
+    /// <summary>
+    /// Multiple kernel combination
+    /// </summary>
+    /// <remarks>
+    /// sk-learnの使ってる組み合わせ11個：https://datachemeng.com/kernel_design_in_gpr/
+    /// </remarks>
+    public class MultipliedKernel : KernelBase
     {
 
         // ★★★★★★★★★★★★★★★ props
 
-        public double NoiseLambda { get; set; }
+        public KernelBase LeftChild { get; set; }
+        public KernelBase RightChild { get; set; }
 
 
         // ★★★★★★★★★★★★★★★ inits
 
-        public WhiteNoiseKernel(double noiseLambda)
+        internal MultipliedKernel()
         {
-            NoiseLambda = noiseLambda;
         }
 
 
@@ -23,7 +29,7 @@ public partial class GaussianProcessRegression
 
         internal override double CalcKernel(double x1, double x2)
         {
-            throw new NotImplementedException();
+            return LeftChild.CalcKernel(x1, x2) * RightChild.CalcKernel(x1, x2);
         }
 
         internal override double CalcGradKernel_Parameter1(double x1, double x2)

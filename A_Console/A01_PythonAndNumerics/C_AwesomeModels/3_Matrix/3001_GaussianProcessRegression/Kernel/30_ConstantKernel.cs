@@ -3,12 +3,22 @@
 namespace Aki32Utilities.ConsoleAppUtilities.PythonAndNumerics;
 public partial class GaussianProcessRegression
 {
-    public class ConstantKernel : IKernel
+    public class ConstantKernel : KernelBase
     {
 
         // ★★★★★★★★★★★★★★★ props
 
-      
+        public double ConstantValue { get; set; }
+
+
+        // ★★★★★★★★★★★★★★★ inits
+
+        public ConstantKernel(double constantValue)
+        {
+            ConstantValue = constantValue;
+        }
+
+
         // ★★★★★★★★★★★★★★★ methods
 
         internal override double CalcKernel(double x1, double x2)
@@ -18,6 +28,21 @@ public partial class GaussianProcessRegression
 
         internal override double CalcGradKernel_Parameter1(double x1, double x2)
         {
+            throw new NotImplementedException();
+        }
+
+        internal override void Fit(DenseVector X, DenseVector Y)
+        {
+            this.X = X;
+
+            throw new NotImplementedException();
+        }
+
+        internal override (DenseVector mu, DenseVector sig) Predict(DenseVector predictX)
+        {
+            if (KInv is null)
+                throw new InvalidOperationException("No available fitted data found. Consider to call \"Fit()\" first!");
+
             throw new NotImplementedException();
         }
 

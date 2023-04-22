@@ -14,6 +14,7 @@ using Aki32Utilities.ConsoleAppUtilities.AI.CheatSheet;
 using Aki32Utilities.ConsoleAppUtilities.PythonAndNumerics;
 using static Aki32Utilities.ConsoleAppUtilities.PythonAndNumerics.PyPlotWrapper;
 using Thickness = Aki32Utilities.ConsoleAppUtilities.General.ChainableExtensions.Thickness;
+using GPR = Aki32Utilities.ConsoleAppUtilities.PythonAndNumerics.GaussianProcessRegression;
 
 using ClosedXML;
 
@@ -900,15 +901,16 @@ public static partial class ExampleExecuter
                     var predictX = EnumerableExtension.Range_WithStep(-3, 3, 0.01).ToArray();
                     var correctY = predictX.Select(x => 0d).ToArray();
 
-                    //var l = gpr.GetOptimizedL(X, Y);
-                    //var noiseLambda = 1 / 30d;
-                    var kernel = new GaussianProcessRegression.GeneralKernel(lengthScale: 1d, noiseLambda: 1 / 30d);
-                    var gpr = new GaussianProcessRegression(kernel);
+                    //var kernel = new GPR.GeneralKernel(lengthScale: 1d, noiseLambda: 1 / 30d);
+
+                    var k1 = new GPR.ConstantKernel(1);
+                    var k2 = new GPR.RBFKernel(1);
+                    var k3 = new GPR.WhiteNoiseKernel(1 / 30d);
+                    var kernel = k1 * k2 + k3;
+
+                    var gpr = new GPR(kernel);
                     (var predictY, var sigmas) = gpr.FitAndPredict(X, Y, predictX);
 
-                    //PyPlotWrapper.LinePlot.DrawSimpleGraph(predictX, predictY);
-
-                    // draw graph
                     new Figure
                     {
                         IsTightLayout = true,

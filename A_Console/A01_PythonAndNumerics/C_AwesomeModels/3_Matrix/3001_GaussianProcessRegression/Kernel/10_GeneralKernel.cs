@@ -6,7 +6,7 @@ public partial class GaussianProcessRegression
     /// <summary>
     /// ConstantKernel() * RBFKernel() + WhiteNoiseKernel()
     /// </summary>
-    public class GeneralKernel : IKernel
+    public class GeneralKernel : KernelBase
     {
         // ★★★★★★★★★★★★★★★ props
 
@@ -44,7 +44,7 @@ public partial class GaussianProcessRegression
         /// </summary>
         /// <param name="X"></param>
         /// <returns></returns>
-        internal void Fit(DenseVector X, DenseVector Y)
+        internal override void Fit(DenseVector X, DenseVector Y)
         {
             this.X = X;
 
@@ -64,7 +64,7 @@ public partial class GaussianProcessRegression
             KInvY = KInv * Y;
         }
 
-        internal (DenseVector mu, DenseVector sig) Predict(DenseVector predictX)
+        internal override (DenseVector mu, DenseVector sig) Predict(DenseVector predictX)
         {
             if (KInv is null)
                 throw new InvalidOperationException("No available fitted data found. Consider to call \"Fit()\" first!");

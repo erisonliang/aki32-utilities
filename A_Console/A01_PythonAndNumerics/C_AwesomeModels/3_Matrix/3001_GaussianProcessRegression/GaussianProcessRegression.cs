@@ -8,12 +8,12 @@ public partial class GaussianProcessRegression
 
     // ★★★★★★★★★★★★★★★ props
 
-    public GeneralKernel Kernel { get; set; }
+    public KernelBase Kernel { get; set; }
 
 
     // ★★★★★★★★★★★★★★★ inits
 
-    public GaussianProcessRegression(GeneralKernel kernel)
+    public GaussianProcessRegression(KernelBase kernel)
     {
         Kernel = kernel;
     }

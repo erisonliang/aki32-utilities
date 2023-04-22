@@ -8,7 +8,7 @@ public partial class GaussianProcessRegression
 
     // ★★★★★★★★★★★★★★★ kernels
 
-    public abstract class IKernel
+    public abstract class KernelBase
     {
 
         // ★★★★★★★★★★★★★★★ props
@@ -53,32 +53,50 @@ public partial class GaussianProcessRegression
             return ks;
         }
 
+        /// <summary>
+        /// グラム行列（カーネル行列）などを作成します。
+        /// </summary>
+        /// <param name="X"></param>
+        /// <returns></returns>
+        internal abstract void Fit(DenseVector X, DenseVector Y);
+        /// <summary>
+        /// 回帰を適用します。
+        /// </summary>
+        /// <param name="predictX"></param>
+        /// <returns></returns>
+        internal abstract (DenseVector mu, DenseVector sig) Predict(DenseVector predictX);
+
+        /// <summary>
+        /// ハイパーパラメーターを最適化します。
+        /// </summary>
+        /// <param name="X"></param>
+        /// <param name="Y"></param>
+        /// <param name="tryCount"></param>
+        /// <param name="learning_rate"></param>
         internal abstract void OptimizeParameters(DenseVector X, DenseVector Y, double tryCount, double learning_rate);
 
 
         // ★★★★★★★★★★★★★★★ operators
 
-        public static CombinedKernel operator +(IKernel left, IKernel right)
+        public static AddedKernel operator +(KernelBase left, KernelBase right)
         {
             return
-                new CombinedKernel
+                new AddedKernel
                 {
                     LeftChild = left,
                     RightChild = right,
-                    ChildKernelsOperator = ExpressionType.Add,
                 };
         }
-        public static CombinedKernel operator *(IKernel left, IKernel right)
+        public static MultipliedKernel operator *(KernelBase left, KernelBase right)
         {
             if (left is not ConstantKernel && right is not ConstantKernel)
                 throw new InvalidOperationException("Either of multiplying kernels have to be ConstantKernel!");
 
             return
-                new CombinedKernel
+                new MultipliedKernel
                 {
                     LeftChild = left,
                     RightChild = right,
-                    ChildKernelsOperator = ExpressionType.Multiply,
                 };
         }
 
