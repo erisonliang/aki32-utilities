@@ -41,23 +41,15 @@ public partial class GaussianProcessRegression
         return Predict(predictX);
     }
 
-    public void Fit(DenseVector X, DenseVector Y)
-    {
-        Kernel.Fit(X, Y);
-    }
+    public void Fit(DenseVector X, DenseVector Y) => Kernel.Fit(X, Y);
 
-    public (DenseVector predictY, DenseVector sigmas) Predict(DenseVector predictX)
-    {
-        return Kernel.Predict(predictX);
-    }
+    public (DenseVector predictY, DenseVector sigmas) Predict(DenseVector predictX) => Kernel.Predict(predictX);
 
     public void OptimizeParameters(DenseVector X, DenseVector Y,
         double tryCount = 100,
         double learning_rate = 0.05
         )
-    {
-        Kernel.OptimizeParameters(X, Y, tryCount, learning_rate);
-    }
+        => Kernel.OptimizeParameters(X, Y, tryCount, learning_rate);
 
 
     // ★★★★★★★★★★★★★★★

@@ -34,15 +34,15 @@ public partial class GaussianProcessRegression
                     ks[i1, i2] = CalcKernel(x1[i1], x2[i2], n1 == n2 && i1 == i2);
             return ks;
         }
-        internal abstract double CalcGradKernel_Parameter1(double x1, double x2, bool isSameIndex);
-        internal DenseMatrix CalcGradKernel_Parameter1(DenseVector x1, DenseVector x2)
+        internal abstract double CalcKernelGrad_Parameter1(double x1, double x2, bool isSameIndex);
+        internal DenseMatrix CalcKernelGrad_Parameter1(DenseVector x1, DenseVector x2)
         {
             var n1 = x1.Count;
             var n2 = x2.Count;
             var ks = new DenseMatrix(n1, n2);
             for (int i1 = 0; i1 < n1; i1++)
                 for (int i2 = 0; i2 < n2; i2++)
-                    ks[i1, i2] = CalcGradKernel_Parameter1(x1[i1], x2[i2], n1 == n2 && i1 == i2);
+                    ks[i1, i2] = CalcKernelGrad_Parameter1(x1[i1], x2[i2], n1 == n2 && i1 == i2);
             return ks;
         }
 
@@ -90,6 +90,11 @@ public partial class GaussianProcessRegression
         /// <param name="tryCount"></param>
         /// <param name="learning_rate"></param>
         internal abstract void OptimizeParameters(DenseVector X, DenseVector Y, double tryCount, double learning_rate);
+
+        /// <summary>
+        /// カーネルを表現する文字列を返します。
+        /// </summary>
+        public new abstract string ToString();
 
 
         // ★★★★★★★★★★★★★★★ operators

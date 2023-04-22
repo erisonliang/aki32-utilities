@@ -8,14 +8,15 @@ public partial class GaussianProcessRegression
 
         // ★★★★★★★★★★★★★★★ props
 
-        public double ConstantValue { get; set; }
+        public double ConstantWeight { get; set; }
+        private double Root => Math.Sqrt(ConstantWeight);
 
 
         // ★★★★★★★★★★★★★★★ inits
 
         public ConstantKernel(double constantValue)
         {
-            ConstantValue = constantValue;
+            ConstantWeight = constantValue;
         }
 
 
@@ -23,10 +24,10 @@ public partial class GaussianProcessRegression
 
         internal override double CalcKernel(double x1, double x2, bool isSameIndex)
         {
-            return ConstantValue;
+            return ConstantWeight;
         }
 
-        internal override double CalcGradKernel_Parameter1(double x1, double x2, bool isSameIndex)
+        internal override double CalcKernelGrad_Parameter1(double x1, double x2, bool isSameIndex)
         {
             return 0;
         }
@@ -36,10 +37,15 @@ public partial class GaussianProcessRegression
           double learning_rate = 0.05
           )
         {
+            throw new NotImplementedException();
 
 
 
+        }
 
+        public override string ToString()
+        {
+            return $"{ConstantWeight:F3}";
         }
 
 

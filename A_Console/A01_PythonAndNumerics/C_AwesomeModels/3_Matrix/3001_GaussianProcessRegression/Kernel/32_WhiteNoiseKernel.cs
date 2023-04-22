@@ -26,7 +26,7 @@ public partial class GaussianProcessRegression
             return isSameIndex ? NoiseLambda : 0;
         }
 
-        internal override double CalcGradKernel_Parameter1(double x1, double x2, bool isSameIndex)
+        internal override double CalcKernelGrad_Parameter1(double x1, double x2, bool isSameIndex)
         {
             return 0;
         }
@@ -36,7 +36,16 @@ public partial class GaussianProcessRegression
           double learning_rate = 0.05
           )
         {
+            throw new NotImplementedException();
 
+
+
+
+        }
+
+        public override string ToString()
+        {
+            return $"White(Noise={NoiseLambda:F3})";
         }
 
 

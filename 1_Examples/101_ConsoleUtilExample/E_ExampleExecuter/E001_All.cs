@@ -904,8 +904,8 @@ public static partial class ExampleExecuter
                     var k1 = new GPR.ConstantKernel(1);
                     var k2 = new GPR.RBFKernel(1);
                     var k3 = new GPR.WhiteNoiseKernel(1 / 30d);
-                    //var kernel = k1 * k2 + k3;
-                    var kernel = new GPR.GeneralKernel(lengthScale: 1d, noiseLambda: 1 / 30d);
+                    var kernel = k1 * k2 + k3;
+                    //var kernel = new GPR.GeneralKernel(lengthScale: 1d, noiseLambda: 1 / 30d);
 
                     var gpr = new GPR(kernel);
                     //gpr.OptimizeParameters(X, Y);
@@ -928,7 +928,7 @@ public static partial class ExampleExecuter
                                 new LinePlot(predictX, predictY) { LineColor="r" },
                                 new LinePlot(predictX, predictY.AddForEach(sigmas)) { LineColor="r", LineStyle="--" },
                                 new LinePlot(predictX, predictY.SubForEach(sigmas)) { LineColor="r", LineStyle="--" },
-                                new TextPlot(2,2,$"λ = {k3.NoiseLambda:F3}\r\nt = {k2.LengthScale:F3}"){ HorizontalAlignment="right"},
+                                new TextPlot(3,1.8,kernel.ToString()){ HorizontalAlignment="right"},
                             },
                         }
                     }.Run(preview: true);

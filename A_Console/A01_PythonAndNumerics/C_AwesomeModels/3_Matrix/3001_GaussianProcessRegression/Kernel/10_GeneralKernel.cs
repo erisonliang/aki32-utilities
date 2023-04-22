@@ -33,7 +33,7 @@ public partial class GaussianProcessRegression
             return Math.Exp(to) + noise;
         }
 
-        internal override double CalcGradKernel_Parameter1(double x1, double x2, bool isSameIndex)
+        internal override double CalcKernelGrad_Parameter1(double x1, double x2, bool isSameIndex)
         {
             var d = x1 - x2;
             var to = -Math.Pow(d / LengthScale, 2) / 2;
@@ -47,22 +47,28 @@ public partial class GaussianProcessRegression
         {
             this.X = X;
 
+
             for (int k = 0; k < tryCount; k++)
             {
                 var K = CalcKernel(X, X);
                 var KInv = (DenseMatrix)K.Inverse();
                 var KInvY = KInv * Y;
 
-                var AnsMat = KInvY.ToColumnMatrix() * KInvY.ToRowMatrix();
+                var KInvYMat = KInvY.ToColumnMatrix() * KInvY.ToRowMatrix();
 
-                var dK = CalcGradKernel_Parameter1(X, X);
-                var mm = (AnsMat - KInv).Multiply(dK);
+                var dK = CalcKernelGrad_Parameter1(X, X);
+                var mm = (KInvYMat - KInv).Multiply(dK);
                 double tr = 0;
                 for (int i = 0; i < N; i++)
                     tr += mm[i, i];
                 LengthScale += tr * learning_rate;
             }
 
+        }
+
+        public override string ToString()
+        {
+            return $"GeneralKernel(LengthScale={LengthScale:F3}, NoiseLambda={NoiseLambda:F3})";
         }
 
 

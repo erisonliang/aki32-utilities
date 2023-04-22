@@ -28,7 +28,7 @@ public partial class GaussianProcessRegression
             return Math.Exp(to);
         }
 
-        internal override double CalcGradKernel_Parameter1(double x1, double x2, bool isSameIndex)
+        internal override double CalcKernelGrad_Parameter1(double x1, double x2, bool isSameIndex)
         {
             throw new NotImplementedException();
         }
@@ -38,11 +38,17 @@ public partial class GaussianProcessRegression
           double learning_rate = 0.05
           )
         {
+            throw new NotImplementedException();
 
 
 
 
 
+        }
+
+        public override string ToString()
+        {
+            return $"RBF(Scale={LengthScale:F3})";
         }
 
 
