@@ -4,20 +4,9 @@
 
 Code for calculating frame structure using matrix displacement method.
 
+* http://www.iust.ac.ir/files/cefsse/pg.cef/Contents/chapter_5.pdf
 
-
-
-
-<br>
-
-## 🌟 RD Technique (or Random Decrement Technique)
-
-Method for assuming biuldings' attenuation constant from microtremor.
-
-* https://www.jstage.jst.go.jp/article/aijsx/454/0/454_KJ00004086057/_pdf
-
-
-
+* https://www.jstage.jst.go.jp/article/coj1963/6/10/6_33/_pdf
 
 
 
