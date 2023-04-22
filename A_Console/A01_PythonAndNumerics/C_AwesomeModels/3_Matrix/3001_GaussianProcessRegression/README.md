@@ -22,9 +22,24 @@ Code set for Template.
 
 
 
+
 <br>
 
-## 🌟 More descriptions to be added
+## 🌟 Memo
+
+
+- ガウス回帰過程について
+https://gochikika.ntt.com/Modeling/gp_regression.html
+
+
+- カーネル一覧
+https://observablehq.com/@herbps10/gaussian-processes
+
+
+- sk-learnの使ってる組み合わせ11個
+https://datachemeng.com/kernel_design_in_gpr/
+
+
 
 
 

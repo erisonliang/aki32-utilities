@@ -4,21 +4,24 @@ namespace Aki32Utilities.ConsoleAppUtilities.PythonAndNumerics;
 public partial class GaussianProcessRegressionExecuter
 {
     /// <summary>
-    /// Multiple Kernel combination with addition
+    /// Periodic Kernel
+    /// <br/> * without σ² in front
     /// </summary>
-    public class MultipliedKernel : KernelBase
+    public class PeriodicKernel : KernelBase
     {
 
         // ★★★★★★★★★★★★★★★ props
 
-        public KernelBase LeftChild { get; set; }
-        public KernelBase RightChild { get; set; }
+        public double LengthScale { get; set; }
+        public double P { get; set; }
 
 
         // ★★★★★★★★★★★★★★★ inits
 
-        internal MultipliedKernel()
+        public PeriodicKernel(double lengthScale, double p)
         {
+            LengthScale = lengthScale;
+            P = p;
         }
 
 
@@ -26,12 +29,17 @@ public partial class GaussianProcessRegressionExecuter
 
         internal override double CalcKernel(double x1, double x2, bool isSameIndex)
         {
-            return LeftChild.CalcKernel(x1, x2, isSameIndex) * RightChild.CalcKernel(x1, x2, isSameIndex);
+            var d = Math.Abs(x1 - x2);
+            var to = -2 * Math.Pow(Math.Sin(Math.PI * d / P) / LengthScale, 2);
+            return Math.Exp(to);
         }
 
         internal override double CalcKernelGrad_Parameter1(double x1, double x2, bool isSameIndex)
         {
             throw new NotImplementedException();
+
+
+
         }
 
         internal override void OptimizeParameters(DenseVector X, DenseVector Y,
@@ -49,7 +57,7 @@ public partial class GaussianProcessRegressionExecuter
 
         public override string ToString()
         {
-            return $"{LeftChild.ToString()} * {RightChild.ToString()}";
+            return $"PK(#{LengthScale:F3}, {P:F3})";
         }
 
 

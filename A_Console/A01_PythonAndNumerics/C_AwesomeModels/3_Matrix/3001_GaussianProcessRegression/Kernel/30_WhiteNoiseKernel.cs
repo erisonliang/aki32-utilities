@@ -4,21 +4,21 @@ namespace Aki32Utilities.ConsoleAppUtilities.PythonAndNumerics;
 public partial class GaussianProcessRegressionExecuter
 {
     /// <summary>
-    /// Multiple Kernel combination with addition
+    /// White Noise Kernel
     /// </summary>
-    public class MultipliedKernel : KernelBase
+    public class WhiteNoiseKernel : KernelBase
     {
 
         // ★★★★★★★★★★★★★★★ props
 
-        public KernelBase LeftChild { get; set; }
-        public KernelBase RightChild { get; set; }
+        public double NoiseLambda { get; set; }
 
 
         // ★★★★★★★★★★★★★★★ inits
 
-        internal MultipliedKernel()
+        public WhiteNoiseKernel(double noiseLambda)
         {
+            NoiseLambda = noiseLambda;
         }
 
 
@@ -26,12 +26,12 @@ public partial class GaussianProcessRegressionExecuter
 
         internal override double CalcKernel(double x1, double x2, bool isSameIndex)
         {
-            return LeftChild.CalcKernel(x1, x2, isSameIndex) * RightChild.CalcKernel(x1, x2, isSameIndex);
+            return isSameIndex ? NoiseLambda : 0;
         }
 
         internal override double CalcKernelGrad_Parameter1(double x1, double x2, bool isSameIndex)
         {
-            throw new NotImplementedException();
+            return 0;
         }
 
         internal override void OptimizeParameters(DenseVector X, DenseVector Y,
@@ -44,12 +44,11 @@ public partial class GaussianProcessRegressionExecuter
 
 
 
-
         }
 
         public override string ToString()
         {
-            return $"{LeftChild.ToString()} * {RightChild.ToString()}";
+            return $"δ(#{NoiseLambda:F3})";
         }
 
 

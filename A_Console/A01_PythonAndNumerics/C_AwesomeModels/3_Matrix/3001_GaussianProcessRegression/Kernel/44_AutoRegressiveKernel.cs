@@ -4,21 +4,22 @@ namespace Aki32Utilities.ConsoleAppUtilities.PythonAndNumerics;
 public partial class GaussianProcessRegressionExecuter
 {
     /// <summary>
-    /// Multiple Kernel combination with addition
+    /// Auto Regressive Kernel
+    /// <br/> * without σ² in front
     /// </summary>
-    public class MultipliedKernel : KernelBase
+    public class AutoRegressiveKernel : KernelBase
     {
 
         // ★★★★★★★★★★★★★★★ props
 
-        public KernelBase LeftChild { get; set; }
-        public KernelBase RightChild { get; set; }
+        public double Rho { get; set; }
 
 
         // ★★★★★★★★★★★★★★★ inits
 
-        internal MultipliedKernel()
+        public AutoRegressiveKernel(double rho)
         {
+            Rho = rho;
         }
 
 
@@ -26,12 +27,16 @@ public partial class GaussianProcessRegressionExecuter
 
         internal override double CalcKernel(double x1, double x2, bool isSameIndex)
         {
-            return LeftChild.CalcKernel(x1, x2, isSameIndex) * RightChild.CalcKernel(x1, x2, isSameIndex);
+            throw new NotImplementedException();
         }
 
         internal override double CalcKernelGrad_Parameter1(double x1, double x2, bool isSameIndex)
         {
             throw new NotImplementedException();
+
+
+
+
         }
 
         internal override void OptimizeParameters(DenseVector X, DenseVector Y,
@@ -49,7 +54,7 @@ public partial class GaussianProcessRegressionExecuter
 
         public override string ToString()
         {
-            return $"{LeftChild.ToString()} * {RightChild.ToString()}";
+            return $"ARK(#{Rho:F3})";
         }
 
 

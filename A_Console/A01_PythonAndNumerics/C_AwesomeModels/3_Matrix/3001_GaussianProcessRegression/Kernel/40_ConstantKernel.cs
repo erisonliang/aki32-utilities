@@ -3,19 +3,23 @@
 namespace Aki32Utilities.ConsoleAppUtilities.PythonAndNumerics;
 public partial class GaussianProcessRegressionExecuter
 {
-    public class RBFKernel : KernelBase
+    /// <summary>
+    /// Constant Kernel
+    /// </summary>
+    public class ConstantKernel : KernelBase
     {
 
         // ★★★★★★★★★★★★★★★ props
 
-        public double LengthScale { get; set; }
+        public double ConstantWeight { get; set; }
+        private double Root => Math.Sqrt(ConstantWeight);
 
 
         // ★★★★★★★★★★★★★★★ inits
 
-        public RBFKernel(double lengthScale)
+        public ConstantKernel(double constantValue)
         {
-            LengthScale = lengthScale;
+            ConstantWeight = constantValue;
         }
 
 
@@ -23,16 +27,12 @@ public partial class GaussianProcessRegressionExecuter
 
         internal override double CalcKernel(double x1, double x2, bool isSameIndex)
         {
-            var d = x1 - x2;
-            var to = -0.5 * Math.Pow(d / LengthScale, 2);
-            return Math.Exp(to);
+            return ConstantWeight;
         }
 
         internal override double CalcKernelGrad_Parameter1(double x1, double x2, bool isSameIndex)
         {
-            var d = x1 - x2;
-            var to = -0.5 * Math.Pow(d / LengthScale, 2);
-            return -2 * Math.Pow(LengthScale, -3) * to * Math.Exp(to);
+            return 0;
         }
 
         internal override void OptimizeParameters(DenseVector X, DenseVector Y,
@@ -44,13 +44,11 @@ public partial class GaussianProcessRegressionExecuter
 
 
 
-
-
         }
 
         public override string ToString()
         {
-            return $"RBF(Scale={LengthScale:F3})";
+            return $"{ConstantWeight:F3}";
         }
 
 

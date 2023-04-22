@@ -74,7 +74,7 @@ public partial class GaussianProcessRegressionExecuter
         var correctY = predictX.Select(x => f(x)).ToArray();
 
         var k1 = new GaussianProcessRegressionExecuter.ConstantKernel(1d);
-        var k2 = new GaussianProcessRegressionExecuter.RBFKernel(1d);
+        var k2 = new GaussianProcessRegressionExecuter.SquaredExponentialKernel(1d);
         var k3 = new GaussianProcessRegressionExecuter.WhiteNoiseKernel(1 / 50d);
         var kernel = k1 * k2 + k3;
 
