@@ -1,6 +1,6 @@
 ﻿using System.Drawing;
+
 using Aki32Utilities.ConsoleAppUtilities.General;
-using General = Aki32Utilities.ConsoleAppUtilities.General;
 
 namespace Aki32Utilities.Apps.ConsoleMiniApps;
 public partial class MiniApps
@@ -43,7 +43,7 @@ public partial class MiniApps
         using var progress = new ProgressManager(PageCount);
         for (int i = 0; i < PageCount; i++)
         {
-            General.ChainableExtensions.SaveScreenShot(targetDirectory, UL, BR);
+            ChainableExtensions.SaveScreenShot(targetDirectory, UL, BR);
             IODeviceExtension.MouseCursorMoveAndClick(ProceedButton);
             progress.WriteCurrentState(i);
             Thread.Sleep(TimePerPageMilliSeconds);
