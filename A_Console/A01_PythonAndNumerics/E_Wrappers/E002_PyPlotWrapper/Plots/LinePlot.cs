@@ -155,7 +155,7 @@ public partial class PyPlotWrapper
                     XLabel = "x",
                     YLabel = "y",
                     ZLabel = "z",
-                    Title = "helix",
+                    Title = "line",
                     Plot = new PyPlotWrapper.LinePlot(x, y, z) { Alpha = 0.6 },
                 }
             }.Run(outputImageFile, preview);
@@ -163,9 +163,6 @@ public partial class PyPlotWrapper
 
 
         // ★★★★★★★★★★★★★★★ 
-
-
-
 
     }
 }

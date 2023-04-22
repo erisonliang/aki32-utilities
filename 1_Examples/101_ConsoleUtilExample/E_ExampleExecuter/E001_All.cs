@@ -889,8 +889,23 @@ public static partial class ExampleExecuter
                 {
                     var baseDir_A01_3001 = baseDir_A01_C.GetChildDirectoryInfo($@"3001_GaussianProcessRegression");
 
-                    PythonController.Initialize();
-                    GaussianProcessRegressionExecuter.RunExampleModel();
+                    //PythonController.Initialize();
+                    //GaussianProcessRegressionExecuter.RunExampleModel();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
                 }
 
@@ -940,12 +955,11 @@ public static partial class ExampleExecuter
 
                 // E002_PyPlotWrapper
                 {
-                    //var baseDir_A01_E002 = baseDir_A01_E.GetChildDirectoryInfo($@"E002_PyPlotWrapper").CreateAndPipe();
-                    //baseDir_A01_E002.OpenOnDefaultApp();
+                    var baseDir_A01_E002 = baseDir_A01_E.GetChildDirectoryInfo($@"E002_PyPlotWrapper").CreateAndPipe();
+                    baseDir_A01_E002.OpenOnDefaultApp();
+                    var output = baseDir_A01_E002.GetChildDirectoryInfo($@"output");
+                    PythonController.Initialize();
 
-                    //var output = baseDir_A01_E002.GetChildDirectoryInfo($@"output");
-
-                    //PythonController.Initialize();
 
                     //PyPlotWrapper.LinePlot.RunExampleModel(output.GetChildFileInfo("line.png"));
 
@@ -960,6 +974,8 @@ public static partial class ExampleExecuter
                     //PyPlotWrapper.QuiverPlot.RunExampleModel(output.GetChildFileInfo("quiver.png"));
 
                     //PyPlotWrapper.TextPlot.RunExampleModel(output.GetChildFileInfo("text.png"));
+
+                    //PyPlotWrapper.FillBetweenPlot.RunExampleModel(output.GetChildFileInfo("fill between.png"));
 
                 }
 
