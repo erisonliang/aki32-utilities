@@ -2,7 +2,7 @@
 
 ## 🌟 Abstract
 
-Elastoplastic analysis algorithms
+Code set for elasto-plastic analysis algorithms.
 
 Currently we only have SDoF models.
 
