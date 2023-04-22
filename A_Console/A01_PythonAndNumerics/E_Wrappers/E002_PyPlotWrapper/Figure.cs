@@ -36,7 +36,7 @@ public partial class PyPlotWrapper
 
         // ★★★★★★★★★★★★★★★ methods
 
-        public FileInfo Run(FileInfo outputFile, bool preview = false)
+        public FileInfo Run(FileInfo? outputFile = null, bool preview = false)
         {
             // ★★★★★ preprocess
             if (!PythonController.Activated)
@@ -46,6 +46,7 @@ public partial class PyPlotWrapper
                 SubPlots = new List<SubPlot> { SubPlot };
             if (SubPlots is null)
                 throw new Exception("Required to set either SubPlot or SubPlots");
+            outputFile ??= new FileInfo(Path.GetTempFileName().GetExtensionChangedFilePath(".png"));
             outputFile.Directory!.Create();
 
 
