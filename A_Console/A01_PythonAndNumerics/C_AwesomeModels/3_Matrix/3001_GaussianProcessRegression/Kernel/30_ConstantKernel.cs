@@ -21,29 +21,14 @@ public partial class GaussianProcessRegression
 
         // ★★★★★★★★★★★★★★★ methods
 
-        internal override double CalcKernel(double x1, double x2)
+        internal override double CalcKernel(double x1, double x2, bool isSameIndex)
         {
             return ConstantValue;
         }
 
-        internal override double CalcGradKernel_Parameter1(double x1, double x2)
+        internal override double CalcGradKernel_Parameter1(double x1, double x2, bool isSameIndex)
         {
             return 0;
-        }
-
-        internal override void Fit(DenseVector X, DenseVector Y)
-        {
-            this.X = X;
-
-            throw new NotImplementedException();
-        }
-
-        internal override (DenseVector mu, DenseVector sig) Predict(DenseVector predictX)
-        {
-            if (KInv is null)
-                throw new InvalidOperationException("No available fitted data found. Consider to call \"Fit()\" first!");
-
-            throw new NotImplementedException();
         }
 
         internal override void OptimizeParameters(DenseVector X, DenseVector Y,
