@@ -76,7 +76,7 @@ public partial class GaussianProcessRegressionExecuter
 
         var k1 = new GaussianProcessRegressionExecuter.ConstantKernel(1d);
         var k2 = new GaussianProcessRegressionExecuter.SquaredExponentialKernel(1d);
-        var k3 = new GaussianProcessRegressionExecuter.WhiteNoiseKernel(1 / 50d);
+        var k3 = new GaussianProcessRegressionExecuter.WhiteNoiseKernel(1 / 15d);
         var kernel = k1 * k2 + k3;
 
         var gpr = new GaussianProcessRegressionExecuter(kernel);
@@ -100,18 +100,18 @@ public partial class GaussianProcessRegressionExecuter
                 {
                     // new ScatterPlot(Array.Empty<double>(),Array.Empty<double>()){ MarkerColor="k", MarkerSize=100, LegendLabel=kernel.ToString()},
 
-                    new LinePlot(predictX, correctY) { LineColor="g", LegendLabel="Answer: y=x*sin(x)"},
-                    new ScatterPlot(X, Y) { MarkerSize=120, MarkerColor="g", LegendLabel="Noised sample data"},
+                    new LinePlot(predictX, correctY) { LineColor="g", LineWidth=3, LegendLabel="Answer: y=x*sin(x)"},
+                    new ScatterPlot(X, Y) { MarkerSize=130, MarkerColor="g", LegendLabel="Noised sample data"},
 
-                    new LinePlot(predictX, predictY) { LineColor="red", LegendLabel=kernel.ToString()},
+                    new LinePlot(predictX, predictY) { LineColor="red", LineWidth=3, LegendLabel=kernel.ToString()},
 
                     new FillBetweenPlot(predictX, predictY.AddForEach(CI95), predictY.SubForEach(CI95)) {FillColor="red", Alpha=0.20, LegendLabel="95% CI"},
-                    new LinePlot(predictX, predictY.AddForEach(CI95)) { LineColor="red", LineStyle="-", Alpha=0.20 },
-                    new LinePlot(predictX, predictY.SubForEach(CI95)) { LineColor="red", LineStyle="-", Alpha=0.20 },
+                    //new LinePlot(predictX, predictY.AddForEach(CI95)) { LineColor="red", LineStyle="-", Alpha=0.20 },
+                    //new LinePlot(predictX, predictY.SubForEach(CI95)) { LineColor="red", LineStyle="-", Alpha=0.20 },
 
-                    new FillBetweenPlot(predictX, predictY.AddForEach(CI99), predictY.SubForEach(CI99)) {FillColor="red", Alpha=0.07, LegendLabel="99% CI"},
-                    new LinePlot(predictX, predictY.AddForEach(CI99)) { LineColor="red", LineStyle="-", Alpha=0.07 },
-                    new LinePlot(predictX, predictY.SubForEach(CI99)) { LineColor="red", LineStyle="-", Alpha=0.07 },
+                    new FillBetweenPlot(predictX, predictY.AddForEach(CI99), predictY.SubForEach(CI99)) {FillColor="red", Alpha=0.10, LegendLabel="99% CI"},
+                    //new LinePlot(predictX, predictY.AddForEach(CI99)) { LineColor="red", LineStyle="-", Alpha=0.10 },
+                    //new LinePlot(predictX, predictY.SubForEach(CI99)) { LineColor="red", LineStyle="-", Alpha=0.10 },
 
                     //new TextPlot(10,8,kernel.ToString()){ HorizontalAlignment="right"},
                 
