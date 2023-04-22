@@ -47,7 +47,7 @@ public partial class GaussianProcessRegressionExecuter
 
         public override string ToString()
         {
-            return $"{ConstantWeight:F3}";
+            return $"CK({ConstantWeight:F3})";
         }
 
 

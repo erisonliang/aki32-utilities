@@ -886,11 +886,11 @@ public static partial class ExampleExecuter
 
                 // 3001_GaussianProcessRegression
                 {
-                    var baseDir_A01_3001 = baseDir_A01_C.GetChildDirectoryInfo($@"3001_GaussianProcessRegression").CreateAndPipe();
-                    baseDir_A01_3001.OpenOnDefaultApp();
+                    //var baseDir_A01_3001 = baseDir_A01_C.GetChildDirectoryInfo($@"3001_GaussianProcessRegression").CreateAndPipe();
+                    //baseDir_A01_3001.OpenOnDefaultApp();
 
-                    PythonController.Initialize();
-                    GaussianProcessRegressionExecuter.RunExampleModel(baseDir_A01_3001.GetChildFileInfo("gpr.png"));
+                    //PythonController.Initialize();
+                    //GaussianProcessRegressionExecuter.RunExampleModel(baseDir_A01_3001.GetChildFileInfo("gpr.png"));
 
                 }
 

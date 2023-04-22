@@ -98,12 +98,12 @@ public partial class GaussianProcessRegressionExecuter
                 LegendFontSize = 20,
                 Plots = new List<IPlot>
                 {
-                    // new ScatterPlot(Array.Empty<double>(),Array.Empty<double>()){ MarkerColor="k", MarkerSize=100, LegendLabel=kernel.ToString()},
+                    new ScatterPlot(Array.Empty<double>(),Array.Empty<double>()){ MarkerColor="yellow", MarkerSize=100, LegendLabel=kernel.ToString()},
 
                     new LinePlot(predictX, correctY) { LineColor="g", LineWidth=3, LegendLabel="True f(X)= Xsin(X)"},
-                    new ScatterPlot(X, Y) { MarkerSize=130, MarkerColor="g", LegendLabel="Observed data"},
+                    new ScatterPlot(X, Y) { MarkerSize=130, MarkerColor="g", LegendLabel="Observed Data"},
 
-                    new LinePlot(predictX, predictY) { LineColor="red", LineWidth=3, LegendLabel=kernel.ToString()},
+                    new LinePlot(predictX, predictY) { LineColor="red", LineWidth=3, LegendLabel="Predicted Mean"},
 
                     new FillBetweenPlot(predictX, predictY.AddForEach(CI95), predictY.SubForEach(CI95)) {FillColor="red", Alpha=0.20, LegendLabel="95% CI"},
                     //new LinePlot(predictX, predictY.AddForEach(CI95)) { LineColor="red", LineStyle="-", Alpha=0.20 },
