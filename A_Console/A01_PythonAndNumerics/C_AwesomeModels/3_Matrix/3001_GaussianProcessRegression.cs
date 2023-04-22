@@ -2,6 +2,8 @@
 
 using MathNet.Numerics.LinearAlgebra.Double;
 
+using XPlot.Plotly;
+
 namespace Aki32Utilities.ConsoleAppUtilities.PythonAndNumerics;
 public class GaussianProcessRegression
 {
@@ -45,30 +47,30 @@ public class GaussianProcessRegression
     //}
 
 
-    public (double[], double[]) FitAndPredict(double[] x, double[] y, double[] predictX,
+    public (double[] predictY, double[] sigmas) FitAndPredict(double[] x, double[] y, double[] predictX,
         int t = 3,
         int beta = 30)
     {
         var _x = new DenseVector(x);
         var _y = new DenseVector(x);
-        var _predictX = new DenseVector(x);
+        var _predictX = new DenseVector(predictX);
 
-        var _predictY = FitAndPredict(_x, _y, predictX, t, beta);
+        var _predictY = FitAndPredict(_x, _y, _predictX, t, beta);
 
-        var mus = _predictY.mus.ToArray();
+        var mus = _predictY.predictY.ToArray();
         var sigmas = _predictY.sigmas.ToArray();
 
         return (mus, sigmas);
     }
 
-    public (DenseVector mus, DenseVector sigmas) FitAndPredict(DenseVector x, DenseVector y, DenseVector predictX,
+    public (DenseVector predictY, DenseVector sigmas) FitAndPredict(DenseVector x, DenseVector y, DenseVector predictX,
         int t = 3,
         int beta = 30)
     {
         var N = x.Count;
 
         // グラム行列
-        var K = new DenseMatrix(N * N);
+        var K = new DenseMatrix(N);
 
         K.Inverse();
 

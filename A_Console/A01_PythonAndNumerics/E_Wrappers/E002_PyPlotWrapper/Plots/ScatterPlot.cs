@@ -177,6 +177,50 @@ public partial class PyPlotWrapper
         }
 
 
+        // ★★★★★★★★★★★★★★★ methods (static)
+
+        public static FileInfo DrawSimpleGraph(double[] X, double[] Y, FileInfo? outputImageFile = null, bool preview = true)
+        {
+            outputImageFile ??= new FileInfo(Path.GetTempFileName().GetExtensionChangedFilePath(".png"));
+
+            return new Figure
+            {
+                IsTightLayout = true,
+                SubPlot = new SubPlot()
+                {
+                    XLabel = "x",
+                    YLabel = "y",
+                    Title = "scatter",
+                    Plot = new ScatterPlot(X, Y)
+                    {
+                        MarkerSize = 50
+                    },
+                }
+            }.Run(outputImageFile, preview);
+        }
+
+        public static FileInfo DrawSimpleGraph(double[] X, double[] Y, double[,] Z, FileInfo? outputImageFile = null, bool preview = true)
+        {
+            outputImageFile ??= new FileInfo(Path.GetTempFileName().GetExtensionChangedFilePath(".png"));
+
+            return new Figure
+            {
+                IsTightLayout = true,
+                SubPlot = new SubPlot()
+                {
+                    XLabel = "x",
+                    YLabel = "y",
+                    ZLabel = "z",
+                    Title = "scatter",
+                    Plot = new ScatterPlot(X, Y, Z)
+                    {
+                        MarkerSize = 50
+                    },
+                }
+            }.Run(outputImageFile, preview);
+        }
+
+
         // ★★★★★★★★★★★★★★★ 
 
     }

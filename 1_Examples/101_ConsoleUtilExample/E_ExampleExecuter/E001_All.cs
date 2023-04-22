@@ -10,6 +10,10 @@ using Aki32Utilities.ConsoleAppUtilities.General;
 using Aki32Utilities.ConsoleAppUtilities.AI;
 using Aki32Utilities.ConsoleAppUtilities.Structure;
 using Aki32Utilities.ConsoleAppUtilities.Research;
+using Aki32Utilities.ConsoleAppUtilities.AI.CheatSheet;
+using Aki32Utilities.ConsoleAppUtilities.PythonAndNumerics;
+using static Aki32Utilities.ConsoleAppUtilities.PythonAndNumerics.PyPlotWrapper;
+using Thickness = Aki32Utilities.ConsoleAppUtilities.General.ChainableExtensions.Thickness;
 
 using ClosedXML;
 
@@ -18,18 +22,15 @@ using DocumentFormat.OpenXml.Wordprocessing;
 using NumSharp;
 
 using Newtonsoft.Json;
-using Aki32Utilities.ConsoleAppUtilities.AI.CheatSheet;
 using iTextSharp.text.pdf.codec.wmf;
 using MathNet.Numerics.LinearAlgebra;
 using ICSharpCode.SharpZipLib.Zip;
 
-using Thickness = Aki32Utilities.ConsoleAppUtilities.General.ChainableExtensions.Thickness;
 using Color = System.Drawing.Color;
 using Point = System.Drawing.Point;
 using DocumentFormat.OpenXml.Bibliography;
 using System.Xml.Linq;
 using XPlot.Plotly;
-using DocumentFormat.OpenXml.Drawing;
 using Org.BouncyCastle.Crypto.Macs;
 using NumSharp.Utilities;
 using DocumentFormat.OpenXml.Office2013.Excel;
@@ -39,7 +40,7 @@ using System.Globalization;
 using Aki32Utilities.ConsoleAppUtilities.Hobby;
 using ClosedXML.Excel;
 using System.Xml.XPath;
-using Aki32Utilities.ConsoleAppUtilities.PythonAndNumerics;
+using MathNet.Numerics.LinearAlgebra.Double;
 
 namespace Aki32Utilities.UsageExamples.ConsoleAppUtilities;
 public static partial class ExampleExecuter
@@ -891,20 +892,36 @@ public static partial class ExampleExecuter
 
                     //var X = new double[] { 1, 3, 5, 6, 7, 8 };
                     //var Y = X.Select(x => x * Math.Sin(x)).ToArray();
+
+                    //PythonController.Initialize();
+                    ////PyPlotWrapper.ScatterPlot.DrawSimpleGraph(X, Y);
+
                     //var predictX = EnumerableExtension.Range_WithStep(0, 10, 0.01).ToArray();
+                    //var correctY = predictX.Select(x => x * Math.Sin(x)).ToArray();
+                    ////PyPlotWrapper.LinePlot.DrawSimpleGraph(predictX, correctY);
 
-                    //(var mus, var sigmas) = gpr.FitAndPredict(X, Y, predictX);
+                    //(var predictY, var sigmas) = gpr.FitAndPredict(X, Y, predictX);
 
+                    ////PyPlotWrapper.LinePlot.DrawSimpleGraph(predictX, predictY);
 
-
-
-                    //PyPlotWrapper.LinePlot.;
-
-
-
-
-
-
+                    //// draw graph
+                    //new Figure
+                    //{
+                    //    IsTightLayout = true,
+                    //    SubPlot = new SubPlot()
+                    //    {
+                    //        XLabel = "x",
+                    //        YLabel = "y",
+                    //        Title = "ガウス過程回帰",
+                    //        Plots = new List<IPlot>
+                    //        {
+                    //            new ScatterPlot(X, Y) { MarkerSize=100, MarkerColor="o" },
+                    //            new LinePlot(predictX, correctY) { LineColor="o"},
+                    //            new LinePlot(predictX, predictY) { },
+                    //            new LinePlot(predictX,  predictY + sigmas) { },
+                    //        },
+                    //    }
+                    //}.Run(new FileInfo(Path.GetTempFileName().GetExtensionChangedFilePath(".png")), true);
 
                 }
 
@@ -954,12 +971,12 @@ public static partial class ExampleExecuter
 
                 // E002_PyPlotWrapper
                 {
-                    var baseDir_A01_E002 = baseDir_A01_E.GetChildDirectoryInfo($@"E002_PyPlotWrapper").CreateAndPipe();
-                    baseDir_A01_E002.OpenOnDefaultApp();
+                    //var baseDir_A01_E002 = baseDir_A01_E.GetChildDirectoryInfo($@"E002_PyPlotWrapper").CreateAndPipe();
+                    //baseDir_A01_E002.OpenOnDefaultApp();
 
-                    var output = baseDir_A01_E002.GetChildDirectoryInfo($@"output");
+                    //var output = baseDir_A01_E002.GetChildDirectoryInfo($@"output");
 
-                    PythonController.Initialize();
+                    //PythonController.Initialize();
 
                     //PyPlotWrapper.LinePlot.RunExampleModel(output.GetChildFileInfo("line.png"));
 
