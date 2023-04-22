@@ -91,8 +91,8 @@ public partial class GaussianProcessRegressionExecuter
             IsTightLayout = true,
             SubPlot = new SubPlot()
             {
-                XLabel = "x",
-                YLabel = "y",
+                XLabel = "X",
+                YLabel = "f(X)",
                 Title = "ガウス過程回帰",
                 LegendLocation = LegendLocation.upper_left,
                 LegendFontSize = 20,
@@ -100,8 +100,8 @@ public partial class GaussianProcessRegressionExecuter
                 {
                     // new ScatterPlot(Array.Empty<double>(),Array.Empty<double>()){ MarkerColor="k", MarkerSize=100, LegendLabel=kernel.ToString()},
 
-                    new LinePlot(predictX, correctY) { LineColor="g", LineWidth=3, LegendLabel="Answer: y=x*sin(x)"},
-                    new ScatterPlot(X, Y) { MarkerSize=130, MarkerColor="g", LegendLabel="Noised sample data"},
+                    new LinePlot(predictX, correctY) { LineColor="g", LineWidth=3, LegendLabel="True f(X)= Xsin(X)"},
+                    new ScatterPlot(X, Y) { MarkerSize=130, MarkerColor="g", LegendLabel="Observed data"},
 
                     new LinePlot(predictX, predictY) { LineColor="red", LineWidth=3, LegendLabel=kernel.ToString()},
 
