@@ -888,7 +888,6 @@ public static partial class ExampleExecuter
                 {
                     var baseDir_A01_3001 = baseDir_A01_C.GetChildDirectoryInfo($@"3001_GaussianProcessRegression");
 
-                    var gpr = new GaussianProcessRegression();
                     PythonController.Initialize();
 
                     //var X = new double[] { 1, 3, 5, 6, 7, 8 };
@@ -903,9 +902,9 @@ public static partial class ExampleExecuter
 
                     //var l = gpr.GetOptimizedL(X, Y);
                     //var noiseLambda = 1 / 30d;
-                    var kernel = new GaussianProcessRegression.DefaultKernel(lengthScale: 1d, noiseLambda: 1 / 30d);
-
-                    (var predictY, var sigmas) = gpr.FitAndPredict(kernel, X, Y, predictX);
+                    var kernel = new GaussianProcessRegression.GeneralKernel(lengthScale: 1d, noiseLambda: 1 / 30d);
+                    var gpr = new GaussianProcessRegression(kernel);
+                    (var predictY, var sigmas) = gpr.FitAndPredict(X, Y, predictX);
 
                     //PyPlotWrapper.LinePlot.DrawSimpleGraph(predictX, predictY);
 
