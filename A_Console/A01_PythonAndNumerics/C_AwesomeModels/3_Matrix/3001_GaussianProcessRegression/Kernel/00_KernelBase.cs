@@ -105,16 +105,8 @@ public partial class GaussianProcessRegressionExecuter
             var Ktp = CalcKernel(X, predictX);
             var Kpp = CalcKernel(predictX, predictX);
 
-            // 期待値 K * K^(-1) * Y
             var predictY = (DenseVector)(Ktp.Transpose() * Ktt_Inv_Y);
-            //var mus = ks * Ktt_Inv_Y;
-
-
-            // 分散 k - (K * K^(-1)) ⊙ K
-            //var v = Ktp * Ktt_Inv;
             var cov = (DenseVector)(Kpp - Ktp.Transpose() * Ktt_Inv * Ktp).Diagonal();
-            //var posteriorCovariance = Kpp - Ktp.Transpose() * Ktt_Inv * Ktp;
-
 
             return (predictY, cov);
 
