@@ -52,7 +52,7 @@ public class GaussianProcessRegression
         int beta = 30)
     {
         var _x = new DenseVector(x);
-        var _y = new DenseVector(x);
+        var _y = new DenseVector(y);
         var _predictX = new DenseVector(predictX);
 
         var _predictY = FitAndPredict(_x, _y, _predictX, t, beta);
