@@ -23,12 +23,12 @@ public partial class GaussianProcessRegression
 
         internal override double CalcKernel(double x1, double x2)
         {
-            throw new NotImplementedException();
+            return ConstantValue;
         }
 
         internal override double CalcGradKernel_Parameter1(double x1, double x2)
         {
-            throw new NotImplementedException();
+            return 0;
         }
 
         internal override void Fit(DenseVector X, DenseVector Y)

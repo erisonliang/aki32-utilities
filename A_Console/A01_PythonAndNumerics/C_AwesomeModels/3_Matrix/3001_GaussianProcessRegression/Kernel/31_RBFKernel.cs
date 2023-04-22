@@ -23,7 +23,9 @@ public partial class GaussianProcessRegression
 
         internal override double CalcKernel(double x1, double x2)
         {
-            throw new NotImplementedException();
+            var d = x1 - x2;
+            var to = -Math.Pow(d / LengthScale, 2) / 2;
+            return Math.Exp(to);
         }
 
         internal override double CalcGradKernel_Parameter1(double x1, double x2)

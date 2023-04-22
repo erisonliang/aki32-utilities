@@ -25,7 +25,7 @@ public partial class GaussianProcessRegression
 
         // ★★★★★★★★★★★★★★★ methods
 
-        internal override double CalcKernel(double x1, double x2)
+        internal override double CalcKernel(double x1, double x2) //bool isSameIndex
         {
             var d = x1 - x2;
             var to = -Math.Pow(d / LengthScale, 2) / 2;
@@ -73,17 +73,14 @@ public partial class GaussianProcessRegression
             var mus = new DenseVector(predictN);
             var sigmas = new DenseVector(predictN);
 
-            for (int i = 0; i < predictN; i++)
-            {
-                var ks = CalcKernel(X, predictX[i]);
+            var ks = CalcKernel(X, predictX);
 
-                // 期待値 K * K^(-1)
-                mus[i] = ks * KInvY;
+            // 期待値 K *K ^ (-1) * Y
+            mus = KInvY* ks;
 
-                // 分散 k - (K x G^(-1)) ⊙ G
-                var v = KInv * ks;
-                sigmas[i] = CalcKernel(predictX[i], predictX[i]) + NoiseLambda - v * v;
-            }
+            // 分散 k - (K x K^(-1)) ⊙ K
+            var v = KInv * ks;
+            sigmas = (DenseVector)(CalcKernel(predictX, predictX) - v.Transpose() * v).Add(NoiseLambda).Diagonal();
 
             return (mus, sigmas);
         }
