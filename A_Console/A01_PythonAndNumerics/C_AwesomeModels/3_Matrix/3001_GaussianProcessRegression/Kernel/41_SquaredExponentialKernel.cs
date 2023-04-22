@@ -54,7 +54,7 @@ public partial class GaussianProcessRegressionExecuter
 
         public override string ToString()
         {
-            return $"SEK(#{LengthScale:F3})";
+            return $"SEK({LengthScale:F3})";
         }
 
 

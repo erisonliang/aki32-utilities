@@ -54,7 +54,7 @@ public partial class GaussianProcessRegressionExecuter
 
         public override string ToString()
         {
-            return $"LK(#{C:F3})";
+            return $"LK({C:F3})";
         }
 
 

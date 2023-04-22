@@ -10,14 +10,16 @@ public partial class GaussianProcessRegressionExecuter
     {
         // ★★★★★★★★★★★★★★★ props
 
+        public double ConstantWeight { get; set; }
         public double LengthScale { get; set; }
         public double NoiseLambda { get; set; }
 
 
         // ★★★★★★★★★★★★★★★ inits
 
-        public GeneralKernel(double lengthScale, double noiseLambda)
+        public GeneralKernel(double constantWeight, double lengthScale, double noiseLambda)
         {
+            ConstantWeight = constantWeight;
             LengthScale = lengthScale;
             NoiseLambda = noiseLambda;
         }
@@ -30,7 +32,7 @@ public partial class GaussianProcessRegressionExecuter
             var noise = isSameIndex ? NoiseLambda : 0;
             var d = x1 - x2;
             var to = -0.5 * Math.Pow(d / LengthScale, 2);
-            return Math.Exp(to) + noise;
+            return ConstantWeight * Math.Exp(to) + noise;
         }
 
         internal override double CalcKernelGrad_Parameter1(double x1, double x2, bool isSameIndex)
@@ -60,7 +62,7 @@ public partial class GaussianProcessRegressionExecuter
 
         public override string ToString()
         {
-            return $"GeneralKernel(LengthScale={LengthScale:F3}, NoiseLambda={NoiseLambda:F3})";
+            return $"{ConstantWeight:F3} * SEK({LengthScale:F3}) + δ({NoiseLambda:F3})";
         }
 
 

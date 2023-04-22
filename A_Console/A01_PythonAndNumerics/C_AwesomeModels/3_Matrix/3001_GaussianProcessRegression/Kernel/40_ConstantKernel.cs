@@ -12,7 +12,6 @@ public partial class GaussianProcessRegressionExecuter
         // ★★★★★★★★★★★★★★★ props
 
         public double ConstantWeight { get; set; }
-        private double Root => Math.Sqrt(ConstantWeight);
 
 
         // ★★★★★★★★★★★★★★★ inits

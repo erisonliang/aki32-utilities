@@ -142,8 +142,10 @@ public partial class PyPlotWrapper
             }.Run(outputImageFile, preview);
         }
 
-        public static void RunExampleModel(FileInfo outputImageFile, bool preview = true)
+        public static void RunExampleModel(FileInfo? outputImageFile = null, bool preview = true)
         {
+            outputImageFile ??= new FileInfo(Path.GetTempFileName().GetExtensionChangedFilePath(".png"));
+
             var pi = Math.PI;
             var n = 10;
             var XX = EnumerableExtension.Range_WithStep(0, n - 1, 1).ToArray();

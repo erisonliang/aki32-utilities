@@ -55,8 +55,9 @@ public partial class GaussianProcessRegressionExecuter
 
     // ★★★★★★★★★★★★★★★ methods (static)
 
-    public static void RunExampleModel()
+    public static void RunExampleModel(FileInfo? outputImageFile = null, bool preview = true)
     {
+        outputImageFile ??= new FileInfo(Path.GetTempFileName().GetExtensionChangedFilePath(".png"));
 
         static double f(double x, bool withNoise = false)
         {
@@ -116,7 +117,7 @@ public partial class GaussianProcessRegressionExecuter
                 
                 },
             }
-        }.Run(preview: true);
+        }.Run(outputImageFile, preview);
 
     }
 

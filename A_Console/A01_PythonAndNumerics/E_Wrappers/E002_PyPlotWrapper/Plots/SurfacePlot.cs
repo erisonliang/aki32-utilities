@@ -116,8 +116,10 @@ public partial class PyPlotWrapper
             }.Run(outputImageFile, preview);
         }
 
-        public static void RunExampleModel(FileInfo outputImageFile, bool preview = true)
+        public static void RunExampleModel(FileInfo? outputImageFile = null, bool preview = true)
         {
+            outputImageFile ??= new FileInfo(Path.GetTempFileName().GetExtensionChangedFilePath(".png"));
+
             var pi = Math.PI;
             var n = 50;
 

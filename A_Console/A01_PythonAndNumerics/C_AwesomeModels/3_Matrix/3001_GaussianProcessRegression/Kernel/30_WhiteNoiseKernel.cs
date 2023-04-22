@@ -48,7 +48,7 @@ public partial class GaussianProcessRegressionExecuter
 
         public override string ToString()
         {
-            return $"δ(#{NoiseLambda:F3})";
+            return $"δ({NoiseLambda:F3})";
         }
 
 

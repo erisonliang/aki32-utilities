@@ -46,6 +46,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Templates", "Templates", "{99E4A9A3-78F2-4D77-AE0E-77416179C9D9}"
 	ProjectSection(SolutionItems) = preProject
 		9_Assets\Templates\README.md = 9_Assets\Templates\README.md
+		Template.cs = Template.cs
 	EndProjectSection
 EndProject
 Global

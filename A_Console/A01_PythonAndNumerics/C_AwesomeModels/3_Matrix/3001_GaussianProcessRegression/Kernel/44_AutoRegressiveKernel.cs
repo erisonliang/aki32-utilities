@@ -54,7 +54,7 @@ public partial class GaussianProcessRegressionExecuter
 
         public override string ToString()
         {
-            return $"ARK(#{Rho:F3})";
+            return $"ARK({Rho:F3})";
         }
 
 

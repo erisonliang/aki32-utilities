@@ -68,8 +68,10 @@ public partial class PyPlotWrapper
 
         // ★★★★★★★★★★★★★★★ methods (static)
 
-        public static void RunExampleModel(FileInfo outputImageFile, bool preview = true)
+        public static void RunExampleModel(FileInfo? outputImageFile = null, bool preview = true)
         {
+            outputImageFile ??= new FileInfo(Path.GetTempFileName().GetExtensionChangedFilePath(".png"));
+
             new PyPlotWrapper.Figure
             {
                 IsTightLayout = true,
