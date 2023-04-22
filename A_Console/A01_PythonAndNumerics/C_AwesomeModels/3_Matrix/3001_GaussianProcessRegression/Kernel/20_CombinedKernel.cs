@@ -19,15 +19,27 @@ public partial class GaussianProcessRegression
         public IKernel? LeftChild { get; set; }
         public IKernel? RightChild { get; set; }
         public ExpressionType ChildKernelsOperator { get; set; }
-
-
+        
+        
         // ★★★★★★★★★★★★★★★ methods
 
+        internal override double CalcKernel(double x1, double x2)
+        {
+            throw new NotImplementedException();
+        }
 
+        internal override double CalcGradKernel_Parameter1(double x1, double x2)
+        {
+            throw new NotImplementedException();
+        }
 
+        internal override void OptimizeParameters(DenseVector X, DenseVector Y,
+          double tryCount = 100,
+          double learning_rate = 0.05
+          )
+        {
 
-
-
+        }
 
 
         // ★★★★★★★★★★★★★★★

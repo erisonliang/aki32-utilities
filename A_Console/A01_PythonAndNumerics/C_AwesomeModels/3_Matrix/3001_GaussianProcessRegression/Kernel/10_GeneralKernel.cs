@@ -1,6 +1,4 @@
-﻿using System.Linq.Expressions;
-
-using MathNet.Numerics.LinearAlgebra.Double;
+﻿using MathNet.Numerics.LinearAlgebra.Double;
 
 namespace Aki32Utilities.ConsoleAppUtilities.PythonAndNumerics;
 public partial class GaussianProcessRegression
@@ -27,33 +25,14 @@ public partial class GaussianProcessRegression
 
         // ★★★★★★★★★★★★★★★ methods
 
-        private double CalcKernel(double x1, double x2)
+        internal override double CalcKernel(double x1, double x2)
         {
             var d = x1 - x2;
             var to = -Math.Pow(d / LengthScale, 2) / 2;
             return Math.Exp(to);
         }
 
-        private DenseVector CalcKernel(DenseVector x1, double x2)
-        {
-            var n1 = x1.Count;
-            var ks = new DenseVector(n1);
-            for (int i = 0; i < n1; i++)
-                ks[i] = CalcKernel(x1[i], x2);
-            return ks;
-        }
-
-        private DenseMatrix CalcKernel(DenseVector x1, DenseVector x2)
-        {
-            var n1 = x1.Count;
-            var n2 = x2.Count;
-            var ks = new DenseMatrix(n1, n2);
-            for (int i = 0; i < n2; i++)
-                ks.SetColumn(i, CalcKernel(x1, x2[i]));
-            return ks;
-        }
-
-        private double dKernel_dl(double x1, double x2)
+        internal override double CalcGradKernel_Parameter1(double x1, double x2)
         {
             var d = x1 - x2;
             var to = -Math.Pow(d / LengthScale, 2) / 2;
@@ -109,7 +88,7 @@ public partial class GaussianProcessRegression
             return (mus, sigmas);
         }
 
-        internal void OptimizeParameters(DenseVector X, DenseVector Y,
+        internal override void OptimizeParameters(DenseVector X, DenseVector Y,
             double tryCount = 100,
             double learning_rate = 0.05
             )
@@ -119,15 +98,12 @@ public partial class GaussianProcessRegression
 
             for (int k = 0; k < tryCount; k++)
             {
-                var K = new DenseMatrix(N);
+                var K = CalcKernel(X, X);
                 var dK = new DenseMatrix(N);
 
                 for (int i = 0; i < N; i++)
                     for (int j = 0; j < N; j++)
-                    {
-                        K[i, j] = CalcKernel(X[i], X[j]);
-                        dK[i, j] = dKernel_dl(X[i], X[j]);
-                    }
+                        dK[i, j] = CalcGradKernel_Parameter1(X[i], X[j]);
 
                 // noise
                 for (int i = 0; i < N; i++)
