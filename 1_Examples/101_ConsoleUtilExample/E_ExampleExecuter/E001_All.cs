@@ -901,9 +901,9 @@ public static partial class ExampleExecuter
                     var predictX = EnumerableExtension.Range_WithStep(-3, 3, 0.01).ToArray();
                     var correctY = predictX.Select(x => 0d).ToArray();
 
-                    var t = gpr.GetOptimizedT(X, Y);
+                    var l = gpr.GetOptimizedL(X, Y);
                     var noiseLambda = 1 / 30d;
-                    (var predictY, var sigmas) = gpr.FitAndPredict(X, Y, predictX, t: t, noiseLambda: noiseLambda);
+                    (var predictY, var sigmas) = gpr.FitAndPredict(X, Y, predictX, l: l, noiseLambda: noiseLambda);
 
                     //PyPlotWrapper.LinePlot.DrawSimpleGraph(predictX, predictY);
 
@@ -925,7 +925,7 @@ public static partial class ExampleExecuter
                                 new LinePlot(predictX, predictY) { LineColor="r" },
                                 new LinePlot(predictX, predictY.AddForEach(sigmas)) { LineColor="r", LineStyle="--" },
                                 new LinePlot(predictX, predictY.SubForEach(sigmas)) { LineColor="r", LineStyle="--" },
-                                new TextPlot(2,2,$"λ = {t:F3}\r\nt = {noiseLambda:F3}"){ HorizontalAlignment="right"},
+                                new TextPlot(2,2,$"λ = {l:F3}\r\nt = {noiseLambda:F3}"){ HorizontalAlignment="right"},
                             },
                         }
                     }.Run(preview: true);

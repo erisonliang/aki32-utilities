@@ -1,40 +1,32 @@
 ﻿using MathNet.Numerics.LinearAlgebra.Double;
 
 namespace Aki32Utilities.ConsoleAppUtilities.PythonAndNumerics;
-public class GaussianProcessRegression
+public partial class GaussianProcessRegression
 {
 
     // ★★★★★★★★★★★★★★★ inits
 
-    // ★★★★★★★★★★★★★★★ kernels
-
-    public class RBFKernel
-    {
-
-
-
-    }
-
 
     // ★★★★★★★★★★★★★★★ methods
 
-    public double Kernel(double x1, double x2, double t)
+    public double Kernel(double x1, double x2, double l)
     {
         var d = x1 - x2;
-        return Math.Exp(d * d * -t);
+        var to = -(d * d) / (2 * l * l);
+        return Math.Exp(to);
     }
-    public double dKernel(double x1, double x2, double t)
+    public double dKernel_dl(double x1, double x2, double l)
     {
         var d = x1 - x2;
-        return (d * d * -t) * Math.Exp(d * d * -t);
-
+        var to = -(d * d) / (2 * l * l);
+        return to * Math.Exp(to) * (-2) / (l * l * l);
 
         //var d = x1 - x2;
         //return (d * d * -t) * Math.Exp(d * d * -t);
     }
 
     public (double[] predictY, double[] sigmas) FitAndPredict(double[] X, double[] Y, double[] predictX,
-        double t = 3,
+        double l = 1,
         double noiseLambda = 1 / 30d
         )
     {
@@ -42,7 +34,7 @@ public class GaussianProcessRegression
         var _Y = new DenseVector(Y);
         var _predictX = new DenseVector(predictX);
 
-        var _predictY = FitAndPredict(_X, _Y, _predictX, t, noiseLambda);
+        var _predictY = FitAndPredict(_X, _Y, _predictX, l, noiseLambda);
 
         var mus = _predictY.predictY.ToArray();
         var sigmas = _predictY.sigmas.ToArray();
@@ -51,16 +43,16 @@ public class GaussianProcessRegression
     }
 
     public (DenseVector predictY, DenseVector sigmas) FitAndPredict(DenseVector X, DenseVector Y, DenseVector predictX,
-        double t = 3,
+        double l = 1,
         double noiseLambda = 1 / 30d
         )
     {
-        var KInv = Fit(X, t, noiseLambda);
-        return Predict(X, Y, predictX, KInv, t, noiseLambda);
+        var KInv = Fit(X, l, noiseLambda);
+        return Predict(X, Y, predictX, KInv, l, noiseLambda);
     }
 
     public DenseMatrix Fit(DenseVector X,
-        double t = 3,
+        double l = 1,
         double noiseLambda = 1 / 30d
         )
     {
@@ -72,7 +64,7 @@ public class GaussianProcessRegression
         // kernel
         for (int i = 0; i < N; i++)
             for (int j = 0; j < N; j++)
-                K[i, j] = Kernel(X[i], X[j], t);
+                K[i, j] = Kernel(X[i], X[j], l);
 
         // noise
         for (int i = 0; i < N; i++)
@@ -85,9 +77,9 @@ public class GaussianProcessRegression
     }
 
     public (DenseVector predictY, DenseVector sigmas) Predict(DenseVector X, DenseVector Y, DenseVector predictX, DenseMatrix KInv,
-       double t = 3,
-       double noiseLambda = 1 / 30d
-       )
+        double l = 1,
+        double noiseLambda = 1 / 30d
+        )
     {
         var N = X.Count;
 
@@ -100,27 +92,27 @@ public class GaussianProcessRegression
         {
             var k = new DenseVector(N);
             for (int j = 0; j < N; j++)
-                k[j] = Kernel(X[j], predictX[i], t);
+                k[j] = Kernel(X[j], predictX[i], l);
 
             // 期待値 K * K^(-1)
             mus[i] = k * Ans;
 
             // 分散 k - (K x G^(-1)) ⊙ G
             var v = KInv * k;
-            sigmas[i] = Kernel(predictX[i], predictX[i], t) + noiseLambda - v * v;
+            sigmas[i] = Kernel(predictX[i], predictX[i], l) + noiseLambda - v * v;
         }
 
         return (mus, sigmas);
     }
 
-    public double GetOptimizedT(DenseVector X, DenseVector Y,
+    public double GetOptimizedL(DenseVector X, DenseVector Y,
         double noiseLambda = 1 / 30d,
         double tryCount = 100,
         double learning_rate = 0.05
         )
     {
         var N = X.Count;
-        double t = 1;
+        double l = 1;
 
         for (int k = 0; k < tryCount; k++)
         {
@@ -130,8 +122,8 @@ public class GaussianProcessRegression
             for (int i = 0; i < N; i++)
                 for (int j = 0; j < N; j++)
                 {
-                    K[i, j] = Kernel(X[i], X[j], t);
-                    dK[i, j] = dKernel(X[i], X[j], t);
+                    K[i, j] = Kernel(X[i], X[j], l);
+                    dK[i, j] = dKernel_dl(X[i], X[j], l);
                 }
 
             // noise
@@ -151,10 +143,10 @@ public class GaussianProcessRegression
             double tr = 0;
             for (int i = 0; i < N; i++)
                 tr += mm[i, i];
-            t += tr * learning_rate;
+            l +=  tr * learning_rate;
         }
 
-        return t;
+        return l;
 
     }
 
