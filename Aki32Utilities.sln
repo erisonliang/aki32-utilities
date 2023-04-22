@@ -41,6 +41,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "A02_AI", "A_Console\A02_AI\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "A01_PythonAndNumerics", "A_Console\A01_PythonAndNumerics\A01_PythonAndNumerics.csproj", "{CA9879CD-7BCF-44DE-A9BF-A87960980C8D}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "9_Assets", "9_Assets", "{26D46CC8-20AE-4079-9E45-58B5B4B9B780}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Templates", "Templates", "{99E4A9A3-78F2-4D77-AE0E-77416179C9D9}"
+	ProjectSection(SolutionItems) = preProject
+		9_Assets\Templates\README.md = 9_Assets\Templates\README.md
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -238,6 +245,7 @@ Global
 		{C476EF84-74C9-4921-AC2F-9C1AAA5DAE3B} = {CEA023E0-4DF9-4B7E-A9BA-296A2522BD9A}
 		{A68E48E2-7D7E-4A9C-B833-FBCF47C070C2} = {12CA4997-7908-4FE0-982F-2FC56A7CC832}
 		{CA9879CD-7BCF-44DE-A9BF-A87960980C8D} = {12CA4997-7908-4FE0-982F-2FC56A7CC832}
+		{99E4A9A3-78F2-4D77-AE0E-77416179C9D9} = {26D46CC8-20AE-4079-9E45-58B5B4B9B780}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E6152233-E9D8-4E47-935B-F8AE00F7FD90}

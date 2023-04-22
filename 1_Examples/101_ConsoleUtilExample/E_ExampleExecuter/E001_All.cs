@@ -1310,8 +1310,8 @@ public static partial class ExampleExecuter
 
                     //var whisper = new WhisperCppWrapper(
                     //    designatedModelDir: new DirectoryInfo(@"C:\Users\aki32\Dropbox\Codes\# SharedData\WhisperCpp"),
-                    //    designatedMainExecuterFile: new FileInfo(@"..\..\..\..\..\9_Assets\dlls\whisper.exe"),
-                    //    designatedWhisperDllFile: new FileInfo(@"..\..\..\..\..\9_Assets\dlls\whisper.dll")
+                    //    designatedMainExecuterFile: new FileInfo(@"..\..\..\..\..\9_Assets\Dlls\whisper.exe"),
+                    //    designatedWhisperDllFile: new FileInfo(@"..\..\..\..\..\9_Assets\Dlls\whisper.dll")
                     //    );
 
                     //whisper.ExecuteWhisper(input, output,

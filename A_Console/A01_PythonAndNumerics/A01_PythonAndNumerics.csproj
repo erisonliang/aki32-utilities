@@ -11,7 +11,7 @@
 
   <ItemGroup>
     <Reference Include="Python.Runtime">
-      <HintPath>..\..\9_Assets\dlls\Python.Runtime.dll</HintPath>
+      <HintPath>..\..\9_Assets\Dlls\Python.Runtime.dll</HintPath>
     </Reference>
   </ItemGroup>
 
