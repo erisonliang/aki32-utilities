@@ -886,42 +886,49 @@ public static partial class ExampleExecuter
 
                 // 3001_GaussianProcessRegression
                 {
-                    //var baseDir_A01_3001 = baseDir_A01_C.GetChildDirectoryInfo($@"3001_GaussianProcessRegression");
+                    var baseDir_A01_3001 = baseDir_A01_C.GetChildDirectoryInfo($@"3001_GaussianProcessRegression");
 
-                    //var gpr = new GaussianProcessRegression();
+                    var gpr = new GaussianProcessRegression();
+                    PythonController.Initialize();
 
                     //var X = new double[] { 1, 3, 5, 6, 7, 8 };
                     //var Y = X.Select(x => x * Math.Sin(x)).ToArray();
-
-                    //PythonController.Initialize();
-                    ////PyPlotWrapper.ScatterPlot.DrawSimpleGraph(X, Y);
-
                     //var predictX = EnumerableExtension.Range_WithStep(0, 10, 0.01).ToArray();
                     //var correctY = predictX.Select(x => x * Math.Sin(x)).ToArray();
-                    ////PyPlotWrapper.LinePlot.DrawSimpleGraph(predictX, correctY);
 
-                    //(var predictY, var sigmas) = gpr.FitAndPredict(X, Y, predictX);
+                    var X = new double[] { -1.5, 0, 0, 0, 0, 1.5 };
+                    var Y = new double[] { -0, -1, -1, -1, -1, -0 };
+                    var predictX = EnumerableExtension.Range_WithStep(-3, 3, 0.01).ToArray();
+                    var correctY = predictX.Select(x => 0d).ToArray();
 
-                    ////PyPlotWrapper.LinePlot.DrawSimpleGraph(predictX, predictY);
+                    var t = gpr.GetOptimizedT(X, Y);
+                    var noiseLambda = 1 / 30d;
+                    (var predictY, var sigmas) = gpr.FitAndPredict(X, Y, predictX, t: t, noiseLambda: noiseLambda);
 
-                    //// draw graph
-                    //new Figure
-                    //{
-                    //    IsTightLayout = true,
-                    //    SubPlot = new SubPlot()
-                    //    {
-                    //        XLabel = "x",
-                    //        YLabel = "y",
-                    //        Title = "ガウス過程回帰",
-                    //        Plots = new List<IPlot>
-                    //        {
-                    //            new ScatterPlot(X, Y) { MarkerSize=100, MarkerColor="o" },
-                    //            new LinePlot(predictX, correctY) { LineColor="o"},
-                    //            new LinePlot(predictX, predictY) { },
-                    //            new LinePlot(predictX,  predictY + sigmas) { },
-                    //        },
-                    //    }
-                    //}.Run(new FileInfo(Path.GetTempFileName().GetExtensionChangedFilePath(".png")), true);
+                    //PyPlotWrapper.LinePlot.DrawSimpleGraph(predictX, predictY);
+
+                    // draw graph
+                    new Figure
+                    {
+                        IsTightLayout = true,
+                        SubPlot = new SubPlot()
+                        {
+                            XLabel = "x",
+                            XLim = (-3, 3),
+                            YLabel = "y",
+                            YLim = (-2, 2),
+                            Title = "ガウス過程回帰",
+                            Plots = new List<IPlot>
+                            {
+                                new ScatterPlot(X, Y) { MarkerSize=100, MarkerColor="g" },
+                                new LinePlot(predictX, correctY) { LineColor="g"},
+                                new LinePlot(predictX, predictY) { LineColor="r" },
+                                new LinePlot(predictX, predictY.AddForEach(sigmas)) { LineColor="r", LineStyle="--" },
+                                new LinePlot(predictX, predictY.SubForEach(sigmas)) { LineColor="r", LineStyle="--" },
+                                new TextPlot(2,2,$"λ = {t:F3}\r\nt = {noiseLambda:F3}"){ HorizontalAlignment="right"},
+                            },
+                        }
+                    }.Run(preview: true);
 
                 }
 
