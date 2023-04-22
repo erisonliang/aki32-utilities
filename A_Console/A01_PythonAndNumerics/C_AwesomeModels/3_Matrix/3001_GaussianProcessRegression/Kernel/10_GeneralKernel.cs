@@ -1,7 +1,7 @@
 ﻿using MathNet.Numerics.LinearAlgebra.Double;
 
 namespace Aki32Utilities.ConsoleAppUtilities.PythonAndNumerics;
-public partial class GaussianProcessRegression
+public partial class GaussianProcessRegressionExecuter
 {
     /// <summary>
     /// ConstantKernel() * RBFKernel() + WhiteNoiseKernel()

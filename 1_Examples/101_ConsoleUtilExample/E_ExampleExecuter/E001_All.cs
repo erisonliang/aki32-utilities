@@ -14,7 +14,6 @@ using Aki32Utilities.ConsoleAppUtilities.AI.CheatSheet;
 using Aki32Utilities.ConsoleAppUtilities.PythonAndNumerics;
 using static Aki32Utilities.ConsoleAppUtilities.PythonAndNumerics.PyPlotWrapper;
 using Thickness = Aki32Utilities.ConsoleAppUtilities.General.ChainableExtensions.Thickness;
-using GPR = Aki32Utilities.ConsoleAppUtilities.PythonAndNumerics.GaussianProcessRegression;
 
 using ClosedXML;
 
@@ -891,56 +890,7 @@ public static partial class ExampleExecuter
                     var baseDir_A01_3001 = baseDir_A01_C.GetChildDirectoryInfo($@"3001_GaussianProcessRegression");
 
                     PythonController.Initialize();
-
-                    static double f(double x, bool withNoise = false)
-                    {
-                        if (withNoise)
-                            return x * Math.Sin(x) + new Random().NextDouble() - 0.5d;
-                        else
-                            return x * Math.Sin(x);
-                    }
-
-                    //var X = new double[] { 1, 3, 5, 6, 7, 8 };
-                    //var X = new double[] { 1, 1.1, 1.2, 1.3, 3, 5, 6, 7, 8 };
-                    var X = new double[] { 1, 1.1, 1.2, 1.3, 3, 5, 5.2, 5.3, 5.4, 5.6, 5.8, 6, 7, 8, 8, 8, 8 };
-                    var Y = X.Select(x => f(x, true)).ToArray();
-                    var predictX = EnumerableExtension.Range_WithStep(0, 10, 0.1).ToArray();
-                    var correctY = predictX.Select(x => f(x)).ToArray();
-
-                    var k1 = new GPR.ConstantKernel(1d);
-                    var k2 = new GPR.RBFKernel(1d);
-                    var k3 = new GPR.WhiteNoiseKernel(1 / 30d);
-                    var kernel = k1 * k2 + k3;
-                    //var kernel = new GPR.GeneralKernel(lengthScale: 1d, noiseLambda: 1/10d);
-
-                    var gpr = new GPR(kernel);
-                    //gpr.OptimizeParameters(X, Y);
-                    (var predictY, var cov) = gpr.FitAndPredict(X, Y, predictX);
-                    var std = cov.Select(x => Math.Sqrt(x)).ToArray();
-
-                    new Figure
-                    {
-                        IsTightLayout = true,
-                        SubPlot = new SubPlot()
-                        {
-                            XLabel = "x",
-                            YLabel = "y",
-                            Title = "ガウス過程回帰",
-                            Plots = new List<IPlot>
-                            {
-                                new ScatterPlot(X, Y) { MarkerSize=100, MarkerColor="g" },
-                                new LinePlot(predictX, correctY) { LineColor="g"},
-                                new LinePlot(predictX, predictY) { LineColor="red" },
-                                new LinePlot(predictX, predictY.AddForEach(std)) { LineColor="red", LineStyle="-", Alpha=0.5 },
-                                new LinePlot(predictX, predictY.SubForEach(std)) { LineColor="red", LineStyle="-", Alpha=0.5 },
-                                new LinePlot(predictX, predictY.AddForEach(std.ProductForEach(2))) { LineColor="red", LineStyle="-", Alpha=0.2 },
-                                new LinePlot(predictX, predictY.SubForEach(std.ProductForEach(2))) { LineColor="red", LineStyle="-", Alpha=0.2 },
-                                new LinePlot(predictX, predictY.AddForEach(std.ProductForEach(3))) { LineColor="red", LineStyle="-", Alpha=0.1 },
-                                new LinePlot(predictX, predictY.SubForEach(std.ProductForEach(3))) { LineColor="red", LineStyle="-", Alpha=0.1 },
-                                new TextPlot(10,8,kernel.ToString()){ HorizontalAlignment="right"},
-                            },
-                        }
-                    }.Run(preview: true);
+                    GaussianProcessRegressionExecuter.RunExampleModel();
 
                 }
 
