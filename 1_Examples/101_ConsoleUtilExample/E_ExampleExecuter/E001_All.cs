@@ -889,23 +889,8 @@ public static partial class ExampleExecuter
                 {
                     var baseDir_A01_3001 = baseDir_A01_C.GetChildDirectoryInfo($@"3001_GaussianProcessRegression");
 
-                    //PythonController.Initialize();
-                    //GaussianProcessRegressionExecuter.RunExampleModel();
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+                    PythonController.Initialize();
+                    GaussianProcessRegressionExecuter.RunExampleModel();
 
                 }
 

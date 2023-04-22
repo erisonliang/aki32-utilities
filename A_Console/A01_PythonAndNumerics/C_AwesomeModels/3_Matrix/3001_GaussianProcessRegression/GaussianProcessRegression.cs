@@ -75,14 +75,15 @@ public partial class GaussianProcessRegressionExecuter
 
         var k1 = new GaussianProcessRegressionExecuter.ConstantKernel(1d);
         var k2 = new GaussianProcessRegressionExecuter.RBFKernel(1d);
-        var k3 = new GaussianProcessRegressionExecuter.WhiteNoiseKernel(1 / 30d);
+        var k3 = new GaussianProcessRegressionExecuter.WhiteNoiseKernel(1 / 50d);
         var kernel = k1 * k2 + k3;
-        //var kernel = new GPR.GeneralKernel(lengthScale: 1d, noiseLambda: 1/10d);
 
         var gpr = new GaussianProcessRegressionExecuter(kernel);
         //gpr.OptimizeParameters(X, Y);
         (var predictY, var cov) = gpr.FitAndPredict(X, Y, predictX);
-        var std = cov.Select(x => Math.Sqrt(x)).ToArray();
+        var std1 = cov.Select(x => Math.Sqrt(x)).ToArray();
+        var CI95 = std1.ProductForEach(1.96);
+        var CI99 = std1.ProductForEach(2.58);
 
         new Figure
         {
@@ -92,18 +93,27 @@ public partial class GaussianProcessRegressionExecuter
                 XLabel = "x",
                 YLabel = "y",
                 Title = "ガウス過程回帰",
+                LegendLocation = LegendLocation.upper_left,
+                LegendFontSize = 20,
                 Plots = new List<IPlot>
                 {
-                    new ScatterPlot(X, Y) { MarkerSize=100, MarkerColor="g" },
-                    new LinePlot(predictX, correctY) { LineColor="g"},
-                    new LinePlot(predictX, predictY) { LineColor="red" },
-                    new LinePlot(predictX, predictY.AddForEach(std)) { LineColor="red", LineStyle="-", Alpha=0.5 },
-                    new LinePlot(predictX, predictY.SubForEach(std)) { LineColor="red", LineStyle="-", Alpha=0.5 },
-                    new LinePlot(predictX, predictY.AddForEach(std.ProductForEach(2))) { LineColor="red", LineStyle="-", Alpha=0.2 },
-                    new LinePlot(predictX, predictY.SubForEach(std.ProductForEach(2))) { LineColor="red", LineStyle="-", Alpha=0.2 },
-                    new LinePlot(predictX, predictY.AddForEach(std.ProductForEach(3))) { LineColor="red", LineStyle="-", Alpha=0.1 },
-                    new LinePlot(predictX, predictY.SubForEach(std.ProductForEach(3))) { LineColor="red", LineStyle="-", Alpha=0.1 },
-                    new TextPlot(10,8,kernel.ToString()){ HorizontalAlignment="right"},
+                    // new ScatterPlot(Array.Empty<double>(),Array.Empty<double>()){ MarkerColor="k", MarkerSize=100, LegendLabel=kernel.ToString()},
+
+                    new LinePlot(predictX, correctY) { LineColor="g", LegendLabel="Answer x*sin(x)"},
+                    new ScatterPlot(X, Y) { MarkerSize=120, MarkerColor="g", LegendLabel="Noised sample data"},
+
+                    new LinePlot(predictX, predictY) { LineColor="red", LegendLabel=kernel.ToString()},
+
+                    new FillBetweenPlot(predictX, predictY.AddForEach(CI95), predictY.SubForEach(CI95)) {FillColor="red", Alpha=0.20, LegendLabel="95% CI"},
+                    new LinePlot(predictX, predictY.AddForEach(CI95)) { LineColor="red", LineStyle="-", Alpha=0.20 },
+                    new LinePlot(predictX, predictY.SubForEach(CI95)) { LineColor="red", LineStyle="-", Alpha=0.20 },
+
+                    new FillBetweenPlot(predictX, predictY.AddForEach(CI99), predictY.SubForEach(CI99)) {FillColor="red", Alpha=0.07, LegendLabel="99% CI"},
+                    new LinePlot(predictX, predictY.AddForEach(CI99)) { LineColor="red", LineStyle="-", Alpha=0.07 },
+                    new LinePlot(predictX, predictY.SubForEach(CI99)) { LineColor="red", LineStyle="-", Alpha=0.07 },
+
+                    //new TextPlot(10,8,kernel.ToString()){ HorizontalAlignment="right"},
+                
                 },
             }
         }.Run(preview: true);

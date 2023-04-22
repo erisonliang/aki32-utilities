@@ -11,6 +11,7 @@ public partial class PyPlotWrapper
         public int FigIndex { get; set; } = 111;
 
         public LegendLocation LegendLocation { get; set; } = LegendLocation.upper_right;
+        public double LegendFontSize { get; set; } = 20;
 
         public string Title { get; set; } = null;
         public int TitleSize { get; set; } = 40;
@@ -205,7 +206,8 @@ public partial class PyPlotWrapper
                     loc: LegendLocation.ToString().Replace("_", " "),
                     prop: new Dictionary<string, string>
                     {
-                            { "family", FontName },
+                        { "family", FontName },
+                        { "size", LegendFontSize.ToString() },
                     }
                     );
 
