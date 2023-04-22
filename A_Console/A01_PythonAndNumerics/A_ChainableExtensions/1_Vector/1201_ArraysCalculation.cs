@@ -33,6 +33,18 @@ public static partial class ChainableExtensions
     public static double[] DivForEach(this double[] array1, double[] array2)
         => Enumerable.Zip(array1, array2, (a1, a2) => a1 / a2).ToArray();
 
+    public static double[] AddForEach(this double[] array1, double value)
+        => array1.Select(a => a + value).ToArray();
+
+    public static double[] SubForEach(this double[] array1, double value)
+        => array1.Select(a => a - value).ToArray();
+
+    public static double[] ProductForEach(this double[] array1, double value)
+        => array1.Select(a => a * value).ToArray();
+
+    public static double[] DivForEach(this double[] array1, double value)
+        => array1.Select(a => a / value).ToArray();
+
 
     // ★★★★★★★★★★★★★★★ 
 
