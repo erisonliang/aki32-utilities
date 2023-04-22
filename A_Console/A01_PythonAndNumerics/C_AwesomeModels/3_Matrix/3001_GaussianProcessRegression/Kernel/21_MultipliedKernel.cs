@@ -6,9 +6,6 @@ public partial class GaussianProcessRegression
     /// <summary>
     /// Multiple kernel combination
     /// </summary>
-    /// <remarks>
-    /// sk-learnの使ってる組み合わせ11個：https://datachemeng.com/kernel_design_in_gpr/
-    /// </remarks>
     public class MultipliedKernel : KernelBase
     {
 

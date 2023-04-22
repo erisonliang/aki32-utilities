@@ -29,15 +29,15 @@ public partial class GaussianProcessRegression
         {
             var noise = isSameIndex ? NoiseLambda : 0;
             var d = x1 - x2;
-            var to = -Math.Pow(d / LengthScale, 2) / 2;
+            var to = -0.5 * Math.Pow(d / LengthScale, 2);
             return Math.Exp(to) + noise;
         }
 
         internal override double CalcKernelGrad_Parameter1(double x1, double x2, bool isSameIndex)
         {
             var d = x1 - x2;
-            var to = -Math.Pow(d / LengthScale, 2) / 2;
-            return -2 * to * Math.Exp(to) / Math.Pow(LengthScale, 3);
+            var to = -0.5 * Math.Pow(d / LengthScale, 2);
+            return -2 * Math.Pow(LengthScale, -3) * to * Math.Exp(to);
         }
 
         internal override void OptimizeParameters(DenseVector X, DenseVector Y,
@@ -49,10 +49,10 @@ public partial class GaussianProcessRegression
             {
                 Fit(X, Y);
 
-                var KInvYMat = KInvY.ToColumnMatrix() * KInvY.ToRowMatrix();
+                var KInvYMat = Ktt_Inv_Y.ToColumnMatrix() * Ktt_Inv_Y.ToRowMatrix();
 
                 var dK = CalcKernelGrad_Parameter1(X, X);
-                var mm = (KInvYMat - KInv).Multiply(dK);
+                var mm = (KInvYMat - Ktt_Inv).Multiply(dK);
                 double tr = mm.Diagonal().Sum();
                 LengthScale += tr * learning_rate;
             }

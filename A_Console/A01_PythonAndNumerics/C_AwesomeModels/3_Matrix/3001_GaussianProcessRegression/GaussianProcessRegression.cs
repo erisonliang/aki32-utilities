@@ -19,21 +19,21 @@ public partial class GaussianProcessRegression
 
     // ★★★★★★★★★★★★★★★ methods
 
-    public (double[] predictY, double[] sigmas) FitAndPredict(double[] X, double[] Y, double[] predictX)
+    public (double[] predictY, double[] cov) FitAndPredict(double[] X, double[] Y, double[] predictX)
     {
         var _X = new DenseVector(X);
         var _Y = new DenseVector(Y);
         var _predictX = new DenseVector(predictX);
 
-        var _predictY = FitAndPredict(_X, _Y, _predictX);
+        var result = FitAndPredict(_X, _Y, _predictX);
 
-        var mus = _predictY.predictY.ToArray();
-        var sigmas = _predictY.sigmas.ToArray();
+        var predictY = result.predictY.ToArray();
+        var cov = result.cov.ToArray();
 
-        return (mus, sigmas);
+        return (predictY, cov);
     }
 
-    public (DenseVector predictY, DenseVector sigmas) FitAndPredict(DenseVector X, DenseVector Y, DenseVector predictX)
+    public (DenseVector predictY, DenseVector cov) FitAndPredict(DenseVector X, DenseVector Y, DenseVector predictX)
     {
         Fit(X, Y);
         return Predict(predictX);
@@ -41,13 +41,27 @@ public partial class GaussianProcessRegression
 
     public void Fit(DenseVector X, DenseVector Y) => Kernel.Fit(X, Y);
 
-    public (DenseVector predictY, DenseVector sigmas) Predict(DenseVector predictX) => Kernel.Predict(predictX);
+    public (DenseVector predictY, DenseVector cov) Predict(DenseVector predictX) => Kernel.Predict(predictX);
 
     public void OptimizeParameters(DenseVector X, DenseVector Y,
         double tryCount = 100,
         double learning_rate = 0.05
         )
         => Kernel.OptimizeParameters(X, Y, tryCount, learning_rate);
+
+    // ★★★★★★★★★★★★★★★ methods (static)
+
+    public static void RunTestModel()
+    {
+
+
+
+
+
+
+
+
+    }
 
 
     // ★★★★★★★★★★★★★★★

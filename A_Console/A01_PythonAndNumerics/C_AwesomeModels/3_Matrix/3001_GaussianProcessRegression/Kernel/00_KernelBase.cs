@@ -6,15 +6,26 @@ public partial class GaussianProcessRegression
 
     // ★★★★★★★★★★★★★★★ kernels
 
+    /// <summary>
+    /// </summary>
+    /// <remarks>
+    /// sk-learnの使ってる組み合わせ11個：https://datachemeng.com/kernel_design_in_gpr/
+    /// カーネル一覧例：https://observablehq.com/@herbps10/gaussian-processes
+    /// </remarks>
     public abstract class KernelBase
     {
 
         // ★★★★★★★★★★★★★★★ props
 
         internal DenseVector X { get; set; }
-        internal DenseMatrix K { get; set; }
-        internal DenseMatrix KInv { get; set; }
-        internal DenseVector KInvY { get; set; }
+        /// <summary>
+        /// Ktt → K-train-train
+        /// Ktp → K-train-predict
+        /// Kpp → K-predict-predict
+        /// </summary>
+        internal DenseMatrix Ktt { get; set; }
+        internal DenseMatrix Ktt_Inv { get; set; }
+        internal DenseVector Ktt_Inv_Y { get; set; }
         internal int N => X.Count;
 
 
@@ -53,30 +64,37 @@ public partial class GaussianProcessRegression
             this.X = X;
 
             // kernel
-            K = CalcKernel(X, X);
-            KInv = (DenseMatrix)K.Inverse();
-            KInvY = KInv * Y;
+            Ktt = CalcKernel(X, X);
+            Ktt_Inv = (DenseMatrix)Ktt.Inverse();
+            Ktt_Inv_Y = Ktt_Inv * Y;
+
         }
         /// <summary>
         /// 回帰を適用します。
         /// </summary>
         /// <param name="predictX"></param>
         /// <returns></returns>
-        internal (DenseVector mu, DenseVector sig) Predict(DenseVector predictX)
+        internal (DenseVector predictY, DenseVector cov) Predict(DenseVector predictX)
         {
-            if (KInv is null)
+            if (Ktt_Inv is null)
                 throw new InvalidOperationException("No available fitted data found. Consider to call \"Fit()\" first!");
 
-            var ks = CalcKernel(X, predictX);
+            var Ktp = CalcKernel(X, predictX);
+            var Kpp = CalcKernel(predictX, predictX);
 
             // 期待値 K * K^(-1) * Y
-            var mus = KInvY * ks;
+            var predictY = (DenseVector)(Ktp.Transpose() * Ktt_Inv_Y);
+            //var mus = ks * Ktt_Inv_Y;
+
 
             // 分散 k - (K * K^(-1)) ⊙ K
-            var v = KInv * ks;
-            var sigmas = (DenseVector)(CalcKernel(predictX, predictX) - v.Transpose() * v).Diagonal();
+            //var v = Ktp * Ktt_Inv;
+            var cov = (DenseVector)(Kpp - Ktp.Transpose() * Ktt_Inv * Ktp).Diagonal();
+            //var posteriorCovariance = Kpp - Ktp.Transpose() * Ktt_Inv * Ktp;
 
-            return (mus, sigmas);
+
+            return (predictY, cov);
+
         }
 
         /// <summary>
