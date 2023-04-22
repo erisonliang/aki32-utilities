@@ -45,25 +45,17 @@ public partial class GaussianProcessRegression
             double learning_rate = 0.05
             )
         {
-            this.X = X;
-
-
             for (int k = 0; k < tryCount; k++)
             {
-                var K = CalcKernel(X, X);
-                var KInv = (DenseMatrix)K.Inverse();
-                var KInvY = KInv * Y;
+                Fit(X, Y);
 
                 var KInvYMat = KInvY.ToColumnMatrix() * KInvY.ToRowMatrix();
 
                 var dK = CalcKernelGrad_Parameter1(X, X);
                 var mm = (KInvYMat - KInv).Multiply(dK);
-                double tr = 0;
-                for (int i = 0; i < N; i++)
-                    tr += mm[i, i];
+                double tr = mm.Diagonal().Sum();
                 LengthScale += tr * learning_rate;
             }
-
         }
 
         public override string ToString()

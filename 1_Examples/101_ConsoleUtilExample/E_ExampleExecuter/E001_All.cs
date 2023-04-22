@@ -890,49 +890,82 @@ public static partial class ExampleExecuter
                     var baseDir_A01_3001 = baseDir_A01_C.GetChildDirectoryInfo($@"3001_GaussianProcessRegression");
 
                     PythonController.Initialize();
-
-                    //var X = new double[] { 1, 3, 5, 6, 7, 8 };
-                    //var Y = X.Select(x => x * Math.Sin(x)).ToArray();
-                    //var predictX = EnumerableExtension.Range_WithStep(0, 10, 0.01).ToArray();
-                    //var correctY = predictX.Select(x => x * Math.Sin(x)).ToArray();
-
-                    var X = new double[] { -1.5, 0, 0, 0, 0, 1.5 };
-                    var Y = new double[] { -0, -1, -1, -1, -1, -0 };
-                    var predictX = EnumerableExtension.Range_WithStep(-3, 3, 0.01).ToArray();
-                    var correctY = predictX.Select(x => 0d).ToArray();
-
-                    var k1 = new GPR.ConstantKernel(1);
-                    var k2 = new GPR.RBFKernel(1);
-                    var k3 = new GPR.WhiteNoiseKernel(1 / 30d);
-                    var kernel = k1 * k2 + k3;
-                    //var kernel = new GPR.GeneralKernel(lengthScale: 1d, noiseLambda: 1 / 30d);
-
-                    var gpr = new GPR(kernel);
-                    //gpr.OptimizeParameters(X, Y);
-                    (var predictY, var sigmas) = gpr.FitAndPredict(X, Y, predictX);
-
-                    new Figure
+               
                     {
-                        IsTightLayout = true,
-                        SubPlot = new SubPlot()
+                        var X = new double[] { 1, 3, 5, 6, 7, 8 };
+                        var Y = X.Select(x => x * Math.Sin(x)).ToArray();
+                        var predictX = EnumerableExtension.Range_WithStep(0, 10, 0.01).ToArray();
+                        var correctY = predictX.Select(x => x * Math.Sin(x)).ToArray();
+
+                        var k1 = new GPR.ConstantKernel(1);
+                        var k2 = new GPR.RBFKernel(1);
+                        var k3 = new GPR.WhiteNoiseKernel(1 / 30d);
+                        //var kernel = k1 * k2 + k3;
+                        var kernel = new GPR.GeneralKernel(lengthScale: 1d, noiseLambda: 1 / 30d);
+
+                        var gpr = new GPR(kernel);
+                        //gpr.OptimizeParameters(X, Y);
+                        (var predictY, var sigmas) = gpr.FitAndPredict(X, Y, predictX);
+
+                        new Figure
                         {
-                            XLabel = "x",
-                            XLim = (-3, 3),
-                            YLabel = "y",
-                            YLim = (-2, 2),
-                            Title = "ガウス過程回帰",
-                            Plots = new List<IPlot>
+                            IsTightLayout = true,
+                            SubPlot = new SubPlot()
+                            {
+                                XLabel = "x",
+                                YLabel = "y",
+                                Title = "ガウス過程回帰",
+                                Plots = new List<IPlot>
                             {
                                 new ScatterPlot(X, Y) { MarkerSize=100, MarkerColor="g" },
                                 new LinePlot(predictX, correctY) { LineColor="g"},
                                 new LinePlot(predictX, predictY) { LineColor="r" },
                                 new LinePlot(predictX, predictY.AddForEach(sigmas)) { LineColor="r", LineStyle="--" },
                                 new LinePlot(predictX, predictY.SubForEach(sigmas)) { LineColor="r", LineStyle="--" },
-                                new TextPlot(3,1.8,kernel.ToString()){ HorizontalAlignment="right"},
+                                new TextPlot(10,8,kernel.ToString()){ HorizontalAlignment="right"},
                             },
-                        }
-                    }.Run(preview: true);
+                            }
+                        }.Run(preview: true);
 
+                    }
+                    {
+                        //var X = new double[] { -1.5, 0, 0, 0, 0, 1.5 };
+                        //var Y = new double[] { -0, -1, -1, -1, -1, -0 };
+                        //var predictX = EnumerableExtension.Range_WithStep(-3, 3, 0.01).ToArray();
+                        //var correctY = predictX.Select(x => 0d).ToArray();
+
+                        //var k1 = new GPR.ConstantKernel(1);
+                        //var k2 = new GPR.RBFKernel(1);
+                        //var k3 = new GPR.WhiteNoiseKernel(1 / 30d);
+                        //var kernel = k1 * k2 + k3;
+
+                        //var gpr = new GPR(kernel);
+                        ////gpr.OptimizeParameters(X, Y);
+                        //(var predictY, var sigmas) = gpr.FitAndPredict(X, Y, predictX);
+
+                        //new Figure
+                        //{
+                        //    IsTightLayout = true,
+                        //    SubPlot = new SubPlot()
+                        //    {
+                        //        XLabel = "x",
+                        //        XLim = (-3, 3),
+                        //        YLabel = "y",
+                        //        YLim = (-2, 2),
+                        //        Title = "ガウス過程回帰",
+                        //        Plots = new List<IPlot>
+                        //    {
+                        //        new ScatterPlot(X, Y) { MarkerSize=100, MarkerColor="g" },
+                        //        new LinePlot(predictX, correctY) { LineColor="g"},
+                        //        new LinePlot(predictX, predictY) { LineColor="r" },
+                        //        new LinePlot(predictX, predictY.AddForEach(sigmas)) { LineColor="r", LineStyle="--" },
+                        //        new LinePlot(predictX, predictY.SubForEach(sigmas)) { LineColor="r", LineStyle="--" },
+                        //        new TextPlot(3,1.8,kernel.ToString()){ HorizontalAlignment="right"},
+                        //    },
+                        //    }
+                        //}.Run(preview: true);
+
+                    }
                 }
 
             }

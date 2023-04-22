@@ -1,7 +1,4 @@
-﻿using System.Linq.Expressions;
-
-using MathNet.Numerics.Distributions;
-using MathNet.Numerics.LinearAlgebra.Double;
+﻿using MathNet.Numerics.LinearAlgebra.Double;
 
 namespace Aki32Utilities.ConsoleAppUtilities.PythonAndNumerics;
 public partial class GaussianProcessRegression
@@ -78,7 +75,7 @@ public partial class GaussianProcessRegression
             // 分散 k - (K * K^(-1)) ⊙ K
             var v = KInv * ks;
             var sigmas = (DenseVector)(CalcKernel(predictX, predictX) - v.Transpose() * v).Diagonal();
-            
+
             return (mus, sigmas);
         }
 
