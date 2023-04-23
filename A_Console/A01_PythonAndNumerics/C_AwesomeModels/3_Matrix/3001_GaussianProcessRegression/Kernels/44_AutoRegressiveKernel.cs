@@ -4,22 +4,22 @@ namespace Aki32Utilities.ConsoleAppUtilities.PythonAndNumerics;
 public partial class GaussianProcessRegressionExecuter
 {
     /// <summary>
-    /// Squared Exponential (also known as Radial Basis Function Kernel (RBF))
+    /// Auto Regressive Kernel
     /// <br/> * without σ² in front
     /// </summary>
-    public class SquaredExponentialKernel : KernelBase
+    public class AutoRegressiveKernel : KernelBase
     {
 
         // ★★★★★★★★★★★★★★★ props
 
-        public double LengthScale { get; set; }
+        public double Rho { get; set; }
 
 
         // ★★★★★★★★★★★★★★★ inits
 
-        public SquaredExponentialKernel(double lengthScale)
+        public AutoRegressiveKernel(double rho)
         {
-            LengthScale = lengthScale;
+            Rho = rho;
         }
 
 
@@ -27,16 +27,16 @@ public partial class GaussianProcessRegressionExecuter
 
         internal override double CalcKernel(double x1, double x2, bool isSameIndex)
         {
-            var d = x1 - x2;
-            var to = -0.5 * Math.Pow(d / LengthScale, 2);
-            return Math.Exp(to);
+            throw new NotImplementedException();
         }
 
         internal override double CalcKernelGrad_Parameter1(double x1, double x2, bool isSameIndex)
         {
-            var d = x1 - x2;
-            var to = -0.5 * Math.Pow(d / LengthScale, 2);
-            return -2 * Math.Pow(LengthScale, -3) * to * Math.Exp(to);
+            throw new NotImplementedException();
+
+
+
+
         }
 
         internal override void OptimizeParameters(DenseVector X, DenseVector Y,
@@ -54,7 +54,7 @@ public partial class GaussianProcessRegressionExecuter
 
         public override string ToString()
         {
-            return $"SEK({LengthScale:F3})";
+            return $"AR({Rho:F3})";
         }
 
 

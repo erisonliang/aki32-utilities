@@ -129,22 +129,22 @@ public partial class GaussianProcessRegressionExecuter
 
         // ★★★★★★★★★★★★★★★ operators
 
-        public static AddedKernel operator +(KernelBase left, KernelBase right)
+        public static AdditionOperationKernel operator +(KernelBase left, KernelBase right)
         {
             return
-                new AddedKernel
+                new AdditionOperationKernel
                 {
                     LeftChild = left,
                     RightChild = right,
                 };
         }
-        public static MultipliedKernel operator *(KernelBase left, KernelBase right)
+        public static MultiplicationOperationKernel operator *(KernelBase left, KernelBase right)
         {
             if (left is not ConstantKernel && right is not ConstantKernel)
                 throw new InvalidOperationException("Either of multiplying kernels have to be ConstantKernel!");
 
             return
-                new MultipliedKernel
+                new MultiplicationOperationKernel
                 {
                     LeftChild = left,
                     RightChild = right,

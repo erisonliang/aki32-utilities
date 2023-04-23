@@ -4,24 +4,21 @@ namespace Aki32Utilities.ConsoleAppUtilities.PythonAndNumerics;
 public partial class GaussianProcessRegressionExecuter
 {
     /// <summary>
-    /// Squared Exponential (also known as Radial Basis Function Kernel (RBF))
-    /// <br/> * without σ² in front
+    /// Multiple Kernel combination with addition
     /// </summary>
-    public class RationalQuadraticKernel : KernelBase
+    public class MultiplicationOperationKernel : KernelBase
     {
 
         // ★★★★★★★★★★★★★★★ props
 
-        public double LengthScale { get; set; }
-        public double Alpha { get; set; }
+        public KernelBase LeftChild { get; set; }
+        public KernelBase RightChild { get; set; }
 
 
         // ★★★★★★★★★★★★★★★ inits
 
-        public RationalQuadraticKernel(double lengthScale, double alpha)
+        internal MultiplicationOperationKernel()
         {
-            LengthScale = lengthScale;
-            Alpha = alpha;
         }
 
 
@@ -29,17 +26,12 @@ public partial class GaussianProcessRegressionExecuter
 
         internal override double CalcKernel(double x1, double x2, bool isSameIndex)
         {
-            var d = x1 - x2;
-            var to = 1 + 0.5 * Math.Pow(d / LengthScale, 2) / Alpha;
-            return Math.Pow(to, -Alpha);
+            return LeftChild.CalcKernel(x1, x2, isSameIndex) * RightChild.CalcKernel(x1, x2, isSameIndex);
         }
 
         internal override double CalcKernelGrad_Parameter1(double x1, double x2, bool isSameIndex)
         {
             throw new NotImplementedException();
-
-
-
         }
 
         internal override void OptimizeParameters(DenseVector X, DenseVector Y,
@@ -57,7 +49,7 @@ public partial class GaussianProcessRegressionExecuter
 
         public override string ToString()
         {
-            return $"RQK({LengthScale:F3}, {Alpha:F3})";
+            return $"{LeftChild.ToString()}×{RightChild.ToString()}";
         }
 
 

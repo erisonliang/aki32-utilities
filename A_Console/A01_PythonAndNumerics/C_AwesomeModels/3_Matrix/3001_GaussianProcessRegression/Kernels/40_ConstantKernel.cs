@@ -4,22 +4,21 @@ namespace Aki32Utilities.ConsoleAppUtilities.PythonAndNumerics;
 public partial class GaussianProcessRegressionExecuter
 {
     /// <summary>
-    /// Linear Kernel
-    /// <br/> * without σ² in front
+    /// Constant Kernel
     /// </summary>
-    public class LinearKernel : KernelBase
+    public class ConstantKernel : KernelBase
     {
 
         // ★★★★★★★★★★★★★★★ props
 
-        public double C { get; set; }
+        public double ConstantWeight { get; set; }
 
 
         // ★★★★★★★★★★★★★★★ inits
 
-        public LinearKernel(double c)
+        public ConstantKernel(double constantValue)
         {
-            C = c;
+            ConstantWeight = constantValue;
         }
 
 
@@ -27,16 +26,12 @@ public partial class GaussianProcessRegressionExecuter
 
         internal override double CalcKernel(double x1, double x2, bool isSameIndex)
         {
-            return (x1 - C) * (x2 - C);
+            return ConstantWeight;
         }
 
         internal override double CalcKernelGrad_Parameter1(double x1, double x2, bool isSameIndex)
         {
-            throw new NotImplementedException();
-
-
-
-
+            return 0;
         }
 
         internal override void OptimizeParameters(DenseVector X, DenseVector Y,
@@ -48,13 +43,11 @@ public partial class GaussianProcessRegressionExecuter
 
 
 
-
-
         }
 
         public override string ToString()
         {
-            return $"LK({C:F3})";
+            return $"C({ConstantWeight:F3})";
         }
 
 

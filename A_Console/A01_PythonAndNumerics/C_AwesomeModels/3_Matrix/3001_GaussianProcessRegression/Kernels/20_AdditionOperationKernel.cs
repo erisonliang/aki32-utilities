@@ -6,7 +6,7 @@ public partial class GaussianProcessRegressionExecuter
     /// <summary>
     /// Multiple Kernel combination with addition
     /// </summary>
-    public class MultipliedKernel : KernelBase
+    public class AdditionOperationKernel : KernelBase
     {
 
         // ★★★★★★★★★★★★★★★ props
@@ -17,7 +17,7 @@ public partial class GaussianProcessRegressionExecuter
 
         // ★★★★★★★★★★★★★★★ inits
 
-        internal MultipliedKernel()
+        internal AdditionOperationKernel()
         {
         }
 
@@ -26,7 +26,7 @@ public partial class GaussianProcessRegressionExecuter
 
         internal override double CalcKernel(double x1, double x2, bool isSameIndex)
         {
-            return LeftChild.CalcKernel(x1, x2, isSameIndex) * RightChild.CalcKernel(x1, x2, isSameIndex);
+            return LeftChild.CalcKernel(x1, x2, isSameIndex) + RightChild.CalcKernel(x1, x2, isSameIndex);
         }
 
         internal override double CalcKernelGrad_Parameter1(double x1, double x2, bool isSameIndex)
@@ -44,12 +44,11 @@ public partial class GaussianProcessRegressionExecuter
 
 
 
-
         }
 
         public override string ToString()
         {
-            return $"{LeftChild.ToString()}×{RightChild.ToString()}";
+            return $"{LeftChild.ToString()}+{RightChild.ToString()}";
         }
 
 

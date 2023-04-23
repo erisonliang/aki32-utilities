@@ -4,24 +4,22 @@ namespace Aki32Utilities.ConsoleAppUtilities.PythonAndNumerics;
 public partial class GaussianProcessRegressionExecuter
 {
     /// <summary>
-    /// Periodic Kernel
+    /// Linear Kernel
     /// <br/> * without σ² in front
     /// </summary>
-    public class PeriodicKernel : KernelBase
+    public class LinearKernel : KernelBase
     {
 
         // ★★★★★★★★★★★★★★★ props
 
-        public double LengthScale { get; set; }
-        public double P { get; set; }
+        public double C { get; set; }
 
 
         // ★★★★★★★★★★★★★★★ inits
 
-        public PeriodicKernel(double lengthScale, double p)
+        public LinearKernel(double c)
         {
-            LengthScale = lengthScale;
-            P = p;
+            C = c;
         }
 
 
@@ -29,14 +27,13 @@ public partial class GaussianProcessRegressionExecuter
 
         internal override double CalcKernel(double x1, double x2, bool isSameIndex)
         {
-            var d = Math.Abs(x1 - x2);
-            var to = -2 * Math.Pow(Math.Sin(Math.PI * d / P) / LengthScale, 2);
-            return Math.Exp(to);
+            return (x1 - C) * (x2 - C);
         }
 
         internal override double CalcKernelGrad_Parameter1(double x1, double x2, bool isSameIndex)
         {
             throw new NotImplementedException();
+
 
 
 
@@ -57,7 +54,7 @@ public partial class GaussianProcessRegressionExecuter
 
         public override string ToString()
         {
-            return $"PK({LengthScale:F3}, {P:F3})";
+            return $"L({C:F3})";
         }
 
 
