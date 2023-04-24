@@ -31,13 +31,13 @@ public partial class GaussianProcessRegressionExecuter
 
         // ★★★★★★★★★★★★★★★ methods
 
-        internal override DenseMatrix CalcKernel(DenseVector m1, DenseVector m2)
+        internal override DenseMatrix CalcKernel(DenseVector v1, DenseVector v2)
         {
-            var K = new DenseMatrix(m1.Count, m2.Count);
+            var K = new DenseMatrix(m1.Count, v2.Count);
 
-            for (int i1 = 0; i1 < m1.Count; i1++)
+            for (int i1 = 0; i1 < v1.Count; i1++)
             {
-                for (int i2 = 0; i2 < m2.Count; i2++)
+                for (int i2 = 0; i2 < v2.Count; i2++)
                 {
                     throw new NotImplementedException();
 
@@ -50,14 +50,30 @@ public partial class GaussianProcessRegressionExecuter
             return K;
         }
 
-        internal DenseMatrix CalcKernelGrad_Rho(DenseVector m1, DenseVector m2)
+        internal override DenseMatrix CalcKernelGrad(DenseVector v1, DenseVector v2, (Guid, string) targetParameter)
+        {
+            if (targetParameter.Item1 == KernelID)
+            {
+                return targetParameter.Item2 switch
+                {
+                    nameof(Rho) => CalcKernelGrad_Rho(v1, v2),
+                    _ => throw new InvalidOperationException("No such parameter found in this kernel."),
+                };
+            }
+            else
+            {
+                return CalcKernel(v1, v2);
+            }
+        }
+
+        internal DenseMatrix CalcKernelGrad_Rho(DenseVector v1, DenseVector v2)
         {
 
-            var K = new DenseMatrix(m1.Count, m2.Count);
+            var K = new DenseMatrix(v1.Count, v2.Count);
 
-            for (int i1 = 0; i1 < m1.Count; i1++)
+            for (int i1 = 0; i1 < v1.Count; i1++)
             {
-                for (int i2 = 0; i2 < m2.Count; i2++)
+                for (int i2 = 0; i2 < v2.Count; i2++)
                 {
                     throw new NotImplementedException();
 
@@ -68,20 +84,7 @@ public partial class GaussianProcessRegressionExecuter
 
             return K;
         }
-
-        internal override void OptimizeParameters(DenseVector X, DenseVector Y,
-          double tryCount = 100,
-          double learning_rate = 0.05
-          )
-        {
-            throw new NotImplementedException();
-
-
-
-
-
-        }
-
+        
         public override string ToString()
         {
             return $"AR({Rho:F3})";

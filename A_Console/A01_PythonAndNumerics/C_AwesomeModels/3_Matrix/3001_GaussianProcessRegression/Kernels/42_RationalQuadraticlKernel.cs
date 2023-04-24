@@ -34,15 +34,15 @@ public partial class GaussianProcessRegressionExecuter
 
         // ★★★★★★★★★★★★★★★ methods
 
-        internal override DenseMatrix CalcKernel(DenseVector m1, DenseVector m2)
+        internal override DenseMatrix CalcKernel(DenseVector v1, DenseVector v2)
         {
-            var K = new DenseMatrix(m1.Count, m2.Count);
+            var K = new DenseMatrix(v1.Count, v2.Count);
 
-            for (int i1 = 0; i1 < m1.Count; i1++)
+            for (int i1 = 0; i1 < v1.Count; i1++)
             {
-                for (int i2 = 0; i2 < m2.Count; i2++)
+                for (int i2 = 0; i2 < v2.Count; i2++)
                 {
-                    var d = m1[i1] - m2[i2];
+                    var d = v1[i1] - v2[i2];
                     var to = 1 + 0.5 * Math.Pow(d / LengthScale, 2) / Alpha;
                     K[i1, i2] = Math.Pow(to, -Alpha);
                 }
@@ -51,14 +51,31 @@ public partial class GaussianProcessRegressionExecuter
             return K;
         }
 
-        internal DenseMatrix CalcKernelGrad_LengthScale(DenseVector m1, DenseVector m2)
+        internal override DenseMatrix CalcKernelGrad(DenseVector v1, DenseVector v2, (Guid, string) targetParameter)
+        {
+            if (targetParameter.Item1 == KernelID)
+            {
+                return targetParameter.Item2 switch
+                {
+                    nameof(LengthScale) => CalcKernelGrad_LengthScale(v1, v2),
+                    nameof(Alpha) => CalcKernelGrad_Alpha(v1, v2),
+                    _ => throw new InvalidOperationException("No such parameter found in this kernel."),
+                };
+            }
+            else
+            {
+                return CalcKernel(v1, v2);
+            }
+        }
+
+        internal DenseMatrix CalcKernelGrad_LengthScale(DenseVector v1, DenseVector v2)
         {
 
-            var K = new DenseMatrix(m1.Count, m2.Count);
+            var K = new DenseMatrix(v1.Count, v2.Count);
 
-            for (int i1 = 0; i1 < m1.Count; i1++)
+            for (int i1 = 0; i1 < v1.Count; i1++)
             {
-                for (int i2 = 0; i2 < m2.Count; i2++)
+                for (int i2 = 0; i2 < v2.Count; i2++)
                 {
                     throw new NotImplementedException();
 
@@ -70,14 +87,14 @@ public partial class GaussianProcessRegressionExecuter
             return K;
         }
 
-        internal DenseMatrix CalcKernelGrad_Alpha(DenseVector m1, DenseVector m2)
+        internal DenseMatrix CalcKernelGrad_Alpha(DenseVector v1, DenseVector v2)
         {
 
-            var K = new DenseMatrix(m1.Count, m2.Count);
+            var K = new DenseMatrix(v1.Count, v2.Count);
 
-            for (int i1 = 0; i1 < m1.Count; i1++)
+            for (int i1 = 0; i1 < v1.Count; i1++)
             {
-                for (int i2 = 0; i2 < m2.Count; i2++)
+                for (int i2 = 0; i2 < v2.Count; i2++)
                 {
                     throw new NotImplementedException();
 
@@ -87,19 +104,6 @@ public partial class GaussianProcessRegressionExecuter
             }
 
             return K;
-        }
-
-        internal override void OptimizeParameters(DenseVector X, DenseVector Y,
-          double tryCount = 100,
-          double learning_rate = 0.05
-          )
-        {
-            throw new NotImplementedException();
-
-
-
-
-
         }
 
         public override string ToString()

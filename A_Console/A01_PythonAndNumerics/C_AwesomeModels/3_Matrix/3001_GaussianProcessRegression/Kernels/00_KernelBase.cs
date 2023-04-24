@@ -29,12 +29,21 @@ public partial class GaussianProcessRegressionExecuter
         // ★★★★★★★★★★★★★★★ methods
 
         /// <summary>
-        /// カーネルの演算を表します。
+        /// カーネルの演算結果を取得します。
         /// </summary>
-        /// <param name="m1"></param>
-        /// <param name="m2"></param>
+        /// <param name="v1"></param>
+        /// <param name="v2"></param>
         /// <returns></returns>
-        internal abstract DenseMatrix CalcKernel(DenseVector m1, DenseVector m2);
+        internal abstract DenseMatrix CalcKernel(DenseVector v1, DenseVector v2);
+
+        /// <summary>
+        /// カーネルの微分演算結果を取得します。
+        /// </summary>
+        /// <param name="X"></param>
+        /// <param name="Y"></param>
+        /// <param name="targetParameter"></param>
+        /// <returns></returns>
+        internal abstract DenseMatrix CalcKernelGrad(DenseVector v1, DenseVector v2, (Guid, string) targetParameter);
 
         /// <summary>
         /// グラム行列（カーネル行列）などを作成します。
@@ -71,15 +80,6 @@ public partial class GaussianProcessRegressionExecuter
             return (predictY, cov);
 
         }
-
-        /// <summary>
-        /// ハイパーパラメーターを最適化します。
-        /// </summary>
-        /// <param name="X"></param>
-        /// <param name="Y"></param>
-        /// <param name="tryCount"></param>
-        /// <param name="learning_rate"></param>
-        internal abstract void OptimizeParameters(DenseVector X, DenseVector Y, double tryCount, double learning_rate);
 
         /// <summary>
         /// カーネルを表現する文字列を返します。

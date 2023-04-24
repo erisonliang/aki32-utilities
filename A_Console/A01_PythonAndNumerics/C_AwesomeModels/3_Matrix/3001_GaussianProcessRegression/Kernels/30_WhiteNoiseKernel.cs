@@ -30,29 +30,33 @@ public partial class GaussianProcessRegressionExecuter
 
         // ★★★★★★★★★★★★★★★ methods
 
-        internal override DenseMatrix CalcKernel(DenseVector m1, DenseVector m2)
+        internal override DenseMatrix CalcKernel(DenseVector v1, DenseVector v2)
         {
-            if (m1.Count == m2.Count)
-                return NoiseLambda * DenseMatrix.CreateIdentity(m1.Count);
+            if (v1.Count == v2.Count)
+                return NoiseLambda * DenseMatrix.CreateIdentity(v1.Count);
 
-            return DenseMatrix.Create(m1.Count, m2.Count, 0);
+            return DenseMatrix.Create(v1.Count, v2.Count, 0);
         }
 
-        internal DenseMatrix CalcKernelGrad_NoiseLambda(DenseVector x1, DenseVector x2)
+        internal override DenseMatrix CalcKernelGrad(DenseVector v1, DenseVector v2, (Guid, string) targetParameter)
         {
-            return DenseMatrix.Create(x1.Count, x2.Count, 0);
+            if (targetParameter.Item1 == KernelID)
+            {
+                return targetParameter.Item2 switch
+                {
+                    nameof(NoiseLambda) => CalcKernelGrad_NoiseLambda(v1, v2),
+                    _ => throw new InvalidOperationException("No such parameter found in this kernel."),
+                };
+            }
+            else
+            {
+                return CalcKernel(v1, v2);
+            }
         }
 
-        internal override void OptimizeParameters(DenseVector X, DenseVector Y,
-          double tryCount = 100,
-          double learning_rate = 0.05
-          )
+        internal DenseMatrix CalcKernelGrad_NoiseLambda(DenseVector v1, DenseVector v2)
         {
-            throw new NotImplementedException();
-
-
-
-
+            return DenseMatrix.Create(v1.Count, v2.Count, 0);
         }
 
         public override string ToString()

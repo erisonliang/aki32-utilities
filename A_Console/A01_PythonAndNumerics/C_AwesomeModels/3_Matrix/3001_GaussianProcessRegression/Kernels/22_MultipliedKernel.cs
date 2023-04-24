@@ -18,22 +18,16 @@ public partial class GaussianProcessRegressionExecuter
 
         // ★★★★★★★★★★★★★★★ methods
 
-        internal override DenseMatrix CalcKernel(DenseVector m1, DenseVector m2)
+        internal override DenseMatrix CalcKernel(DenseVector v1, DenseVector v2)
         {
-            return (DenseMatrix)LeftChild.CalcKernel(m1, m2).PointwiseMultiply(RightChild.CalcKernel(m1, m2));
+            return (DenseMatrix)LeftChild.CalcKernel(v1, v2)
+                .PointwiseMultiply(RightChild.CalcKernel(v1, v2));
         }
 
-        internal override void OptimizeParameters(DenseVector X, DenseVector Y,
-          double tryCount = 100,
-          double learning_rate = 0.05
-          )
+        internal override DenseMatrix CalcKernelGrad(DenseVector v1, DenseVector v2, (Guid, string) targetParameter)
         {
-            throw new NotImplementedException();
-
-
-
-
-
+            return (DenseMatrix)LeftChild.CalcKernelGrad(v1, v2, targetParameter)
+                .PointwiseMultiply(RightChild.CalcKernelGrad(v1, v2, targetParameter));
         }
 
         public override string ToString()

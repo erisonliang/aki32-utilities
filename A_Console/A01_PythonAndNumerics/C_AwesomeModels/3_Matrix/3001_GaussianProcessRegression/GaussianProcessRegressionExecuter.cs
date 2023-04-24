@@ -73,7 +73,21 @@ public partial class GaussianProcessRegressionExecuter
         double tryCount = 100,
         double learning_rate = 0.05
         )
-        => Kernel.OptimizeParameters(X, Y, tryCount, learning_rate);
+    {
+        throw new NotImplementedException();
+
+
+
+
+
+
+
+
+
+    }
+
+
+
 
     // ★★★★★★★★★★★★★★★ methods (static)
 
