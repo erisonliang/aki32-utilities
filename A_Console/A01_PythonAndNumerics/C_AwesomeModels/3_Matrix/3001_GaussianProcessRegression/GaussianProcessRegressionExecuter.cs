@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.Design.Serialization;
-
-using Aki32Utilities.ConsoleAppUtilities.General;
+﻿using Aki32Utilities.ConsoleAppUtilities.General;
 
 using MathNet.Numerics.LinearAlgebra.Double;
 
@@ -24,22 +22,10 @@ public partial class GaussianProcessRegressionExecuter
         Kernel = kernel;
         HyperParameters = new List<(Guid, string)>();
 
-        void ProcessKernelRecursive(KernelBase k)
-        {
-            if (k is OperationKernelBase ok)
-            {
-                ProcessKernelRecursive(ok.LeftChild);
-                ProcessKernelRecursive(ok.RightChild);
-            }
-            else
-            {
-                HyperParameters.AddRange(k.HyperParameters.Select(kHP => (k.KernelID, kHP)));
-            }
-        }
+        foreach (var k in Kernel.GetAllChildrenKernelsAndSelf())
+            HyperParameters.AddRange(k.HyperParameters.Select(kHP => (k.KernelID, kHP)));
 
-        ProcessKernelRecursive(Kernel);
-
-        Console.WriteLine($"{nameof(GaussianProcessRegressionExecuter)} instance created.\r\n");
+        Console.WriteLine($"★ {nameof(GaussianProcessRegressionExecuter)} instance created.\r\n");
         Console.WriteLine(this.ToString());
 
     }
@@ -47,7 +33,7 @@ public partial class GaussianProcessRegressionExecuter
 
     // ★★★★★★★★★★★★★★★ methods
 
-    public (double[] Y_predict, double[] cov) FitAndPredict(double[] X_train, double[] Y_train, double[] X_predict)
+    public (double[] Y_predict, double[] Y_Cov) FitAndPredict(double[] X_train, double[] Y_train, double[] X_predict)
     {
         var _X = new DenseVector(X_train);
         var _Y = new DenseVector(Y_train);
@@ -56,12 +42,12 @@ public partial class GaussianProcessRegressionExecuter
         var result = FitAndPredict(_X, _Y, _X_predict);
 
         var Y_predict = result.Y_predict.ToArray();
-        var cov = result.Cov.ToArray();
+        var Y_Cov = result.Y_Cov.ToArray();
 
-        return (Y_predict, cov);
+        return (Y_predict, Y_Cov);
     }
 
-    public (DenseVector Y_predict, DenseVector Cov) FitAndPredict(DenseVector X_train, DenseVector Y_train, DenseVector X_predict)
+    public (DenseVector Y_predict, DenseVector Y_Cov) FitAndPredict(DenseVector X_train, DenseVector Y_train, DenseVector X_predict)
     {
         Fit(X_train, Y_train);
         return Predict(X_predict);
@@ -69,32 +55,62 @@ public partial class GaussianProcessRegressionExecuter
 
     public void Fit(DenseVector X, DenseVector Y) => Kernel.Fit(X, Y);
 
-    public (DenseVector Y_predict, DenseVector cov) Predict(DenseVector X_predict) => Kernel.Predict(X_predict);
+    public (DenseVector Y_predict, DenseVector Y_Cov) Predict(DenseVector X_predict) => Kernel.Predict(X_predict);
 
-    public void OptimizeParameters(DenseVector X_train, DenseVector Y_train,
-        double tryCount = 100,
-        double learning_rate = 0.05
+    /// <summary>
+    /// Optimize all hyper parameters
+    /// </summary>
+    /// <param name="X_train"></param>
+    /// <param name="Y_train"></param>
+    /// <param name="maxTryCount"></param>
+    /// <param name="terminatingSRSS">Terminating threshold of SRSS of SSE</param>
+    /// <param name="learning_rate"></param>
+    /// <returns>Optimizing SRSS history</returns>
+    public double[] OptimizeParameters(DenseVector X_train, DenseVector Y_train,
+        int maxTryCount = 10000,
+        double terminatingSRSS = 0.0001d,
+        double learning_rate = 0.0003d
         )
     {
         // target = length
+        using var progress = new ProgressManager(maxTryCount);
+        progress.StartAutoWrite();
 
-        var N = X_train.Count;
+        var SRSSHistory = new List<double>();
 
-        var targetParam = HyperParameters.First(p => p.Item2 == "LengthScale");
-        double targetParamValue = 1;
-
-        for (int k = 0; k < tryCount; k++)
+        for (int i = 0; i < maxTryCount; i++)
         {
-            Fit(X_train, Y_train);
+            var SS = 0d;
 
-            var Ktt_Inv_Y_2 = (DenseMatrix)(Kernel.Ktt_Inv_Y.ToColumnMatrix() * Kernel.Ktt_Inv_Y.ToRowMatrix());
-            var dK = Kernel.CalcKernelGrad(X_train, Y_train, targetParam);
+            foreach (var targetParam in HyperParameters)
+            {
+                Fit(X_train, Y_train);
+                var Ktt_Inv_Y_2 = (DenseMatrix)(Kernel.Ktt_Inv_Y.ToColumnMatrix() * Kernel.Ktt_Inv_Y.ToRowMatrix());
+                var dK = Kernel.CalcKernelGrad(X_train, Y_train, targetParam);
 
-            var mm = (Ktt_Inv_Y_2 - Kernel.Ktt_Inv).Multiply(dK);
+                var SSE = (Ktt_Inv_Y_2 - Kernel.Ktt_Inv).Multiply(dK); // 二乗和誤差
 
-            var addingValue = learning_rate * mm.Diagonal().Sum();
-            Kernel.AddValueToParameter(addingValue, targetParam);
+                var addingValue = learning_rate * SSE.Diagonal().Sum();
+                Kernel.AddValueToParameter(addingValue, targetParam);
+
+                SS += Math.Pow(addingValue, 2);
+            }
+
+            var SRSS = Math.Sqrt(SS);
+            SRSSHistory.Add(SRSS);
+            if (SRSS < terminatingSRSS)
+                break;
+
+            progress.CurrentStep = i;
         }
+
+        progress.WriteDone();
+
+        Console.WriteLine($"★ Parameters optimized.\r\n");
+        Console.WriteLine(this.ToString());
+
+        return SRSSHistory.ToArray();
+
     }
 
 
@@ -102,35 +118,46 @@ public partial class GaussianProcessRegressionExecuter
 
     public static void RunExampleModel(FileInfo? outputImageFile = null, bool preview = true)
     {
+        // pre-process
         outputImageFile ??= new FileInfo(Path.GetTempFileName().GetExtensionChangedFilePath(".png"));
 
+
+        // prepare data
         static double f(double x, bool withNoise = false)
         {
-            if (withNoise)
-                return x * Math.Sin(x) + new Random().NextDouble() - 0.5d;
-            else
-                return x * Math.Sin(x);
+            var noise = withNoise ? new Random().NextDouble() - 0.5d : 0;
+            return x * Math.Sin(x) + noise;
         }
-
         //var X = new double[] { 1, 3, 5, 6, 7, 8 };
         //var X = new double[] { 1, 1.1, 1.2, 1.3, 3, 5, 6, 7, 8 };
-        var X_train = new double[] { 1, 1.1, 1.2, 1.3, 3, 5, 5.2, 5.3, 5.4, 5.6, 5.8, 6, 7, 8, 8, 8, 8 };
+        //var X_train = new double[] { 1, 1.1, 1.2, 1.3, 3, 5, 5.2, 5.3, 5.4, 5.6, 5.8, 6, 7, 8, 8, 8, 8 };
+        var X_train = new double[] { 1, 1.5, 2, 5, 5, 5, 5.5, 5.5, 5.5, 6, 6, 6, 6.5, 6.5, 6.5, 7, 7, 7, 8, 8, 8, 8 };
         var Y_train = X_train.Select(x => f(x, true)).ToArray();
         var X_predict = EnumerableExtension.Range_WithStep(0, 10, 0.1).ToArray();
         var Y_true = X_predict.Select(x => f(x)).ToArray();
 
+
+        // build model
         var k1 = new GaussianProcessRegressionExecuter.ConstantKernel(1d);
         var k2 = new GaussianProcessRegressionExecuter.SquaredExponentialKernel(1d);
         var k3 = new GaussianProcessRegressionExecuter.WhiteNoiseKernel(1 / 15d);
         var kernel = k1 * k2 + k3;
-
         var gpr = new GaussianProcessRegressionExecuter(kernel);
-        //gpr.OptimizeParameters(X, Y);
-        (var Y_predict, var cov) = gpr.FitAndPredict(X_train, Y_train, X_predict);
-        var Y_Std = cov.Select(x => Math.Sqrt(x)).ToArray();
+
+
+        // (optional) optimize parameters
+        var optimizeHistory = gpr.OptimizeParameters(X_train, Y_train);
+        PyPlotWrapper.LinePlot.DrawSimpleGraph(optimizeHistory.ToArray());
+
+
+        // fit and predict
+        (var Y_predict, var Y_Cov) = gpr.FitAndPredict(X_train, Y_train, X_predict);
+        var Y_Std = Y_Cov.Select(x => Math.Sqrt(x)).ToArray();
         var Y_95CI = Y_Std.ProductForEach(1.96);
         var Y_99CI = Y_Std.ProductForEach(2.58);
 
+
+        // draw
         new Figure
         {
             IsTightLayout = true,

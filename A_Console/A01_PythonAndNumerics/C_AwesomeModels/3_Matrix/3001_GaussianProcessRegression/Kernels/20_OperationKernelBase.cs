@@ -11,8 +11,8 @@ public partial class GaussianProcessRegressionExecuter
 
         // ★★★★★★★★★★★★★★★ props
 
-        public KernelBase LeftChild { get; set; }
-        public KernelBase RightChild { get; set; }
+        internal KernelBase LeftChild { get; set; }
+        internal KernelBase RightChild { get; set; }
 
 
         // ★★★★★★★★★★★★★★★

@@ -103,7 +103,12 @@ public partial class PyPlotWrapper
 
         // ★★★★★★★★★★★★★★★ methods (static)
 
-        public static FileInfo DrawSimpleGraph(double[] X, double[] Y, FileInfo? outputImageFile = null, bool preview = true)
+        public static FileInfo DrawSimpleGraph(double[] Y, FileInfo? outputImageFile = null, bool preview = true)
+        {
+            return DrawSimpleGraph(null, Y, outputImageFile, preview);
+        }
+
+        public static FileInfo DrawSimpleGraph(double[]? X, double[] Y, FileInfo? outputImageFile = null, bool preview = true)
         {
             outputImageFile ??= new FileInfo(Path.GetTempFileName().GetExtensionChangedFilePath(".png"));
 

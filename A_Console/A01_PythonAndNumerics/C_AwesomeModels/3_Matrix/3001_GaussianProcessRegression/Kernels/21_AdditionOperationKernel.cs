@@ -1,5 +1,7 @@
 ﻿using MathNet.Numerics.LinearAlgebra.Double;
 
+using Microsoft.FSharp.Data.UnitSystems.SI.UnitNames;
+
 namespace Aki32Utilities.ConsoleAppUtilities.PythonAndNumerics;
 public partial class GaussianProcessRegressionExecuter
 {
@@ -27,14 +29,18 @@ public partial class GaussianProcessRegressionExecuter
 
         internal override DenseMatrix CalcKernelGrad(DenseVector X1, DenseVector X2, (Guid, string) targetParameter)
         {
-            return LeftChild.CalcKernelGrad(X1, X2, targetParameter)
-                + RightChild.CalcKernelGrad(X1, X2, targetParameter);
+            // 微分対象の要素が含まれている枝を採用。それ以外は微分すると0になるので無視。
+            if (LeftChild.GetAllChildrenKernelsAndSelf().Any(k => k.KernelID == targetParameter.Item1))
+                return LeftChild.CalcKernelGrad(X1, X2, targetParameter);
+            else
+                return RightChild.CalcKernelGrad(X1, X2, targetParameter);
+
         }
 
         internal override void AddValueToParameter(double addingValue, (Guid, string) targetParameter)
         {
-            LeftChild.AddValueToParameter(addingValue,targetParameter);
-            RightChild.AddValueToParameter(addingValue,targetParameter);
+            LeftChild.AddValueToParameter(addingValue, targetParameter);
+            RightChild.AddValueToParameter(addingValue, targetParameter);
         }
 
         public override string ToString()

@@ -93,6 +93,31 @@ public partial class GaussianProcessRegressionExecuter
         /// </summary>
         public new abstract string ToString();
 
+        /// <summary>
+        /// 自身と全ての子カーネルを取得します。
+        /// </summary>
+        /// <returns></returns>
+        internal KernelBase[] GetAllChildrenKernelsAndSelf()
+        {
+            var children = new List<KernelBase>();
+
+            void ProcessKernelRecursive(KernelBase k)
+            {
+                if (k is OperationKernelBase ok)
+                {
+                    ProcessKernelRecursive(ok.LeftChild);
+                    ProcessKernelRecursive(ok.RightChild);
+                }
+                else
+                {
+                    children.Add(k);
+                }
+            }
+
+            ProcessKernelRecursive(this);
+            return children.ToArray();
+        }
+
 
         // ★★★★★★★★★★★★★★★ operators
 
