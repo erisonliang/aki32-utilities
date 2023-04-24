@@ -31,13 +31,13 @@ public partial class GaussianProcessRegressionExecuter
 
         // ★★★★★★★★★★★★★★★ methods
 
-        internal override DenseMatrix CalcKernel(DenseVector v1, DenseVector v2)
+        internal override DenseMatrix CalcKernel(DenseVector X1, DenseVector X2)
         {
-            var K = new DenseMatrix(m1.Count, v2.Count);
+            var K = new DenseMatrix(X1.Count, X2.Count);
 
-            for (int i1 = 0; i1 < v1.Count; i1++)
+            for (int i1 = 0; i1 < X1.Count; i1++)
             {
-                for (int i2 = 0; i2 < v2.Count; i2++)
+                for (int i2 = 0; i2 < X2.Count; i2++)
                 {
                     throw new NotImplementedException();
 
@@ -50,30 +50,30 @@ public partial class GaussianProcessRegressionExecuter
             return K;
         }
 
-        internal override DenseMatrix CalcKernelGrad(DenseVector v1, DenseVector v2, (Guid, string) targetParameter)
+        internal override DenseMatrix CalcKernelGrad(DenseVector X1, DenseVector X2, (Guid, string) targetParameter)
         {
             if (targetParameter.Item1 == KernelID)
             {
                 return targetParameter.Item2 switch
                 {
-                    nameof(Rho) => CalcKernelGrad_Rho(v1, v2),
+                    nameof(Rho) => CalcKernelGrad_Rho(X1, X2),
                     _ => throw new InvalidOperationException("No such parameter found in this kernel."),
                 };
             }
             else
             {
-                return CalcKernel(v1, v2);
+                return CalcKernel(X1, X2);
             }
         }
 
-        internal DenseMatrix CalcKernelGrad_Rho(DenseVector v1, DenseVector v2)
+        internal DenseMatrix CalcKernelGrad_Rho(DenseVector X1, DenseVector X2)
         {
 
-            var K = new DenseMatrix(v1.Count, v2.Count);
+            var K = new DenseMatrix(X1.Count, X2.Count);
 
-            for (int i1 = 0; i1 < v1.Count; i1++)
+            for (int i1 = 0; i1 < X1.Count; i1++)
             {
-                for (int i2 = 0; i2 < v2.Count; i2++)
+                for (int i2 = 0; i2 < X2.Count; i2++)
                 {
                     throw new NotImplementedException();
 

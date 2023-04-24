@@ -30,33 +30,33 @@ public partial class GaussianProcessRegressionExecuter
 
         // ★★★★★★★★★★★★★★★ methods
 
-        internal override DenseMatrix CalcKernel(DenseVector v1, DenseVector v2)
+        internal override DenseMatrix CalcKernel(DenseVector X1, DenseVector X2)
         {
-            if (v1.Count == v2.Count)
-                return NoiseLambda * DenseMatrix.CreateIdentity(v1.Count);
+            if (X1.Count == X2.Count)
+                return NoiseLambda * DenseMatrix.CreateIdentity(X1.Count);
 
-            return DenseMatrix.Create(v1.Count, v2.Count, 0);
+            return DenseMatrix.Create(X1.Count, X2.Count, 0);
         }
 
-        internal override DenseMatrix CalcKernelGrad(DenseVector v1, DenseVector v2, (Guid, string) targetParameter)
+        internal override DenseMatrix CalcKernelGrad(DenseVector X1, DenseVector X2, (Guid, string) targetParameter)
         {
             if (targetParameter.Item1 == KernelID)
             {
                 return targetParameter.Item2 switch
                 {
-                    nameof(NoiseLambda) => CalcKernelGrad_NoiseLambda(v1, v2),
+                    nameof(NoiseLambda) => CalcKernelGrad_NoiseLambda(X1, X2),
                     _ => throw new InvalidOperationException("No such parameter found in this kernel."),
                 };
             }
             else
             {
-                return CalcKernel(v1, v2);
+                return CalcKernel(X1, X2);
             }
         }
 
-        internal DenseMatrix CalcKernelGrad_NoiseLambda(DenseVector v1, DenseVector v2)
+        internal DenseMatrix CalcKernelGrad_NoiseLambda(DenseVector X1, DenseVector X2)
         {
-            return DenseMatrix.Create(v1.Count, v2.Count, 0);
+            return DenseMatrix.Create(X1.Count, X2.Count, 0);
         }
 
         public override string ToString()

@@ -34,15 +34,15 @@ public partial class GaussianProcessRegressionExecuter
 
         // ★★★★★★★★★★★★★★★ methods
 
-        internal override DenseMatrix CalcKernel(DenseVector v1, DenseVector v2)
+        internal override DenseMatrix CalcKernel(DenseVector X1, DenseVector X2)
         {
-            var K = new DenseMatrix(v1.Count, v2.Count);
+            var K = new DenseMatrix(X1.Count, X2.Count);
 
-            for (int i1 = 0; i1 < v1.Count; i1++)
+            for (int i1 = 0; i1 < X1.Count; i1++)
             {
-                for (int i2 = 0; i2 < v2.Count; i2++)
+                for (int i2 = 0; i2 < X2.Count; i2++)
                 {
-                    var d = v1[i1] - v2[i2];
+                    var d = X1[i1] - X2[i2];
                     var to = 1 + 0.5 * Math.Pow(d / LengthScale, 2) / Alpha;
                     K[i1, i2] = Math.Pow(to, -Alpha);
                 }
@@ -51,31 +51,31 @@ public partial class GaussianProcessRegressionExecuter
             return K;
         }
 
-        internal override DenseMatrix CalcKernelGrad(DenseVector v1, DenseVector v2, (Guid, string) targetParameter)
+        internal override DenseMatrix CalcKernelGrad(DenseVector X1, DenseVector X2, (Guid, string) targetParameter)
         {
             if (targetParameter.Item1 == KernelID)
             {
                 return targetParameter.Item2 switch
                 {
-                    nameof(LengthScale) => CalcKernelGrad_LengthScale(v1, v2),
-                    nameof(Alpha) => CalcKernelGrad_Alpha(v1, v2),
+                    nameof(LengthScale) => CalcKernelGrad_LengthScale(X1, X2),
+                    nameof(Alpha) => CalcKernelGrad_Alpha(X1, X2),
                     _ => throw new InvalidOperationException("No such parameter found in this kernel."),
                 };
             }
             else
             {
-                return CalcKernel(v1, v2);
+                return CalcKernel(X1, X2);
             }
         }
 
-        internal DenseMatrix CalcKernelGrad_LengthScale(DenseVector v1, DenseVector v2)
+        internal DenseMatrix CalcKernelGrad_LengthScale(DenseVector X1, DenseVector X2)
         {
 
-            var K = new DenseMatrix(v1.Count, v2.Count);
+            var K = new DenseMatrix(X1.Count, X2.Count);
 
-            for (int i1 = 0; i1 < v1.Count; i1++)
+            for (int i1 = 0; i1 < X1.Count; i1++)
             {
-                for (int i2 = 0; i2 < v2.Count; i2++)
+                for (int i2 = 0; i2 < X2.Count; i2++)
                 {
                     throw new NotImplementedException();
 
@@ -87,14 +87,14 @@ public partial class GaussianProcessRegressionExecuter
             return K;
         }
 
-        internal DenseMatrix CalcKernelGrad_Alpha(DenseVector v1, DenseVector v2)
+        internal DenseMatrix CalcKernelGrad_Alpha(DenseVector X1, DenseVector X2)
         {
 
-            var K = new DenseMatrix(v1.Count, v2.Count);
+            var K = new DenseMatrix(X1.Count, X2.Count);
 
-            for (int i1 = 0; i1 < v1.Count; i1++)
+            for (int i1 = 0; i1 < X1.Count; i1++)
             {
-                for (int i2 = 0; i2 < v2.Count; i2++)
+                for (int i2 = 0; i2 < X2.Count; i2++)
                 {
                     throw new NotImplementedException();
 

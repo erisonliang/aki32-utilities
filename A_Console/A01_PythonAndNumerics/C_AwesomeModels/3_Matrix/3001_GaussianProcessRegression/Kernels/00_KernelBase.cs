@@ -31,10 +31,10 @@ public partial class GaussianProcessRegressionExecuter
         /// <summary>
         /// カーネルの演算結果を取得します。
         /// </summary>
-        /// <param name="v1"></param>
-        /// <param name="v2"></param>
+        /// <param name="X1"></param>
+        /// <param name="X2"></param>
         /// <returns></returns>
-        internal abstract DenseMatrix CalcKernel(DenseVector v1, DenseVector v2);
+        internal abstract DenseMatrix CalcKernel(DenseVector X1, DenseVector X2);
 
         /// <summary>
         /// カーネルの微分演算結果を取得します。
@@ -43,7 +43,7 @@ public partial class GaussianProcessRegressionExecuter
         /// <param name="Y"></param>
         /// <param name="targetParameter"></param>
         /// <returns></returns>
-        internal abstract DenseMatrix CalcKernelGrad(DenseVector v1, DenseVector v2, (Guid, string) targetParameter);
+        internal abstract DenseMatrix CalcKernelGrad(DenseVector X1, DenseVector X2, (Guid, string) targetParameter);
 
         /// <summary>
         /// グラム行列（カーネル行列）などを作成します。
