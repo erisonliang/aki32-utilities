@@ -50,7 +50,13 @@ public partial class GaussianProcessRegressionExecuter
         /// </summary>
         /// <param name="addingValue"></param>
         /// <param name="targetParameter"></param>
-        internal abstract void AddValueToParameter(double addingValue, (Guid, string) targetParameter);
+        internal void AddValueToParameter(double addingValue, (Guid, string) targetParameter)
+        {
+            SetParameterValue(targetParameter, GetParameterValue(targetParameter)!.Value + addingValue);
+        }
+        internal abstract double? GetParameterValue((Guid, string) targetParameter);
+        internal abstract void SetParameterValue((Guid, string) targetParameter, double settingValue);
+
 
         /// <summary>
         /// グラム行列（カーネル行列）などを作成します。

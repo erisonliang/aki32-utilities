@@ -37,10 +37,15 @@ public partial class GaussianProcessRegressionExecuter
 
         }
 
-        internal override void AddValueToParameter(double addingValue, (Guid, string) targetParameter)
+        internal override double? GetParameterValue((Guid, string) targetParameter)
         {
-            LeftChild.AddValueToParameter(addingValue, targetParameter);
-            RightChild.AddValueToParameter(addingValue, targetParameter);
+            return LeftChild.GetParameterValue(targetParameter)
+                ?? RightChild.GetParameterValue(targetParameter);
+        }
+        internal override void SetParameterValue((Guid, string) targetParameter, double settingValue)
+        {
+            LeftChild.SetParameterValue(targetParameter, settingValue);
+            RightChild.SetParameterValue(targetParameter, settingValue);
         }
 
         public override string ToString()

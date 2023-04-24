@@ -106,14 +106,30 @@ public partial class GaussianProcessRegressionExecuter
             return K;
         }
 
-        internal override void AddValueToParameter(double addingValue, (Guid, string) targetParameter)
+        internal override double? GetParameterValue((Guid, string) targetParameter)
+        {
+            if (targetParameter.Item1 == KernelID)
+            {
+                return targetParameter.Item2 switch
+                {
+                    nameof(LengthScale) => LengthScale,
+                    nameof(Alpha) => Alpha,
+                    _ => throw new InvalidOperationException("No such parameter found in this kernel."),
+                };
+            }
+            else
+            {
+                return null;
+            }
+        }
+        internal override void SetParameterValue((Guid, string) targetParameter, double settingValue)
         {
             if (targetParameter.Item1 == KernelID)
             {
                 _ = targetParameter.Item2 switch
                 {
-                    nameof(LengthScale) => LengthScale += addingValue,
-                    nameof(Alpha) => Alpha += addingValue,
+                    nameof(LengthScale) => LengthScale = settingValue,
+                    nameof(Alpha) => Alpha = settingValue,
                     _ => throw new InvalidOperationException("No such parameter found in this kernel."),
                 };
             }

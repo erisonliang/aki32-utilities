@@ -64,20 +64,31 @@ public partial class GaussianProcessRegressionExecuter
     /// <param name="Y_train"></param>
     /// <param name="maxTryCount"></param>
     /// <param name="terminatingSRSS">Terminating threshold of SRSS of SSE</param>
-    /// <param name="learning_rate"></param>
+    /// <param name="learningRate"></param>
     /// <returns>Optimizing SRSS history</returns>
     public double[] OptimizeParameters(DenseVector X_train, DenseVector Y_train,
         int maxTryCount = 10000,
-        double terminatingSRSS = 0.0001d,
-        double learning_rate = 0.0003d
+        double terminatingSRSS = 0.003d,
+        double learningRate = 0.0003d
         )
     {
-        // target = length
         using var progress = new ProgressManager(maxTryCount);
         progress.StartAutoWrite();
 
-        var SRSSHistory = new List<double>();
+        // wide optimize
+        {
+            // 全てのパラメーター，初期値の{ 1/8, 1/4, 1/2, 1, 2, 4, 8}倍を比較する。
 
+
+
+
+
+
+
+        }
+
+        // precise optimize
+        var SRSSHistory = new List<double>();
         for (int i = 0; i < maxTryCount; i++)
         {
             var SS = 0d;
@@ -90,7 +101,7 @@ public partial class GaussianProcessRegressionExecuter
 
                 var SSE = (Ktt_Inv_Y_2 - Kernel.Ktt_Inv).Multiply(dK); // 二乗和誤差
 
-                var addingValue = learning_rate * SSE.Diagonal().Sum();
+                var addingValue = learningRate * SSE.Diagonal().Sum();
                 Kernel.AddValueToParameter(addingValue, targetParam);
 
                 SS += Math.Pow(addingValue, 2);
@@ -144,31 +155,32 @@ public partial class GaussianProcessRegressionExecuter
         var kernel = k1 * k2 + k3;
         var gpr = new GaussianProcessRegressionExecuter(kernel);
 
-
-        // (optional) optimize parameters
-        var optimizeHistory = gpr.OptimizeParameters(X_train, Y_train);
-        PyPlotWrapper.LinePlot.DrawSimpleGraph(optimizeHistory.ToArray());
-
-
-        // fit and predict
-        (var Y_predict, var Y_Cov) = gpr.FitAndPredict(X_train, Y_train, X_predict);
-        var Y_Std = Y_Cov.Select(x => Math.Sqrt(x)).ToArray();
-        var Y_95CI = Y_Std.ProductForEach(1.96);
-        var Y_99CI = Y_Std.ProductForEach(2.58);
-
-
-        // draw
-        new Figure
         {
-            IsTightLayout = true,
-            SubPlot = new SubPlot()
+
+            // (optional) optimize parameters
+            var optimizeHistory = gpr.OptimizeParameters(X_train, Y_train);
+            PyPlotWrapper.LinePlot.DrawSimpleGraph(optimizeHistory.ToArray());
+
+
+            // fit and predict
+            (var Y_predict, var Y_Cov) = gpr.FitAndPredict(X_train, Y_train, X_predict);
+            var Y_Std = Y_Cov.Select(x => Math.Sqrt(x)).ToArray();
+            var Y_95CI = Y_Std.ProductForEach(1.96);
+            var Y_99CI = Y_Std.ProductForEach(2.58);
+
+
+            // draw
+            new Figure
             {
-                XLabel = "X",
-                YLabel = "f(X)",
-                Title = "ガウス過程回帰",
-                LegendLocation = LegendLocation.upper_left,
-                LegendFontSize = 20,
-                Plots = new List<IPlot>
+                IsTightLayout = true,
+                SubPlot = new SubPlot()
+                {
+                    XLabel = "X",
+                    YLabel = "f(X)",
+                    Title = "ガウス過程回帰",
+                    LegendLocation = LegendLocation.upper_left,
+                    LegendFontSize = 20,
+                    Plots = new List<IPlot>
                 {
                     new ScatterPlot(Array.Empty<double>(),Array.Empty<double>()){ MarkerColor="yellow", MarkerSize=100, LegendLabel=kernel.ToString()},
 
@@ -188,8 +200,9 @@ public partial class GaussianProcessRegressionExecuter
                     //new TextPlot(10,8,kernel.ToString()){ HorizontalAlignment="right"},
                 
                 },
-            }
-        }.Run(outputImageFile, preview);
+                }
+            }.Run(outputImageFile, preview);
+        }
 
     }
 

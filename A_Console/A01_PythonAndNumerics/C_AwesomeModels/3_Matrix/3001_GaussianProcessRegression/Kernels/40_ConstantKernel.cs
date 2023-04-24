@@ -56,13 +56,28 @@ public partial class GaussianProcessRegressionExecuter
             return DenseMatrix.Create(X1.Count, X2.Count, 0);
         }
 
-        internal override void AddValueToParameter(double addingValue, (Guid, string) targetParameter)
+        internal override double? GetParameterValue((Guid, string) targetParameter)
+        {
+            if (targetParameter.Item1 == KernelID)
+            {
+                return targetParameter.Item2 switch
+                {
+                    nameof(ConstantWeight) => ConstantWeight,
+                    _ => throw new InvalidOperationException("No such parameter found in this kernel."),
+                };
+            }
+            else
+            {
+                return null;
+            }
+        }
+        internal override void SetParameterValue((Guid, string) targetParameter, double settingValue)
         {
             if (targetParameter.Item1 == KernelID)
             {
                 _ = targetParameter.Item2 switch
                 {
-                    nameof(ConstantWeight) => ConstantWeight += addingValue,
+                    nameof(ConstantWeight) => ConstantWeight = settingValue,
                     _ => throw new InvalidOperationException("No such parameter found in this kernel."),
                 };
             }
