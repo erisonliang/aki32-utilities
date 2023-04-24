@@ -17,9 +17,15 @@ Code set for Template.
 
 <img name="" src="https://github.com/aki32/aki32-utilities/raw/main/9_Assets/Images/A10_EP_Overview.jpg" width="666">
 
+
 ### 🎇 Example
 
+```C#
+new DirectoryInfo(@"C:\input");
+```
+
 <img name="" src="https://github.com/aki32/aki32-utilities/raw/main/9_Assets/Images/001_M001_Example.png" width="666">
+
 
 
 
