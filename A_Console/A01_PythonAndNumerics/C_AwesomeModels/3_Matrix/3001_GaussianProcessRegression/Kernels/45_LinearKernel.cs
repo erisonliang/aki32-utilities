@@ -20,23 +20,49 @@ public partial class GaussianProcessRegressionExecuter
         public LinearKernel(double c)
         {
             C = c;
+
+            HyperParameters = new string[]
+            {
+                nameof(C),
+            };
+
         }
 
 
         // ★★★★★★★★★★★★★★★ methods
 
-        internal override double CalcKernel(double x1, double x2, bool isSameIndex)
+        internal override DenseMatrix CalcKernel(DenseVector m1, DenseVector m2)
         {
-            return (x1 - C) * (x2 - C);
+            var K = new DenseMatrix(m1.Count, m2.Count);
+
+            for (int i1 = 0; i1 < m1.Count; i1++)
+            {
+                for (int i2 = 0; i2 < m2.Count; i2++)
+                {
+                    K[i1, i2] = (m1[i1] - C) * (m2[i2] - C);
+                }
+            }
+
+            return K;
         }
 
-        internal override double CalcKernelGrad_Parameter1(double x1, double x2, bool isSameIndex)
+        internal DenseMatrix CalcKernelGrad_C(DenseVector m1, DenseVector m2)
         {
-            throw new NotImplementedException();
+
+            var K = new DenseMatrix(m1.Count, m2.Count);
+
+            for (int i1 = 0; i1 < m1.Count; i1++)
+            {
+                for (int i2 = 0; i2 < m2.Count; i2++)
+                {
+                    throw new NotImplementedException();
 
 
 
+                }
+            }
 
+            return K;
         }
 
         internal override void OptimizeParameters(DenseVector X, DenseVector Y,

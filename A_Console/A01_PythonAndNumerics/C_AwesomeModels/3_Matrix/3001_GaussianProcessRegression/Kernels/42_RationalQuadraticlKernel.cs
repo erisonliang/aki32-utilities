@@ -22,24 +22,71 @@ public partial class GaussianProcessRegressionExecuter
         {
             LengthScale = lengthScale;
             Alpha = alpha;
+
+            HyperParameters = new string[]
+            {
+                nameof(LengthScale),
+                nameof(Alpha),
+            };
+
         }
 
 
         // ★★★★★★★★★★★★★★★ methods
 
-        internal override double CalcKernel(double x1, double x2, bool isSameIndex)
+        internal override DenseMatrix CalcKernel(DenseVector m1, DenseVector m2)
         {
-            var d = x1 - x2;
-            var to = 1 + 0.5 * Math.Pow(d / LengthScale, 2) / Alpha;
-            return Math.Pow(to, -Alpha);
+            var K = new DenseMatrix(m1.Count, m2.Count);
+
+            for (int i1 = 0; i1 < m1.Count; i1++)
+            {
+                for (int i2 = 0; i2 < m2.Count; i2++)
+                {
+                    var d = m1[i1] - m2[i2];
+                    var to = 1 + 0.5 * Math.Pow(d / LengthScale, 2) / Alpha;
+                    K[i1, i2] = Math.Pow(to, -Alpha);
+                }
+            }
+
+            return K;
         }
 
-        internal override double CalcKernelGrad_Parameter1(double x1, double x2, bool isSameIndex)
+        internal DenseMatrix CalcKernelGrad_LengthScale(DenseVector m1, DenseVector m2)
         {
-            throw new NotImplementedException();
+
+            var K = new DenseMatrix(m1.Count, m2.Count);
+
+            for (int i1 = 0; i1 < m1.Count; i1++)
+            {
+                for (int i2 = 0; i2 < m2.Count; i2++)
+                {
+                    throw new NotImplementedException();
 
 
 
+                }
+            }
+
+            return K;
+        }
+
+        internal DenseMatrix CalcKernelGrad_Alpha(DenseVector m1, DenseVector m2)
+        {
+
+            var K = new DenseMatrix(m1.Count, m2.Count);
+
+            for (int i1 = 0; i1 < m1.Count; i1++)
+            {
+                for (int i2 = 0; i2 < m2.Count; i2++)
+                {
+                    throw new NotImplementedException();
+
+
+
+                }
+            }
+
+            return K;
         }
 
         internal override void OptimizeParameters(DenseVector X, DenseVector Y,

@@ -4,7 +4,7 @@ namespace Aki32Utilities.ConsoleAppUtilities.PythonAndNumerics;
 public partial class GaussianProcessRegressionExecuter
 {
     /// <summary>
-    /// Multiple Kernel combination with addition
+    /// Multiple kernel combination with addition
     /// </summary>
     public class AdditionOperationKernel : KernelBase
     {
@@ -19,19 +19,15 @@ public partial class GaussianProcessRegressionExecuter
 
         internal AdditionOperationKernel()
         {
+
         }
 
 
         // ★★★★★★★★★★★★★★★ methods
 
-        internal override double CalcKernel(double x1, double x2, bool isSameIndex)
+        internal override DenseMatrix CalcKernel(DenseVector m1, DenseVector m2)
         {
-            return LeftChild.CalcKernel(x1, x2, isSameIndex) + RightChild.CalcKernel(x1, x2, isSameIndex);
-        }
-
-        internal override double CalcKernelGrad_Parameter1(double x1, double x2, bool isSameIndex)
-        {
-            throw new NotImplementedException();
+            return LeftChild.CalcKernel(m1, m2) + RightChild.CalcKernel(m1, m2);
         }
 
         internal override void OptimizeParameters(DenseVector X, DenseVector Y,

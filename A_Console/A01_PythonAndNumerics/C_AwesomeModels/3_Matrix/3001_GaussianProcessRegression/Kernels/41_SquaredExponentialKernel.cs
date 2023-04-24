@@ -20,23 +20,49 @@ public partial class GaussianProcessRegressionExecuter
         public SquaredExponentialKernel(double lengthScale)
         {
             LengthScale = lengthScale;
+
+            HyperParameters = new string[]
+            {
+                nameof(LengthScale),
+            };
+
         }
 
 
         // ★★★★★★★★★★★★★★★ methods
 
-        internal override double CalcKernel(double x1, double x2, bool isSameIndex)
+        internal override DenseMatrix CalcKernel(DenseVector m1, DenseVector m2)
         {
-            var d = x1 - x2;
-            var to = -0.5 * Math.Pow(d / LengthScale, 2);
-            return Math.Exp(to);
+            var K = new DenseMatrix(m1.Count, m2.Count);
+
+            for (int i1 = 0; i1 < m1.Count; i1++)
+            {
+                for (int i2 = 0; i2 < m2.Count; i2++)
+                {
+                    var d = m1[i1] - m2[i2];
+                    var to = -0.5 * Math.Pow(d / LengthScale, 2);
+                    K[i1, i2] = Math.Exp(to);
+                }
+            }
+
+            return K;
         }
 
-        internal override double CalcKernelGrad_Parameter1(double x1, double x2, bool isSameIndex)
+        internal DenseMatrix CalcKernelGrad_LengthScale(DenseVector m1, DenseVector m2)
         {
-            var d = x1 - x2;
-            var to = -0.5 * Math.Pow(d / LengthScale, 2);
-            return -2 * Math.Pow(LengthScale, -3) * to * Math.Exp(to);
+            var K = new DenseMatrix(m1.Count, m2.Count);
+
+            for (int i1 = 0; i1 < m1.Count; i1++)
+            {
+                for (int i2 = 0; i2 < m2.Count; i2++)
+                {
+                    var d = m1[i1] - m2[i2];
+                    var to = -0.5 * Math.Pow(d / LengthScale, 2);
+                    K[i1, i2] = -2 * Math.Pow(LengthScale, -3) * to * Math.Exp(to);
+                }
+            }
+
+            return K;
         }
 
         internal override void OptimizeParameters(DenseVector X, DenseVector Y,

@@ -19,19 +19,28 @@ public partial class GaussianProcessRegressionExecuter
         public WhiteNoiseKernel(double noiseLambda)
         {
             NoiseLambda = noiseLambda;
+
+            HyperParameters = new string[]
+            {
+                nameof(NoiseLambda),
+            };
+
         }
 
 
         // ★★★★★★★★★★★★★★★ methods
 
-        internal override double CalcKernel(double x1, double x2, bool isSameIndex)
+        internal override DenseMatrix CalcKernel(DenseVector m1, DenseVector m2)
         {
-            return isSameIndex ? NoiseLambda : 0;
+            if (m1.Count == m2.Count)
+                return NoiseLambda * DenseMatrix.CreateIdentity(m1.Count);
+
+            return DenseMatrix.Create(m1.Count, m2.Count, 0);
         }
 
-        internal override double CalcKernelGrad_Parameter1(double x1, double x2, bool isSameIndex)
+        internal DenseMatrix CalcKernelGrad_NoiseLambda(DenseVector x1, DenseVector x2)
         {
-            return 0;
+            return DenseMatrix.Create(x1.Count, x2.Count, 0);
         }
 
         internal override void OptimizeParameters(DenseVector X, DenseVector Y,

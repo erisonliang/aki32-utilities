@@ -4,7 +4,7 @@ namespace Aki32Utilities.ConsoleAppUtilities.PythonAndNumerics;
 public partial class GaussianProcessRegressionExecuter
 {
     /// <summary>
-    /// Multiple Kernel combination with addition
+    /// Multiple kernel combination with pointwise multiplication
     /// </summary>
     public class MultiplicationOperationKernel : KernelBase
     {
@@ -24,14 +24,9 @@ public partial class GaussianProcessRegressionExecuter
 
         // ★★★★★★★★★★★★★★★ methods
 
-        internal override double CalcKernel(double x1, double x2, bool isSameIndex)
+        internal override DenseMatrix CalcKernel(DenseVector m1, DenseVector m2)
         {
-            return LeftChild.CalcKernel(x1, x2, isSameIndex) * RightChild.CalcKernel(x1, x2, isSameIndex);
-        }
-
-        internal override double CalcKernelGrad_Parameter1(double x1, double x2, bool isSameIndex)
-        {
-            throw new NotImplementedException();
+            return (DenseMatrix)LeftChild.CalcKernel(m1, m2).PointwiseMultiply(RightChild.CalcKernel(m1, m2));
         }
 
         internal override void OptimizeParameters(DenseVector X, DenseVector Y,
@@ -49,7 +44,7 @@ public partial class GaussianProcessRegressionExecuter
 
         public override string ToString()
         {
-            return $"{LeftChild.ToString()}×{RightChild.ToString()}";
+            return $"{LeftChild.ToString()}⊙{RightChild.ToString()}"; // using Ademar product
         }
 
 

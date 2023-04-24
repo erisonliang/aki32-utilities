@@ -22,60 +22,19 @@ public partial class GaussianProcessRegressionExecuter
         internal DenseVector Ktt_Inv_Y { get; set; }
         internal int N => X.Count;
 
+        internal Guid Guid { get; set; } = Guid.NewGuid();
+        internal string[] HyperParameters { get; set; }
+
 
         // ★★★★★★★★★★★★★★★ methods
 
         /// <summary>
         /// カーネルの演算を表します。
         /// </summary>
-        /// <param name="x1"></param>
-        /// <param name="x2"></param>
-        /// <param name="isSameIndex"></param>
+        /// <param name="m1"></param>
+        /// <param name="m2"></param>
         /// <returns></returns>
-        internal abstract double CalcKernel(double x1, double x2, bool isSameIndex);
-        /// <summary>
-        /// カーネルの演算を表します。
-        /// </summary>
-        /// <param name="x1"></param>
-        /// <param name="x2"></param>
-        /// <returns></returns>
-        internal DenseMatrix CalcKernel(DenseVector x1, DenseVector x2)
-        {
-            var n1 = x1.Count;
-            var n2 = x2.Count;
-            var ks = new DenseMatrix(n1, n2);
-            for (int i1 = 0; i1 < n1; i1++)
-                for (int i2 = 0; i2 < n2; i2++)
-                    ks[i1, i2] = CalcKernel(x1[i1], x2[i2], n1 == n2 && i1 == i2);
-            return ks;
-        }
-
-        /// <summary>
-        /// カーネルの微分演算を表します。
-        /// </summary>
-        /// <param name="x1"></param>
-        /// <param name="x2"></param>
-        /// <param name="isSameIndex"></param>
-        /// <returns></returns>
-        /// <exception cref="NotImplementedException"></exception>
-        internal abstract double CalcKernelGrad_Parameter1(double x1, double x2, bool isSameIndex);
-        /// <summary>
-        /// カーネルの微分演算を表します。
-        /// </summary>
-        /// <param name="x1"></param>
-        /// <param name="x2"></param>
-        /// <returns></returns>
-        /// <exception cref="NotImplementedException"></exception>
-        internal DenseMatrix CalcKernelGrad_Parameter1(DenseVector x1, DenseVector x2)
-        {
-            var n1 = x1.Count;
-            var n2 = x2.Count;
-            var ks = new DenseMatrix(n1, n2);
-            for (int i1 = 0; i1 < n1; i1++)
-                for (int i2 = 0; i2 < n2; i2++)
-                    ks[i1, i2] = CalcKernelGrad_Parameter1(x1[i1], x2[i2], n1 == n2 && i1 == i2);
-            return ks;
-        }
+        internal abstract DenseMatrix CalcKernel(DenseVector m1, DenseVector m2);
 
         /// <summary>
         /// グラム行列（カーネル行列）などを作成します。
@@ -92,6 +51,7 @@ public partial class GaussianProcessRegressionExecuter
             Ktt_Inv_Y = Ktt_Inv * Y;
 
         }
+
         /// <summary>
         /// 回帰を適用します。
         /// </summary>

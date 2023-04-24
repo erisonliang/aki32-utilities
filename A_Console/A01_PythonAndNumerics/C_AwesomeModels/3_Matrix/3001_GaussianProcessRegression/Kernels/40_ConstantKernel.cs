@@ -16,22 +16,28 @@ public partial class GaussianProcessRegressionExecuter
 
         // ★★★★★★★★★★★★★★★ inits
 
-        public ConstantKernel(double constantValue)
+        public ConstantKernel(double constantWeight)
         {
-            ConstantWeight = constantValue;
+            ConstantWeight = constantWeight;
+
+            HyperParameters = new string[]
+            {
+                nameof(ConstantWeight),
+            };
+
         }
 
 
         // ★★★★★★★★★★★★★★★ methods
 
-        internal override double CalcKernel(double x1, double x2, bool isSameIndex)
+        internal override DenseMatrix CalcKernel(DenseVector m1, DenseVector m2)
         {
-            return ConstantWeight;
+            return DenseMatrix.Create(m1.Count, m2.Count, ConstantWeight);
         }
 
-        internal override double CalcKernelGrad_Parameter1(double x1, double x2, bool isSameIndex)
+        internal DenseMatrix CalcKernelGrad_ConstantWeight(DenseVector x1, DenseVector x2)
         {
-            return 0;
+            return DenseMatrix.Create(x1.Count, x2.Count, 0);
         }
 
         internal override void OptimizeParameters(DenseVector X, DenseVector Y,

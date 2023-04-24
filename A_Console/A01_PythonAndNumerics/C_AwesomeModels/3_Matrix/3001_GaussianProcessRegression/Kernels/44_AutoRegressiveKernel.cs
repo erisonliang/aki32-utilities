@@ -20,23 +20,53 @@ public partial class GaussianProcessRegressionExecuter
         public AutoRegressiveKernel(double rho)
         {
             Rho = rho;
+
+            HyperParameters = new string[]
+            {
+                nameof(Rho),
+            };
+
         }
 
 
         // ★★★★★★★★★★★★★★★ methods
 
-        internal override double CalcKernel(double x1, double x2, bool isSameIndex)
+        internal override DenseMatrix CalcKernel(DenseVector m1, DenseVector m2)
         {
-            throw new NotImplementedException();
+            var K = new DenseMatrix(m1.Count, m2.Count);
+
+            for (int i1 = 0; i1 < m1.Count; i1++)
+            {
+                for (int i2 = 0; i2 < m2.Count; i2++)
+                {
+                    throw new NotImplementedException();
+
+
+
+
+                }
+            }
+
+            return K;
         }
 
-        internal override double CalcKernelGrad_Parameter1(double x1, double x2, bool isSameIndex)
+        internal DenseMatrix CalcKernelGrad_Rho(DenseVector m1, DenseVector m2)
         {
-            throw new NotImplementedException();
+
+            var K = new DenseMatrix(m1.Count, m2.Count);
+
+            for (int i1 = 0; i1 < m1.Count; i1++)
+            {
+                for (int i2 = 0; i2 < m2.Count; i2++)
+                {
+                    throw new NotImplementedException();
 
 
 
+                }
+            }
 
+            return K;
         }
 
         internal override void OptimizeParameters(DenseVector X, DenseVector Y,
