@@ -63,109 +63,138 @@ public partial class GaussianProcessRegressionExecuter
     /// <param name="X_train"></param>
     /// <param name="Y_train"></param>
     /// <param name="maxTryCount"></param>
-    /// <param name="terminatingSRSS">Terminating threshold of SRSS of SSE</param>
+    /// <param name="terminatingRatio">Terminating threshold of difference of values</param>
     /// <param name="learningRate"></param>
-    /// <returns>Optimizing SRSS history</returns>
-    public double[] OptimizeParameters(DenseVector X_train, DenseVector Y_train,
-        int maxTryCount = 10000,
-        double terminatingSRSS = 0.000001d,
-        double learningRate = 0.0003d,
-        int wideOptimizeSize = 8
+    /// <returns>Optimize history</returns>
+    public TimeHistory OptimizeParameters(DenseVector X_train, DenseVector Y_train,
+        int maxTryCount = 2000,
+        double terminatingRatio = 0.00001d,
+        double learningRate = 0.001d,
+        int wideOptimizeSize = 8,
+        bool executeWideOptimize = true,
+        bool executePreciseOptimize = true
         )
     {
-        // wide optimize
+        var SSHistory = new TimeHistory();
+
+        try
         {
-            var maxCount = HyperParameters.Count * (2 * wideOptimizeSize + 1);
-            using var progress = new ProgressManager(maxCount);
-            Console.WriteLine("wide optimize");
-            progress.StartAutoWrite();
-
-            // 全てのパラメーターに対して，初期値の周辺の値を代入してみて比較する。
-            foreach (var targetParam in HyperParameters)
+            // wide optimize
+            if (executeWideOptimize)
             {
-                var initialParamValue = Kernel.GetParameterValue(targetParam)!.Value;
+                var maxCount = HyperParameters.Count * (2 * wideOptimizeSize + 1);
+                using var progress = new ProgressManager(maxCount);
+                Console.WriteLine("wide optimize");
+                progress.StartAutoWrite();
 
-                var tryingParamValues = new List<double>
+                // 全てのパラメーターに対して，初期値の周辺の値を代入してみて比較する。
+                foreach (var targetParam in HyperParameters)
+                {
+                    var initialParamValue = Kernel.GetParameterValue(targetParam)!.Value;
+
+                    var tryingParamValues = new List<double>
                 {
                     initialParamValue
                 };
 
-                for (int i = 1; i < wideOptimizeSize; i++)
-                {
-                    var weight = (double)i / wideOptimizeSize;
-                    tryingParamValues.Add(initialParamValue * weight);
-                    tryingParamValues.Add(initialParamValue / weight);
+                    for (int i = 1; i < wideOptimizeSize; i++)
+                    {
+                        var weight = (double)i / wideOptimizeSize;
+                        tryingParamValues.Add(initialParamValue * weight);
+                        tryingParamValues.Add(initialParamValue / weight);
+                    }
+
+                    var results = new List<(double ParamValue, double SSE)>();
+
+                    foreach (var tryingParamValue in tryingParamValues)
+                    {
+                        Kernel.SetParameterValue(targetParam, tryingParamValue);
+
+                        Fit(X_train, Y_train);
+
+                        var Ktt_Inv_Y_2 = (DenseMatrix)(Kernel.Ktt_Inv_Y.ToColumnMatrix() * Kernel.Ktt_Inv_Y.ToRowMatrix());
+                        var dK = Kernel.CalcKernelGrad(X_train, Y_train, targetParam);
+                        var difference = (Ktt_Inv_Y_2 - Kernel.Ktt_Inv).Multiply(dK); // 二乗和誤差
+
+                        results.Add((tryingParamValue, Math.Abs(difference.Diagonal().Sum())));
+                        progress.CurrentStep++;
+                    }
+
+                    var settingValue = results.MinBy(r => r.SSE).ParamValue;
+                    Kernel.SetParameterValue(targetParam, settingValue);
+
                 }
 
-                var results = new List<(double ParamValue, double SSE)>();
-
-                foreach (var tryingParamValue in tryingParamValues)
-                {
-                    Kernel.SetParameterValue(targetParam, tryingParamValue);
-
-                    Fit(X_train, Y_train);
-
-                    var Ktt_Inv_Y_2 = (DenseMatrix)(Kernel.Ktt_Inv_Y.ToColumnMatrix() * Kernel.Ktt_Inv_Y.ToRowMatrix());
-                    var dK = Kernel.CalcKernelGrad(X_train, Y_train, targetParam);
-                    var difference = (Ktt_Inv_Y_2 - Kernel.Ktt_Inv).Multiply(dK); // 二乗和誤差
-
-                    results.Add((tryingParamValue, Math.Abs(difference.Diagonal().Sum())));
-
-                    progress.CurrentStep++;
-                }
-
-                var settingValue = results.MinBy(r => r.SSE).ParamValue;
-                Kernel.SetParameterValue(targetParam, settingValue);
-
+                progress.WriteDone();
             }
 
-            progress.WriteDone();
-        }
-
-        // precise optimize
-        var SRSSHistory = new List<double>();
-        {
-            using var progress = new ProgressManager(maxTryCount);
-            Console.WriteLine("precise optimize");
-            progress.StartAutoWrite();
-
-            for (int i = 0; i < maxTryCount; i++)
+            // precise optimize
+            if (executePreciseOptimize)
             {
-                var SS = 0d;
+                using var progress = new ProgressManager(maxTryCount);
+                Console.WriteLine("precise optimize");
+                progress.StartAutoWrite();
+                var signSwap = 1d; //for emergency
 
-                foreach (var targetParam in HyperParameters)
+                for (int i = 0; i < maxTryCount; i++)
                 {
-                    Fit(X_train, Y_train);
+                    var step = new TimeHistoryStep();
 
-                    var Ktt_Inv_Y_2 = (DenseMatrix)(Kernel.Ktt_Inv_Y.ToColumnMatrix() * Kernel.Ktt_Inv_Y.ToRowMatrix());
-                    var dK = Kernel.CalcKernelGrad(X_train, Y_train, targetParam);
-                    var SSE = (Ktt_Inv_Y_2 - Kernel.Ktt_Inv).Multiply(dK); // 二乗和誤差
+                    // optimize
+                    foreach (var targetParam in HyperParameters)
+                    {
+                        Fit(X_train, Y_train);
 
-                    var addingValue = learningRate * SSE.Diagonal().Sum();
-                    Kernel.AddValueToParameter(targetParam, addingValue);
+                        var Ktt_Inv_Y_2 = (DenseMatrix)(Kernel.Ktt_Inv_Y.ToColumnMatrix() * Kernel.Ktt_Inv_Y.ToRowMatrix());
+                        var dK = Kernel.CalcKernelGrad(X_train, Y_train, targetParam);
+                        var difference = (Ktt_Inv_Y_2 - Kernel.Ktt_Inv).Multiply(dK); // 二乗和誤差
+                        var addingValue = learningRate * signSwap * difference.Diagonal().Sum();
 
-                    SS += Math.Pow(addingValue, 2);
+                        var originalValue = Kernel.GetParameterValue(targetParam)!.Value;
+                        Kernel.SetParameterValue(targetParam, originalValue + addingValue);
+
+                        step[targetParam.ToString()] = originalValue;
+                    }
+
+                    SSHistory.AppendStep(step);
+
+                    // terminate check
+                    if (SSHistory.DataRowCount >= 2)
+                    {
+                        var TerminatingFlag = true;
+
+                        foreach (var column in SSHistory.Columns)
+                        {
+                            var c = SSHistory[column][SSHistory.DataRowCount - 1];
+                            var p = SSHistory[column][SSHistory.DataRowCount - 2];
+                            if (Math.Abs((c - p) / p) > terminatingRatio)
+                                TerminatingFlag = false;
+                        }
+                        if (TerminatingFlag)
+                            throw new OperationCanceledException("terminated");
+
+                    }
+                    progress.CurrentStep++;
+
                 }
+                progress.WriteDone();
 
-                var SRSS = Math.Sqrt(Math.Abs(SS));
-                SRSSHistory.Add(SRSS);
-
-                progress.CurrentStep++;
-                if (SRSS < terminatingSRSS)
-                {
-                    progress.MaxStep = progress.CurrentStep;
-                    break;
-                }
             }
 
-            progress.WriteDone();
+        }
+        catch (OperationCanceledException)
+        {
+            // terminated
+        }
+        catch (Exception)
+        {
+            throw;
         }
 
         Console.WriteLine($"★ Parameters optimized.\r\n");
         Console.WriteLine(this.ToString());
 
-        return SRSSHistory.ToArray();
-
+        return SSHistory;
     }
 
 
@@ -199,9 +228,10 @@ public partial class GaussianProcessRegressionExecuter
         var kernel = k1 * k2 + k3;
         var gpr = new GaussianProcessRegressionExecuter(kernel);
 
+
         // (optional) optimize parameters
         var optimizeHistory = gpr.OptimizeParameters(X_train, Y_train);
-        PyPlotWrapper.LinePlot.DrawSimpleGraph(optimizeHistory.ToArray());
+        PyPlotWrapper.LinePlot.DrawSimpleGraph(optimizeHistory[1]);
 
 
         // fit and predict
