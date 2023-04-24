@@ -12,12 +12,34 @@ public partial class GaussianProcessRegressionExecuter
 
     public KernelBase Kernel { get; set; }
 
+    internal List<(Guid, string)> HyperParameters { get; set; }
+
 
     // ★★★★★★★★★★★★★★★ inits
 
     public GaussianProcessRegressionExecuter(KernelBase kernel)
     {
         Kernel = kernel;
+        HyperParameters = new List<(Guid, string)>();
+
+        void ProcessKernelRecursive(KernelBase k)
+        {
+            if (k is OperationKernelBase ok)
+            {
+                ProcessKernelRecursive(ok.LeftChild);
+                ProcessKernelRecursive(ok.RightChild);
+            }
+            else
+            {
+                HyperParameters.AddRange(k.HyperParameters.Select(kHP => (k.KernelID, kHP)));
+            }
+        }
+
+        ProcessKernelRecursive(Kernel);
+
+        Console.WriteLine($"{nameof(GaussianProcessRegressionExecuter)} instance created.\r\n");
+        Console.WriteLine(this.ToString());
+
     }
 
 
@@ -121,6 +143,20 @@ public partial class GaussianProcessRegressionExecuter
 
     }
 
+    public override string ToString()
+    {
+        var s = "";
+
+        s += $"Kernel:\r\n";
+        s += $"  {Kernel.ToString()}\r\n";
+        s += $"\r\n";
+        s += $"Hyper Parameters:\r\n";
+        foreach (var hp in HyperParameters)
+            s += $"  {hp}\r\n";
+        s += $"\r\n";
+        return s;
+
+    }
 
     // ★★★★★★★★★★★★★★★
 
