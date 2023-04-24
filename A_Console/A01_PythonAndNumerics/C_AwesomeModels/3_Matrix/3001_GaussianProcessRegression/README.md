@@ -26,10 +26,10 @@ after optimization
 ```C#
 
 // build model
-var k1 = new GaussianProcessRegressionExecuter.ConstantKernel(1d);
-var k2 = new GaussianProcessRegressionExecuter.SquaredExponentialKernel(1d);
-var k3 = new GaussianProcessRegressionExecuter.WhiteNoiseKernel(1 / 15d);
-var kernel = k1 * k2 + k3;
+var kc = new ConstantKernel(1d);
+var kse = new SquaredExponentialKernel(1d);
+var kwn = new WhiteNoiseKernel(1 / 15d);
+var kernel = kc * kse + kwn;
 var gpr = new GaussianProcessRegressionExecuter(kernel);
 
 
