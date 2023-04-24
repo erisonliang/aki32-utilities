@@ -31,6 +31,12 @@ public partial class GaussianProcessRegressionExecuter
                 + RightChild.CalcKernelGrad(X1, X2, targetParameter);
         }
 
+        internal override void AddValueToParameter(double addingValue, (Guid, string) targetParameter)
+        {
+            LeftChild.AddValueToParameter(addingValue,targetParameter);
+            RightChild.AddValueToParameter(addingValue,targetParameter);
+        }
+
         public override string ToString()
         {
             return $"{LeftChild.ToString()}+{RightChild.ToString()}";

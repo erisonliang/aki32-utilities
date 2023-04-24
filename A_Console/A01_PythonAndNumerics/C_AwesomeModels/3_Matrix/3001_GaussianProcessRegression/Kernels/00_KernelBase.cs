@@ -46,6 +46,13 @@ public partial class GaussianProcessRegressionExecuter
         internal abstract DenseMatrix CalcKernelGrad(DenseVector X1, DenseVector X2, (Guid, string) targetParameter);
 
         /// <summary>
+        /// カーネルのハイパーパラメーターに値を加算します。
+        /// </summary>
+        /// <param name="addingValue"></param>
+        /// <param name="targetParameter"></param>
+        internal abstract void AddValueToParameter(double addingValue, (Guid, string) targetParameter);
+
+        /// <summary>
         /// グラム行列（カーネル行列）などを作成します。
         /// </summary>
         /// <param name="XTrain"></param>

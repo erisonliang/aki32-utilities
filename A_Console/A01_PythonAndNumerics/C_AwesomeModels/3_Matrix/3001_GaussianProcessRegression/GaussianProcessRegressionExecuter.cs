@@ -1,4 +1,6 @@
-﻿using Aki32Utilities.ConsoleAppUtilities.General;
+﻿using System.ComponentModel.Design.Serialization;
+
+using Aki32Utilities.ConsoleAppUtilities.General;
 
 using MathNet.Numerics.LinearAlgebra.Double;
 
@@ -74,49 +76,26 @@ public partial class GaussianProcessRegressionExecuter
         double learning_rate = 0.05
         )
     {
-        //var N = X_train.Count;
-        //double t = 1;
+        // target = length
 
-        //for (int k = 0; k < tryCount; k++)
-        //{
-        //    var K = new DenseMatrix(N);
-        //    var dK = new DenseMatrix(N);
+        var N = X_train.Count;
 
-        //    for (int i = 0; i < N; i++)
-        //        for (int j = 0; j < N; j++)
-        //        {
-        //            K[i, j] = Kernel(X_train[i], X_train[j], t);
-        //            dK[i, j] = dKernel(X_train[i], X_train[j], t);
-        //        }
+        var targetParam = HyperParameters.First(p => p.Item2 == "LengthScale");
+        double targetParamValue = 1;
 
-        //    // noise
-        //    for (int i = 0; i < N; i++)
-        //        K[i, i] += noiseLambda;
+        for (int k = 0; k < tryCount; k++)
+        {
+            Fit(X_train, Y_train);
 
-        //    // K^(-1)
-        //    var KInv = K.Inverse();
-        //    var Ans = KInv * Y_train;
+            var Ktt_Inv_Y_2 = (DenseMatrix)(Kernel.Ktt_Inv_Y.ToColumnMatrix() * Kernel.Ktt_Inv_Y.ToRowMatrix());
+            var dK = Kernel.CalcKernelGrad(X_train, Y_train, targetParam);
 
-        //    var AnsMat = new DenseMatrix(N);
-        //    for (int i = 0; i < N; i++)
-        //        for (int j = 0; j < N; j++)
-        //            AnsMat[i, j] = Ans[i] * Ans[j];
+            var mm = (Ktt_Inv_Y_2 - Kernel.Ktt_Inv).Multiply(dK);
 
-        //    var mm = (AnsMat - KInv).Multiply(dK);
-        //    double tr = 0;
-        //    for (int i = 0; i < N; i++)
-        //        tr += mm[i, i];
-        //    t += tr * learning_rate;
-        //}
-
-        //return t;
-
-
-
-
+            var addingValue = learning_rate * mm.Diagonal().Sum();
+            Kernel.AddValueToParameter(addingValue, targetParam);
+        }
     }
-
-
 
 
     // ★★★★★★★★★★★★★★★ methods (static)

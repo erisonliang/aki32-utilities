@@ -59,6 +59,18 @@ public partial class GaussianProcessRegressionExecuter
             return DenseMatrix.Create(X1.Count, X2.Count, 0);
         }
 
+        internal override void AddValueToParameter(double addingValue, (Guid, string) targetParameter)
+        {
+            if (targetParameter.Item1 == KernelID)
+            {
+                _ = targetParameter.Item2 switch
+                {
+                    nameof(NoiseLambda) => NoiseLambda += addingValue,
+                    _ => throw new InvalidOperationException("No such parameter found in this kernel."),
+                };
+            }
+        }
+
         public override string ToString()
         {
             return $"δ({NoiseLambda:F3})";

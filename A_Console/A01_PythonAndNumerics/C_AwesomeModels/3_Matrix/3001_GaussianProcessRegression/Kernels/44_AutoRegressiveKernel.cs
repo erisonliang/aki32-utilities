@@ -84,7 +84,19 @@ public partial class GaussianProcessRegressionExecuter
 
             return K;
         }
-        
+
+        internal override void AddValueToParameter(double addingValue, (Guid, string) targetParameter)
+        {
+            if (targetParameter.Item1 == KernelID)
+            {
+                _ = targetParameter.Item2 switch
+                {
+                    nameof(Rho) => Rho += addingValue,
+                    _ => throw new InvalidOperationException("No such parameter found in this kernel."),
+                };
+            }
+        }
+
         public override string ToString()
         {
             return $"AR({Rho:F3})";
