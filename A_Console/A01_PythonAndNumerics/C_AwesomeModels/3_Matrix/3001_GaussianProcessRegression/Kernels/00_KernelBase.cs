@@ -48,9 +48,9 @@ public partial class GaussianProcessRegressionExecuter
         /// <summary>
         /// カーネルのハイパーパラメーターに値を加算します。
         /// </summary>
-        /// <param name="addingValue"></param>
         /// <param name="targetParameter"></param>
-        internal void AddValueToParameter(double addingValue, (Guid, string) targetParameter)
+        /// <param name="addingValue"></param>
+        internal void AddValueToParameter((Guid, string) targetParameter, double addingValue)
         {
             SetParameterValue(targetParameter, GetParameterValue(targetParameter)!.Value + addingValue);
         }

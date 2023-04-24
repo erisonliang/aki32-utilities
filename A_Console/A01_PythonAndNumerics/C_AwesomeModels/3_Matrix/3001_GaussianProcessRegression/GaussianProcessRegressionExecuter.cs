@@ -68,54 +68,98 @@ public partial class GaussianProcessRegressionExecuter
     /// <returns>Optimizing SRSS history</returns>
     public double[] OptimizeParameters(DenseVector X_train, DenseVector Y_train,
         int maxTryCount = 10000,
-        double terminatingSRSS = 0.003d,
-        double learningRate = 0.0003d
+        double terminatingSRSS = 0.000003d,
+        double learningRate = 0.0003d,
+        int wideOptimizeSize = 8
         )
     {
-        using var progress = new ProgressManager(maxTryCount);
-        progress.StartAutoWrite();
-
         // wide optimize
         {
-            // 全てのパラメーター，初期値の{ 1/8, 1/4, 1/2, 1, 2, 4, 8}倍を比較する。
+            Console.Write("wide optimize");
+            var maxCount = HyperParameters.Count * (2 * wideOptimizeSize + 1);
+            using var progress = new ProgressManager(maxCount);
+            progress.StartAutoWrite();
 
+            // 全てのパラメーターに対して，初期値の周辺の値を代入してみて比較する。
+            foreach (var targetParam in HyperParameters)
+            {
+                var initialParamValue = Kernel.GetParameterValue(targetParam)!.Value;
 
+                var tryingParamValues = new List<double>
+                {
+                    initialParamValue
+                };
 
+                for (int i = 1; i < wideOptimizeSize; i++)
+                {
+                    var weight = (double)i / wideOptimizeSize;
+                    tryingParamValues.Add(initialParamValue * weight);
+                    tryingParamValues.Add(initialParamValue / weight);
+                }
 
+                var results = new List<(double ParamValue, double SSE)>();
 
+                foreach (var tryingParamValue in tryingParamValues)
+                {
+                    Kernel.SetParameterValue(targetParam, tryingParamValue);
 
+                    Fit(X_train, Y_train);
 
+                    var Ktt_Inv_Y_2 = (DenseMatrix)(Kernel.Ktt_Inv_Y.ToColumnMatrix() * Kernel.Ktt_Inv_Y.ToRowMatrix());
+                    var dK = Kernel.CalcKernelGrad(X_train, Y_train, targetParam);
+                    var difference = (Ktt_Inv_Y_2 - Kernel.Ktt_Inv).Multiply(dK); // 二乗和誤差
+
+                    results.Add((tryingParamValue, Math.Abs(difference.Diagonal().Sum())));
+
+                    progress.CurrentStep++;
+                }
+
+                var settingValue = results.MinBy(r => r.SSE).ParamValue;
+                Kernel.SetParameterValue(targetParam, settingValue);
+
+            }
+
+            progress.WriteDone();
         }
 
         // precise optimize
         var SRSSHistory = new List<double>();
-        for (int i = 0; i < maxTryCount; i++)
         {
-            var SS = 0d;
+            Console.Write("precise optimize");
+            using var progress = new ProgressManager(maxTryCount);
+            progress.StartAutoWrite();
 
-            foreach (var targetParam in HyperParameters)
+            for (int i = 0; i < maxTryCount; i++)
             {
-                Fit(X_train, Y_train);
-                var Ktt_Inv_Y_2 = (DenseMatrix)(Kernel.Ktt_Inv_Y.ToColumnMatrix() * Kernel.Ktt_Inv_Y.ToRowMatrix());
-                var dK = Kernel.CalcKernelGrad(X_train, Y_train, targetParam);
+                var SS = 0d;
 
-                var SSE = (Ktt_Inv_Y_2 - Kernel.Ktt_Inv).Multiply(dK); // 二乗和誤差
+                foreach (var targetParam in HyperParameters)
+                {
+                    Fit(X_train, Y_train);
 
-                var addingValue = learningRate * SSE.Diagonal().Sum();
-                Kernel.AddValueToParameter(addingValue, targetParam);
+                    var Ktt_Inv_Y_2 = (DenseMatrix)(Kernel.Ktt_Inv_Y.ToColumnMatrix() * Kernel.Ktt_Inv_Y.ToRowMatrix());
+                    var dK = Kernel.CalcKernelGrad(X_train, Y_train, targetParam);
+                    var SSE = (Ktt_Inv_Y_2 - Kernel.Ktt_Inv).Multiply(dK); // 二乗和誤差
 
-                SS += Math.Pow(addingValue, 2);
+                    var addingValue = learningRate * SSE.Diagonal().Sum();
+                    Kernel.AddValueToParameter(targetParam, addingValue);
+
+                    SS += Math.Pow(addingValue, 2);
+                }
+
+                var SRSS = Math.Sqrt(Math.Abs(SS));
+                SRSSHistory.Add(SRSS);
+
+                progress.CurrentStep = i + 1;
+                if (SRSS < terminatingSRSS)
+                {
+                    progress.MaxStep = i + 1;
+                    break;
+                }
             }
 
-            var SRSS = Math.Sqrt(SS);
-            SRSSHistory.Add(SRSS);
-            if (SRSS < terminatingSRSS)
-                break;
-
-            progress.CurrentStep = i;
+            progress.WriteDone();
         }
-
-        progress.WriteDone();
 
         Console.WriteLine($"★ Parameters optimized.\r\n");
         Console.WriteLine(this.ToString());
@@ -142,7 +186,7 @@ public partial class GaussianProcessRegressionExecuter
         //var X = new double[] { 1, 3, 5, 6, 7, 8 };
         //var X = new double[] { 1, 1.1, 1.2, 1.3, 3, 5, 6, 7, 8 };
         //var X_train = new double[] { 1, 1.1, 1.2, 1.3, 3, 5, 5.2, 5.3, 5.4, 5.6, 5.8, 6, 7, 8, 8, 8, 8 };
-        var X_train = new double[] { 1, 1.5, 2, 5, 5, 5, 5.5, 5.5, 5.5, 6, 6, 6, 6.5, 6.5, 6.5, 7, 7, 7, 8, 8, 8, 8 };
+        var X_train = new double[] { 0, 0.5, 1, 1.5, 2, 2, 2, 5, 5, 5, 5.5, 5.5, 5.5, 6, 6, 6, 6.5, 6.5, 6.5, 7, 7, 7, 8, 8, 8, 8 };
         var Y_train = X_train.Select(x => f(x, true)).ToArray();
         var X_predict = EnumerableExtension.Range_WithStep(0, 10, 0.1).ToArray();
         var Y_true = X_predict.Select(x => f(x)).ToArray();
