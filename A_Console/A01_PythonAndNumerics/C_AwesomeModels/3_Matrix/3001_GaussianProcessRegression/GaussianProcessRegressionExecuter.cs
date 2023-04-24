@@ -150,10 +150,10 @@ public partial class GaussianProcessRegressionExecuter
                 var SRSS = Math.Sqrt(Math.Abs(SS));
                 SRSSHistory.Add(SRSS);
 
-                progress.CurrentStep = i + 1;
+                progress.CurrentStep++;
                 if (SRSS < terminatingSRSS)
                 {
-                    progress.MaxStep = i + 1;
+                    progress.MaxStep = progress.CurrentStep;
                     break;
                 }
             }
