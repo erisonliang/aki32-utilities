@@ -4,7 +4,13 @@ namespace Aki32Utilities.ConsoleAppUtilities.PythonAndNumerics;
 public partial class GaussianProcessRegressionExecuter
 {
     /// <summary>
-    /// Squared Exponential (also known as Radial Basis Function Kernel (RBF))
+    /// Represent all kernels known as followings.
+    /// <br/>
+    /// <br/>- SE (Squared Exponential Kernel)
+    /// <br/>- RBF (Radial Basis Function Kernel)
+    /// <br/>- EQ (Exponentiated Quadratic Kernel)
+    /// <br/>- G(Gaussian Kernel)
+    /// <br/>
     /// <br/> * without σ² in front
     /// </summary>
     public class SquaredExponentialKernel : KernelBase
