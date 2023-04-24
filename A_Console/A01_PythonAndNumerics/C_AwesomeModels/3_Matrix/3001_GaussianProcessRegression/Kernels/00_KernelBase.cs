@@ -22,8 +22,8 @@ public partial class GaussianProcessRegressionExecuter
         internal DenseVector Ktt_Inv_Y { get; set; }
         internal int N => X.Count;
 
-        internal Guid Guid { get; set; } = Guid.NewGuid();
-        internal string[] HyperParameters { get; set; }
+        internal Guid KernelID { get; set; } = Guid.NewGuid();
+        internal string[] HyperParameters { get; set; } = Array.Empty<string>();
 
 
         // ★★★★★★★★★★★★★★★ methods
