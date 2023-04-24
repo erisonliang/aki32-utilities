@@ -1,11 +1,10 @@
 ﻿
-using MathNet.Numerics.LinearAlgebra.Double;
 
 namespace Aki32Utilities.ConsoleAppUtilities.PythonAndNumerics;
 public partial class GaussianProcessRegressionExecuter
 {
     /// <summary>
-    /// Multiple kernel combination with addition
+    /// Multiple kernel combination
     /// </summary>
     public abstract class OperationKernelBase : KernelBase
     {
