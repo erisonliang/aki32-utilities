@@ -45,41 +45,71 @@ public partial class GaussianProcessRegressionExecuter
 
     // ★★★★★★★★★★★★★★★ methods
 
-    public (double[] predictY, double[] cov) FitAndPredict(double[] X, double[] Y, double[] predictX)
+    public (double[] Y_predict, double[] cov) FitAndPredict(double[] X_train, double[] Y_train, double[] X_predict)
     {
-        var _X = new DenseVector(X);
-        var _Y = new DenseVector(Y);
-        var _predictX = new DenseVector(predictX);
+        var _X = new DenseVector(X_train);
+        var _Y = new DenseVector(Y_train);
+        var _X_predict = new DenseVector(X_predict);
 
-        var result = FitAndPredict(_X, _Y, _predictX);
+        var result = FitAndPredict(_X, _Y, _X_predict);
 
-        var predictY = result.predictY.ToArray();
-        var cov = result.cov.ToArray();
+        var Y_predict = result.Y_predict.ToArray();
+        var cov = result.Cov.ToArray();
 
-        return (predictY, cov);
+        return (Y_predict, cov);
     }
 
-    public (DenseVector predictY, DenseVector cov) FitAndPredict(DenseVector X, DenseVector Y, DenseVector predictX)
+    public (DenseVector Y_predict, DenseVector Cov) FitAndPredict(DenseVector X_train, DenseVector Y_train, DenseVector X_predict)
     {
-        Fit(X, Y);
-        return Predict(predictX);
+        Fit(X_train, Y_train);
+        return Predict(X_predict);
     }
 
     public void Fit(DenseVector X, DenseVector Y) => Kernel.Fit(X, Y);
 
-    public (DenseVector predictY, DenseVector cov) Predict(DenseVector predictX) => Kernel.Predict(predictX);
+    public (DenseVector Y_predict, DenseVector cov) Predict(DenseVector X_predict) => Kernel.Predict(X_predict);
 
-    public void OptimizeParameters(DenseVector X, DenseVector Y,
+    public void OptimizeParameters(DenseVector X_train, DenseVector Y_train,
         double tryCount = 100,
         double learning_rate = 0.05
         )
     {
-        throw new NotImplementedException();
+        //var N = X_train.Count;
+        //double t = 1;
 
+        //for (int k = 0; k < tryCount; k++)
+        //{
+        //    var K = new DenseMatrix(N);
+        //    var dK = new DenseMatrix(N);
 
+        //    for (int i = 0; i < N; i++)
+        //        for (int j = 0; j < N; j++)
+        //        {
+        //            K[i, j] = Kernel(X_train[i], X_train[j], t);
+        //            dK[i, j] = dKernel(X_train[i], X_train[j], t);
+        //        }
 
+        //    // noise
+        //    for (int i = 0; i < N; i++)
+        //        K[i, i] += noiseLambda;
 
+        //    // K^(-1)
+        //    var KInv = K.Inverse();
+        //    var Ans = KInv * Y_train;
 
+        //    var AnsMat = new DenseMatrix(N);
+        //    for (int i = 0; i < N; i++)
+        //        for (int j = 0; j < N; j++)
+        //            AnsMat[i, j] = Ans[i] * Ans[j];
+
+        //    var mm = (AnsMat - KInv).Multiply(dK);
+        //    double tr = 0;
+        //    for (int i = 0; i < N; i++)
+        //        tr += mm[i, i];
+        //    t += tr * learning_rate;
+        //}
+
+        //return t;
 
 
 
@@ -105,10 +135,10 @@ public partial class GaussianProcessRegressionExecuter
 
         //var X = new double[] { 1, 3, 5, 6, 7, 8 };
         //var X = new double[] { 1, 1.1, 1.2, 1.3, 3, 5, 6, 7, 8 };
-        var X = new double[] { 1, 1.1, 1.2, 1.3, 3, 5, 5.2, 5.3, 5.4, 5.6, 5.8, 6, 7, 8, 8, 8, 8 };
-        var Y = X.Select(x => f(x, true)).ToArray();
-        var predictX = EnumerableExtension.Range_WithStep(0, 10, 0.1).ToArray();
-        var correctY = predictX.Select(x => f(x)).ToArray();
+        var X_train = new double[] { 1, 1.1, 1.2, 1.3, 3, 5, 5.2, 5.3, 5.4, 5.6, 5.8, 6, 7, 8, 8, 8, 8 };
+        var Y_train = X_train.Select(x => f(x, true)).ToArray();
+        var X_predict = EnumerableExtension.Range_WithStep(0, 10, 0.1).ToArray();
+        var Y_true = X_predict.Select(x => f(x)).ToArray();
 
         var k1 = new GaussianProcessRegressionExecuter.ConstantKernel(1d);
         var k2 = new GaussianProcessRegressionExecuter.SquaredExponentialKernel(1d);
@@ -117,10 +147,10 @@ public partial class GaussianProcessRegressionExecuter
 
         var gpr = new GaussianProcessRegressionExecuter(kernel);
         //gpr.OptimizeParameters(X, Y);
-        (var predictY, var cov) = gpr.FitAndPredict(X, Y, predictX);
-        var std1 = cov.Select(x => Math.Sqrt(x)).ToArray();
-        var CI95 = std1.ProductForEach(1.96);
-        var CI99 = std1.ProductForEach(2.58);
+        (var Y_predict, var cov) = gpr.FitAndPredict(X_train, Y_train, X_predict);
+        var Y_Std = cov.Select(x => Math.Sqrt(x)).ToArray();
+        var Y_95CI = Y_Std.ProductForEach(1.96);
+        var Y_99CI = Y_Std.ProductForEach(2.58);
 
         new Figure
         {
@@ -136,16 +166,16 @@ public partial class GaussianProcessRegressionExecuter
                 {
                     new ScatterPlot(Array.Empty<double>(),Array.Empty<double>()){ MarkerColor="yellow", MarkerSize=100, LegendLabel=kernel.ToString()},
 
-                    new LinePlot(predictX, correctY) { LineColor="g", LineWidth=3, LegendLabel="True f(X)= Xsin(X)"},
-                    new ScatterPlot(X, Y) { MarkerSize=130, MarkerColor="g", LegendLabel="Observed Data"},
+                    new LinePlot(X_predict, Y_true) { LineColor="g", LineWidth=3, LegendLabel="True f(X)= Xsin(X)"},
+                    new ScatterPlot(X_train, Y_train) { MarkerSize=130, MarkerColor="g", LegendLabel="Observed Data"},
 
-                    new LinePlot(predictX, predictY) { LineColor="red", LineWidth=3, LegendLabel="Predicted Mean"},
+                    new LinePlot(X_predict, Y_predict) { LineColor="red", LineWidth=3, LegendLabel="Predicted Mean"},
 
-                    new FillBetweenPlot(predictX, predictY.AddForEach(CI95), predictY.SubForEach(CI95)) {FillColor="red", Alpha=0.20, LegendLabel="95% CI"},
+                    new FillBetweenPlot(X_predict, Y_predict.AddForEach(Y_95CI), Y_predict.SubForEach(Y_95CI)) {FillColor="red", Alpha=0.20, LegendLabel="95% CI"},
                     //new LinePlot(predictX, predictY.AddForEach(CI95)) { LineColor="red", LineStyle="-", Alpha=0.20 },
                     //new LinePlot(predictX, predictY.SubForEach(CI95)) { LineColor="red", LineStyle="-", Alpha=0.20 },
 
-                    new FillBetweenPlot(predictX, predictY.AddForEach(CI99), predictY.SubForEach(CI99)) {FillColor="red", Alpha=0.10, LegendLabel="99% CI"},
+                    new FillBetweenPlot(X_predict, Y_predict.AddForEach(Y_99CI), Y_predict.SubForEach(Y_99CI)) {FillColor="red", Alpha=0.10, LegendLabel="99% CI"},
                     //new LinePlot(predictX, predictY.AddForEach(CI99)) { LineColor="red", LineStyle="-", Alpha=0.10 },
                     //new LinePlot(predictX, predictY.SubForEach(CI99)) { LineColor="red", LineStyle="-", Alpha=0.10 },
 

@@ -48,36 +48,36 @@ public partial class GaussianProcessRegressionExecuter
         /// <summary>
         /// グラム行列（カーネル行列）などを作成します。
         /// </summary>
-        /// <param name="X"></param>
+        /// <param name="XTrain"></param>
         /// <returns></returns>
-        internal void Fit(DenseVector X, DenseVector Y)
+        internal void Fit(DenseVector XTrain, DenseVector Y_train)
         {
-            this.X = X;
+            this.X = XTrain;
 
             // kernel
-            Ktt = CalcKernel(X, X);
+            Ktt = CalcKernel(XTrain, XTrain);
             Ktt_Inv = (DenseMatrix)Ktt.Inverse();
-            Ktt_Inv_Y = Ktt_Inv * Y;
+            Ktt_Inv_Y = Ktt_Inv * Y_train;
 
         }
 
         /// <summary>
         /// 回帰を適用します。
         /// </summary>
-        /// <param name="predictX"></param>
+        /// <param name="X_predict"></param>
         /// <returns></returns>
-        internal (DenseVector predictY, DenseVector cov) Predict(DenseVector predictX)
+        internal (DenseVector Y_predict, DenseVector cov) Predict(DenseVector X_predict)
         {
             if (Ktt_Inv is null)
                 throw new InvalidOperationException("No available fitted data found. Consider to call \"Fit()\" first!");
 
-            var Ktp = CalcKernel(X, predictX);
-            var Kpp = CalcKernel(predictX, predictX);
+            var Ktp = CalcKernel(X, X_predict);
+            var Kpp = CalcKernel(X_predict, X_predict);
 
-            var predictY = (DenseVector)(Ktp.Transpose() * Ktt_Inv_Y);
+            var Y_predict = (DenseVector)(Ktp.Transpose() * Ktt_Inv_Y);
             var cov = (DenseVector)(Kpp - Ktp.Transpose() * Ktt_Inv * Ktp).Diagonal();
 
-            return (predictY, cov);
+            return (Y_predict, cov);
 
         }
 
