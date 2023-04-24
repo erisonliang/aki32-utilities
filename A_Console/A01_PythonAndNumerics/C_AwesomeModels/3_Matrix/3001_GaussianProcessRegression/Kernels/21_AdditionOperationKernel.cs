@@ -6,14 +6,8 @@ public partial class GaussianProcessRegressionExecuter
     /// <summary>
     /// Multiple kernel combination with addition
     /// </summary>
-    public class AdditionOperationKernel : KernelBase
+    public class AdditionOperationKernel : OperationKernelBase
     {
-
-        // ★★★★★★★★★★★★★★★ props
-
-        public KernelBase LeftChild { get; set; }
-        public KernelBase RightChild { get; set; }
-
 
         // ★★★★★★★★★★★★★★★ inits
 

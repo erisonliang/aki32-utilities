@@ -6,14 +6,8 @@ public partial class GaussianProcessRegressionExecuter
     /// <summary>
     /// Multiple kernel combination with pointwise multiplication
     /// </summary>
-    public class MultiplicationOperationKernel : KernelBase
+    public class MultiplicationOperationKernel : OperationKernelBase
     {
-
-        // ★★★★★★★★★★★★★★★ props
-
-        public KernelBase LeftChild { get; set; }
-        public KernelBase RightChild { get; set; }
-
 
         // ★★★★★★★★★★★★★★★ inits
 
@@ -44,7 +38,7 @@ public partial class GaussianProcessRegressionExecuter
 
         public override string ToString()
         {
-            return $"{LeftChild.ToString()}⊙{RightChild.ToString()}"; // using Ademar product
+            return $"{LeftChild.ToString()}×{RightChild.ToString()}";
         }
 
 
