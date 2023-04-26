@@ -39,10 +39,10 @@ PyPlotWrapper.LinePlot.DrawSimpleGraph(optimizeHistory[1]);
 
 
 // fit and predict
-(var Y_predict, var Y_Cov) = gpr.FitAndPredict(X_train, Y_train, X_predict);
-var Y_Std = Y_Cov.Select(x => Math.Sqrt(x)).ToArray();
-var Y_95CI = Y_Std.ProductForEach(1.96);
-var Y_99CI = Y_Std.ProductForEach(2.58);
+(var Y_predict, var Y_cov) = gpr.FitAndPredict(X_train, Y_train, X_predict);
+var Y_std = Y_cov.Select(x => Math.Sqrt(x)).ToArray();
+var Y_95CI = Y_std.ProductForEach(1.96);
+var Y_99CI = Y_std.ProductForEach(2.58);
 
 ```
 
