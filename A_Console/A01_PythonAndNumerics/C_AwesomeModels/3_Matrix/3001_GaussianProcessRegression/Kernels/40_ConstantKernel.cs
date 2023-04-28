@@ -24,12 +24,14 @@ public partial class GaussianProcessRegressionExecuter
             {
                 nameof(ConstantWeight),
             };
-
         }
 
 
         // ★★★★★★★★★★★★★★★ methods
 
+        /// <summary>
+        /// K = σ²
+        /// </summary>
         internal override DenseMatrix CalcKernel(DenseVector X1, DenseVector X2)
         {
             return DenseMatrix.Create(X1.Count, X2.Count, ConstantWeight);
@@ -51,9 +53,15 @@ public partial class GaussianProcessRegressionExecuter
             }
         }
 
+        /// <summary>
+        /// dK/dσ = 2σ
+        /// </summary>
+        /// <param name="X1"></param>
+        /// <param name="X2"></param>
+        /// <returns></returns>
         internal DenseMatrix CalcKernelGrad_ConstantWeight(DenseVector X1, DenseVector X2)
         {
-            return DenseMatrix.Create(X1.Count, X2.Count, 0);
+            return DenseMatrix.Create(X1.Count, X2.Count, 2 * Math.Sqrt(ConstantWeight));
         }
 
         internal override double? GetParameterValue((Guid, string) targetParameter)

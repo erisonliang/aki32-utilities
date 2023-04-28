@@ -12,29 +12,32 @@ public partial class GaussianProcessRegressionExecuter
         // ★★★★★★★★★★★★★★★ props
 
         public double NoiseLambda { get; set; }
+        public double InitialNoiseLambda { get; set; }
 
 
         // ★★★★★★★★★★★★★★★ inits
 
         public WhiteNoiseKernel(double noiseLambda)
         {
+            InitialNoiseLambda = noiseLambda;
             NoiseLambda = noiseLambda;
 
             HyperParameters = new string[]
             {
                 nameof(NoiseLambda),
             };
-
         }
 
 
         // ★★★★★★★★★★★★★★★ methods
 
+        /// <summary>
+        /// K = δ²
+        /// </summary>
         internal override DenseMatrix CalcKernel(DenseVector X1, DenseVector X2)
         {
             if (X1.Count == X2.Count)
                 return NoiseLambda * DenseMatrix.CreateIdentity(X1.Count);
-
             return DenseMatrix.Create(X1.Count, X2.Count, 0);
         }
 
@@ -54,8 +57,16 @@ public partial class GaussianProcessRegressionExecuter
             }
         }
 
+        /// <summary>
+        /// dK/dδ = 2δ
+        /// </summary>
+        /// <param name="X1"></param>
+        /// <param name="X2"></param>
+        /// <returns></returns>
         internal DenseMatrix CalcKernelGrad_NoiseLambda(DenseVector X1, DenseVector X2)
         {
+            if (X1.Count == X2.Count)
+                return 2 * Math.Sqrt(NoiseLambda) * DenseMatrix.CreateIdentity(X1.Count);
             return DenseMatrix.Create(X1.Count, X2.Count, 0);
         }
 
