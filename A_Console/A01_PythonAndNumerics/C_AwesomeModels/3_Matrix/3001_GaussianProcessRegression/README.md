@@ -98,6 +98,12 @@ https://datachemeng.com/kernel_design_in_gpr/
 ```
 
 
+- flow
+<img name="" src="https://github.com/aki32/aki32-utilities/raw/main/9_Assets/Images/A01_C_3001_Algorithm.jpg" width="666">
+
+
+
+
 
 
 <br>
