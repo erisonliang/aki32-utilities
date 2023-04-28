@@ -20,14 +20,10 @@ public partial class GaussianProcessRegressionExecuter
 
         public PeriodicKernel(double lengthScale, double p)
         {
-            LengthScale = new HyperParameter(nameof(LengthScale), lengthScale, false, double.Epsilon, double.MaxValue);
-            P = new HyperParameter(nameof(P), p, false, double.Epsilon, double.MaxValue);
+            LengthScale = new HyperParameter(nameof(LengthScale), lengthScale, KernelID, false, double.Epsilon, double.MaxValue);
+            P = new HyperParameter(nameof(P), p, KernelID, false, double.Epsilon, double.MaxValue);
 
-            HyperParameters = new string[]
-            {
-                nameof(LengthScale),
-                nameof(P),
-            };
+            HyperParameters = new HyperParameter[] { LengthScale, P };
 
         }
 
@@ -51,11 +47,11 @@ public partial class GaussianProcessRegressionExecuter
             return K;
         }
 
-        internal override DenseMatrix CalcKernelGrad(DenseVector X1, DenseVector X2, (Guid, string) targetParameter)
+        internal override DenseMatrix CalcKernelGrad(DenseVector X1, DenseVector X2, HyperParameter targetParameter)
         {
-            if (targetParameter.Item1 == KernelID)
+            if (targetParameter.ParentKernelID == KernelID)
             {
-                return targetParameter.Item2 switch
+                return targetParameter.Name switch
                 {
                     nameof(LengthScale) => CalcKernelGrad_LengthScale(X1, X2),
                     nameof(P) => CalcKernelGrad_P(X1, X2),
@@ -104,35 +100,6 @@ public partial class GaussianProcessRegressionExecuter
             }
 
             return K;
-        }
-
-        internal override double? GetParameterValue((Guid, string) targetParameter)
-        {
-            if (targetParameter.Item1 == KernelID)
-            {
-                return targetParameter.Item2 switch
-                {
-                    nameof(LengthScale) => LengthScale,
-                    nameof(P) => P,
-                    _ => throw new InvalidOperationException("No such parameter found in this kernel."),
-                };
-            }
-            else
-            {
-                return null;
-            }
-        }
-        internal override void SetParameterValue((Guid, string) targetParameter, double settingValue)
-        {
-            if (targetParameter.Item1 == KernelID)
-            {
-                _ = targetParameter.Item2 switch
-                {
-                    nameof(LengthScale) => LengthScale.Value = settingValue,
-                    nameof(P) => P.Value = settingValue,
-                    _ => throw new InvalidOperationException("No such parameter found in this kernel."),
-                };
-            }
         }
 
         public override string ToString()

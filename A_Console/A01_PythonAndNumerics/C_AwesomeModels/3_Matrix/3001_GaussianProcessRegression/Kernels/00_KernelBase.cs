@@ -23,7 +23,7 @@ public partial class GaussianProcessRegressionExecuter
         internal int N => X.Count;
 
         internal Guid KernelID { get; set; } = Guid.NewGuid();
-        internal string[] HyperParameters { get; set; } = Array.Empty<string>();
+        internal HyperParameter[] HyperParameters { get; set; } = Array.Empty<HyperParameter>();
 
 
         // ★★★★★★★★★★★★★★★ methods
@@ -43,23 +43,7 @@ public partial class GaussianProcessRegressionExecuter
         /// <param name="Y"></param>
         /// <param name="targetParameter"></param>
         /// <returns></returns>
-        internal abstract DenseMatrix CalcKernelGrad(DenseVector X1, DenseVector X2, (Guid, string) targetParameter);
-
-        /// <summary>
-        /// カーネルのハイパーパラメーターに値を加算します。
-        /// </summary>
-        /// <param name="targetParameter"></param>
-        /// <param name="addingValue"></param>
-        internal (double originalValue, double processedValue) AddValueToParameter((Guid, string) targetParameter, double addingValue)
-        {
-            var originalValue = GetParameterValue(targetParameter)!.Value;
-            var processedValue = originalValue + addingValue;
-            SetParameterValue(targetParameter, processedValue);
-            return (originalValue, processedValue);
-        }
-        internal abstract double? GetParameterValue((Guid, string) targetParameter);
-        internal abstract void SetParameterValue((Guid, string) targetParameter, double settingValue);
-
+        internal abstract DenseMatrix CalcKernelGrad(DenseVector X1, DenseVector X2, HyperParameter targetParameter);
 
         /// <summary>
         /// グラム行列（カーネル行列）などを作成します。

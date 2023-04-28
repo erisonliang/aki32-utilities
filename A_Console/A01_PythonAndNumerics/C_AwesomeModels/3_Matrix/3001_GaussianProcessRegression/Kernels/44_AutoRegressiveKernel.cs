@@ -19,12 +19,9 @@ public partial class GaussianProcessRegressionExecuter
 
         public AutoRegressiveKernel(double rho)
         {
-            Rho = new HyperParameter(nameof(Rho), rho, false, double.Epsilon, double.MaxValue);
+            Rho = new HyperParameter(nameof(Rho), rho, KernelID, false, double.Epsilon, double.MaxValue);
 
-            HyperParameters = new string[]
-            {
-                nameof(Rho),
-            };
+            HyperParameters = new HyperParameter[] { Rho };
 
         }
 
@@ -50,11 +47,11 @@ public partial class GaussianProcessRegressionExecuter
             return K;
         }
 
-        internal override DenseMatrix CalcKernelGrad(DenseVector X1, DenseVector X2, (Guid, string) targetParameter)
+        internal override DenseMatrix CalcKernelGrad(DenseVector X1, DenseVector X2, HyperParameter targetParameter)
         {
-            if (targetParameter.Item1 == KernelID)
+            if (targetParameter.ParentKernelID == KernelID)
             {
-                return targetParameter.Item2 switch
+                return targetParameter.Name switch
                 {
                     nameof(Rho) => CalcKernelGrad_Rho(X1, X2),
                     _ => throw new InvalidOperationException("No such parameter found in this kernel."),
@@ -83,33 +80,6 @@ public partial class GaussianProcessRegressionExecuter
             }
 
             return K;
-        }
-
-        internal override double? GetParameterValue((Guid, string) targetParameter)
-        {
-            if (targetParameter.Item1 == KernelID)
-            {
-                return targetParameter.Item2 switch
-                {
-                    nameof(Rho) => Rho,
-                    _ => throw new InvalidOperationException("No such parameter found in this kernel."),
-                };
-            }
-            else
-            {
-                return null;
-            }
-        }
-        internal override void SetParameterValue((Guid, string) targetParameter, double settingValue)
-        {
-            if (targetParameter.Item1 == KernelID)
-            {
-                _ = targetParameter.Item2 switch
-                {
-                    nameof(Rho) => Rho.Value = settingValue,
-                    _ => throw new InvalidOperationException("No such parameter found in this kernel."),
-                };
-            }
         }
 
         public override string ToString()

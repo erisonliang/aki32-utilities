@@ -27,25 +27,14 @@ public partial class GaussianProcessRegressionExecuter
                 + RightChild.CalcKernel(X1, X2);
         }
 
-        internal override DenseMatrix CalcKernelGrad(DenseVector X1, DenseVector X2, (Guid, string) targetParameter)
+        internal override DenseMatrix CalcKernelGrad(DenseVector X1, DenseVector X2, HyperParameter targetParameter)
         {
             // 微分対象の要素が含まれている枝を採用。それ以外は微分すると0になるので無視。
-            if (LeftChild.GetAllChildrenKernelsAndSelf().Any(k => k.KernelID == targetParameter.Item1))
+            if (LeftChild.GetAllChildrenKernelsAndSelf().Any(k => k.KernelID == targetParameter.ParentKernelID))
                 return LeftChild.CalcKernelGrad(X1, X2, targetParameter);
             else
                 return RightChild.CalcKernelGrad(X1, X2, targetParameter);
 
-        }
-
-        internal override double? GetParameterValue((Guid, string) targetParameter)
-        {
-            return LeftChild.GetParameterValue(targetParameter)
-                ?? RightChild.GetParameterValue(targetParameter);
-        }
-        internal override void SetParameterValue((Guid, string) targetParameter, double settingValue)
-        {
-            LeftChild.SetParameterValue(targetParameter, settingValue);
-            RightChild.SetParameterValue(targetParameter, settingValue);
         }
 
         public override string ToString()

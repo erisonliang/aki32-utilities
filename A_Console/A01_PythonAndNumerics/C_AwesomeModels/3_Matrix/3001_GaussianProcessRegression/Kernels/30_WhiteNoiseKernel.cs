@@ -18,12 +18,10 @@ public partial class GaussianProcessRegressionExecuter
 
         public WhiteNoiseKernel(double noiseLambda, bool fixNoiseLambda = false)
         {
-            NoiseLambda = new HyperParameter(nameof(NoiseLambda), noiseLambda, fixNoiseLambda, double.Epsilon, double.MaxValue);
+            NoiseLambda = new HyperParameter(nameof(NoiseLambda), noiseLambda, KernelID, fixNoiseLambda, double.Epsilon, double.MaxValue);
 
-            HyperParameters = new string[]
-            {
-                nameof(NoiseLambda),
-            };
+            HyperParameters = new HyperParameter[] { NoiseLambda };
+
         }
 
 
@@ -39,11 +37,11 @@ public partial class GaussianProcessRegressionExecuter
             return DenseMatrix.Create(X1.Count, X2.Count, 0);
         }
 
-        internal override DenseMatrix CalcKernelGrad(DenseVector X1, DenseVector X2, (Guid, string) targetParameter)
+        internal override DenseMatrix CalcKernelGrad(DenseVector X1, DenseVector X2, HyperParameter targetParameter)
         {
-            if (targetParameter.Item1 == KernelID)
+            if (targetParameter.ParentKernelID == KernelID)
             {
-                return targetParameter.Item2 switch
+                return targetParameter.Name switch
                 {
                     nameof(NoiseLambda) => CalcKernelGrad_NoiseLambda(X1, X2),
                     _ => throw new InvalidOperationException("No such parameter found in this kernel."),
@@ -68,33 +66,6 @@ public partial class GaussianProcessRegressionExecuter
             if (X1.Count == X2.Count)
                 return 2 * Math.Sqrt(NoiseLambda) * DenseMatrix.CreateIdentity(X1.Count);
             return DenseMatrix.Create(X1.Count, X2.Count, 0);
-        }
-
-        internal override double? GetParameterValue((Guid, string) targetParameter)
-        {
-            if (targetParameter.Item1 == KernelID)
-            {
-                return targetParameter.Item2 switch
-                {
-                    nameof(NoiseLambda) => NoiseLambda,
-                    _ => throw new InvalidOperationException("No such parameter found in this kernel."),
-                };
-            }
-            else
-            {
-                return null;
-            }
-        }
-        internal override void SetParameterValue((Guid, string) targetParameter, double settingValue)
-        {
-            if (targetParameter.Item1 == KernelID)
-            {
-                _ = targetParameter.Item2 switch
-                {
-                    nameof(NoiseLambda) => NoiseLambda.Value = settingValue,
-                    _ => throw new InvalidOperationException("No such parameter found in this kernel."),
-                };
-            }
         }
 
         public override string ToString()

@@ -18,12 +18,10 @@ public partial class GaussianProcessRegressionExecuter
 
         public ConstantKernel(double constantWeight, bool fixConstantWeight = false)
         {
-            ConstantWeight = new HyperParameter(nameof(ConstantWeight), constantWeight, fixConstantWeight, double.MinValue, double.MaxValue);
+            ConstantWeight = new HyperParameter(nameof(ConstantWeight), constantWeight, KernelID, fixConstantWeight, double.MinValue, double.MaxValue);
 
-            HyperParameters = new string[]
-            {
-                nameof(ConstantWeight),
-            };
+            HyperParameters = new HyperParameter[] { ConstantWeight };
+
         }
 
 
@@ -37,11 +35,11 @@ public partial class GaussianProcessRegressionExecuter
             return DenseMatrix.Create(X1.Count, X2.Count, ConstantWeight);
         }
 
-        internal override DenseMatrix CalcKernelGrad(DenseVector X1, DenseVector X2, (Guid, string) targetParameter)
+        internal override DenseMatrix CalcKernelGrad(DenseVector X1, DenseVector X2, HyperParameter targetParameter)
         {
-            if (targetParameter.Item1 == KernelID)
+            if (targetParameter.ParentKernelID == KernelID)
             {
-                return targetParameter.Item2 switch
+                return targetParameter.Name switch
                 {
                     nameof(ConstantWeight) => CalcKernelGrad_ConstantWeight(X1, X2),
                     _ => throw new InvalidOperationException("No such parameter found in this kernel."),
@@ -64,33 +62,6 @@ public partial class GaussianProcessRegressionExecuter
             if (ConstantWeight.IsFixed)
                 return DenseMatrix.Create(X1.Count, X2.Count, 0);
             return DenseMatrix.Create(X1.Count, X2.Count, 2 * Math.Sqrt(ConstantWeight));
-        }
-
-        internal override double? GetParameterValue((Guid, string) targetParameter)
-        {
-            if (targetParameter.Item1 == KernelID)
-            {
-                return targetParameter.Item2 switch
-                {
-                    nameof(ConstantWeight) => ConstantWeight,
-                    _ => throw new InvalidOperationException("No such parameter found in this kernel."),
-                };
-            }
-            else
-            {
-                return null;
-            }
-        }
-        internal override void SetParameterValue((Guid, string) targetParameter, double settingValue)
-        {
-            if (targetParameter.Item1 == KernelID)
-            {
-                _ = targetParameter.Item2 switch
-                {
-                    nameof(ConstantWeight) => ConstantWeight.Value = settingValue,
-                    _ => throw new InvalidOperationException("No such parameter found in this kernel."),
-                };
-            }
         }
 
         public override string ToString()

@@ -1,5 +1,7 @@
 ﻿
 
+using static Aki32Utilities.ConsoleAppUtilities.PythonAndNumerics.GaussianProcessRegressionExecuter;
+
 namespace Aki32Utilities.ConsoleAppUtilities.PythonAndNumerics;
 public partial class GaussianProcessRegressionExecuter
 {
@@ -12,6 +14,8 @@ public partial class GaussianProcessRegressionExecuter
         // ★★★★★★★★★★★★★★★ props
 
         public string Name { get; set; }
+        public Guid HyperParameterID { get; set; }
+        public Guid ParentKernelID { get; set; }
 
         private double _Value;
         public double Value
@@ -32,8 +36,11 @@ public partial class GaussianProcessRegressionExecuter
 
         // ★★★★★★★★★★★★★★★ init
 
-        public HyperParameter(string name, double initialValue, bool fixValue = false, double minValue = double.MinValue, double maxValue = double.MaxValue)
+        public HyperParameter(string name, double initialValue, Guid parentKernelID, bool fixValue = false, double minValue = double.MinValue, double maxValue = double.MaxValue)
         {
+            HyperParameterID = Guid.NewGuid();
+            ParentKernelID = parentKernelID;
+
             Name = name;
             Minimum = minValue;
             Maximum = maxValue;
@@ -43,6 +50,19 @@ public partial class GaussianProcessRegressionExecuter
             if (IsFixed)
                 Minimum = Maximum = Value;
 
+        }
+
+
+        // ★★★★★★★★★★★★★★★ methods
+
+        public override string ToString()
+        {
+            return $"{Name} ({HyperParameterID.ToString()[^6..]}), {Value:F4}";
+        }
+
+        public string ToInitialStateString()
+        {
+            return $"{Name} ({HyperParameterID.ToString()[^6..]}), {Value:F4}";
         }
 
 

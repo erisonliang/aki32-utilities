@@ -24,21 +24,10 @@ public partial class GaussianProcessRegressionExecuter
                 .PointwiseMultiply(RightChild.CalcKernel(X1, X2));
         }
 
-        internal override DenseMatrix CalcKernelGrad(DenseVector X1, DenseVector X2, (Guid, string) targetParameter)
+        internal override DenseMatrix CalcKernelGrad(DenseVector X1, DenseVector X2, HyperParameter targetParameter)
         {
             return (DenseMatrix)LeftChild.CalcKernelGrad(X1, X2, targetParameter)
                 .PointwiseMultiply(RightChild.CalcKernelGrad(X1, X2, targetParameter));
-        }
-
-        internal override double? GetParameterValue((Guid, string) targetParameter)
-        {
-            return LeftChild.GetParameterValue(targetParameter)
-                ?? RightChild.GetParameterValue(targetParameter);
-        }
-        internal override void SetParameterValue((Guid, string) targetParameter, double settingValue)
-        {
-            LeftChild.SetParameterValue(targetParameter, settingValue);
-            RightChild.SetParameterValue(targetParameter, settingValue);
         }
 
         public override string ToString()

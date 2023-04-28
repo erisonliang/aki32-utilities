@@ -12,7 +12,7 @@ public partial class GaussianProcessRegressionExecuter
 
     public KernelBase Kernel { get; set; }
 
-    internal List<(Guid, string)> HyperParameters { get; set; }
+    internal List<HyperParameter> HyperParameters { get; set; }
 
     public const string logLikelihoodIndexName = "LogLikelihood";
 
@@ -22,10 +22,10 @@ public partial class GaussianProcessRegressionExecuter
     public GaussianProcessRegressionExecuter(KernelBase kernel)
     {
         Kernel = kernel;
-        HyperParameters = new List<(Guid, string)>();
+        HyperParameters = new List<HyperParameter>();
 
         foreach (var k in Kernel.GetAllChildrenKernelsAndSelf())
-            HyperParameters.AddRange(k.HyperParameters.Select(kHP => (k.KernelID, kHP)));
+            HyperParameters.AddRange(k.HyperParameters);
 
         Console.WriteLine($"★ {nameof(GaussianProcessRegressionExecuter)} instance created.\r\n");
         Console.WriteLine(this.ToString());
@@ -94,7 +94,7 @@ public partial class GaussianProcessRegressionExecuter
                 {
                     foreach (var targetParam in HyperParameters)
                     {
-                        var initialParamValue = Kernel.GetParameterValue(targetParam)!.Value;
+                        var initialParamValue = targetParam.Value;
 
                         var tryingParamValues = new List<double>
                         {
@@ -112,7 +112,7 @@ public partial class GaussianProcessRegressionExecuter
 
                         foreach (var tryingParamValue in tryingParamValues)
                         {
-                            Kernel.SetParameterValue(targetParam, tryingParamValue);
+                            targetParam.Value = tryingParamValue;
 
                             Fit(X_train, Y_train);
 
@@ -123,8 +123,7 @@ public partial class GaussianProcessRegressionExecuter
                             progress.CurrentStep++;
                         }
 
-                        var settingValue = results.MinBy(r => r.SSE).ParamValue;
-                        Kernel.SetParameterValue(targetParam, settingValue);
+                        targetParam.Value = results.MinBy(r => r.SSE).ParamValue;
 
                     }
                 }
@@ -154,16 +153,16 @@ public partial class GaussianProcessRegressionExecuter
                         var Ktt_Inv_Y_2 = (DenseMatrix)(Kernel.Ktt_Inv_Y.ToColumnMatrix() * Kernel.Ktt_Inv_Y.ToRowMatrix());
                         var dK = Kernel.CalcKernelGrad(X_train, Y_train, targetParam);
                         var difference = (Ktt_Inv_Y_2 - Kernel.Ktt_Inv).Multiply(dK); // 二乗和誤差
-                        var addingValue = learningRate * difference.Trace();
 
-                        (var originalValue, var processedValue) = Kernel.AddValueToParameter(targetParam, addingValue);
-                        if (double.IsNaN(processedValue)) // 計算の発散
+                        targetParam.Value += learningRate * difference.Trace();
+
+                        if (double.IsNaN(targetParam.Value)) // 計算の発散
                         {
                             progress.StopAutoWrite();
                             throw new Exception("got NaN");
                         }
-                        step[targetParam.ToString()] = originalValue;
-
+                     
+                        step[targetParam.ToString()] = targetParam.Value;
                     }
 
 
@@ -324,7 +323,7 @@ public partial class GaussianProcessRegressionExecuter
         s += $"\r\n";
         s += $"Hyper Parameters:\r\n";
         foreach (var hp in HyperParameters)
-            s += $"  ({hp.Item1}, {hp.Item2}, {Kernel.GetParameterValue(hp):F5})\r\n";
+            s += $"  {hp.ToString()}\r\n";
         s += $"\r\n";
         return s;
 
