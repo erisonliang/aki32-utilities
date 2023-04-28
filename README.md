@@ -27,6 +27,9 @@ All of my C# utilities
  ┃   ┣━ 102_NodeControllerExample          ... Usage examples for B01
  ┃   ┗━ 103_WFAControlExample              ... Usage examples for C01
  ┃
+ ┣━ 2_Personal
+ ┃   ┗━ 20A_LowCycleFatigueResearch        ... My master research codes
+ ┃
  ┣━ A_Console
  ┃   ┣━ A00_General                        ... C# utils
  ┃   ┣━ A01_PythonAndNumerics              ... Python wrapper and my math models
