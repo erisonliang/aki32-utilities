@@ -231,7 +231,7 @@ public partial class GaussianProcessRegressionExecuter
         static double f(double x, bool withNoise = false)
         {
             var noise = withNoise ? new Random().NextDouble() - 0.5d : 0;
-            return x * Math.Sin(x) + noise;
+            return x * (Math.Sin(x) + 2) + noise;
         }
         //var X = new double[] { 1, 3, 5, 6, 7, 8 };
         //var X = new double[] { 1, 1.1, 1.2, 1.3, 3, 5, 6, 7, 8 };
@@ -243,11 +243,12 @@ public partial class GaussianProcessRegressionExecuter
 
 
         // build model
-        var k1 = new GaussianProcessRegressionExecuter.ConstantKernel(1d);
-        var k2 = new GaussianProcessRegressionExecuter.SquaredExponentialKernel(1d);
-        var k3 = new GaussianProcessRegressionExecuter.WhiteNoiseKernel(1 / 15d);
-        var kernel = k1 * k2 + k3;
-
+        var k11 = new GaussianProcessRegressionExecuter.ConstantKernel(1d);
+        var k12 = new GaussianProcessRegressionExecuter.SquaredExponentialKernel(1d);
+        var k21 = new GaussianProcessRegressionExecuter.ConstantKernel(0.1d);
+        var k22 = new GaussianProcessRegressionExecuter.LinearKernel(1d);
+        var k30 = new GaussianProcessRegressionExecuter.WhiteNoiseKernel(1 / 15d);
+        var kernel = k11 * k12 + k21 * k22 + k30;
         var gpr = new GaussianProcessRegressionExecuter(kernel);
 
 
@@ -293,7 +294,7 @@ public partial class GaussianProcessRegressionExecuter
                 {
                     new ScatterPlot(Array.Empty<double>(),Array.Empty<double>()){ MarkerColor="yellow", MarkerSize=100, LegendLabel=kernel.ToString()},
 
-                    new LinePlot(X_predict, Y_true) { LineColor="g", LineWidth=3, LegendLabel="True f(X)= X sin(X)"},
+                    new LinePlot(X_predict, Y_true) { LineColor="g", LineWidth=3, LegendLabel="True f(X)= X(sin(X)+2)"},
                     new ScatterPlot(X_train, Y_train) { MarkerSize=130, MarkerColor="g", LegendLabel="Observed Data"},
 
                     new LinePlot(X_predict, Y_predict) { LineColor="red", LineWidth=3, LegendLabel="Predicted Mean"},

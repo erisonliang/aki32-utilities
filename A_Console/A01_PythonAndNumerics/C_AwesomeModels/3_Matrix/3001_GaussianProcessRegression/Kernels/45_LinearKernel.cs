@@ -71,10 +71,7 @@ public partial class GaussianProcessRegressionExecuter
             {
                 for (int i2 = 0; i2 < X2.Count; i2++)
                 {
-                    throw new NotImplementedException();
-
-
-
+                    K[i1, i2] = -X1[i1] - X2[i2] - 2 * C;
                 }
             }
 
