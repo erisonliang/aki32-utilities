@@ -63,7 +63,10 @@ var Y_99CI = Y_std.ProductForEach(2.58);
 
 - 尤度
 ```math
-\mathcal{L}(\mathbf{y}|\mathbf{X},\boldsymbol{\theta})=\frac{1}{(2\pi)^{\frac{n}{2}}|\mathbf{K}+\sigma_{n}^2\mathbf{I}|^{\frac{1}{2}}}\exp\left(-\frac{1}{2}\mathbf{y}^{\top}(\mathbf{K}+\sigma_{n}^2\mathbf{I})^{-1}\mathbf{y}\right)
+\mathcal{L}(\mathbf{y}|\mathbf{X},\boldsymbol{\theta})=
+\frac{1}
+{(2\pi)^{\frac{n}{2}}|\mathbf{Kernel}|^{\frac{1}{2}}}
+\exp\left(-\frac{1}{2}\mathbf{y}^{\top}(\mathbf{Kernel})^{-1}\mathbf{y}\right)
 ```
 
 
