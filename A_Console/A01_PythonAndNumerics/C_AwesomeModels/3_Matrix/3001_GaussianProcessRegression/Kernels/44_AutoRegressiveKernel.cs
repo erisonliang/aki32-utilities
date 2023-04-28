@@ -13,13 +13,14 @@ public partial class GaussianProcessRegressionExecuter
         // ★★★★★★★★★★★★★★★ props
 
         public double Rho { get; set; }
+        public double InitialRho { get; private set; }
 
 
         // ★★★★★★★★★★★★★★★ inits
 
         public AutoRegressiveKernel(double rho)
         {
-            Rho = rho;
+            Rho = InitialRho = rho;
 
             HyperParameters = new string[]
             {
@@ -115,6 +116,11 @@ public partial class GaussianProcessRegressionExecuter
         public override string ToString()
         {
             return $"AR({Rho:F3})";
+        }
+
+        public override string ToInitialStateString()
+        {
+            return $"AR({InitialRho:F3})";
         }
 
 

@@ -127,6 +127,8 @@ public partial class GaussianProcessRegressionExecuter
             return children.ToArray();
         }
 
+        public abstract string ToInitialStateString();
+
 
         // ★★★★★★★★★★★★★★★ operators
 

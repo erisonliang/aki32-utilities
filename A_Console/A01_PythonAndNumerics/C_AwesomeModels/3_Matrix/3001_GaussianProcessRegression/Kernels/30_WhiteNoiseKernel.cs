@@ -11,17 +11,16 @@ public partial class GaussianProcessRegressionExecuter
 
         // ★★★★★★★★★★★★★★★ props
 
-        public bool FixNoiseLambda { get; set; } = false;
+        public bool FixNoiseLambda { get; init; } = false;
         public double NoiseLambda { get; set; }
-        public double InitialNoiseLambda { get; set; }
+        public double InitialNoiseLambda { get; private set; }
 
 
         // ★★★★★★★★★★★★★★★ inits
 
         public WhiteNoiseKernel(double noiseLambda)
         {
-            InitialNoiseLambda = noiseLambda;
-            NoiseLambda = noiseLambda;
+            NoiseLambda = InitialNoiseLambda = noiseLambda;
 
             HyperParameters = new string[]
             {
@@ -103,6 +102,11 @@ public partial class GaussianProcessRegressionExecuter
         public override string ToString()
         {
             return $"δ({NoiseLambda:F3})";
+        }
+
+        public override string ToInitialStateString()
+        {
+            return $"δ({InitialNoiseLambda:F3})";
         }
 
 

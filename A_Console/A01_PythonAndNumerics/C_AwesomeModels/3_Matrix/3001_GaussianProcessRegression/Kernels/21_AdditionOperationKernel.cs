@@ -53,6 +53,11 @@ public partial class GaussianProcessRegressionExecuter
             return $"{LeftChild.ToString()}+{RightChild.ToString()}";
         }
 
+        public override string ToInitialStateString()
+        {
+            return $"{LeftChild.ToInitialStateString()}+{RightChild.ToInitialStateString()}";
+        }
+
 
         // ★★★★★★★★★★★★★★★
 

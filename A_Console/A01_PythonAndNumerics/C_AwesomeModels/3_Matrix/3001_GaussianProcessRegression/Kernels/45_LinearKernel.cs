@@ -13,13 +13,14 @@ public partial class GaussianProcessRegressionExecuter
         // ★★★★★★★★★★★★★★★ props
 
         public double C { get; set; }
+        public double InitialC { get; private set; }
 
 
         // ★★★★★★★★★★★★★★★ inits
 
         public LinearKernel(double c)
         {
-            C = c;
+            C = InitialC = c;
 
             HyperParameters = new string[]
             {
@@ -111,6 +112,11 @@ public partial class GaussianProcessRegressionExecuter
         public override string ToString()
         {
             return $"L({C:F3})";
+        }
+
+        public override string ToInitialStateString()
+        {
+            return $"L({InitialC:F3})";
         }
 
 

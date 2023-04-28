@@ -13,15 +13,18 @@ public partial class GaussianProcessRegressionExecuter
         // ★★★★★★★★★★★★★★★ props
 
         public double LengthScale { get; set; }
+        public double InitialLengthScale { get; private set; }
+
         public double Alpha { get; set; }
+        public double InitialAlpha { get; private set; }
 
 
         // ★★★★★★★★★★★★★★★ inits
 
         public RationalQuadraticKernel(double lengthScale, double alpha)
         {
-            LengthScale = lengthScale;
-            Alpha = alpha;
+            LengthScale = InitialLengthScale = lengthScale;
+            Alpha = InitialAlpha = alpha;
 
             HyperParameters = new string[]
             {
@@ -138,6 +141,11 @@ public partial class GaussianProcessRegressionExecuter
         public override string ToString()
         {
             return $"RQ({LengthScale:F3}, {Alpha:F3})";
+        }
+
+        public override string ToInitialStateString()
+        {
+            return $"RQ({InitialLengthScale:F3}, {InitialAlpha:F3})";
         }
 
 

@@ -13,15 +13,18 @@ public partial class GaussianProcessRegressionExecuter
         // ★★★★★★★★★★★★★★★ props
 
         public double LengthScale { get; set; }
+        public double InitialLengthScale { get; private set; }
+
         public double P { get; set; }
+        public double InitialP { get; private set; }
 
 
         // ★★★★★★★★★★★★★★★ inits
 
         public PeriodicKernel(double lengthScale, double p)
         {
-            LengthScale = lengthScale;
-            P = p;
+            LengthScale = InitialLengthScale = lengthScale;
+            P = InitialP = p;
 
             HyperParameters = new string[]
             {
@@ -138,6 +141,11 @@ public partial class GaussianProcessRegressionExecuter
         public override string ToString()
         {
             return $"P({LengthScale:F3}, {P:F3})";
+        }
+
+        public override string ToInitialStateString()
+        {
+            return $"P({InitialLengthScale:F3}, {InitialP:F3})";
         }
 
 

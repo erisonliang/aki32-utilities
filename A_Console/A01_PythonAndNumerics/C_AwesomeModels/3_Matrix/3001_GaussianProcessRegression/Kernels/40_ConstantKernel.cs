@@ -12,23 +12,15 @@ public partial class GaussianProcessRegressionExecuter
         // ★★★★★★★★★★★★★★★ props
 
         public bool FixConstantWeight { get; init; } = false;
-        private double _ConstantWeight;
-        public double ConstantWeight
-        {
-            get => _ConstantWeight;
-            set => _ConstantWeight = MathExtension.Between(MinConstantWeight, value, MaxConstantWeight);
-        }
+        public double ConstantWeight { get; set; }
         public double InitialConstantWeight { get; private set; }
-        public double MinConstantWeight { get; init; } = double.MinValue;
-        public double MaxConstantWeight { get; init; } = double.MaxValue;
 
 
         // ★★★★★★★★★★★★★★★ inits
 
         public ConstantKernel(double constantWeight)
         {
-            InitialConstantWeight = constantWeight;
-            ConstantWeight = constantWeight;
+            ConstantWeight = InitialConstantWeight = constantWeight;
 
             HyperParameters = new string[]
             {
@@ -106,6 +98,11 @@ public partial class GaussianProcessRegressionExecuter
         public override string ToString()
         {
             return $"C({ConstantWeight:F3})";
+        }
+
+        public override string ToInitialStateString()
+        {
+            return $"C({InitialConstantWeight:F3})";
         }
 
 

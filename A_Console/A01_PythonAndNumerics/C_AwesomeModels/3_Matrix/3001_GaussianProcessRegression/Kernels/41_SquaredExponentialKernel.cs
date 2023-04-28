@@ -19,13 +19,14 @@ public partial class GaussianProcessRegressionExecuter
         // ★★★★★★★★★★★★★★★ props
 
         public double LengthScale { get; set; }
+        public double InitialLengthScale { get; private set; }
 
 
         // ★★★★★★★★★★★★★★★ inits
 
         public SquaredExponentialKernel(double lengthScale)
         {
-            LengthScale = lengthScale;
+            LengthScale = InitialLengthScale = lengthScale;
 
             HyperParameters = new string[]
             {
@@ -117,6 +118,11 @@ public partial class GaussianProcessRegressionExecuter
         public override string ToString()
         {
             return $"SE({LengthScale:F3})";
+        }
+
+        public override string ToInitialStateString()
+        {
+            return $"SE({InitialLengthScale:F3})";
         }
 
 
