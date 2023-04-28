@@ -48,21 +48,21 @@ var Y_99CI = Y_std.ProductForEach(2.58);
 
 
 
-<img src="https://latex.codecogs.com/svg.image?%5CLarge&space;%5Cmathcal%7BL%7D(%5Cmathbf%7By%7D%7C%5Cmathbf%7BX%7D,%5Cboldsymbol%7B%5Ctheta%7D)=%5Cfrac%7B1%7D%7B(2%5Cpi)%5E%7B%5Cfrac%7Bn%7D%7B2%7D%7D%7C%5Cmathbf%7BK%7D+%5Csigma_%7Bn%7D%5E2%5Cmathbf%7BI%7D%7C%5E%7B%5Cfrac%7B1%7D%7B2%7D%7D%7D%5Cexp%5Cleft(-%5Cfrac%7B1%7D%7B2%7D%5Cmathbf%7By%7D%5E%7B%5Ctop%7D(%5Cmathbf%7BK%7D+%5Csigma_%7Bn%7D%5E2%5Cmathbf%7BI%7D)%5E%7B-1%7D%5Cmathbf%7By%7D%5Cright)"/>
 
 
-$$
-\mathcal{L}(\mathbf{y}|\mathbf{X},\boldsymbol{\theta})=\frac{1}{(2\pi)^{\frac{n}{2}}|\mathbf{K}+\sigma_{n}^2\mathbf{I}|^{\frac{1}{2}}}\exp\left(-\frac{1}{2}\mathbf{y}^{\top}(\mathbf{K}+\sigma_{n}^2\mathbf{I})^{-1}\mathbf{y}\right)
-$$
 
-
-![likelihood](https://latex.codecogs.com/svg.image?\Large&space;\mathcal{L}(\mathbf{y}|\mathbf{X},\boldsymbol{\theta})=\frac{1}{(2\pi)^{\frac{n}{2}}|\mathbf{K}+\sigma_{n}^2\mathbf{I}|^{\frac{1}{2}}}\exp\left(-\frac{1}{2}\mathbf{y}^{\top}(\mathbf{K}+\sigma_{n}^2\mathbf{I})^{-1}\mathbf{y}\right))
 
 
 
 <br>
 
 ## 🌟 Memo
+
+
+- 尤度
+```math
+\mathcal{L}(\mathbf{y}|\mathbf{X},\boldsymbol{\theta})=\frac{1}{(2\pi)^{\frac{n}{2}}|\mathbf{K}+\sigma_{n}^2\mathbf{I}|^{\frac{1}{2}}}\exp\left(-\frac{1}{2}\mathbf{y}^{\top}(\mathbf{K}+\sigma_{n}^2\mathbf{I})^{-1}\mathbf{y}\right)
+```
 
 
 - ガウス回帰過程について
