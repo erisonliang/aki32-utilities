@@ -14,7 +14,7 @@ public partial class Module
 
             //Console.WriteLine("\r\n★★★★★★★★★★★★★★★ 定義\r\n");
 
-            //var targetDirectory = new DirectoryInfo(@"C:\Users\aki32\Dropbox\Codes\# Projects\研究\修士論文研究\1 CSharp\#TestModel\Images2Video\RawImages");
+            //var targetDirectory = new DirectoryInfo(@"C:\Users\aki32\Dropbox\Codes\# Projects\# Utilities\8_Personal\80A_LowCycleFatigueResearch\# SampleData\Images2Video\RawImages");
 
             //var marginSizes = new float[] { 0.15f, 0.25f, 0.15f, 0.25f };
             //var targetPoints = new PointF[]
