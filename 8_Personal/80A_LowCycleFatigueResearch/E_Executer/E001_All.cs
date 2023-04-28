@@ -22,7 +22,7 @@ public static partial class Executer
 
         // ★★★★★ SNAP
         {
-            // 前処理
+            // SNAP前処理
             {
                 // ★ 地震応答
                 {
@@ -89,85 +89,88 @@ public static partial class Executer
                 }
             }
 
-            // 後処理 1
+            // SNAP後処理 1
             if (true)
             {
-                //// ★ 変数（ここを割と編集する。）
+                // ★ 変数（ここを割と編集する。）
 
-                //var targetModels = Array.Empty<string>();
-                //var targetEQs = Array.Empty<string>();
-                //DirectoryInfo collectedResultsBaseDir = null;
+                var targetModels = Array.Empty<string>();
+                var targetEQs = Array.Empty<string>();
+                DirectoryInfo collectedResultsBaseDir = null;
 
-                //{
+                {
 
-                //    //targetModels = new string[] { "S-A30-B仕-CKNMYG004--3" };
-                //    //targetEQs = Enumerable.Range(1, 34).Select(x => $"D{x}").ToArray();
-                //    //collectedResultsBaseDir = new DirectoryInfo($@"C:\Users\aki32\Dropbox\Documents\02 東大関連\1 研究室\14 SNAP\修論モデル\09 calc\011-MYG829 比例倍仮定");
+                    targetModels = new string[] { "S-A30-B仕-CKNKMM006--4" };
+                    targetEQs = Enumerable.Range(1, 32).Select(x => $"D{x}").ToArray();
+                    collectedResultsBaseDir = new DirectoryInfo($@"C:\Users\aki32\Dropbox\Documents\02 東大関連\1 研究室\14 SNAP\修論モデル\09 calc\013-CKKMM006");
 
-                //    targetModels = new string[] { "S-A30-B仕-CKNMYG004--3" };
-                //    targetEQs = new string[] { "D35" };
-                //    collectedResultsBaseDir = new DirectoryInfo($@"C:\Users\aki32\Dropbox\Documents\02 東大関連\1 研究室\14 SNAP\修論モデル\09 calc\012-MYG829 極稀");
+                    //targetModels = new string[] { "S-A30-B仕-CKNMYG004--3" };
+                    //targetEQs = Enumerable.Range(1, 34).Select(x => $"D{x}").ToArray();
+                    //collectedResultsBaseDir = new DirectoryInfo($@"C:\Users\aki32\Dropbox\Documents\02 東大関連\1 研究室\14 SNAP\修論モデル\09 calc\011-MYG829 比例倍仮定");
 
+                    //targetModels = new string[] { "S-A30-B仕-CKNMYG004--3" };
+                    //targetEQs = new string[] { "D35" };
+                    //collectedResultsBaseDir = new DirectoryInfo($@"C:\Users\aki32\Dropbox\Documents\02 東大関連\1 研究室\14 SNAP\修論モデル\09 calc\012-MYG829 極稀");
 
-                //    //targetModels = new string[] { "S-A30-B仕-CBCJ--2" };
-                //    //targetEQs = Enumerable.Range(1, 40).Select(x => $"D{x}").ToArray();
-                //    //collectedResultsBaseDir = new DirectoryInfo($@"C:\Users\aki32\Dropbox\Documents\02 東大関連\1 研究室\14 SNAP\修論モデル\09 calc\010-CBCJ");
+                    //targetModels = new string[] { "S-A30-B仕-CBCJ--2" };
+                    //targetEQs = Enumerable.Range(1, 40).Select(x => $"D{x}").ToArray();
+                    //collectedResultsBaseDir = new DirectoryInfo($@"C:\Users\aki32\Dropbox\Documents\02 東大関連\1 研究室\14 SNAP\修論モデル\09 calc\010-CBCJ");
 
-                //    //targetModels = new string[] { "S-A30-B仕-CKNFKS004--2" };
-                //    //targetEQs = Enumerable.Range(1, 23).Select(x => $"D{x}").ToArray();
-                //    //collectedResultsBaseDir = new DirectoryInfo($@"C:\Users\aki32\Dropbox\Documents\02 東大関連\1 研究室\14 SNAP\修論モデル\09 calc\010-CKNFKS004");
+                    //targetModels = new string[] { "S-A30-B仕-CKNFKS004--2" };
+                    //targetEQs = Enumerable.Range(1, 23).Select(x => $"D{x}").ToArray();
+                    //collectedResultsBaseDir = new DirectoryInfo($@"C:\Users\aki32\Dropbox\Documents\02 東大関連\1 研究室\14 SNAP\修論モデル\09 calc\010-CKNFKS004");
 
-                //    //targetModels = new string[] { "S-A30-B仕-CKKMM006--2" };
-                //    //targetEQs = Enumerable.Range(1, 27).Select(x => $"D{x}").ToArray();
-                //    //collectedResultsBaseDir = new DirectoryInfo($@"C:\Users\aki32\Dropbox\Documents\02 東大関連\1 研究室\14 SNAP\修論モデル\09 calc\010-CKKMM006");
+                    //targetModels = new string[] { "S-A30-B仕-CKKMM006--2" };
+                    //targetEQs = Enumerable.Range(1, 27).Select(x => $"D{x}").ToArray();
+                    //collectedResultsBaseDir = new DirectoryInfo($@"C:\Users\aki32\Dropbox\Documents\02 東大関連\1 研究室\14 SNAP\修論モデル\09 calc\010-CKKMM006");
 
-                //    //targetModels = new string[] { "S-A30-B仕-CKNMYG004--2" };
-                //    //targetEQs = Enumerable.Range(1, 30).Select(x => $"D{x}").ToArray();
-                //    //collectedResultsBaseDir = new DirectoryInfo($@"C:\Users\aki32\Dropbox\Documents\02 東大関連\1 研究室\14 SNAP\修論モデル\09 calc\010-CKNMYG004");
+                    //targetModels = new string[] { "S-A30-B仕-CKNMYG004--2" };
+                    //targetEQs = Enumerable.Range(1, 30).Select(x => $"D{x}").ToArray();
+                    //collectedResultsBaseDir = new DirectoryInfo($@"C:\Users\aki32\Dropbox\Documents\02 東大関連\1 研究室\14 SNAP\修論モデル\09 calc\010-CKNMYG004");
 
-                //    //targetModels = new string[] { "S-A30-B仕-COS1" };
-                //    //targetModels = new string[] { "S-A30-B仕-CCH1", "S-A30-B仕-CSZ1", "S-A30-B仕-CKA1" };
-                //    //targetModels = new string[] { "S-A30-B仕-CCH1", "S-A30-B仕-CSZ1", "S-A30-B仕-COS1", "S-A30-B仕-CKA1" };
-                //    //targetModels = new string[] { "S-A30-B仕-CBCJ", "S-A30-B仕-CE4E" };
-                //    //targetModels = new string[] { "S-A30-B仕-CBCJ" };
+                    //targetModels = new string[] { "S-A30-B仕-COS1" };
+                    //targetModels = new string[] { "S-A30-B仕-CCH1", "S-A30-B仕-CSZ1", "S-A30-B仕-CKA1" };
+                    //targetModels = new string[] { "S-A30-B仕-CCH1", "S-A30-B仕-CSZ1", "S-A30-B仕-COS1", "S-A30-B仕-CKA1" };
+                    //targetModels = new string[] { "S-A30-B仕-CBCJ", "S-A30-B仕-CE4E" };
+                    //targetModels = new string[] { "S-A30-B仕-CBCJ" };
 
-                //    //targetEQs = new string[] { "D1", "D2", "D3", "D4", "D5", "D6", "D7", "D8", "D9", "D10", "D11", "D12", "D13", "D14", "D15" };
-                //    //targetEQs = new string[] { "D1", "D3", "D4", "D5", "D6", "D7", "D8", "D9", "D10", "D11" };
-                //    //targetEQs = new string[] { "D10", "D11" };
-                //    //targetEQs = Enumerable.Range(1, 15).Select(x => $"D{x}").ToArray();
+                    //targetEQs = new string[] { "D1", "D2", "D3", "D4", "D5", "D6", "D7", "D8", "D9", "D10", "D11", "D12", "D13", "D14", "D15" };
+                    //targetEQs = new string[] { "D1", "D3", "D4", "D5", "D6", "D7", "D8", "D9", "D10", "D11" };
+                    //targetEQs = new string[] { "D10", "D11" };
+                    //targetEQs = Enumerable.Range(1, 15).Select(x => $"D{x}").ToArray();
 
-                //    //var collectedResultsBaseDir = new DirectoryInfo($@"C:\Users\aki32\Dropbox\Documents\02 東大関連\1 研究室\14 SNAP\修論モデル\09 calc\999");
+                    //var collectedResultsBaseDir = new DirectoryInfo($@"C:\Users\aki32\Dropbox\Documents\02 東大関連\1 研究室\14 SNAP\修論モデル\09 calc\999");
 
-                //}
-
-
-                ////var snapOutputDir = new DirectoryInfo($@"D:\SNAP結果バックアップ");
-                //var snapOutputDir = new DirectoryInfo($@"C:\Users\aki32\MyLocalData\SNAP - results\修論モデル");
-
-
-                //// ★ ほぼ固定の変数
-                //var collectedResultsBaseDir_ResultCsv = collectedResultsBaseDir.GetChildDirectoryInfo("ResultCsv");
-                //var buildingInfoExcel = new FileInfo(@$"C:\Users\aki32\Dropbox\Documents\02 東大関連\1 研究室\14 SNAP\修論モデル\01 model\部材配置情報.xlsx");
+                }
 
 
-                //// ★ SNAPエクセルキラー（10回終わったら次の処理に移行！）
-                //Module.M030_KeepClosingExcel();
-                //Console.WriteLine("\r\n\r\nExcelキラー終了！\r\n次の処理に移行。\r\n\r\n");
-                //_ = line.SendMessageAsync(@"Excelキラー終了");
+                // ★ ほぼ固定の変数
 
-                //// ★ SNAPからのデータ抽出
-                //Module.M061_SNAP_1_CSCollect(targetModels, targetEQs, line, snapOutputDir, collectedResultsBaseDir);
+                //var snapOutputDir = new DirectoryInfo($@"D:\SNAP結果バックアップ");
+                var snapOutputDir = new DirectoryInfo($@"C:\Users\aki32\MyLocalData\SNAP - results\修論モデル");
 
-                //// ★ Pythonで描画やら解析やら
-                //Module.M062_SNAP_2_PyDraw(targetModels, targetEQs, line, collectedResultsBaseDir, buildingInfoExcel);
+                var collectedResultsBaseDir_ResultCsv = collectedResultsBaseDir.GetChildDirectoryInfo("ResultCsv");
+                var buildingInfoExcel = new FileInfo(@$"C:\Users\aki32\Dropbox\Documents\02 東大関連\1 研究室\14 SNAP\修論モデル\01 model\部材配置情報.xlsx");
 
 
-                //// ★ SNAPの，ResultCsvの更なる集計！
-                //Module.M063_SNAP_3_CSCollect(line, collectedResultsBaseDir_ResultCsv);
+                // ★ SNAPエクセルキラー（10回終わったら次の処理に移行！）
+                Module.M030_KeepClosingExcel();
+                Console.WriteLine("\r\n\r\nExcelキラー終了！\r\n次の処理に移行。\r\n\r\n");
+                _ = line.SendMessageAsync(@"Excelキラー終了");
+
+                // ★ SNAPからのデータ抽出
+                Module.M061_SNAP_1_CSCollect(targetModels, targetEQs, line, snapOutputDir, collectedResultsBaseDir);
+
+                // ★ Pythonで描画やら解析やら
+                Module.M062_SNAP_2_PyDraw(targetModels, targetEQs, line, collectedResultsBaseDir, buildingInfoExcel);
+
+
+                // ★ SNAPの，ResultCsvの更なる集計！
+                Module.M063_SNAP_3_CSCollect(line, collectedResultsBaseDir_ResultCsv);
 
             }
 
-            // 後処理 2
+            // SNAP後処理 2
             {
                 //var collectedResultsBaseDir = new DirectoryInfo(@"C:\Users\aki32\Dropbox\Documents\02 東大関連\1 研究室\14 SNAP\修論モデル\09 calc\011-MYG829 比例倍仮定");
 
