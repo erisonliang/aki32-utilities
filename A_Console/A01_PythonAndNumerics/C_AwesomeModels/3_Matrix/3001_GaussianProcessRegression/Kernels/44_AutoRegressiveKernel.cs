@@ -12,15 +12,14 @@ public partial class GaussianProcessRegressionExecuter
 
         // ★★★★★★★★★★★★★★★ props
 
-        public double Rho { get; set; }
-        public double InitialRho { get; private set; }
+        public HyperParameter Rho { get; private set; }
 
 
         // ★★★★★★★★★★★★★★★ inits
 
         public AutoRegressiveKernel(double rho)
         {
-            Rho = InitialRho = rho;
+            Rho = new HyperParameter(nameof(Rho), rho, false, double.Epsilon, double.MaxValue);
 
             HyperParameters = new string[]
             {
@@ -107,7 +106,7 @@ public partial class GaussianProcessRegressionExecuter
             {
                 _ = targetParameter.Item2 switch
                 {
-                    nameof(Rho) => Rho = settingValue,
+                    nameof(Rho) => Rho.Value = settingValue,
                     _ => throw new InvalidOperationException("No such parameter found in this kernel."),
                 };
             }
@@ -115,12 +114,12 @@ public partial class GaussianProcessRegressionExecuter
 
         public override string ToString()
         {
-            return $"AR({Rho:F3})";
+            return $"AR({Rho.Value:F3})";
         }
 
         public override string ToInitialStateString()
         {
-            return $"AR({InitialRho:F3})";
+            return $"AR({Rho.InitialValue:F3})";
         }
 
 

@@ -18,24 +18,14 @@ public partial class GaussianProcessRegressionExecuter
 
         // ★★★★★★★★★★★★★★★ props
 
-        private double _LengthScale;
-        public double LengthScale
-        {
-            get => _LengthScale;
-            set => _LengthScale = MathExtension.Between(MinLengthScale, value, MaxLengthScale);
-        }
-        public double InitialLengthScale { get; private set; }
-        public double MinLengthScale { get; private set; }
-        public double MaxLengthScale { get; private set; }
+        public HyperParameter LengthScale { get; private set; }
 
 
         // ★★★★★★★★★★★★★★★ inits
 
-        public SquaredExponentialKernel(double lengthScale, double minLengthScale = 0, double maxLengthScale = double.MaxValue)
+        public SquaredExponentialKernel(double lengthScale)
         {
-            MinLengthScale = minLengthScale;
-            MaxLengthScale = maxLengthScale;
-            InitialLengthScale = LengthScale = lengthScale;
+            LengthScale = new HyperParameter(nameof(LengthScale), lengthScale, false, double.Epsilon, double.MaxValue);
 
             HyperParameters = new string[]
             {
@@ -118,7 +108,7 @@ public partial class GaussianProcessRegressionExecuter
             {
                 _ = targetParameter.Item2 switch
                 {
-                    nameof(LengthScale) => LengthScale = settingValue,
+                    nameof(LengthScale) => LengthScale.Value = settingValue,
                     _ => throw new InvalidOperationException("No such parameter found in this kernel."),
                 };
             }
@@ -126,12 +116,12 @@ public partial class GaussianProcessRegressionExecuter
 
         public override string ToString()
         {
-            return $"SE({LengthScale:F3})";
+            return $"SE({LengthScale.Value:F3})";
         }
 
         public override string ToInitialStateString()
         {
-            return $"SE({InitialLengthScale:F3})";
+            return $"SE({LengthScale.InitialValue:F3})";
         }
 
 

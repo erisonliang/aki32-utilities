@@ -11,24 +11,14 @@ public partial class GaussianProcessRegressionExecuter
 
         // ★★★★★★★★★★★★★★★ props
 
-        private double _NoiseLambda;
-        public double NoiseLambda
-        {
-            get => _NoiseLambda;
-            set => _NoiseLambda = MathExtension.Between(MinNoiseLambda, value, MaxNoiseLambda);
-        }
-        public bool FixNoiseLambda { get; private set; } = false;
-        public double InitialNoiseLambda { get; private set; }
-        public double MinNoiseLambda { get; private set; } = double.MinValue;
-        public double MaxNoiseLambda { get; private set; }=double.MaxValue;
+        public HyperParameter NoiseLambda { get; private set; }
 
 
         // ★★★★★★★★★★★★★★★ inits
 
         public WhiteNoiseKernel(double noiseLambda, bool fixNoiseLambda = false)
         {
-            NoiseLambda = InitialNoiseLambda = noiseLambda;
-            FixNoiseLambda = fixNoiseLambda;
+            NoiseLambda = new HyperParameter(nameof(NoiseLambda), noiseLambda, fixNoiseLambda, double.Epsilon, double.MaxValue);
 
             HyperParameters = new string[]
             {
@@ -73,7 +63,7 @@ public partial class GaussianProcessRegressionExecuter
         /// <returns></returns>
         internal DenseMatrix CalcKernelGrad_NoiseLambda(DenseVector X1, DenseVector X2)
         {
-            if (FixNoiseLambda)
+            if (NoiseLambda.IsFixed)
                 return DenseMatrix.Create(X1.Count, X2.Count, 0);
             if (X1.Count == X2.Count)
                 return 2 * Math.Sqrt(NoiseLambda) * DenseMatrix.CreateIdentity(X1.Count);
@@ -101,7 +91,7 @@ public partial class GaussianProcessRegressionExecuter
             {
                 _ = targetParameter.Item2 switch
                 {
-                    nameof(NoiseLambda) => NoiseLambda = settingValue,
+                    nameof(NoiseLambda) => NoiseLambda.Value = settingValue,
                     _ => throw new InvalidOperationException("No such parameter found in this kernel."),
                 };
             }
@@ -109,12 +99,12 @@ public partial class GaussianProcessRegressionExecuter
 
         public override string ToString()
         {
-            return $"δ({NoiseLambda:F3})";
+            return $"δ({NoiseLambda.Value:F3})";
         }
 
         public override string ToInitialStateString()
         {
-            return $"δ({InitialNoiseLambda:F3})";
+            return $"δ({NoiseLambda.InitialValue:F3})";
         }
 
 

@@ -11,16 +11,14 @@ public partial class GaussianProcessRegressionExecuter
 
         // ★★★★★★★★★★★★★★★ props
 
-        public bool FixConstantWeight { get; init; } = false;
-        public double ConstantWeight { get; set; }
-        public double InitialConstantWeight { get; private set; }
+        public HyperParameter ConstantWeight { get; private set; }
 
 
         // ★★★★★★★★★★★★★★★ inits
 
-        public ConstantKernel(double constantWeight)
+        public ConstantKernel(double constantWeight, bool fixConstantWeight = false)
         {
-            ConstantWeight = InitialConstantWeight = constantWeight;
+            ConstantWeight = new HyperParameter(nameof(ConstantWeight), constantWeight, fixConstantWeight, double.MinValue, double.MaxValue);
 
             HyperParameters = new string[]
             {
@@ -63,7 +61,7 @@ public partial class GaussianProcessRegressionExecuter
         /// <returns></returns>
         internal DenseMatrix CalcKernelGrad_ConstantWeight(DenseVector X1, DenseVector X2)
         {
-            if (FixConstantWeight)
+            if (ConstantWeight.IsFixed)
                 return DenseMatrix.Create(X1.Count, X2.Count, 0);
             return DenseMatrix.Create(X1.Count, X2.Count, 2 * Math.Sqrt(ConstantWeight));
         }
@@ -89,7 +87,7 @@ public partial class GaussianProcessRegressionExecuter
             {
                 _ = targetParameter.Item2 switch
                 {
-                    nameof(ConstantWeight) => ConstantWeight = settingValue,
+                    nameof(ConstantWeight) => ConstantWeight.Value = settingValue,
                     _ => throw new InvalidOperationException("No such parameter found in this kernel."),
                 };
             }
@@ -97,12 +95,12 @@ public partial class GaussianProcessRegressionExecuter
 
         public override string ToString()
         {
-            return $"C({ConstantWeight:F3})";
+            return $"C({ConstantWeight.Value:F3})";
         }
 
         public override string ToInitialStateString()
         {
-            return $"C({InitialConstantWeight:F3})";
+            return $"C({ConstantWeight.InitialValue:F3})";
         }
 
 

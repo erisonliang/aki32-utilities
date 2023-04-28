@@ -12,15 +12,14 @@ public partial class GaussianProcessRegressionExecuter
 
         // ★★★★★★★★★★★★★★★ props
 
-        public double C { get; set; }
-        public double InitialC { get; private set; }
+        public HyperParameter C { get; private set; }
 
 
         // ★★★★★★★★★★★★★★★ inits
 
         public LinearKernel(double c)
         {
-            C = InitialC = c;
+            C = new HyperParameter(nameof(C), c, false, double.MinValue, double.MaxValue);
 
             HyperParameters = new string[]
             {
@@ -103,7 +102,7 @@ public partial class GaussianProcessRegressionExecuter
             {
                 _ = targetParameter.Item2 switch
                 {
-                    nameof(C) => C = settingValue,
+                    nameof(C) => C.Value = settingValue,
                     _ => throw new InvalidOperationException("No such parameter found in this kernel."),
                 };
             }
@@ -111,12 +110,12 @@ public partial class GaussianProcessRegressionExecuter
 
         public override string ToString()
         {
-            return $"L({C:F3})";
+            return $"L({C.Value:F3})";
         }
 
         public override string ToInitialStateString()
         {
-            return $"L({InitialC:F3})";
+            return $"L({C.InitialValue:F3})";
         }
 
 

@@ -19,15 +19,15 @@ public partial class GaussianProcessRegressionExecuter
             get => _Value;
             set
             {
-                if (FixValue)
+                if (IsFixed)
                     return;
-                _Value = MathExtension.Between(MinValue, value, MaxValue);
+                _Value = MathExtension.Between(Minimum, value, Maximum);
             }
         }
         public double InitialValue { get; internal set; }
-        public bool FixValue { get; set; } = false;
-        public double MinValue { get; internal set; }
-        public double MaxValue { get; internal set; }
+        public bool IsFixed { get; set; } = false;
+        public double Minimum { get; internal set; }
+        public double Maximum { get; internal set; }
 
 
         // ★★★★★★★★★★★★★★★ init
@@ -35,13 +35,13 @@ public partial class GaussianProcessRegressionExecuter
         public HyperParameter(string name, double initialValue, bool fixValue = false, double minValue = double.MinValue, double maxValue = double.MaxValue)
         {
             Name = name;
-            MinValue = minValue;
-            MaxValue = maxValue;
+            Minimum = minValue;
+            Maximum = maxValue;
             InitialValue = Value = initialValue;
-            FixValue = fixValue;
+            IsFixed = fixValue;
 
-            if (FixValue)
-                MinValue = MaxValue = Value;
+            if (IsFixed)
+                Minimum = Maximum = Value;
 
         }
 

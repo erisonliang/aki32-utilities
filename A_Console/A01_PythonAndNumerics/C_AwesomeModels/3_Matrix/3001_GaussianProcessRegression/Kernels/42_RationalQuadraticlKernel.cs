@@ -12,19 +12,16 @@ public partial class GaussianProcessRegressionExecuter
 
         // ★★★★★★★★★★★★★★★ props
 
-        public double LengthScale { get; set; }
-        public double InitialLengthScale { get; private set; }
-
-        public double Alpha { get; set; }
-        public double InitialAlpha { get; private set; }
+        public HyperParameter LengthScale { get; private set; }
+        public HyperParameter Alpha { get; private set; }
 
 
         // ★★★★★★★★★★★★★★★ inits
 
         public RationalQuadraticKernel(double lengthScale, double alpha)
         {
-            LengthScale = InitialLengthScale = lengthScale;
-            Alpha = InitialAlpha = alpha;
+            LengthScale = new HyperParameter(nameof(LengthScale), lengthScale, false, double.Epsilon, double.MaxValue);
+            Alpha = new HyperParameter(nameof(Alpha), alpha, false, double.Epsilon, double.MaxValue);
 
             HyperParameters = new string[]
             {
@@ -131,8 +128,8 @@ public partial class GaussianProcessRegressionExecuter
             {
                 _ = targetParameter.Item2 switch
                 {
-                    nameof(LengthScale) => LengthScale = settingValue,
-                    nameof(Alpha) => Alpha = settingValue,
+                    nameof(LengthScale) => LengthScale.Value = settingValue,
+                    nameof(Alpha) => Alpha.Value = settingValue,
                     _ => throw new InvalidOperationException("No such parameter found in this kernel."),
                 };
             }
@@ -140,12 +137,12 @@ public partial class GaussianProcessRegressionExecuter
 
         public override string ToString()
         {
-            return $"RQ({LengthScale:F3}, {Alpha:F3})";
+            return $"RQ({LengthScale.Value:F3}, {Alpha.Value:F3})";
         }
 
         public override string ToInitialStateString()
         {
-            return $"RQ({InitialLengthScale:F3}, {InitialAlpha:F3})";
+            return $"RQ({LengthScale.InitialValue:F3}, {Alpha.InitialValue:F3})";
         }
 
 

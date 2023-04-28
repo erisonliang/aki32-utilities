@@ -12,19 +12,16 @@ public partial class GaussianProcessRegressionExecuter
 
         // ★★★★★★★★★★★★★★★ props
 
-        public double LengthScale { get; set; }
-        public double InitialLengthScale { get; private set; }
-
-        public double P { get; set; }
-        public double InitialP { get; private set; }
+        public HyperParameter LengthScale { get; private set; }
+        public HyperParameter P { get; private set; }
 
 
         // ★★★★★★★★★★★★★★★ inits
 
         public PeriodicKernel(double lengthScale, double p)
         {
-            LengthScale = InitialLengthScale = lengthScale;
-            P = InitialP = p;
+            LengthScale = new HyperParameter(nameof(LengthScale), lengthScale, false, double.Epsilon, double.MaxValue);
+            P = new HyperParameter(nameof(P), p, false, double.Epsilon, double.MaxValue);
 
             HyperParameters = new string[]
             {
@@ -131,8 +128,8 @@ public partial class GaussianProcessRegressionExecuter
             {
                 _ = targetParameter.Item2 switch
                 {
-                    nameof(LengthScale) => LengthScale = settingValue,
-                    nameof(P) => P = settingValue,
+                    nameof(LengthScale) => LengthScale.Value = settingValue,
+                    nameof(P) => P.Value = settingValue,
                     _ => throw new InvalidOperationException("No such parameter found in this kernel."),
                 };
             }
@@ -140,12 +137,12 @@ public partial class GaussianProcessRegressionExecuter
 
         public override string ToString()
         {
-            return $"P({LengthScale:F3}, {P:F3})";
+            return $"P({LengthScale.Value:F3}, {P.Value:F3})";
         }
 
         public override string ToInitialStateString()
         {
-            return $"P({InitialLengthScale:F3}, {InitialP:F3})";
+            return $"P({LengthScale.InitialValue:F3}, {P.InitialValue:F3})";
         }
 
 
