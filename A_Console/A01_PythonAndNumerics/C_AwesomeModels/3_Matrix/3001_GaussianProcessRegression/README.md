@@ -61,15 +61,6 @@ var Y_99CI = Y_std.ProductForEach(2.58);
 ## 🌟 Memo
 
 
-- 尤度
-```math
-\mathcal{L}(\mathbf{y}|\mathbf{X},\boldsymbol{\theta})=
-\frac{1}
-{(2\pi)^{\frac{n}{2}}|\mathbf{Kernel}|^{\frac{1}{2}}}
-\exp\left(-\frac{1}{2}\mathbf{y}^{\top}(\mathbf{Kernel})^{-1}\mathbf{y}\right)
-```
-
-
 - ガウス回帰過程について
 https://gochikika.ntt.com/Modeling/gp_regression.html
 
@@ -82,6 +73,13 @@ https://observablehq.com/@herbps10/gaussian-processes
 https://datachemeng.com/kernel_design_in_gpr/
 
 
+- 尤度
+```math
+\mathcal{L}(\mathbf{y}|\mathbf{X},\boldsymbol{\theta})=
+\frac{1}
+{(2\pi)^{\frac{n}{2}}|\mathbf{Kernel}|^{\frac{1}{2}}}
+\exp\left(-\frac{1}{2}\mathbf{y}^{\top}(\mathbf{Kernel})^{-1}\mathbf{y}\right)
+```
 
 
 
