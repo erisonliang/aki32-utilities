@@ -14,6 +14,8 @@ public partial class GaussianProcessRegressionExecuter
 
     internal List<(Guid, string)> HyperParameters { get; set; }
 
+    const string logLikelihoodIndexName = "LogLikelihood";
+
 
     // ★★★★★★★★★★★★★★★ inits
 
@@ -161,17 +163,19 @@ public partial class GaussianProcessRegressionExecuter
                     double logDetKs = Kernel.Ktt.Determinant().Log();
                     double yKy = Y_train * Kernel.Ktt_Inv_Y;
                     double logLikelihood = -0.5 * (logDetKs + yKy + X_train.Count * Math.Log(2 * Math.PI));
-                    step["LogLikelihood"] = logLikelihood;
+                    step[logLikelihoodIndexName] = logLikelihood;
                     SSHistory.AppendStep(step);
 
 
                     // terminate check
                     if (SSHistory.DataRowCount >= 2)
                     {
-
-                        var c = SSHistory["LogLikelihood"][SSHistory.DataRowCount - 1];
-                        var p = SSHistory["LogLikelihood"][SSHistory.DataRowCount - 2];
-                        if (Math.Abs((c - p) / p) < terminatingRatio)
+                        var logLikelihoods = SSHistory[logLikelihoodIndexName];
+                        var prev = logLikelihoods[SSHistory.DataRowCount - 2];
+                        var current = logLikelihoods[SSHistory.DataRowCount - 1];
+                        //if (current < prev) // 尤度最大化が目標なのに下がってる場合は，最適化失敗
+                        //    throw new Exception("likelihood decreased");
+                        if (Math.Abs((current - prev) / prev) < terminatingRatio)
                             throw new OperationCanceledException("terminated");
 
                     }
