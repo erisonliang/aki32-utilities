@@ -20,7 +20,6 @@ public partial class GaussianProcessRegressionExecuter
         public AutoRegressiveKernel(double rho)
         {
             Rho = new HyperParameter(nameof(Rho), rho, KernelID, false, double.Epsilon, double.MaxValue);
-
             HyperParameters = new HyperParameter[] { Rho };
 
         }

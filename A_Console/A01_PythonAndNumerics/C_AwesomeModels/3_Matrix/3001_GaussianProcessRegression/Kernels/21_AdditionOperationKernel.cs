@@ -15,7 +15,6 @@ public partial class GaussianProcessRegressionExecuter
 
         internal AdditionOperationKernel()
         {
-
         }
 
 
@@ -23,8 +22,7 @@ public partial class GaussianProcessRegressionExecuter
 
         internal override DenseMatrix CalcKernel(DenseVector X1, DenseVector X2)
         {
-            return LeftChild.CalcKernel(X1, X2)
-                + RightChild.CalcKernel(X1, X2);
+            return LeftChild.CalcKernel(X1, X2) + RightChild.CalcKernel(X1, X2);
         }
 
         internal override DenseMatrix CalcKernelGrad(DenseVector X1, DenseVector X2, HyperParameter targetParameter)

@@ -19,7 +19,6 @@ public partial class GaussianProcessRegressionExecuter
         public ConstantKernel(double constantWeight, bool fixConstantWeight = false)
         {
             ConstantWeight = new HyperParameter(nameof(ConstantWeight), constantWeight, KernelID, fixConstantWeight, double.MinValue, double.MaxValue);
-
             HyperParameters = new HyperParameter[] { ConstantWeight };
 
         }

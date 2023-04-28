@@ -19,7 +19,6 @@ public partial class GaussianProcessRegressionExecuter
         public WhiteNoiseKernel(double noiseLambda, bool fixNoiseLambda = false)
         {
             NoiseLambda = new HyperParameter(nameof(NoiseLambda), noiseLambda, KernelID, fixNoiseLambda, double.Epsilon, double.MaxValue);
-
             HyperParameters = new HyperParameter[] { NoiseLambda };
 
         }

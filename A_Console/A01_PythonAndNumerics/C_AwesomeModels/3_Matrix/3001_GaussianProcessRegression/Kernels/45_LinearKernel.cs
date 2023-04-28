@@ -20,7 +20,6 @@ public partial class GaussianProcessRegressionExecuter
         public LinearKernel(double c)
         {
             C = new HyperParameter(nameof(C), c, KernelID, false, double.MinValue, double.MaxValue);
-
             HyperParameters = new HyperParameter[] { C };
 
         }
@@ -33,12 +32,8 @@ public partial class GaussianProcessRegressionExecuter
             var K = new DenseMatrix(X1.Count, X2.Count);
 
             for (int i1 = 0; i1 < X1.Count; i1++)
-            {
                 for (int i2 = 0; i2 < X2.Count; i2++)
-                {
                     K[i1, i2] = (X1[i1] - C) * (X2[i2] - C);
-                }
-            }
 
             return K;
         }
@@ -65,12 +60,8 @@ public partial class GaussianProcessRegressionExecuter
             var K = new DenseMatrix(X1.Count, X2.Count);
 
             for (int i1 = 0; i1 < X1.Count; i1++)
-            {
                 for (int i2 = 0; i2 < X2.Count; i2++)
-                {
                     K[i1, i2] = -X1[i1] - X2[i2] - 2 * C;
-                }
-            }
 
             return K;
         }

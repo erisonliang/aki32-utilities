@@ -26,7 +26,6 @@ public partial class GaussianProcessRegressionExecuter
         public SquaredExponentialKernel(double lengthScale)
         {
             LengthScale = new HyperParameter(nameof(LengthScale), lengthScale, KernelID, false, double.Epsilon, double.MaxValue);
-
             HyperParameters = new HyperParameter[] { LengthScale };
 
         }

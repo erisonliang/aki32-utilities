@@ -27,7 +27,13 @@ Code set for Gaussian Process Regression.
 
 - used kernel
 ```math
-k(\mathbf{x}_i, \mathbf{x}_j) = \sigma_f^2\exp\left(-\frac{1}{2}\left(\frac{\|\mathbf{x}_i - \mathbf{x}_j\|}{\ell}\right)^2\right) + \sigma_l^2\mathbf{x}_i^{\top}\mathbf{x}_j + \sigma_n^2\delta_{ij}
+k(\mathbf{x}_i, \mathbf{x}_j) 
+=
+\sigma_f^2\exp\left(-\frac{1}{2}\left(\frac{\|\mathbf{x}_i - \mathbf{x}_j\|}{\ell}\right)^2\right) 
++
+\sigma_l^2\mathbf{x}_i^{\top}\mathbf{x}_j
++ 
+\sigma_n^2\delta_{ij}
 ```
 
 
@@ -85,9 +91,9 @@ https://datachemeng.com/kernel_design_in_gpr/
 
 - 尤度（コード内では対数取った）
 ```math
-\mathcal{L}(\mathbf{y}|\mathbf{X},\boldsymbol{\theta})=
-\frac{1}
-{(2\pi)^{\frac{n}{2}}|\mathbf{Kernel}|^{\frac{1}{2}}}
+\mathcal{L}(\mathbf{y}|\mathbf{X},\boldsymbol{\theta})
+=
+\frac{1}{(2\pi)^{\frac{n}{2}}|\mathbf{Kernel}|^{\frac{1}{2}}}
 \exp\left(-\frac{1}{2}\mathbf{y}^{\top}(\mathbf{Kernel})^{-1}\mathbf{y}\right)
 ```
 

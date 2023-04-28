@@ -22,7 +22,6 @@ public partial class GaussianProcessRegressionExecuter
         {
             LengthScale = new HyperParameter(nameof(LengthScale), lengthScale, KernelID, false, double.Epsilon, double.MaxValue);
             Alpha = new HyperParameter(nameof(Alpha), alpha, KernelID, false, double.Epsilon, double.MaxValue);
-
             HyperParameters = new HyperParameter[] { LengthScale, Alpha };
 
         }
