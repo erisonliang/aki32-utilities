@@ -84,49 +84,52 @@ public partial class GaussianProcessRegressionExecuter
             // wide optimize
             if (executeGridOptimization)
             {
-                //    var maxCount = HyperParameters.Count * (2 * gridOptimizationSize + 1);
-                //    using var progress = new ProgressManager(maxCount);
-                //    Console.WriteLine("grid optimization");
-                //    progress.StartAutoWrite();
+                var maxCount = HyperParameters.Count * HyperParameters.Count * (2 * gridOptimizationSize + 1);
+                using var progress = new ProgressManager(maxCount);
+                Console.WriteLine("grid optimization");
+                progress.StartAutoWrite();
 
-                //    // 全てのパラメーターに対して，初期値の周辺の値を代入してみて比較する。
-                //    foreach (var targetParam in HyperParameters)
-                //    {
-                //        var initialParamValue = Kernel.GetParameterValue(targetParam)!.Value;
+                // 全てのパラメーターに対して，初期値の周辺の値を代入してみて比較する。
+                for (int times = 0; times < HyperParameters.Count; times++)
+                {
+                    foreach (var targetParam in HyperParameters)
+                    {
+                        var initialParamValue = Kernel.GetParameterValue(targetParam)!.Value;
 
-                //        var tryingParamValues = new List<double>
-                //        {
-                //            initialParamValue
-                //        };
+                        var tryingParamValues = new List<double>
+                        {
+                            initialParamValue
+                        };
 
-                //        for (int i = 1; i < gridOptimizationSize; i++)
-                //        {
-                //            var weight = (double)i / gridOptimizationSize;
-                //            tryingParamValues.Add(initialParamValue * weight);
-                //            tryingParamValues.Add(initialParamValue / weight);
-                //        }
+                        for (int i = 1; i < gridOptimizationSize; i++)
+                        {
+                            var weight = (double)i / gridOptimizationSize;
+                            tryingParamValues.Add(initialParamValue * weight);
+                            tryingParamValues.Add(initialParamValue / weight);
+                        }
 
-                //        var results = new List<(double ParamValue, double SSE)>();
+                        var results = new List<(double ParamValue, double SSE)>();
 
-                //        foreach (var tryingParamValue in tryingParamValues)
-                //        {
-                //            Kernel.SetParameterValue(targetParam, tryingParamValue);
+                        foreach (var tryingParamValue in tryingParamValues)
+                        {
+                            Kernel.SetParameterValue(targetParam, tryingParamValue);
 
-                //            Fit(X_train, Y_train);
+                            Fit(X_train, Y_train);
 
-                //            var Ktt_Inv_Y_2 = (DenseMatrix)(Kernel.Ktt_Inv_Y.ToColumnMatrix() * Kernel.Ktt_Inv_Y.ToRowMatrix());
-                //            var difference = (Ktt_Inv_Y_2 - Kernel.Ktt_Inv);
+                            var Ktt_Inv_Y_2 = (DenseMatrix)(Kernel.Ktt_Inv_Y.ToColumnMatrix() * Kernel.Ktt_Inv_Y.ToRowMatrix());
+                            var difference = (Ktt_Inv_Y_2 - Kernel.Ktt_Inv);
 
-                //            results.Add((tryingParamValue, Math.Abs(difference.Diagonal().Sum())));
-                //            progress.CurrentStep++;
-                //        }
+                            results.Add((tryingParamValue, Math.Abs(difference.Diagonal().Sum())));
+                            progress.CurrentStep++;
+                        }
 
-                //        var settingValue = results.MinBy(r => r.SSE).ParamValue;
-                //        Kernel.SetParameterValue(targetParam, settingValue);
+                        var settingValue = results.MinBy(r => r.SSE).ParamValue;
+                        Kernel.SetParameterValue(targetParam, settingValue);
 
-                //    }
+                    }
+                }
 
-                //    progress.WriteDone();
+                progress.WriteDone();
             }
 
             // precise optimize
@@ -171,12 +174,15 @@ public partial class GaussianProcessRegressionExecuter
                     if (SSHistory.DataRowCount >= 2)
                     {
                         var logLikelihoods = SSHistory[logLikelihoodIndexName];
-                        var prev = logLikelihoods[SSHistory.DataRowCount - 2];
-                        var current = logLikelihoods[SSHistory.DataRowCount - 1];
-                        //if (current < prev) // 尤度最大化が目標なのに下がってる場合は，最適化失敗
+                        var p = logLikelihoods[SSHistory.DataRowCount - 2];
+                        var c = logLikelihoods[SSHistory.DataRowCount - 1];
+                        //if (c < p) // 尤度最大化が目標なのに下がってる場合は，最適化失敗
                         //    throw new Exception("likelihood decreased");
-                        if (Math.Abs((current - prev) / prev) < terminatingRatio)
+                        if (Math.Abs((c - p) / p) < terminatingRatio)
+                        {
+                            progress.StopAutoWrite();
                             throw new OperationCanceledException("terminated");
+                        }
 
                     }
                     progress.CurrentStep++;
@@ -190,7 +196,6 @@ public partial class GaussianProcessRegressionExecuter
         catch (OperationCanceledException)
         {
             // terminated
-            Console.WriteLine();
             Console.WriteLine();
             Console.WriteLine("Converged. Terminated!");
         }

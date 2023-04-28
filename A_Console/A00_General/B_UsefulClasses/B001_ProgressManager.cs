@@ -139,6 +139,13 @@ public class ProgressManager : IDisposable
         autoWriteTimer.Start();
     }
 
+    public void StopAutoWrite()
+    {
+        autoWriteTimer?.Stop();
+        autoWriteTimer?.Dispose();
+        Console.WriteLine();
+    }
+
     private string GetCurrentStateString(string message)
     {
         var s = $"{message}, ";
