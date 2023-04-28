@@ -11,16 +11,24 @@ public partial class GaussianProcessRegressionExecuter
 
         // ★★★★★★★★★★★★★★★ props
 
-        public bool FixNoiseLambda { get; init; } = false;
-        public double NoiseLambda { get; set; }
+        private double _NoiseLambda;
+        public double NoiseLambda
+        {
+            get => _NoiseLambda;
+            set => _NoiseLambda = MathExtension.Between(MinNoiseLambda, value, MaxNoiseLambda);
+        }
+        public bool FixNoiseLambda { get; private set; } = false;
         public double InitialNoiseLambda { get; private set; }
+        public double MinNoiseLambda { get; private set; } = double.MinValue;
+        public double MaxNoiseLambda { get; private set; }=double.MaxValue;
 
 
         // ★★★★★★★★★★★★★★★ inits
 
-        public WhiteNoiseKernel(double noiseLambda)
+        public WhiteNoiseKernel(double noiseLambda, bool fixNoiseLambda = false)
         {
             NoiseLambda = InitialNoiseLambda = noiseLambda;
+            FixNoiseLambda = fixNoiseLambda;
 
             HyperParameters = new string[]
             {

@@ -81,7 +81,7 @@ public partial class GaussianProcessRegressionExecuter
 
         try
         {
-            // wide optimize
+            // grid optimize (TODO: make this to grid)
             if (executeGridOptimization)
             {
                 var maxCount = HyperParameters.Count * HyperParameters.Count * (2 * gridOptimizationSize + 1);
@@ -157,8 +157,11 @@ public partial class GaussianProcessRegressionExecuter
                         var addingValue = learningRate * difference.Trace();
 
                         (var originalValue, var processedValue) = Kernel.AddValueToParameter(targetParam, addingValue);
-                        if (double.IsNaN(processedValue))
+                        if (double.IsNaN(processedValue)) // 計算の発散
+                        {
+                            progress.StopAutoWrite();
                             throw new Exception("got NaN");
+                        }
                         step[targetParam.ToString()] = originalValue;
 
                     }
@@ -178,8 +181,11 @@ public partial class GaussianProcessRegressionExecuter
                         var logLikelihoods = SSHistory[logLikelihoodIndexName];
                         var p = logLikelihoods[SSHistory.DataRowCount - 2];
                         var c = logLikelihoods[SSHistory.DataRowCount - 1];
-                        //if (c < p) // 尤度最大化が目標なのに下がってる場合は，最適化失敗
-                        //    throw new Exception("likelihood decreased");
+                        if (c < p) // 尤度最大化が目標なのに下がってる場合は，最適化失敗
+                        {
+                            progress.StopAutoWrite();
+                            throw new Exception("likelihood decreased");
+                        }
                         if (Math.Abs((c - p) / p) < terminatingRatio)
                         {
                             progress.StopAutoWrite();
@@ -230,41 +236,60 @@ public partial class GaussianProcessRegressionExecuter
         //var X = new double[] { 1, 3, 5, 6, 7, 8 };
         //var X = new double[] { 1, 1.1, 1.2, 1.3, 3, 5, 6, 7, 8 };
         //var X_train = new double[] { 1, 1.1, 1.2, 1.3, 3, 5, 5.2, 5.3, 5.4, 5.6, 5.8, 6, 7, 8, 8, 8, 8 };
-        var X_train = new double[] { 0, 0.5, 1, 1.5, 2, 2, 2, 5, 5, 5, 5.5, 5.5, 5.5, 6, 6, 6, 6.5, 6.5, 6.5, 7, 7, 7, 8, 8, 8, 8, 10, 10.5, 11, 11.5, 12, 12, 12, 15, 15, 15, 15.5, 15.5, 15.5, 16, 16, 16 };
+        var X_train = new double[] { 0, 0.5, 0.7, 0.7, 1, 1.5, 2, 2, 2, 5, 5, 5, 5, 5, 5.5, 5.5, 5.5, 6, 6, 6, 6.5, 6.5, 6.5, 6.5, 7, 7, 7, 7, 8, 8, 8, 8, 10, 10, 10 };
         var Y_train = X_train.Select(x => f(x, true)).ToArray();
-        var X_predict = EnumerableExtension.Range_WithStep(0, 16, 0.1).ToArray();
+        var X_predict = EnumerableExtension.Range_WithStep(0, 10, 0.1).ToArray();
         var Y_true = X_predict.Select(x => f(x)).ToArray();
 
 
         // build model
         var k1 = new GaussianProcessRegressionExecuter.ConstantKernel(1d);
         var k2 = new GaussianProcessRegressionExecuter.SquaredExponentialKernel(1d);
-        var k3 = new GaussianProcessRegressionExecuter.WhiteNoiseKernel(1 / 15d) { FixNoiseLambda = true };
+        var k3 = new GaussianProcessRegressionExecuter.WhiteNoiseKernel(1 / 15d, true);
         var kernel = k1 * k2 + k3;
+
         var gpr = new GaussianProcessRegressionExecuter(kernel);
 
 
+        // (optional) optimize parameters
+        while (true)
         {
-
-            // fit and predict
-            (var Y_predict, var Y_cov) = gpr.FitAndPredict(X_train, Y_train, X_predict);
-            var Y_std = Y_cov.Select(x => Math.Sqrt(x)).ToArray();
-            var Y_95CI = Y_std.ProductForEach(1.96);
-            var Y_99CI = Y_std.ProductForEach(2.58);
-
-
-            // draw
-            new Figure
+            try
             {
-                IsTightLayout = true,
-                SubPlot = new SubPlot()
-                {
-                    XLabel = "X",
-                    YLabel = "f(X)",
-                    Title = "ガウス過程回帰",
-                    LegendLocation = LegendLocation.upper_left,
-                    LegendFontSize = 20,
-                    Plots = new List<IPlot>
+                var optimizeHistory = gpr.OptimizeParameters(X_train, Y_train, executeGridOptimization: false);
+                optimizeHistory.DrawGraph_OnPyPlot(null, "Index", logLikelihoodIndexName, preview: true);
+                //optimizeHistory.DrawGraph_OnPyPlot(null, "Index", optimizeHistory.Columns.Where(x => x.Contains("Constant")).ToArray(), preview: true);
+                //optimizeHistory.DrawGraph_OnPyPlot(null, "Index", optimizeHistory.Columns.Where(x => x.Contains("Length")).ToArray(), preview: true);
+                //optimizeHistory.DrawGraph_OnPyPlot(null, "Index", optimizeHistory.Columns.Where(x => x.Contains("Noise")).ToArray(), preview: true);
+
+                break;
+            }
+            catch (Exception ex)
+            {
+                ConsoleExtension.WriteWithColor($"Failed. Trying again... (error: {ex.Message})", ConsoleColor.Red);
+            }
+        }
+
+
+        // fit and predict
+        (var Y_predict, var Y_cov) = gpr.FitAndPredict(X_train, Y_train, X_predict);
+        var Y_std = Y_cov.Select(x => Math.Sqrt(x)).ToArray();
+        var Y_95CI = Y_std.ProductForEach(1.96);
+        var Y_99CI = Y_std.ProductForEach(2.58);
+
+
+        // draw
+        new Figure
+        {
+            IsTightLayout = true,
+            SubPlot = new SubPlot()
+            {
+                XLabel = "X",
+                YLabel = "f(X)",
+                Title = "ガウス過程回帰",
+                LegendLocation = LegendLocation.upper_left,
+                LegendFontSize = 20,
+                Plots = new List<IPlot>
                 {
                     new ScatterPlot(Array.Empty<double>(),Array.Empty<double>()){ MarkerColor="yellow", MarkerSize=100, LegendLabel=kernel.ToString()},
 
@@ -284,62 +309,8 @@ public partial class GaussianProcessRegressionExecuter
                     //new TextPlot(10,8,kernel.ToString()){ HorizontalAlignment="right"},
                 
                 },
-                }
-            }.Run(outputImageFile, preview);
-        }
-
-        {
-
-            // (optional) optimize parameters
-            var optimizeHistory = gpr.OptimizeParameters(X_train, Y_train);
-            optimizeHistory.DrawGraph_OnPyPlot(null, "Index", logLikelihoodIndexName, preview: true);
-            //optimizeHistory.DrawGraph_OnPyPlot(null, "Index", optimizeHistory.Columns.Where(x => x.Contains("Constant")).ToArray(), preview: true);
-            //optimizeHistory.DrawGraph_OnPyPlot(null, "Index", optimizeHistory.Columns.Where(x => x.Contains("Length")).ToArray(), preview: true);
-            //optimizeHistory.DrawGraph_OnPyPlot(null, "Index", optimizeHistory.Columns.Where(x => x.Contains("Noise")).ToArray(), preview: true);
-
-
-            // fit and predict
-            (var Y_predict, var Y_cov) = gpr.FitAndPredict(X_train, Y_train, X_predict);
-            var Y_std = Y_cov.Select(x => Math.Sqrt(x)).ToArray();
-            var Y_95CI = Y_std.ProductForEach(1.96);
-            var Y_99CI = Y_std.ProductForEach(2.58);
-
-
-            // draw
-            new Figure
-            {
-                IsTightLayout = true,
-                SubPlot = new SubPlot()
-                {
-                    XLabel = "X",
-                    YLabel = "f(X)",
-                    Title = "ガウス過程回帰",
-                    LegendLocation = LegendLocation.upper_left,
-                    LegendFontSize = 20,
-                    Plots = new List<IPlot>
-                {
-                    new ScatterPlot(Array.Empty<double>(),Array.Empty<double>()){ MarkerColor="yellow", MarkerSize=100, LegendLabel=kernel.ToString()},
-
-                    new LinePlot(X_predict, Y_true) { LineColor="g", LineWidth=3, LegendLabel="True f(X)= X sin(X)"},
-                    new ScatterPlot(X_train, Y_train) { MarkerSize=130, MarkerColor="g", LegendLabel="Observed Data"},
-
-                    new LinePlot(X_predict, Y_predict) { LineColor="red", LineWidth=3, LegendLabel="Predicted Mean"},
-
-                    new FillBetweenPlot(X_predict, Y_predict.AddForEach(Y_95CI), Y_predict.SubForEach(Y_95CI)) {FillColor="red", Alpha=0.20, LegendLabel="95% CI"},
-                    //new LinePlot(predictX, predictY.AddForEach(Y_95CI)) { LineColor="red", LineStyle="-", Alpha=0.20 },
-                    //new LinePlot(predictX, predictY.SubForEach(Y_95CI)) { LineColor="red", LineStyle="-", Alpha=0.20 },
-
-                    new FillBetweenPlot(X_predict, Y_predict.AddForEach(Y_99CI), Y_predict.SubForEach(Y_99CI)) {FillColor="red", Alpha=0.10, LegendLabel="99% CI"},
-                    //new LinePlot(predictX, predictY.AddForEach(Y_99CI)) { LineColor="red", LineStyle="-", Alpha=0.10 },
-                    //new LinePlot(predictX, predictY.SubForEach(Y_99CI)) { LineColor="red", LineStyle="-", Alpha=0.10 },
-
-                    //new TextPlot(10,8,kernel.ToString()){ HorizontalAlignment="right"},
-                
-                },
-                }
-            }.Run(outputImageFile, preview);
-        }
-
+            }
+        }.Run(outputImageFile, preview);
     }
 
     public override string ToString()

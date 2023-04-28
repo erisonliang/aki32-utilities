@@ -18,15 +18,24 @@ public partial class GaussianProcessRegressionExecuter
 
         // ★★★★★★★★★★★★★★★ props
 
-        public double LengthScale { get; set; }
+        private double _LengthScale;
+        public double LengthScale
+        {
+            get => _LengthScale;
+            set => _LengthScale = MathExtension.Between(MinLengthScale, value, MaxLengthScale);
+        }
         public double InitialLengthScale { get; private set; }
+        public double MinLengthScale { get; private set; }
+        public double MaxLengthScale { get; private set; }
 
 
         // ★★★★★★★★★★★★★★★ inits
 
-        public SquaredExponentialKernel(double lengthScale)
+        public SquaredExponentialKernel(double lengthScale, double minLengthScale = 0, double maxLengthScale = double.MaxValue)
         {
-            LengthScale = InitialLengthScale = lengthScale;
+            MinLengthScale = minLengthScale;
+            MaxLengthScale = maxLengthScale;
+            InitialLengthScale = LengthScale = lengthScale;
 
             HyperParameters = new string[]
             {
