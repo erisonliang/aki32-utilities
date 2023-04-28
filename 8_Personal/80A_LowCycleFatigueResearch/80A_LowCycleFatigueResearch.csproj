@@ -15,4 +15,8 @@
     <ProjectReference Include="..\..\A_Console\A10_Structure\A10_Structure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="P_PythonCodes\" />
+  </ItemGroup>
+
 </Project>

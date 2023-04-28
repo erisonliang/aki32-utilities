@@ -19,7 +19,7 @@ public partial class Module
 
         PythonController.PythonPath = @"C:\Python310";
         PythonController.DllName = @"C:\Python310";
-        PythonController.AdditionalPath.Add(@"C:\Users\aki32\Dropbox\Codes\# Projects\研究\修士論文研究\2 Python Jupyter");
+        PythonController.AdditionalPath.Add(@"C:\Users\aki32\Dropbox\Codes\# Projects\# Utilities\8_Personal\80A_LowCycleFatigueResearch\P_PythonCodes");
         PythonController.Initialize();
 
 
