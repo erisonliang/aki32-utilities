@@ -71,8 +71,8 @@ public partial class GaussianProcessRegressionExecuter
         double terminatingRatio = 0.00001d,
         double learningRate = 0.001d,
         int wideOptimizeSize = 8,
-        bool executeWideOptimize = true,
-        bool executePreciseOptimize = true
+        bool executeWideOptimization = true,
+        bool executePreciseOptimization = true
         )
     {
         var SSHistory = new TimeHistory();
@@ -80,11 +80,11 @@ public partial class GaussianProcessRegressionExecuter
         try
         {
             // wide optimize
-            if (executeWideOptimize)
+            if (executeWideOptimization)
             {
                 var maxCount = HyperParameters.Count * (2 * wideOptimizeSize + 1);
                 using var progress = new ProgressManager(maxCount);
-                Console.WriteLine("wide optimize");
+                Console.WriteLine("wide optimization");
                 progress.StartAutoWrite();
 
                 // 全てのパラメーターに対して，初期値の周辺の値を代入してみて比較する。
@@ -93,9 +93,9 @@ public partial class GaussianProcessRegressionExecuter
                     var initialParamValue = Kernel.GetParameterValue(targetParam)!.Value;
 
                     var tryingParamValues = new List<double>
-                {
-                    initialParamValue
-                };
+                    {
+                        initialParamValue
+                    };
 
                     for (int i = 1; i < wideOptimizeSize; i++)
                     {
@@ -129,7 +129,7 @@ public partial class GaussianProcessRegressionExecuter
             }
 
             // precise optimize
-            if (executePreciseOptimize)
+            if (executePreciseOptimization)
             {
                 using var progress = new ProgressManager(maxTryCount);
                 Console.WriteLine("precise optimize");
