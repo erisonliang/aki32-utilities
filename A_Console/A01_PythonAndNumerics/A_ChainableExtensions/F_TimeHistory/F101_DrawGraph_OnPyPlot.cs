@@ -11,7 +11,7 @@ public static partial class ChainableExtensions
     /// </summary>
     /// <param name="yName">Vertical Axis</param>
     /// <param name="xName">Horizontal Axis</param>
-    public static FileInfo DrawGraph_OnPyPlot(this TimeHistory th, FileInfo outputFile, string yName,
+    public static FileInfo DrawGraph_OnPyPlot(this TimeHistory th, FileInfo? outputFile, string yName,
         ChartType type = ChartType.Line,
         string chartTitle = "",
         string? xLabel = null,
@@ -32,7 +32,7 @@ public static partial class ChainableExtensions
     /// </summary>
     /// <param name="yName">Vertical Axis</param>
     /// <param name="xName">Horizontal Axis</param>
-    public static FileInfo DrawGraph_OnPyPlot(this TimeHistory th, FileInfo outputFile, string xName, string yName,
+    public static FileInfo DrawGraph_OnPyPlot(this TimeHistory th, FileInfo? outputFile, string xName, string yName,
         ChartType type = ChartType.Line,
         string chartTitle = "",
         string? xLabel = null,
@@ -53,7 +53,7 @@ public static partial class ChainableExtensions
     /// </summary>
     /// <param name="yName">Vertical Axis</param>
     /// <param name="xName">Horizontal Axis</param>
-    public static FileInfo DrawGraph_OnPyPlot(this TimeHistory th, FileInfo outputFile, string xName, string[] yName,
+    public static FileInfo DrawGraph_OnPyPlot(this TimeHistory th, FileInfo? outputFile, string xName, string[] yName,
         ChartType type = ChartType.Line,
         string chartTitle = "",
         string? xLabel = null,

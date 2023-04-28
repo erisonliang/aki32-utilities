@@ -20,7 +20,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="A_ChainableExtensions\0_Scalar\" />
     <Folder Include="A_ChainableExtensions\__Base\" />
     <Folder Include="Properties\" />
   </ItemGroup>

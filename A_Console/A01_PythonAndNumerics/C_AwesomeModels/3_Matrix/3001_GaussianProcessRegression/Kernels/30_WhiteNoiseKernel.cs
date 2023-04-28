@@ -11,6 +11,7 @@ public partial class GaussianProcessRegressionExecuter
 
         // ★★★★★★★★★★★★★★★ props
 
+        public bool FixNoiseLambda { get; set; } = false;
         public double NoiseLambda { get; set; }
         public double InitialNoiseLambda { get; set; }
 
@@ -65,6 +66,8 @@ public partial class GaussianProcessRegressionExecuter
         /// <returns></returns>
         internal DenseMatrix CalcKernelGrad_NoiseLambda(DenseVector X1, DenseVector X2)
         {
+            if (FixNoiseLambda)
+                return DenseMatrix.Create(X1.Count, X2.Count, 0);
             if (X1.Count == X2.Count)
                 return 2 * Math.Sqrt(NoiseLambda) * DenseMatrix.CreateIdentity(X1.Count);
             return DenseMatrix.Create(X1.Count, X2.Count, 0);

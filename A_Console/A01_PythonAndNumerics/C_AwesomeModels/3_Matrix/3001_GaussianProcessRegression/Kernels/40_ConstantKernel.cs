@@ -11,13 +11,23 @@ public partial class GaussianProcessRegressionExecuter
 
         // ★★★★★★★★★★★★★★★ props
 
-        public double ConstantWeight { get; set; }
+        public bool FixConstantWeight { get; init; } = false;
+        private double _ConstantWeight;
+        public double ConstantWeight
+        {
+            get => _ConstantWeight;
+            set => _ConstantWeight = MathExtension.Between(MinConstantWeight, value, MaxConstantWeight);
+        }
+        public double InitialConstantWeight { get; private set; }
+        public double MinConstantWeight { get; init; } = double.MinValue;
+        public double MaxConstantWeight { get; init; } = double.MaxValue;
 
 
         // ★★★★★★★★★★★★★★★ inits
 
         public ConstantKernel(double constantWeight)
         {
+            InitialConstantWeight = constantWeight;
             ConstantWeight = constantWeight;
 
             HyperParameters = new string[]
@@ -61,6 +71,8 @@ public partial class GaussianProcessRegressionExecuter
         /// <returns></returns>
         internal DenseMatrix CalcKernelGrad_ConstantWeight(DenseVector X1, DenseVector X2)
         {
+            if (FixConstantWeight)
+                return DenseMatrix.Create(X1.Count, X2.Count, 0);
             return DenseMatrix.Create(X1.Count, X2.Count, 2 * Math.Sqrt(ConstantWeight));
         }
 

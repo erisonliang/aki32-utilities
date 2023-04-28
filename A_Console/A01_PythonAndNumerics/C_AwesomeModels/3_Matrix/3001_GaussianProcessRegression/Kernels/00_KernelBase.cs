@@ -50,10 +50,12 @@ public partial class GaussianProcessRegressionExecuter
         /// </summary>
         /// <param name="targetParameter"></param>
         /// <param name="addingValue"></param>
-        internal void AddValueToParameter((Guid, string) targetParameter, double addingValue)
+        internal (double originalValue, double processedValue) AddValueToParameter((Guid, string) targetParameter, double addingValue)
         {
             var originalValue = GetParameterValue(targetParameter)!.Value;
-            SetParameterValue(targetParameter, originalValue + addingValue);
+            var processedValue = originalValue + addingValue;
+            SetParameterValue(targetParameter, processedValue);
+            return (originalValue, processedValue);
         }
         internal abstract double? GetParameterValue((Guid, string) targetParameter);
         internal abstract void SetParameterValue((Guid, string) targetParameter, double settingValue);
