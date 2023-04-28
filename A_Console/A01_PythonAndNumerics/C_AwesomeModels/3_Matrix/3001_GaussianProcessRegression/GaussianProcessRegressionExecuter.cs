@@ -142,7 +142,7 @@ public partial class GaussianProcessRegressionExecuter
                 for (int i = 0; i < maxTryCount; i++)
                 {
                     var step = new TimeHistoryStep();
-                    step["Index"] = i;
+                    step["TrialCount"] = i;
 
 
                     // optimize
@@ -243,12 +243,12 @@ public partial class GaussianProcessRegressionExecuter
 
 
         // build model
-        var k11 = new GaussianProcessRegressionExecuter.ConstantKernel(1d);
-        var k12 = new GaussianProcessRegressionExecuter.SquaredExponentialKernel(1d);
-        var k21 = new GaussianProcessRegressionExecuter.ConstantKernel(0.1d);
-        var k22 = new GaussianProcessRegressionExecuter.LinearKernel(1d);
-        var k30 = new GaussianProcessRegressionExecuter.WhiteNoiseKernel(1 / 15d);
-        var kernel = k11 * k12 + k21 * k22 + k30;
+        var k1 = new GaussianProcessRegressionExecuter.ConstantKernel(1d);
+        var k2 = new GaussianProcessRegressionExecuter.SquaredExponentialKernel(1d);
+        var k3 = new GaussianProcessRegressionExecuter.ConstantKernel(0.1d);
+        var k4 = new GaussianProcessRegressionExecuter.LinearKernel(1d);
+        var k5 = new GaussianProcessRegressionExecuter.WhiteNoiseKernel(1 / 15d);
+        var kernel = k1 * k2 + k3 * k4 + k5;
         var gpr = new GaussianProcessRegressionExecuter(kernel);
 
 
@@ -258,7 +258,7 @@ public partial class GaussianProcessRegressionExecuter
             try
             {
                 var optimizeHistory = gpr.OptimizeParameters(X_train, Y_train, executeGridOptimization: false);
-                optimizeHistory.DrawGraph_OnPyPlot(null, "Index", logLikelihoodIndexName, preview: true);
+                optimizeHistory.DrawGraph_OnPyPlot(null, "TrialCount", logLikelihoodIndexName, preview: true);
                 //optimizeHistory.DrawGraph_OnPyPlot(null, "Index", optimizeHistory.Columns.Where(x => x.Contains("Constant")).ToArray(), preview: true);
                 //optimizeHistory.DrawGraph_OnPyPlot(null, "Index", optimizeHistory.Columns.Where(x => x.Contains("Length")).ToArray(), preview: true);
                 //optimizeHistory.DrawGraph_OnPyPlot(null, "Index", optimizeHistory.Columns.Where(x => x.Contains("Noise")).ToArray(), preview: true);
