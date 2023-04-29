@@ -1,6 +1,4 @@
-﻿
-
-using MathNet.Spatial.Euclidean;
+﻿using MathNet.Spatial.Euclidean;
 
 namespace Aki32Utilities.ConsoleAppUtilities.Structure;
 public partial class MatrixDisplacementMethod
@@ -60,6 +58,6 @@ public partial class MatrixDisplacementMethod
     }
 
 
-    // ★★★★★★★★★★★★★★★ tests
+    // ★★★★★★★★★★★★★★★ 
 
 }
