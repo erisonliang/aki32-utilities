@@ -102,7 +102,7 @@ public static partial class Executer
 
                     targetModels = new string[] { "S-A30-B仕-CKNKMM006--4" };
                     targetEQs = Enumerable.Range(1, 32).Select(x => $"D{x}").ToArray();
-                    collectedResultsBaseDir = new DirectoryInfo($@"C:\Users\aki32\Dropbox\Documents\02 東大関連\1 研究室\14 SNAP\修論モデル\09 calc\013-CKKMM006");
+                    collectedResultsBaseDir = new DirectoryInfo($@"C:\Users\aki32\Dropbox\Documents\02 東大関連\1 研究室\14 SNAP\修論モデル\09 calc\013-CKKMM006").CreateAndPipe();
 
                     //targetModels = new string[] { "S-A30-B仕-CKNMYG004--3" };
                     //targetEQs = Enumerable.Range(1, 34).Select(x => $"D{x}").ToArray();
@@ -146,24 +146,23 @@ public static partial class Executer
 
                 // ★ ほぼ固定の変数
 
-                //var snapOutputDir = new DirectoryInfo($@"D:\SNAP結果バックアップ");
-                var snapOutputDir = new DirectoryInfo($@"C:\Users\aki32\MyLocalData\SNAP - results\修論モデル");
+                //var snapOutputDir = new DirectoryInfo($@"D:\SNAP結果バックアップ").CreateAndPipe();
+                var snapOutputDir = new DirectoryInfo($@"C:\Users\aki32\MyLocalData\SNAP - results\修論モデル").CreateAndPipe();
 
-                var collectedResultsBaseDir_ResultCsv = collectedResultsBaseDir.GetChildDirectoryInfo("ResultCsv");
+                var collectedResultsBaseDir_ResultCsv = collectedResultsBaseDir.GetChildDirectoryInfo("ResultCsv").CreateAndPipe();
                 var buildingInfoExcel = new FileInfo(@$"C:\Users\aki32\Dropbox\Documents\02 東大関連\1 研究室\14 SNAP\修論モデル\01 model\部材配置情報.xlsx");
 
 
-                // ★ SNAPエクセルキラー（10回終わったら次の処理に移行！）
-                Module.M030_KeepClosingExcel();
-                Console.WriteLine("\r\n\r\nExcelキラー終了！\r\n次の処理に移行。\r\n\r\n");
-                _ = line.SendMessageAsync(@"Excelキラー終了");
+                //// ★ SNAPエクセルキラー（10回終わったら次の処理に移行！）
+                //Module.M030_KeepClosingExcel();
+                //Console.WriteLine("\r\n\r\nExcelキラー終了！\r\n次の処理に移行。\r\n\r\n");
+                //_ = line.SendMessageAsync(@"Excelキラー終了");
 
-                // ★ SNAPからのデータ抽出
-                Module.M061_SNAP_1_CSCollect(targetModels, targetEQs, line, snapOutputDir, collectedResultsBaseDir);
+                //// ★ SNAPからのデータ抽出
+                //Module.M061_SNAP_1_CSCollect(targetModels, targetEQs, line, snapOutputDir, collectedResultsBaseDir);
 
                 // ★ Pythonで描画やら解析やら
                 Module.M062_SNAP_2_PyDraw(targetModels, targetEQs, line, collectedResultsBaseDir, buildingInfoExcel);
-
 
                 // ★ SNAPの，ResultCsvの更なる集計！
                 Module.M063_SNAP_3_CSCollect(line, collectedResultsBaseDir_ResultCsv);

@@ -20,7 +20,7 @@ public partial class Module
         var BeamDamageDir = ResultCsvDir;
         var BeamDamageDirCollectedFile = ResultCsvDir.GetChildFileInfo("# CollectedBeamDamageAndMuAmpPeak.xlsx");
         BeamDamageDir
-            .RenameFiles_Replace(("BeamDamage", "d-"), ("BeamMuAmpPeak", "mu-"))
+            .RenameFiles_Replace(new (string from, string to)[] { ("BeamDamage", "d-"), ("BeamMuAmpPeak", "mu-") })
             .RenameFiles()
             .Csvs2ExcelSheets(BeamDamageDirCollectedFile);
 
