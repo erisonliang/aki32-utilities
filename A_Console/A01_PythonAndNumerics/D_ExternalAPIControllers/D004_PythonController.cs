@@ -17,6 +17,7 @@ public static partial class PythonController
     public static Py.GILState GIL;
 
 
+
     // ★★★★★★★★★★★★★★★ main
 
     public static void Initialize(bool reInit = false)
@@ -52,8 +53,8 @@ public static partial class PythonController
                 var pythonPathEnvVar = Environment.ExpandEnvironmentVariables(PythonPath);
                 SystemExtension.AddEnvPath("PATH", new string[]
                 {
-                pythonPathEnvVar,
-                Path.Combine(pythonPathEnvVar, @"DLLs"),
+                    pythonPathEnvVar,
+                    Path.Combine(pythonPathEnvVar, @"DLLs"),
                 });
             }
         }
@@ -108,8 +109,9 @@ public static partial class PythonController
         if (!Activated)
             throw new Exception("Required to call PythonController.Initialize() first");
         return Py.Import(name);
-
     }
+    public static dynamic BasicBuiltInModule => PythonController.Import("builtins");
+    public static dynamic BasicSystemModule => PythonController.Import("sys");
     public static int RunSimpleString(string code)
     {
         if (!Activated)

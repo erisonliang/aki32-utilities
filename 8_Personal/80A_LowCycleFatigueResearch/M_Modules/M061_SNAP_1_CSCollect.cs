@@ -37,7 +37,7 @@ public partial class Module
 
                 // ★ 梁端
 
-                // #M000 テスト
+                // #000 テスト
                 {
                     //input
                     //    .CollectFiles(null, @"D.*\\D.*\.csv$")
@@ -45,7 +45,7 @@ public partial class Module
                     //    ;
                 }
 
-                // #M001 塑性変形頻度
+                // #001 損傷・塑性変形頻度
                 {
                     var middle1_r = new DirectoryInfo($@"{middleBasePath}\{model}_{eq}_rainflow_result");
                     var middle1_rb = new DirectoryInfo($@"{middleBasePath}\{model}_{eq}_rainflow_branch_result");
@@ -54,7 +54,7 @@ public partial class Module
                         .CollectFiles(middle0, searchRegexen: $@"{eq}B\d*\.csv$")
                         // {eq}B.*\.csv$
                         //.CollectFiles(null, @".*B85.csv", @".*B86.csv", @".*B87.csv")
-                        .RenameFiles()
+                        .RenameFiles_Replace(new string[] { $@"{eq}B" }) // 単独の梁端だけを見た時には梁端名が消えてしまうので，これを使う。
                         .ExtractCsvColumnsForMany_Loop(null, 6,
                             ("i", new int[] { 0, 5 }, "t,μ"),
                             ("j", new int[] { 0, 11 }, "t,μ"))
@@ -62,21 +62,22 @@ public partial class Module
                         ;
 
                     middle1_r
-                        .RenameFiles()
+                        //.RenameFiles()
                         .CollectCsvColumns(null, 3, null, -1)
                         .RenameFile($"損傷")
                         .MoveTo(middle9)
                         ;
 
                     middle1_rb
-                        .RenameFiles()
+                        //.RenameFiles()
+                        .RenameFiles_Replace(new string[] { $@"_Branches" })
                         .CollectCsvColumns(null, 0, null, 1)
                         .RenameFile($"塑性変形頻度")
                         .MoveTo(middle9)
                         ;
                 }
 
-                // ★ 仕上げ
+                // #002 仕上げ
                 {
                     middle9
                         .Csvs2ExcelSheets(null)
