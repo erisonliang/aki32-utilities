@@ -1,4 +1,5 @@
-# 💖 ElastoplasticAnalysis (StructuralEngineering)
+# 💖 Research Article Manager
+
 
 ## 🌟 Abstract
 Research article manager
@@ -32,6 +33,8 @@ Any commitment to enhance this repo will be welcomed!
 
 
 
+
+
 <br>
 
 ## ❗Japanese 日本語
@@ -39,7 +42,7 @@ Any commitment to enhance this repo will be welcomed!
 
 論文の管理を行うためのコード集です。
 
-様々な情報提供元からの同一論文データをマージしたり，自動でPDFの取り寄せをしたりなど，便利機能を数多く取り揃えています！
+様々な情報提供元から自動で論文情報やPDFを取り寄せたり，重複のあるデータをマージしたりなど，便利機能を数多く取り揃えています！
 
 
 <br>
