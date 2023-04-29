@@ -1,4 +1,4 @@
-# 💖 PythonAndNumerics
+# 💖 Python & Numerics
 
 ## 🌟 Abstract
 
