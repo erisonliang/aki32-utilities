@@ -1406,14 +1406,14 @@ public static partial class ExampleExecuter
 
                 // F002_BeamCyclicLoading
                 {
-                    // Define IO paths
-                    var baseDir_A10_C_F002 = baseDir_A10_C.GetChildDirectoryInfo($@"F002_BeamCyclicLoading").CreateAndPipe();
-                    var inputDir = baseDir_A10_C_F002.GetChildDirectoryInfo($@"input");
-                    var outputDir = baseDir_A10_C_F002.GetChildDirectoryInfo($@"output");
-                    baseDir_A10_C_F002.OpenOnDefaultApp();
+                    //// Define IO paths
+                    //var baseDir_A10_C_F002 = baseDir_A10_C.GetChildDirectoryInfo($@"F002_BeamCyclicLoading").CreateAndPipe();
+                    //var inputDir = baseDir_A10_C_F002.GetChildDirectoryInfo($@"input");
+                    //var outputDir = baseDir_A10_C_F002.GetChildDirectoryInfo($@"output");
+                    //baseDir_A10_C_F002.OpenOnDefaultApp();
 
-                    BeamCyclicLoading.RunExampleModel1(inputDir);
-
+                    // Run Example
+                    //BeamCyclicLoading.RunExampleModel1(inputDir);
 
                 }
 
