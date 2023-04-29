@@ -1,10 +1,6 @@
 ﻿using Aki32Utilities.ConsoleAppUtilities.General;
 using Aki32Utilities.ConsoleAppUtilities.PythonAndNumerics;
 
-using DocumentFormat.OpenXml.Office2010.CustomUI;
-using DocumentFormat.OpenXml.Spreadsheet;
-using DocumentFormat.OpenXml.Wordprocessing;
-
 namespace Aki32Utilities.Personal.LowCycleFatigueResearch;
 public partial class Module
 {
@@ -21,17 +17,11 @@ public partial class Module
         ConsoleExtension.WriteLineWithColor($"★★★★★★★★★★★★★★★ SNAP_2_PyDraw 開始！！！！", ConsoleColor.Blue);
         _ = line.SendMessageAsync(@$"★ SNAP_2_PyDraw 開始！！！！");
 
-        PythonController.PythonPath = @"C:\Python310";
-        PythonController.DllName = @"python310.dll";
-        PythonController.AdditionalPath.Add(@"C:\Users\aki32\Dropbox\Codes\# Projects\研究\修士論文研究\8_Personal\80A_LowCycleFatigueResearch\P_PythonCodes");
-        PythonController.Initialize();
-
 
         // main
+        PythonController.AdditionalPath.Add(@"C:\Users\aki32\Dropbox\Codes\# Projects\研究\修士論文研究\8_Personal\80A_LowCycleFatigueResearch\P_PythonCodes");
+        PythonController.Initialize();
         dynamic snap = PythonController.Import("SNAPVisualizer");
-
-        dynamic bi = PythonController.BasicBuiltInModule;
-        Console.WriteLine(bi.dir(snap));
 
 
         // 全組み合わせ呼び出し
@@ -85,6 +75,7 @@ public partial class Module
                 {
                 }
             }
+
 
         // post process
         PythonController.Shutdown();

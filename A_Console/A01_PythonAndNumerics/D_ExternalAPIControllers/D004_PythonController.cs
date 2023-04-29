@@ -12,7 +12,7 @@ public static partial class PythonController
 
     public static bool Activated { get; private set; } = false;
     public static string DllName { get; set; } = "python310.dll";
-    public static string PythonPath { get; set; }
+    public static string PythonPath { get; set; } = $@"C:\Python310";
     public static List<string> AdditionalPath { get; set; } = new List<string>();
     public static Py.GILState GIL;
 
@@ -56,6 +56,9 @@ public static partial class PythonController
                     pythonPathEnvVar,
                     Path.Combine(pythonPathEnvVar, @"DLLs"),
                 });
+
+                PythonEngine.PythonHome = PythonPath;
+
             }
         }
         catch (Exception ex)
@@ -67,6 +70,7 @@ public static partial class PythonController
         // ★ 初期化 (明示的に呼ばなくても内部で自動実行されるようだが、一応呼ぶ)
         PythonEngine.Initialize();
 
+
         // ★ Global Interpreter Lockを取得
         GIL = Py.GIL();
 
@@ -77,7 +81,7 @@ public static partial class PythonController
             foreach (var ap in AdditionalPath)
                 sys.path.append(ap);
         }
-
+    
     }
 
     public static void Shutdown()

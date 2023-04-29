@@ -161,11 +161,11 @@ public static partial class Executer
                 //// ★ SNAPからのデータ抽出
                 //Module.M061_SNAP_1_CSCollect(targetModels, targetEQs, line, snapOutputDir, collectedResultsBaseDir);
 
-                // ★ Pythonで描画やら解析やら
-                Module.M062_SNAP_2_PyDraw(targetModels, targetEQs, line, collectedResultsBaseDir, buildingInfoExcel);
+                //// ★ Pythonで描画やら解析やら
+                //Module.M062_SNAP_2_PyDraw(targetModels, targetEQs, line, collectedResultsBaseDir, buildingInfoExcel);
 
-                // ★ SNAPの，ResultCsvの更なる集計！
-                Module.M063_SNAP_3_CSCollect(line, collectedResultsBaseDir_ResultCsv);
+                //// ★ SNAPの，ResultCsvの更なる集計！
+                //Module.M063_SNAP_3_CSCollect(line, collectedResultsBaseDir_ResultCsv);
 
             }
 
