@@ -1,4 +1,4 @@
-# 💖 Matrix DisplacementMethod
+# 💖 Matrix Displacement Method
 
 ## 🌟 Abstract
 
