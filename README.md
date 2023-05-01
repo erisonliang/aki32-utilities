@@ -53,6 +53,7 @@ All of my C# utilities
  ┃   ┗━ EZZ_CheatSheet                     ... Cheat sheet
  ┃
  ┗━ F_Azure                                   (Microoft Azure)
+     ┣━ F01_B2CAuth                        ... Authentication with B2C tenant
      ┗━ FZZ_CheatSheet                     ... Cheat sheet
 
 </pre>
