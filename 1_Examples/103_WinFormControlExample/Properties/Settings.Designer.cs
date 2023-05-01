@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace _003_WFAControlExample.Properties
+namespace _003_WinFormControlExample.Properties
 {
 
 

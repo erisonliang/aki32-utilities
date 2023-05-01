@@ -7,7 +7,7 @@
     <ProjectGuid>{85AE4E11-6DCE-4795-BF35-0D58FF5E5FCF}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <RootNamespace>Aki32Utilities</RootNamespace>
-    <AssemblyName>103_WFAControlExample</AssemblyName>
+    <AssemblyName>103_WinFormControlExample</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -80,7 +80,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\C_WFA\C01_Control\C01_Control.csproj">
+    <ProjectReference Include="..\..\C_WinForm\C01_Control\C01_Control.csproj">
       <Project>{c476ef84-74c9-4921-ac2f-9c1aaa5dae3b}</Project>
       <Name>C01_Control</Name>
     </ProjectReference>

@@ -1,4 +1,4 @@
-﻿namespace Aki32Utilities.WFAAppUtilities.Control
+﻿namespace Aki32Utilities.WinFormAppUtilities.Control
 {
     partial class ZoomableImage
     {

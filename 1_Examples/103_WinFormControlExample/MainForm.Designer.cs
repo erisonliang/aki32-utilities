@@ -1,4 +1,4 @@
-﻿namespace Aki32Utilities.UsageExamples.WFAControlExample
+﻿namespace Aki32Utilities.UsageExamples.WinFormControlExample
 {
     partial class MainForm
     {
@@ -31,11 +31,13 @@
             this.TabControl_Main = new System.Windows.Forms.TabControl();
             this.TabPage_Main = new System.Windows.Forms.TabPage();
             this.TabPage_ZoomableImage = new System.Windows.Forms.TabPage();
-            this.ZoomableImage_Main = new Aki32Utilities.WFAAppUtilities.Control.ZoomableImage();
+            this.ZoomableImage_Main = new Aki32Utilities.WinFormAppUtilities.Control.ZoomableImage();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.ToolStripMenuItem_Instruction1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.button1 = new System.Windows.Forms.Button();
             this.TabControl_Main.SuspendLayout();
             this.TabPage_Main.SuspendLayout();
+            this.TabPage_ZoomableImage.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -47,27 +49,28 @@
             this.TabControl_Main.Location = new System.Drawing.Point(0, 0);
             this.TabControl_Main.Name = "TabControl_Main";
             this.TabControl_Main.SelectedIndex = 0;
-            this.TabControl_Main.Size = new System.Drawing.Size(833, 616);
+            this.TabControl_Main.Size = new System.Drawing.Size(818, 563);
             this.TabControl_Main.TabIndex = 0;
             // 
             // TabPage_Main
             // 
-            this.TabPage_Main.Controls.Add(this.ZoomableImage_Main);
-            this.TabPage_Main.Controls.Add(this.menuStrip1);
+            this.TabPage_Main.Controls.Add(this.button1);
             this.TabPage_Main.Location = new System.Drawing.Point(8, 39);
             this.TabPage_Main.Name = "TabPage_Main";
             this.TabPage_Main.Padding = new System.Windows.Forms.Padding(3);
-            this.TabPage_Main.Size = new System.Drawing.Size(817, 569);
+            this.TabPage_Main.Size = new System.Drawing.Size(802, 516);
             this.TabPage_Main.TabIndex = 1;
             this.TabPage_Main.Text = "Main";
             this.TabPage_Main.UseVisualStyleBackColor = true;
             // 
             // TabPage_ZoomableImage
             // 
+            this.TabPage_ZoomableImage.Controls.Add(this.ZoomableImage_Main);
+            this.TabPage_ZoomableImage.Controls.Add(this.menuStrip1);
             this.TabPage_ZoomableImage.Location = new System.Drawing.Point(8, 39);
             this.TabPage_ZoomableImage.Name = "TabPage_ZoomableImage";
             this.TabPage_ZoomableImage.Padding = new System.Windows.Forms.Padding(3);
-            this.TabPage_ZoomableImage.Size = new System.Drawing.Size(1346, 997);
+            this.TabPage_ZoomableImage.Size = new System.Drawing.Size(817, 569);
             this.TabPage_ZoomableImage.TabIndex = 0;
             this.TabPage_ZoomableImage.Text = "ZoomableImage";
             this.TabPage_ZoomableImage.UseVisualStyleBackColor = true;
@@ -80,9 +83,7 @@
             this.ZoomableImage_Main.Location = new System.Drawing.Point(3, 43);
             this.ZoomableImage_Main.Name = "ZoomableImage_Main";
             this.ZoomableImage_Main.Size = new System.Drawing.Size(811, 523);
-            this.ZoomableImage_Main.TabIndex = 0;
-            this.ZoomableImage_Main.DragDrop += new System.Windows.Forms.DragEventHandler(this.ZoomableImage_Main_DragDrop);
-            this.ZoomableImage_Main.DragEnter += new System.Windows.Forms.DragEventHandler(this.ZoomableImage_Main_DragEnter);
+            this.ZoomableImage_Main.TabIndex = 2;
             // 
             // menuStrip1
             // 
@@ -93,7 +94,7 @@
             this.menuStrip1.Location = new System.Drawing.Point(3, 3);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(811, 40);
-            this.menuStrip1.TabIndex = 1;
+            this.menuStrip1.TabIndex = 3;
             this.menuStrip1.Text = "menuStrip1";
             // 
             // ToolStripMenuItem_Instruction1
@@ -102,18 +103,28 @@
             this.ToolStripMenuItem_Instruction1.Size = new System.Drawing.Size(275, 36);
             this.ToolStripMenuItem_Instruction1.Text = "↓画像をドロップして追加";
             // 
+            // button1
+            // 
+            this.button1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.button1.Location = new System.Drawing.Point(3, 3);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(796, 510);
+            this.button1.TabIndex = 1;
+            this.button1.Text = "Hello WinFormControlExample!";
+            this.button1.UseVisualStyleBackColor = true;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(13F, 24F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(833, 616);
+            this.ClientSize = new System.Drawing.Size(818, 563);
             this.Controls.Add(this.TabControl_Main);
-            this.MainMenuStrip = this.menuStrip1;
             this.Name = "MainForm";
-            this.Text = "WFAControlExample";
+            this.Text = "WinFormControlExample";
             this.TabControl_Main.ResumeLayout(false);
             this.TabPage_Main.ResumeLayout(false);
-            this.TabPage_Main.PerformLayout();
+            this.TabPage_ZoomableImage.ResumeLayout(false);
+            this.TabPage_ZoomableImage.PerformLayout();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
@@ -125,9 +136,10 @@
         private System.Windows.Forms.TabControl TabControl_Main;
         private System.Windows.Forms.TabPage TabPage_Main;
         private System.Windows.Forms.TabPage TabPage_ZoomableImage;
-        private WFAAppUtilities.Control.ZoomableImage ZoomableImage_Main;
+        private WinFormAppUtilities.Control.ZoomableImage ZoomableImage_Main;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItem_Instruction1;
+        private System.Windows.Forms.Button button1;
     }
 }
 

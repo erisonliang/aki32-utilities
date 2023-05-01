@@ -4,7 +4,7 @@ using System.Windows.Forms;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 
-namespace Aki32Utilities.WFAAppUtilities.Control
+namespace Aki32Utilities.WinFormAppUtilities.Control
 {
     public partial class ZoomableImage : UserControl
     {

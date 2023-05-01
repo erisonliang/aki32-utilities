@@ -11,7 +11,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "A_Console", "A_Console", "{
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "B_WPF", "B_WPF", "{6B224D67-E18F-4B9A-8286-E075E2C665C0}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "C_WFA", "C_WFA", "{CEA023E0-4DF9-4B7E-A9BA-296A2522BD9A}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "C_WinForm", "C_WinForm", "{CEA023E0-4DF9-4B7E-A9BA-296A2522BD9A}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "001_ConsoleMiniApps", "0_Apps\001_ConsoleMiniApps\001_ConsoleMiniApps.csproj", "{D3E7567F-9B02-470E-A2C9-A553EE7FF40C}"
 EndProject
@@ -21,7 +21,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "101_ConsoleUtilExample", "1
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "102_NodeControllerExample", "1_Examples\102_NodeControllerExample\102_NodeControllerExample.csproj", "{2B4D0D2C-B0FD-4F87-A29B-AA0AE5B8A164}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "103_WFAControlExample", "1_Examples\103_WFAControlExample\103_WFAControlExample.csproj", "{85AE4E11-6DCE-4795-BF35-0D58FF5E5FCF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "103_WinFormControlExample", "1_Examples\103_WinFormControlExample\103_WinFormControlExample.csproj", "{85AE4E11-6DCE-4795-BF35-0D58FF5E5FCF}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "A00_General", "A_Console\A00_General\A00_General.csproj", "{3BD89421-B1E1-490F-AFEF-34B703F8D603}"
 EndProject
@@ -35,7 +35,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "B00_General", "B_WPF\B00_Ge
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "B01_NodeController", "B_WPF\B01_NodeController\B01_NodeController.csproj", "{50F91BAF-531E-4395-804B-7B37996EBD5F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "C01_Control", "C_WFA\C01_Control\C01_Control.csproj", "{C476EF84-74C9-4921-AC2F-9C1AAA5DAE3B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "C01_Control", "C_WinForm\C01_Control\C01_Control.csproj", "{C476EF84-74C9-4921-AC2F-9C1AAA5DAE3B}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "A02_AI", "A_Console\A02_AI\A02_AI.csproj", "{A68E48E2-7D7E-4A9C-B833-FBCF47C070C2}"
 EndProject
