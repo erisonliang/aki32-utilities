@@ -16,23 +16,25 @@ All of my C# utilities
 
 <pre>
 
-#_Aki32Utilities
+#_Aki32Utilities                              (* Important/Basic projects)
  ┃
  ┣━ 0_Apps
- ┃   ┣━ 001_ConsoleMiniApps                ... Standalone C# small applications
+ ┃   ┣━ 001_ConsoleMiniApps                ... * Standalone C# small applications
  ┃   ┗━ 0AA_ResearchArticlesNodeController ... Handle research articles with node link GUI (using A11 and B01)
  ┃
  ┣━ 1_Examples
- ┃   ┣━ 101_ConsoleUtilExample             ... Usage examples for A
- ┃   ┣━ 102_NodeControllerExample          ... Usage examples for B01
- ┃   ┗━ 103_WFAControlExample              ... Usage examples for C01
+ ┃   ┣━ 101_ConsoleUtilExample             ... * Usage examples for A
+ ┃   ┣━ 102_NodeControllerExample          ... * Usage examples for B01
+ ┃   ┗━ 103_WFAControlExample              ... * Usage examples for C01
  ┃
- ┣━ 2_Personal
- ┃   ┗━ 20A_LowCycleFatigueResearch        ... My master research codes
+ ┣━ 8_Personal
+ ┃   ┗━ 80A_LowCycleFatigueResearch        ... My master research codes
+ ┃
+ ┣━ 9_Assets
  ┃
  ┣━ A_Console
- ┃   ┣━ A00_General                        ... C# utils
- ┃   ┣━ A01_PythonAndNumerics              ... Python wrapper and my math models
+ ┃   ┣━ A00_General                        ... * C# utils
+ ┃   ┣━ A01_PythonAndNumerics              ... * Python wrapper and my math models
  ┃   ┣━ A02_AI                             ... Handle AI/ML models
  ┃   ┣━ A10_Structure                      ... Many structural engineering calculation models
  ┃   ┣━ A11_Research                       ... Handle research articles
@@ -53,6 +55,10 @@ All of my C# utilities
  ┃   ┗━ EZZ_CheatSheet                     ... Cheat sheet
  ┃
  ┗━ F_Azure                                   (Microoft Azure)
+     ┣━ F01_B2CAuth                        ... Authentication with B2C tenant base
+     ┣━ F02_B2CAuthFromConsoleViaWeb       ... log into B2C from console via web
+     ┣━ F03_B2CAuthFromConsoleViaGlyph     ... access database from console via glyph
+     ┣━ F04_B2CAuthFromApps                ... log into B2C via UWP app
      ┣━ F01_B2CAuth                        ... Authentication with B2C tenant
      ┗━ FZZ_CheatSheet                     ... Cheat sheet
 
