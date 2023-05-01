@@ -4,7 +4,7 @@
     <!--<OutputType>Library</OutputType>-->
     <!--<OutputType>WinExe</OutputType>-->
     <TargetFramework>net6.0-windows</TargetFramework>
-    <RootNamespace>Aki32Utilities</RootNamespace>
+    <RootNamespace>Aki32Utilities.WPFAppUtilities.NodeController</RootNamespace>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
