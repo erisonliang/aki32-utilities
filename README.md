@@ -35,7 +35,8 @@ All of my C# utilities
  ┃   ┣━ A01_PythonAndNumerics              ... Python wrapper and my math models
  ┃   ┣━ A02_AI                             ... Handle AI/ML models
  ┃   ┣━ A10_Structure                      ... Many structural engineering calculation models
- ┃   ┗━ A11_Research                       ... Handle research articles
+ ┃   ┣━ A11_Research                       ... Handle research articles
+ ┃   ┗━ AZZ_CheatSheet                     ... Cheat sheet
  ┃
  ┣━ B_WPF                                     (Windows Presentation Foundation)
  ┃   ┣━ B00_General                        ... WPF utils
@@ -48,8 +49,12 @@ All of my C# utilities
  ┣━ D_UWP                                     (Universal Windows Platform)
  ┃   ┗━ DZZ_CheatSheet                     ... Cheat sheet
  ┃
- ┗━ E_Uno                                     (Uno Platform)
-     ┗━ EZZ_CheatSheet                     ... Cheat sheet
+ ┣━ E_Uno                                     (Uno Platform)
+ ┃   ┗━ EZZ_CheatSheet                     ... Cheat sheet
+ ┃
+ ┗━ F_Azure                                   (Microoft Azure)
+     ┣━ F01_B2CAuth                        ... Authentication with B2C tenant
+     ┗━ FZZ_CheatSheet                     ... Cheat sheet
 
 </pre>
 
