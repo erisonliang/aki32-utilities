@@ -27,6 +27,7 @@ public static partial class ChainableExtensions
             .Where(x => x.FullName != outputFile.FullName)
             .Sort()
             .ToArray();
+
         if (csvs.Length == 0)
         {
             Console.WriteLine($"※ No csv file found in {inputDir.FullName}");
