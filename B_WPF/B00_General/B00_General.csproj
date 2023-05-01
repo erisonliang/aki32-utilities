@@ -2,7 +2,6 @@
 
   <PropertyGroup>
     <TargetFramework>net6.0-windows</TargetFramework>
-    <!--<OutputType>Library</OutputType>-->
     <RootNamespace>Aki32Utilities.WPFAppUtilities.General</RootNamespace>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>

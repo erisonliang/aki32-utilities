@@ -1,10 +1,11 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <RootNamespace>Aki32Utilities.Azure.B2CAuth.FromConsoleViaGlyph</RootNamespace>
+    <AssemblyName>F03_B2CAuthFromConsoleViaGlyph</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
