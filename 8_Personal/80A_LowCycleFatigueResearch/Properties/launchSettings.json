@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "80A_LowCycleFatigueResearch": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "https://localhost:53958;http://localhost:53959"
+    }
+  }
+}

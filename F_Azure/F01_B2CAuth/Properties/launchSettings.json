@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "F01_B2CAuth": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "https://localhost:53954;http://localhost:53955"
+    }
+  }
+}

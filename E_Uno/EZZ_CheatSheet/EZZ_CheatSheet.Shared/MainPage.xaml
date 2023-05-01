@@ -7,17 +7,98 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
-    FontSize="30"
     >
+    <ScrollViewer>
+        <StackPanel Margin="15" Spacing="5">
 
-    <Grid>
+            <TextBlock Text="==============================================================================================================================================================================================================================================="/>
 
-        <TextBlock
-            Text="Hello Uno Platform Cheat Sheet!"
-            HorizontalAlignment="Center"
-            VerticalAlignment="Center"
-            />
+            <TextBlock FontSize="30" Text="Hello Uno Platform Cheat Sheet!"/>
 
-    </Grid>
 
+            <TextBlock Text="==============================================================================================================================================================================================================================================="/>
+
+            <TextBlock FontSize="30" Text="SQL"/>
+
+
+
+            <Grid Name="Grid_Main"  Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition  Width="*"/>
+                    <ColumnDefinition  Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0">
+
+                    <StackPanel Orientation="Horizontal" Spacing="2">
+                        <Button x:Name="AddButton" Content="Add" Click="AddButton_Click"/>
+                        <Button x:Name="DeleteButton" Content="Delete" Click="DeleteButton_Click"/>
+                        <Button x:Name="UpdateButton" Content="Update" Click="UpdateButton_Click"/>
+                        <TextBox Header="名前" Text="" Name="TextBox_Name"/>
+                        <TextBox Header="年齢" Text="" Name="TextBox_Age"/>
+                    </StackPanel>
+
+                    <ListView x:Name="ListView_1" Grid.Row="1" FontSize="16" Grid.Column="0" >
+
+                        <ListView.ItemTemplate>
+
+                            <DataTemplate >
+                                <Grid MinWidth="360">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="30" />
+                                        <ColumnDefinition Width="auto" />
+                                    </Grid.ColumnDefinitions>
+
+                                    <TextBlock Text="{Binding StudentId}" VerticalAlignment="Center" />
+                                    <StackPanel Grid.Column="1">
+                                        <TextBlock Grid.Column="1" Text="{Binding Name}"
+                                             Margin="5,0,0,0" TextTrimming="CharacterEllipsis" />
+                                        <TextBlock Grid.Column="2" Text="{Binding Age}" FontSize="12"
+                                             Margin="5,0,0,0" TextTrimming="CharacterEllipsis" />
+                                    </StackPanel>
+                                </Grid>
+                            </DataTemplate>
+
+                        </ListView.ItemTemplate>
+                    </ListView>
+
+                </StackPanel>
+
+                <ListView x:Name="ListView_2" Grid.Row="1" FontSize="16" Grid.Column="1" >
+
+                    <ListView.ItemTemplate>
+
+                        <DataTemplate >
+                            <Grid MinWidth="360">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="30" />
+                                    <ColumnDefinition Width="auto" />
+                                </Grid.ColumnDefinitions>
+
+                                <TextBlock Text="{Binding StudentId}" VerticalAlignment="Center" />
+                                <StackPanel Grid.Column="1">
+                                    <TextBlock Grid.Column="1" Text="{Binding Name}"
+                                             Margin="5,0,0,0" TextTrimming="CharacterEllipsis" />
+                                    <TextBlock Grid.Column="2" Text="{Binding Age}" FontSize="12"
+                                             Margin="5,0,0,0" TextTrimming="CharacterEllipsis" />
+                                </StackPanel>
+                            </Grid>
+                        </DataTemplate>
+
+                    </ListView.ItemTemplate>
+                </ListView>
+
+            </Grid>
+            
+
+            <TextBlock Text="==============================================================================================================================================================================================================================================="/>
+
+            <TextBlock FontSize="30" Text="Memo"/>
+
+
+            <TextBlock Text="==============================================================================================================================================================================================================================================="/>
+
+        </StackPanel>
+    </ScrollViewer>
 </Page>

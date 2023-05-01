@@ -21,6 +21,13 @@
     <Compile Include="$(MSBuildThisFileDirectory)MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Memos\Android課金.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Memos\SQLite取り扱い\Student.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Memos\SQLite取り扱い\StudentContext.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Memos\SQLite取り扱い\StudentDatabase.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Memos\SQLite取り扱い\Teacher.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Memos\Memo.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Memos\Release.cs" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="$(MSBuildThisFileDirectory)MainPage.xaml">

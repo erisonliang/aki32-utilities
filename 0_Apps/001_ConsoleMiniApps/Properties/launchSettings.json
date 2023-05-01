@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "001_ConsoleMiniApps": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "https://localhost:53933;http://localhost:53942"
+    }
+  }
+}
