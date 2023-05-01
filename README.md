@@ -35,7 +35,8 @@ All of my C# utilities
  ┃   ┣━ A01_PythonAndNumerics              ... Python wrapper and my math models
  ┃   ┣━ A02_AI                             ... Handle AI/ML models
  ┃   ┣━ A10_Structure                      ... Many structural engineering calculation models
- ┃   ┗━ A11_Research                       ... Handle research articles
+ ┃   ┣━ A11_Research                       ... Handle research articles
+ ┃   ┗━ AZZ_CheatSheet                     ... Cheat sheet
  ┃
  ┣━ B_WPF                                     (Windows Presentation Foundation)
  ┃   ┣━ B00_General                        ... WPF utils
