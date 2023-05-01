@@ -1,0 +1,32 @@
+﻿
+
+ Xamarinからログインできるようにするやつ！
+ ダウンロード元： https://docs.microsoft.com/ja-jp/azure/active-directory-b2c/code-samples
+
+
+NuGet 入れるもの！
+ - Microsoft.Identity.Client
+ - Microsoft.IdentityModel.Clients.ActiveDirectory
+ - Newtonsoft.Json
+
+
+
+やり忘れがちなこと
+
+ - 認証
+ 1 プラットフォームに追加。
+ 2 msal...://auth などの既存の2つにチェックを入れる
+
+
+ - スコープの定義
+ 1 URLなんでも良い
+ 2 user_impersonation 作る。（なんでもいいけど）
+ 3 文字も何でも良い
+ 4 URLコピーして，Constantsクラスに貼り付け！
+
+
+ - APIの有効化
+ 1 APIのアクセス許可
+ 2 追加
+ 3 自分のAPIから，user_impersonation を選んで許可！
+
