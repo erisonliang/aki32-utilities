@@ -3,7 +3,7 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net6.0</TargetFramework>
-    <RootNamespace>Aki32Utilities</RootNamespace>
+    <RootNamespace>Aki32Utilities.Apps.ConsoleMiniApps</RootNamespace>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <AssemblyName>001_ConsoleMiniApps</AssemblyName>

@@ -3,7 +3,7 @@
   <PropertyGroup>
     <OutputType>Library</OutputType>
     <TargetFramework>net6.0</TargetFramework>
-    <RootNamespace>Aki32Utilities</RootNamespace>
+    <RootNamespace>Aki32Utilities.ConsoleAppUtilities.Structure</RootNamespace>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <AssemblyName>A10_Structure</AssemblyName>

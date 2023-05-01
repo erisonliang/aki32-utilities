@@ -6,7 +6,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{85AE4E11-6DCE-4795-BF35-0D58FF5E5FCF}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>Aki32Utilities</RootNamespace>
+    <RootNamespace>Aki32Utilities.UsageExamples.WinFormControlExample</RootNamespace>
     <AssemblyName>103_WinFormControlExample</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -65,6 +65,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

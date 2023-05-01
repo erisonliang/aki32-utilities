@@ -6,7 +6,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{C476EF84-74C9-4921-AC2F-9C1AAA5DAE3B}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>Aki32Utilities</RootNamespace>
+    <RootNamespace>Aki32Utilities.WinFormAppUtilities.Control</RootNamespace>
     <AssemblyName>C01_Control</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
