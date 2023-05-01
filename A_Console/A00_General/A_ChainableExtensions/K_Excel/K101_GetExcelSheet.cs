@@ -4,11 +4,10 @@ namespace Aki32Utilities.ConsoleAppUtilities.General;
 public static partial class ChainableExtensions
 {
     /// <summary>
-    /// create csvs from excel sheets
+    /// get matrix data from excel sheet
     /// </summary>
     /// <param name="inputFile"></param>
-    /// <param name="outputDir">when null, automatically set</param>
-    /// <param name="includeExcelFileName">include input excel file name as an output file name suffix</param>
+    /// <param name="targetSheetName"></param>
     /// <returns></returns>
     public static string[,] GetExcelSheet(this FileInfo inputFile, string targetSheetName)
     {
@@ -32,6 +31,30 @@ public static partial class ChainableExtensions
 
         // post process
         return csvCells;
+    }
+
+    /// <summary>
+    /// set matrix data to excel sheet
+    /// </summary>
+    /// <param name="inputFile"></param>
+    /// <param name="targetSheetName"></param>
+    /// <param name="data"></param>
+    /// <returns></returns>
+    public static void SetExcelSheet(this FileInfo targetExcelFile, string targetSheetName, string[][] inputData)
+    {
+        // main
+        if (targetExcelFile.Exists)
+        {
+            using var workbook = new XLWorkbook(targetExcelFile.FullName);
+            workbook.SetExcelSheet(targetSheetName, inputData);
+            workbook.Save(true);
+        }
+        else
+        {
+            using var workbook = new XLWorkbook();
+            workbook.SetExcelSheet(targetSheetName, inputData);
+            workbook.SaveAs(targetExcelFile.FullName, true);
+        }
     }
 
 }

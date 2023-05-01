@@ -76,16 +76,28 @@ public static partial class ChainableExtensions
     private static void Csv2ExcelSheet(this FileInfo inputFile, XLWorkbook excelWorkBook)
     {
         var sheetName = Path.GetFileNameWithoutExtension(inputFile.Name);
-        var worksheet = excelWorkBook.AddWorksheet(sheetName);
+        excelWorkBook.SetExcelSheet(sheetName, inputFile.ReadCsv_Rows());
+    }
 
-        var inputCsv = inputFile.ReadCsv_Rows();
-        for (int i = 0; i < inputCsv.Length; i++)
+    /// <summary>
+    /// set matrix data to excel sheet
+    /// </summary>
+    /// <param name="inputFile"></param>
+    /// <param name="targetSheetName"></param>
+    /// <param name="data"></param>
+    /// <returns></returns>
+    public static XLWorkbook SetExcelSheet(this XLWorkbook targetExcelWorkBook, string addingSheetName, string[][] inputData)
+    {
+        var worksheet = targetExcelWorkBook.AddWorksheet(addingSheetName);
+
+        for (int i = 0; i < inputData.Length; i++)
         {
-            var line = inputCsv[i];
-
+            var line = inputData[i];
             for (int j = 0; j < line.Length; j++)
                 worksheet.Cell(i + 1, j + 1).Value = line[j];
         }
+
+        return targetExcelWorkBook;
     }
 
 }
