@@ -40,19 +40,19 @@ public static partial class ChainableExtensions
     /// <param name="targetSheetName"></param>
     /// <param name="data"></param>
     /// <returns></returns>
-    public static void SetExcelSheet(this FileInfo targetExcelFile, string targetSheetName, string[][] inputData)
+    public static void SetExcelSheet(this FileInfo targetExcelFile, string targetSheetName, string[][] inputData, int? position = null)
     {
         // main
         if (targetExcelFile.Exists)
         {
             using var workbook = new XLWorkbook(targetExcelFile.FullName);
-            workbook.SetExcelSheet(targetSheetName, inputData);
+            workbook.SetExcelSheet(targetSheetName, inputData, position);
             workbook.Save(true);
         }
         else
         {
             using var workbook = new XLWorkbook();
-            workbook.SetExcelSheet(targetSheetName, inputData);
+            workbook.SetExcelSheet(targetSheetName, inputData, position);
             workbook.SaveAs(targetExcelFile.FullName, true);
         }
     }

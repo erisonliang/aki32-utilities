@@ -102,7 +102,7 @@ public static partial class Executer
 
                     targetModels = new string[] { "S-A30-B仕-CKNKMM006--4" };
                     targetEQs = Enumerable.Range(1, 32).Select(x => $"D{x}").ToArray();
-                    collectedResultsBaseDir = new DirectoryInfo($@"C:\Users\aki32\Dropbox\Documents\02 東大関連\1 研究室\14 SNAP\修論モデル\09 calc\013-CKKMM006").CreateAndPipe();
+                    collectedResultsBaseDir = new DirectoryInfo($@"C:\Users\aki32\Dropbox\Documents\02 東大関連\1 研究室\14 SNAP\修論モデル\09 calc\013-CKNKMM006").CreateAndPipe();
 
                     //targetModels = new string[] { "S-A30-B仕-CKNMYG004--3" };
                     //targetEQs = Enumerable.Range(1, 34).Select(x => $"D{x}").ToArray();
@@ -115,18 +115,6 @@ public static partial class Executer
                     //targetModels = new string[] { "S-A30-B仕-CBCJ--2" };
                     //targetEQs = Enumerable.Range(1, 40).Select(x => $"D{x}").ToArray();
                     //collectedResultsBaseDir = new DirectoryInfo($@"C:\Users\aki32\Dropbox\Documents\02 東大関連\1 研究室\14 SNAP\修論モデル\09 calc\010-CBCJ");
-
-                    //targetModels = new string[] { "S-A30-B仕-CKNFKS004--2" };
-                    //targetEQs = Enumerable.Range(1, 23).Select(x => $"D{x}").ToArray();
-                    //collectedResultsBaseDir = new DirectoryInfo($@"C:\Users\aki32\Dropbox\Documents\02 東大関連\1 研究室\14 SNAP\修論モデル\09 calc\010-CKNFKS004");
-
-                    //targetModels = new string[] { "S-A30-B仕-CKKMM006--2" };
-                    //targetEQs = Enumerable.Range(1, 27).Select(x => $"D{x}").ToArray();
-                    //collectedResultsBaseDir = new DirectoryInfo($@"C:\Users\aki32\Dropbox\Documents\02 東大関連\1 研究室\14 SNAP\修論モデル\09 calc\010-CKKMM006");
-
-                    //targetModels = new string[] { "S-A30-B仕-CKNMYG004--2" };
-                    //targetEQs = Enumerable.Range(1, 30).Select(x => $"D{x}").ToArray();
-                    //collectedResultsBaseDir = new DirectoryInfo($@"C:\Users\aki32\Dropbox\Documents\02 東大関連\1 研究室\14 SNAP\修論モデル\09 calc\010-CKNMYG004");
 
                     //targetModels = new string[] { "S-A30-B仕-COS1" };
                     //targetModels = new string[] { "S-A30-B仕-CCH1", "S-A30-B仕-CSZ1", "S-A30-B仕-CKA1" };
@@ -165,16 +153,10 @@ public static partial class Executer
                 //Module.M062_SNAP_2_PyDraw(targetModels, targetEQs, line, collectedResultsBaseDir, buildingInfoExcel);
 
                 //// ★ SNAPの，ResultCsvの更なる集計！
-                //Module.M063_SNAP_3_CSCollect(line, collectedResultsBaseDir_ResultCsv);
+                //Module.M063_SNAP_3_CSCollect(line, collectedResultsBaseDir_ResultCsv, targetModels[0]);
 
-            }
-
-            // SNAP後処理 2
-            {
-                //var collectedResultsBaseDir = new DirectoryInfo(@"C:\Users\aki32\Dropbox\Documents\02 東大関連\1 研究室\14 SNAP\修論モデル\09 calc\011-MYG829 比例倍仮定");
-
-                //// ★ Pythonで描画やら解析やら
-                //Module.M064_SNAP_4_Calc100YearDamage(line, collectedResultsBaseDir, "600_j", "{DValue}_{edgeName}");
+                ////// ★ Pythonで描画やら解析やら（# PGV対応表.csv の準備が必要。）
+                ////Module.M064_SNAP_4_Calc100YearDamage(line, collectedResultsBaseDir, "600_j", "{DValue}_{edgeName}");
 
             }
 

@@ -87,9 +87,11 @@ public static partial class ChainableExtensions
     /// <param name="targetSheetName"></param>
     /// <param name="data"></param>
     /// <returns></returns>
-    public static XLWorkbook SetExcelSheet(this XLWorkbook targetExcelWorkBook, string addingSheetName, string[][] inputData)
+    public static XLWorkbook SetExcelSheet(this XLWorkbook targetExcelWorkBook, string addingSheetName, string[][] inputData, int? position = null)
     {
-        var worksheet = targetExcelWorkBook.AddWorksheet(addingSheetName);
+        var worksheet = position.HasValue
+            ? targetExcelWorkBook.AddWorksheet(addingSheetName, position.Value)
+            : targetExcelWorkBook.AddWorksheet(addingSheetName);
 
         for (int i = 0; i < inputData.Length; i++)
         {
