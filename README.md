@@ -41,7 +41,7 @@ All of my C# utilities
  ┃   ┣━ B00_General                        ... WPF utils
  ┃   ┗━ B01_NodeController                 ... Define node link graph
  ┃
- ┗━ C_WFA                                     (Windows Form Application)
+ ┗━ C_WinForm                                 (Windows Form Application)
      ┗━ C01_Control                        ... Original user controls
 
 </pre>
