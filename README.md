@@ -42,7 +42,8 @@ All of my C# utilities
  ┃   ┗━ B01_NodeController                 ... Define node link graph
  ┃
  ┗━ C_WinForm                                 (Windows Form Application)
-     ┗━ C01_Control                        ... Original user controls
+     ┣━ C01_Control                        ... Original user controls
+     ┗━ CZZ_CheatSheet                     ... Cheat sheet
 
 </pre>
 
