@@ -49,8 +49,13 @@ All of my C# utilities
  ┣━ D_UWP                                     (Universal Windows Platform)
  ┃   ┗━ DZZ_CheatSheet                     ... Cheat sheet
  ┃
- ┗━ E_Uno                                     (Uno Platform)
-     ┗━ EZZ_CheatSheet                     ... Cheat sheet
+ ┣━ E_Uno                                     (Uno Platform)
+ ┃   ┗━ EZZ_CheatSheet                     ... Cheat sheet
+ ┃
+ ┗━ F_Azure                                   (Microoft Azure)
+     ┗━ FZZ_CheatSheet                     ... Cheat sheet
+
+
 
 </pre>
 
