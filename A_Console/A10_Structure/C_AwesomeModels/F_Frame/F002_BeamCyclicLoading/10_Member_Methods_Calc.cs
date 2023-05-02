@@ -26,6 +26,7 @@ public partial class BeamCyclicLoading
             int divH, double dL, int divHf, int dHs,
 
             int n_ratio, bool ConsiderQDef
+
             )
         {
 
@@ -299,7 +300,7 @@ public partial class BeamCyclicLoading
                             s[iL].p[iH].Sig_n = prev_s[iL].p[iH].Sig_n + dP / A;
                         }
 
-                        M_Phi(iL);
+                        CalcMPhi(iL);
                         prev_s[iL].Phi = s[iL].Phi;
 
                         for (int iH = 0; iH < DivH; iH++)
@@ -388,7 +389,8 @@ public partial class BeamCyclicLoading
                             }
 
                             // 3-2] 断面の曲率と各要素の歪度の増分・弾塑性判定
-                            M_Phi(iL);
+                            CalcMPhi(iL); // モーメント - 曲率関係計算
+                            CalcEP(iL);   // 弾塑性判定[接線剛性の変更]
                             s[iL].ddDelH = s[iL].Phi;
 
                         }
@@ -461,11 +463,10 @@ public partial class BeamCyclicLoading
         }
 
         /// <summary>
-        /// モーメント－曲率関係計算
+        /// モーメント - 曲率関係計算
         /// モーメントおよび軸力の増分に対する計算 
-        ///  ※軸力の作用位置について修正(コメント文の※630)
         /// </summary>
-        private void M_Phi(int iL)
+        private void CalcMPhi(int iL)
         {
             // 積分計算
             var h = 0d; // H方向の位置（資料ではz方向）
@@ -516,15 +517,12 @@ public partial class BeamCyclicLoading
                 h += s[iL].p[iH].dH / 2;
             }
 
-            // 弾塑性判定[接線剛性の変更]
-            HCSS06(iL);
-
         }
 
         /// <summary>
-        /// バウシンガー効果を考慮した鋼材の履歴モデルに基づく弾塑性判定
+        /// バウシンガー効果を考慮した鋼材の履歴モデルに基づく弾塑性判定（接線剛性の変更）
         /// </summary>
-        private void HCSS06(int iL)
+        private void CalcEP(int iL)
         {
             for (int iH = 0; iH < DivH; iH++)
             {
@@ -577,7 +575,6 @@ public partial class BeamCyclicLoading
 
                                 p.SigEpsState = SigEpsState.PlasticNeg;
                                 p.SigError = p.Sig_t - p.RecoverSig_neg;
-
                             }
                         }
                         break;

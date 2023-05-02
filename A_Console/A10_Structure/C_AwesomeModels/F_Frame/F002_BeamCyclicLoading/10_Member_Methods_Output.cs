@@ -20,6 +20,9 @@ public partial class BeamCyclicLoading
                 return p.SigEpsState.GetHashCode().ToString();
             }));
         }
+        /// <summary>
+        /// 梁を可視化します。
+        /// </summary>
         private void SaveVisualizeBeam(string imageName, Func<MemberPiece, string> displayStringDefinition, string nullValue = " ")
         {
             // 結果文字列を出力
