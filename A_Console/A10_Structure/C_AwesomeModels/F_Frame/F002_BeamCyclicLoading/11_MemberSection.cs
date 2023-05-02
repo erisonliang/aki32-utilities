@@ -3,7 +3,6 @@
 namespace Aki32Utilities.ConsoleAppUtilities.Structure;
 public partial class BeamCyclicLoading
 {
-
     /// <summary>
     /// 梁の微小厚さ断面
     /// </summary>
