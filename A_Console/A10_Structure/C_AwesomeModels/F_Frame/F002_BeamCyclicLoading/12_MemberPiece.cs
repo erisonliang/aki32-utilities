@@ -18,7 +18,7 @@ public partial class BeamCyclicLoading
         /// <summary>
         /// バウシンガー部における状態を表す変数
         /// </summary>
-        public BausState BauschingerState { get; set; }
+        public BausState BausState { get; set; }
 
         /// <summary>
         /// 応力度歪度関係における状態を表す変数
@@ -55,6 +55,7 @@ public partial class BeamCyclicLoading
         /// </summary>
         public double SigError { get; set; }
 
+
         #endregion
 
         #region 真公称ペア
@@ -89,7 +90,6 @@ public partial class BeamCyclicLoading
         /// 公称応力度-公称歪度関係における接線剛性
         /// </summary>
         public double E_n { get; set; }
-
 
 
         #endregion
@@ -134,16 +134,16 @@ public partial class BeamCyclicLoading
         {
             get
             {
-                if (___IsBroken)
+                if (isBroken)
                     return true;
-                return ___IsBroken = Sig_t > Steel.Sig_u_t;
+                return isBroken = Sig_t > Steel.Sig_u_t;
             }
             set
             {
-                ___IsBroken = value;
+                isBroken = value;
             }
         }
-        private bool ___IsBroken { get; set; }
+        private bool isBroken { get; set; }
 
         #endregion
 
