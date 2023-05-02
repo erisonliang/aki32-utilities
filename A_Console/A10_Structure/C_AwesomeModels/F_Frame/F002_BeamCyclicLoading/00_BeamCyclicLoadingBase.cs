@@ -21,13 +21,10 @@ public partial class BeamCyclicLoading
             // 基本的に入力する部分はこのファイルだけでOK！！あとは適宜材料試験の.csvファイルや目標変位の.txtファイルを作成。
             // 引き継ぐ側が嫌にならないように，あまりオブジェクト指向的でない形で書いてます。
 
-            // ★★★★★ 鋼材情報作成
+            // ★★★★★ 鋼材情報作成（フランジとウェブそれぞれ）
             var steels = new List<Steel>();
             {
-                // フランジ
                 steels.Add(new Steel("F", inputDataDir.GetChildFileInfo("Steel_Flange.csv"), 345, 0.33, 0.67));
-
-                // ウェブ
                 steels.Add(new Steel("W", inputDataDir.GetChildFileInfo("Steel_Web.csv"), 420, 0.33, 0.67));
             }
 

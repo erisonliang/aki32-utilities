@@ -32,13 +32,11 @@ public partial class BeamCyclicLoading
             if (!Directory.Exists(OutputDir))
                 Directory.CreateDirectory(OutputDir);
 
-            // M-φ図を出力
+            // M-φを出力
             try
             {
-                using (var sw = new StreamWriter(Path.Combine(OutputDir, PathMPhiResult), true, Encoding.UTF8))
-                {
-                    sw.WriteLine("Step,載荷Q,根元M,部材θ,累積変形角");
-                }
+                using var sw = new StreamWriter(Path.Combine(OutputDir, PathMPhiResult), true, Encoding.UTF8);
+                sw.WriteLine("Step,載荷Q,根元M,部材θ,累積変形角");
             }
             catch (Exception ex)
             {
@@ -49,11 +47,9 @@ public partial class BeamCyclicLoading
             // 危険断面関連事項を出力
             try
             {
-                using (var sw = new StreamWriter(Path.Combine(OutputDir, PathDangerousSectionResult), true, Encoding.UTF8))
-                {
-                    sw.WriteLine(",,,,,,,上フランジ,,,,骨格曲線累積塑性歪,,下フランジ,,,,骨格曲線累積塑性歪,");
-                    sw.WriteLine("Step,載荷Q,根元M,部材θ,累積変形角,θ(危険断面),M(危険断面),εn,σn ,εt,σt,Σεpt,Σεpst+,εn,σn,εt,σt,Σεpt,Σεpst+");
-                }
+                using var sw = new StreamWriter(Path.Combine(OutputDir, PathDangerousSectionResult), true, Encoding.UTF8);
+                sw.WriteLine(",,,,,,,上フランジ,,,,骨格曲線累積塑性歪,,下フランジ,,,,骨格曲線累積塑性歪,");
+                sw.WriteLine("Step,載荷Q,根元M,部材θ,累積変形角,θ(危険断面),M(危険断面),εn,σn ,εt,σt,Σεpt,Σεpst+,εn,σn,εt,σt,Σεpt,Σεpst+");
             }
             catch (Exception ex)
             {
@@ -282,20 +278,6 @@ public partial class BeamCyclicLoading
 
         /// <summary>
         /// 部材の繰り返し曲げ解析プログラム[N][mm]
-        ///
-        /// ver.7.0   on 2021/05/20 by T.Akimitsu
-        ///   C#に翻訳
-        ///   
-        /// ver.6.31  on 20XX/XX/XX by S.YAMADA
-        ///   一定軸力下における繰り返し曲げの解析
-        ///   断面形状はH [もしくはBox] を想定
-        ///   鋼材の応力度-歪度関係はフランジとウェブで共通：[フランジとウエブの鋼材は別々：変更可能）
-        ///   ウェブのモーメント伝達効率も考慮
-        ///   サブルーチン[Ｍ-φ]は軸力変動にも対応
-        /// 
-        /// var.1.0   on 2010/08/03 by S.YAMADA
-        ///   original
-        ///
         /// </summary>
         /// <param name="target_delH_list">目標変位リスト</param>
         public void Calc(List<double> target_delH_list)
