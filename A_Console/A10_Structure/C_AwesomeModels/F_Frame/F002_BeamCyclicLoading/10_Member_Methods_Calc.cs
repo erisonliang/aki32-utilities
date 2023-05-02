@@ -136,14 +136,13 @@ public partial class BeamCyclicLoading
             {
                 for (int iH = 0; iH < DivH; iH++)
                 {
-
                     // 全部材に材料を設定
                     if (iH < divHf)
-                        s[iL].p[iH].Steel = steels.Find(x => x.Name == "F");
+                        s[iL].p[iH].Steel = steels.First(x => x.Name == "F");
                     else if (iH < DivH - divHf)
-                        s[iL].p[iH].Steel = steels.Find(x => x.Name == "W");
+                        s[iL].p[iH].Steel = steels.First(x => x.Name == "W");
                     else
-                        s[iL].p[iH].Steel = steels.Find(x => x.Name == "F");
+                        s[iL].p[iH].Steel = steels.First(x => x.Name == "F");
 
 
                     // 弾塑性判定における初期降伏点
@@ -155,8 +154,6 @@ public partial class BeamCyclicLoading
 
                     // 断面の分割
                     {
-
-
                         // 上フランジ[DivHf 分割]
                         if (iH < divHf)
                         {
@@ -222,28 +219,6 @@ public partial class BeamCyclicLoading
                     prev_s[iL].p[iH].E_t = 0;
                     s[iL].p[iH].E_n = 0;
                     s[iL].p[iH].E_t = 0;
-                }
-
-                //ウェブ中央
-                {
-                    //	 DO 49 IA=0,6
-                    //	  DO 48 IB=17,27
-                    //	 __sections[MJ].__piece[IA].ETNIA,IB]=0.0
-                    //	 __sections[MJ].__piece[IA].ETTIA,IB]=0.0
-                    //48     CONTINUE
-                    //49    CONTINUE
-                    //
-                    //      IA=7  
-                    //	  DO 47	IB=18,26
-                    //	  __sections[MJ].__piece[IA].ETNIA,IB]=0.0
-                    //	  __sections[MJ].__piece[IA].ETTIA,IB]=0.0
-                    //47	  CONTINUE
-                    //
-                    //      IA=8  
-                    //	  DO 46	IB=20,25
-                    //	 __sections[MJ].__piece[IA].ETNIA,IB]=0.0
-                    //	 __sections[MJ].__piece[IA].ETTIA,IB]=0.0
-                    //46	  CONTINUE
                 }
 
             }
@@ -403,6 +378,7 @@ public partial class BeamCyclicLoading
                                 Q -= 0.99 * dQ;
                             else
                                 Q += dQ;
+
                             // 収束するまで繰り返し実行
                             continue;
                         }
@@ -529,7 +505,7 @@ public partial class BeamCyclicLoading
                 var p = s[iL].p[iH];
                 var prev_p = prev_s[iL].p[iH];
 
-                //収斂計算初期状態へ戻す
+                // 収束計算初期状態へ戻す
                 p.SigEpsState = prev_p.SigEpsState;
                 p.BausState = prev_p.BausState;
                 p.RecoverSig_pos = prev_p.RecoverSig_pos;
@@ -545,14 +521,14 @@ public partial class BeamCyclicLoading
                 p.E_n = prev_p.E_n;
                 p.SigError = prev_p.SigError;
 
-                //公称応力度
+                // 公称応力度
                 p.Sig_n = prev_p.Sig_n + p.dEps_n * prev_p.E_n;
-                //真応力度への変換
+                // 真応力度への変換
                 p.Sig_t = p.Sig_n * (1 + p.Eps_n);
-                //差を保存しておく
+                // 差を保存しておく
                 var dEps_t = p.Eps_t - prev_p.Eps_t;
 
-                //応力状態に応じて処理
+                // 応力状態に応じて処理
                 switch (p.SigEpsState)
                 {
                     // 1]弾性域
@@ -616,7 +592,6 @@ public partial class BeamCyclicLoading
                                 }
                             }
 
-
                         }
                         break;
 
@@ -663,13 +638,12 @@ public partial class BeamCyclicLoading
                         {
                             switch (p.BausState)
                             {
-
                                 case BausState.Baus1:
                                     {
 
                                         if (p.Sig_t <= 0)
                                         {
-                                            p.RecoverSig_pos = p.RecoverSig_pos - p.SigError;
+                                            p.RecoverSig_pos -= p.SigError;
                                             p.SigError = 0.0;
                                         }
 
@@ -702,7 +676,7 @@ public partial class BeamCyclicLoading
 
                                 case BausState.Baus2:
                                     {
-                                        p.TotalPlasticEps_t = p.TotalPlasticEps_t - dEps_t;
+                                        p.TotalPlasticEps_t -= dEps_t;
 
                                         if (p.Sig_t <= p.RecoverSig_neg)
                                         {
@@ -757,7 +731,7 @@ public partial class BeamCyclicLoading
 
                                 case BausState.Baus4:
                                     {
-                                        p.TotalPlasticEps_t = p.TotalPlasticEps_t + dEps_t;
+                                        p.TotalPlasticEps_t += dEps_t;
 
                                         if (p.Sig_t >= p.RecoverSig_pos)
                                         {
@@ -798,12 +772,11 @@ public partial class BeamCyclicLoading
                         {
                             switch (p.BausState)
                             {
-
                                 case BausState.Baus1:
                                     {
                                         if (p.Sig_t >= 0)
                                         {
-                                            p.RecoverSig_neg = p.RecoverSig_neg - p.SigError;
+                                            p.RecoverSig_neg -= p.SigError;
                                             p.SigError = 0;
                                         }
 
@@ -835,7 +808,7 @@ public partial class BeamCyclicLoading
 
                                 case BausState.Baus2:
                                     {
-                                        p.TotalPlasticEps_t = p.TotalPlasticEps_t + dEps_t;
+                                        p.TotalPlasticEps_t += dEps_t;
 
                                         if (p.Sig_t >= p.RecoverSig_pos)
                                         {
@@ -892,7 +865,7 @@ public partial class BeamCyclicLoading
 
                                 case BausState.Baus4:
                                     {
-                                        p.TotalPlasticEps_t = p.TotalPlasticEps_t - dEps_t;
+                                        p.TotalPlasticEps_t -= dEps_t;
 
                                         if (p.Sig_t <= p.RecoverSig_neg)
                                         {
