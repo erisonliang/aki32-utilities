@@ -2,7 +2,7 @@
 
 ## 🌟 Abstract
 
-Beam Cyclic Loading Analysis program.
+Code set for Steel Beam Cyclic Loading Analysis.
 
 Still working on.
 
