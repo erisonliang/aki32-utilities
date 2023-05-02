@@ -18,40 +18,13 @@ public partial class BeamCyclicLoading
         /// 
         /// </summary>
         /// <param name="steels">鋼材リスト</param>
-        /// <param name="DivHf">フランジのH方向分割数</param>
+        /// <param name="divHf">フランジのH方向分割数</param>
         /// <param name="Hs">スカラップのH方向長さ</param>
         /// <param name="dHs">スカラップのH方向微小要素長さ</param>
         /// <param name="Ls">スカラップのL方向無力化長さ</param>
         /// <param name="Lw">溶接金属のL方向弾性化長さ</param>
-        public Member(List<Steel> steels, SectionType sectionType, double dL, int divH, double H, double B, double L, double tw, double tf, double sig_y, double E, int n_ratio, bool ConsiderQDef, string data_dir, int DivHf, int Hs, int dHs, int Ls, int Lw)
+        public Member(List<Steel> steels, SectionType sectionType, double dL, int divH, double H, double B, double L, double tw, double tf, double sig_y, double E, int n_ratio, bool ConsiderQDef, string data_dir, int divHf, int Hs, int dHs, int Ls, int Lw)
         {
-
-            #region 呼び出し方。コンストラクタではなく初期代入する形式を取っている。
-
-            //// 今回は，L方向は10mmごとに分割，H方向には50分割ということで固定。
-            //var m = new Member(
-            //     steels: steels,
-            //     sectionType: SectionType.H,
-            //     dL: 10,
-            //     divH: 50,
-            //     H: 600,
-            //     B: 200,
-            //     L: 2050,
-            //     tw: 11,
-            //     tf: 17,
-            //     sig_y: 345.4165295,
-            //     E: 205000,
-            //     n_ratio: 0,
-            //     ConsiderQDef: true,
-            //     data_dir: inputDataDir.FullName,
-            //     DivHf: 5,
-            //     Hs: 35,
-            //     dHs: 5,
-            //     Ls: 40,
-            //     Lw: 10
-            //     );
-
-            #endregion
 
             #region 出力ファイル
 
@@ -123,20 +96,20 @@ public partial class BeamCyclicLoading
             G = this.E / (2 * (1 + Poisson)); // 実質，E / 2.6 となる。
 
             // 断面積・軸力の計算
-            A = this.B * tf * 2 + (this.H - 2 * tf) * tw_c;
+            A = this.B * tf * 2 + (this.H - 2 * tf) * tw_total;
             Py = Sig_y * A;
             P = Py * N_ratio;
-            Aw = (this.H - 2 * tf) * tw_c;
+            Aw = (this.H - 2 * tf) * tw_total;
             Af = this.B * tf;
 
             // 全塑性モーメント（※ハイブリッド材の場合は組み直す必要あり）
             var FF = (P - Aw * Sig_y) / (Af * Sig_y) / 2;
             var WF = P / (Aw * Sig_y);
 
-            if (sectionType == SectionType.Rect)
+            if (sectionType == SectionType.Rectangle)
                 Mp = Sig_y * (this.B * tf * (1 - FF) * (this.H - tf * (1 - FF)));
             else if (sectionType == SectionType.H)
-                Mp = Sig_y * (this.B * tf * (this.H - tf) + tw_c * Math.Pow(((this.H - 2 * tf) / 2), 2) * (1 - WF) * (1 + WF));
+                Mp = Sig_y * (this.B * tf * (this.H - tf) + tw_total * Math.Pow(((this.H - 2 * tf) / 2), 2) * (1 - WF) * (1 + WF));
             else
                 throw new Exception("未定義");
 
@@ -144,9 +117,9 @@ public partial class BeamCyclicLoading
             // PHIY=2.0*SIGY/EE/SH*[1.0-ABS[ROU]]
             // 降伏変形の計算
 
-            I = (this.B * Math.Pow(this.H, 3) - (this.B - tw_c) * Math.Pow(this.H - 2 * tf, 3)) / 12;
+            I = (this.B * Math.Pow(this.H, 3) - (this.B - tw_total) * Math.Pow(this.H - 2 * tf, 3)) / 12;
 
-            Aw_s = this.H * tw_c;
+            Aw_s = this.H * tw_total;
             Qp = Mp / this.L;
             DelP = Qp * Math.Pow(this.L, 3) / 3 / this.E / I;
             DelP += ConsiderQDef ? (Qp / G / Aw_s * this.L) : 0;
@@ -167,19 +140,19 @@ public partial class BeamCyclicLoading
                 {
 
                     // 全部材に材料を設定
-                    if (iH < DivHf)
-                        s[iL].p[iH].steel = steels.Find(x => x.Name == "F");
-                    else if (iH < DivH - DivHf)
-                        s[iL].p[iH].steel = steels.Find(x => x.Name == "W");
+                    if (iH < divHf)
+                        s[iL].p[iH].Steel = steels.Find(x => x.Name == "F");
+                    else if (iH < DivH - divHf)
+                        s[iL].p[iH].Steel = steels.Find(x => x.Name == "W");
                     else
-                        s[iL].p[iH].steel = steels.Find(x => x.Name == "F");
+                        s[iL].p[iH].Steel = steels.Find(x => x.Name == "F");
 
 
                     // 弾塑性判定における初期降伏点
-                    prev_s[iL].p[iH].RecoverSig_pos = s[iL].p[iH].steel.Sig_y_t;
-                    prev_s[iL].p[iH].RecoverSig_neg = -s[iL].p[iH].steel.Sig_y_t;
-                    s[iL].p[iH].RecoverSig_pos = s[iL].p[iH].steel.Sig_y_t;
-                    s[iL].p[iH].RecoverSig_neg = -s[iL].p[iH].steel.Sig_y_t;
+                    prev_s[iL].p[iH].RecoverSig_pos = s[iL].p[iH].Steel.Sig_y_t;
+                    prev_s[iL].p[iH].RecoverSig_neg = -s[iL].p[iH].Steel.Sig_y_t;
+                    s[iL].p[iH].RecoverSig_pos = s[iL].p[iH].Steel.Sig_y_t;
+                    s[iL].p[iH].RecoverSig_neg = -s[iL].p[iH].Steel.Sig_y_t;
 
 
                     // 断面の分割
@@ -187,37 +160,37 @@ public partial class BeamCyclicLoading
 
 
                         // 上フランジ[DivHf 分割]
-                        if (iH < DivHf)
+                        if (iH < divHf)
                         {
-                            s[iL].p[iH].dH = tf / DivHf;
+                            s[iL].p[iH].dH = tf / divHf;
                             s[iL].p[iH].B = this.B;
                         }
 
                         // スカラップ位置[dHs mmずつ DivHs 分割]
-                        else if (iH < (DivHf + DivHs))
+                        else if (iH < (divHf + DivHs))
                         {
                             s[iL].p[iH].dH = dHs;
-                            s[iL].p[iH].B = tw_c;
+                            s[iL].p[iH].B = tw_total;
                         }
 
                         // ウェブ中間部 [残りを均等分割]
-                        else if (iH < DivH - (DivHf + DivHs))
+                        else if (iH < DivH - (divHf + DivHs))
                         {
-                            s[iL].p[iH].dH = (this.H - 2 * (tf + dHs * DivHs)) / (DivH - 2 * (DivHf + DivHs));
-                            s[iL].p[iH].B = tw_c;
+                            s[iL].p[iH].dH = (this.H - 2 * (tf + dHs * DivHs)) / (DivH - 2 * (divHf + DivHs));
+                            s[iL].p[iH].B = tw_total;
                         }
 
                         // スカラップ位置[dHs mmずつ DivHs 分割];
-                        else if (iH < DivH - DivHf)
+                        else if (iH < DivH - divHf)
                         {
                             s[iL].p[iH].dH = dHs;
-                            s[iL].p[iH].B = tw_c;
+                            s[iL].p[iH].B = tw_total;
                         }
 
                         // 下フランジ[DivHf 分割];
                         else
                         {
-                            s[iL].p[iH].dH = tf / DivHf;
+                            s[iL].p[iH].dH = tf / divHf;
                             s[iL].p[iH].B = this.B;
                         }
                     }
@@ -236,7 +209,7 @@ public partial class BeamCyclicLoading
             for (int iL = 0; iL < DivLs; iL++)
             {
                 // 上フランジ側
-                for (int iH = DivHf; iH < (DivHf + DivHs); iH++)
+                for (int iH = divHf; iH < (divHf + DivHs); iH++)
                 {
                     prev_s[iL].p[iH].E_n = 0;
                     prev_s[iL].p[iH].E_t = 0;
@@ -245,7 +218,7 @@ public partial class BeamCyclicLoading
                 }
 
                 // 下フランジ側
-                for (int iH = DivH - (DivHf + DivHs); iH < DivH - DivHf; iH++)
+                for (int iH = DivH - (divHf + DivHs); iH < DivH - divHf; iH++)
                 {
                     prev_s[iL].p[iH].E_n = 0;
                     prev_s[iL].p[iH].E_t = 0;
@@ -283,7 +256,7 @@ public partial class BeamCyclicLoading
             {
 
                 // 上フランジ
-                for (int iH = 0; iH < DivHf; iH++)
+                for (int iH = 0; iH < divHf; iH++)
                 {
                     s[iL].p[iH].RecoverSig_pos *= 10;
                     s[iL].p[iH].RecoverSig_neg *= 10;
@@ -292,7 +265,7 @@ public partial class BeamCyclicLoading
                 }
 
                 // 下フランジ
-                for (int iH = DivH - DivHf; iH < DivH; iH++)
+                for (int iH = DivH - divHf; iH < DivH; iH++)
                 {
                     s[iL].p[iH].RecoverSig_pos *= 10;
                     s[iL].p[iH].RecoverSig_neg *= 10;
@@ -353,7 +326,7 @@ public partial class BeamCyclicLoading
                             prev_s[iL].p[iH].E_n = s[iL].p[iH].E_n;
                             prev_s[iL].p[iH].Eps_t = s[iL].p[iH].Eps_t;
                             prev_s[iL].p[iH].SigEpsState = s[iL].p[iH].SigEpsState;
-                            prev_s[iL].p[iH].BausState = s[iL].p[iH].BausState;
+                            prev_s[iL].p[iH].BauschingerState = s[iL].p[iH].BauschingerState;
                             prev_s[iL].p[iH].RecoverSig_pos = s[iL].p[iH].RecoverSig_pos;
                             prev_s[iL].p[iH].RecoverSig_neg = s[iL].p[iH].RecoverSig_neg;
                             prev_s[iL].p[iH].TotalEps_t = s[iL].p[iH].TotalEps_t;
@@ -474,7 +447,7 @@ public partial class BeamCyclicLoading
                             prev_s[iL].p[iH].E_n = s[iL].p[iH].E_n;
                             prev_s[iL].p[iH].Eps_t = s[iL].p[iH].Eps_t;
                             prev_s[iL].p[iH].SigEpsState = s[iL].p[iH].SigEpsState;
-                            prev_s[iL].p[iH].BausState = s[iL].p[iH].BausState;
+                            prev_s[iL].p[iH].BauschingerState = s[iL].p[iH].BauschingerState;
                             prev_s[iL].p[iH].RecoverSig_pos = s[iL].p[iH].RecoverSig_pos;
                             prev_s[iL].p[iH].RecoverSig_neg = s[iL].p[iH].RecoverSig_neg;
                             prev_s[iL].p[iH].TotalEps_t = s[iL].p[iH].TotalEps_t;
@@ -581,7 +554,7 @@ public partial class BeamCyclicLoading
 
                 //収斂計算初期状態へ戻す
                 p.SigEpsState = prev_p.SigEpsState;
-                p.BausState = prev_p.BausState;
+                p.BauschingerState = prev_p.BauschingerState;
                 p.RecoverSig_pos = prev_p.RecoverSig_pos;
                 p.RecoverSig_neg = prev_p.RecoverSig_neg;
                 p.TotalEps_t = prev_p.TotalEps_t;
@@ -611,8 +584,8 @@ public partial class BeamCyclicLoading
                             if (p.Sig_t >= p.RecoverSig_pos)
                             {
                                 //1
-                                p.E_t = p.steel.Steps[1].E_t;
-                                p.E_n = p.steel.Steps[1].E_n_t;
+                                p.E_t = p.Steel.Steps[1].E_t;
+                                p.E_n = p.Steel.Steps[1].E_n_t;
 
                                 p.SigEpsState = SigEpsState.PlasticPos;
                                 p.SigError = p.Sig_t - p.RecoverSig_pos;
@@ -620,8 +593,8 @@ public partial class BeamCyclicLoading
                             else if (p.Sig_t <= p.RecoverSig_neg)
                             {
                                 //2
-                                p.E_t = p.steel.Steps[1].E_t;
-                                p.E_n = p.steel.Steps[1].E_n_c;
+                                p.E_t = p.Steel.Steps[1].E_t;
+                                p.E_n = p.Steel.Steps[1].E_n_c;
 
                                 p.SigEpsState = SigEpsState.PlasticNeg;
                                 p.SigError = p.Sig_t - p.RecoverSig_neg;
@@ -640,29 +613,29 @@ public partial class BeamCyclicLoading
                             if (dEps_t < 0)
                             {
                                 //3
-                                p.E_t = p.steel.Steps[0].E_t;
-                                p.E_n = p.steel.Steps[0].E_n_t;
+                                p.E_t = p.Steel.Steps[0].E_t;
+                                p.E_n = p.Steel.Steps[0].E_n_t;
 
                                 p.RecoverSig_pos = p.Sig_t;
                                 p.SigEpsState = SigEpsState.BausFromPos;
 
-                                p.BausBoundSig_t_pos = p.steel.ALF * p.RecoverSig_pos;
-                                p.BausBoundSig_t_neg = p.steel.ALF * p.RecoverSig_neg;
-                                p.BausState = BausState.Baus1;
+                                p.BausBoundSig_t_pos = p.Steel.ALF * p.RecoverSig_pos;
+                                p.BausBoundSig_t_neg = p.Steel.ALF * p.RecoverSig_neg;
+                                p.BauschingerState = BausState.Baus1;
                                 p.BausEps_t_pos = p.Eps_t;
-                                p.BausEps_t_neg = p.Eps_t + ((p.RecoverSig_neg - p.RecoverSig_pos) / p.steel.Steps[0].E_t) - p.steel.BCF * p.TotalEps_t;
+                                p.BausEps_t_neg = p.Eps_t + ((p.RecoverSig_neg - p.RecoverSig_pos) / p.Steel.Steps[0].E_t) - p.Steel.BCF * p.TotalEps_t;
 
                             }
                             // 2次剛性の変更
                             else
                             {
-                                for (int i = 0; i < p.steel.Num_of_Data; i++)
+                                for (int i = 0; i < p.Steel.Num_of_Data; i++)
                                 {
-                                    if (p.Sig_t >= p.steel.Steps[i].Sig_t)
+                                    if (p.Sig_t >= p.Steel.Steps[i].Sig_t)
                                     {
                                         //4
-                                        p.E_t = p.steel.Steps[i + 1].E_t;
-                                        p.E_n = p.steel.Steps[i + 1].E_n_t;
+                                        p.E_t = p.Steel.Steps[i + 1].E_t;
+                                        p.E_n = p.Steel.Steps[i + 1].E_n_t;
                                     }
                                 }
                             }
@@ -680,29 +653,29 @@ public partial class BeamCyclicLoading
                             if (dEps_t > 0)
                             {
                                 //5
-                                p.E_t = p.steel.Steps[0].E_t;
-                                p.E_n = p.steel.Steps[0].E_n_c;
+                                p.E_t = p.Steel.Steps[0].E_t;
+                                p.E_n = p.Steel.Steps[0].E_n_c;
 
                                 p.RecoverSig_neg = p.Sig_t;
                                 p.SigEpsState = SigEpsState.BausFromNeg;
 
-                                p.BausBoundSig_t_pos = p.steel.ALF * p.RecoverSig_pos;
-                                p.BausBoundSig_t_neg = p.steel.ALF * p.RecoverSig_neg;
-                                p.BausState = BausState.Baus1;
-                                p.BausEps_t_pos = p.Eps_t + (p.RecoverSig_pos - p.RecoverSig_neg) / p.steel.Steps[0].E_t + p.steel.BCF * p.TotalEps_t;
+                                p.BausBoundSig_t_pos = p.Steel.ALF * p.RecoverSig_pos;
+                                p.BausBoundSig_t_neg = p.Steel.ALF * p.RecoverSig_neg;
+                                p.BauschingerState = BausState.Baus1;
+                                p.BausEps_t_pos = p.Eps_t + (p.RecoverSig_pos - p.RecoverSig_neg) / p.Steel.Steps[0].E_t + p.Steel.BCF * p.TotalEps_t;
                                 p.BausEps_t_neg = p.Eps_t;
 
                             }
                             // 2次剛性の変更
                             else
                             {
-                                for (int i = 0; i < p.steel.Num_of_Data; i++)
+                                for (int i = 0; i < p.Steel.Num_of_Data; i++)
                                 {
-                                    if (p.Sig_t <= -p.steel.Steps[i].Sig_t)
+                                    if (p.Sig_t <= -p.Steel.Steps[i].Sig_t)
                                     {
                                         //6
-                                        p.E_t = p.steel.Steps[i + 1].E_t;
-                                        p.E_n = p.steel.Steps[i + 1].E_n_c;
+                                        p.E_t = p.Steel.Steps[i + 1].E_t;
+                                        p.E_n = p.Steel.Steps[i + 1].E_n_c;
                                     }
                                 }
                             }
@@ -712,7 +685,7 @@ public partial class BeamCyclicLoading
                     // 4]除荷＆バウシンガ[正→負]
                     case SigEpsState.BausFromPos:
                         {
-                            switch (p.BausState)
+                            switch (p.BauschingerState)
                             {
 
                                 case BausState.Baus1:
@@ -726,13 +699,13 @@ public partial class BeamCyclicLoading
 
                                         if (p.Sig_t >= p.RecoverSig_pos)
                                         {
-                                            for (int i = 0; i < p.steel.Num_of_Data; i++)
+                                            for (int i = 0; i < p.Steel.Num_of_Data; i++)
                                             {
-                                                if (p.Sig_t >= p.steel.Steps[i].Sig_t)
+                                                if (p.Sig_t >= p.Steel.Steps[i].Sig_t)
                                                 {
                                                     //7
-                                                    p.E_t = p.steel.Steps[i + 1].E_t;
-                                                    p.E_n = p.steel.Steps[i + 1].E_n_t;
+                                                    p.E_t = p.Steel.Steps[i + 1].E_t;
+                                                    p.E_n = p.Steel.Steps[i + 1].E_n_t;
                                                 }
                                             }
 
@@ -746,7 +719,7 @@ public partial class BeamCyclicLoading
                                             p.E_t = (p.RecoverSig_neg - p.BausBoundSig_t_neg) / (p.BausEps_t_neg - p.Eps_t);
                                             p.E_n = (p.RecoverSig_neg / Math.Exp(p.BausEps_t_neg) - p.BausBoundSig_t_neg / Math.Exp(p.Eps_t)) / ((Math.Exp(p.BausEps_t_neg) - 1) - (Math.Exp(p.Eps_t) - 1));
 
-                                            p.BausState = BausState.Baus2;
+                                            p.BauschingerState = BausState.Baus2;
                                         }
                                     }
                                     break;
@@ -757,13 +730,13 @@ public partial class BeamCyclicLoading
 
                                         if (p.Sig_t <= p.RecoverSig_neg)
                                         {
-                                            for (int i = 0; i < p.steel.Num_of_Data; i++)
+                                            for (int i = 0; i < p.Steel.Num_of_Data; i++)
                                             {
-                                                if (p.Sig_t <= -1 * p.steel.Steps[i].Sig_t)
+                                                if (p.Sig_t <= -1 * p.Steel.Steps[i].Sig_t)
                                                 {
                                                     //9
-                                                    p.E_t = p.steel.Steps[i + 1].E_t;
-                                                    p.E_n = p.steel.Steps[i + 1].E_n_c;
+                                                    p.E_t = p.Steel.Steps[i + 1].E_t;
+                                                    p.E_n = p.Steel.Steps[i + 1].E_n_c;
                                                 }
                                             }
 
@@ -773,10 +746,10 @@ public partial class BeamCyclicLoading
                                         else if (dEps_t > 0)
                                         {
                                             //10
-                                            p.E_t = p.steel.Steps[0].E_t;
-                                            p.E_n = p.steel.Steps[0].E_n_c;
+                                            p.E_t = p.Steel.Steps[0].E_t;
+                                            p.E_n = p.Steel.Steps[0].E_n_c;
 
-                                            p.BausState = BausState.Baus3;
+                                            p.BauschingerState = BausState.Baus3;
                                             p.BausBoundSig_t_neg = p.Sig_t;
                                         }
                                     }
@@ -786,21 +759,21 @@ public partial class BeamCyclicLoading
                                     {
                                         if (p.Sig_t <= p.BausBoundSig_t_neg)
                                         {
-                                            p.BausBoundSig_t_pos = p.steel.ALF * p.RecoverSig_pos;
+                                            p.BausBoundSig_t_pos = p.Steel.ALF * p.RecoverSig_pos;
                                             //11
                                             p.E_t = (p.RecoverSig_neg - p.BausBoundSig_t_neg) / (p.BausEps_t_neg - p.Eps_t);
                                             p.E_n = (p.RecoverSig_neg / Math.Exp(p.BausEps_t_neg) - p.BausBoundSig_t_neg / Math.Exp(p.Eps_t)) / ((Math.Exp(p.BausEps_t_neg) - 1) - (Math.Exp(p.Eps_t) - 1));
 
-                                            p.BausState = BausState.Baus2;
+                                            p.BauschingerState = BausState.Baus2;
                                         }
                                         else if (p.Sig_t >= p.BausBoundSig_t_pos)
                                         {
-                                            p.BausBoundSig_t_neg = p.steel.ALF * p.RecoverSig_neg;
+                                            p.BausBoundSig_t_neg = p.Steel.ALF * p.RecoverSig_neg;
                                             //12
                                             p.E_t = (p.RecoverSig_pos - p.BausBoundSig_t_pos) / (p.BausEps_t_pos - p.Eps_t);
                                             p.E_n = (p.RecoverSig_pos / Math.Exp(p.BausEps_t_pos) - p.BausBoundSig_t_pos / Math.Exp(p.Eps_t)) / ((Math.Exp(p.BausEps_t_pos) - 1) - (Math.Exp(p.Eps_t) - 1));
 
-                                            p.BausState = BausState.Baus4;
+                                            p.BauschingerState = BausState.Baus4;
 
                                         }
                                     }
@@ -812,13 +785,13 @@ public partial class BeamCyclicLoading
 
                                         if (p.Sig_t >= p.RecoverSig_pos)
                                         {
-                                            for (int IB = 0; IB < p.steel.Num_of_Data; IB++)
+                                            for (int IB = 0; IB < p.Steel.Num_of_Data; IB++)
                                             {
-                                                if (p.Sig_t >= p.steel.Steps[IB].Sig_t)
+                                                if (p.Sig_t >= p.Steel.Steps[IB].Sig_t)
                                                 {
                                                     //13
-                                                    p.E_t = p.steel.Steps[IB + 1].E_t;
-                                                    p.E_n = p.steel.Steps[IB + 1].E_n_t;
+                                                    p.E_t = p.Steel.Steps[IB + 1].E_t;
+                                                    p.E_n = p.Steel.Steps[IB + 1].E_n_t;
                                                 }
                                             }
 
@@ -829,10 +802,10 @@ public partial class BeamCyclicLoading
                                         else if (dEps_t < 0)
                                         {
                                             //14
-                                            p.E_t = p.steel.Steps[0].E_t;
-                                            p.E_n = p.steel.Steps[0].E_n_t;
+                                            p.E_t = p.Steel.Steps[0].E_t;
+                                            p.E_n = p.Steel.Steps[0].E_n_t;
 
-                                            p.BausState = BausState.Baus3;
+                                            p.BauschingerState = BausState.Baus3;
                                             p.BausBoundSig_t_pos = p.Sig_t;
                                         }
                                     }
@@ -847,7 +820,7 @@ public partial class BeamCyclicLoading
                     // 5]除荷＆バウシンガー[負→正]
                     case SigEpsState.BausFromNeg:
                         {
-                            switch (p.BausState)
+                            switch (p.BauschingerState)
                             {
 
                                 case BausState.Baus1:
@@ -860,13 +833,13 @@ public partial class BeamCyclicLoading
 
                                         if (p.Sig_t <= p.RecoverSig_neg)
                                         {
-                                            for (int i = 0; i < p.steel.Num_of_Data; i++)
+                                            for (int i = 0; i < p.Steel.Num_of_Data; i++)
                                             {
-                                                if (p.Sig_t < -1 * p.steel.Steps[i].Sig_t)
+                                                if (p.Sig_t < -1 * p.Steel.Steps[i].Sig_t)
                                                 {
                                                     //15
-                                                    p.E_t = p.steel.Steps[i + 1].E_t;
-                                                    p.E_n = p.steel.Steps[i + 1].E_n_c;
+                                                    p.E_t = p.Steel.Steps[i + 1].E_t;
+                                                    p.E_n = p.Steel.Steps[i + 1].E_n_c;
                                                 }
                                             }
 
@@ -879,7 +852,7 @@ public partial class BeamCyclicLoading
                                             p.E_t = (p.RecoverSig_pos - p.BausBoundSig_t_pos) / (p.BausEps_t_pos - p.Eps_t);
                                             p.E_n = (p.RecoverSig_pos / Math.Exp(p.BausEps_t_pos) - p.BausBoundSig_t_pos / Math.Exp(p.Eps_t)) / ((Math.Exp(p.BausEps_t_pos) - 1) - (Math.Exp(p.Eps_t) - 1));
 
-                                            p.BausState = BausState.Baus2;
+                                            p.BauschingerState = BausState.Baus2;
                                         }
                                     }
                                     break;
@@ -890,13 +863,13 @@ public partial class BeamCyclicLoading
 
                                         if (p.Sig_t >= p.RecoverSig_pos)
                                         {
-                                            for (int i = 0; i < p.steel.Num_of_Data; i++)
+                                            for (int i = 0; i < p.Steel.Num_of_Data; i++)
                                             {
-                                                if (p.Sig_t >= p.steel.Steps[i].Sig_t)
+                                                if (p.Sig_t >= p.Steel.Steps[i].Sig_t)
                                                 {
                                                     //17
-                                                    p.E_t = p.steel.Steps[i + 1].E_t;
-                                                    p.E_n = p.steel.Steps[i + 1].E_n_t;
+                                                    p.E_t = p.Steel.Steps[i + 1].E_t;
+                                                    p.E_n = p.Steel.Steps[i + 1].E_n_t;
                                                 }
                                                 p.SigError = p.Sig_t - p.RecoverSig_pos;
                                                 p.SigEpsState = SigEpsState.PlasticPos;
@@ -905,10 +878,10 @@ public partial class BeamCyclicLoading
                                         else if (dEps_t < 0)
                                         {
                                             //18
-                                            p.E_t = p.steel.Steps[0].E_t;
-                                            p.E_n = p.steel.Steps[0].E_n_t;
+                                            p.E_t = p.Steel.Steps[0].E_t;
+                                            p.E_n = p.Steel.Steps[0].E_n_t;
 
-                                            p.BausState = BausState.Baus3;
+                                            p.BauschingerState = BausState.Baus3;
                                             p.BausBoundSig_t_pos = p.Sig_t;
                                         }
 
@@ -920,23 +893,23 @@ public partial class BeamCyclicLoading
                                         if (p.Sig_t >= p.BausBoundSig_t_pos)
                                         {
 
-                                            p.BausBoundSig_t_neg = p.steel.ALF * p.RecoverSig_neg;
+                                            p.BausBoundSig_t_neg = p.Steel.ALF * p.RecoverSig_neg;
                                             //19
                                             p.E_t = (p.RecoverSig_pos - p.BausBoundSig_t_pos) / (p.BausEps_t_pos - p.Eps_t);
                                             p.E_n = (p.RecoverSig_pos / Math.Exp(p.BausEps_t_pos) - p.BausBoundSig_t_pos / Math.Exp(p.Eps_t)) / ((Math.Exp(p.BausEps_t_pos) - 1) - (Math.Exp(p.Eps_t) - 1));
 
-                                            p.BausState = BausState.Baus2;
+                                            p.BauschingerState = BausState.Baus2;
 
                                         }
                                         else if (p.Sig_t <= p.BausBoundSig_t_neg)
                                         {
 
-                                            p.BausBoundSig_t_pos = p.steel.ALF * p.RecoverSig_pos;
+                                            p.BausBoundSig_t_pos = p.Steel.ALF * p.RecoverSig_pos;
                                             //20
                                             p.E_t = (p.RecoverSig_neg - p.BausBoundSig_t_neg) / (p.BausEps_t_neg - p.Eps_t);
                                             p.E_n = (p.RecoverSig_neg / Math.Exp(p.BausEps_t_neg) - p.BausBoundSig_t_neg / Math.Exp(p.Eps_t)) / ((Math.Exp(p.BausEps_t_neg) - 1) - (Math.Exp(p.Eps_t) - 1));
 
-                                            p.BausState = BausState.Baus4;
+                                            p.BauschingerState = BausState.Baus4;
                                         }
                                     }
                                     break;
@@ -947,13 +920,13 @@ public partial class BeamCyclicLoading
 
                                         if (p.Sig_t <= p.RecoverSig_neg)
                                         {
-                                            for (int i = 0; i < p.steel.Num_of_Data; i++)
+                                            for (int i = 0; i < p.Steel.Num_of_Data; i++)
                                             {
-                                                if (p.Sig_t <= -1 * p.steel.Steps[i].Sig_t)
+                                                if (p.Sig_t <= -1 * p.Steel.Steps[i].Sig_t)
                                                 {
                                                     //21
-                                                    p.E_t = p.steel.Steps[i + 1].E_t;
-                                                    p.E_n = p.steel.Steps[i + 1].E_n_c;
+                                                    p.E_t = p.Steel.Steps[i + 1].E_t;
+                                                    p.E_n = p.Steel.Steps[i + 1].E_n_c;
                                                 }
                                             }
 
@@ -964,10 +937,10 @@ public partial class BeamCyclicLoading
                                         else if (dEps_t > 0)
                                         {
                                             //22
-                                            p.E_t = p.steel.Steps[0].E_t;
-                                            p.E_n = p.steel.Steps[0].E_n_c;
+                                            p.E_t = p.Steel.Steps[0].E_t;
+                                            p.E_n = p.Steel.Steps[0].E_n_c;
 
-                                            p.BausState = BausState.Baus3;
+                                            p.BauschingerState = BausState.Baus3;
                                             p.BausBoundSig_t_neg = p.Sig_t;
                                         }
                                     }

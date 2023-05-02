@@ -13,12 +13,12 @@ public partial class BeamCyclicLoading
         /// <summary>
         /// 要素I,Jの素材参照
         /// </summary>
-        public Steel steel { get; set; }
+        public Steel Steel { get; set; }
 
         /// <summary>
         /// バウシンガー部における状態を表す変数
         /// </summary>
-        public BausState BausState { get; set; }
+        public BausState BauschingerState { get; set; }
 
         /// <summary>
         /// 応力度歪度関係における状態を表す変数
@@ -136,7 +136,7 @@ public partial class BeamCyclicLoading
             {
                 if (___IsBroken)
                     return true;
-                return ___IsBroken = Sig_t > steel.Sig_u_t;
+                return ___IsBroken = Sig_t > Steel.Sig_u_t;
             }
             set
             {

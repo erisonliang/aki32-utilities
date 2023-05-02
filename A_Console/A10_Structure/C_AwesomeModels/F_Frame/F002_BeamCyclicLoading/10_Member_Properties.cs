@@ -19,7 +19,7 @@ public partial class BeamCyclicLoading
         // ★★★★★ 部材固有情報
 
         /// <summary>
-        /// 部材断面形状  (1:Ｈ形　2:箱形)
+        /// 部材断面形状
         /// </summary>
         public SectionType SectionType { get; set; }
 
@@ -54,19 +54,16 @@ public partial class BeamCyclicLoading
         /// <summary>
         /// フランジ板厚（断面積計算などのため，矩形の場合，ウェブ厚さの２倍が返ってくる）
         /// </summary>
-        public double tw_c
+        public double tw_total
         {
             get
             {
-                switch (SectionType)
+                return SectionType switch
                 {
-                    case SectionType.H:
-                        return tw;
-                    case SectionType.Rect:
-                        return 2 * tw;
-                    default:
-                        return double.NaN;
-                }
+                    SectionType.H => tw,
+                    SectionType.Rectangle => 2 * tw,
+                    _ => double.NaN,
+                };
             }
         }
         /// <summary>
@@ -216,12 +213,12 @@ public partial class BeamCyclicLoading
         /// <summary>
         /// 結果表示パス３
         /// </summary>
-        public string PathVisualizedBeamResult => Path.Combine(OutputDir, "visualised_beam.txt");
+        public string PathVisualizedBeamResult => Path.Combine(OutputDir, "Result_Visualized Beam.txt");
 
     }
 
     /// <summary>
     /// 断面タイプ
     /// </summary>
-    enum SectionType { H, Rect }
+    enum SectionType { H, Rectangle }
 }

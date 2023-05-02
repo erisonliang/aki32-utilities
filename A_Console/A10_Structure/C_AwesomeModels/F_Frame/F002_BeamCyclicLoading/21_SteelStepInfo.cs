@@ -44,5 +44,6 @@ public partial class BeamCyclicLoading
             E_n_t = e_n_t;
             E_n_c = e_n_c;
         }
+
     }
 }
