@@ -40,7 +40,7 @@ public partial class BeamCyclicLoading
 
             var m = new Member(
 
-                outputDir: outputDirBase.GetChildDirectoryInfo(targetAmp).CreateAndPipe(),
+                outputDir: outputDirBase.GetChildDirectoryInfo($"{targetAmp}_{Guid.NewGuid().ToString()[0..6]}").CreateAndPipe(),
 
                 steels: steels,
                 sectionType: SectionType.H,
@@ -57,13 +57,13 @@ public partial class BeamCyclicLoading
                 Ls: 40,
                 Lw: 10,
 
-                divH: 50,
                 dL: 10,
+                divH: 50,
                 divHf: 5,
-                dHs: 5,
+                divHs: 5,
 
                 n_ratio: 0,
-                ConsiderQDef: true
+                considerQDef: true
 
                 );
 

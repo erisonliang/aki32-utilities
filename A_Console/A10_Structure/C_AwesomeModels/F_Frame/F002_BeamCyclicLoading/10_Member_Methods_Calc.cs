@@ -9,12 +9,29 @@ public partial class BeamCyclicLoading
         /// コンストラクタ。
         /// 範囲の設定は資料を参照！
         /// </summary>
+        /// <param name="outputDir">計算結果の出力先</param>
         /// <param name="steels">鋼材リスト</param>
-        /// <param name="divHf">フランジのH方向分割数</param>
+        /// <param name="sectionType">断面形状</param>
+        /// <param name="sig_y">材料の降伏応力度の代表値</param>
+        /// <param name="E">材料の弾性係数の代表値</param>
+        /// 
+        /// <param name="B">梁幅（B方向長さ）</param>
+        /// <param name="H">梁せい（H方向長さ）</param>
+        /// <param name="L">梁長さ（L方向長さ）</param>
+        /// <param name="tw">ウェブ厚さ</param>
+        /// <param name="tf">フランジ厚さ</param>
         /// <param name="Hs">スカラップのH方向長さ</param>
-        /// <param name="dHs">スカラップのH方向微小要素長さ</param>
-        /// <param name="Ls">スカラップのL方向無力化長さ</param>
-        /// <param name="Lw">溶接金属のL方向弾性化長さ</param>
+        /// <param name="Ls">スカラップのL方向長さ</param>
+        /// <param name="Lw">溶接部分のL方向長さ</param>
+        /// 
+        /// <param name="dL">L方向の微小要素長さ</param>
+        /// <param name="divH">H方向の微小要素数</param>
+        /// <param name="divHf">フランジのH方向の微小要素数</param>
+        /// <param name="divHs">スカラップのH方向微小要素数</param>
+        /// 
+        /// <param name="n_ratio"></param>
+        /// <param name="considerQDef"></param>
+        /// <exception cref="Exception"></exception>
         public Member(DirectoryInfo outputDir,
 
             List<Steel> steels, SectionType sectionType,
@@ -23,16 +40,16 @@ public partial class BeamCyclicLoading
             double B, double H, double L, double tw, double tf,
             int Hs, int Ls, int Lw,
 
-            int divH, double dL, int divHf, int dHs,
+            double dL, int divH, int divHf, int divHs,
 
-            int n_ratio, bool ConsiderQDef
+            int n_ratio, bool considerQDef
 
             )
         {
 
             #region 出力ファイル
 
-            this.OutputDir = outputDir;
+            OutputDir = outputDir;
 
             // M-φを出力
             try
@@ -67,7 +84,7 @@ public partial class BeamCyclicLoading
 
             // 今回は，L方向は10mmごとに分割，H方向には50分割ということで固定。
             this.dL = dL;
-            DivH = divH;
+            this.DivH = divH;
 
             this.H = H;
             this.B = B;
@@ -80,7 +97,7 @@ public partial class BeamCyclicLoading
             this.E = E;
 
             N_ratio = n_ratio;
-            this.ConsiderQDef = ConsiderQDef;
+            this.ConsiderQDef = considerQDef;
 
             #endregion
 
@@ -88,6 +105,7 @@ public partial class BeamCyclicLoading
 
             // ★★★★★ 分割数
             DivL = (int)(this.L / dL);
+            var dH = (double)Hs / divHs;
 
             // ★★★★★ 断面諸量の計算
             var Poisson = 0.3;
@@ -112,34 +130,31 @@ public partial class BeamCyclicLoading
                 throw new Exception("未定義");
 
 
-            // PHIY=2.0*SIGY/EE/SH*[1.0-ABS[ROU]]
             // 降伏変形の計算
-
             I = (this.B * Math.Pow(this.H, 3) - (this.B - tw_total) * Math.Pow(this.H - 2 * tf, 3)) / 12;
-
             Aw_s = this.H * tw_total;
             Qp = Mp / this.L;
             DelP = Qp * Math.Pow(this.L, 3) / 3 / this.E / I;
-            DelP += ConsiderQDef ? (Qp / G / Aw_s * this.L) : 0;
+            DelP += considerQDef ? (Qp / G / Aw_s * this.L) : 0;
 
             #endregion
 
             #region ★★★★★ 梁の分割の設定
 
             // ★★★★★ 初期分割
-            s = Enumerable.Range(0, DivL).Select(_ => new MemberSection(DivH)).ToArray();
-            prev_s = Enumerable.Range(0, DivL).Select(_ => new MemberSection(DivH)).ToArray();
+            s = Enumerable.Range(0, DivL).Select(_ => new MemberSection(divH)).ToArray();
+            prev_s = Enumerable.Range(0, DivL).Select(_ => new MemberSection(divH)).ToArray();
 
             // ★★★★★ 全ての微小要素に対して実行
-            var DivHs = Hs / dHs;
+
             for (int iL = 0; iL < DivL; iL++)
             {
-                for (int iH = 0; iH < DivH; iH++)
+                for (int iH = 0; iH < this.DivH; iH++)
                 {
                     // 全部材に材料を設定
                     if (iH < divHf)
                         s[iL].p[iH].Steel = steels.First(x => x.Name == "F");
-                    else if (iH < DivH - divHf)
+                    else if (iH < this.DivH - divHf)
                         s[iL].p[iH].Steel = steels.First(x => x.Name == "W");
                     else
                         s[iL].p[iH].Steel = steels.First(x => x.Name == "F");
@@ -162,23 +177,23 @@ public partial class BeamCyclicLoading
                         }
 
                         // スカラップ位置[dHs mmずつ DivHs 分割]
-                        else if (iH < (divHf + DivHs))
+                        else if (iH < (divHf + divHs))
                         {
-                            s[iL].p[iH].dH = dHs;
+                            s[iL].p[iH].dH = dH;
                             s[iL].p[iH].B = tw_total;
                         }
 
                         // ウェブ中間部 [残りを均等分割]
-                        else if (iH < DivH - (divHf + DivHs))
+                        else if (iH < this.DivH - (divHf + divHs))
                         {
-                            s[iL].p[iH].dH = (this.H - 2 * (tf + dHs * DivHs)) / (DivH - 2 * (divHf + DivHs));
+                            s[iL].p[iH].dH = (this.H - 2 * (tf + dH * divHs)) / (this.DivH - 2 * (divHf + divHs));
                             s[iL].p[iH].B = tw_total;
                         }
 
                         // スカラップ位置[dHs mmずつ DivHs 分割];
-                        else if (iH < DivH - divHf)
+                        else if (iH < this.DivH - divHf)
                         {
-                            s[iL].p[iH].dH = dHs;
+                            s[iL].p[iH].dH = dH;
                             s[iL].p[iH].B = tw_total;
                         }
 
@@ -204,7 +219,7 @@ public partial class BeamCyclicLoading
             for (int iL = 0; iL < DivLs; iL++)
             {
                 // 上フランジ側
-                for (int iH = divHf; iH < (divHf + DivHs); iH++)
+                for (int iH = divHf; iH < (divHf + divHs); iH++)
                 {
                     prev_s[iL].p[iH].E_n = 0;
                     prev_s[iL].p[iH].E_t = 0;
@@ -213,7 +228,7 @@ public partial class BeamCyclicLoading
                 }
 
                 // 下フランジ側
-                for (int iH = DivH - (divHf + DivHs); iH < DivH - divHf; iH++)
+                for (int iH = this.DivH - (divHf + divHs); iH < this.DivH - divHf; iH++)
                 {
                     prev_s[iL].p[iH].E_n = 0;
                     prev_s[iL].p[iH].E_t = 0;
@@ -238,7 +253,7 @@ public partial class BeamCyclicLoading
                 }
 
                 // 下フランジ
-                for (int iH = DivH - divHf; iH < DivH; iH++)
+                for (int iH = this.DivH - divHf; iH < this.DivH; iH++)
                 {
                     s[iL].p[iH].RecoverSig_pos *= 10;
                     s[iL].p[iH].RecoverSig_neg *= 10;
