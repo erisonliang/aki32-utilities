@@ -1,4 +1,4 @@
-﻿
+﻿using Aki32Utilities.ConsoleAppUtilities.General;
 
 namespace Aki32Utilities.ConsoleAppUtilities.Structure;
 public partial class BeamCyclicLoading
@@ -193,27 +193,27 @@ public partial class BeamCyclicLoading
         /// ベースとなるディレクトリのパス
         /// 主に外部入力データが入る
         /// </summary>
-        public string BaseDir { get; set; }
+        public DirectoryInfo BaseDir { get; set; }
 
         /// <summary>
         /// 出力先ディレクトリのパス
         /// </summary>
-        public string OutputDir => Path.Combine(BaseDir, "結果出力 - " + ModelCreateTime.ToString("yyyy-MM-dd_HH-mm-ss"));
+        public DirectoryInfo OutputDir => BaseDir.GetChildDirectoryInfo("結果出力 - " + ModelCreateTime.ToString("yyyy-MM-dd_HH-mm-ss")).CreateAndPipe();
 
         /// <summary>
         /// 結果表示パス１
         /// </summary>
-        public string PathMPhiResult => Path.Combine(OutputDir, "Result_M_Phi.csv");
+        public FileInfo PathMPhiResult => OutputDir.GetChildFileInfo("Result_M_Phi.csv");
 
         /// <summary>
         /// 結果表示パス２
         /// </summary>
-        public string PathDangerousSectionResult => Path.Combine(OutputDir, "Result_DangerousSection.csv");
+        public FileInfo PathDangerousSectionResult => OutputDir.GetChildFileInfo("Result_DangerousSection.csv");
 
         /// <summary>
         /// 結果表示パス３
         /// </summary>
-        public string PathVisualizedBeamResult => Path.Combine(OutputDir, "Result_Visualized Beam.txt");
+        public FileInfo PathVisualizedBeamResult => OutputDir.GetChildFileInfo("Result_Visualized Beam.txt");
 
     }
 

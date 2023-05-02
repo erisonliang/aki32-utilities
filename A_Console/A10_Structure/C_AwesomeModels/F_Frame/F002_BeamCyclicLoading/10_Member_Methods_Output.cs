@@ -25,7 +25,7 @@ public partial class BeamCyclicLoading
             // 結果文字列を出力
             try
             {
-                using (var sw = new StreamWriter(PathVisualizedBeamResult, true, Encoding.UTF8))
+                using (var sw = new StreamWriter(PathVisualizedBeamResult.FullName, true, Encoding.UTF8))
                 {
                     Console.WriteLine();
                     Console.WriteLine(imageName);
@@ -57,7 +57,7 @@ public partial class BeamCyclicLoading
                     sw.WriteLine();
                 }
 
-                Console.WriteLine($"出力：{Path.GetFileName(PathVisualizedBeamResult)}");
+                Console.WriteLine($"出力：{PathVisualizedBeamResult.Name}");
             }
             catch (Exception e)
             {
@@ -92,10 +92,10 @@ public partial class BeamCyclicLoading
                     TotalDelH / L
                 }.Select(x => x.ToString()));
 
-                using (var sw = new StreamWriter(PathMPhiResult, true, Encoding.UTF8))
+                using (var sw = new StreamWriter(PathMPhiResult.FullName, true, Encoding.UTF8))
                     sw.WriteLine(resultLine);
 
-                Console.WriteLine($"出力：{Path.GetFileName(PathMPhiResult)}");
+                Console.WriteLine($"出力：{PathMPhiResult.Name}");
             }
             catch (Exception ex)
             {
@@ -134,10 +134,10 @@ public partial class BeamCyclicLoading
                 s[iL].p[DivH - 1-iH].TotalEps_t_pos,
                 }.Select(x => x.ToString()));
 
-                using (var sw = new StreamWriter(PathDangerousSectionResult, true, Encoding.UTF8))
+                using (var sw = new StreamWriter(PathDangerousSectionResult.FullName, true, Encoding.UTF8))
                     sw.WriteLine(resultLine);
 
-                Console.WriteLine($"出力：{Path.GetFileName(PathDangerousSectionResult)}");
+                Console.WriteLine($"出力：{PathDangerousSectionResult.Name}");
             }
             catch (Exception ex)
             {

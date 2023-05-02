@@ -27,35 +27,45 @@ public partial class BeamCyclicLoading
             }
 
             // ★★★★★ 梁作成（梁の分割方法を変更するには，Memberクラスのコンストラクタにて行う。）
+            //
+            // メモ
+            // 
+            // 通しダイアフラム形式
+            // R=35mm，長さ67mm[25+7+35]のスカラップを想定。(Ls = 70)(Lw = 40)
+            // 
+            // 柱通し＋エンドプレート形式
+            // R=35mm,長さ42mm[7+35] のスカラップを想定。(Ls = 40)(Lw = 10)
+            //
+            // 今回は，L方向は10mmごとに分割，H方向には50分割ということで固定（高精度 → dLを5にしたりする）
 
-            //（高精度 → dLを5にする？）
-            // 今回は，L方向は10mmごとに分割，H方向には50分割ということで固定。
             var m = new Member(
+
+                baseDir: inputDataDir,
 
                 steels: steels,
                 sectionType: SectionType.H,
+                sig_y: 345.4165295,
+                E: 205000,
 
+                B: 200,
                 L: 2050,
-                dL: 10,
+                H: 600,
+                tw: 11,
+                tf: 17,
+
+                Hs: 35,
                 Ls: 40,
                 Lw: 10,
 
-                H: 600,
+
                 divH: 50,
-                Hs: 35,
-                dHs: 5,
+                dL: 10,
                 divHf: 5,
-                tf: 17,
+                dHs: 5,
 
-                B: 200,
-                tw: 11,
-
-                sig_y: 345.4165295,
-                E: 205000,
                 n_ratio: 0,
-                data_dir: inputDataDir.FullName,
-
                 ConsiderQDef: true
+
                 );
 
             // ★★★★★ 目標変位データ

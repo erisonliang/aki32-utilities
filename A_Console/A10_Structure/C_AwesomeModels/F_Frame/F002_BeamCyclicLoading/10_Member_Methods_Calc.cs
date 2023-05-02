@@ -6,16 +6,8 @@ public partial class BeamCyclicLoading
     partial class Member
     {
         /// <summary>
-        /// コンストラクタ
-        /// 
+        /// コンストラクタ。
         /// 範囲の設定は資料を参照！
-        /// 
-        /// 通しダイアフラム形式
-        /// R=35mm，長さ67mm[25+7+35]のスカラップを想定。(Ls = 70)(Lw = 40)
-        /// 
-        /// 柱通し＋エンドプレート形式
-        /// R=35mm,長さ42mm[7+35] のスカラップを想定。(Ls = 40)(Lw = 10)
-        /// 
         /// </summary>
         /// <param name="steels">鋼材リスト</param>
         /// <param name="divHf">フランジのH方向分割数</param>
@@ -23,19 +15,28 @@ public partial class BeamCyclicLoading
         /// <param name="dHs">スカラップのH方向微小要素長さ</param>
         /// <param name="Ls">スカラップのL方向無力化長さ</param>
         /// <param name="Lw">溶接金属のL方向弾性化長さ</param>
-        public Member(List<Steel> steels, SectionType sectionType, double dL, int divH, double H, double B, double L, double tw, double tf, double sig_y, double E, int n_ratio, bool ConsiderQDef, string data_dir, int divHf, int Hs, int dHs, int Ls, int Lw)
+        public Member(DirectoryInfo baseDir,
+
+            List<Steel> steels, SectionType sectionType,
+            double sig_y, double E,
+
+            double B, double H, double L, double tw, double tf,
+            int Hs, int Ls, int Lw,
+
+            int divH, double dL, int divHf, int dHs,
+
+            int n_ratio, bool ConsiderQDef
+            )
         {
 
             #region 出力ファイル
 
-            this.BaseDir = data_dir;
-            if (!Directory.Exists(OutputDir))
-                Directory.CreateDirectory(OutputDir);
+            this.BaseDir = baseDir;
 
             // M-φを出力
             try
             {
-                using var sw = new StreamWriter(Path.Combine(OutputDir, PathMPhiResult), true, Encoding.UTF8);
+                using var sw = new StreamWriter(PathMPhiResult.FullName, true, Encoding.UTF8);
                 sw.WriteLine("Step,載荷Q,根元M,部材θ,累積変形角");
             }
             catch (Exception ex)
@@ -47,7 +48,7 @@ public partial class BeamCyclicLoading
             // 危険断面関連事項を出力
             try
             {
-                using var sw = new StreamWriter(Path.Combine(OutputDir, PathDangerousSectionResult), true, Encoding.UTF8);
+                using var sw = new StreamWriter(PathDangerousSectionResult.FullName, true, Encoding.UTF8);
                 sw.WriteLine(",,,,,,,上フランジ,,,,骨格曲線累積塑性歪,,下フランジ,,,,骨格曲線累積塑性歪,");
                 sw.WriteLine("Step,載荷Q,根元M,部材θ,累積変形角,θ(危険断面),M(危険断面),εn,σn ,εt,σt,Σεpt,Σεpst+,εn,σn,εt,σt,Σεpt,Σεpst+");
             }
