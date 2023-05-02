@@ -190,15 +190,9 @@ public partial class BeamCyclicLoading
         public DateTime ModelCreateTime { get; set; } = DateTime.Now;
 
         /// <summary>
-        /// ベースとなるディレクトリのパス
-        /// 主に外部入力データが入る
-        /// </summary>
-        public DirectoryInfo BaseDir { get; set; }
-
-        /// <summary>
         /// 出力先ディレクトリのパス
         /// </summary>
-        public DirectoryInfo OutputDir => BaseDir.GetChildDirectoryInfo("結果出力 - " + ModelCreateTime.ToString("yyyy-MM-dd_HH-mm-ss")).CreateAndPipe();
+        public DirectoryInfo OutputDir { get; set; }
 
         /// <summary>
         /// 結果表示パス１

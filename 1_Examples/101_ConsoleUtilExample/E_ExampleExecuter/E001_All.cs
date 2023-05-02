@@ -1413,7 +1413,7 @@ public static partial class ExampleExecuter
                     baseDir_A10_C_F002.OpenOnDefaultApp();
 
                     //Run Example
-                    BeamCyclicLoading.RunExampleModel1(inputDir);
+                    BeamCyclicLoading.RunExampleModel1(inputDir, outputDir);
 
                 }
 

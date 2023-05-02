@@ -15,7 +15,7 @@ public partial class BeamCyclicLoading
         /// <param name="dHs">スカラップのH方向微小要素長さ</param>
         /// <param name="Ls">スカラップのL方向無力化長さ</param>
         /// <param name="Lw">溶接金属のL方向弾性化長さ</param>
-        public Member(DirectoryInfo baseDir,
+        public Member(DirectoryInfo outputDir,
 
             List<Steel> steels, SectionType sectionType,
             double sig_y, double E,
@@ -31,7 +31,7 @@ public partial class BeamCyclicLoading
 
             #region 出力ファイル
 
-            this.BaseDir = baseDir;
+            this.OutputDir = outputDir;
 
             // M-φを出力
             try

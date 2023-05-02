@@ -9,12 +9,12 @@ public partial class BeamCyclicLoading
     /// <summary>
     /// AB-W 一気に処理。
     /// </summary>
-    public static void RunExampleModel1(DirectoryInfo inputDataDir)
+    public static void RunExampleModel1(DirectoryInfo inputDataDir, DirectoryInfo outputDirBase)
     {
-        var coef = new string[] { "2.81" };
-        //var coef = new string[] { "2.81", "2.21", "1.75", "1.32", "0.75" };
+        var targetAmps = new string[] { "2.81" };
+        //var targetAmps = new string[] { "2.81", "2.21", "1.75", "1.32", "0.75" };
 
-        foreach (var item in coef)
+        foreach (var targetAmp in targetAmps)
         {
             // 基本的に入力する部分はこのファイルだけでOK！！あとは適宜材料試験の.csvファイルや目標変位の.txtファイルを作成。
             // 引き継ぐ側が嫌にならないように，あまりオブジェクト指向的でない形で書いてます。
@@ -40,7 +40,7 @@ public partial class BeamCyclicLoading
 
             var m = new Member(
 
-                baseDir: inputDataDir,
+                outputDir: outputDirBase.GetChildDirectoryInfo(targetAmp).CreateAndPipe(),
 
                 steels: steels,
                 sectionType: SectionType.H,
@@ -57,7 +57,6 @@ public partial class BeamCyclicLoading
                 Ls: 40,
                 Lw: 10,
 
-
                 divH: 50,
                 dL: 10,
                 divHf: 5,
@@ -69,7 +68,7 @@ public partial class BeamCyclicLoading
                 );
 
             // ★★★★★ 目標変位データ
-            var target_delH_list = TimeHistory.FromCsv(inputDataDir.GetChildFileInfo($"目標変位 {item}.txt"))[0].ToList();
+            var target_delH_list = TimeHistory.FromCsv(inputDataDir.GetChildFileInfo($"目標変位 {targetAmp}.txt"))[0].ToList();
 
             // ★★★★★ 載荷実行！
             m.Calc(target_delH_list);
