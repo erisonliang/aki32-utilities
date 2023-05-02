@@ -333,16 +333,13 @@ public partial class BeamCyclicLoading
             // 半サイクルの計算
             for (int iDelH = 0; iDelH < target_delH_list.Count; iDelH++)
             {
-                int force_direction = 0;
-
-                if (iDelH == 0)
-                    force_direction = Math.Sign(target_delH_list[iDelH]);
-                else
-                    force_direction = Math.Sign(target_delH_list[iDelH] - target_delH_list[iDelH - 1]);
+                int force_direction = iDelH == 0
+                    ? Math.Sign(target_delH_list[iDelH])
+                    : Math.Sign(target_delH_list[iDelH] - target_delH_list[iDelH - 1]);
 
                 double dQ = 100;
 
-                //1ステップ分の計算
+                // 1ステップ分の計算
                 while (true)
                 {
                     step_count++;

@@ -42,7 +42,6 @@ public partial class BeamCyclicLoading
                 Ls: 40,
                 Lw: 10,
 
-
                 H: 600,
                 divH: 50,
                 Hs: 35,

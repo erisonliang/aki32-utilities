@@ -46,23 +46,29 @@ public partial class BeamCyclicLoading
         /// コンストラクタ
         /// </summary>
         /// <param name="name">部材名</param>
-        /// <param name="MonoEPFile">単調載荷時の弾塑性特性データの場所</param>
+        /// <param name="monoEPDataFile">単調載荷時の弾塑性特性データの場所</param>
         /// <param name="sig_y_t">規準となる降伏応力度の手動入力</param>
-        /// <param name="bCF"></param>
-        /// <param name="aLF"></param>
-        public Steel(string name, FileInfo MonoEPFile, int sig_y_t, double bCF, double aLF)
+        /// <param name="BCF"></param>
+        /// <param name="ALF"></param>
+        public Steel(string name, FileInfo monoEPDataFile, int sig_y_t, double BCF, double ALF)
         {
             Name = name;
             Steps = new List<SteelStepInfo>();
 
             //データ読み込み
-            var EP = TimeHistory.FromCsv(MonoEPFile);
+            var EP = TimeHistory.FromCsv(monoEPDataFile);
 
-            double prev_sig_t = 0d, prev_eps_t = 0d;
+            double prev_sig_t = 0d;
+            double prev_eps_t = 0d;
+            
             for (int i = 0; i < EP.DataRowCount; i++)
             {
                 var eps_t = EP[0][i];
                 var sig_t = EP[1][i];
+                
+                if (eps_t==0)
+                    continue;
+
                 var e_t = (sig_t - prev_sig_t) / (eps_t - prev_eps_t);
                 var e_n_t = (sig_t / Math.Exp(eps_t) - prev_sig_t / Math.Exp(prev_eps_t)) / ((Math.Exp(eps_t) - 1) - (Math.Exp(prev_eps_t) - 1));
                 var e_n_c = (-sig_t / Math.Exp(-eps_t) + prev_sig_t / Math.Exp(-prev_eps_t)) / ((Math.Exp(-eps_t) - 1) - (Math.Exp(-prev_eps_t) - 1));
@@ -74,8 +80,9 @@ public partial class BeamCyclicLoading
             }
 
             Sig_y_t = sig_y_t;
-            BCF = bCF;
-            ALF = aLF;
+
+            this.BCF = BCF;
+            this.ALF = ALF;
         }
 
     }
