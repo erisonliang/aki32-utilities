@@ -25,10 +25,10 @@ public partial class BeamCyclicLoading
             var steels = new List<Steel>();
             {
                 // フランジ
-                steels.Add(new Steel("F", inputDataDir.GetChildFileInfo("Steel_F.csv").FullName, 345, 0.33, 0.67));
+                steels.Add(new Steel("F", inputDataDir.GetChildFileInfo("Steel_F.csv"), 345, 0.33, 0.67));
 
                 // ウェブ
-                steels.Add(new Steel("W", inputDataDir.GetChildFileInfo("Steel_W.csv").FullName, 420, 0.33, 0.67));
+                steels.Add(new Steel("W", inputDataDir.GetChildFileInfo("Steel_W.csv"), 420, 0.33, 0.67));
             }
 
             // ★★★★★ 梁作成（梁の分割方法を変更するには，Memberクラスのコンストラクタにて行う。）
@@ -57,7 +57,7 @@ public partial class BeamCyclicLoading
                 );
 
             // ★★★★★ 目標変位データ
-            var target_delH_list = IO_Extension.ReadDataList1D(inputDataDir.GetChildFileInfo($"目標変位 {item}.txt").FullName).ToList();
+            var target_delH_list = TimeHistory.FromCsv(inputDataDir.GetChildFileInfo($"目標変位 {item}.txt"))[0].ToList();
 
             // ★★★★★ 載荷実行！
             m.Calc(target_delH_list);

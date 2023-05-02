@@ -371,7 +371,7 @@ public partial class BeamCyclicLoading
 
             // ★★★★★ 解析計算
             int step_count = 0;
-            SaveVisualiseBeam();
+            SaveVisualizeBeam();
             SaveCurrentState(step_count);
 
 
@@ -498,7 +498,7 @@ public partial class BeamCyclicLoading
                     {
                         Console.WriteLine("★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★");
                         SaveCurrentState(step_count);
-                        SaveVisualiseBeam();
+                        SaveVisualizeBeam();
                         break;
                     }
                 }
@@ -982,32 +982,29 @@ public partial class BeamCyclicLoading
                     default:
                         throw new Exception("SigEpsState未定義状態");
                 }
-
             }
-
         }
 
         /// <summary>
         /// 梁を可視化します。
         /// </summary>
-        private void SaveVisualiseBeam()
+        private void SaveVisualizeBeam()
         {
-            //VisualiseBeam("dH", new Func<MemberPiece, string>(p =>
+            //SaveVisualizeBeam("dH", new Func<MemberPiece, string>(p =>
             // {
             //     return p.dH.ToString("00");
             // }), "  ");
 
-            SaveVisualiseBeam("SigEpsState", new Func<MemberPiece, string>(p =>
+            SaveVisualizeBeam("SigEpsState", new Func<MemberPiece, string>(p =>
             {
                 return p.SigEpsState.GetHashCode().ToString();
             }));
         }
-        private void SaveVisualiseBeam(string image_name, Func<MemberPiece, string> func_display, string for_null_value = " ")
+        private void SaveVisualizeBeam(string image_name, Func<MemberPiece, string> func_display, string for_null_value = " ")
         {
             // 結果文字列を出力
             try
             {
-
                 using (var sw = new StreamWriter(PathVisualizedBeamResult, true, Encoding.UTF8))
                 {
                     Console.WriteLine();
