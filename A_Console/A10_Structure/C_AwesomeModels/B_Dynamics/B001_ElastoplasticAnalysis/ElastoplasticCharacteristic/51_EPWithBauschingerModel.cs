@@ -1,19 +1,17 @@
-﻿
-
-using Aki32Utilities.ConsoleAppUtilities.General;
+﻿using Aki32Utilities.ConsoleAppUtilities.General;
 
 namespace Aki32Utilities.ConsoleAppUtilities.Structure;
 /// <summary>
 /// EP Model with Bauschinger
 /// </summary>
-public class BauschingerModel : ElastoplasticCharacteristicBase
+public class EPWithBauschingerModel : ElastoplasticCharacteristicBase
 {
 
     // ★★★★★★★★★★★★★★★ props
 
     // ★★★★★★★★★★★★★★★ inits
 
-    public BauschingerModel()
+    public EPWithBauschingerModel()
     {
         throw new NotImplementedException();
 
