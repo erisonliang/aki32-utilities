@@ -142,8 +142,8 @@ public partial class SimpleBeamModel
             #region ★★★★★ 梁の分割の設定
 
             // ★★★★★ 初期分割
-            s = Enumerable.Range(0, DivL).Select(_ => new MemberSection(divH)).ToArray();
-            prev_s = Enumerable.Range(0, DivL).Select(_ => new MemberSection(divH)).ToArray();
+            s = Enumerable.Range(0, DivL).Select(_ => new MemberSection(divH) { PreviousState = new MemberSection(0) }).ToArray();
+
 
             // ★★★★★ 全ての微小要素に対して実行
 
@@ -161,8 +161,8 @@ public partial class SimpleBeamModel
 
 
                     // 弾塑性判定における初期降伏点
-                    prev_s[iL].p[iH].RecoverSig_pos = s[iL].p[iH].Steel.Sig_y_t;
-                    prev_s[iL].p[iH].RecoverSig_neg = -s[iL].p[iH].Steel.Sig_y_t;
+                    s[iL].p[iH].PreviousState.RecoverSig_pos = s[iL].p[iH].Steel.Sig_y_t;
+                    s[iL].p[iH].PreviousState.RecoverSig_neg = -s[iL].p[iH].Steel.Sig_y_t;
                     s[iL].p[iH].RecoverSig_pos = s[iL].p[iH].Steel.Sig_y_t;
                     s[iL].p[iH].RecoverSig_neg = -s[iL].p[iH].Steel.Sig_y_t;
 
@@ -206,8 +206,8 @@ public partial class SimpleBeamModel
                     }
 
                     // 解析の初期値
-                    prev_s[iL].p[iH].E_n = this.E;
-                    prev_s[iL].p[iH].E_t = this.E;
+                    s[iL].p[iH].PreviousState.E_n = this.E;
+                    s[iL].p[iH].PreviousState.E_t = this.E;
                     s[iL].p[iH].E_n = this.E;
                     s[iL].p[iH].E_t = this.E;
 
@@ -221,8 +221,8 @@ public partial class SimpleBeamModel
                 // 上フランジ側
                 for (int iH = divHf; iH < (divHf + divHs); iH++)
                 {
-                    prev_s[iL].p[iH].E_n = 0;
-                    prev_s[iL].p[iH].E_t = 0;
+                    s[iL].p[iH].PreviousState.E_n = 0;
+                    s[iL].p[iH].PreviousState.E_t = 0;
                     s[iL].p[iH].E_n = 0;
                     s[iL].p[iH].E_t = 0;
                 }
@@ -230,8 +230,8 @@ public partial class SimpleBeamModel
                 // 下フランジ側
                 for (int iH = DivH - (divHf + divHs); iH < DivH - divHf; iH++)
                 {
-                    prev_s[iL].p[iH].E_n = 0;
-                    prev_s[iL].p[iH].E_t = 0;
+                    s[iL].p[iH].PreviousState.E_n = 0;
+                    s[iL].p[iH].PreviousState.E_t = 0;
                     s[iL].p[iH].E_n = 0;
                     s[iL].p[iH].E_t = 0;
                 }
@@ -248,8 +248,8 @@ public partial class SimpleBeamModel
                 {
                     s[iL].p[iH].RecoverSig_pos *= 10;
                     s[iL].p[iH].RecoverSig_neg *= 10;
-                    prev_s[iL].p[iH].RecoverSig_pos *= 10;
-                    prev_s[iL].p[iH].RecoverSig_neg *= 10;
+                    s[iL].p[iH].PreviousState.RecoverSig_pos *= 10;
+                    s[iL].p[iH].PreviousState.RecoverSig_neg *= 10;
                 }
 
                 // 下フランジ
@@ -257,8 +257,8 @@ public partial class SimpleBeamModel
                 {
                     s[iL].p[iH].RecoverSig_pos *= 10;
                     s[iL].p[iH].RecoverSig_neg *= 10;
-                    prev_s[iL].p[iH].RecoverSig_pos *= 10;
-                    prev_s[iL].p[iH].RecoverSig_neg *= 10;
+                    s[iL].p[iH].PreviousState.RecoverSig_pos *= 10;
+                    s[iL].p[iH].PreviousState.RecoverSig_neg *= 10;
                 }
 
             }
@@ -287,29 +287,29 @@ public partial class SimpleBeamModel
 
                         for (int iH = 0; iH < DivH; iH++)
                         {
-                            s[iL].p[iH].Sig_n = prev_s[iL].p[iH].Sig_n + dP / A;
+                            s[iL].p[iH].Sig_n = s[iL].p[iH].PreviousState.Sig_n + dP / A;
                         }
 
                         CalcMPhi(iL);
-                        prev_s[iL].Phi = s[iL].Phi;
+                        s[iL].PreviousState.Phi = s[iL].Phi;
 
                         for (int iH = 0; iH < DivH; iH++)
                         {
-                            prev_s[iL].p[iH].Eps_n = s[iL].p[iH].Eps_n;
-                            prev_s[iL].p[iH].Sig_n = s[iL].p[iH].Sig_n;
-                            prev_s[iL].p[iH].E_n = s[iL].p[iH].E_n;
-                            prev_s[iL].p[iH].Eps_t = s[iL].p[iH].Eps_t;
-                            prev_s[iL].p[iH].SigEpsState = s[iL].p[iH].SigEpsState;
-                            prev_s[iL].p[iH].BausState = s[iL].p[iH].BausState;
-                            prev_s[iL].p[iH].RecoverSig_pos = s[iL].p[iH].RecoverSig_pos;
-                            prev_s[iL].p[iH].RecoverSig_neg = s[iL].p[iH].RecoverSig_neg;
-                            prev_s[iL].p[iH].TotalEps_t = s[iL].p[iH].TotalEps_t;
-                            prev_s[iL].p[iH].SigError = s[iL].p[iH].SigError;
-                            prev_s[iL].p[iH].BausBoundSig_t_pos = s[iL].p[iH].BausBoundSig_t_pos;
-                            prev_s[iL].p[iH].BausBoundSig_t_neg = s[iL].p[iH].BausBoundSig_t_neg;
-                            prev_s[iL].p[iH].BausEps_t_pos = s[iL].p[iH].BausEps_t_pos;
-                            prev_s[iL].p[iH].BausEps_t_neg = s[iL].p[iH].BausEps_t_neg;
-                            prev_s[iL].p[iH].E_t = s[iL].p[iH].E_t;
+                            s[iL].p[iH].PreviousState.Eps_n = s[iL].p[iH].Eps_n;
+                            s[iL].p[iH].PreviousState.Sig_n = s[iL].p[iH].Sig_n;
+                            s[iL].p[iH].PreviousState.E_n = s[iL].p[iH].E_n;
+                            s[iL].p[iH].PreviousState.Eps_t = s[iL].p[iH].Eps_t;
+                            s[iL].p[iH].PreviousState.SigEpsState = s[iL].p[iH].SigEpsState;
+                            s[iL].p[iH].PreviousState.BausState = s[iL].p[iH].BausState;
+                            s[iL].p[iH].PreviousState.RecoverSig_pos = s[iL].p[iH].RecoverSig_pos;
+                            s[iL].p[iH].PreviousState.RecoverSig_neg = s[iL].p[iH].RecoverSig_neg;
+                            s[iL].p[iH].PreviousState.TotalEps_t = s[iL].p[iH].TotalEps_t;
+                            s[iL].p[iH].PreviousState.SigError = s[iL].p[iH].SigError;
+                            s[iL].p[iH].PreviousState.BausBoundSig_t_pos = s[iL].p[iH].BausBoundSig_t_pos;
+                            s[iL].p[iH].PreviousState.BausBoundSig_t_neg = s[iL].p[iH].BausBoundSig_t_neg;
+                            s[iL].p[iH].PreviousState.BausEps_t_pos = s[iL].p[iH].BausEps_t_pos;
+                            s[iL].p[iH].PreviousState.BausEps_t_neg = s[iL].p[iH].BausEps_t_neg;
+                            s[iL].p[iH].PreviousState.E_t = s[iL].p[iH].E_t;
                         }
                     }
                 }
@@ -340,14 +340,14 @@ public partial class SimpleBeamModel
                     // 劣化させないので荷重制御とする
                     double dMe = Mp;
 
-                    if (Math.Abs(prev_s[0].M) <= 0.5 * Mp)
+                    if (Math.Abs(s[0].PreviousState.M) <= 0.5 * Mp)
                         dMe *= 0.02;
-                    else if (Math.Abs(prev_s[0].M) <= Mp)
+                    else if (Math.Abs(s[0].PreviousState.M) <= Mp)
                         dMe *= 0.002;
                     else
                         dMe *= 0.0005;
 
-                    s[0].M = prev_s[0].M + force_direction * dMe;
+                    s[0].M = s[0].PreviousState.M + force_direction * dMe;
 
                     // 2] せん断力の仮定
                     for (int iCal = 0; iCal < int.MaxValue; iCal++)
@@ -375,7 +375,7 @@ public partial class SimpleBeamModel
                                 s[iL].DelL = s[iL - 1].DelL + Math.Sqrt(dLx * dLx - Math.Pow(s[iL].DelH - s[iL - 1].DelH, 2));
                                 s[iL].M = s[iL - 1].M + (P * (s[iL - 1].dDelH * dLx + s[iL - 1].ddDelH * dLx * dLx / 2)) - Q * dLx;
 
-                                dM = s[iL].M - prev_s[iL].M;
+                                dM = s[iL].M - s[iL].PreviousState.M;
                             }
 
                             // 3-2] 断面の曲率と各要素の歪度の増分・弾塑性判定
@@ -404,33 +404,33 @@ public partial class SimpleBeamModel
                         }
                     }
 
-                    TotalDelH += Math.Abs(s[DivL - 1].DelH - prev_s[DivL - 1].DelH);
+                    TotalDelH += Math.Abs(s[DivL - 1].DelH - s[DivL - 1].PreviousState.DelH);
 
                     for (int iL = 0; iL < DivL; iL++)
                     {
-                        prev_s[iL].M = s[iL].M;
-                        prev_s[iL].Phi = s[iL].Phi;
-                        prev_s[iL].DelH = s[iL].DelH;
+                        s[iL].PreviousState.M = s[iL].M;
+                        s[iL].PreviousState.Phi = s[iL].Phi;
+                        s[iL].PreviousState.DelH = s[iL].DelH;
 
                         for (int iH = 0; iH < DivH; iH++)
                         {
-                            prev_s[iL].p[iH].Eps_n = s[iL].p[iH].Eps_n;
-                            prev_s[iL].p[iH].Sig_n = s[iL].p[iH].Sig_n;
-                            prev_s[iL].p[iH].E_n = s[iL].p[iH].E_n;
-                            prev_s[iL].p[iH].Eps_t = s[iL].p[iH].Eps_t;
-                            prev_s[iL].p[iH].SigEpsState = s[iL].p[iH].SigEpsState;
-                            prev_s[iL].p[iH].BausState = s[iL].p[iH].BausState;
-                            prev_s[iL].p[iH].RecoverSig_pos = s[iL].p[iH].RecoverSig_pos;
-                            prev_s[iL].p[iH].RecoverSig_neg = s[iL].p[iH].RecoverSig_neg;
-                            prev_s[iL].p[iH].TotalEps_t = s[iL].p[iH].TotalEps_t;
-                            prev_s[iL].p[iH].TotalPlasticEps_t = s[iL].p[iH].TotalPlasticEps_t;
-                            prev_s[iL].p[iH].TotalEps_t_pos = s[iL].p[iH].TotalEps_t_pos;
-                            prev_s[iL].p[iH].SigError = s[iL].p[iH].SigError;
-                            prev_s[iL].p[iH].BausBoundSig_t_pos = s[iL].p[iH].BausBoundSig_t_pos;
-                            prev_s[iL].p[iH].BausBoundSig_t_neg = s[iL].p[iH].BausBoundSig_t_neg;
-                            prev_s[iL].p[iH].BausEps_t_pos = s[iL].p[iH].BausEps_t_pos;
-                            prev_s[iL].p[iH].BausEps_t_neg = s[iL].p[iH].BausEps_t_neg;
-                            prev_s[iL].p[iH].E_t = s[iL].p[iH].E_t;
+                            s[iL].p[iH].PreviousState.Eps_n = s[iL].p[iH].Eps_n;
+                            s[iL].p[iH].PreviousState.Sig_n = s[iL].p[iH].Sig_n;
+                            s[iL].p[iH].PreviousState.E_n = s[iL].p[iH].E_n;
+                            s[iL].p[iH].PreviousState.Eps_t = s[iL].p[iH].Eps_t;
+                            s[iL].p[iH].PreviousState.SigEpsState = s[iL].p[iH].SigEpsState;
+                            s[iL].p[iH].PreviousState.BausState = s[iL].p[iH].BausState;
+                            s[iL].p[iH].PreviousState.RecoverSig_pos = s[iL].p[iH].RecoverSig_pos;
+                            s[iL].p[iH].PreviousState.RecoverSig_neg = s[iL].p[iH].RecoverSig_neg;
+                            s[iL].p[iH].PreviousState.TotalEps_t = s[iL].p[iH].TotalEps_t;
+                            s[iL].p[iH].PreviousState.TotalPlasticEps_t = s[iL].p[iH].TotalPlasticEps_t;
+                            s[iL].p[iH].PreviousState.TotalEps_t_pos = s[iL].p[iH].TotalEps_t_pos;
+                            s[iL].p[iH].PreviousState.SigError = s[iL].p[iH].SigError;
+                            s[iL].p[iH].PreviousState.BausBoundSig_t_pos = s[iL].p[iH].BausBoundSig_t_pos;
+                            s[iL].p[iH].PreviousState.BausBoundSig_t_neg = s[iL].p[iH].BausBoundSig_t_neg;
+                            s[iL].p[iH].PreviousState.BausEps_t_pos = s[iL].p[iH].BausEps_t_pos;
+                            s[iL].p[iH].PreviousState.BausEps_t_neg = s[iL].p[iH].BausEps_t_neg;
+                            s[iL].p[iH].PreviousState.E_t = s[iL].p[iH].E_t;
                         }
                     }
 
@@ -470,9 +470,9 @@ public partial class SimpleBeamModel
                 // h は 微小要素の中心に設定。
                 h += s[iL].p[iH].dH / 2;
 
-                F1 += prev_s[iL].p[iH].E_n * s[iL].p[iH].B * s[iL].p[iH].dH;
-                F2 += prev_s[iL].p[iH].E_n * s[iL].p[iH].B * s[iL].p[iH].dH * h;
-                F3 += prev_s[iL].p[iH].E_n * s[iL].p[iH].B * s[iL].p[iH].dH * h * h;
+                F1 += s[iL].p[iH].PreviousState.E_n * s[iL].p[iH].B * s[iL].p[iH].dH;
+                F2 += s[iL].p[iH].PreviousState.E_n * s[iL].p[iH].B * s[iL].p[iH].dH * h;
+                F3 += s[iL].p[iH].PreviousState.E_n * s[iL].p[iH].B * s[iL].p[iH].dH * h * h;
 
                 // 残りの長さを後で足す。
                 h += s[iL].p[iH].dH / 2;
@@ -482,7 +482,7 @@ public partial class SimpleBeamModel
             dM += dP * F2 / F1;
             var dPhi = (dM - dP * F2 / F1) / (F3 - F2 * F2 / F1);
             var dEps = dP / F1 - F2 / F1 * dPhi;
-            s[iL].Phi = prev_s[iL].Phi + dPhi;
+            s[iL].Phi = s[iL].PreviousState.Phi + dPhi;
 
 
             // 断面要素における歪度
@@ -496,7 +496,7 @@ public partial class SimpleBeamModel
                 s[iL].p[iH].dEps_n = dEps + dPhi * h;
 
                 // 公称歪度
-                s[iL].p[iH].Eps_n = prev_s[iL].p[iH].Eps_n + s[iL].p[iH].dEps_n;
+                s[iL].p[iH].Eps_n = s[iL].p[iH].PreviousState.Eps_n + s[iL].p[iH].dEps_n;
 
                 // 真歪度への変換
                 if (s[iL].p[iH].Eps_n >= -1)
@@ -515,15 +515,11 @@ public partial class SimpleBeamModel
         /// </summary>
         private void CalcEP(int iL)
         {
+
             for (int iH = 0; iH < DivH; iH++)
-            {
-                var ppppp = s[iL].p[iH];
-                var prev_p = prev_s[iL].p[iH];
+                s[iL].p[iH].CalcNext();
 
-                ppppp.CalcNext(prev_p);
-
-            }
         }
-  
+
     }
 }

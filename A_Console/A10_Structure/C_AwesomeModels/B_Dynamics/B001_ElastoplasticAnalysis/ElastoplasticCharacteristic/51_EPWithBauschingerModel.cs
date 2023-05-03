@@ -18,14 +18,19 @@ public class EPWithBauschingerModel : ElastoplasticCharacteristicBase
 
     public EPWithBauschingerModel()
     {
-        this.beta1 = beta;
-        this.K1 = K1;
-        this.K2 = K1 * beta;
-        this.Fy1 = Fy;
+        //this.beta1 = beta;
+        //this.K1 = K1;
+        //this.K2 = K1 * beta;
+        //this.Fy1 = Fy;
 
-        Xy1 = Fy / K1;
+        //Xy1 = Fy / K1;
 
-        CurrentK = K1;
+        //CurrentK = K1;
+
+
+
+
+
 
 
 

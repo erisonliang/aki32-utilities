@@ -11,10 +11,6 @@ public partial class SimpleBeamModel
         /// 梁の微小厚さ断面の集合体
         /// </summary>
         public MemberSection[] s { get; set; }
-        /// <summary>
-        /// 梁の微小厚さ断面の集合体（前ステップ）
-        /// </summary>
-        public MemberSection[] prev_s { get; set; }
 
         // ★★★★★ 部材固有情報
 

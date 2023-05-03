@@ -3,7 +3,7 @@
 namespace Aki32Utilities.ConsoleAppUtilities.Structure;
 public partial class SimpleBeamModel
 {
-    public struct Steel
+    public class Steel
     {
 
         /// <summary>

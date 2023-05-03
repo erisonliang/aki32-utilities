@@ -1334,6 +1334,24 @@ public static partial class ExampleExecuter
 
                     }
 
+                    // StructureModels
+                    {
+                        var baseDir_A10_B001_S = baseDir_A10_B001.GetChildDirectoryInfo($@"StructureModels").CreateAndPipe();
+
+                        // 20_SimpleBeamModel
+                        {
+                            // Define IO paths
+                            var baseDir_A10_B001_S_20 = baseDir_A10_B001_S.GetChildDirectoryInfo($@"20_SimpleBeamModel").CreateAndPipe();
+                            var inputDir = baseDir_A10_B001_S_20.GetChildDirectoryInfo($@"input");
+                            var outputDir = baseDir_A10_B001_S_20.GetChildDirectoryInfo($@"output");
+                            baseDir_A10_B001_S_20.OpenOnDefaultApp();
+
+                            //Run Example
+                            SimpleBeamModel.RunExampleModel1(inputDir, outputDir);
+
+                        }
+
+                    }
                 }
 
                 // B002_RainflowCycleCounting
@@ -1389,7 +1407,7 @@ public static partial class ExampleExecuter
                 // B999_BeamCyclicLoading_Keep
                 {
                     //// Define IO paths
-                    //var baseDir_A10_C_F002 = baseDir_A10_C.GetChildDirectoryInfo($@"B999_BeamCyclicLoading").CreateAndPipe();
+                    //var baseDir_A10_C_F002 = baseDir_A10_C.GetChildDirectoryInfo($@"B999_BeamCyclicLoading_Keep").CreateAndPipe();
                     //var inputDir = baseDir_A10_C_F002.GetChildDirectoryInfo($@"input");
                     //var outputDir = baseDir_A10_C_F002.GetChildDirectoryInfo($@"output");
                     //baseDir_A10_C_F002.OpenOnDefaultApp();
@@ -1399,19 +1417,6 @@ public static partial class ExampleExecuter
 
                 }
 
-                // B999_BeamCyclicLoading_Keep
-                {
-                    // Define IO paths
-                    var baseDir_A10_C_F002 = baseDir_A10_C.GetChildDirectoryInfo($@"B999_BeamCyclicLoading").CreateAndPipe();
-                    var inputDir = baseDir_A10_C_F002.GetChildDirectoryInfo($@"input");
-                    var outputDir = baseDir_A10_C_F002.GetChildDirectoryInfo($@"output");
-                    baseDir_A10_C_F002.OpenOnDefaultApp();
-
-                    //Run Example
-                    SimpleBeamModel.RunExampleModel1(inputDir, outputDir);
-
-                }
-                
                 // F001_MatrixDisplacementMethod
                 {
                     //// Define IO paths

@@ -16,6 +16,11 @@ public partial class SimpleBeamModel
         public Steel Steel { get; set; }
 
         /// <summary>
+        /// 前ステップの状況
+        /// </summary>
+        public MemberPiece PreviousState { get; set; }
+
+        /// <summary>
         /// バウシンガー部における状態を表す変数
         /// </summary>
         public BausState BausState { get; set; }
@@ -157,36 +162,35 @@ public partial class SimpleBeamModel
         /// <summary>
         /// 前のステップの情報から次のステップの情報を算出します。
         /// </summary>
-        /// <param name="prev_p"></param>
         /// <exception cref="Exception"></exception>
-        public void CalcNext(MemberPiece prev_p)
+        public void CalcNext()
         {
 
             // 収束計算初期状態へ戻す
-            SigEpsState = prev_p.SigEpsState;
-            BausState = prev_p.BausState;
+            SigEpsState = PreviousState.SigEpsState;
+            BausState = PreviousState.BausState;
 
-            TotalEps_t = prev_p.TotalEps_t;
-            TotalPlasticEps_t = prev_p.TotalPlasticEps_t;
-            TotalEps_t_pos = prev_p.TotalEps_t_pos;
-            SigError = prev_p.SigError;
+            TotalEps_t = PreviousState.TotalEps_t;
+            TotalPlasticEps_t = PreviousState.TotalPlasticEps_t;
+            TotalEps_t_pos = PreviousState.TotalEps_t_pos;
+            SigError = PreviousState.SigError;
 
-            Sig_n = prev_p.Sig_n + dEps_n * prev_p.E_n; ///これだけ特殊！
+            Sig_n = PreviousState.Sig_n + dEps_n * PreviousState.E_n; ///これだけ特殊！
             // Eps_t
             // Eps_n
             // dEps_n
-            E_t = prev_p.E_t;
-            E_n = prev_p.E_n;
+            E_t = PreviousState.E_t;
+            E_n = PreviousState.E_n;
 
-            BausEps_t_pos = prev_p.BausEps_t_pos;
-            BausEps_t_neg = prev_p.BausEps_t_neg;
-            BausBoundSig_t_pos = prev_p.BausBoundSig_t_pos;
-            BausBoundSig_t_neg = prev_p.BausBoundSig_t_neg;
-            RecoverSig_pos = prev_p.RecoverSig_pos;
-            RecoverSig_neg = prev_p.RecoverSig_neg;
+            BausEps_t_pos = PreviousState.BausEps_t_pos;
+            BausEps_t_neg = PreviousState.BausEps_t_neg;
+            BausBoundSig_t_pos = PreviousState.BausBoundSig_t_pos;
+            BausBoundSig_t_neg = PreviousState.BausBoundSig_t_neg;
+            RecoverSig_pos = PreviousState.RecoverSig_pos;
+            RecoverSig_neg = PreviousState.RecoverSig_neg;
 
             // 差を保存しておく
-            var dEps_t = Eps_t - prev_p.Eps_t;
+            var dEps_t = Eps_t - PreviousState.Eps_t;
 
             // 応力状態に応じて処理
             switch (SigEpsState)

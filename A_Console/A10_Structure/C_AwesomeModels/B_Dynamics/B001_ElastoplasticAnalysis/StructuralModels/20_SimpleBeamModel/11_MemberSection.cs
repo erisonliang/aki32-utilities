@@ -14,6 +14,11 @@ public partial class SimpleBeamModel
         public MemberPiece[] p { get; set; }
 
         /// <summary>
+        /// 前ステップの情報（断面情報関係のみ）
+        /// </summary>
+        public MemberSection PreviousState { get; set; }
+
+        /// <summary>
         /// 曲率
         /// </summary>
         public double Phi { get; set; }
@@ -45,7 +50,7 @@ public partial class SimpleBeamModel
         /// <param name="member_piece_num"></param>
         public MemberSection(int member_piece_num)
         {
-            p = Enumerable.Range(0, member_piece_num).Select(_ => new MemberPiece()).ToArray();
+            p = Enumerable.Range(0, member_piece_num).Select(_ => new MemberPiece() { PreviousState = new MemberPiece() }).ToArray();
         }
 
     }
