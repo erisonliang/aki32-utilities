@@ -378,3 +378,4 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 
+/A_Console/A10_Structure/C_AwesomeModels/F_Frame/F002_BeamCyclicLoading/*
