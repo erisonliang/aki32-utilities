@@ -1,9 +1,7 @@
 ﻿
 
-using static Aki32Utilities.ConsoleAppUtilities.Structure.MultilinearWithBauschingerModel;
-
 namespace Aki32Utilities.ConsoleAppUtilities.Structure;
-public partial class SimpleBeamModel
+public partial class BuiltInSimpleBeamModel
 {
     /// <summary>
     /// 梁の微小要素

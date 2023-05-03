@@ -1,7 +1,7 @@
 ﻿using Aki32Utilities.ConsoleAppUtilities.General;
 
 namespace Aki32Utilities.ConsoleAppUtilities.Structure;
-public partial class SimpleBeamModel
+public partial class BuiltInSimpleBeamModel
 {
     public class Steel
     {

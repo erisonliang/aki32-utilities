@@ -1,7 +1,7 @@
 ﻿
 
 namespace Aki32Utilities.ConsoleAppUtilities.Structure;
-public partial class SimpleBeamModel
+public partial class BuiltInSimpleBeamModel
 {
     /// <summary>
     /// 梁の微小厚さ断面

@@ -1215,8 +1215,10 @@ public static partial class ExampleExecuter
                 {
                     var baseDir_A10_B001 = baseDir_A10_C.GetChildDirectoryInfo(@$"B001_EPAnalysis");
 
-                    // XX_All
+                    // XX_Integrated
                     {
+                        var baseDir_A10_B001_XX = baseDir_A10_B001.GetChildDirectoryInfo($@"XX_Integrated").CreateAndPipe();
+
                         //var epList = new List<ElastoplasticCharacteristicBase>
                         //{
                         //    //new ElasticModel(2),
@@ -1239,7 +1241,7 @@ public static partial class ExampleExecuter
                         //    var tester = new EPTester(ep);
                         //    var result = tester.Calc(EPTester.TestWave.TestWave1);
 
-                        //    var saveDir = baseDir_A10_B001.GetChildDirectoryInfo(@$"output");
+                        //    var saveDir = baseDir_A10_B001_XX.GetChildDirectoryInfo(@$"output");
                         //    result.SaveToCsv(saveDir);
                         //    result.DrawGraph_OnPlotly("f", "x");
                         //}
@@ -1253,7 +1255,7 @@ public static partial class ExampleExecuter
                             //    //new NigamJenningsModel(),
                             //};
 
-                            //var waveCsv = baseDir_A10_B001.GetChildFileInfo(@$"Hachinohe-NS.csv");
+                            //var waveCsv = baseDir_A10_B001_XX.GetChildFileInfo(@$"Hachinohe-NS.csv");
                             //var wave = TimeHistory.FromCsv(waveCsv, new string[] { "t", "ytt" });
 
                             //foreach (var waveAnalysisModel in waveAnalysisModelList)
@@ -1295,7 +1297,7 @@ public static partial class ExampleExecuter
                             //var TList = Enumerable.Range(100, 400).Select(x => x / 100d).ToArray();
                             //var hList = new double[] { 0.00, 0.03, 0.05, 0.10 };
 
-                            //var waveCsv = baseDir_A10_B001.GetChildFileInfo(@$"Hachinohe-NS.csv");
+                            //var waveCsv = baseDir_A10_B001_XX.GetChildFileInfo(@$"Hachinohe-NS.csv");
                             //var wave = TimeHistory.FromCsv(waveCsv, new string[] { "t", "ytt" });
 
                             ////var waveAnalysisModel = new NewmarkBetaModel(0.25);
@@ -1311,16 +1313,16 @@ public static partial class ExampleExecuter
                     {
                         var baseDir_A10_B001_00 = baseDir_A10_B001.GetChildDirectoryInfo($@"00_StructureModels").CreateAndPipe();
 
-                        // 20_SimpleBeamModel
+                        // 21_BuiltInSimpleBeamModel
                         {
                             //// Define IO paths
-                            //var baseDir_A10_B001_00_20 = baseDir_A10_B001_00.GetChildDirectoryInfo($@"20_SimpleBeamModel").CreateAndPipe();
+                            //var baseDir_A10_B001_00_20 = baseDir_A10_B001_00.GetChildDirectoryInfo($@"21_BuiltInSimpleBeamModel").CreateAndPipe();
                             //var inputDir = baseDir_A10_B001_00_20.GetChildDirectoryInfo($@"input");
                             //var outputDir = baseDir_A10_B001_00_20.GetChildDirectoryInfo($@"output");
                             //baseDir_A10_B001_00_20.OpenOnDefaultApp();
 
                             ////Run Example
-                            //SimpleBeamModel.RunExampleModel1(inputDir, outputDir);
+                            //BuiltInSimpleBeamModel.RunExampleModel1(inputDir, outputDir);
 
                         }
 
@@ -1348,32 +1350,34 @@ public static partial class ExampleExecuter
 
                     // 02_ElastoplasticCharacteristic
                     {
+                        var baseDir_A10_B001_02 = baseDir_A10_B001.GetChildDirectoryInfo($@"02_ElastoplasticCharacteristic").CreateAndPipe();
+
                         // newmark beta
                         {
                             //var model = SDoFModel.FromT(1, 0.03);
 
-                            //var waveCsv = baseDir_A10_B001.GetChildFileInfo(@$"Hachinohe-NS.csv");
+                            //var waveCsv = baseDir_A10_B001_02.GetChildFileInfo(@$"Hachinohe-NS.csv");
                             //var wave = TimeHistory.FromCsv(waveCsv, new string[] { "t", "ytt" });
 
                             //var waveAnalysisModel = new NewmarkBetaModel(0.25);
                             //var result = model.Calc(wave, waveAnalysisModel);
 
                             //result.SaveToCsv();
-                            //result.DrawGraph("x", "t");
+                            //result.DrawGraph_OnPlotly("t", "x");
                         }
 
                         // nigam jennings
                         {
                             //var model = SDoFModel.FromT(1, 0.03);
 
-                            //var waveCsv = new FileInfo(@$"{baseDir_A10_B001}\Hachinohe-NS.csv");
+                            //var waveCsv = baseDir_A10_B001_02.GetChildFileInfo(@$"Hachinohe-NS.csv");
                             //var wave = TimeHistory.FromCsv(waveCsv, new string[] { "t", "ytt" });
 
                             //var waveAnalysisModel = new NigamJenningsModel();
                             //var result = model.Calc(wave, waveAnalysisModel);
 
                             //result.SaveToCsv();
-                            //result.DrawGraph("x", "t");
+                            //result.DrawGraph_OnPlotly("t", "x");
                         }
 
                     }

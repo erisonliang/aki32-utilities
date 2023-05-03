@@ -1,7 +1,7 @@
 ﻿using System.Text;
 
 namespace Aki32Utilities.ConsoleAppUtilities.Structure;
-public partial class SimpleBeamModel
+public partial class BuiltInSimpleBeamModel
 {
     partial class Member
     {
@@ -9,6 +9,7 @@ public partial class SimpleBeamModel
         /// コンストラクタ。
         /// 範囲の設定は資料を参照！
         /// </summary>
+        /// 
         /// <param name="outputDir">計算結果の出力先</param>
         /// <param name="steels">鋼材リスト</param>
         /// <param name="sectionType">断面形状</param>
@@ -31,6 +32,7 @@ public partial class SimpleBeamModel
         /// 
         /// <param name="n_ratio"></param>
         /// <param name="considerQDef"></param>
+        /// 
         /// <exception cref="Exception"></exception>
         public Member(DirectoryInfo outputDir,
 

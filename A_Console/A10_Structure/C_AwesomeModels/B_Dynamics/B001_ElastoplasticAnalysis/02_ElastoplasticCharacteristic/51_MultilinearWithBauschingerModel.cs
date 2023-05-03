@@ -1,4 +1,6 @@
-﻿using Aki32Utilities.ConsoleAppUtilities.General;
+﻿using System.Threading.Channels;
+
+using Aki32Utilities.ConsoleAppUtilities.General;
 
 namespace Aki32Utilities.ConsoleAppUtilities.Structure;
 /// <summary>
@@ -18,20 +20,14 @@ public class MultilinearWithBauschingerModel : ElastoplasticCharacteristicBase
     /// </summary>
     public Material.Steel Steel { get; set; }
 
-
     /// <summary>
-    /// 微小高さ
+    /// 材料初期長さ
     /// </summary>
-    public double dH { get; set; }
+    public double L { get; set; }
     /// <summary>
-    /// 微小要素のB方向長さ
+    /// 材料断面積
     /// </summary>
-    public double B { get; set; }
-
-    /// <summary>
-    /// 弾塑性判定における応力度の誤差
-    /// </summary>
-    public double SigError { get; set; }
+    public double A { get; set; }
 
     /// <summary>
     /// バウシンガー関連の計数。.md 参照
@@ -41,70 +37,6 @@ public class MultilinearWithBauschingerModel : ElastoplasticCharacteristicBase
     /// バウシンガー関連の計数。.md 参照
     /// </summary>
     public double ALF { get; set; }
-
-
-    // ★★★★★ 真公称ペア
-
-    /// <summary>
-    /// 真応力度
-    /// </summary>
-    public double Sig_t => Sig_n * (1 + Eps_n);
-    /// <summary>
-    /// 公称応力度
-    /// </summary>
-    public double Sig_n { get; set; }
-
-    /// <summary>
-    /// 真歪度
-    /// </summary>
-    public double Eps_t { get; set; }
-    /// <summary>
-    /// 公称歪度
-    /// </summary>
-    public double Eps_n { get; set; }
-    /// <summary>
-    /// 公称歪度の増分
-    /// </summary>
-    public double dEps_n { get; set; }
-
-    /// <summary>
-    /// 真応力度-真歪度関係における接線剛性
-    /// </summary>
-    public double E_t { get; set; }
-    /// <summary>
-    /// 公称応力度-公称歪度関係における接線剛性
-    /// </summary>
-    public double E_n { get; set; }
-
-
-    // ★★★★★ 正負ペア
-
-    /// <summary>
-    /// 真応力度-真歪度関係における正側バウシンガー部での歪量
-    /// </summary>
-    public double BausEps_t_pos { get; set; }
-    /// <summary>
-    /// 真応力度-真歪度関係における負側バウシンガー部での歪量
-    /// </summary>
-    public double BausEps_t_neg { get; set; }
-
-    /// <summary>
-    /// 真応力度-真歪度関係における正側バウシンガー部での折れ曲がり点応力度
-    /// </summary>
-    public double BausBoundSig_t_pos { get; set; }
-    /// <summary>
-    /// 真応力度-真歪度関係における負側バウシンガー部での折れ曲がり点応力度
-    /// </summary>
-    public double BausBoundSig_t_neg { get; set; }
-
-    /// <summary>
-    /// 正側骨格復帰応力度
-    /// </summary>
-    public double RecoverSig_pos { get; set; }
-    /// <summary>
-    /// 負側骨格復帰応力度
-    /// </summary>
-    public double RecoverSig_neg { get; set; }
 
 
     // ★★★★★ 動的
@@ -118,7 +50,7 @@ public class MultilinearWithBauschingerModel : ElastoplasticCharacteristicBase
         {
             if (isBroken)
                 return true;
-            return isBroken = Sig_t > Steel.Sig_u_t;
+            return isBroken = CurrentF > CalcF(Steel.Sig_u_t);
         }
         set
         {
@@ -127,21 +59,37 @@ public class MultilinearWithBauschingerModel : ElastoplasticCharacteristicBase
     }
     private bool isBroken { get; set; }
 
+    public double CalcX(double eps) => eps * L;
+    public double CalcF(double sig) => sig * A;
+
 
     #endregion
 
 
     // ★★★★★★★★★★★★★★★ inits
 
-    public MultilinearWithBauschingerModel(double K1, double beta, double Fy)
+    public MultilinearWithBauschingerModel(Material.Steel steel, double L, double A, double BCF = 0.33, double ALF = 0.67)
     {
-        this.beta1 = beta;
-        this.K1 = K1;
-        this.Fy1 = Fy;
+        throw new NotImplementedException("not yet implemented");
 
-        Xy1 = Fy / K1;
+        Steel = steel;
 
-        CurrentK = K1;
+        this.L = L;
+        this.A = A;
+
+        this.BCF = BCF;
+        this.ALF = ALF;
+
+        //this.beta1 = beta;
+        //this.K1 = K1;
+        //this.Fy1 = Fy;
+
+        //Xy1 = Fy / K1;
+
+        //CurrentK = K1;
+
+
+
     }
 
 
@@ -149,6 +97,8 @@ public class MultilinearWithBauschingerModel : ElastoplasticCharacteristicBase
 
     public override double TryCalcNextF(double nextX)
     {
+        throw new NotImplementedException("not yet implemented");
+
         if (CurrentX == nextX)
             return CurrentF;
 

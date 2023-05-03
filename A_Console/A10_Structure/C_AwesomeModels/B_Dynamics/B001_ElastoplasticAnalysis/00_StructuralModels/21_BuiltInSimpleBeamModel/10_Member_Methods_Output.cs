@@ -1,7 +1,7 @@
 ﻿using System.Text;
 
 namespace Aki32Utilities.ConsoleAppUtilities.Structure;
-public partial class SimpleBeamModel
+public partial class BuiltInSimpleBeamModel
 {
     partial class Member
     {

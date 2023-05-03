@@ -32,12 +32,7 @@ public class Material
         /// <summary>
         /// 鋼材のσ-ε関係の集合体。(0,0)を含む！
         /// </summary>
-        public TimeHistory SigEps { get; set; }
-        public SteelStepInfo GetSigEpsAt(int i) => (SteelStepInfo)SigEps.GetStep(i);
-        public double[] Eps_n => SigEps["Eps_n"];
-        public double[] Sig_n => SigEps["Sig_n"];
-        public double[] Eps_t => SigEps["Eps_t"];
-        public double[] Sig_t => SigEps["Sig_t"];
+        public List<SteelStepInfo> Steps { get; set; }
 
         /// <summary>
         /// 鋼材の σt-εt 関係における比例限界点。
@@ -48,7 +43,13 @@ public class Material
         /// <summary>
         /// 鋼材の破断応力度(真応力度最大値)
         /// </summary>
-        public double Sig_u_t => ((SteelStepInfo)SigEps.GetTheLastStep()).Sig_t;
+        public double Sig_u_t => Steps.Last().Sig_t;
+
+        // sugar
+        public double[] Eps_n => Steps.Select(s => s.Eps_n).ToArray();
+        public double[] Sig_n => Steps.Select(s => s.Sig_n).ToArray();
+        public double[] Eps_t => Steps.Select(s => s.Eps_t).ToArray();
+        public double[] Sig_t => Steps.Select(s => s.Sig_t).ToArray();
 
 
         // ★★★★★★★★★★★★★★★ inits
@@ -64,10 +65,11 @@ public class Material
         /// <param name="cutAfterWeaken">真応力が低下しているのを発見したら，それ以降のデータを無視（その段階で破断）</param>
         public Steel(string name, double[] sig_list, double[] eps_list, StressType stressType, double? sigma_p_t = null, bool cutAfterWeaken = true)
         {
-            SigEps = new TimeHistory(name);
+            Name = name;
+            Steps = new List<SteelStepInfo>();
 
             if (eps_list[0] != 0) // (0,0) のデータが最初にあってもなくても対応できるようにしてる。
-                SigEps.AppendStep(new SteelStepInfo(0, 0, stressType).StepTable);
+                Steps.Add(new SteelStepInfo(0, 0, stressType));
 
             for (int i = 0; i < eps_list.Length; i++)
             {
@@ -77,14 +79,14 @@ public class Material
 
                 if (cutAfterWeaken
                     && i > 0
-                    && (((SteelStepInfo)SigEps.GetTheLastStep()).Sig_t > addingStep.Sig_t))
+                    && (Steps.Last().Sig_t > addingStep.Sig_t))
                     break;
 
-                SigEps.AppendStep(addingStep);
+                Steps.Add(addingStep);
 
             }
 
-            Sig_p_t = sigma_p_t ?? GetSigEpsAt(1).Sig_t;
+            Sig_p_t = sigma_p_t ?? Steps[1].Sig_t;
 
         }
 
@@ -96,33 +98,23 @@ public class Material
         /// </summary>
         public class SteelStepInfo
         {
-            public TimeHistoryStep StepTable { get; set; } = new TimeHistoryStep();
-
             /// <summary>
             /// εn
             /// </summary>
-            public double Eps_n { get => StepTable["Eps_n"]; set => StepTable["Eps_n"] = value; }
+            public double Eps_n { get; set; }
             /// <summary>
             /// σn
             /// </summary>
-            public double Sig_n { get => StepTable["Sig_n"]; set => StepTable["Sig_n"] = value; }
+            public double Sig_n { get; set; }
 
             /// <summary>
             /// εt
             /// </summary>
-            public double Eps_t { get => StepTable["Eps_t"]; set => StepTable["Eps_t"] = value; }
+            public double Eps_t { get; set; }
             /// <summary>
             /// σt
             /// </summary>
-            public double Sig_t { get => StepTable["Sig_t"]; set => StepTable["Sig_t"] = value; }
-
-            /// <summary>
-            /// コンストラクタ
-            /// </summary>
-            private SteelStepInfo(TimeHistoryStep ths)
-            {
-                StepTable = ths;
-            }
+            public double Sig_t { get; set; }
 
             /// <summary>
             /// コンストラクタ
@@ -149,19 +141,6 @@ public class Material
                         break;
                 }
             }
-
-
-
-            public static implicit operator TimeHistoryStep(SteelStepInfo step)
-            {
-                return step.StepTable;
-            }
-
-            public static explicit operator SteelStepInfo(TimeHistoryStep ths)
-            {
-                return new SteelStepInfo(ths);
-            }
-
         }
 
         public enum StressType
