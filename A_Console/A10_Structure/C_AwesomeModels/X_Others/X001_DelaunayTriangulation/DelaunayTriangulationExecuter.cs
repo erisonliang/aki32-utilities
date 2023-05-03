@@ -1,5 +1,4 @@
-﻿using Aki32Utilities.ConsoleAppUtilities.General;
-using Aki32Utilities.ConsoleAppUtilities.PythonAndNumerics;
+﻿using Aki32Utilities.ConsoleAppUtilities.PythonAndNumerics;
 
 using MathNet.Spatial.Euclidean;
 
@@ -86,7 +85,7 @@ public class DelaunayTriangulationExecuter
         for (int i = 0; i < polyPoints.Length - 1; i++)
             currentTriangles.Add(new Triangle2D(addingPoint, polyPoints[i], polyPoints[i + 1]));
         currentTriangles.Add(new Triangle2D(addingPoint, polyPoints.Last(), polyPoints.First()));
-    
+
     }
 
 
