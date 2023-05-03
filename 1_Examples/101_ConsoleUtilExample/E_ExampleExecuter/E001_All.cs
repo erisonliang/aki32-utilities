@@ -1332,20 +1332,16 @@ public static partial class ExampleExecuter
 
                         // 00_Steel
                         {
-                            var baseDir_A10_B001_01_00 = baseDir_A10_B001_01.GetChildDirectoryInfo($@"00_Steel").CreateAndPipe();
-                            var input = baseDir_A10_B001_01_00.GetChildFileInfo($@"SteelTrue.csv");
+                            //var baseDir_A10_B001_01_00 = baseDir_A10_B001_01.GetChildDirectoryInfo($@"00_Steel").CreateAndPipe();
+                            //var input = baseDir_A10_B001_01_00.GetChildFileInfo($@"SteelTrue.csv");
+                            //baseDir_A10_B001_01_00.OpenOnDefaultApp();
 
-                            var EP = TimeHistory.FromCsv(input);
-                            var steel = new Material.Steel("Steel_001", EP[0], EP[1], StressType.True);
+                            //var EP = TimeHistory.FromCsv(input);
+                            //var steel = new Material.Steel("Steel_001", EP[0], EP[1], StressType.True);
 
-                            var sign = steel.Steps.Select(s => s.Sig_n).ToArray();
-                            var sigt = steel.Steps.Select(s => s.Sig_t).ToArray();
-                            var epsn = steel.Steps.Select(s => s.Eps_n).ToArray();
-                            var epst = steel.Steps.Select(s => s.Eps_t).ToArray();
-
-                            PythonController.Initialize();
-                            LinePlot.DrawSimpleGraph(epsn, sign);
-                            LinePlot.DrawSimpleGraph(epst, sigt);
+                            //PythonController.Initialize();
+                            //LinePlot.DrawSimpleGraph(steel.Eps_n, steel.Sig_n);
+                            //LinePlot.DrawSimpleGraph(steel.Eps_t, steel.Sig_t);
 
                         }
                     }
