@@ -137,7 +137,6 @@ public class MultilinearWithBauschingerModel : ElastoplasticCharacteristicBase
     {
         this.beta1 = beta;
         this.K1 = K1;
-        this.K2 = K1 * beta;
         this.Fy1 = Fy;
 
         Xy1 = Fy / K1;
@@ -162,7 +161,7 @@ public class MultilinearWithBauschingerModel : ElastoplasticCharacteristicBase
         var dir = Math.Sign(dX);
 
         var f1r = K1 * dX + CurrentF;
-        var f2 = K2 * (NextX - dir * Xy1) + dir * Fy1;
+        var f2 = 1;
 
         // max, min
         var fs = new List<double> { f1r, f2 };

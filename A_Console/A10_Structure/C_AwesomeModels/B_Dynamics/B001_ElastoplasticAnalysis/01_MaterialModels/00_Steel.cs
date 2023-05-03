@@ -1,8 +1,11 @@
-﻿using Aki32Utilities.ConsoleAppUtilities.General;
+﻿
 
 namespace Aki32Utilities.ConsoleAppUtilities.Structure;
 public class Material
 {
+
+    // ★★★★★★★★★★★★★★★ props
+
     /// <summary>
     /// </summary>
     /// <remarks>
@@ -18,12 +21,12 @@ public class Material
     public class Steel
     {
         /// <summary>
-        /// テストピースの名称
+        /// 標本の名称
         /// </summary>
         public string Name { get; set; }
 
         /// <summary>
-        /// 鋼材のσ-ε関係の諸元の集合体
+        /// 鋼材のσ-ε関係の諸元の集合体。(0,0)を含む！
         /// </summary>
         public List<SteelStepInfo> Steps { get; set; }
 
@@ -31,98 +34,109 @@ public class Material
         /// 鋼材の σt-εt 関係における比例限界点。
         /// ※ 塑性化の開始を判断する応力度なので、降伏点ではなく比例限界。
         /// </summary>
-        public int Sig_p_t { get; set; }
+        public double Sig_p_t { get; set; }
 
         /// <summary>
         /// 鋼材の破断応力度(真応力度最大値)
         /// </summary>
         public double Sig_u_t => Steps.Last().Sig_t;
 
-        public void Example(FileInfo monoEPDataFile)
-        {
-            var EP = TimeHistory.FromCsv(monoEPDataFile);
-            new Steel("Steel_001", EP[0], EP[1]);
-        }
+
+        // ★★★★★★★★★★★★★★★ inits
 
         /// <summary>
         /// コンストラクタ
         /// </summary>
-        /// <param name="name">部材名</param>
-        /// <param name="eps_t_list"> σt-εt 関係の εt のリスト。</param>
-        /// <param name="sig_t_list"> σt-εt 関係の σt のリスト。</param>
-        public Steel(string name,double[] eps_t_list, double[] sig_t_list)
+        /// <param name="name"></param>
+        /// <param name="sig_list"></param>
+        /// <param name="eps_list"></param>
+        /// <param name="stressType"></param>
+        /// <param name="sigma_p_t"></param>
+        /// <param name="cutAfterWeaken">真応力が低下しているのを発見したら，それ以降のデータを無視（その段階で破断）</param>
+        public Steel(string name, double[] sig_list, double[] eps_list, StressType stressType, double? sigma_p_t = null, bool cutAfterWeaken = true)
         {
             Name = name;
             Steps = new List<SteelStepInfo>();
 
-            //データ読み込み
+            if (eps_list[0] != 0) // (0,0) のデータが最初にあってもなくても対応できるようにしてる。
+                Steps.Add(new SteelStepInfo(0, 0, stressType));
 
-            double prev_sig_t = 0d;
-            double prev_eps_t = 0d;
-
-            for (int i = 0; i < eps_t_list.Length; i++)
+            for (int i = 0; i < eps_list.Length; i++)
             {
-                var eps_t = eps_t_list[i];
-                var sig_t = sig_t_list[i];
+                var eps_t = eps_list[i];
+                var sig_t = sig_list[i];
+                var addingStep = new SteelStepInfo(eps_t, sig_t, stressType);
 
-                if (eps_t == 0) // (0,0) のデータが最初にあってもなくても対応できるようにしてる。
-                    continue;
+                if (cutAfterWeaken
+                    && i > 0
+                    && Steps.Last().Sig_t > addingStep.Sig_t)
+                    break;
 
-                var e_t = (sig_t - prev_sig_t) / (eps_t - prev_eps_t);
-                var e_n_t = (sig_t / Math.Exp(eps_t) - prev_sig_t / Math.Exp(prev_eps_t)) / ((Math.Exp(eps_t) - 1) - (Math.Exp(prev_eps_t) - 1));
-                var e_n_c = (-sig_t / Math.Exp(-eps_t) + prev_sig_t / Math.Exp(-prev_eps_t)) / ((Math.Exp(-eps_t) - 1) - (Math.Exp(-prev_eps_t) - 1));
+                Steps.Add(addingStep);
 
-                Steps.Add(new SteelStepInfo(eps_t, sig_t, e_t, e_n_t, e_n_c));
-
-                prev_eps_t = eps_t;
-                prev_sig_t = sig_t;
             }
 
-            Sig_p_t = sig_y_t;
+            Sig_p_t = sigma_p_t ?? Steps.First().Sig_t;
+
         }
 
 
+        // ★★★★★★★★★★★★★★★ classes
+
+        /// <summary>
+        /// 折れ点位置の情報
+        /// </summary>
         public class SteelStepInfo
         {
             /// <summary>
-            /// 鋼材の歪度(εt-真歪度関係_骨格曲線)
+            /// εn
+            /// </summary>
+            public double Eps_n { get; set; }
+            /// <summary>
+            /// σn
+            /// </summary>
+            public double Sig_n { get; set; }
+
+            /// <summary>
+            /// εt
             /// </summary>
             public double Eps_t { get; set; }
             /// <summary>
-            /// 鋼材の応力度(真応力度-真歪度関係_骨格曲線)
+            /// σt
             /// </summary>
             public double Sig_t { get; set; }
 
             /// <summary>
-            /// 鋼材の剛性(真応力度-真歪度関係_骨格曲線)
-            /// </summary>
-            public double E_t { get; set; }
-            /// <summary>
-            /// 鋼材の剛性(工学応力度-工学歪度関係_引張側骨格曲線)
-            /// </summary>
-            public double E_n_t { get; set; }
-            /// <summary>
-            /// 鋼材の剛性(工学応力度-工学歪度関係_圧縮側骨格曲線)
-            /// </summary>
-            public double E_n_c { get; set; }
-
-            /// <summary>
             /// コンストラクタ
             /// </summary>
-            /// <param name="eps_t"></param>
-            /// <param name="sig_t"></param>
-            /// <param name="e_t"></param>
-            /// <param name="e_n_t"></param>
-            /// <param name="e_n_c"></param>
-            public SteelStepInfo(double eps_t, double sig_t, double e_t, double e_n_t, double e_n_c)
+            public SteelStepInfo(double eps, double sig, StressType stressType)
             {
-                Eps_t = eps_t;
-                Sig_t = sig_t;
-                E_t = e_t;
-                E_n_t = e_n_t;
-                E_n_c = e_n_c;
+                switch (stressType)
+                {
+                    case StressType.Nominal:
+                        {
+                            Sig_n = sig;
+                            Eps_n = eps;
+                            Sig_t = Sig_n * (1 + Eps_n);
+                            Eps_t = Math.Log(1 + Eps_n);
+                        }
+                        break;
+                    case StressType.True:
+                        {
+                            Sig_t = sig;
+                            Eps_t = eps;
+                            Eps_n = Math.Exp(Eps_t) - 1; // * Eps first!
+                            Sig_n = Sig_t / (1 + Eps_n);
+                        }
+                        break;
+                }
             }
+        }
 
+        public enum StressType
+        {
+            Nominal,
+            True,
         }
 
     }
