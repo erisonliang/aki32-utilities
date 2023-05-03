@@ -2,7 +2,7 @@
 
 namespace Aki32Utilities.ConsoleAppUtilities.Structure;
 /// <summary>
-/// Base abstruct class of Elastoplastic Characteristics
+/// Base abstract class of Elastoplastic Characteristics
 /// </summary>
 public abstract class ElastoplasticCharacteristicBase : ICloneable
 {

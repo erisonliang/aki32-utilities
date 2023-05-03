@@ -476,7 +476,6 @@ public partial class SimpleBeamModel
         /// </summary>
         private void CalcEP(int iL)
         {
-
             for (int iH = 0; iH < DivH; iH++)
                 s[iL].p[iH].CalcNext();
 

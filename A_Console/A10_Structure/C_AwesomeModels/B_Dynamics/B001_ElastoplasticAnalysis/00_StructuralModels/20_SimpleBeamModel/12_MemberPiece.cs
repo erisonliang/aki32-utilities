@@ -1,5 +1,7 @@
 ﻿
 
+using static Aki32Utilities.ConsoleAppUtilities.Structure.MultilinearWithBauschingerModel;
+
 namespace Aki32Utilities.ConsoleAppUtilities.Structure;
 public partial class SimpleBeamModel
 {
@@ -8,7 +10,8 @@ public partial class SimpleBeamModel
     /// </summary>
     class MemberPiece
     {
-        #region 単体変数
+
+        // ★★★★★ 単体変数
 
         /// <summary>
         /// 要素I,Jの素材参照
@@ -61,9 +64,7 @@ public partial class SimpleBeamModel
         public double SigError { get; set; }
 
 
-        #endregion
-
-        #region 真公称ペア
+        // ★★★★★ 真公称ペア
 
         /// <summary>
         /// 真応力度
@@ -97,9 +98,7 @@ public partial class SimpleBeamModel
         public double E_n { get; set; }
 
 
-        #endregion
-
-        #region 正負ペア
+        // ★★★★★ 正負ペア
 
         /// <summary>
         /// 真応力度-真歪度関係における正側バウシンガー部での歪量
@@ -128,9 +127,8 @@ public partial class SimpleBeamModel
         /// </summary>
         public double RecoverSig_neg { get; set; }
 
-        #endregion
 
-        #region 動的
+        // ★★★★★ 動的
 
         /// <summary>
         /// 破壊判定
@@ -149,8 +147,6 @@ public partial class SimpleBeamModel
             }
         }
         private bool isBroken { get; set; }
-
-        #endregion
 
         /// <summary>
         /// コンストラクタ

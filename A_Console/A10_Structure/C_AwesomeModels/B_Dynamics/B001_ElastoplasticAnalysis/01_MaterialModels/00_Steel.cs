@@ -1,11 +1,10 @@
 ﻿using Aki32Utilities.ConsoleAppUtilities.General;
 
 namespace Aki32Utilities.ConsoleAppUtilities.Structure;
-public partial class SimpleBeamModel
+public class Material
 {
     public class Steel
     {
-
         /// <summary>
         /// テストピースの名称
         /// </summary>
@@ -21,19 +20,6 @@ public partial class SimpleBeamModel
         /// ※ 塑性化の開始を判断する応力度なので、降伏点ではなく比例限界を入力しておく
         /// </summary>
         public int Sig_y_t { get; set; }
-        /// <summary>
-        /// バウシンガー関連の計数。.md 参照
-        /// </summary>
-        public double BCF { get; set; }
-        /// <summary>
-        /// バウシンガー関連の計数。.md 参照
-        /// </summary>
-        public double ALF { get; set; }
-
-        /// <summary>
-        /// 鋼材の真応力度-真歪度関係(骨格曲線)のデーター数
-        /// </summary>
-        public int Num_of_Data => Steps.Count;
 
         /// <summary>
         /// 鋼材の破断応力度(真応力度最大値)
@@ -48,7 +34,7 @@ public partial class SimpleBeamModel
         /// <param name="sig_y_t">規準となる降伏応力度の手動入力</param>
         /// <param name="BCF"></param>
         /// <param name="ALF"></param>
-        public Steel(string name, FileInfo monoEPDataFile, int sig_y_t, double BCF, double ALF)
+        public Steel(string name, FileInfo monoEPDataFile, int sig_y_t)
         {
             Name = name;
             Steps = new List<SteelStepInfo>();
@@ -64,7 +50,7 @@ public partial class SimpleBeamModel
                 var eps_t = EP[0][i];
                 var sig_t = EP[1][i];
 
-                if (eps_t == 0)
+                if (eps_t == 0) // (0,0) のデータが最初にあってもなくても対応できるようにしてる。
                     continue;
 
                 var e_t = (sig_t - prev_sig_t) / (eps_t - prev_eps_t);
@@ -78,55 +64,55 @@ public partial class SimpleBeamModel
             }
 
             Sig_y_t = sig_y_t;
-
-            this.BCF = BCF;
-            this.ALF = ALF;
         }
 
-    }
-
-    public class SteelStepInfo
-    {
-
-        /// <summary>
-        /// 鋼材の歪度(真応力度-真歪度関係_骨格曲線)
-        /// </summary>
-        public double Eps_t { get; set; }
-        /// <summary>
-        /// 鋼材の応力度(真応力度-真歪度関係_骨格曲線)
-        /// </summary>
-        public double Sig_t { get; set; }
-
-        /// <summary>
-        /// 鋼材の剛性(真応力度-真歪度関係_骨格曲線)
-        /// </summary>
-        public double E_t { get; set; }
-        /// <summary>
-        /// 鋼材の剛性(工学応力度-工学歪度関係_引張側骨格曲線)
-        /// </summary>
-        public double E_n_t { get; set; }
-        /// <summary>
-        /// 鋼材の剛性(工学応力度-工学歪度関係_圧縮側骨格曲線)
-        /// </summary>
-        public double E_n_c { get; set; }
-
-        /// <summary>
-        /// コンストラクタ
-        /// </summary>
-        /// <param name="eps_t"></param>
-        /// <param name="sig_t"></param>
-        /// <param name="e_t"></param>
-        /// <param name="e_n_t"></param>
-        /// <param name="e_n_c"></param>
-        public SteelStepInfo(double eps_t, double sig_t, double e_t, double e_n_t, double e_n_c)
+        public class SteelStepInfo
         {
-            Eps_t = eps_t;
-            Sig_t = sig_t;
-            E_t = e_t;
-            E_n_t = e_n_t;
-            E_n_c = e_n_c;
+
+            /// <summary>
+            /// 鋼材の歪度(真応力度-真歪度関係_骨格曲線)
+            /// </summary>
+            public double Eps_t { get; set; }
+            /// <summary>
+            /// 鋼材の応力度(真応力度-真歪度関係_骨格曲線)
+            /// </summary>
+            public double Sig_t { get; set; }
+
+            /// <summary>
+            /// 鋼材の剛性(真応力度-真歪度関係_骨格曲線)
+            /// </summary>
+            public double E_t { get; set; }
+            /// <summary>
+            /// 鋼材の剛性(工学応力度-工学歪度関係_引張側骨格曲線)
+            /// </summary>
+            public double E_n_t { get; set; }
+            /// <summary>
+            /// 鋼材の剛性(工学応力度-工学歪度関係_圧縮側骨格曲線)
+            /// </summary>
+            public double E_n_c { get; set; }
+
+            /// <summary>
+            /// コンストラクタ
+            /// </summary>
+            /// <param name="eps_t"></param>
+            /// <param name="sig_t"></param>
+            /// <param name="e_t"></param>
+            /// <param name="e_n_t"></param>
+            /// <param name="e_n_c"></param>
+            public SteelStepInfo(double eps_t, double sig_t, double e_t, double e_n_t, double e_n_c)
+            {
+                Eps_t = eps_t;
+                Sig_t = sig_t;
+                E_t = e_t;
+                E_n_t = e_n_t;
+                E_n_c = e_n_c;
+            }
+
         }
 
     }
+
+
+    // ★★★★★★★★★★★★★★★
 
 }
