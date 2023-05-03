@@ -3,6 +3,18 @@
 namespace Aki32Utilities.ConsoleAppUtilities.Structure;
 public class Material
 {
+    /// <summary>
+    /// </summary>
+    /// <remarks>
+    /// 用語の定義
+    /// 
+    /// εt = 真歪度
+    /// σt = 真応力度
+    /// 
+    /// εn = 工学的歪度（公称歪度）
+    /// σn = 工学的応力度（公称応力度）
+    /// 
+    /// </remarks>
     public class Steel
     {
         /// <summary>
@@ -16,39 +28,42 @@ public class Material
         public List<SteelStepInfo> Steps { get; set; }
 
         /// <summary>
-        /// 鋼材の真応力度-真歪度関係(骨格曲線)における降伏点
-        /// ※ 塑性化の開始を判断する応力度なので、降伏点ではなく比例限界を入力しておく
+        /// 鋼材の σt-εt 関係における比例限界点。
+        /// ※ 塑性化の開始を判断する応力度なので、降伏点ではなく比例限界。
         /// </summary>
-        public int Sig_y_t { get; set; }
+        public int Sig_p_t { get; set; }
 
         /// <summary>
         /// 鋼材の破断応力度(真応力度最大値)
         /// </summary>
         public double Sig_u_t => Steps.Last().Sig_t;
 
+        public void Example(FileInfo monoEPDataFile)
+        {
+            var EP = TimeHistory.FromCsv(monoEPDataFile);
+            new Steel("Steel_001", EP[0], EP[1]);
+        }
+
         /// <summary>
         /// コンストラクタ
         /// </summary>
         /// <param name="name">部材名</param>
-        /// <param name="monoEPDataFile">単調載荷時の弾塑性特性データの場所</param>
-        /// <param name="sig_y_t">規準となる降伏応力度の手動入力</param>
-        /// <param name="BCF"></param>
-        /// <param name="ALF"></param>
-        public Steel(string name, FileInfo monoEPDataFile, int sig_y_t)
+        /// <param name="eps_t_list"> σt-εt 関係の εt のリスト。</param>
+        /// <param name="sig_t_list"> σt-εt 関係の σt のリスト。</param>
+        public Steel(string name,double[] eps_t_list, double[] sig_t_list)
         {
             Name = name;
             Steps = new List<SteelStepInfo>();
 
             //データ読み込み
-            var EP = TimeHistory.FromCsv(monoEPDataFile);
 
             double prev_sig_t = 0d;
             double prev_eps_t = 0d;
 
-            for (int i = 0; i < EP.DataRowCount; i++)
+            for (int i = 0; i < eps_t_list.Length; i++)
             {
-                var eps_t = EP[0][i];
-                var sig_t = EP[1][i];
+                var eps_t = eps_t_list[i];
+                var sig_t = sig_t_list[i];
 
                 if (eps_t == 0) // (0,0) のデータが最初にあってもなくても対応できるようにしてる。
                     continue;
@@ -63,14 +78,14 @@ public class Material
                 prev_sig_t = sig_t;
             }
 
-            Sig_y_t = sig_y_t;
+            Sig_p_t = sig_y_t;
         }
+
 
         public class SteelStepInfo
         {
-
             /// <summary>
-            /// 鋼材の歪度(真応力度-真歪度関係_骨格曲線)
+            /// 鋼材の歪度(εt-真歪度関係_骨格曲線)
             /// </summary>
             public double Eps_t { get; set; }
             /// <summary>

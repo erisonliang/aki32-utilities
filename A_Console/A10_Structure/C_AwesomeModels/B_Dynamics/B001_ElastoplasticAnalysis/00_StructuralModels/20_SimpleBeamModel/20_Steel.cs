@@ -33,7 +33,7 @@ public partial class SimpleBeamModel
         /// <summary>
         /// 鋼材の真応力度-真歪度関係(骨格曲線)のデーター数
         /// </summary>
-        public int Num_of_Data => Steps.Count;
+        public int DataCount => Steps.Count;
 
         /// <summary>
         /// 鋼材の破断応力度(真応力度最大値)

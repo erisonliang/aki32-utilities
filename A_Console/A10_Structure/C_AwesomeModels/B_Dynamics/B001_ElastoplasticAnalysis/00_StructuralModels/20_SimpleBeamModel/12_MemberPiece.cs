@@ -272,7 +272,7 @@ public partial class SimpleBeamModel
                         // 2次剛性の変更
                         else
                         {
-                            for (int i = 0; i < Steel.Num_of_Data; i++)
+                            for (int i = 0; i < Steel.DataCount; i++)
                             {
                                 if (Sig_t >= Steel.Steps[i].Sig_t)
                                 {
@@ -311,7 +311,7 @@ public partial class SimpleBeamModel
                         // 2次剛性の変更
                         else
                         {
-                            for (int i = 0; i < Steel.Num_of_Data; i++)
+                            for (int i = 0; i < Steel.DataCount; i++)
                             {
                                 if (Sig_t <= -Steel.Steps[i].Sig_t)
                                 {
@@ -340,7 +340,7 @@ public partial class SimpleBeamModel
 
                                     if (Sig_t >= RecoverSig_pos)
                                     {
-                                        for (int i = 0; i < Steel.Num_of_Data; i++)
+                                        for (int i = 0; i < Steel.DataCount; i++)
                                         {
                                             if (Sig_t >= Steel.Steps[i].Sig_t)
                                             {
@@ -371,7 +371,7 @@ public partial class SimpleBeamModel
 
                                     if (Sig_t <= RecoverSig_neg)
                                     {
-                                        for (int i = 0; i < Steel.Num_of_Data; i++)
+                                        for (int i = 0; i < Steel.DataCount; i++)
                                         {
                                             if (Sig_t <= -1 * Steel.Steps[i].Sig_t)
                                             {
@@ -426,7 +426,7 @@ public partial class SimpleBeamModel
 
                                     if (Sig_t >= RecoverSig_pos)
                                     {
-                                        for (int IB = 0; IB < Steel.Num_of_Data; IB++)
+                                        for (int IB = 0; IB < Steel.DataCount; IB++)
                                         {
                                             if (Sig_t >= Steel.Steps[IB].Sig_t)
                                             {
@@ -473,7 +473,7 @@ public partial class SimpleBeamModel
 
                                     if (Sig_t <= RecoverSig_neg)
                                     {
-                                        for (int i = 0; i < Steel.Num_of_Data; i++)
+                                        for (int i = 0; i < Steel.DataCount; i++)
                                         {
                                             if (Sig_t < -1 * Steel.Steps[i].Sig_t)
                                             {
@@ -503,7 +503,7 @@ public partial class SimpleBeamModel
 
                                     if (Sig_t >= RecoverSig_pos)
                                     {
-                                        for (int i = 0; i < Steel.Num_of_Data; i++)
+                                        for (int i = 0; i < Steel.DataCount; i++)
                                         {
                                             if (Sig_t >= Steel.Steps[i].Sig_t)
                                             {
@@ -560,7 +560,7 @@ public partial class SimpleBeamModel
 
                                     if (Sig_t <= RecoverSig_neg)
                                     {
-                                        for (int i = 0; i < Steel.Num_of_Data; i++)
+                                        for (int i = 0; i < Steel.DataCount; i++)
                                         {
                                             if (Sig_t <= -1 * Steel.Steps[i].Sig_t)
                                             {

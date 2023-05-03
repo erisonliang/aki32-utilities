@@ -18,16 +18,6 @@ public class MultilinearWithBauschingerModel : ElastoplasticCharacteristicBase
     /// </summary>
     public Material.Steel Steel { get; set; }
 
-    /// <summary>
-    /// バウシンガー部における状態を表す変数
-    /// </summary>
-    public BausStates BausState { get; set; }
-
-    /// <summary>
-    /// 応力度歪度関係における状態を表す変数
-    /// </summary>
-    public SigEpsStates SigEpsState { get; set; }
-
 
     /// <summary>
     /// 微小高さ
