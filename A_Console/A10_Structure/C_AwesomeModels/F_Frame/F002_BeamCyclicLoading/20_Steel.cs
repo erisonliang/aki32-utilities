@@ -22,11 +22,11 @@ public partial class BeamCyclicLoading
         /// </summary>
         public int Sig_y_t { get; set; }
         /// <summary>
-        /// ？？？？？？？？
+        /// ■
         /// </summary>
         public double BCF { get; set; }
         /// <summary>
-        /// ？？？？？？？？
+        /// ■
         /// </summary>
         public double ALF { get; set; }
 

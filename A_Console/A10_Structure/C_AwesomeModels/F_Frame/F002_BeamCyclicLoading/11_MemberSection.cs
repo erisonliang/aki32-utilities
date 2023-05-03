@@ -18,11 +18,11 @@ public partial class BeamCyclicLoading
         /// </summary>
         public double Phi { get; set; }
         /// <summary>
-        /// 変形（ L 方向）
+        /// 変形（L方向）
         /// </summary>
         public double DelL { get; set; }
         /// <summary>
-        /// 変形（ H 方向）
+        /// 変形（H方向）
         /// </summary>
         public double DelH { get; set; }
         /// <summary>

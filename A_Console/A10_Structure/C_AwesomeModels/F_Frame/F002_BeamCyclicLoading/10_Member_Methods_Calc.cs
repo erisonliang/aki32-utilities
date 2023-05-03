@@ -84,7 +84,7 @@ public partial class BeamCyclicLoading
 
             // 今回は，L方向は10mmごとに分割，H方向には50分割ということで固定。
             this.dL = dL;
-            this.DivH = divH;
+            DivH = divH;
 
             this.H = H;
             this.B = B;
@@ -97,7 +97,7 @@ public partial class BeamCyclicLoading
             this.E = E;
 
             N_ratio = n_ratio;
-            this.ConsiderQDef = considerQDef;
+            ConsiderQDef = considerQDef;
 
             #endregion
 
@@ -149,12 +149,12 @@ public partial class BeamCyclicLoading
 
             for (int iL = 0; iL < DivL; iL++)
             {
-                for (int iH = 0; iH < this.DivH; iH++)
+                for (int iH = 0; iH < DivH; iH++)
                 {
                     // 全部材に材料を設定
                     if (iH < divHf)
                         s[iL].p[iH].Steel = steels.First(x => x.Name == "F");
-                    else if (iH < this.DivH - divHf)
+                    else if (iH < DivH - divHf)
                         s[iL].p[iH].Steel = steels.First(x => x.Name == "W");
                     else
                         s[iL].p[iH].Steel = steels.First(x => x.Name == "F");
@@ -184,14 +184,14 @@ public partial class BeamCyclicLoading
                         }
 
                         // ウェブ中間部 [残りを均等分割]
-                        else if (iH < this.DivH - (divHf + divHs))
+                        else if (iH < DivH - (divHf + divHs))
                         {
-                            s[iL].p[iH].dH = (this.H - 2 * (tf + dH * divHs)) / (this.DivH - 2 * (divHf + divHs));
+                            s[iL].p[iH].dH = (this.H - 2 * (tf + dH * divHs)) / (DivH - 2 * (divHf + divHs));
                             s[iL].p[iH].B = tw_total;
                         }
 
                         // スカラップ位置[dHs mmずつ DivHs 分割];
-                        else if (iH < this.DivH - divHf)
+                        else if (iH < DivH - divHf)
                         {
                             s[iL].p[iH].dH = dH;
                             s[iL].p[iH].B = tw_total;
@@ -228,7 +228,7 @@ public partial class BeamCyclicLoading
                 }
 
                 // 下フランジ側
-                for (int iH = this.DivH - (divHf + divHs); iH < this.DivH - divHf; iH++)
+                for (int iH = DivH - (divHf + divHs); iH < DivH - divHf; iH++)
                 {
                     prev_s[iL].p[iH].E_n = 0;
                     prev_s[iL].p[iH].E_t = 0;
@@ -253,7 +253,7 @@ public partial class BeamCyclicLoading
                 }
 
                 // 下フランジ
-                for (int iH = this.DivH - divHf; iH < this.DivH; iH++)
+                for (int iH = DivH - divHf; iH < DivH; iH++)
                 {
                     s[iL].p[iH].RecoverSig_pos *= 10;
                     s[iL].p[iH].RecoverSig_neg *= 10;
