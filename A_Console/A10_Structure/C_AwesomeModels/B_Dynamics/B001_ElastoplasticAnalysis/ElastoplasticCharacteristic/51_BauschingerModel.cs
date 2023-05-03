@@ -1,19 +1,25 @@
 ﻿
 
+using Aki32Utilities.ConsoleAppUtilities.General;
+
 namespace Aki32Utilities.ConsoleAppUtilities.Structure;
 /// <summary>
-/// Yoshida-Uemori Model
+/// EP Model with Bauschinger
 /// </summary>
-public class YoshidaUemoriModel : ElastoplasticCharacteristicBase
+public class BauschingerModel : ElastoplasticCharacteristicBase
 {
 
     // ★★★★★★★★★★★★★★★ props
 
     // ★★★★★★★★★★★★★★★ inits
 
-    public YoshidaUemoriModel()
+    public BauschingerModel()
     {
         throw new NotImplementedException();
+
+
+
+
     }
 
 
@@ -22,7 +28,14 @@ public class YoshidaUemoriModel : ElastoplasticCharacteristicBase
     public override double TryCalcNextF(double nextX)
     {
         throw new NotImplementedException();
+
+
+
+
     }
+
+
+    // ★★★★★★★★★★★★★★★ memo
 
 
     // ★★★★★★★★★★★★★★★

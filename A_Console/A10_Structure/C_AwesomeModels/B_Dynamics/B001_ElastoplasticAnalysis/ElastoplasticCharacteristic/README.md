@@ -23,6 +23,15 @@ Material's elastoplastic characteristic algorithms
 
 
 
+
+- Akiyamaモデル
+
+
+【参考】山田哲,  今枝知子,  岡田健: バウシンガー効果を考慮した構造用鋼材の簡潔な履歴モデル, 日本建築学会構造系論文集, 第559号, pp.225-232, 2002.9
+
+
+
+
 <br>
 
 ## ❗Notice

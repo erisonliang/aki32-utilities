@@ -1386,16 +1386,16 @@ public static partial class ExampleExecuter
                     // see A10_Structure > A_ChainableExtensions > F203_FFT
                 }
 
-                // B999_BeamCyclicLoading
+                // B999_BeamCyclicLoading_Keep
                 {
-                    //// Define IO paths
-                    //var baseDir_A10_C_F002 = baseDir_A10_C.GetChildDirectoryInfo($@"B999_BeamCyclicLoading").CreateAndPipe();
-                    //var inputDir = baseDir_A10_C_F002.GetChildDirectoryInfo($@"input");
-                    //var outputDir = baseDir_A10_C_F002.GetChildDirectoryInfo($@"output");
-                    //baseDir_A10_C_F002.OpenOnDefaultApp();
+                    // Define IO paths
+                    var baseDir_A10_C_F002 = baseDir_A10_C.GetChildDirectoryInfo($@"B999_BeamCyclicLoading").CreateAndPipe();
+                    var inputDir = baseDir_A10_C_F002.GetChildDirectoryInfo($@"input");
+                    var outputDir = baseDir_A10_C_F002.GetChildDirectoryInfo($@"output");
+                    baseDir_A10_C_F002.OpenOnDefaultApp();
 
-                    ////Run Example
-                    //BeamCyclicLoading.RunExampleModel1(inputDir, outputDir);
+                    //Run Example
+                    BeamCyclicLoading.RunExampleModel1(inputDir, outputDir);
 
 
 
