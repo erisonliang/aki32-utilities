@@ -1,4 +1,4 @@
-﻿
+﻿using Aki32Utilities.ConsoleAppUtilities.General;
 
 namespace Aki32Utilities.ConsoleAppUtilities.Structure;
 public partial class SimpleBeamModel
@@ -63,7 +63,7 @@ public partial class SimpleBeamModel
         /// <summary>
         /// 真応力度
         /// </summary>
-        public double Sig_t { get; set; }
+        public double Sig_t => Sig_n * (1 + Eps_n);
         /// <summary>
         /// 公称応力度
         /// </summary>
@@ -152,9 +152,420 @@ public partial class SimpleBeamModel
         /// </summary>
         public MemberPiece()
         {
-
         }
 
+        /// <summary>
+        /// 前のステップの情報から次のステップの情報を算出します。
+        /// </summary>
+        /// <param name="prev_p"></param>
+        /// <exception cref="Exception"></exception>
+        public void CalcNext(MemberPiece prev_p)
+        {
+
+            // 収束計算初期状態へ戻す
+            SigEpsState = prev_p.SigEpsState;
+            BausState = prev_p.BausState;
+
+            TotalEps_t = prev_p.TotalEps_t;
+            TotalPlasticEps_t = prev_p.TotalPlasticEps_t;
+            TotalEps_t_pos = prev_p.TotalEps_t_pos;
+            SigError = prev_p.SigError;
+
+            Sig_n = prev_p.Sig_n + dEps_n * prev_p.E_n; ///これだけ特殊！
+            // Eps_t
+            // Eps_n
+            // dEps_n
+            E_t = prev_p.E_t;
+            E_n = prev_p.E_n;
+
+            BausEps_t_pos = prev_p.BausEps_t_pos;
+            BausEps_t_neg = prev_p.BausEps_t_neg;
+            BausBoundSig_t_pos = prev_p.BausBoundSig_t_pos;
+            BausBoundSig_t_neg = prev_p.BausBoundSig_t_neg;
+            RecoverSig_pos = prev_p.RecoverSig_pos;
+            RecoverSig_neg = prev_p.RecoverSig_neg;
+
+            // 差を保存しておく
+            var dEps_t = Eps_t - prev_p.Eps_t;
+
+            // 応力状態に応じて処理
+            switch (SigEpsState)
+            {
+                // 1]弾性域
+                case SigEpsState.Elastic:
+                    {
+                        if (Sig_t >= RecoverSig_pos)
+                        {
+                            //1
+                            E_t = Steel.Steps[1].E_t;
+                            E_n = Steel.Steps[1].E_n_t;
+
+                            SigEpsState = SigEpsState.PlasticPos;
+                            SigError = Sig_t - RecoverSig_pos;
+                        }
+                        else if (Sig_t <= RecoverSig_neg)
+                        {
+                            //2
+                            E_t = Steel.Steps[1].E_t;
+                            E_n = Steel.Steps[1].E_n_c;
+
+                            SigEpsState = SigEpsState.PlasticNeg;
+                            SigError = Sig_t - RecoverSig_neg;
+                        }
+                    }
+                    break;
+
+                // 2]正側塑性域
+                case SigEpsState.PlasticPos:
+                    {
+                        TotalEps_t += dEps_t;
+                        TotalEps_t_pos += dEps_t;
+                        TotalPlasticEps_t += dEps_t;
+
+                        if (dEps_t < 0)
+                        {
+                            //3
+                            E_t = Steel.Steps[0].E_t;
+                            E_n = Steel.Steps[0].E_n_t;
+
+                            RecoverSig_pos = Sig_t;
+                            SigEpsState = SigEpsState.BausFromPos;
+
+                            BausBoundSig_t_pos = Steel.ALF * RecoverSig_pos;
+                            BausBoundSig_t_neg = Steel.ALF * RecoverSig_neg;
+                            BausState = BausState.Baus1;
+                            BausEps_t_pos = Eps_t;
+                            BausEps_t_neg = Eps_t + ((RecoverSig_neg - RecoverSig_pos) / Steel.Steps[0].E_t) - Steel.BCF * TotalEps_t;
+
+                        }
+                        // 2次剛性の変更
+                        else
+                        {
+                            for (int i = 0; i < Steel.Num_of_Data; i++)
+                            {
+                                if (Sig_t >= Steel.Steps[i].Sig_t)
+                                {
+                                    //4
+                                    E_t = Steel.Steps[i + 1].E_t;
+                                    E_n = Steel.Steps[i + 1].E_n_t;
+                                }
+                            }
+                        }
+
+                    }
+                    break;
+
+                // 3]負側塑性域
+                case SigEpsState.PlasticNeg:
+                    {
+                        TotalEps_t -= dEps_t;
+                        TotalPlasticEps_t -= dEps_t;
+
+                        if (dEps_t > 0)
+                        {
+                            //5
+                            E_t = Steel.Steps[0].E_t;
+                            E_n = Steel.Steps[0].E_n_c;
+
+                            RecoverSig_neg = Sig_t;
+                            SigEpsState = SigEpsState.BausFromNeg;
+
+                            BausBoundSig_t_pos = Steel.ALF * RecoverSig_pos;
+                            BausBoundSig_t_neg = Steel.ALF * RecoverSig_neg;
+                            BausState = BausState.Baus1;
+                            BausEps_t_pos = Eps_t + (RecoverSig_pos - RecoverSig_neg) / Steel.Steps[0].E_t + Steel.BCF * TotalEps_t;
+                            BausEps_t_neg = Eps_t;
+
+                        }
+                        // 2次剛性の変更
+                        else
+                        {
+                            for (int i = 0; i < Steel.Num_of_Data; i++)
+                            {
+                                if (Sig_t <= -Steel.Steps[i].Sig_t)
+                                {
+                                    //6
+                                    E_t = Steel.Steps[i + 1].E_t;
+                                    E_n = Steel.Steps[i + 1].E_n_c;
+                                }
+                            }
+                        }
+                    }
+                    break;
+
+                // 4]除荷＆バウシンガ[正→負]
+                case SigEpsState.BausFromPos:
+                    {
+                        switch (BausState)
+                        {
+                            case BausState.Baus1:
+                                {
+
+                                    if (Sig_t <= 0)
+                                    {
+                                        RecoverSig_pos -= SigError;
+                                        SigError = 0.0;
+                                    }
+
+                                    if (Sig_t >= RecoverSig_pos)
+                                    {
+                                        for (int i = 0; i < Steel.Num_of_Data; i++)
+                                        {
+                                            if (Sig_t >= Steel.Steps[i].Sig_t)
+                                            {
+                                                //7
+                                                E_t = Steel.Steps[i + 1].E_t;
+                                                E_n = Steel.Steps[i + 1].E_n_t;
+                                            }
+                                        }
+
+                                        SigError = Sig_t - RecoverSig_pos;
+                                        SigEpsState = SigEpsState.PlasticPos;
+
+                                    }
+                                    else if (Sig_t <= BausBoundSig_t_neg)
+                                    {
+                                        //8
+                                        E_t = (RecoverSig_neg - BausBoundSig_t_neg) / (BausEps_t_neg - Eps_t);
+                                        E_n = (RecoverSig_neg / Math.Exp(BausEps_t_neg) - BausBoundSig_t_neg / Math.Exp(Eps_t)) / ((Math.Exp(BausEps_t_neg) - 1) - (Math.Exp(Eps_t) - 1));
+
+                                        BausState = BausState.Baus2;
+                                    }
+                                }
+                                break;
+
+                            case BausState.Baus2:
+                                {
+                                    TotalPlasticEps_t -= dEps_t;
+
+                                    if (Sig_t <= RecoverSig_neg)
+                                    {
+                                        for (int i = 0; i < Steel.Num_of_Data; i++)
+                                        {
+                                            if (Sig_t <= -1 * Steel.Steps[i].Sig_t)
+                                            {
+                                                //9
+                                                E_t = Steel.Steps[i + 1].E_t;
+                                                E_n = Steel.Steps[i + 1].E_n_c;
+                                            }
+                                        }
+
+                                        SigError = Sig_t - RecoverSig_neg;
+                                        SigEpsState = SigEpsState.PlasticNeg;
+                                    }
+                                    else if (dEps_t > 0)
+                                    {
+                                        //10
+                                        E_t = Steel.Steps[0].E_t;
+                                        E_n = Steel.Steps[0].E_n_c;
+
+                                        BausState = BausState.Baus3;
+                                        BausBoundSig_t_neg = Sig_t;
+                                    }
+                                }
+                                break;
+
+                            case BausState.Baus3:
+                                {
+                                    if (Sig_t <= BausBoundSig_t_neg)
+                                    {
+                                        BausBoundSig_t_pos = Steel.ALF * RecoverSig_pos;
+                                        //11
+                                        E_t = (RecoverSig_neg - BausBoundSig_t_neg) / (BausEps_t_neg - Eps_t);
+                                        E_n = (RecoverSig_neg / Math.Exp(BausEps_t_neg) - BausBoundSig_t_neg / Math.Exp(Eps_t)) / ((Math.Exp(BausEps_t_neg) - 1) - (Math.Exp(Eps_t) - 1));
+
+                                        BausState = BausState.Baus2;
+                                    }
+                                    else if (Sig_t >= BausBoundSig_t_pos)
+                                    {
+                                        BausBoundSig_t_neg = Steel.ALF * RecoverSig_neg;
+                                        //12
+                                        E_t = (RecoverSig_pos - BausBoundSig_t_pos) / (BausEps_t_pos - Eps_t);
+                                        E_n = (RecoverSig_pos / Math.Exp(BausEps_t_pos) - BausBoundSig_t_pos / Math.Exp(Eps_t)) / ((Math.Exp(BausEps_t_pos) - 1) - (Math.Exp(Eps_t) - 1));
+
+                                        BausState = BausState.Baus4;
+
+                                    }
+                                }
+                                break;
+
+                            case BausState.Baus4:
+                                {
+                                    TotalPlasticEps_t += dEps_t;
+
+                                    if (Sig_t >= RecoverSig_pos)
+                                    {
+                                        for (int IB = 0; IB < Steel.Num_of_Data; IB++)
+                                        {
+                                            if (Sig_t >= Steel.Steps[IB].Sig_t)
+                                            {
+                                                //13
+                                                E_t = Steel.Steps[IB + 1].E_t;
+                                                E_n = Steel.Steps[IB + 1].E_n_t;
+                                            }
+                                        }
+
+                                        SigError = Sig_t - RecoverSig_pos;
+                                        SigEpsState = SigEpsState.PlasticPos;
+
+                                    }
+                                    else if (dEps_t < 0)
+                                    {
+                                        //14
+                                        E_t = Steel.Steps[0].E_t;
+                                        E_n = Steel.Steps[0].E_n_t;
+
+                                        BausState = BausState.Baus3;
+                                        BausBoundSig_t_pos = Sig_t;
+                                    }
+                                }
+                                break;
+
+                            default:
+                                throw new Exception("BausState未定義状態");
+                        }
+                    }
+                    break;
+
+                // 5]除荷＆バウシンガー[負→正]
+                case SigEpsState.BausFromNeg:
+                    {
+                        switch (BausState)
+                        {
+                            case BausState.Baus1:
+                                {
+                                    if (Sig_t >= 0)
+                                    {
+                                        RecoverSig_neg -= SigError;
+                                        SigError = 0;
+                                    }
+
+                                    if (Sig_t <= RecoverSig_neg)
+                                    {
+                                        for (int i = 0; i < Steel.Num_of_Data; i++)
+                                        {
+                                            if (Sig_t < -1 * Steel.Steps[i].Sig_t)
+                                            {
+                                                //15
+                                                E_t = Steel.Steps[i + 1].E_t;
+                                                E_n = Steel.Steps[i + 1].E_n_c;
+                                            }
+                                        }
+
+                                        SigError = Sig_t - RecoverSig_neg;
+                                        SigEpsState = SigEpsState.PlasticNeg;
+                                    }
+                                    else if (Sig_t >= BausBoundSig_t_pos)
+                                    {
+                                        //16
+                                        E_t = (RecoverSig_pos - BausBoundSig_t_pos) / (BausEps_t_pos - Eps_t);
+                                        E_n = (RecoverSig_pos / Math.Exp(BausEps_t_pos) - BausBoundSig_t_pos / Math.Exp(Eps_t)) / ((Math.Exp(BausEps_t_pos) - 1) - (Math.Exp(Eps_t) - 1));
+
+                                        BausState = BausState.Baus2;
+                                    }
+                                }
+                                break;
+
+                            case BausState.Baus2:
+                                {
+                                    TotalPlasticEps_t += dEps_t;
+
+                                    if (Sig_t >= RecoverSig_pos)
+                                    {
+                                        for (int i = 0; i < Steel.Num_of_Data; i++)
+                                        {
+                                            if (Sig_t >= Steel.Steps[i].Sig_t)
+                                            {
+                                                //17
+                                                E_t = Steel.Steps[i + 1].E_t;
+                                                E_n = Steel.Steps[i + 1].E_n_t;
+                                            }
+                                            SigError = Sig_t - RecoverSig_pos;
+                                            SigEpsState = SigEpsState.PlasticPos;
+                                        }
+                                    }
+                                    else if (dEps_t < 0)
+                                    {
+                                        //18
+                                        E_t = Steel.Steps[0].E_t;
+                                        E_n = Steel.Steps[0].E_n_t;
+
+                                        BausState = BausState.Baus3;
+                                        BausBoundSig_t_pos = Sig_t;
+                                    }
+
+                                }
+                                break;
+
+                            case BausState.Baus3:
+                                {
+                                    if (Sig_t >= BausBoundSig_t_pos)
+                                    {
+
+                                        BausBoundSig_t_neg = Steel.ALF * RecoverSig_neg;
+                                        //19
+                                        E_t = (RecoverSig_pos - BausBoundSig_t_pos) / (BausEps_t_pos - Eps_t);
+                                        E_n = (RecoverSig_pos / Math.Exp(BausEps_t_pos) - BausBoundSig_t_pos / Math.Exp(Eps_t)) / ((Math.Exp(BausEps_t_pos) - 1) - (Math.Exp(Eps_t) - 1));
+
+                                        BausState = BausState.Baus2;
+
+                                    }
+                                    else if (Sig_t <= BausBoundSig_t_neg)
+                                    {
+
+                                        BausBoundSig_t_pos = Steel.ALF * RecoverSig_pos;
+                                        //20
+                                        E_t = (RecoverSig_neg - BausBoundSig_t_neg) / (BausEps_t_neg - Eps_t);
+                                        E_n = (RecoverSig_neg / Math.Exp(BausEps_t_neg) - BausBoundSig_t_neg / Math.Exp(Eps_t)) / ((Math.Exp(BausEps_t_neg) - 1) - (Math.Exp(Eps_t) - 1));
+
+                                        BausState = BausState.Baus4;
+                                    }
+                                }
+                                break;
+
+                            case BausState.Baus4:
+                                {
+                                    TotalPlasticEps_t -= dEps_t;
+
+                                    if (Sig_t <= RecoverSig_neg)
+                                    {
+                                        for (int i = 0; i < Steel.Num_of_Data; i++)
+                                        {
+                                            if (Sig_t <= -1 * Steel.Steps[i].Sig_t)
+                                            {
+                                                //21
+                                                E_t = Steel.Steps[i + 1].E_t;
+                                                E_n = Steel.Steps[i + 1].E_n_c;
+                                            }
+                                        }
+
+                                        SigError = Sig_t - RecoverSig_neg;
+                                        SigEpsState = SigEpsState.PlasticNeg;
+
+                                    }
+                                    else if (dEps_t > 0)
+                                    {
+                                        //22
+                                        E_t = Steel.Steps[0].E_t;
+                                        E_n = Steel.Steps[0].E_n_c;
+
+                                        BausState = BausState.Baus3;
+                                        BausBoundSig_t_neg = Sig_t;
+                                    }
+                                }
+                                break;
+
+                            default:
+                                throw new Exception("BausState未定義状態");
+                        }
+                    }
+                    break;
+
+                default:
+                    throw new Exception("SigEpsState未定義状態");
+            }
+
+        }
     }
 
     /// <summary>
@@ -179,4 +590,5 @@ public partial class SimpleBeamModel
         Baus3 = 3,
         Baus4 = 4
     }
+
 }

@@ -37,7 +37,6 @@ public partial class SimpleBeamModel
             // R=35mm,長さ42mm[7+35] のスカラップを想定。(Ls = 40)(Lw = 10)
             //
             // 今回は，L方向は10mmごとに分割，H方向には50分割ということで固定（高精度 → dLを5にしたりする）
-
             var m = new Member(
 
                 outputDir: outputDirBase.GetChildDirectoryInfo($"{targetAmp}_{Guid.NewGuid().ToString()[0..6]}").CreateAndPipe(),

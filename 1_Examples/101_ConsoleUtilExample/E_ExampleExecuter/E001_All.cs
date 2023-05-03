@@ -1388,6 +1388,19 @@ public static partial class ExampleExecuter
 
                 // B999_BeamCyclicLoading_Keep
                 {
+                    //// Define IO paths
+                    //var baseDir_A10_C_F002 = baseDir_A10_C.GetChildDirectoryInfo($@"B999_BeamCyclicLoading").CreateAndPipe();
+                    //var inputDir = baseDir_A10_C_F002.GetChildDirectoryInfo($@"input");
+                    //var outputDir = baseDir_A10_C_F002.GetChildDirectoryInfo($@"output");
+                    //baseDir_A10_C_F002.OpenOnDefaultApp();
+
+                    ////Run Example
+                    //BeamCyclicLoading.RunExampleModel1(inputDir, outputDir);
+
+                }
+
+                // B999_BeamCyclicLoading_Keep
+                {
                     // Define IO paths
                     var baseDir_A10_C_F002 = baseDir_A10_C.GetChildDirectoryInfo($@"B999_BeamCyclicLoading").CreateAndPipe();
                     var inputDir = baseDir_A10_C_F002.GetChildDirectoryInfo($@"input");
@@ -1395,12 +1408,10 @@ public static partial class ExampleExecuter
                     baseDir_A10_C_F002.OpenOnDefaultApp();
 
                     //Run Example
-                    BeamCyclicLoading.RunExampleModel1(inputDir, outputDir);
-
-
+                    SimpleBeamModel.RunExampleModel1(inputDir, outputDir);
 
                 }
-
+                
                 // F001_MatrixDisplacementMethod
                 {
                     //// Define IO paths
