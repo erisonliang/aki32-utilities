@@ -1,4 +1,4 @@
-﻿using Aki32Utilities.ConsoleAppUtilities.General;
+﻿
 
 namespace Aki32Utilities.ConsoleAppUtilities.Structure;
 public partial class SimpleBeamModel
@@ -159,14 +159,8 @@ public partial class SimpleBeamModel
         {
         }
 
-        /// <summary>
-        /// 前のステップの情報から次のステップの情報を算出します。
-        /// </summary>
-        /// <exception cref="Exception"></exception>
-        public void CalcNext()
+        public void CopyPreviousToCurrent()
         {
-
-            // 収束計算初期状態へ戻す
             SigEpsState = PreviousState.SigEpsState;
             BausState = PreviousState.BausState;
 
@@ -175,7 +169,7 @@ public partial class SimpleBeamModel
             TotalEps_t_pos = PreviousState.TotalEps_t_pos;
             SigError = PreviousState.SigError;
 
-            Sig_n = PreviousState.Sig_n + dEps_n * PreviousState.E_n; ///これだけ特殊！
+            Sig_n = PreviousState.Sig_n; ///これだけ特殊！
             // Eps_t
             // Eps_n
             // dEps_n
@@ -188,6 +182,43 @@ public partial class SimpleBeamModel
             BausBoundSig_t_neg = PreviousState.BausBoundSig_t_neg;
             RecoverSig_pos = PreviousState.RecoverSig_pos;
             RecoverSig_neg = PreviousState.RecoverSig_neg;
+        }
+
+        public void CopyCurrentToPrevious()
+        {
+            PreviousState.SigEpsState = SigEpsState;
+            PreviousState.BausState = BausState;
+
+            PreviousState.TotalEps_t = TotalEps_t;
+            //PreviousState.TotalPlasticEps_t = TotalPlasticEps_t;
+            //PreviousState.TotalEps_t_pos = TotalEps_t_pos;
+            PreviousState.SigError = SigError;
+
+            PreviousState.Sig_n = Sig_n;
+            PreviousState.Eps_t = Eps_t;
+            PreviousState.Eps_n = Eps_n;
+            //PreviousState.dEps_n = dEps_n;
+            PreviousState.E_t = E_t;
+            PreviousState.E_n = E_n;
+
+            PreviousState.BausEps_t_pos = BausEps_t_pos;
+            PreviousState.BausEps_t_neg = BausEps_t_neg;
+            PreviousState.BausBoundSig_t_pos = BausBoundSig_t_pos;
+            PreviousState.BausBoundSig_t_neg = BausBoundSig_t_neg;
+            PreviousState.RecoverSig_pos = RecoverSig_pos;
+            PreviousState.RecoverSig_neg = RecoverSig_neg;
+        }
+
+        /// <summary>
+        /// 前のステップの情報から次のステップの情報を算出します。
+        /// </summary>
+        /// <exception cref="Exception"></exception>
+        public void CalcNext()
+        {
+
+            // 収束計算初期状態へ戻す
+            CopyPreviousToCurrent();
+            Sig_n = PreviousState.Sig_n + dEps_n * PreviousState.E_n; ///これだけ特殊！
 
             // 差を保存しておく
             var dEps_t = Eps_t - PreviousState.Eps_t;

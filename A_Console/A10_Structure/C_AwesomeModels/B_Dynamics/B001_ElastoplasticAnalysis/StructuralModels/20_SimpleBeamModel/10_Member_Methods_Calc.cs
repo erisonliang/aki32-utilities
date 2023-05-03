@@ -47,7 +47,7 @@ public partial class SimpleBeamModel
             )
         {
 
-            #region 出力ファイル
+            // ★★★★★ 出力ファイル
 
             OutputDir = outputDir;
 
@@ -76,9 +76,8 @@ public partial class SimpleBeamModel
                 Console.WriteLine(ex.Message);
             }
 
-            #endregion
 
-            #region 各種初期化
+            // ★★★★★ 各種初期化
 
             SectionType = sectionType;
 
@@ -99,15 +98,14 @@ public partial class SimpleBeamModel
             N_ratio = n_ratio;
             ConsiderQDef = considerQDef;
 
-            #endregion
 
-            #region ★★★★★ 諸元の自動算出
+            // ★★★★★ 諸元の自動算出
 
-            // ★★★★★ 分割数
+            // ★ 分割数
             DivL = (int)(this.L / dL);
             var dH = (double)Hs / divHs;
 
-            // ★★★★★ 断面諸量の計算
+            // ★ 断面諸量の計算
             var Poisson = 0.3;
             G = this.E / (2 * (1 + Poisson)); // 実質，E / 2.6 となる。
 
@@ -137,15 +135,13 @@ public partial class SimpleBeamModel
             DelP = Qp * Math.Pow(this.L, 3) / 3 / this.E / I;
             DelP += considerQDef ? (Qp / G / Aw_s * this.L) : 0;
 
-            #endregion
+            // ★★★★★ 梁の分割の設定
 
-            #region ★★★★★ 梁の分割の設定
-
-            // ★★★★★ 初期分割
+            // ★ 初期分割
             s = Enumerable.Range(0, DivL).Select(_ => new MemberSection(divH) { PreviousState = new MemberSection(0) }).ToArray();
 
 
-            // ★★★★★ 全ての微小要素に対して実行
+            // ★ 全ての微小要素に対して実行
 
             for (int iL = 0; iL < DivL; iL++)
             {
@@ -214,7 +210,7 @@ public partial class SimpleBeamModel
                 }
             }
 
-            // ★★★★★ 無効領域の設定
+            // ★ 無効領域の設定
             var DivLs = Ls / dL;
             for (int iL = 0; iL < DivLs; iL++)
             {
@@ -238,7 +234,7 @@ public partial class SimpleBeamModel
 
             }
 
-            // ★★★★★ ダイアフラムと溶接金属を弾性に留める[降伏点10倍]
+            // ★ ダイアフラムと溶接金属を弾性に留める[降伏点10倍]
             var DivLw = Lw / dL;
             for (int iL = 0; iL < DivLw; iL++)
             {
@@ -264,7 +260,7 @@ public partial class SimpleBeamModel
             }
 
 
-            #endregion
+            // ★★★★★ 
 
         }
 
@@ -274,7 +270,7 @@ public partial class SimpleBeamModel
         /// <param name="target_delH_list">目標変位リスト</param>
         public void Calc(List<double> target_delH_list)
         {
-            // ★★★★★ 軸力の導入
+            // ★ 軸力の導入
             var iN_ratio = (int)(Math.Abs(N_ratio) / 0.01);
             if (iN_ratio != 0)
             {
@@ -294,35 +290,18 @@ public partial class SimpleBeamModel
                         s[iL].PreviousState.Phi = s[iL].Phi;
 
                         for (int iH = 0; iH < DivH; iH++)
-                        {
-                            s[iL].p[iH].PreviousState.Eps_n = s[iL].p[iH].Eps_n;
-                            s[iL].p[iH].PreviousState.Sig_n = s[iL].p[iH].Sig_n;
-                            s[iL].p[iH].PreviousState.E_n = s[iL].p[iH].E_n;
-                            s[iL].p[iH].PreviousState.Eps_t = s[iL].p[iH].Eps_t;
-                            s[iL].p[iH].PreviousState.SigEpsState = s[iL].p[iH].SigEpsState;
-                            s[iL].p[iH].PreviousState.BausState = s[iL].p[iH].BausState;
-                            s[iL].p[iH].PreviousState.RecoverSig_pos = s[iL].p[iH].RecoverSig_pos;
-                            s[iL].p[iH].PreviousState.RecoverSig_neg = s[iL].p[iH].RecoverSig_neg;
-                            s[iL].p[iH].PreviousState.TotalEps_t = s[iL].p[iH].TotalEps_t;
-                            s[iL].p[iH].PreviousState.SigError = s[iL].p[iH].SigError;
-                            s[iL].p[iH].PreviousState.BausBoundSig_t_pos = s[iL].p[iH].BausBoundSig_t_pos;
-                            s[iL].p[iH].PreviousState.BausBoundSig_t_neg = s[iL].p[iH].BausBoundSig_t_neg;
-                            s[iL].p[iH].PreviousState.BausEps_t_pos = s[iL].p[iH].BausEps_t_pos;
-                            s[iL].p[iH].PreviousState.BausEps_t_neg = s[iL].p[iH].BausEps_t_neg;
-                            s[iL].p[iH].PreviousState.E_t = s[iL].p[iH].E_t;
-                        }
+                            s[iL].p[iH].CopyCurrentToPrevious();
                     }
                 }
 
             }
 
-            // ★★★★★ 解析計算
+            // ★ 初期処理
             int step_count = 0;
             SaveVisualizeBeam();
             SaveCurrentState(step_count);
 
-
-            // 半サイクルの計算
+            // ★ 半サイクルの計算の繰り返し
             for (int iDelH = 0; iDelH < target_delH_list.Count; iDelH++)
             {
                 int force_direction = iDelH == 0
@@ -350,7 +329,7 @@ public partial class SimpleBeamModel
                     s[0].M = s[0].PreviousState.M + force_direction * dMe;
 
                     // 2] せん断力の仮定
-                    for (int iCal = 0; iCal < int.MaxValue; iCal++)
+                    while (true)
                     {
                         // 3] 解析計算
                         // 固定端の境界条件[せん断変形角+接合部局所変形]
@@ -379,7 +358,7 @@ public partial class SimpleBeamModel
                             }
 
                             // 3-2] 断面の曲率と各要素の歪度の増分・弾塑性判定
-                            CalcMPhi(iL); // モーメント - 曲率関係計算
+                            CalcMPhi(iL); // 平面保持仮定において，セクションごとに単一の曲率の決定
                             CalcEP(iL);   // 弾塑性判定[接線剛性の変更]
                             s[iL].ddDelH = s[iL].Phi;
 
@@ -413,25 +392,7 @@ public partial class SimpleBeamModel
                         s[iL].PreviousState.DelH = s[iL].DelH;
 
                         for (int iH = 0; iH < DivH; iH++)
-                        {
-                            s[iL].p[iH].PreviousState.Eps_n = s[iL].p[iH].Eps_n;
-                            s[iL].p[iH].PreviousState.Sig_n = s[iL].p[iH].Sig_n;
-                            s[iL].p[iH].PreviousState.E_n = s[iL].p[iH].E_n;
-                            s[iL].p[iH].PreviousState.Eps_t = s[iL].p[iH].Eps_t;
-                            s[iL].p[iH].PreviousState.SigEpsState = s[iL].p[iH].SigEpsState;
-                            s[iL].p[iH].PreviousState.BausState = s[iL].p[iH].BausState;
-                            s[iL].p[iH].PreviousState.RecoverSig_pos = s[iL].p[iH].RecoverSig_pos;
-                            s[iL].p[iH].PreviousState.RecoverSig_neg = s[iL].p[iH].RecoverSig_neg;
-                            s[iL].p[iH].PreviousState.TotalEps_t = s[iL].p[iH].TotalEps_t;
-                            s[iL].p[iH].PreviousState.TotalPlasticEps_t = s[iL].p[iH].TotalPlasticEps_t;
-                            s[iL].p[iH].PreviousState.TotalEps_t_pos = s[iL].p[iH].TotalEps_t_pos;
-                            s[iL].p[iH].PreviousState.SigError = s[iL].p[iH].SigError;
-                            s[iL].p[iH].PreviousState.BausBoundSig_t_pos = s[iL].p[iH].BausBoundSig_t_pos;
-                            s[iL].p[iH].PreviousState.BausBoundSig_t_neg = s[iL].p[iH].BausBoundSig_t_neg;
-                            s[iL].p[iH].PreviousState.BausEps_t_pos = s[iL].p[iH].BausEps_t_pos;
-                            s[iL].p[iH].PreviousState.BausEps_t_neg = s[iL].p[iH].BausEps_t_neg;
-                            s[iL].p[iH].PreviousState.E_t = s[iL].p[iH].E_t;
-                        }
+                            s[iL].p[iH].CopyCurrentToPrevious();
                     }
 
                     //基本情報
