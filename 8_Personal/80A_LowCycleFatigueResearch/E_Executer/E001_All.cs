@@ -141,19 +141,19 @@ public static partial class Executer
                 var buildingInfoExcel = new FileInfo(@$"C:\Users\aki32\Dropbox\Documents\02 東大関連\1 研究室\14 SNAP\修論モデル\01 model\部材配置情報.xlsx");
 
 
-                //// ★ SNAPエクセルキラー（10回終わったら次の処理に移行！）
-                //Module.M030_KeepClosingExcel();
-                //Console.WriteLine("\r\n\r\nExcelキラー終了！\r\n次の処理に移行。\r\n\r\n");
-                //_ = line.SendMessageAsync(@"Excelキラー終了");
+                // ★ SNAPエクセルキラー（10回終わったら次の処理に移行！）
+                Module.M030_KeepClosingExcel();
+                Console.WriteLine("\r\n\r\nExcelキラー終了！\r\n次の処理に移行。\r\n\r\n");
+                _ = line.SendMessageAsync(@"Excelキラー終了");
 
-                //// ★ SNAPからのデータ抽出
-                //Module.M061_SNAP_1_CSCollect(targetModels, targetEQs, line, snapOutputDir, collectedResultsBaseDir);
+                // ★ SNAPからのデータ抽出
+                Module.M061_SNAP_1_CSCollect(targetModels, targetEQs, line, snapOutputDir, collectedResultsBaseDir);
 
-                //// ★ Pythonで描画やら解析やら
-                //Module.M062_SNAP_2_PyDraw(targetModels, targetEQs, line, collectedResultsBaseDir, buildingInfoExcel);
+                // ★ Pythonで描画やら解析やら
+                Module.M062_SNAP_2_PyDraw(targetModels, targetEQs, line, collectedResultsBaseDir, buildingInfoExcel);
 
-                //// ★ SNAPの，ResultCsvの更なる集計！
-                //Module.M063_SNAP_3_CSCollect(line, collectedResultsBaseDir_ResultCsv, targetModels[0]);
+                // ★ SNAPの，ResultCsvの更なる集計！
+                Module.M063_SNAP_3_CSCollect(line, collectedResultsBaseDir_ResultCsv, targetModels[0]);
 
                 ////// ★ Pythonで描画やら解析やら（# PGV対応表.csv の準備が必要。）
                 ////Module.M064_SNAP_4_Calc100YearDamage(line, collectedResultsBaseDir, "600_j", "{DValue}_{edgeName}");
